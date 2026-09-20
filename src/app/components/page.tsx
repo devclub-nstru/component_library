@@ -85,7 +85,7 @@ export default function ComponentsPage() {
         <div className="space-y-16">
           <section>
             <div className="flex items-center gap-2 mb-6">
-              <h2 className="text-sm sm:text-base font-medium text-white tracking-tight">
+              <h2 className="text-sm sm:text-xl font-medium font-serif text-white tracking-tight">
                 New releases
               </h2>
               <span className="text-xs font-mono font-medium text-orange-500">
@@ -108,7 +108,7 @@ export default function ComponentsPage() {
           {displayComponents.length > 0 && (
             <section>
               <div className="flex items-center gap-2 mb-6">
-                <h2 className="text-sm sm:text-base font-medium text-white tracking-tight">
+                <h2 className="text-sm sm:text-xl font-medium font-serif text-white tracking-tight">
                   Display
                 </h2>
                 <span className="text-xs font-mono font-medium text-orange-500">

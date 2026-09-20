@@ -13,6 +13,10 @@ import {
   CheckIcon,
   ChevronRightIcon,
   LayersIcon,
+  DesktopIcon,
+  MobileIcon,
+  ViewGridIcon,
+  DragHandleDots2Icon,
 } from "@radix-ui/react-icons";
 import { ComponentRegistryItem } from "@/types/component";
 import { getComponentBySlug } from "@/registry";
@@ -35,54 +39,34 @@ const CATEGORIES = [
     label: "DISPLAY",
     items: [
       { label: "Scales & Borders", slug: "scales", href: "/components/scales" },
-      {
-        label: "Spotlight Card",
-        slug: "spotlight-card",
-        href: "/components/spotlight-card",
-      },
-      {
-        label: "GitHub activity",
-        slug: "github-activity",
-        href: "/components/github-activity",
-      },
+      { label: "Spotlight Card", slug: "spotlight-card", href: "/components/spotlight-card" },
+      { label: "GitHub activity", slug: "github-activity", href: "/components/github-activity" },
     ],
   },
   {
     label: "NAVIGATION",
-    items: [
-      {
-        label: "Hook Sidebar",
-        slug: "hook-sidebar",
-        href: "/components/hook-sidebar",
-      },
-    ],
+    items: [{ label: "Hook Sidebar", slug: "hook-sidebar", href: "/components/hook-sidebar" }],
   },
   {
     label: "INPUTS",
-    items: [
-      {
-        label: "Animated Button",
-        slug: "animated-button",
-        href: "/components/animated-button",
-      },
-    ],
+    items: [{ label: "Animated Button", slug: "animated-button", href: "/components/animated-button" }],
   },
   {
     label: "LAYOUT & FEEDBACK",
     items: [
-      {
-        label: "Bento Grid",
-        slug: "bento-grid",
-        href: "/components/bento-grid",
-      },
-      {
-        label: "Status Badge",
-        slug: "glowing-badge",
-        href: "/components/glowing-badge",
-      },
+      { label: "Bento Grid", slug: "bento-grid", href: "/components/bento-grid" },
+      { label: "Status Badge", slug: "glowing-badge", href: "/components/glowing-badge" },
     ],
   },
 ];
+
+const PALETTE = [
+  { id: "blue", hex: "#3B82F6", label: "Electric Blue" },
+  { id: "purple", hex: "#A855F7", label: "Neon Purple" },
+  { id: "red", hex: "#EF4444", label: "Coral Red" },
+  { id: "orange", hex: "#F97316", label: "Sunset Orange" },
+  { id: "green", hex: "#22C55E", label: "Vibrant Green" },
+] as const;
 
 const CODE_KEYWORDS = new Set([
   "import",
@@ -190,10 +174,11 @@ function highlightCode(code: string) {
 export const ComponentStudio = ({ component }: ComponentStudioProps) => {
   const [selectedSlug, setSelectedSlug] = useState(component.slug);
   const [prevPropSlug, setPrevPropSlug] = useState(component.slug);
+  const [viewport, setViewport] = useState<"desktop" | "tablet" | "mobile">("desktop");
+  const [activeColor, setActiveColor] = useState<string>(PALETTE[3].hex);
+
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [activePanel, setActivePanel] = useState<"none" | "info" | "code">(
-    "none",
-  );
+  const [activePanel, setActivePanel] = useState<"none" | "info" | "code">("none");
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [installCopied, setInstallCopied] = useState(false);
   const [codeCopied, setCodeCopied] = useState(false);
@@ -265,21 +250,17 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     setTimeout(() => setCodeCopied(false), 2000);
   };
 
-  const renderInteractivePreview = (slug: string) => {
+  const renderComponentPreview = (slug: string, color: string) => {
     switch (slug) {
       case "animated-button":
         return (
           <div className="w-full max-w-md bg-[#0c0c0e] border border-white/10 rounded-2xl p-6 shadow-2xl flex flex-col gap-6 select-none">
             <div className="flex items-center justify-between pb-3 border-b border-white/8">
               <div>
-                <h3 className="text-sm font-medium text-white">
-                  Interactive Action Stack
-                </h3>
-                <p className="text-[11px] text-zinc-400 font-light mt-0.5">
-                  High-stiffness spring feedback & damping
-                </p>
+                <h3 className="text-sm font-medium text-white">Interactive Action Stack</h3>
+                <p className="text-[11px] text-zinc-400 font-light mt-0.5">High-stiffness spring feedback & damping</p>
               </div>
-              <span className="text-[10px] font-mono text-orange-500 uppercase font-medium">
+              <span className="text-[10px] font-mono uppercase font-medium" style={{ color }}>
                 Spring
               </span>
             </div>
@@ -287,6 +268,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               <AnimatedButton
                 variant="primary"
                 showArrow
+                style={{ backgroundColor: color }}
                 className="w-full justify-between"
               >
                 <span>Primary Action</span>
@@ -319,13 +301,15 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         return (
           <div className="w-full max-w-sm bg-[#0c0c0e] border border-white/10 rounded-2xl p-6 shadow-2xl flex flex-col gap-4">
             <div className="flex items-center justify-between pb-2 border-b border-white/8">
-              <span className="text-xs font-mono uppercase text-zinc-400">
-                Hook Rail Demonstration
+              <span className="text-xs font-mono uppercase text-zinc-400">Hook Rail Demonstration</span>
+              <span className="text-[10px] font-mono" style={{ color }}>
+                Stiffness: 420
               </span>
             </div>
             <HookSidebar
               label="SIDEBAR NAVIGATION"
               defaultValue={1}
+              color={color}
               items={[
                 { label: "Overview", href: "#overview" },
                 { label: "Components", href: "#components" },
@@ -340,14 +324,10 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
           <div className="w-full max-w-xl bg-[#0c0c0e] border border-white/10 rounded-2xl p-6 shadow-2xl flex flex-col gap-6">
             <div className="flex items-center justify-between pb-3 border-b border-white/8">
               <div>
-                <h3 className="text-sm font-medium text-white">
-                  Architectural Scales
-                </h3>
-                <p className="text-[11px] text-zinc-400 font-light mt-0.5">
-                  Repeating linear gradient borders
-                </p>
+                <h3 className="text-sm font-medium text-white">Architectural Scales</h3>
+                <p className="text-[11px] text-zinc-400 font-light mt-0.5">Repeating linear gradient borders</p>
               </div>
-              <span className="text-[10px] font-mono text-orange-500 uppercase font-medium">
+              <span className="text-[10px] font-mono uppercase font-medium" style={{ color }}>
                 Grid
               </span>
             </div>
@@ -363,16 +343,14 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
       case "spotlight-card":
         return (
           <div className="w-full max-w-md">
-            <SpotlightCard className="p-6 border-white/10 bg-[#0c0c0e]">
-              <h4 className="text-base font-medium text-white">
-                Radial Spotlight
-              </h4>
+            <SpotlightCard className="p-6 border-white/10 bg-[#0c0c0e]" spotlightColor={color}>
+              <h4 className="text-base font-medium text-white">Radial Spotlight</h4>
               <p className="text-xs text-zinc-400 mt-2 font-light leading-relaxed">
                 Smooth cursor tracking with radial falloff gradient.
               </p>
               <div className="mt-6 pt-4 border-t border-white/8 flex items-center justify-between text-[11px] font-mono text-zinc-500">
                 <span>Tailwind CSS</span>
-                <span className="text-orange-400">GPU Native</span>
+                <span style={{ color }}>Active Theme</span>
               </div>
             </SpotlightCard>
           </div>
@@ -381,16 +359,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         return (
           <div className="w-full max-w-lg bg-[#0c0c0e] border border-white/10 rounded-2xl p-6 shadow-2xl">
             <BentoGrid className="grid-cols-2 gap-3">
-              <BentoCard
-                colSpan={1}
-                title="Telemetry"
-                description="Real-time event logging."
-              />
-              <BentoCard
-                colSpan={1}
-                title="Throughput"
-                description="Low latency processing."
-              />
+              <BentoCard colSpan={1} title="Telemetry" description="Real-time event logging." />
+              <BentoCard colSpan={1} title="Throughput" description="Low latency processing." />
             </BentoGrid>
           </div>
         );
@@ -399,21 +369,15 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
           <div className="w-full max-w-md bg-[#0c0c0e] border border-white/10 rounded-2xl p-8 shadow-2xl flex flex-col items-center justify-center gap-4">
             <div className="flex items-center gap-3">
               <GlowingBadge>PRODUCTION</GlowingBadge>
-              <GlowingBadge className="border-orange-500/40 text-orange-400">
+              <GlowingBadge style={{ borderColor: `${color}60`, color, boxShadow: `0 0 20px ${color}35` }}>
                 LIVE
               </GlowingBadge>
             </div>
-            <span className="text-xs font-mono text-zinc-500">
-              Geometric status indicators
-            </span>
+            <span className="text-xs font-mono text-zinc-500">Geometric status indicators</span>
           </div>
         );
       default:
-        return (
-          <div className="text-zinc-500 font-mono text-xs">
-            Preview unavailable
-          </div>
-        );
+        return <div className="text-zinc-500 font-mono text-xs">Preview unavailable</div>;
     }
   };
 
@@ -593,6 +557,42 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
             </div>
 
             <div className="flex items-center gap-2">
+              <div className="flex items-center p-0.5 rounded-lg border border-white/10 bg-[#18181b]/90 shadow-sm mr-1">
+                <button
+                  type="button"
+                  onClick={() => setViewport("desktop")}
+                  title="Desktop (100%)"
+                  className={cn(
+                    "p-1.5 rounded-md transition-colors cursor-pointer",
+                    viewport === "desktop" ? "bg-white/15 text-white" : "text-zinc-500 hover:text-zinc-300"
+                  )}
+                >
+                  <DesktopIcon className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setViewport("tablet")}
+                  title="Tablet (768px)"
+                  className={cn(
+                    "p-1.5 rounded-md transition-colors cursor-pointer",
+                    viewport === "tablet" ? "bg-white/15 text-white" : "text-zinc-500 hover:text-zinc-300"
+                  )}
+                >
+                  <ViewGridIcon className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setViewport("mobile")}
+                  title="Mobile (390px)"
+                  className={cn(
+                    "p-1.5 rounded-md transition-colors cursor-pointer",
+                    viewport === "mobile" ? "bg-white/15 text-white" : "text-zinc-500 hover:text-zinc-300"
+                  )}
+                >
+                  <MobileIcon className="w-3.5 h-3.5" />
+                </button>
+              </div>
+
               <motion.button
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.94 }}
@@ -669,25 +669,81 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
             </div>
           </div>
 
-          <div className="flex-1 flex items-center justify-center p-8 overflow-auto relative">
+          <div className="flex-1 flex items-center justify-center p-6 overflow-hidden relative">
             <div className="absolute inset-0 bg-[radial-gradient(#27272a_1px,transparent_1px)] bg-size-[20px_20px] opacity-15 pointer-events-none" />
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.div
-                key={activeComponent.slug}
-                initial={{ opacity: 0, scale: 0.97, y: 10 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.97, y: -10 }}
-                transition={{
-                  type: "spring",
-                  stiffness: 450,
-                  damping: 35,
-                  mass: 0.8,
-                }}
-                className="relative z-10 w-full flex items-center justify-center"
-              >
-                {renderInteractivePreview(activeComponent.slug)}
-              </motion.div>
-            </AnimatePresence>
+
+            <motion.div
+              layout
+              transition={panelSpring}
+              animate={{
+                width: viewport === "mobile" ? 390 : viewport === "tablet" ? 768 : "100%",
+                height: viewport === "mobile" ? 640 : viewport === "tablet" ? 520 : "100%",
+                borderRadius: viewport === "mobile" ? 40 : viewport === "tablet" ? 24 : 0,
+              }}
+              className={cn(
+                "relative flex flex-col items-center justify-center overflow-hidden transition-colors",
+                viewport !== "desktop" &&
+                  "border border-white/15 bg-[#09090b] shadow-[0_25px_60px_rgba(0,0,0,0.9)] my-auto max-h-[90vh]"
+              )}
+            >
+              {viewport === "mobile" && (
+                <div className="absolute top-3 inset-x-0 flex justify-center z-30 pointer-events-none">
+                  <div className="w-20 h-3.5 bg-black rounded-full border border-white/10" />
+                </div>
+              )}
+
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.div
+                  key={activeComponent.slug}
+                  initial={{ opacity: 0, scale: 0.97, y: 10 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.97, y: -10 }}
+                  transition={panelSpring}
+                  className="w-full h-full flex items-center justify-center p-6 overflow-auto"
+                >
+                  {renderComponentPreview(activeComponent.slug, activeColor)}
+                </motion.div>
+              </AnimatePresence>
+            </motion.div>
+
+            <motion.div
+              drag
+              dragMomentum={false}
+              dragElastic={0.1}
+              dragConstraints={{ left: -260, right: 260, top: -350, bottom: 20 }}
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={panelSpring}
+              className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 rounded-full border border-white/10 bg-[#141416]/95 backdrop-blur-2xl px-3.5 py-2 shadow-[0_12px_36px_rgba(0,0,0,0.85)] flex items-center gap-2.5 select-none"
+            >
+              <div className="cursor-grab active:cursor-grabbing text-zinc-500 hover:text-zinc-300 pr-1 flex items-center">
+                <DragHandleDots2Icon className="w-4 h-4" />
+              </div>
+
+              <div className="flex items-center gap-2">
+                {PALETTE.map((p) => {
+                  const isSelected = activeColor === p.hex;
+                  return (
+                    <motion.button
+                      key={p.id}
+                      whileHover={{ scale: 1.12 }}
+                      whileTap={{ scale: 0.92 }}
+                      transition={microSpring}
+                      type="button"
+                      onClick={() => setActiveColor(p.hex)}
+                      title={p.label}
+                      style={{ backgroundColor: p.hex }}
+                      className={cn(
+                        "w-7 h-7 rounded-xl transition-all cursor-pointer shadow-md",
+                        isSelected
+                          ? "scale-110 ring-2 ring-white/90 ring-offset-2 ring-offset-black"
+                          : "opacity-75 hover:opacity-100"
+                      )}
+                    />
+                  );
+                })}
+              </div>
+            </motion.div>
           </div>
 
           <AnimatePresence>
@@ -796,9 +852,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           <div key={i}>{i + 1}</div>
                         ))}
                       </div>
-                      <div className="flex-1 overflow-x-auto">
-                        {highlighted}
-                      </div>
+                      <div className="flex-1 overflow-x-auto">{highlighted}</div>
                     </div>
                   </div>
                 </motion.div>
@@ -874,60 +928,55 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       Interaction Physics
                     </div>
                     <p className="text-xs text-zinc-400 font-light leading-relaxed">
-                      Interactive spring-physics state dampening with smooth
-                      hover transitions and tactile feedback.
+                      Interactive spring-physics state dampening with smooth hover
+                      transitions and tactile feedback.
                     </p>
                   </motion.div>
 
-                  {activeComponent.props &&
-                    activeComponent.props.length > 0 && (
-                      <motion.div
-                        variants={fadeVariants}
-                        className="space-y-3 pt-4 border-t border-white/8"
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
-                            Props Interface
-                          </div>
-                          <span className="text-[10px] font-mono text-zinc-500">
-                            {activeComponent.props.length} configurable
-                          </span>
+                  {activeComponent.props && activeComponent.props.length > 0 && (
+                    <motion.div
+                      variants={fadeVariants}
+                      className="space-y-3 pt-4 border-t border-white/8"
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
+                          Props Interface
                         </div>
-                        <div className="border border-white/8 rounded-xl overflow-hidden bg-black/40">
-                          <table className="w-full text-left text-xs">
-                            <thead className="bg-zinc-950 border-b border-white/8 text-zinc-500 font-mono text-[10px] uppercase">
-                              <tr>
-                                <th className="p-2.5 font-medium">Prop</th>
-                                <th className="p-2.5 font-medium">Type</th>
-                                <th className="p-2.5 font-medium">
-                                  Description
-                                </th>
+                        <span className="text-[10px] font-mono text-zinc-500">
+                          {activeComponent.props.length} configurable
+                        </span>
+                      </div>
+                      <div className="border border-white/8 rounded-xl overflow-hidden bg-black/40">
+                        <table className="w-full text-left text-xs">
+                          <thead className="bg-zinc-950 border-b border-white/8 text-zinc-500 font-mono text-[10px] uppercase">
+                            <tr>
+                              <th className="p-2.5 font-medium">Prop</th>
+                              <th className="p-2.5 font-medium">Type</th>
+                              <th className="p-2.5 font-medium">Description</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-white/6 font-mono text-xs">
+                            {activeComponent.props.map((p) => (
+                              <tr
+                                key={p.name}
+                                className="hover:bg-white/5 transition-colors"
+                              >
+                                <td className="p-2.5">
+                                  <span className="bg-zinc-900 border border-white/10 px-2 py-0.5 rounded text-orange-400 text-[11px]">
+                                    {p.name}
+                                  </span>
+                                </td>
+                                <td className="p-2.5 text-zinc-400">{p.type}</td>
+                                <td className="p-2.5 text-zinc-300 font-sans font-light">
+                                  {p.description}
+                                </td>
                               </tr>
-                            </thead>
-                            <tbody className="divide-y divide-white/6 font-mono text-xs">
-                              {activeComponent.props.map((p) => (
-                                <tr
-                                  key={p.name}
-                                  className="hover:bg-white/5 transition-colors"
-                                >
-                                  <td className="p-2.5">
-                                    <span className="bg-zinc-900 border border-white/10 px-2 py-0.5 rounded text-orange-400 text-[11px]">
-                                      {p.name}
-                                    </span>
-                                  </td>
-                                  <td className="p-2.5 text-zinc-400">
-                                    {p.type}
-                                  </td>
-                                  <td className="p-2.5 text-zinc-300 font-sans font-light">
-                                    {p.description}
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-                      </motion.div>
-                    )}
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </motion.div>
+                  )}
                 </motion.div>
               </div>
             </motion.aside>

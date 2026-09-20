@@ -116,7 +116,7 @@ export function HookSidebar({
 
   const routed = items.some((item) => hrefOf(item));
   const routeIndex = items.findIndex((item) => hrefOf(item) === pathname);
-  const activeIndex = value ?? (routed ? routeIndex : internalValue);
+  const activeIndex = value ?? (routeIndex >= 0 ? routeIndex : internalValue);
 
   useEffect(() => {
     const list = listRef.current;
