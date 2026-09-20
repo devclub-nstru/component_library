@@ -1,6 +1,5 @@
 import React from "react";
 import { notFound } from "next/navigation";
-import { Navbar } from "@/components/layout/navbar";
 import { getComponentBySlug, getAllComponents } from "@/registry";
 import { ComponentStudio } from "@/components/showcase/component-studio";
 
@@ -24,8 +23,7 @@ export default async function ComponentDetailPage({ params }: PageProps) {
   const allComponents = getAllComponents();
 
   return (
-    <div className="min-h-screen flex flex-col bg-black text-[#f4f4f5]">
-      <Navbar />
+    <div className="h-screen w-screen bg-black text-[#f4f4f5] overflow-hidden">
       <ComponentStudio component={component} allComponents={allComponents} />
     </div>
   );

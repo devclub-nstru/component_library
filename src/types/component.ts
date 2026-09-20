@@ -4,7 +4,8 @@ export type ComponentCategory =
   | "cards"
   | "feedback"
   | "navigation"
-  | "scales";
+  | "scales"
+  | "display";
 
 export interface ComponentProp {
   name: string;
