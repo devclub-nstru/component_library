@@ -35,7 +35,7 @@ export default function HeroSection() {
           <div
             key={i}
             className={cn(
-              "h-full border-r border-dashed border-white/[0.08]",
+              "h-full border-r border-dashed border-white/8",
               i >= 6 && "hidden sm:block",
               i >= 8 && "hidden md:block"
             )}
@@ -130,7 +130,7 @@ export const RepeatingLineScale = ({ className }: { className?: string }) => {
   return (
     <div
       className={cn(
-        "h-3 w-full bg-[repeating-linear-gradient(90deg,rgba(255,255,255,0.12)_0px,rgba(255,255,255,0.12)_1px,transparent_1px,transparent_8px)] border-y border-white/[0.06]",
+        "h-3 w-full bg-[repeating-linear-gradient(90deg,rgba(255,255,255,0.12)_0px,rgba(255,255,255,0.12)_1px,transparent_1px,transparent_8px)] border-y border-white/6",
         className
       )}
     />

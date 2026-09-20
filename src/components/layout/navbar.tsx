@@ -13,7 +13,7 @@ export const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-white/[0.08] bg-black/90 backdrop-blur-md">
+    <header className="sticky top-0 z-50 w-full border-b border-white/8 bg-black/90 backdrop-blur-md">
       <div className="max-w-7xl mx-auto flex h-14 items-center justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-6">
           <Link href="/" className="flex items-center gap-2.5">
@@ -77,7 +77,7 @@ export const Navbar = () => {
       </div>
 
       {mobileMenuOpen && (
-        <div className="md:hidden border-b border-white/[0.08] bg-black px-4 py-4 space-y-3 font-mono">
+        <div className="md:hidden border-b border-white/8 bg-black px-4 py-4 space-y-3 font-mono">
           {NAV_ITEMS.map((item) => (
             <Link
               key={item.href}

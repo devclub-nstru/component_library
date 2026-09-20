@@ -129,7 +129,7 @@ export default async function ComponentDetailPage({ params }: PageProps) {
           </Link>
         </div>
 
-        <div className="flex flex-col gap-3 mb-8 border-b border-white/[0.08] pb-8">
+        <div className="flex flex-col gap-3 mb-8 border-b border-white/8 pb-8">
           <h1 className="text-3xl sm:text-4xl font-serif font-normal tracking-tight text-white">
             {component.name}
           </h1>

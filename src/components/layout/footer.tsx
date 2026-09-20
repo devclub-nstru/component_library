@@ -5,8 +5,8 @@ import { SITE_CONFIG } from "@/lib/constants";
 
 export const Footer = () => {
   return (
-    <footer className="border-t border-white/[0.08] bg-black py-12 text-zinc-400 font-mono">
-      <div className="h-2 w-full mb-10 bg-[repeating-linear-gradient(90deg,rgba(255,255,255,0.08)_0px,rgba(255,255,255,0.08)_1px,transparent_1px,transparent_8px)] border-b border-white/[0.06]" />
+    <footer className="border-t border-white/8 bg-black py-12 text-zinc-400 font-mono">
+      <div className="h-2 w-full mb-10 bg-[repeating-linear-gradient(90deg,rgba(255,255,255,0.08)_0px,rgba(255,255,255,0.08)_1px,transparent_1px,transparent_8px)] border-b border-white/6" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
@@ -114,7 +114,7 @@ export const Footer = () => {
           </div>
         </div>
 
-        <div className="border-t border-white/[0.08] pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-500">
+        <div className="border-t border-white/8 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-500">
           <p>
             © {new Date().getFullYear()} devclub. All rights reserved.
           </p>

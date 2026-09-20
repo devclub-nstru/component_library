@@ -21,26 +21,26 @@ export const AnimatedButton = React.forwardRef<
       <button
         ref={ref}
         className={cn(
-          "group relative inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-xs font-medium tracking-wide transition-all duration-200 cursor-pointer select-none overflow-hidden",
+          "group relative inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-xs font-medium tracking-wide transition-all duration-200 cursor-pointer select-none overflow-hidden ease-[cubic-bezier(0.16,1,0.3,1)]",
           variant === "primary" &&
-            "bg-linear-to-t from-blue-700 to-blue-500 text-white shadow-lg shadow-blue-500/20 hover:brightness-110 active:scale-[0.98]",
+            "bg-white text-black font-medium hover:bg-zinc-200 active:scale-[0.96] shadow-sm",
           variant === "secondary" &&
-            "bg-zinc-800 text-zinc-100 hover:bg-zinc-700 active:scale-[0.98]",
+            "bg-zinc-900 border border-white/15 text-zinc-100 hover:bg-zinc-800 hover:border-white/30 active:scale-[0.96]",
           variant === "outline" &&
-            "border border-zinc-800 text-zinc-300 hover:border-zinc-700 hover:bg-zinc-900/60 hover:text-white active:scale-[0.98]",
+            "border border-white/20 text-zinc-300 hover:border-white/50 hover:bg-white/5 hover:text-white active:scale-[0.96]",
           variant === "shimmer" &&
-            "border border-zinc-700/80 bg-zinc-900/90 text-zinc-100 hover:border-zinc-500 shadow-[0_0_15px_rgba(255,255,255,0.05)]",
+            "border border-white/20 bg-black text-zinc-100 hover:border-white/50 active:scale-[0.96]",
           className,
         )}
         {...props}
       >
         {variant === "shimmer" && (
-          <span className="absolute inset-0 -translate-x-full animate-[shimmer_2s_infinite] bg-linear-to-r from-transparent via-white/10 to-transparent pointer-events-none" />
+          <span className="absolute inset-0 -translate-x-full animate-[shimmer_2s_infinite] bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent)] pointer-events-none" />
         )}
         <span className="relative z-10 flex items-center gap-2">
           {children}
           {showArrow && (
-            <ArrowRightIcon className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
+            <ArrowRightIcon className="h-3.5 w-3.5 transition-transform duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-1" />
           )}
         </span>
       </button>

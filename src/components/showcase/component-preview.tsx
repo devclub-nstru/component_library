@@ -58,8 +58,8 @@ export const ComponentPreview = ({
 
       <div className="p-0">
         {activeTab === "preview" ? (
-          <div className="relative flex min-h-[320px] w-full items-center justify-center p-8 overflow-hidden bg-zinc-950/40">
-            <div className="absolute inset-0 bg-[radial-gradient(#27272a_1px,transparent_1px)] [background-size:16px_16px] opacity-30 pointer-events-none" />
+          <div className="relative flex min-h-80 w-full items-center justify-center p-8 overflow-hidden bg-zinc-950/40">
+            <div className="absolute inset-0 bg-[radial-gradient(#27272a_1px,transparent_1px)] bg-size-[16px_16px] opacity-30 pointer-events-none" />
             <div className="relative z-10 w-full flex items-center justify-center">
               {children}
             </div>

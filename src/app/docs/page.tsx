@@ -11,7 +11,7 @@ export default function DocsPage() {
       <Navbar />
 
       <main className="flex-1 max-w-4xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-12">
-        <div className="flex flex-col gap-3 mb-10 border-b border-white/[0.08] pb-8">
+        <div className="flex flex-col gap-3 mb-10 border-b border-white/8 pb-8">
           <h1 className="text-3xl sm:text-5xl font-serif font-normal tracking-tight text-white">
             Getting Started
           </h1>
@@ -86,7 +86,7 @@ export function cn(...inputs: ClassValue[]) {
             </div>
           </section>
 
-          <div className="pt-6 border-t border-white/[0.08] flex justify-between items-center font-mono">
+          <div className="pt-6 border-t border-white/8 flex justify-between items-center font-mono">
             <Link
               href="/"
               className="text-xs text-zinc-400 hover:text-white transition-colors"
