@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Poppins, Newsreader } from "next/font/google";
+import { Poppins } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { SITE_CONFIG } from "@/lib/constants";
 
@@ -10,10 +11,60 @@ const poppins = Poppins({
   display: "swap",
 });
 
-const newsreader = Newsreader({
-  variable: "--font-newsreader",
-  subsets: ["latin"],
-  style: ["normal", "italic"],
+const gambetta = localFont({
+  src: [
+    {
+      path: "../../public/fonts/Gambetta-Light.otf",
+      weight: "300",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Gambetta-LightItalic.otf",
+      weight: "300",
+      style: "italic",
+    },
+    {
+      path: "../../public/fonts/Gambetta-Regular.otf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Gambetta-Italic.otf",
+      weight: "400",
+      style: "italic",
+    },
+    {
+      path: "../../public/fonts/Gambetta-Medium.otf",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Gambetta-MediumItalic.otf",
+      weight: "500",
+      style: "italic",
+    },
+    {
+      path: "../../public/fonts/Gambetta-Semibold.otf",
+      weight: "600",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Gambetta-SemiboldItalic.otf",
+      weight: "600",
+      style: "italic",
+    },
+    {
+      path: "../../public/fonts/Gambetta-Bold.otf",
+      weight: "700",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Gambetta-BoldItalic.otf",
+      weight: "700",
+      style: "italic",
+    },
+  ],
+  variable: "--font-gambetta",
   display: "swap",
 });
 
@@ -34,7 +85,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${poppins.variable} ${newsreader.variable} dark h-full antialiased`}
+      className={`${poppins.variable} ${gambetta.variable} dark h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-black text-zinc-100 font-sans selection:bg-zinc-800 selection:text-white">
         {children}

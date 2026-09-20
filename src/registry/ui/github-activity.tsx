@@ -80,7 +80,7 @@ export function GitHubActivity({
   return (
     <div
       className={cn(
-        "relative w-full max-w-[390px] rounded-2xl border border-white/10 bg-[#0c0c0e] p-5 shadow-2xl overflow-hidden select-none",
+        "relative w-full max-w-97.5 rounded-2xl border border-white/10 bg-[#0c0c0e] p-5 shadow-2xl overflow-hidden select-none",
         className,
       )}
     >
@@ -102,9 +102,9 @@ export function GitHubActivity({
       </div>
 
       <div className="relative">
-        <div className="flex gap-[3px] overflow-x-auto scrollbar-none pb-3">
+        <div className="flex gap-0.75 overflow-x-auto scrollbar-none pb-3">
           {gridData.map((col, cIdx) => (
-            <div key={cIdx} className="flex flex-col gap-[3px]">
+            <div key={cIdx} className="flex flex-col gap-0.75">
               {col.map((level, rIdx) => (
                 <div
                   key={rIdx}
@@ -116,7 +116,7 @@ export function GitHubActivity({
                   }
                   onMouseLeave={() => setHoveredCell(null)}
                   className={cn(
-                    "h-2.5 w-2.5 sm:h-3 sm:w-3 rounded-[2px] transition-transform duration-150 hover:scale-125 hover:z-10 hover:ring-1 hover:ring-white/40 cursor-pointer",
+                    "h-2.5 w-2.5 sm:h-3 sm:w-3 rounded-xs transition-transform duration-150 hover:scale-125 hover:z-10 hover:ring-1 hover:ring-white/40 cursor-pointer",
                     GREEN_LEVELS[level],
                   )}
                 />

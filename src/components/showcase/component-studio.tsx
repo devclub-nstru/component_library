@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
 import {
@@ -11,8 +11,11 @@ import {
   Cross2Icon,
   CopyIcon,
   CheckIcon,
+  ChevronRightIcon,
+  LayersIcon,
 } from "@radix-ui/react-icons";
 import { ComponentRegistryItem } from "@/types/component";
+import { getComponentBySlug } from "@/registry";
 import { AnimatedButton } from "@/registry/ui/animated-button";
 import { HorizontalScale, VerticalScale, Lines } from "@/registry/ui/scales";
 import { SpotlightCard } from "@/registry/ui/spotlight-card";
@@ -31,24 +34,52 @@ const CATEGORIES = [
   {
     label: "DISPLAY",
     items: [
-      { label: "Scales & Borders", href: "/components/scales" },
-      { label: "Spotlight Card", href: "/components/spotlight-card" },
-      { label: "GitHub activity", href: "/components/github-activity" },
+      { label: "Scales & Borders", slug: "scales", href: "/components/scales" },
+      {
+        label: "Spotlight Card",
+        slug: "spotlight-card",
+        href: "/components/spotlight-card",
+      },
+      {
+        label: "GitHub activity",
+        slug: "github-activity",
+        href: "/components/github-activity",
+      },
     ],
   },
   {
     label: "NAVIGATION",
-    items: [{ label: "Hook Sidebar", href: "/components/hook-sidebar" }],
+    items: [
+      {
+        label: "Hook Sidebar",
+        slug: "hook-sidebar",
+        href: "/components/hook-sidebar",
+      },
+    ],
   },
   {
     label: "INPUTS",
-    items: [{ label: "Animated Button", href: "/components/animated-button" }],
+    items: [
+      {
+        label: "Animated Button",
+        slug: "animated-button",
+        href: "/components/animated-button",
+      },
+    ],
   },
   {
     label: "LAYOUT & FEEDBACK",
     items: [
-      { label: "Bento Grid", href: "/components/bento-grid" },
-      { label: "Status Badge", href: "/components/glowing-badge" },
+      {
+        label: "Bento Grid",
+        slug: "bento-grid",
+        href: "/components/bento-grid",
+      },
+      {
+        label: "Status Badge",
+        slug: "glowing-badge",
+        href: "/components/glowing-badge",
+      },
     ],
   },
 ];
@@ -80,6 +111,44 @@ const CODE_KEYWORDS = new Set([
   "case",
 ]);
 
+const panelSpring = {
+  type: "spring" as const,
+  stiffness: 450,
+  damping: 35,
+  mass: 0.8,
+};
+
+const microSpring = {
+  type: "spring" as const,
+  stiffness: 520,
+  damping: 30,
+};
+
+const sheetSpring = {
+  type: "spring" as const,
+  stiffness: 460,
+  damping: 38,
+  mass: 0.8,
+};
+
+const fadeVariants = {
+  hidden: { opacity: 0, y: 12 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: "spring" as const,
+      stiffness: 420,
+      damping: 32,
+    },
+  },
+  exit: {
+    opacity: 0,
+    y: 8,
+    transition: { duration: 0.15 },
+  },
+};
+
 function highlightCode(code: string) {
   return code.split("\n").map((line, lineIdx) => {
     const regex =
@@ -107,7 +176,7 @@ function highlightCode(code: string) {
       tokens.push(
         <span key={match.index} className={colorClass}>
           {token}
-        </span>
+        </span>,
       );
     }
     return (
@@ -119,20 +188,72 @@ function highlightCode(code: string) {
 }
 
 export const ComponentStudio = ({ component }: ComponentStudioProps) => {
+  const [selectedSlug, setSelectedSlug] = useState(component.slug);
+  const [prevPropSlug, setPrevPropSlug] = useState(component.slug);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [activePanel, setActivePanel] = useState<"none" | "info" | "code">(
-    "none"
+    "none",
   );
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [installCopied, setInstallCopied] = useState(false);
   const [codeCopied, setCodeCopied] = useState(false);
+  const [selectedFileIndex, setSelectedFileIndex] = useState(0);
 
-  const activeCode = component.files[0]?.code || "";
+  if (component.slug !== prevPropSlug) {
+    setPrevPropSlug(component.slug);
+    setSelectedSlug(component.slug);
+  }
+
+  const activeComponent = useMemo(() => {
+    return getComponentBySlug(selectedSlug) || component;
+  }, [selectedSlug, component]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        if (activePanel !== "none") {
+          setActivePanel("none");
+        } else if (isFullscreen) {
+          setIsFullscreen(false);
+        }
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [activePanel, isFullscreen]);
+
+  useEffect(() => {
+    const handlePopState = () => {
+      const parts = window.location.pathname.split("/").filter(Boolean);
+      if (parts[0] === "components" && parts[1]) {
+        const target = getComponentBySlug(parts[1]);
+        if (target) {
+          setSelectedSlug(target.slug);
+          setSelectedFileIndex(0);
+        }
+      }
+    };
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
+
+  const handleSelectSlug = (slug: string) => {
+    const nextComp = getComponentBySlug(slug);
+    if (nextComp && nextComp.slug !== activeComponent.slug) {
+      setSelectedSlug(slug);
+      setSelectedFileIndex(0);
+      window.history.pushState(null, "", `/components/${slug}`);
+    }
+  };
+
+  const activeFile =
+    activeComponent.files[selectedFileIndex] || activeComponent.files[0];
+  const activeCode = activeFile?.code || "";
   const codeLines = useMemo(() => activeCode.split("\n"), [activeCode]);
   const highlighted = useMemo(() => highlightCode(activeCode), [activeCode]);
 
   const handleInstallCopy = async () => {
-    const cmd = `npm install ${component.dependencies.join(" ")}`;
+    const cmd = `npm install ${activeComponent.dependencies.join(" ")}`;
     await navigator.clipboard.writeText(cmd);
     setInstallCopied(true);
     setTimeout(() => setInstallCopied(false), 2000);
@@ -200,9 +321,6 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
             <div className="flex items-center justify-between pb-2 border-b border-white/8">
               <span className="text-xs font-mono uppercase text-zinc-400">
                 Hook Rail Demonstration
-              </span>
-              <span className="text-[10px] font-mono text-orange-500">
-                Stiffness: 420
               </span>
             </div>
             <HookSidebar
@@ -301,25 +419,28 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
 
   return (
     <div className="h-screen w-screen bg-black text-[#f4f4f5] flex overflow-hidden select-none">
-      {!isFullscreen && (
-        <motion.aside
-          initial={false}
-          animate={{
-            width: sidebarOpen ? 260 : 64,
-          }}
-          transition={{
-            type: "spring",
-            stiffness: 420,
-            damping: 34,
-            mass: 0.7,
-          }}
-          className="shrink-0 bg-black flex flex-col overflow-hidden h-full z-10"
-        >
-          <div className="p-4 flex items-center justify-between h-14">
-            <button
-              type="button"
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="w-8 h-8 rounded-lg border border-white/10 bg-[#18181b] hover:bg-[#222226] text-zinc-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+      <motion.aside
+        initial={false}
+        animate={{
+          width: isFullscreen ? 0 : sidebarOpen ? 260 : 64,
+          opacity: isFullscreen ? 0 : 1,
+        }}
+        transition={panelSpring}
+        className="shrink-0 bg-black flex flex-col overflow-hidden h-full z-20 border-r border-white/5"
+      >
+        <div className="p-3.5 flex items-center justify-between h-14 shrink-0 border-b border-white/5">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.92 }}
+            transition={microSpring}
+            type="button"
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="w-8 h-8 rounded-lg border border-white/10 bg-[#18181b] hover:bg-[#222226] text-zinc-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+            title={sidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
+          >
+            <motion.div
+              animate={{ rotate: sidebarOpen ? 0 : 180 }}
+              transition={microSpring}
             >
               <svg
                 width="16"
@@ -332,287 +453,487 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 <rect x="2" y="2" width="12" height="12" rx="2" />
                 <path d="M6 2v12" />
               </svg>
-            </button>
-            {sidebarOpen && (
-              <span className="font-mono text-[11px] text-zinc-500 uppercase tracking-widest font-medium">
-                Studio
-              </span>
-            )}
-          </div>
+            </motion.div>
+          </motion.button>
+        </div>
 
-          {sidebarOpen && (
-            <div className="flex-1 overflow-y-auto px-4 pb-6 pt-2 space-y-7 scrollbar-none font-sans">
-              <Link
-                href="/components"
-                className="block text-sm font-medium text-white hover:text-orange-400 transition-colors tracking-tight"
-              >
-                Components
-              </Link>
-
-              <div className="space-y-6">
-                {CATEGORIES.map((cat) => (
-                  <HookSidebar
-                    key={cat.label}
-                    label={cat.label}
-                    items={cat.items}
-                    color="#FC4C01"
-                    dashed={true}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
-        </motion.aside>
-      )}
-
-      <div className="flex-1 flex p-3 gap-3 overflow-hidden h-full relative">
-        <motion.main
-          layout
-          transition={{
-            type: "spring",
-            stiffness: 420,
-            damping: 34,
-            mass: 0.7,
-          }}
-          className={cn(
-            "relative rounded-[28px] border border-white/6 bg-[#0f0f11] flex flex-col justify-between overflow-hidden h-full flex-1",
-            isFullscreen && "fixed inset-0 z-50 rounded-none border-none m-0"
-          )}
-        >
-          <div className="absolute top-4 right-4 z-20 flex items-center gap-2">
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              type="button"
-              onClick={handleInstallCopy}
-              className="h-10 px-4 rounded-xl border border-white/10 bg-[#18181b]/90 hover:bg-[#222226] text-zinc-300 hover:text-white text-xs font-mono transition-colors cursor-pointer flex items-center justify-center shadow-lg"
-            >
-              {installCopied ? "Copied!" : "Install"}
-            </motion.button>
-
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              type="button"
-              onClick={() => setIsFullscreen(!isFullscreen)}
-              className="w-10 h-10 rounded-xl border border-white/10 bg-[#18181b]/90 hover:bg-[#222226] text-zinc-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer shadow-lg"
-            >
-              {isFullscreen ? (
-                <ExitFullScreenIcon className="w-4 h-4" />
-              ) : (
-                <EnterFullScreenIcon className="w-4 h-4" />
-              )}
-            </motion.button>
-
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              type="button"
-              onClick={() =>
-                setActivePanel(activePanel === "code" ? "none" : "code")
-              }
-              className={cn(
-                "w-10 h-10 rounded-xl border flex items-center justify-center transition-colors cursor-pointer shadow-lg",
-                activePanel === "code"
-                  ? "border-orange-500/80 text-orange-400 bg-orange-500/10"
-                  : "border-white/10 bg-[#18181b]/90 hover:bg-[#222226] text-zinc-400 hover:text-white"
-              )}
-            >
-              <CodeIcon className="w-4 h-4" />
-            </motion.button>
-
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              type="button"
-              onClick={() =>
-                setActivePanel(activePanel === "info" ? "none" : "info")
-              }
-              className={cn(
-                "w-10 h-10 rounded-xl border flex items-center justify-center transition-colors cursor-pointer shadow-lg",
-                activePanel === "info"
-                  ? "border-orange-500/80 text-orange-400 bg-orange-500/10"
-                  : "border-white/10 bg-[#18181b]/90 hover:bg-[#222226] text-zinc-400 hover:text-white"
-              )}
-            >
-              <InfoCircledIcon className="w-4 h-4" />
-            </motion.button>
-          </div>
-
-          <div className="flex-1 flex items-center justify-center p-8 overflow-auto">
-            {renderInteractivePreview(component.slug)}
-          </div>
-
-          <AnimatePresence>
-            {activePanel === "code" && (
+        <div className="flex-1 overflow-hidden relative">
+          <AnimatePresence initial={false} mode="popLayout">
+            {sidebarOpen ? (
               <motion.div
-                key="code-sheet"
-                initial={{ y: "100%", opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: "100%", opacity: 0 }}
-                transition={{
-                  type: "spring",
-                  stiffness: 400,
-                  damping: 36,
-                  mass: 0.8,
-                }}
-                className="absolute inset-x-3 bottom-3 top-3 z-30 rounded-[24px] border border-white/10 bg-[#0a0a0c] shadow-2xl flex flex-col overflow-hidden"
+                key="sidebar-expanded"
+                initial={{ opacity: 0, x: -16 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -16 }}
+                transition={panelSpring}
+                className="w-65 min-w-65 h-full overflow-y-auto px-4 pb-6 pt-3 space-y-6 scrollbar-none font-sans"
               >
-                <div className="w-12 h-1 bg-zinc-700/60 rounded-full mx-auto my-3 shrink-0" />
+                <Link
+                  href="/components"
+                  className="flex items-center justify-between text-xs font-medium text-zinc-300 hover:text-orange-400 transition-colors tracking-tight px-1 py-1"
+                >
+                  <span>All Components</span>
+                  <ChevronRightIcon className="w-3.5 h-3.5 text-zinc-600" />
+                </Link>
 
-                <div className="px-6 pb-3 border-b border-white/8 flex items-center justify-between shrink-0">
-                  <span className="text-sm font-sans font-medium text-zinc-100 tracking-tight">
-                    {component.name}
-                  </span>
+                <div className="space-y-6">
+                  {CATEGORIES.map((cat) => {
+                    const activeItemIdx = cat.items.findIndex(
+                      (item) => item.slug === activeComponent.slug,
+                    );
 
-                  <div className="flex items-center gap-2">
-                    <motion.button
-                      whileTap={{ scale: 0.95 }}
-                      type="button"
-                      onClick={handleInstallCopy}
-                      className="border border-white/10 hover:border-white/20 bg-[#18181b] hover:bg-[#222226] text-zinc-300 hover:text-white px-3 py-1.5 rounded-lg text-xs font-mono transition-colors cursor-pointer"
-                    >
-                      {installCopied ? "Copied!" : "Install"}
-                    </motion.button>
-
-                    <motion.button
-                      whileTap={{ scale: 0.95 }}
-                      type="button"
-                      onClick={handleCodeCopy}
-                      className="w-8 h-8 rounded-lg border border-white/10 hover:border-white/20 bg-[#18181b] hover:bg-[#222226] text-zinc-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
-                    >
-                      {codeCopied ? (
-                        <CheckIcon className="w-4 h-4 text-emerald-400" />
-                      ) : (
-                        <CopyIcon className="w-4 h-4" />
-                      )}
-                    </motion.button>
-
-                    <motion.button
-                      whileTap={{ scale: 0.95 }}
-                      type="button"
-                      onClick={() => setActivePanel("none")}
-                      className="w-8 h-8 rounded-lg border border-white/10 hover:border-white/20 bg-[#18181b] hover:bg-[#222226] text-zinc-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
-                    >
-                      <Cross2Icon className="w-4 h-4" />
-                    </motion.button>
-                  </div>
+                    return (
+                      <HookSidebar
+                        key={cat.label}
+                        label={cat.label}
+                        value={activeItemIdx >= 0 ? activeItemIdx : -1}
+                        items={cat.items.map((item) => ({
+                          label: item.label,
+                          href: item.href,
+                          onClick: (e: React.MouseEvent<HTMLElement>) => {
+                            if (
+                              !e.metaKey &&
+                              !e.ctrlKey &&
+                              !e.shiftKey &&
+                              e.button === 0
+                            ) {
+                              e.preventDefault();
+                              handleSelectSlug(item.slug);
+                            }
+                          },
+                        }))}
+                        color="#FC4C01"
+                        dashed={true}
+                      />
+                    );
+                  })}
                 </div>
-
-                <div className="flex-1 p-6 overflow-auto font-mono text-xs leading-relaxed bg-[#070709]">
-                  <div className="flex">
-                    <div className="select-none text-zinc-600 text-right pr-5 shrink-0 space-y-0.5">
-                      {codeLines.map((_, i) => (
-                        <div key={i}>{i + 1}</div>
-                      ))}
-                    </div>
-                    <div className="flex-1 overflow-x-auto">{highlighted}</div>
-                  </div>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="sidebar-collapsed"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={microSpring}
+                className="w-16 h-full flex flex-col items-center py-4 gap-4"
+              >
+                <Link
+                  href="/components"
+                  title="All Components"
+                  className="w-9 h-9 rounded-lg border border-white/5 bg-zinc-900/60 hover:bg-zinc-800 text-zinc-400 hover:text-white flex items-center justify-center transition-colors"
+                >
+                  <LayersIcon className="w-4 h-4" />
+                </Link>
+                <div className="w-6 h-px bg-white/5" />
+                <div className="flex flex-col gap-2">
+                  {CATEGORIES.map((cat, idx) => (
+                    <button
+                      key={cat.label}
+                      type="button"
+                      onClick={() => {
+                        const first = cat.items[0];
+                        if (first) {
+                          handleSelectSlug(first.slug);
+                        }
+                      }}
+                      title={cat.label}
+                      className={cn(
+                        "w-9 h-9 rounded-lg transition-colors font-mono text-[10px] flex items-center justify-center cursor-pointer",
+                        cat.items.some(
+                          (item) => item.slug === activeComponent.slug,
+                        )
+                          ? "bg-orange-500/15 text-orange-400 border border-orange-500/30"
+                          : "text-zinc-500 hover:text-zinc-200 hover:bg-white/5",
+                      )}
+                    >
+                      0{idx + 1}
+                    </button>
+                  ))}
                 </div>
               </motion.div>
             )}
           </AnimatePresence>
+        </div>
+      </motion.aside>
+
+      <motion.div
+        animate={{
+          padding: isFullscreen ? "0px" : "14px",
+          gap: isFullscreen ? "0px" : "16px",
+        }}
+        transition={panelSpring}
+        className={cn(
+          "flex-1 flex overflow-hidden h-full relative p-3.5 gap-4",
+          isFullscreen && "p-0 gap-0",
+        )}
+      >
+        <motion.main
+          layout
+          transition={panelSpring}
+          animate={{
+            borderRadius: isFullscreen ? 0 : 24,
+            scale: activePanel === "code" ? 0.985 : 1,
+            opacity: activePanel === "code" ? 0.75 : 1,
+          }}
+          className={cn(
+            "relative border border-white/8 bg-[#0f0f11] flex flex-col overflow-hidden h-full flex-1",
+            isFullscreen && "border-none",
+          )}
+        >
+          <div className="h-14 px-5 border-b border-white/5 flex items-center justify-between z-20 shrink-0 bg-[#0f0f11]/80 backdrop-blur-md">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 shrink-0">
+                {activeComponent.category}
+              </span>
+              <span className="text-zinc-700 shrink-0">/</span>
+              <span className="text-xs font-sans font-medium text-white tracking-tight truncate">
+                {activeComponent.name}
+              </span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <motion.button
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.94 }}
+                transition={microSpring}
+                type="button"
+                onClick={handleInstallCopy}
+                className="h-8 px-3 rounded-lg border border-white/10 bg-[#18181b]/90 hover:bg-[#222226] text-zinc-300 hover:text-white text-xs font-mono transition-colors cursor-pointer flex items-center gap-1.5 shadow-sm"
+              >
+                {installCopied ? (
+                  <>
+                    <CheckIcon className="w-3.5 h-3.5 text-emerald-400" />
+                    <span className="text-emerald-400">Copied</span>
+                  </>
+                ) : (
+                  <span>npm i</span>
+                )}
+              </motion.button>
+
+              <motion.button
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.94 }}
+                transition={microSpring}
+                type="button"
+                onClick={() => setIsFullscreen(!isFullscreen)}
+                title={
+                  isFullscreen ? "Exit Fullscreen (Esc)" : "Enter Fullscreen"
+                }
+                className="w-8 h-8 rounded-lg border border-white/10 bg-[#18181b]/90 hover:bg-[#222226] text-zinc-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer shadow-sm"
+              >
+                {isFullscreen ? (
+                  <ExitFullScreenIcon className="w-3.5 h-3.5" />
+                ) : (
+                  <EnterFullScreenIcon className="w-3.5 h-3.5" />
+                )}
+              </motion.button>
+
+              <motion.button
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.94 }}
+                transition={microSpring}
+                type="button"
+                onClick={() =>
+                  setActivePanel(activePanel === "code" ? "none" : "code")
+                }
+                className={cn(
+                  "h-8 px-2.5 rounded-lg border flex items-center gap-1.5 text-xs transition-all cursor-pointer shadow-sm",
+                  activePanel === "code"
+                    ? "border-orange-500/80 text-orange-400 bg-orange-500/15 shadow-orange-500/10 shadow-md font-medium"
+                    : "border-white/10 bg-[#18181b]/90 hover:bg-[#222226] text-zinc-400 hover:text-white",
+                )}
+              >
+                <CodeIcon className="w-3.5 h-3.5" />
+                <span className="font-mono text-[11px]">Code</span>
+              </motion.button>
+
+              <motion.button
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.94 }}
+                transition={microSpring}
+                type="button"
+                onClick={() =>
+                  setActivePanel(activePanel === "info" ? "none" : "info")
+                }
+                className={cn(
+                  "h-8 px-2.5 rounded-lg border flex items-center gap-1.5 text-xs transition-all cursor-pointer shadow-sm",
+                  activePanel === "info"
+                    ? "border-orange-500/80 text-orange-400 bg-orange-500/15 shadow-orange-500/10 shadow-md font-medium"
+                    : "border-white/10 bg-[#18181b]/90 hover:bg-[#222226] text-zinc-400 hover:text-white",
+                )}
+              >
+                <InfoCircledIcon className="w-3.5 h-3.5" />
+                <span className="font-mono text-[11px]">Info</span>
+              </motion.button>
+            </div>
+          </div>
+
+          <div className="flex-1 flex items-center justify-center p-8 overflow-auto relative">
+            <div className="absolute inset-0 bg-[radial-gradient(#27272a_1px,transparent_1px)] bg-size-[20px_20px] opacity-15 pointer-events-none" />
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={activeComponent.slug}
+                initial={{ opacity: 0, scale: 0.97, y: 10 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.97, y: -10 }}
+                transition={{
+                  type: "spring",
+                  stiffness: 450,
+                  damping: 35,
+                  mass: 0.8,
+                }}
+                className="relative z-10 w-full flex items-center justify-center"
+              >
+                {renderInteractivePreview(activeComponent.slug)}
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          <AnimatePresence>
+            {activePanel === "code" && (
+              <>
+                <motion.div
+                  key="code-backdrop"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  onClick={() => setActivePanel("none")}
+                  className="absolute inset-0 bg-black/40 backdrop-blur-[2px] z-30"
+                />
+                <motion.div
+                  key="code-sheet"
+                  initial={{ y: "100%" }}
+                  animate={{ y: 0 }}
+                  exit={{ y: "100%" }}
+                  transition={sheetSpring}
+                  drag="y"
+                  dragConstraints={{ top: 0, bottom: 0 }}
+                  dragElastic={{ top: 0.05, bottom: 0.4 }}
+                  onDragEnd={(_, info) => {
+                    if (info.offset.y > 100 || info.velocity.y > 400) {
+                      setActivePanel("none");
+                    }
+                  }}
+                  className="absolute inset-x-2 bottom-2 top-10 z-40 rounded-2xl border border-white/10 bg-[#0a0a0c] shadow-[0_-20px_50px_rgba(0,0,0,0.8)] flex flex-col overflow-hidden"
+                >
+                  <div className="pt-2.5 pb-1 flex justify-center shrink-0 cursor-grab active:cursor-grabbing">
+                    <div className="w-10 h-1 bg-zinc-700/80 rounded-full" />
+                  </div>
+
+                  <div className="px-5 pb-3 border-b border-white/8 flex items-center justify-between shrink-0">
+                    <div className="flex items-center gap-2 overflow-x-auto">
+                      {activeComponent.files.map((file, idx) => (
+                        <button
+                          key={file.name}
+                          type="button"
+                          onClick={() => setSelectedFileIndex(idx)}
+                          className={cn(
+                            "relative px-3 py-1.5 rounded-lg text-xs font-mono transition-colors cursor-pointer",
+                            idx === selectedFileIndex
+                              ? "text-white"
+                              : "text-zinc-500 hover:text-zinc-300",
+                          )}
+                        >
+                          {idx === selectedFileIndex && (
+                            <motion.div
+                              layoutId="active-code-tab"
+                              transition={microSpring}
+                              className="absolute inset-0 bg-white/10 border border-white/10 rounded-lg"
+                            />
+                          )}
+                          <span className="relative z-10">{file.name}</span>
+                        </button>
+                      ))}
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <motion.button
+                        whileHover={{ scale: 1.04 }}
+                        whileTap={{ scale: 0.94 }}
+                        transition={microSpring}
+                        type="button"
+                        onClick={handleInstallCopy}
+                        className="border border-white/10 hover:border-white/20 bg-[#18181b] hover:bg-[#222226] text-zinc-300 hover:text-white px-3 py-1.5 rounded-lg text-xs font-mono transition-colors cursor-pointer"
+                      >
+                        {installCopied ? "Copied!" : "Install"}
+                      </motion.button>
+
+                      <motion.button
+                        whileHover={{ scale: 1.04 }}
+                        whileTap={{ scale: 0.94 }}
+                        transition={microSpring}
+                        type="button"
+                        onClick={handleCodeCopy}
+                        className="w-8 h-8 rounded-lg border border-white/10 hover:border-white/20 bg-[#18181b] hover:bg-[#222226] text-zinc-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+                        title="Copy code"
+                      >
+                        {codeCopied ? (
+                          <CheckIcon className="w-4 h-4 text-emerald-400" />
+                        ) : (
+                          <CopyIcon className="w-4 h-4" />
+                        )}
+                      </motion.button>
+
+                      <motion.button
+                        whileTap={{ scale: 0.94 }}
+                        transition={microSpring}
+                        type="button"
+                        onClick={() => setActivePanel("none")}
+                        className="w-8 h-8 rounded-lg border border-white/10 hover:border-white/20 bg-[#18181b] hover:bg-[#222226] text-zinc-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+                        title="Close (Esc)"
+                      >
+                        <Cross2Icon className="w-4 h-4" />
+                      </motion.button>
+                    </div>
+                  </div>
+
+                  <div className="flex-1 p-6 overflow-auto font-mono text-xs leading-relaxed bg-[#070709] select-text">
+                    <div className="flex">
+                      <div className="select-none text-zinc-600 text-right pr-5 shrink-0 space-y-0.5">
+                        {codeLines.map((_, i) => (
+                          <div key={i}>{i + 1}</div>
+                        ))}
+                      </div>
+                      <div className="flex-1 overflow-x-auto">
+                        {highlighted}
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              </>
+            )}
+          </AnimatePresence>
         </motion.main>
 
-        <AnimatePresence mode="wait">
+        <AnimatePresence>
           {activePanel === "info" && (
             <motion.aside
               key="info-panel"
-              initial={{ opacity: 0, x: 50, width: 0 }}
-              animate={{ opacity: 1, x: 0, width: 440 }}
-              exit={{ opacity: 0, x: 50, width: 0 }}
-              transition={{
-                type: "spring",
-                stiffness: 420,
-                damping: 34,
-                mass: 0.7,
-              }}
-              className="shrink-0 h-full border border-white/8 bg-[#0c0c0e] rounded-[24px] p-6 sm:p-8 overflow-y-auto flex flex-col justify-between"
+              initial={{ width: 0, opacity: 0 }}
+              animate={{ width: 420, opacity: 1 }}
+              exit={{ width: 0, opacity: 0 }}
+              transition={panelSpring}
+              className="shrink-0 h-full border border-white/8 bg-[#0c0c0e] rounded-3xl overflow-hidden flex flex-col"
             >
-              <div className="space-y-6">
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-mono uppercase tracking-widest text-zinc-500">
-                    {component.slug.replace("-", " ")}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => setActivePanel("none")}
-                    className="text-zinc-500 hover:text-white transition-colors cursor-pointer p-1"
+              <div className="w-105 min-w-105 h-full p-6 sm:p-7 overflow-y-auto flex flex-col justify-between scrollbar-none">
+                <motion.div
+                  initial="hidden"
+                  animate="visible"
+                  transition={{ staggerChildren: 0.05 }}
+                  className="space-y-6"
+                >
+                  <motion.div
+                    variants={fadeVariants}
+                    className="flex items-center justify-between pb-2 border-b border-white/5"
                   >
-                    <Cross2Icon className="w-4 h-4" />
-                  </button>
-                </div>
-
-                <div>
-                  <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight leading-snug">
-                    {component.description}
-                  </h2>
-                </div>
-
-                <div className="space-y-2">
-                  <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
-                    Dependencies
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {component.dependencies.map((dep) => (
-                      <span
-                        key={dep}
-                        className="inline-flex items-center gap-1.5 border border-white/10 bg-black/60 px-3 py-1 text-xs font-mono text-zinc-300 rounded-lg"
-                      >
-                        <span className="text-zinc-500">〰</span>
-                        {dep}
+                    <div className="flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-orange-500" />
+                      <span className="text-[10px] font-mono uppercase tracking-widest text-zinc-400 font-medium">
+                        {activeComponent.slug.replace("-", " ")}
                       </span>
-                    ))}
-                  </div>
-                </div>
+                    </div>
+                    <motion.button
+                      whileTap={{ scale: 0.9 }}
+                      transition={microSpring}
+                      type="button"
+                      onClick={() => setActivePanel("none")}
+                      className="w-7 h-7 rounded-lg border border-white/10 hover:border-white/20 bg-zinc-900 text-zinc-400 hover:text-white transition-colors cursor-pointer flex items-center justify-center"
+                      title="Close (Esc)"
+                    >
+                      <Cross2Icon className="w-3.5 h-3.5" />
+                    </motion.button>
+                  </motion.div>
 
-                <div className="space-y-2">
-                  <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
-                    Interaction Type
-                  </div>
-                  <p className="text-xs text-zinc-400 font-light leading-relaxed">
-                    Interactive spring-physics state dampening with smooth hover
-                    transitions and tactile feedback.
-                  </p>
-                </div>
+                  <motion.div variants={fadeVariants}>
+                    <h2 className="text-xl sm:text-2xl font-serif text-white tracking-tight leading-snug">
+                      {activeComponent.description}
+                    </h2>
+                  </motion.div>
 
-                {component.props && component.props.length > 0 && (
-                  <div className="space-y-3 pt-4 border-t border-white/8">
+                  <motion.div variants={fadeVariants} className="space-y-2">
                     <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
-                      Props
+                      Dependencies
                     </div>
-                    <p className="text-xs text-zinc-400 font-light">
-                      Options you can pass to customize this component.
+                    <div className="flex flex-wrap gap-2">
+                      {activeComponent.dependencies.map((dep) => (
+                        <span
+                          key={dep}
+                          className="inline-flex items-center gap-1.5 border border-white/10 bg-black/60 px-3 py-1 text-xs font-mono text-zinc-300 rounded-lg"
+                        >
+                          <span className="text-orange-500/70">~</span>
+                          {dep}
+                        </span>
+                      ))}
+                    </div>
+                  </motion.div>
+
+                  <motion.div variants={fadeVariants} className="space-y-2">
+                    <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
+                      Interaction Physics
+                    </div>
+                    <p className="text-xs text-zinc-400 font-light leading-relaxed">
+                      Interactive spring-physics state dampening with smooth
+                      hover transitions and tactile feedback.
                     </p>
-                    <div className="border border-white/8 rounded-xl overflow-hidden">
-                      <table className="w-full text-left text-xs">
-                        <thead className="bg-zinc-950 border-b border-white/8 text-zinc-500 font-mono text-[10px] uppercase">
-                          <tr>
-                            <th className="p-2.5">Prop</th>
-                            <th className="p-2.5">Type</th>
-                            <th className="p-2.5">Description</th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-white/6 font-mono text-xs">
-                          {component.props.map((p) => (
-                            <tr key={p.name} className="hover:bg-white/5">
-                              <td className="p-2.5">
-                                <span className="bg-zinc-900 border border-white/10 px-2 py-0.5 rounded text-zinc-300 text-[11px]">
-                                  {p.name}
-                                </span>
-                              </td>
-                              <td className="p-2.5 text-zinc-400">{p.type}</td>
-                              <td className="p-2.5 text-zinc-300 font-sans font-light">
-                                {p.description}
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                )}
+                  </motion.div>
+
+                  {activeComponent.props &&
+                    activeComponent.props.length > 0 && (
+                      <motion.div
+                        variants={fadeVariants}
+                        className="space-y-3 pt-4 border-t border-white/8"
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
+                            Props Interface
+                          </div>
+                          <span className="text-[10px] font-mono text-zinc-500">
+                            {activeComponent.props.length} configurable
+                          </span>
+                        </div>
+                        <div className="border border-white/8 rounded-xl overflow-hidden bg-black/40">
+                          <table className="w-full text-left text-xs">
+                            <thead className="bg-zinc-950 border-b border-white/8 text-zinc-500 font-mono text-[10px] uppercase">
+                              <tr>
+                                <th className="p-2.5 font-medium">Prop</th>
+                                <th className="p-2.5 font-medium">Type</th>
+                                <th className="p-2.5 font-medium">
+                                  Description
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody className="divide-y divide-white/6 font-mono text-xs">
+                              {activeComponent.props.map((p) => (
+                                <tr
+                                  key={p.name}
+                                  className="hover:bg-white/5 transition-colors"
+                                >
+                                  <td className="p-2.5">
+                                    <span className="bg-zinc-900 border border-white/10 px-2 py-0.5 rounded text-orange-400 text-[11px]">
+                                      {p.name}
+                                    </span>
+                                  </td>
+                                  <td className="p-2.5 text-zinc-400">
+                                    {p.type}
+                                  </td>
+                                  <td className="p-2.5 text-zinc-300 font-sans font-light">
+                                    {p.description}
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </motion.div>
+                    )}
+                </motion.div>
               </div>
             </motion.aside>
           )}
         </AnimatePresence>
-      </div>
+      </motion.div>
     </div>
   );
 };

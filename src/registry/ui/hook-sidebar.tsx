@@ -10,7 +10,13 @@ const CORNER = 6;
 const DASH =
   "repeating-linear-gradient(to top, transparent 0 2px, currentColor 2px 4px)";
 
-export type HookSidebarItem = string | { label: string; href?: string };
+export type HookSidebarItem =
+  | string
+  | {
+      label: string;
+      href?: string;
+      onClick?: (e: React.MouseEvent<HTMLElement>) => void;
+    };
 
 export type HookSidebarProps = Omit<ComponentProps<"nav">, "onChange"> & {
   items: HookSidebarItem[];
@@ -196,7 +202,12 @@ export function HookSidebar({
               setFocusInside(true);
             },
             onBlur: () => setFocusInside(false),
-            onClick: () => select(index),
+            onClick: (e: React.MouseEvent<HTMLElement>) => {
+              if (typeof item !== "string" && item.onClick) {
+                item.onClick(e);
+              }
+              select(index);
+            },
             className: cn(
               "rounded-lg py-1 pl-5 pr-2 text-left text-xs transition-colors duration-200 motion-reduce:transition-none select-none",
               isActive
