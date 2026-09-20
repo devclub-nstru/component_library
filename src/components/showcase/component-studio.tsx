@@ -1,8 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
 import {
   CodeIcon,
@@ -25,7 +24,7 @@ import { cn } from "@/lib/utils";
 
 interface ComponentStudioProps {
   component: ComponentRegistryItem;
-  allComponents: ComponentRegistryItem[];
+  allComponents?: ComponentRegistryItem[];
 }
 
 const CATEGORIES = [
@@ -54,11 +53,72 @@ const CATEGORIES = [
   },
 ];
 
-export const ComponentStudio = ({
-  component,
-  allComponents,
-}: ComponentStudioProps) => {
-  const pathname = usePathname();
+const CODE_KEYWORDS = new Set([
+  "import",
+  "from",
+  "export",
+  "default",
+  "const",
+  "let",
+  "var",
+  "function",
+  "return",
+  "interface",
+  "type",
+  "extends",
+  "as",
+  "typeof",
+  "keyof",
+  "new",
+  "true",
+  "false",
+  "null",
+  "undefined",
+  "if",
+  "else",
+  "switch",
+  "case",
+]);
+
+function highlightCode(code: string) {
+  return code.split("\n").map((line, lineIdx) => {
+    const regex =
+      /(".*?"|'.*?'|`.*?`|\b[A-Za-z_$][A-Za-z0-9_$]*\b|[{}()[\];:,.=><&|!+*/?-]|\s+)/g;
+    const tokens = [];
+    let match;
+    while ((match = regex.exec(line)) !== null) {
+      const token = match[0];
+      let colorClass = "text-zinc-300";
+      if (
+        token.startsWith('"') ||
+        token.startsWith("'") ||
+        token.startsWith("`")
+      ) {
+        colorClass = "text-zinc-400";
+      } else if (CODE_KEYWORDS.has(token)) {
+        colorClass = "text-white font-medium";
+      } else if (/^[A-Z][A-Za-z0-9_$]*$/.test(token)) {
+        colorClass = "text-zinc-200";
+      } else if (/^[{}()[\];:,.=><&|!+*/?-]+$/.test(token)) {
+        colorClass = "text-zinc-500";
+      } else if (/^\d+$/.test(token)) {
+        colorClass = "text-zinc-300";
+      }
+      tokens.push(
+        <span key={match.index} className={colorClass}>
+          {token}
+        </span>
+      );
+    }
+    return (
+      <div key={lineIdx} className="whitespace-pre">
+        {tokens.length > 0 ? tokens : "\u00A0"}
+      </div>
+    );
+  });
+}
+
+export const ComponentStudio = ({ component }: ComponentStudioProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [activePanel, setActivePanel] = useState<"none" | "info" | "code">(
     "none"
@@ -68,7 +128,8 @@ export const ComponentStudio = ({
   const [codeCopied, setCodeCopied] = useState(false);
 
   const activeCode = component.files[0]?.code || "";
-  const codeLines = activeCode.split("\n");
+  const codeLines = useMemo(() => activeCode.split("\n"), [activeCode]);
+  const highlighted = useMemo(() => highlightCode(activeCode), [activeCode]);
 
   const handleInstallCopy = async () => {
     const cmd = `npm install ${component.dependencies.join(" ")}`;
@@ -304,7 +365,7 @@ export const ComponentStudio = ({
         </motion.aside>
       )}
 
-      <div className="flex-1 flex p-3 gap-3 overflow-hidden h-full">
+      <div className="flex-1 flex p-3 gap-3 overflow-hidden h-full relative">
         <motion.main
           layout
           transition={{
@@ -318,7 +379,7 @@ export const ComponentStudio = ({
             isFullscreen && "fixed inset-0 z-50 rounded-none border-none m-0"
           )}
         >
-          <div className="absolute top-4 right-4 z-30 flex items-center gap-2">
+          <div className="absolute top-4 right-4 z-20 flex items-center gap-2">
             <motion.button
               whileTap={{ scale: 0.95 }}
               type="button"
@@ -354,11 +415,7 @@ export const ComponentStudio = ({
                   : "border-white/10 bg-[#18181b]/90 hover:bg-[#222226] text-zinc-400 hover:text-white"
               )}
             >
-              {activePanel === "code" ? (
-                <Cross2Icon className="w-4 h-4" />
-              ) : (
-                <CodeIcon className="w-4 h-4" />
-              )}
+              <CodeIcon className="w-4 h-4" />
             </motion.button>
 
             <motion.button
@@ -381,6 +438,76 @@ export const ComponentStudio = ({
           <div className="flex-1 flex items-center justify-center p-8 overflow-auto">
             {renderInteractivePreview(component.slug)}
           </div>
+
+          <AnimatePresence>
+            {activePanel === "code" && (
+              <motion.div
+                key="code-sheet"
+                initial={{ y: "100%", opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: "100%", opacity: 0 }}
+                transition={{
+                  type: "spring",
+                  stiffness: 400,
+                  damping: 36,
+                  mass: 0.8,
+                }}
+                className="absolute inset-x-3 bottom-3 top-3 z-30 rounded-[24px] border border-white/10 bg-[#0a0a0c] shadow-2xl flex flex-col overflow-hidden"
+              >
+                <div className="w-12 h-1 bg-zinc-700/60 rounded-full mx-auto my-3 shrink-0" />
+
+                <div className="px-6 pb-3 border-b border-white/8 flex items-center justify-between shrink-0">
+                  <span className="text-sm font-sans font-medium text-zinc-100 tracking-tight">
+                    {component.name}
+                  </span>
+
+                  <div className="flex items-center gap-2">
+                    <motion.button
+                      whileTap={{ scale: 0.95 }}
+                      type="button"
+                      onClick={handleInstallCopy}
+                      className="border border-white/10 hover:border-white/20 bg-[#18181b] hover:bg-[#222226] text-zinc-300 hover:text-white px-3 py-1.5 rounded-lg text-xs font-mono transition-colors cursor-pointer"
+                    >
+                      {installCopied ? "Copied!" : "Install"}
+                    </motion.button>
+
+                    <motion.button
+                      whileTap={{ scale: 0.95 }}
+                      type="button"
+                      onClick={handleCodeCopy}
+                      className="w-8 h-8 rounded-lg border border-white/10 hover:border-white/20 bg-[#18181b] hover:bg-[#222226] text-zinc-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+                    >
+                      {codeCopied ? (
+                        <CheckIcon className="w-4 h-4 text-emerald-400" />
+                      ) : (
+                        <CopyIcon className="w-4 h-4" />
+                      )}
+                    </motion.button>
+
+                    <motion.button
+                      whileTap={{ scale: 0.95 }}
+                      type="button"
+                      onClick={() => setActivePanel("none")}
+                      className="w-8 h-8 rounded-lg border border-white/10 hover:border-white/20 bg-[#18181b] hover:bg-[#222226] text-zinc-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+                    >
+                      <Cross2Icon className="w-4 h-4" />
+                    </motion.button>
+                  </div>
+                </div>
+
+                <div className="flex-1 p-6 overflow-auto font-mono text-xs leading-relaxed bg-[#070709]">
+                  <div className="flex">
+                    <div className="select-none text-zinc-600 text-right pr-5 shrink-0 space-y-0.5">
+                      {codeLines.map((_, i) => (
+                        <div key={i}>{i + 1}</div>
+                      ))}
+                    </div>
+                    <div className="flex-1 overflow-x-auto">{highlighted}</div>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </motion.main>
 
         <AnimatePresence mode="wait">
@@ -481,76 +608,6 @@ export const ComponentStudio = ({
                     </div>
                   </div>
                 )}
-              </div>
-            </motion.aside>
-          )}
-
-          {activePanel === "code" && (
-            <motion.aside
-              key="code-panel"
-              initial={{ opacity: 0, x: 50, width: 0 }}
-              animate={{ opacity: 1, x: 0, width: 560 }}
-              exit={{ opacity: 0, x: 50, width: 0 }}
-              transition={{
-                type: "spring",
-                stiffness: 420,
-                damping: 34,
-                mass: 0.7,
-              }}
-              className="shrink-0 h-full border border-white/8 bg-[#0c0c0e] rounded-[24px] flex flex-col overflow-hidden relative"
-            >
-              <div className="w-10 h-1 bg-white/15 rounded-full mx-auto mt-2.5" />
-
-              <div className="p-4 border-b border-white/8 flex items-center justify-between">
-                <span className="text-xs font-mono font-medium text-white tracking-wide">
-                  {component.name}
-                </span>
-
-                <div className="flex items-center gap-2">
-                  <motion.button
-                    whileTap={{ scale: 0.95 }}
-                    type="button"
-                    onClick={handleInstallCopy}
-                    className="border border-white/10 hover:border-white/25 bg-zinc-900/90 text-zinc-300 hover:text-white px-2.5 py-1 rounded-lg text-xs font-mono transition-colors cursor-pointer"
-                  >
-                    {installCopied ? "Copied!" : "Install"}
-                  </motion.button>
-
-                  <motion.button
-                    whileTap={{ scale: 0.95 }}
-                    type="button"
-                    onClick={handleCodeCopy}
-                    className="w-7 h-7 rounded-lg border border-white/10 hover:border-white/25 bg-zinc-900/90 text-zinc-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
-                  >
-                    {codeCopied ? (
-                      <CheckIcon className="w-3.5 h-3.5 text-emerald-400" />
-                    ) : (
-                      <CopyIcon className="w-3.5 h-3.5" />
-                    )}
-                  </motion.button>
-
-                  <motion.button
-                    whileTap={{ scale: 0.95 }}
-                    type="button"
-                    onClick={() => setActivePanel("none")}
-                    className="w-7 h-7 rounded-lg border border-white/10 hover:border-white/25 bg-zinc-900/90 text-zinc-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
-                  >
-                    <Cross2Icon className="w-3.5 h-3.5" />
-                  </motion.button>
-                </div>
-              </div>
-
-              <div className="flex-1 p-4 overflow-auto font-mono text-xs leading-relaxed bg-[#080809]">
-                <div className="flex">
-                  <div className="select-none text-zinc-600 text-right pr-4 shrink-0 space-y-0.5">
-                    {codeLines.map((_, i) => (
-                      <div key={i}>{i + 1}</div>
-                    ))}
-                  </div>
-                  <pre className="text-zinc-300 whitespace-pre overflow-x-auto">
-                    <code>{activeCode}</code>
-                  </pre>
-                </div>
               </div>
             </motion.aside>
           )}

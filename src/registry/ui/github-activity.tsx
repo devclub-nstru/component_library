@@ -59,17 +59,12 @@ export function GitHubActivity({
     const cols = 26;
     const rows = 7;
     const matrix: ContributionLevel[][] = [];
-    const seed = 42;
-    let s = seed;
-    const pseudoRandom = () => {
-      s = (s * 9301 + 49297) % 233280;
-      return s / 233280;
-    };
 
     for (let c = 0; c < cols; c++) {
       const col: ContributionLevel[] = [];
       for (let r = 0; r < rows; r++) {
-        const rand = pseudoRandom();
+        const hash = ((c * 17 + r * 31 + 42) * 9301 + 49297) % 233280;
+        const rand = hash / 233280;
         let level: ContributionLevel = 0;
         if (rand > 0.8) level = 4;
         else if (rand > 0.6) level = 3;
