@@ -874,12 +874,12 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
             <motion.aside
               key="info-panel"
               initial={{ width: 0, opacity: 0 }}
-              animate={{ width: 420, opacity: 1 }}
+              animate={{ width: 440, opacity: 1 }}
               exit={{ width: 0, opacity: 0 }}
               transition={panelSpring}
               className="shrink-0 h-full border border-white/8 bg-[#0c0c0e] rounded-3xl overflow-hidden flex flex-col"
             >
-              <div className="w-105 min-w-105 h-full p-6 sm:p-7 overflow-y-auto flex flex-col justify-between scrollbar-none">
+              <div className="w-[440px] min-w-[440px] h-full p-6 sm:p-7 overflow-y-auto flex flex-col gap-6 scrollbar-none pb-12">
                 <motion.div
                   initial="hidden"
                   animate="visible"
@@ -895,6 +895,12 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       <span className="text-[10px] font-mono uppercase tracking-widest text-zinc-400 font-medium">
                         {activeComponent.slug.replace("-", " ")}
                       </span>
+                      <span className="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-white/5 text-zinc-400 border border-white/8">
+                        {activeComponent.category}
+                      </span>
+                      <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-orange-500/10 text-orange-400 border border-orange-500/20">
+                        v{activeComponent.version}
+                      </span>
                     </div>
                     <motion.button
                       whileTap={{ scale: 0.9 }}
@@ -908,38 +914,88 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     </motion.button>
                   </motion.div>
 
-                  <motion.div variants={fadeVariants}>
+                  <motion.div variants={fadeVariants} className="space-y-2">
                     <h2 className="text-xl sm:text-2xl font-serif text-white tracking-tight leading-snug">
-                      {activeComponent.description}
+                      {activeComponent.name}
                     </h2>
-                  </motion.div>
-
-                  <motion.div variants={fadeVariants} className="space-y-2">
-                    <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
-                      Dependencies
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      {activeComponent.dependencies.map((dep) => (
-                        <span
-                          key={dep}
-                          className="inline-flex items-center gap-1.5 border border-white/10 bg-black/60 px-3 py-1 text-xs font-mono text-zinc-300 rounded-lg"
-                        >
-                          <span className="text-orange-500/70">~</span>
-                          {dep}
-                        </span>
-                      ))}
-                    </div>
-                  </motion.div>
-
-                  <motion.div variants={fadeVariants} className="space-y-2">
-                    <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
-                      Interaction Physics
-                    </div>
-                    <p className="text-xs text-zinc-400 font-light leading-relaxed">
-                      Interactive spring-physics state dampening with smooth hover
-                      transitions and tactile feedback.
+                    <p className="text-xs text-zinc-300 font-light leading-relaxed">
+                      {activeComponent.description}
                     </p>
+                    {activeComponent.summary && (
+                      <p className="text-xs text-zinc-400 font-light leading-relaxed pt-1">
+                        {activeComponent.summary}
+                      </p>
+                    )}
                   </motion.div>
+
+                  {activeComponent.highlights && activeComponent.highlights.length > 0 && (
+                    <motion.div variants={fadeVariants} className="space-y-2.5 pt-4 border-t border-white/8">
+                      <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
+                        Capabilities & Highlights
+                      </div>
+                      <div className="space-y-1.5">
+                        {activeComponent.highlights.map((h, i) => (
+                          <div key={i} className="flex items-start gap-2 text-xs text-zinc-300 font-light leading-relaxed">
+                            <span className="text-orange-500 text-[11px] font-mono shrink-0 select-none">›</span>
+                            <span>{h}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {activeComponent.anatomy && activeComponent.anatomy.length > 0 && (
+                    <motion.div variants={fadeVariants} className="space-y-2.5 pt-4 border-t border-white/8">
+                      <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
+                        Component Anatomy
+                      </div>
+                      <div className="border border-white/8 rounded-xl bg-black/40 p-3 space-y-1 font-mono text-[11px]">
+                        {activeComponent.anatomy.map((item, idx) => (
+                          <div key={idx} className="flex items-center gap-2 text-zinc-300">
+                            <span className="text-zinc-600 text-[10px] w-3 shrink-0 text-right">{idx + 1}</span>
+                            <span className="text-zinc-500">→</span>
+                            <span className="text-zinc-300 font-mono text-[11px]">{item}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {activeComponent.physics && (
+                    <motion.div variants={fadeVariants} className="space-y-3 pt-4 border-t border-white/8">
+                      <div className="flex items-center justify-between">
+                        <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
+                          Motion & Interaction Spec
+                        </div>
+                        <span className="text-[10px] font-mono text-orange-400 bg-orange-500/10 border border-orange-500/20 px-2 py-0.5 rounded">
+                          {activeComponent.physics.engine}
+                        </span>
+                      </div>
+                      <p className="text-xs text-zinc-400 font-light leading-relaxed">
+                        {activeComponent.physics.description}
+                      </p>
+                      {activeComponent.physics.parameters && (
+                        <div className="border border-white/8 rounded-xl overflow-hidden bg-black/40">
+                          <table className="w-full text-left text-xs">
+                            <thead className="bg-zinc-950 border-b border-white/8 text-zinc-500 font-mono text-[10px] uppercase">
+                              <tr>
+                                <th className="p-2.5 font-medium">Parameter</th>
+                                <th className="p-2.5 font-medium">Value</th>
+                              </tr>
+                            </thead>
+                            <tbody className="divide-y divide-white/6 font-mono text-[11px]">
+                              {activeComponent.physics.parameters.map((param) => (
+                                <tr key={param.label} className="hover:bg-white/5 transition-colors">
+                                  <td className="p-2.5 text-zinc-400">{param.label}</td>
+                                  <td className="p-2.5 text-zinc-200">{param.value}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      )}
+                    </motion.div>
+                  )}
 
                   {activeComponent.props && activeComponent.props.length > 0 && (
                     <motion.div
@@ -960,22 +1016,35 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             <tr>
                               <th className="p-2.5 font-medium">Prop</th>
                               <th className="p-2.5 font-medium">Type</th>
+                              <th className="p-2.5 font-medium">Default</th>
                               <th className="p-2.5 font-medium">Description</th>
                             </tr>
                           </thead>
-                          <tbody className="divide-y divide-white/6 font-mono text-xs">
+                          <tbody className="divide-y divide-white/6 text-xs">
                             {activeComponent.props.map((p) => (
                               <tr
                                 key={p.name}
-                                className="hover:bg-white/5 transition-colors"
+                                className="hover:bg-white/5 transition-colors align-top"
                               >
-                                <td className="p-2.5">
-                                  <span className="bg-zinc-900 border border-white/10 px-2 py-0.5 rounded text-orange-400 text-[11px]">
-                                    {p.name}
-                                  </span>
+                                <td className="p-2.5 font-mono">
+                                  <div className="flex flex-col items-start gap-1">
+                                    <span className="bg-zinc-900 border border-white/10 px-2 py-0.5 rounded text-orange-400 text-[11px]">
+                                      {p.name}
+                                    </span>
+                                    {p.required && (
+                                      <span className="text-[9px] uppercase tracking-wider text-rose-400 font-medium font-mono">
+                                        Required
+                                      </span>
+                                    )}
+                                  </div>
                                 </td>
-                                <td className="p-2.5 text-zinc-400">{p.type}</td>
-                                <td className="p-2.5 text-zinc-300 font-sans font-light">
+                                <td className="p-2.5 text-zinc-400 font-mono text-[11px] break-all">
+                                  {p.type}
+                                </td>
+                                <td className="p-2.5 text-zinc-500 font-mono text-[11px]">
+                                  {p.defaultValue ?? "—"}
+                                </td>
+                                <td className="p-2.5 text-zinc-300 font-sans font-light leading-relaxed">
                                   {p.description}
                                 </td>
                               </tr>
@@ -985,6 +1054,111 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       </div>
                     </motion.div>
                   )}
+
+                  {activeComponent.accessibility && (
+                    <motion.div variants={fadeVariants} className="space-y-3 pt-4 border-t border-white/8">
+                      <div className="flex items-center justify-between">
+                        <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
+                          Accessibility & Shortcuts
+                        </div>
+                        {activeComponent.accessibility.role && (
+                          <span className="text-[10px] font-mono text-zinc-400 bg-white/5 border border-white/8 px-2 py-0.5 rounded">
+                            role=&quot;{activeComponent.accessibility.role}&quot;
+                          </span>
+                        )}
+                      </div>
+                      {activeComponent.accessibility.aria && (
+                        <p className="text-xs text-zinc-400 font-light leading-relaxed">
+                          {activeComponent.accessibility.aria}
+                        </p>
+                      )}
+                      {activeComponent.accessibility.keyboard && activeComponent.accessibility.keyboard.length > 0 && (
+                        <div className="border border-white/8 rounded-xl overflow-hidden bg-black/40">
+                          <table className="w-full text-left text-xs">
+                            <thead className="bg-zinc-950 border-b border-white/8 text-zinc-500 font-mono text-[10px] uppercase">
+                              <tr>
+                                <th className="p-2.5 font-medium">Key</th>
+                                <th className="p-2.5 font-medium">Action</th>
+                              </tr>
+                            </thead>
+                            <tbody className="divide-y divide-white/6 text-xs">
+                              {activeComponent.accessibility.keyboard.map((kb) => (
+                                <tr key={kb.key} className="hover:bg-white/5 transition-colors align-top">
+                                  <td className="p-2.5 font-mono">
+                                    <kbd className="bg-zinc-900 border border-white/10 px-1.5 py-0.5 rounded text-zinc-200 text-[11px]">
+                                      {kb.key}
+                                    </kbd>
+                                  </td>
+                                  <td className="p-2.5 text-zinc-300 font-sans font-light leading-relaxed">
+                                    {kb.description}
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      )}
+                      {activeComponent.accessibility.reducedMotion && (
+                        <div className="flex items-start gap-2 text-xs text-zinc-400 font-light leading-relaxed bg-zinc-950/60 border border-white/6 rounded-lg p-2.5">
+                          <span className="text-orange-400 text-[11px] font-mono select-none">✦</span>
+                          <span>{activeComponent.accessibility.reducedMotion}</span>
+                        </div>
+                      )}
+                    </motion.div>
+                  )}
+
+                  {activeComponent.guidelines && (
+                    <motion.div variants={fadeVariants} className="space-y-3 pt-4 border-t border-white/8">
+                      <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
+                        Integration & Best Practices
+                      </div>
+                      {activeComponent.guidelines.recommended && (
+                        <div className="space-y-1.5">
+                          <div className="text-[10px] font-mono uppercase text-zinc-500">Recommended Use</div>
+                          {activeComponent.guidelines.recommended.map((rec, i) => (
+                            <div key={i} className="flex items-start gap-2 text-xs text-zinc-300 font-light leading-relaxed">
+                              <span className="text-emerald-500 text-[11px] font-mono select-none">✓</span>
+                              <span>{rec}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                      {activeComponent.guidelines.bestPractices && (
+                        <div className="space-y-1.5 pt-2">
+                          <div className="text-[10px] font-mono uppercase text-zinc-500">Best Practices</div>
+                          {activeComponent.guidelines.bestPractices.map((bp, i) => (
+                            <div key={i} className="flex items-start gap-2 text-xs text-zinc-300 font-light leading-relaxed">
+                              <span className="text-orange-400 text-[11px] font-mono select-none">·</span>
+                              <span>{bp}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </motion.div>
+                  )}
+
+                  <motion.div variants={fadeVariants} className="space-y-2.5 pt-4 border-t border-white/8">
+                    <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
+                      Dependencies & Source
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {activeComponent.dependencies.map((dep) => (
+                        <span
+                          key={dep}
+                          className="inline-flex items-center gap-1.5 border border-white/10 bg-black/60 px-3 py-1 text-xs font-mono text-zinc-300 rounded-lg"
+                        >
+                          <span className="text-orange-500/70">~</span>
+                          {dep}
+                        </span>
+                      ))}
+                    </div>
+                    {activeComponent.files && activeComponent.files[0] && (
+                      <div className="flex items-center justify-between text-[11px] font-mono text-zinc-500 bg-black/40 border border-white/8 rounded-lg px-3 py-2 mt-2">
+                        <span>Source File</span>
+                        <span className="text-zinc-300">{activeComponent.files[0].path}</span>
+                      </div>
+                    )}
+                  </motion.div>
                 </motion.div>
               </div>
             </motion.aside>

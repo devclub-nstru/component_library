@@ -114,7 +114,6 @@ export function HookSidebar({
   const [pointerInside, setPointerInside] = useState(false);
   const [focusInside, setFocusInside] = useState(false);
 
-  const routed = items.some((item) => hrefOf(item));
   const routeIndex = items.findIndex((item) => hrefOf(item) === pathname);
   const activeIndex = value ?? (routeIndex >= 0 ? routeIndex : internalValue);
 

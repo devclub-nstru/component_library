@@ -5,19 +5,61 @@ export const COMPONENT_REGISTRY: Record<string, ComponentRegistryItem> = {
     slug: "scales",
     name: "Scales & Borders",
     description: "Symmetric repeating linear gradient borders and geometric scale dividers.",
+    summary: "Technical boundary elements and geometric scale dividers engineered to replace generic horizontal rules with architectural, sci-fi, and developer console aesthetics. Built entirely with pure CSS repeating linear gradients (315deg angle with 14px pitch and 1px sub-pixel line calibration) and theme-driven CSS custom properties (--pattern-line, --pattern), delivering high-density boundary aesthetics with zero JavaScript runtime overhead.",
     category: "scales",
-    tags: ["borders", "scales", "divider", "linear-gradient"],
+    tags: ["borders", "scales", "divider", "linear-gradient", "geometric", "pattern"],
     dependencies: ["clsx", "tailwind-merge"],
     version: "1.0.0",
     createdDate: "2026-09-10",
     updatedDate: "2026-09-10",
     interactive: true,
+    highlights: [
+      "Pure CSS repeating-linear-gradient shader rendering with zero JavaScript overhead",
+      "Zero cumulative layout shift (CLS 0.0) with GPU-accelerated compositing",
+      "Three specialized geometric layout variants: HorizontalScale, VerticalScale, and Lines",
+      "Themeable token variables (--pattern-line, --pattern) for seamless light/dark adaptation",
+      "Sub-pixel calibrated 14px repeating tile pitch with 1px hairline boundary strokes"
+    ],
+    anatomy: [
+      "<HorizontalScale> (40px horizontal ribbon with diagonal 315° repeating hatch marks)",
+      "<VerticalScale> (40px vertical divider with diagonal 315° repeating hatch marks)",
+      "<Lines> (56px horizontal scanline guide with high-density repeating lines)"
+    ],
+    physics: {
+      engine: "CSS Repeating Gradient Shader",
+      description: "Zero-runtime GPU rasterized gradient stripes calculated via repeating linear-gradient geometry without layout repaints.",
+      parameters: [
+        { label: "Shader Angle", value: "315deg diagonal" },
+        { label: "Tile Pitch", value: "14px × 14px repeat" },
+        { label: "Hairline Weight", value: "1px stroke (var(--pattern-line))" },
+        { label: "Horizontal Height", value: "40px (h-10)" },
+        { label: "Lines Height", value: "56px (h-14)" },
+        { label: "Runtime Overhead", value: "0ms / Pure CSS" }
+      ]
+    },
+    accessibility: {
+      role: "separator",
+      aria: "aria-hidden='true' when purely decorative, or role='separator' with aria-orientation when separating semantic document regions.",
+      reducedMotion: "Static CSS background gradient pattern; completely unaffected by motion preferences."
+    },
+    guidelines: {
+      recommended: [
+        "Technical panel dividers in developer tools, IDE views, and engineering dashboards",
+        "Header and footer section breaks in technical documentation sites",
+        "Visual framing boundaries around code editors, telemetry viewers, and terminal displays"
+      ],
+      bestPractices: [
+        "Define --pattern-line and --pattern in your theme root for consistent contrast across light and dark modes",
+        "Use VerticalScale inside flex containers with h-full for crisp column separation",
+        "Apply h-auto or custom height classes to adapt the scale to your layout grid"
+      ]
+    },
     props: [
       {
         name: "className",
         type: "string",
         defaultValue: "undefined",
-        description: "Additional CSS classes to apply.",
+        description: "Additional CSS classes to customize dimensions, border colors, or pattern line token overrides.",
       },
     ],
     files: [
@@ -66,25 +108,103 @@ export const Lines = ({ className }: { className?: string }) => {
     slug: "animated-button",
     name: "Animated Button",
     description: "Multi-variant interactive button with shimmering effects and micro-interactions.",
+    summary: "A high-impact call-to-action button supporting four distinct visual styles (primary, secondary, outline, and shimmer). Engineered with fluid cubic-bezier micro-interactions, hardware-accelerated transform scaling on active press (scale-[0.96]), an automated looping CSS keyframe linear gradient shimmer sweep, and dynamic icon translation with group-hover mechanics.",
     category: "buttons",
-    tags: ["button", "shimmer", "interaction", "animation"],
+    tags: ["button", "shimmer", "interaction", "animation", "cta", "micro-interactions"],
     dependencies: ["clsx", "tailwind-merge", "@radix-ui/react-icons"],
     version: "1.0.0",
     createdDate: "2026-09-10",
     updatedDate: "2026-09-10",
     interactive: true,
+    highlights: [
+      "Four production-ready visual variants tuned for dark-mode interfaces",
+      "Infinite 2-second linear-gradient shimmer light sweep with zero CPU overhead",
+      "Tactile cubic-bezier timing curve (cubic-bezier(0.16, 1, 0.3, 1)) for snappy feedback",
+      "Forwarded ref support with full HTML button attribute inheritance",
+      "Automatic hover translation on accessory directional icons with group-hover"
+    ],
+    anatomy: [
+      "<button> (Focus-visible enabled interactive container with overflow containment)",
+      "<span> (Shimmer Layer with infinite linear gradient keyframe animation)",
+      "<span> (Content Shell housing label and optional icon)",
+      "<ArrowRightIcon> (Directional icon with hover translate-x animation)"
+    ],
+    physics: {
+      engine: "CSS Hardware-Accelerated Transforms",
+      description: "High-frequency micro-interactions utilizing CSS cubic-bezier timing curves and scale compression on click.",
+      parameters: [
+        { label: "Timing Curve", value: "cubic-bezier(0.16, 1, 0.3, 1)" },
+        { label: "Active Compression", value: "scale-[0.96] (4% scale down)" },
+        { label: "Shimmer Speed", value: "2000ms infinite linear sweep" },
+        { label: "Transition Duration", value: "200ms" },
+        { label: "Icon Translation", value: "+4px translateX on hover" },
+        { label: "Rendering Layer", value: "GPU composited transform" }
+      ]
+    },
+    accessibility: {
+      role: "button",
+      aria: "Inherits native HTMLButtonElement attributes including aria-disabled, aria-label, and aria-pressed.",
+      reducedMotion: "Disables active scaling and shimmer translation when prefers-reduced-motion is active.",
+      keyboard: [
+        { key: "Tab", description: "Focus button with visible high-contrast ring outline." },
+        { key: "Enter / Space", description: "Trigger button onClick event with active compression effect." }
+      ]
+    },
+    guidelines: {
+      recommended: [
+        "Primary conversion CTAs on landing page heroes and product announcements",
+        "Form submission actions in checkout, modal, and onboarding flows",
+        "Interactive navigation links requiring elevated visual priority"
+      ],
+      bestPractices: [
+        "Limit the shimmer variant to 1 instance per viewport to preserve visual hierarchy",
+        "Use outline or secondary variants for auxiliary actions like Cancel or Dismiss",
+        "Always provide descriptive text children or an aria-label for icon-only usage"
+      ]
+    },
     props: [
       {
         name: "variant",
         type: '"primary" | "secondary" | "outline" | "shimmer"',
         defaultValue: '"primary"',
-        description: "Visual style variant of the button.",
+        description: "Visual style variant of the button: high-contrast white primary, dark secondary, bordered outline, or luminous shimmer.",
       },
       {
         name: "showArrow",
         type: "boolean",
         defaultValue: "false",
-        description: "Display an animated arrow icon on hover.",
+        description: "Display an animated arrow icon on hover with smooth translateX translation.",
+      },
+      {
+        name: "disabled",
+        type: "boolean",
+        defaultValue: "false",
+        description: "Disables pointer interactions, suppresses hover transforms, and lowers opacity.",
+      },
+      {
+        name: "type",
+        type: '"button" | "submit" | "reset"',
+        defaultValue: '"button"',
+        description: "Native HTML button behavior for forms and dialogs.",
+      },
+      {
+        name: "className",
+        type: "string",
+        defaultValue: "undefined",
+        description: "Additional CSS classes to override dimensions, paddings, or font weights.",
+      },
+      {
+        name: "children",
+        type: "React.ReactNode",
+        required: true,
+        defaultValue: "undefined",
+        description: "Content label, icons, or badges rendered inside the button.",
+      },
+      {
+        name: "onClick",
+        type: "(event: React.MouseEvent<HTMLButtonElement>) => void",
+        defaultValue: "undefined",
+        description: "Click event handler callback invoked on button press.",
       },
     ],
     files: [
@@ -156,19 +276,83 @@ AnimatedButton.displayName = "AnimatedButton";`,
     slug: "spotlight-card",
     name: "Spotlight Card",
     description: "Card container with cursor-following radial gradient glow effect.",
+    summary: "A dynamic glassmorphic card container that tracks pointer coordinates within its bounding box in real time. It calculates Cartesian cursor offsets relative to the element's top-left corner (clientX - left, clientY - top) and projects a soft 600px radial gradient lighting mask centered under the cursor with smooth 300ms opacity fades on boundary crossing, creating an illuminated spotlight aesthetic across dark surfaces.",
     category: "cards",
-    tags: ["card", "spotlight", "hover", "interactive"],
+    tags: ["card", "spotlight", "hover", "interactive", "radial-gradient", "glassmorphism"],
     dependencies: ["clsx", "tailwind-merge"],
     version: "1.0.0",
     createdDate: "2026-09-10",
     updatedDate: "2026-09-10",
     interactive: true,
+    highlights: [
+      "Client-side pointer calculation with getBoundingClientRect() coordinate tracking",
+      "600px radial gradient spotlight with exponential 40% falloff curve",
+      "Instantaneous coordinate binding directly to CSS radial-gradient styles",
+      "Smooth 300ms opacity transition during cursor boundary entry and departure",
+      "Backdrop blur integration (backdrop-blur-md) with semi-transparent zinc-950 surfaces"
+    ],
+    anatomy: [
+      "<div> (Relative rounded card wrapper with border containment and hover border brightening)",
+      "<div> (Spotlight Beam: pointer-events-none absolute mask rendering radial gradient)",
+      "<div> (Content Layer: relative z-10 container preserving interactive child element clickability)"
+    ],
+    physics: {
+      engine: "Pointer Event Matrix & Radial Shader",
+      description: "Real-time client pointer coordinate mapping calculating relative Cartesian offsets with CSS opacity decay.",
+      parameters: [
+        { label: "Spotlight Radius", value: "600px circle" },
+        { label: "Decay Curve", value: "Radial transparent at 40%" },
+        { label: "Fade Duration", value: "300ms transition-opacity" },
+        { label: "Coordinate Mapping", value: "Cartesian offset (x, y)" },
+        { label: "Backdrop Filter", value: "12px blur-md" },
+        { label: "Compositing", value: "GPU layer isolated" }
+      ]
+    },
+    accessibility: {
+      role: "region",
+      aria: "Accepts aria-labelledby or aria-describedby for container identification.",
+      reducedMotion: "Radial gradient renders with static position or instant opacity when motion is reduced.",
+      keyboard: [
+        { key: "Tab", description: "Standard keyboard tab navigation passes cleanly to interactive child elements." },
+        { key: "Enter / Space", description: "Triggers card onClick callback if interactive handler is assigned." }
+      ]
+    },
+    guidelines: {
+      recommended: [
+        "Feature matrices and product highlights in modern SaaS landing pages",
+        "Interactive pricing tiers and subscription comparison modules",
+        "Developer portfolio project showcases and case study links"
+      ],
+      bestPractices: [
+        "Use subtle accent colors with low opacity (0.12 - 0.20) to prevent content unreadability",
+        "Combine with high-contrast text and dark slate/zinc background surfaces",
+        "Keep card interactive children inside the relative z-10 layer to prevent pointer event masking"
+      ]
+    },
     props: [
       {
         name: "spotlightColor",
         type: "string",
         defaultValue: '"rgba(59, 130, 246, 0.15)"',
-        description: "Radial gradient spotlight color on hover.",
+        description: "CSS RGBA, HSLA, or hex color string defining the center glow of the 600px radial light cone.",
+      },
+      {
+        name: "className",
+        type: "string",
+        defaultValue: "undefined",
+        description: "Additional Tailwind or CSS classes applied to the root card container.",
+      },
+      {
+        name: "children",
+        type: "React.ReactNode",
+        defaultValue: "undefined",
+        description: "Card content, headlines, telemetry, or icons rendered above the spotlight beam.",
+      },
+      {
+        name: "onClick",
+        type: "(event: React.MouseEvent<HTMLDivElement>) => void",
+        defaultValue: "undefined",
+        description: "Optional click handler for making the spotlight card act as an interactive clickable surface.",
       },
     ],
     files: [
@@ -255,25 +439,82 @@ SpotlightCard.displayName = "SpotlightCard";`,
     slug: "glowing-badge",
     name: "Glowing Badge",
     description: "Compact status and tag badge with glowing borders and pulsing indicator.",
+    summary: "A compact status indicator engineered for system health monitors, live telemetry badges, server status widgets, and release chips. Features vibrant chromatic color palettes (blue, emerald, amber, violet) with diffused outer glow box-shadows and an animated concentric ping pulse dot indicator that visually communicates active background tasks, live connectivity, or nominal status.",
     category: "feedback",
-    tags: ["badge", "status", "glow", "indicator"],
+    tags: ["badge", "status", "glow", "indicator", "pulse", "live-data", "telemetry"],
     dependencies: ["clsx", "tailwind-merge"],
     version: "1.0.0",
     createdDate: "2026-09-10",
     updatedDate: "2026-09-10",
     interactive: true,
+    highlights: [
+      "Four curated semantic color schemes with matching diffuse radial glow drop shadows",
+      "Concentric dual-element ping pulse with 75% peak opacity and infinite loop",
+      "Compact uppercase monospace typography tailored for developer interfaces",
+      "Zero-JS CSS-only animation for exceptional performance in dense data tables",
+      "Flexible pill geometry supporting arbitrary child icons, metrics, or labels"
+    ],
+    anatomy: [
+      "<div> (Badge Shell: inline-flex container with rounded pill border, background, and radial box shadow)",
+      "<span> (Pulse Ring: expanding ping ring with animate-ping keyframe effect)",
+      "<span> (Core Dot: solid static colored dot anchoring the pulse animation)",
+      "<span> (Label: monospace text container displaying status text)"
+    ],
+    physics: {
+      engine: "CSS Keyframe Ping & Diffuse Shadow",
+      description: "Infinite 1-second CSS keyframe animation expanding a concentric ring with opacity decay.",
+      parameters: [
+        { label: "Ping Duration", value: "1000ms cubic-bezier(0, 0, 0.2, 1) infinite" },
+        { label: "Glow Radius", value: "12px outer blur shadow" },
+        { label: "Dot Diameter", value: "6px (1.5rem / 6px)" },
+        { label: "Border Weight", value: "1px hairline border" },
+        { label: "Execution Impact", value: "0ms JavaScript runtime" }
+      ]
+    },
+    accessibility: {
+      role: "status",
+      aria: "Accepts aria-live='polite' or aria-label for live telemetry status announcements.",
+      reducedMotion: "Pulse ping animation automatically pauses when prefers-reduced-motion is active.",
+      keyboard: [
+        { key: "Non-interactive", description: "Focus passes through unless wrapped in an interactive anchor or button." }
+      ]
+    },
+    guidelines: {
+      recommended: [
+        "Production vs Staging environment indicators in application headers",
+        "API gateway health and database cluster status chips",
+        "Live streaming, build pipeline status, and real-time telemetry markers"
+      ],
+      bestPractices: [
+        "Use emerald for nominal/healthy, amber for degraded/warning, blue for active/syncing, violet for beta/preview",
+        "Keep status text concise (1 to 2 words, e.g., 'SYSTEM_ACTIVE', 'NOMINAL')",
+        "Pair with monospace numerals for real-time uptime or latency metrics"
+      ]
+    },
     props: [
       {
         name: "variant",
         type: '"blue" | "emerald" | "amber" | "violet"',
         defaultValue: '"blue"',
-        description: "Color palette of the badge.",
+        description: "Color palette controlling border tint, diffuse glow shadow, and pulse dot color: blue, emerald, amber, or violet.",
       },
       {
         name: "pulse",
         type: "boolean",
         defaultValue: "true",
-        description: "Enable the pinging pulse dot indicator.",
+        description: "Enable or disable the animated concentric ping pulse dot indicator.",
+      },
+      {
+        name: "children",
+        type: "React.ReactNode",
+        defaultValue: "undefined",
+        description: "Status label, count, or text rendered inside the badge pill.",
+      },
+      {
+        name: "className",
+        type: "string",
+        defaultValue: "undefined",
+        description: "Additional CSS classes to customize pill borders, spacing, or typography.",
       },
     ],
     files: [
@@ -345,25 +586,91 @@ export const GlowingBadge = ({
     slug: "hook-sidebar",
     name: "Hook Sidebar",
     description: "Collapsible navigation sidebar with animated traveling spring rail and curved elbow hook.",
+    summary: "A precision navigation rail engineered for documentation portals, administrative sidebars, and hierarchical application navigators. Features a continuous vertical guide rail with a dynamic traveling SVG elbow hook that smoothly tracks the active or hovered navigation item via real-time DOM geometry measurement (offsetTop + offsetHeight / 2) and high-frequency ResizeObserver listeners.",
     category: "navigation",
-    tags: ["sidebar", "navigation", "hook", "rail", "spring"],
+    tags: ["sidebar", "navigation", "hook", "rail", "spring", "a11y"],
     dependencies: ["clsx", "tailwind-merge", "motion"],
     version: "1.0.0",
     createdDate: "2026-09-20",
     updatedDate: "2026-09-20",
     interactive: true,
+    highlights: [
+      "Continuous SVG vector path interpolation (M0.5 0a6 6 0 0 0 6 6H12) with 6px corner curve",
+      "Real-time DOM element measuring with ResizeObserver and requestAnimationFrame",
+      "Dual-rail architecture: instantaneous hover preview rail and persistent active route indicator",
+      "Zero-lag route synchronization using Next.js usePathname() with hash anchor support",
+      "Integrated prefers-reduced-motion fallback bypassing physics for instant transitions"
+    ],
+    anatomy: [
+      "<nav> (Root navigation wrapper with data-slot and customizable ARIA label)",
+      "<Rail (Hover)> (Ephemeral zinc-600 dashed guide following pointer and focus events)",
+      "<Rail (Active)> (Accent-colored solid/dashed traveling indicator with SVG elbow curve)",
+      "<HookSidebarItem> (Semantic Next.js <Link> or <button> with active state markers)"
+    ],
+    physics: {
+      engine: "Motion Spring Dynamics",
+      description: "Damped harmonic oscillator physics calculating real-time traveling rail distance and SVG hook translation with zero overshoot oscillation.",
+      parameters: [
+        { label: "Spring Stiffness", value: "420" },
+        { label: "Damping Factor", value: "34" },
+        { label: "Mass Coefficient", value: "0.7" },
+        { label: "Elbow Curve Radius", value: "6px corner" },
+        { label: "Dash Pattern Pitch", value: "4px repeating gradient" },
+        { label: "Reduced Motion", value: "0ms / Instant duration" }
+      ]
+    },
+    accessibility: {
+      role: "navigation",
+      aria: "aria-label on nav container, aria-current='page' on active Next.js links, aria-current='true' on active buttons, and aria-hidden='true' on decorative motion rails.",
+      reducedMotion: "Hook and rail transitions immediately collapse to 0s duration when prefers-reduced-motion is detected.",
+      keyboard: [
+        { key: "Tab / Shift+Tab", description: "Focus next / previous navigation item with automatic focus indicator rail tracking." },
+        { key: "Enter / Space", description: "Activate focused navigation link or trigger custom item click handler." }
+      ]
+    },
+    guidelines: {
+      recommended: [
+        "Primary left navigation for technical documentation portals and knowledge bases",
+        "Multi-step settings dashboards and administrative account consoles",
+        "Hierarchical section navigators in rich data web applications"
+      ],
+      bestPractices: [
+        "Keep top-level items between 3 and 10 for optimal vertical rail travel ergonomics",
+        "Ensure high-contrast accent colors (#FC4C01 or similar) against dark container surfaces",
+        "Pass explicit unique href or label values to prevent key collisions"
+      ]
+    },
     props: [
       {
         name: "items",
         type: "HookSidebarItem[]",
+        required: true,
         defaultValue: "[]",
-        description: "List of items or links to render in the navigation sidebar.",
+        description: "Array of navigation items as strings or objects containing label, optional href, and custom onClick.",
       },
       {
         name: "label",
         type: "string",
         defaultValue: "undefined",
-        description: "Optional category or section label rendered above items.",
+        description: "Uppercase category or section label rendered above navigation items.",
+      },
+      {
+        name: "value",
+        type: "number",
+        defaultValue: "undefined",
+        description: "Controlled active item index. Overrides internal state and pathname detection.",
+      },
+      {
+        name: "defaultValue",
+        type: "number",
+        defaultValue: "0",
+        description: "Initial item index to highlight when rendered in uncontrolled mode.",
+      },
+      {
+        name: "onChange",
+        type: "(index: number) => void",
+        defaultValue: "undefined",
+        description: "Callback triggered whenever the user clicks or navigates to a new item.",
       },
       {
         name: "color",
@@ -376,6 +683,12 @@ export const GlowingBadge = ({
         type: "boolean",
         defaultValue: "true",
         description: "Render repeating dashed guide pattern along the rail.",
+      },
+      {
+        name: "className",
+        type: "string",
+        defaultValue: "undefined",
+        description: "Additional CSS classes passed to the outer <nav> element.",
       },
     ],
     files: [
@@ -498,7 +811,6 @@ export function HookSidebar({
   const [pointerInside, setPointerInside] = useState(false);
   const [focusInside, setFocusInside] = useState(false);
 
-  const routed = items.some((item) => hrefOf(item));
   const routeIndex = items.findIndex((item) => hrefOf(item) === pathname);
   const activeIndex = value ?? (routeIndex >= 0 ? routeIndex : internalValue);
 
@@ -638,27 +950,93 @@ export function HookSidebar({
   },
   "github-activity": {
     slug: "github-activity",
-    name: "GitHub activity",
+    name: "GitHub Activity",
     description: "A contribution heatmap with a footer panel that expands over the grid to rank your top repositories.",
+    summary: "An interactive contribution heatmap modeled after GitHub's developer activity grid. Renders 26 calendar weeks across 7 weekday rows (182 individual day cells) mapped to 5 contribution intensity tiers (dark #161b22 to vibrant green #39d353). Features cell hover coordinate tooltips, real-time count feedback, and an expandable glassmorphic drawer panel driven by spring physics (stiffness: 420, damping: 34) that slides up over the grid to rank top repository contributions.",
     category: "display",
-    tags: ["heatmap", "github", "contributions", "drawer", "spring"],
+    tags: ["heatmap", "github", "contributions", "drawer", "spring", "visualization", "metrics"],
     dependencies: ["clsx", "tailwind-merge", "motion", "@radix-ui/react-icons"],
     version: "1.0.0",
     createdDate: "2026-09-20",
     updatedDate: "2026-09-20",
     interactive: true,
+    highlights: [
+      "26×7 contribution cell matrix with pseudo-random seed distribution generator",
+      "5-tier GitHub emerald color grading (bg-[#161b22] through bg-[#39d353])",
+      "Interactive cell hover scale (scale-125) with active tooltip timestamping",
+      "Expandable bottom drawer powered by Motion spring physics (stiffness: 420)",
+      "Integrated repository ranking list displaying commit volume and categories"
+    ],
+    anatomy: [
+      "<div> (Card Shell: rounded-2xl container with dark background and top header metadata)",
+      "<div> (Month Labels: horizontal flex row showing 7-month calendar intervals)",
+      "<div> (Grid Matrix: 26 vertical column flex containers each containing 7 day cells)",
+      "<motion.div> (Drawer: absolute spring-animated drawer with backdrop blur overlay)",
+      "<button> (Drawer Trigger: interactive bottom bar with chevron rotation indicator)"
+    ],
+    physics: {
+      engine: "Motion Spring Drawer & Scale Interpolation",
+      description: "Harmonic spring curve driving the repository drawer translation with smooth cell scale up on hover.",
+      parameters: [
+        { label: "Drawer Stiffness", value: "420" },
+        { label: "Drawer Damping", value: "34" },
+        { label: "Drawer Mass", value: "0.7" },
+        { label: "Chevron Flip", value: "180deg rotation transition" },
+        { label: "Cell Hover Scale", value: "1.25 (25% magnification)" },
+        { label: "Tooltip Delay", value: "0ms instantaneous binding" }
+      ]
+    },
+    accessibility: {
+      role: "region",
+      aria: "aria-label='GitHub Contribution Heatmap', aria-expanded on repository drawer trigger, and aria-hidden on decorative grid visuals.",
+      reducedMotion: "Drawer translation collapses to instant fade when prefers-reduced-motion is active.",
+      keyboard: [
+        { key: "Tab", description: "Focus drawer toggle button and interactive repository links." },
+        { key: "Enter / Space", description: "Toggle drawer expansion state between collapsed grid and repo leaderboard." }
+      ]
+    },
+    guidelines: {
+      recommended: [
+        "Developer portfolio hero sections and about pages",
+        "Open-source organization dashboards and profile cards",
+        "Telemetry and commit streak tracking widgets"
+      ],
+      bestPractices: [
+        "Pass real contribution data arrays to override default simulated data",
+        "Keep totalContributions synchronized with the sum of all cell values",
+        "Ensure container has minimum width of 360px to prevent horizontal grid clipping"
+      ]
+    },
     props: [
       {
         name: "username",
         type: "string",
         defaultValue: "undefined",
-        description: "The GitHub username you want the data for.",
+        description: "Target GitHub username for dynamic API data fetching or profile attribution.",
+      },
+      {
+        name: "totalContributions",
+        type: "number",
+        defaultValue: "1863",
+        description: "Total annual contribution count displayed in the top card header.",
+      },
+      {
+        name: "year",
+        type: "number",
+        defaultValue: "2025",
+        description: "Calendar year corresponding to the displayed 26-week contribution window.",
       },
       {
         name: "contributions",
         type: "Contribution[]",
         defaultValue: "[]",
-        description: "Your own contribution data instead of a username.",
+        description: "Custom array of contribution data points with ISO date string, count, and level (0-4).",
+      },
+      {
+        name: "className",
+        type: "string",
+        defaultValue: "undefined",
+        description: "Additional CSS utility classes applied to the root card wrapper.",
       },
     ],
     files: [
@@ -882,19 +1260,103 @@ export function GitHubActivity({
     slug: "bento-grid",
     name: "Bento Grid",
     description: "Responsive 3-column asymmetric layout grid for high-impact feature displays.",
+    summary: "An asymmetric modular layout grid inspired by Japanese bento box architecture and modern product showcase decks. Utilizes a responsive 3-column CSS Grid system (grid-cols-1 md:grid-cols-3) with configurable colSpan props on child BentoCard containers (1, 2, or 3 columns). Accommodates visual graphic headers, accent iconography, and typography with smooth 300ms hover border brightening.",
     category: "layout",
-    tags: ["bento", "grid", "layout", "cards"],
+    tags: ["bento", "grid", "layout", "cards", "responsive", "showcase"],
     dependencies: ["clsx", "tailwind-merge"],
     version: "1.0.0",
     createdDate: "2026-09-10",
     updatedDate: "2026-09-10",
     interactive: true,
+    highlights: [
+      "Asymmetric 3-column CSS Grid with automatic single-column mobile collapse",
+      "Configurable colSpan spans (col-span-1, col-span-2, col-span-3) on desktop",
+      "Compound component pattern (BentoGrid + BentoCard) with type-safe interfaces",
+      "Subtle hover border brightening and background tinting with 300ms transition",
+      "Header viewport slot accommodating interactive previews, charts, and media"
+    ],
+    anatomy: [
+      "<BentoGrid> (CSS Grid container with 16px gap spacing and max-w-7xl auto centering)",
+      "<BentoCard> (Flex container card with customizable colSpan, border, and background)",
+      "<div> (Header Slot: optional top container for diagrams, screenshots, or code previews)",
+      "<div> (Icon + Title: flex row with hover color transitions and font-semibold styling)",
+      "<p> (Description: light zinc-400 typography with relaxed leading for high readability)"
+    ],
+    physics: {
+      engine: "CSS Grid & Transition Matrix",
+      description: "Zero-overhead responsive CSS Grid with CSS transition-all hover state transitions.",
+      parameters: [
+        { label: "Columns (Desktop)", value: "3 columns (1fr 1fr 1fr)" },
+        { label: "Columns (Mobile)", value: "1 column stack" },
+        { label: "Grid Gap", value: "16px (gap-4)" },
+        { label: "Hover Duration", value: "300ms transition-all" },
+        { label: "Border Transition", value: "border-zinc-800 to border-zinc-700" }
+      ]
+    },
+    accessibility: {
+      role: "region",
+      aria: "Accepts aria-labelledby linked to the main section heading for screen readers.",
+      reducedMotion: "Pure CSS transitions instantly respect prefers-reduced-motion media queries.",
+      keyboard: [
+        { key: "Tab", description: "Standard keyboard tab navigation passes cleanly to interactive items inside cards." }
+      ]
+    },
+    guidelines: {
+      recommended: [
+        "Product feature comparison sections on SaaS landing pages",
+        "Architecture overview matrices and capability grids",
+        "Design system component galleries and capability highlights"
+      ],
+      bestPractices: [
+        "Group cards in complementary row sums that total 3 columns (e.g. 2 + 1, 1 + 1 + 1, or 3)",
+        "Place the most visually complex card with an interactive header in a 2-colSpan slot",
+        "Use subtle borders and deep zinc backgrounds (#0c0c0e or zinc-950) to retain clean contrast"
+      ]
+    },
     props: [
       {
         name: "colSpan",
         type: "1 | 2 | 3",
         defaultValue: "1",
-        description: "Number of grid columns spanned by BentoCard on medium+ screens.",
+        description: "Number of grid columns spanned by BentoCard on medium and larger viewports (md:col-span-1, md:col-span-2, or md:col-span-3).",
+      },
+      {
+        name: "title",
+        type: "string",
+        required: true,
+        defaultValue: "undefined",
+        description: "Feature headline displayed on the BentoCard.",
+      },
+      {
+        name: "description",
+        type: "string",
+        required: true,
+        defaultValue: "undefined",
+        description: "Secondary explanatory paragraph detailing feature value and capabilities.",
+      },
+      {
+        name: "header",
+        type: "React.ReactNode",
+        defaultValue: "undefined",
+        description: "Visual graphic, preview element, screenshot, or interactive canvas rendered above card content.",
+      },
+      {
+        name: "icon",
+        type: "React.ReactNode",
+        defaultValue: "undefined",
+        description: "Icon element displayed beside the card title with hover color transitions.",
+      },
+      {
+        name: "children",
+        type: "React.ReactNode",
+        defaultValue: "undefined",
+        description: "Child BentoCard elements or custom elements rendered inside BentoGrid.",
+      },
+      {
+        name: "className",
+        type: "string",
+        defaultValue: "undefined",
+        description: "Additional CSS utility classes passed to BentoGrid or BentoCard.",
       },
     ],
     files: [
