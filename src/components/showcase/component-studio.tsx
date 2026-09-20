@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion, useDragControls } from "motion/react";
 import {
   CodeIcon,
   InfoCircledIcon,
@@ -176,6 +176,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
   const [prevPropSlug, setPrevPropSlug] = useState(component.slug);
   const [viewport, setViewport] = useState<"desktop" | "tablet" | "mobile">("desktop");
   const [activeColor, setActiveColor] = useState<string>(PALETTE[3].hex);
+  const dragControls = useDragControls();
+  const [hookDemoIndex, setHookDemoIndex] = useState(0);
 
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [activePanel, setActivePanel] = useState<"none" | "info" | "code">("none");
@@ -302,19 +304,20 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
           <div className="w-full max-w-sm bg-[#0c0c0e] border border-white/10 rounded-2xl p-6 shadow-2xl flex flex-col gap-4">
             <div className="flex items-center justify-between pb-2 border-b border-white/8">
               <span className="text-xs font-mono uppercase text-zinc-400">Hook Rail Demonstration</span>
-              <span className="text-[10px] font-mono" style={{ color }}>
+              <span className="text-[10px] font-mono font-medium" style={{ color }}>
                 Stiffness: 420
               </span>
             </div>
             <HookSidebar
               label="SIDEBAR NAVIGATION"
-              defaultValue={1}
+              value={hookDemoIndex}
+              onChange={setHookDemoIndex}
               color={color}
               items={[
-                { label: "Overview", href: "#overview" },
-                { label: "Components", href: "#components" },
-                { label: "Documentation", href: "#docs" },
-                { label: "Settings", href: "#settings" },
+                { label: "Overview" },
+                { label: "Components" },
+                { label: "Documentation" },
+                { label: "Settings" },
               ]}
             />
           </div>
@@ -466,7 +469,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             }
                           },
                         }))}
-                        color="#FC4C01"
+                        color={activeColor}
                         dashed={true}
                       />
                     );
@@ -708,6 +711,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
 
             <motion.div
               drag
+              dragListener={false}
+              dragControls={dragControls}
               dragMomentum={false}
               dragElastic={0.1}
               dragConstraints={{ left: -260, right: 260, top: -350, bottom: 20 }}
@@ -716,7 +721,10 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               transition={panelSpring}
               className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 rounded-full border border-white/10 bg-[#141416]/95 backdrop-blur-2xl px-3.5 py-2 shadow-[0_12px_36px_rgba(0,0,0,0.85)] flex items-center gap-2.5 select-none"
             >
-              <div className="cursor-grab active:cursor-grabbing text-zinc-500 hover:text-zinc-300 pr-1 flex items-center">
+              <div
+                onPointerDown={(e) => dragControls.start(e)}
+                className="cursor-grab active:cursor-grabbing text-zinc-500 hover:text-zinc-300 pr-1 flex items-center touch-none"
+              >
                 <DragHandleDots2Icon className="w-4 h-4" />
               </div>
 

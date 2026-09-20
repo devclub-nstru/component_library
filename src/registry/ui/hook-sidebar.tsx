@@ -130,9 +130,13 @@ export function HookSidebar({
       );
 
     measure();
+    const rafId = requestAnimationFrame(measure);
     const observer = new ResizeObserver(measure);
     observer.observe(list);
-    return () => observer.disconnect();
+    return () => {
+      cancelAnimationFrame(rafId);
+      observer.disconnect();
+    };
   }, [items.length]);
 
   const activeY = activeIndex < 0 ? null : (centers[activeIndex] ?? null);
@@ -206,10 +210,13 @@ export function HookSidebar({
               if (typeof item !== "string" && item.onClick) {
                 item.onClick(e);
               }
+              if (href?.startsWith("#")) {
+                e.preventDefault();
+              }
               select(index);
             },
             className: cn(
-              "rounded-lg py-1 pl-5 pr-2 text-left text-xs transition-colors duration-200 motion-reduce:transition-none select-none",
+              "rounded-lg py-1 pl-5 pr-2 text-left text-xs transition-colors duration-200 motion-reduce:transition-none select-none cursor-pointer",
               isActive
                 ? "text-white font-medium"
                 : "text-zinc-400 hover:text-zinc-200",
