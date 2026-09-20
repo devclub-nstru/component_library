@@ -12,9 +12,6 @@ export const SITE_CONFIG = {
 
 export const NAV_ITEMS = [
   { label: "Components", href: "/components" },
-  { label: "Features", href: "/#features" },
-  { label: "Setup", href: "/#setup" },
-  { label: "Reviews", href: "/#testimonials" },
   { label: "Docs", href: "/docs" },
 ];
 

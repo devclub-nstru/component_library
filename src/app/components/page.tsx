@@ -73,36 +73,31 @@ export default function ComponentsPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-zinc-950 text-zinc-100">
+    <div className="min-h-screen flex flex-col bg-[#050505] text-[#f4f4f5]">
       <Navbar />
 
       <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-12">
-        <div className="flex flex-col gap-3 mb-10">
-          <div className="flex items-center gap-2">
-            <GlowingBadge variant="blue">Registry</GlowingBadge>
-            <span className="text-xs text-zinc-500 font-mono">
-              {filteredComponents.length} components available
-            </span>
-          </div>
-          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-white font-heading">
+        <div className="flex flex-col gap-3 mb-10 border-b border-white/[0.08] pb-8">
+          <h1 className="text-3xl sm:text-5xl font-serif font-normal tracking-tight text-white">
             Component Library
           </h1>
           <p className="text-sm text-zinc-400 max-w-2xl font-light">
-            Modular, high-performance UI components built with Tailwind CSS, Radix UI icons, and custom design tokens. Copy and paste directly into your project.
+            Minimal, high-performance UI components built with precision, clean geometry, and custom design tokens.
           </p>
         </div>
 
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-2 md:pb-0 scrollbar-none">
+          <div className="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-none font-mono">
             {CATEGORIES.map((category) => (
               <button
                 key={category.id}
+                type="button"
                 onClick={() => setSelectedCategory(category.id)}
                 className={cn(
-                  "rounded-lg px-3 py-1.5 text-xs font-medium transition-all whitespace-nowrap cursor-pointer",
+                  "border px-3 py-1.5 text-xs transition-colors whitespace-nowrap cursor-pointer",
                   selectedCategory === category.id
-                    ? "bg-zinc-800 text-white shadow-sm"
-                    : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900"
+                    ? "border-white/60 bg-white/10 text-white"
+                    : "border-white/10 text-zinc-400 hover:text-zinc-200 hover:border-white/30"
                 )}
               >
                 {category.label}
@@ -117,20 +112,21 @@ export default function ComponentsPage() {
               placeholder="Search components..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-lg border border-zinc-800 bg-zinc-900/60 pl-8 pr-3 py-1.5 text-xs text-zinc-200 placeholder:text-zinc-500 focus:border-zinc-600 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors"
+              className="w-full border border-white/15 bg-black/60 pl-8 pr-3 py-1.5 text-xs text-zinc-200 placeholder:text-zinc-500 focus:border-white/40 focus:outline-none transition-colors font-mono"
             />
           </div>
         </div>
 
         {filteredComponents.length === 0 ? (
-          <div className="rounded-xl border border-zinc-900 bg-zinc-950/50 py-16 text-center">
+          <div className="border border-white/10 bg-black/40 py-16 text-center font-mono">
             <p className="text-sm text-zinc-400">No components match your search query.</p>
             <button
+              type="button"
               onClick={() => {
                 setSelectedCategory("all");
                 setSearchQuery("");
               }}
-              className="mt-3 text-xs text-blue-400 hover:underline"
+              className="mt-3 text-xs text-white underline cursor-pointer"
             >
               Reset filters
             </button>

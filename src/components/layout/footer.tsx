@@ -5,19 +5,30 @@ import { SITE_CONFIG } from "@/lib/constants";
 
 export const Footer = () => {
   return (
-    <footer className="border-t border-zinc-900 bg-zinc-950 py-12 text-zinc-400">
+    <footer className="border-t border-white/[0.08] bg-black py-12 text-zinc-400 font-mono">
+      <div className="h-2 w-full mb-10 bg-[repeating-linear-gradient(90deg,rgba(255,255,255,0.08)_0px,rgba(255,255,255,0.08)_1px,transparent_1px,transparent_8px)] border-b border-white/[0.06]" />
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           <div className="space-y-3">
-            <div className="flex items-center gap-2">
-              <div className="h-6 w-6 rounded-md bg-linear-to-tr from-blue-600 to-indigo-400 flex items-center justify-center text-white font-black text-xs">
-                D
+            <div className="flex items-center gap-2.5">
+              <div className="w-5 h-5 border border-white flex items-center justify-center p-0.5">
+                <svg
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  className="w-full h-full stroke-white"
+                  strokeWidth="1.2"
+                >
+                  <rect x="1" y="1" width="14" height="14" />
+                  <line x1="1" y1="1" x2="15" y2="15" />
+                  <line x1="15" y1="1" x2="1" y2="15" />
+                </svg>
               </div>
-              <span className="font-semibold text-sm tracking-tight text-white">
-                {SITE_CONFIG.name}
+              <span className="font-sans font-medium text-base tracking-tight text-white">
+                devclub
               </span>
             </div>
-            <p className="text-xs text-zinc-500 max-w-xs leading-relaxed">
+            <p className="text-xs text-zinc-500 max-w-xs leading-relaxed font-sans">
               {SITE_CONFIG.description}
             </p>
           </div>
@@ -29,7 +40,7 @@ export const Footer = () => {
             <ul className="space-y-2 text-xs">
               <li>
                 <Link
-                  href="/components?category=scales"
+                  href="/components"
                   className="hover:text-white transition-colors"
                 >
                   Scales & Borders
@@ -37,26 +48,18 @@ export const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="/components?category=buttons"
+                  href="/components"
                   className="hover:text-white transition-colors"
                 >
-                  Animated Buttons
+                  Actions & Controls
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/components?category=cards"
+                  href="/components"
                   className="hover:text-white transition-colors"
                 >
-                  Spotlight Cards
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/components?category=layout"
-                  className="hover:text-white transition-colors"
-                >
-                  Bento Grids
+                  Cards & Panels
                 </Link>
               </li>
             </ul>
@@ -80,15 +83,7 @@ export const Footer = () => {
                   href="/api/components"
                   className="hover:text-white transition-colors"
                 >
-                  REST API
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/api/health"
-                  className="hover:text-white transition-colors"
-                >
-                  System Health
+                  API Endpoints
                 </Link>
               </li>
             </ul>
@@ -96,14 +91,14 @@ export const Footer = () => {
 
           <div>
             <h4 className="text-xs font-semibold uppercase tracking-wider text-zinc-300 mb-3">
-              Connect
+              Source
             </h4>
             <div className="flex items-center gap-3">
               <a
                 href={SITE_CONFIG.links.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 rounded-lg border border-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-900 transition-colors"
+                className="p-2 border border-white/15 text-zinc-400 hover:text-white hover:bg-white/5 transition-colors"
               >
                 <GitHubLogoIcon className="h-4 w-4" />
               </a>
@@ -111,7 +106,7 @@ export const Footer = () => {
                 href={SITE_CONFIG.links.twitter}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 rounded-lg border border-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-900 transition-colors"
+                className="p-2 border border-white/15 text-zinc-400 hover:text-white hover:bg-white/5 transition-colors"
               >
                 <TwitterLogoIcon className="h-4 w-4" />
               </a>
@@ -119,11 +114,11 @@ export const Footer = () => {
           </div>
         </div>
 
-        <div className="border-t border-zinc-900 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-600">
+        <div className="border-t border-white/[0.08] pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-500">
           <p>
-            © {new Date().getFullYear()} DevClub UI. Built for modern engineers.
+            © {new Date().getFullYear()} devclub. All rights reserved.
           </p>
-          <p>MIT Licensed. Free for commercial and personal projects.</p>
+          <p>Classy, minimalist architecture.</p>
         </div>
       </div>
     </footer>

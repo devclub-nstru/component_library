@@ -13,15 +13,24 @@ export const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-zinc-800/80 bg-zinc-950/80 backdrop-blur-md">
+    <header className="sticky top-0 z-50 w-full border-b border-white/[0.08] bg-black/90 backdrop-blur-md">
       <div className="max-w-7xl mx-auto flex h-14 items-center justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-6">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="h-6 w-6 rounded-md bg-linear-to-tr from-blue-600 to-indigo-400 flex items-center justify-center text-white font-black text-xs">
-              D
+          <Link href="/" className="flex items-center gap-2.5">
+            <div className="w-5 h-5 border border-white flex items-center justify-center p-0.5">
+              <svg
+                viewBox="0 0 16 16"
+                fill="none"
+                className="w-full h-full stroke-white"
+                strokeWidth="1.2"
+              >
+                <rect x="1" y="1" width="14" height="14" />
+                <line x1="1" y1="1" x2="15" y2="15" />
+                <line x1="15" y1="1" x2="1" y2="15" />
+              </svg>
             </div>
-            <span className="font-semibold text-sm tracking-tight text-white">
-              {SITE_CONFIG.name}
+            <span className="font-sans font-medium text-base tracking-tight text-white">
+              devclub
             </span>
           </Link>
           <nav className="hidden md:flex items-center gap-5">
@@ -29,7 +38,7 @@ export const Navbar = () => {
               <Link
                 key={item.href}
                 href={item.href}
-                className="text-xs font-medium text-zinc-400 hover:text-zinc-100 transition-colors"
+                className="text-xs font-mono text-zinc-400 hover:text-white transition-colors"
               >
                 {item.label}
               </Link>
@@ -42,18 +51,19 @@ export const Navbar = () => {
             href={SITE_CONFIG.links.github}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 rounded-md border border-zinc-800 px-3 py-1.5 text-xs font-medium text-zinc-300 hover:bg-zinc-900 hover:text-white transition-colors"
+            className="flex items-center gap-1.5 border border-white/15 px-3 py-1 text-xs font-mono text-zinc-300 hover:bg-white/5 hover:text-white hover:border-white/40 transition-colors"
           >
             <GitHubLogoIcon className="h-3.5 w-3.5" />
-            <span className="hidden sm:inline">Star on GitHub</span>
+            <span className="hidden sm:inline">GitHub</span>
           </a>
           <Link
             href="/components"
-            className="rounded-md bg-linear-to-t from-blue-700 to-blue-500 px-3.5 py-1.5 text-xs font-medium text-white shadow-sm hover:brightness-110 transition-all"
+            className="border border-white/20 hover:border-white/50 px-3 py-1 text-xs font-mono text-white hover:bg-white/5 transition-all"
           >
-            Explore
+            Components
           </Link>
           <button
+            type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="md:hidden p-1.5 text-zinc-400 hover:text-white"
           >
@@ -67,7 +77,7 @@ export const Navbar = () => {
       </div>
 
       {mobileMenuOpen && (
-        <div className="md:hidden border-b border-zinc-800 bg-zinc-950 px-4 py-4 space-y-3">
+        <div className="md:hidden border-b border-white/[0.08] bg-black px-4 py-4 space-y-3 font-mono">
           {NAV_ITEMS.map((item) => (
             <Link
               key={item.href}

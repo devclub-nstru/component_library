@@ -115,31 +115,22 @@ export default async function ComponentDetailPage({ params }: PageProps) {
   const installCommand = `npm install ${component.dependencies.join(" ")}`;
 
   return (
-    <div className="min-h-screen flex flex-col bg-zinc-950 text-zinc-100">
+    <div className="min-h-screen flex flex-col bg-[#050505] text-[#f4f4f5]">
       <Navbar />
 
       <main className="flex-1 max-w-5xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10">
         <div className="mb-6">
           <Link
             href="/components"
-            className="inline-flex items-center gap-1.5 text-xs text-zinc-400 hover:text-white transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs font-mono text-zinc-400 hover:text-white transition-colors"
           >
             <ArrowLeftIcon className="h-3.5 w-3.5" />
             <span>Back to Components</span>
           </Link>
         </div>
 
-        <div className="flex flex-col gap-3 mb-8">
-          <div className="flex items-center gap-2">
-            <GlowingBadge variant="blue" className="capitalize">
-              {component.category}
-            </GlowingBadge>
-            <span className="text-xs font-mono text-zinc-500">
-              v{component.version}
-            </span>
-          </div>
-
-          <h1 className="text-3xl font-bold tracking-tight text-white font-heading">
+        <div className="flex flex-col gap-3 mb-8 border-b border-white/[0.08] pb-8">
+          <h1 className="text-3xl sm:text-4xl font-serif font-normal tracking-tight text-white">
             {component.name}
           </h1>
           <p className="text-sm text-zinc-400 font-light max-w-2xl">
@@ -150,9 +141,9 @@ export default async function ComponentDetailPage({ params }: PageProps) {
             {component.tags.map((tag) => (
               <span
                 key={tag}
-                className="rounded bg-zinc-900 border border-zinc-800 px-2 py-0.5 text-[11px] text-zinc-400 font-mono"
+                className="border border-white/10 bg-black/40 px-2 py-0.5 text-[11px] text-zinc-400 font-mono"
               >
-                #{tag}
+                {tag}
               </span>
             ))}
           </div>
@@ -160,7 +151,7 @@ export default async function ComponentDetailPage({ params }: PageProps) {
 
         <div className="space-y-10">
           <div>
-            <h2 className="text-base font-semibold text-white mb-3">Preview & Code</h2>
+            <h2 className="text-base font-mono uppercase tracking-wider text-white mb-3">Preview & Code</h2>
             <ComponentPreview
               code={component.files[0]?.code || ""}
               filename={component.files[0]?.name}
@@ -170,8 +161,8 @@ export default async function ComponentDetailPage({ params }: PageProps) {
           </div>
 
           <div>
-            <h2 className="text-base font-semibold text-white mb-3">Installation</h2>
-            <div className="rounded-xl border border-zinc-800 bg-zinc-900/60 p-4 font-mono text-xs text-zinc-200 flex items-center justify-between">
+            <h2 className="text-base font-mono uppercase tracking-wider text-white mb-3">Installation</h2>
+            <div className="border border-white/15 bg-black/60 p-4 font-mono text-xs text-zinc-200 flex items-center justify-between">
               <span>{installCommand}</span>
               <span className="text-[11px] text-zinc-500">bash</span>
             </div>
@@ -179,10 +170,10 @@ export default async function ComponentDetailPage({ params }: PageProps) {
 
           {component.props && component.props.length > 0 && (
             <div>
-              <h2 className="text-base font-semibold text-white mb-3">Props & Attributes</h2>
-              <div className="rounded-xl border border-zinc-800 overflow-hidden">
+              <h2 className="text-base font-mono uppercase tracking-wider text-white mb-3">Props & Attributes</h2>
+              <div className="border border-white/15 overflow-hidden">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-zinc-900/80 border-b border-zinc-800 text-zinc-400 font-medium">
+                  <thead className="bg-zinc-950 border-b border-white/10 text-zinc-400 font-mono">
                     <tr>
                       <th className="p-3">Prop</th>
                       <th className="p-3">Type</th>
@@ -190,15 +181,15 @@ export default async function ComponentDetailPage({ params }: PageProps) {
                       <th className="p-3">Description</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-zinc-800/80 bg-zinc-950">
+                  <tbody className="divide-y divide-white/10 bg-black">
                     {component.props.map((p) => (
-                      <tr key={p.name} className="hover:bg-zinc-900/30">
-                        <td className="p-3 font-mono text-blue-400">{p.name}</td>
-                        <td className="p-3 font-mono text-zinc-400">{p.type}</td>
-                        <td className="p-3 font-mono text-zinc-500">
+                      <tr key={p.name} className="hover:bg-zinc-950/60 font-mono">
+                        <td className="p-3 text-zinc-200">{p.name}</td>
+                        <td className="p-3 text-zinc-400">{p.type}</td>
+                        <td className="p-3 text-zinc-500">
                           {p.defaultValue || "-"}
                         </td>
-                        <td className="p-3 text-zinc-300 font-light">
+                        <td className="p-3 text-zinc-300 font-sans font-light">
                           {p.description}
                         </td>
                       </tr>

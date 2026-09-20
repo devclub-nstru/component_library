@@ -1,52 +1,43 @@
 @import "tailwindcss";
 
 :root {
-  --bg-primary: #08080a;
-  --bg-card: #0d0e12;
-  --border-primary: rgba(255, 255, 255, 0.08);
-  --border-accent: rgba(59, 130, 246, 0.35);
-  --text-primary: #fdfdfd;
-  --text-secondary: #a1a1aa;
-  --text-muted: #71717a;
-  --accent-glow: rgba(59, 130, 246, 0.12);
-  --pattern: rgba(255, 255, 255, 0.08);
-  --pattern-line: rgba(255, 255, 255, 0.12);
-  --font-heading: var(--font-inter), sans-serif;
-  --background: #08080a;
-  --foreground: #fdfdfd;
+  --background: #050505;
+  --foreground: #f4f4f5;
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-hairline: rgba(255, 255, 255, 0.16);
+  --pattern-line: rgba(255, 255, 255, 0.1);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-inter);
-  --font-heading: var(--font-inter);
+  --font-sans: var(--font-poppins), sans-serif;
+  --font-serif: var(--font-newsreader), Georgia, serif;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-inter), sans-serif;
+  font-family: var(--font-poppins), sans-serif;
   overflow-x: hidden;
 }
 
 ::selection {
-  background: #2563eb;
+  background: rgba(255, 255, 255, 0.2);
   color: #ffffff;
 }
 
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #08080a;
+  background: #050505;
 }
 
 ::-webkit-scrollbar-thumb {
   background: #27272a;
-  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
