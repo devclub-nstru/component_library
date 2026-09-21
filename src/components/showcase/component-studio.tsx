@@ -38,6 +38,7 @@ import {
   type OtpVariant,
 } from "@/registry/ui/otp-input";
 import { CodeBlock } from "@/registry/ui/code-block";
+import { SmoothAccordion } from "@/registry/ui/smooth-accordion";
 import { cn } from "@/lib/utils";
 
 interface ComponentStudioProps {
@@ -104,6 +105,16 @@ const ALL_CATEGORIES = [
         label: "Animated Button",
         slug: "animated-button",
         href: "/components/animated-button",
+      },
+    ],
+  },
+  {
+    label: "ACCORDIONS",
+    items: [
+      {
+        label: "Smooth Accordion",
+        slug: "smooth-accordion",
+        href: "/components/smooth-accordion",
       },
     ],
   },
@@ -721,6 +732,46 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         return (
           <div className="w-full max-w-2xl flex items-center justify-center p-4">
             <CodeBlock color={color} />
+          </div>
+        );
+      case "smooth-accordion":
+        return (
+          <div className="w-full max-w-xl p-4 sm:p-6">
+            <SmoothAccordion
+              type="single"
+              defaultValue="item-1"
+              items={[
+                {
+                  value: "item-1",
+                  title: "Fluid Motion & Blur Physics",
+                  subtitle: "GPU composited filter and height interpolation",
+                  content:
+                    "Answers emerge through an optical blur-to-sharp filter curve combined with hardware-accelerated transform interpolation. When another section is clicked, the active panel collapses concurrently in complete visual harmony with zero layout stutter.",
+                },
+                {
+                  value: "item-2",
+                  title: "Synchronized State Transitions",
+                  subtitle: "Concurrent enter and exit animations",
+                  content:
+                    "Traditional accordions close before opening the next item, causing jarring multi-step layout jumps. DevClub UI synchronizes both lifecycles through identical spring damping curves for seamless fluid movement.",
+                },
+                {
+                  value: "item-3",
+                  title: "Sub-pixel Layout Calibration",
+                  subtitle: "Zero CLS and overflow containment",
+                  content:
+                    "Calibrated with overflow clipping containment to prevent scrollbar flicker. Each trigger and content region maintains strict boundary geometry with theme-aware border accents and spring-rotated chevrons.",
+                },
+                {
+                  value: "item-4",
+                  title: "Accessible Keyboard Navigation",
+                  subtitle:
+                    "WAI-ARIA accordion pattern with Tab and Space/Enter",
+                  content:
+                    "Fully compliant with WAI-ARIA authoring practices. Features dynamic aria-expanded and aria-controls state binding, focus-visible indicators, and automatic reduced-motion fallbacks for vestibular sensitivity.",
+                },
+              ]}
+            />
           </div>
         );
       default:

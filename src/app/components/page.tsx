@@ -15,6 +15,7 @@ import { GitHubActivity } from "@/registry/ui/github-activity";
 import { AnimatedCounter } from "@/registry/ui/animated-counter";
 import { OtpInput } from "@/registry/ui/otp-input";
 import { CodeBlock } from "@/registry/ui/code-block";
+import { SmoothAccordion } from "@/registry/ui/smooth-accordion";
 import { cn } from "@/lib/utils";
 
 function CounterPreview() {
@@ -156,6 +157,26 @@ export default function ComponentsPage() {
     "code-block": (
       <div className="w-full max-w-72 pointer-events-none scale-[0.68] origin-top-left overflow-hidden max-h-36 select-none">
         <CodeBlock color="#4ade80" />
+      </div>
+    ),
+    "smooth-accordion": (
+      <div className="w-full max-w-72 pointer-events-none scale-90 origin-center">
+        <SmoothAccordion
+          type="single"
+          defaultValue="preview-1"
+          items={[
+            {
+              value: "preview-1",
+              title: "Synchronized Motion",
+              content: "Fluid height expansion with optical blur-reveal curve.",
+            },
+            {
+              value: "preview-2",
+              title: "Concurrent Collapsing",
+              content: "Active panel closes simultaneously as new ones expand.",
+            },
+          ]}
+        />
       </div>
     ),
   };

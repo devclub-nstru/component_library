@@ -17,6 +17,7 @@ export const NAV_ITEMS = [
 
 export const CATEGORIES = [
   { id: "all", label: "All Components" },
+  { id: "accordion", label: "Accordions" },
   { id: "scales", label: "Scales & Borders" },
   { id: "buttons", label: "Buttons & Actions" },
   { id: "cards", label: "Cards & Bento" },

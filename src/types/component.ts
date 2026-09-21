@@ -6,7 +6,8 @@ export type ComponentCategory =
   | "navigation"
   | "scales"
   | "display"
-  | "inputs";
+  | "inputs"
+  | "accordion";
 
 export interface ComponentProp {
   name: string;
