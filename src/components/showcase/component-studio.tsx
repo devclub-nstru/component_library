@@ -45,6 +45,7 @@ import {
   ProximitySidebar,
   type ProximitySection,
 } from "@/registry/ui/proximity-sidebar";
+import { AiOrb } from "@/registry/ui/ai-orb";
 import { cn } from "@/lib/utils";
 
 interface ComponentStudioProps {
@@ -151,6 +152,11 @@ const ALL_CATEGORIES = [
         label: "Status Badge",
         slug: "glowing-badge",
         href: "/components/glowing-badge",
+      },
+      {
+        label: "AI Orb",
+        slug: "ai-orb",
+        href: "/components/ai-orb",
       },
     ],
   },
@@ -619,6 +625,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
       "candy-button",
       "hook-sidebar",
       "proximity-sidebar",
+      "ai-orb",
       "animated-button",
       "spotlight-card",
       "glowing-badge",
@@ -895,6 +902,12 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 </div>
               ))}
             </div>
+          </div>
+        );
+      case "ai-orb":
+        return (
+          <div className="flex flex-col items-center justify-center p-12 min-h-80 w-full select-none">
+            <AiOrb color={color} />
           </div>
         );
       case "scales":
