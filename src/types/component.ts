@@ -5,7 +5,8 @@ export type ComponentCategory =
   | "feedback"
   | "navigation"
   | "scales"
-  | "display";
+  | "display"
+  | "inputs";
 
 export interface ComponentProp {
   name: string;

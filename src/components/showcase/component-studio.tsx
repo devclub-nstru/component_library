@@ -33,6 +33,12 @@ import { GlowingBadge } from "@/registry/ui/glowing-badge";
 import { HookSidebar } from "@/registry/ui/hook-sidebar";
 import { GitHubActivity } from "@/registry/ui/github-activity";
 import { AnimatedCounter } from "@/registry/ui/animated-counter";
+import {
+  OtpInput,
+  type OtpStatus,
+  type OtpSize,
+  type OtpVariant,
+} from "@/registry/ui/otp-input";
 import { cn } from "@/lib/utils";
 
 interface ComponentStudioProps {
@@ -75,6 +81,11 @@ const ALL_CATEGORIES = [
   {
     label: "INPUTS",
     items: [
+      {
+        label: "OTP Input",
+        slug: "otp-input",
+        href: "/components/otp-input",
+      },
       {
         label: "Sparkle Button",
         slug: "sparkle-button",
@@ -288,6 +299,21 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     });
   };
 
+  const [otpValue, setOtpValue] = useState("");
+  const [otpStatus, setOtpStatus] = useState<OtpStatus>("idle");
+  const [otpMask, setOtpMask] = useState(false);
+  const [otpSize, setOtpSize] = useState<OtpSize>("md");
+  const [otpVariant, setOtpVariant] = useState<OtpVariant>("default");
+  const [otpGrouped, setOtpGrouped] = useState(false);
+
+  const resetOtpConfig = () => {
+    setOtpStatus("idle");
+    setOtpMask(false);
+    setOtpSize("md");
+    setOtpVariant("default");
+    setOtpGrouped(false);
+  };
+
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [activePanel, setActivePanel] = useState<"none" | "info" | "code">(
     "none",
@@ -377,6 +403,31 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
 
   const renderComponentPreview = (slug: string, color: string) => {
     switch (slug) {
+      case "otp-input":
+        return (
+          <div className="flex flex-col items-center justify-center gap-5 select-none w-full p-8 min-h-55">
+            <OtpInput
+              length={6}
+              value={otpValue}
+              onChange={setOtpValue}
+              onComplete={(code) => {
+                setOtpStatus(
+                  code === "123456" || code === "729481" ? "success" : "error",
+                );
+              }}
+              status={otpStatus}
+              size={otpSize}
+              variant={otpVariant}
+              mask={otpMask}
+              separator={
+                otpGrouped ? (
+                  <span className="w-2.5 h-0.5 rounded-full bg-zinc-600 dark:bg-zinc-700" />
+                ) : undefined
+              }
+              groupSize={otpGrouped ? 3 : undefined}
+            />
+          </div>
+        );
       case "sparkle-button":
         return (
           <div className="flex items-center justify-center select-none w-full p-8 min-h-55">
@@ -1281,6 +1332,220 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             {sparkleConfig.springStiffness}
                           </span>
                         </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {activeComponent.slug === "otp-input" && (
+                  <motion.div
+                    key="otp-customize-panel"
+                    initial={{
+                      opacity: 0,
+                      y: 22,
+                      scale: 0.94,
+                      filter: "blur(6px)",
+                    }}
+                    animate={{
+                      opacity: 1,
+                      y: 0,
+                      scale: 1,
+                      filter: "blur(0px)",
+                    }}
+                    exit={{
+                      opacity: 0,
+                      y: 16,
+                      scale: 0.94,
+                      filter: "blur(6px)",
+                    }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 400,
+                      damping: 32,
+                      mass: 0.8,
+                    }}
+                    className="pointer-events-auto rounded-2xl border border-white/10 bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-xl w-full mx-4 select-none flex flex-col gap-2.5"
+                  >
+                    <div className="flex items-center justify-between px-1">
+                      <span className="text-xs font-semibold text-white/90 tracking-tight">
+                        Customize
+                      </span>
+                      <button
+                        type="button"
+                        onClick={resetOtpConfig}
+                        className="text-[11px] text-zinc-400 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                      >
+                        <ResetIcon className="w-3.5 h-3.5" />
+                        <span>Reset</span>
+                      </button>
+                    </div>
+
+                    <div className="rounded-xl border border-white/5 bg-[#0b0b0e] p-1.5 flex flex-col gap-1.5">
+                      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-1.5 pb-1.5 border-b border-white/5">
+                        <div className="flex items-center gap-0.5 bg-[#17171b] p-1 rounded-xl border border-white/5">
+                          {(
+                            ["idle", "success", "error", "loading"] as const
+                          ).map((s) => (
+                            <button
+                              key={s}
+                              type="button"
+                              onClick={() => setOtpStatus(s)}
+                              className={cn(
+                                "relative h-7 px-2.5 rounded-lg text-xs font-mono capitalize transition-colors cursor-pointer flex items-center justify-center",
+                                otpStatus === s
+                                  ? "text-black font-semibold"
+                                  : "text-zinc-400 hover:text-white",
+                              )}
+                            >
+                              {otpStatus === s && (
+                                <motion.div
+                                  layoutId="activeOtpStatusIndicator"
+                                  transition={{
+                                    type: "spring",
+                                    stiffness: 450,
+                                    damping: 32,
+                                  }}
+                                  className="absolute inset-0 bg-white rounded-lg shadow-xs"
+                                />
+                              )}
+                              <span className="relative z-10">{s}</span>
+                            </button>
+                          ))}
+                        </div>
+
+                        <div className="flex items-center gap-1 bg-[#17171b] p-1 rounded-xl border border-white/5">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setOtpValue("729481");
+                              setOtpStatus("success");
+                            }}
+                            className="h-7 px-2.5 rounded-lg text-xs font-mono text-zinc-300 hover:text-white hover:bg-white/5 transition-colors cursor-pointer flex items-center justify-center"
+                          >
+                            Auto-fill
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setOtpValue("999999");
+                              setOtpStatus("error");
+                            }}
+                            className="h-7 px-2.5 rounded-lg text-xs font-mono text-zinc-300 hover:text-white hover:bg-white/5 transition-colors cursor-pointer flex items-center justify-center"
+                          >
+                            Error
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setOtpValue("");
+                              setOtpStatus("idle");
+                            }}
+                            className="h-7 px-2.5 rounded-lg text-xs font-mono text-zinc-300 hover:text-white hover:bg-white/5 transition-colors cursor-pointer flex items-center justify-center"
+                          >
+                            Clear
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                        <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                          <span className="text-zinc-400 text-xs font-medium">
+                            Size
+                          </span>
+                          <div className="flex items-center gap-0.5 bg-black/25 p-0.5 rounded-md border border-white/5">
+                            {(["sm", "md", "lg", "xl"] as const).map((sz) => (
+                              <button
+                                key={sz}
+                                type="button"
+                                onClick={() => setOtpSize(sz)}
+                                className={cn(
+                                  "relative px-2 py-0.5 rounded text-[11px] font-mono uppercase transition-colors cursor-pointer",
+                                  otpSize === sz
+                                    ? "text-black font-semibold"
+                                    : "text-zinc-400 hover:text-white",
+                                )}
+                              >
+                                {otpSize === sz && (
+                                  <motion.div
+                                    layoutId="activeOtpSizeIndicator"
+                                    transition={{
+                                      type: "spring",
+                                      stiffness: 450,
+                                      damping: 32,
+                                    }}
+                                    className="absolute inset-0 bg-white rounded shadow-xs"
+                                  />
+                                )}
+                                <span className="relative z-10">{sz}</span>
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const variants: OtpVariant[] = [
+                              "default",
+                              "glass",
+                              "neon",
+                              "underlined",
+                            ];
+                            const nextIndex =
+                              (variants.indexOf(otpVariant) + 1) %
+                              variants.length;
+                            setOtpVariant(variants[nextIndex]);
+                          }}
+                          className="h-9 rounded-lg border border-white/5 bg-[#17171b] hover:bg-[#1f1f25] px-3 flex items-center justify-between text-xs transition-colors cursor-pointer"
+                        >
+                          <span className="text-zinc-400 text-xs font-medium">
+                            Variant
+                          </span>
+                          <span className="text-zinc-100 font-medium capitalize flex items-center gap-1.5 text-xs">
+                            {otpVariant}
+                            <ChevronDownIcon className="w-3.5 h-3.5 text-zinc-400" />
+                          </span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => setOtpMask((m) => !m)}
+                          className="h-9 rounded-lg border border-white/5 bg-[#17171b] hover:bg-[#1f1f25] px-3 flex items-center justify-between text-xs transition-colors cursor-pointer"
+                        >
+                          <span className="text-zinc-400 text-xs font-medium">
+                            Mask (•)
+                          </span>
+                          <span
+                            className={cn(
+                              "px-2 py-0.5 rounded text-[11px] font-mono uppercase transition-colors",
+                              otpMask
+                                ? "bg-white text-black font-semibold"
+                                : "bg-white/5 text-zinc-400",
+                            )}
+                          >
+                            {otpMask ? "ON" : "OFF"}
+                          </span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => setOtpGrouped((g) => !g)}
+                          className="h-9 rounded-lg border border-white/5 bg-[#17171b] hover:bg-[#1f1f25] px-3 flex items-center justify-between text-xs transition-colors cursor-pointer"
+                        >
+                          <span className="text-zinc-400 text-xs font-medium">
+                            3-3 Split
+                          </span>
+                          <span
+                            className={cn(
+                              "px-2 py-0.5 rounded text-[11px] font-mono uppercase transition-colors",
+                              otpGrouped
+                                ? "bg-white text-black font-semibold"
+                                : "bg-white/5 text-zinc-400",
+                            )}
+                          >
+                            {otpGrouped ? "ON" : "OFF"}
+                          </span>
+                        </button>
                       </div>
                     </div>
                   </motion.div>

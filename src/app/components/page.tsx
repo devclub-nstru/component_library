@@ -13,6 +13,7 @@ import { SpotlightCard } from "@/registry/ui/spotlight-card";
 import { HookSidebar } from "@/registry/ui/hook-sidebar";
 import { GitHubActivity } from "@/registry/ui/github-activity";
 import { AnimatedCounter } from "@/registry/ui/animated-counter";
+import { OtpInput } from "@/registry/ui/otp-input";
 import { cn } from "@/lib/utils";
 
 function CounterPreview() {
@@ -68,6 +69,11 @@ export default function ComponentsPage() {
       <div className="w-full max-w-70 flex flex-col gap-3">
         <HorizontalScale className="w-full h-8" />
         <Lines className="w-full h-10" />
+      </div>
+    ),
+    "otp-input": (
+      <div className="flex flex-col items-center gap-3 select-none pointer-events-none scale-90 sm:scale-95 origin-center">
+        <OtpInput length={4} size="sm" status="idle" />
       </div>
     ),
     "sparkle-button": (
