@@ -6,6 +6,7 @@ import { Footer } from "@/components/layout/footer";
 import { ComponentCard } from "@/components/showcase/component-card";
 import { getAllComponents } from "@/registry";
 import { HorizontalScale, Lines } from "@/registry/ui/scales";
+import { CandyButton } from "@/registry/ui/candy-button";
 import { AnimatedButton } from "@/registry/ui/animated-button";
 import { SpotlightCard } from "@/registry/ui/spotlight-card";
 import { HookSidebar } from "@/registry/ui/hook-sidebar";
@@ -66,6 +67,16 @@ export default function ComponentsPage() {
       <div className="w-full max-w-70 flex flex-col gap-3">
         <HorizontalScale className="w-full h-8" />
         <Lines className="w-full h-10" />
+      </div>
+    ),
+    "candy-button": (
+      <div className="flex flex-col items-center gap-3 select-none">
+        <CandyButton variant="emerald" size="default">
+          Emerald Candy
+        </CandyButton>
+        <CandyButton variant="ruby" size="sm">
+          Ruby Gloss
+        </CandyButton>
       </div>
     ),
     "animated-button": (
