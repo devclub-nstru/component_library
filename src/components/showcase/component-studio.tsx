@@ -34,7 +34,7 @@ interface ComponentStudioProps {
   allComponents?: ComponentRegistryItem[];
 }
 
-const CATEGORIES = [
+const ALL_CATEGORIES = [
   {
     label: "DISPLAY",
     items: [
@@ -87,6 +87,14 @@ const CATEGORIES = [
     ],
   },
 ];
+
+const CATEGORIES = ALL_CATEGORIES.map((cat) => ({
+  ...cat,
+  items: cat.items.filter((item) => {
+    const comp = getComponentBySlug(item.slug);
+    return Boolean(comp && !comp.hidden);
+  }),
+})).filter((cat) => cat.items.length > 0);
 
 const HOOK_SIDEBAR_DEMO_CATEGORIES = [
   {
@@ -257,9 +265,12 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
 
   const supportsColor = Boolean(
     activeComponent.supportsColor ??
-      ["hook-sidebar", "animated-button", "spotlight-card", "glowing-badge"].includes(
-        activeComponent.slug,
-      ),
+    [
+      "hook-sidebar",
+      "animated-button",
+      "spotlight-card",
+      "glowing-badge",
+    ].includes(activeComponent.slug),
   );
 
   useEffect(() => {
@@ -412,9 +423,6 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   Repeating linear gradient borders
                 </p>
               </div>
-              <span className="text-[10px] font-mono uppercase font-medium text-zinc-400">
-                Grid
-              </span>
             </div>
             <div className="flex flex-col gap-4">
               <HorizontalScale className="w-full h-8" />
@@ -856,9 +864,24 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       top: -360,
                       bottom: 16,
                     }}
-                    initial={{ opacity: 0, y: 22, scale: 0.93, filter: "blur(6px)" }}
-                    animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
-                    exit={{ opacity: 0, y: 16, scale: 0.93, filter: "blur(6px)" }}
+                    initial={{
+                      opacity: 0,
+                      y: 22,
+                      scale: 0.93,
+                      filter: "blur(6px)",
+                    }}
+                    animate={{
+                      opacity: 1,
+                      y: 0,
+                      scale: 1,
+                      filter: "blur(0px)",
+                    }}
+                    exit={{
+                      opacity: 0,
+                      y: 16,
+                      scale: 0.93,
+                      filter: "blur(6px)",
+                    }}
                     transition={{
                       type: "spring",
                       stiffness: 400,

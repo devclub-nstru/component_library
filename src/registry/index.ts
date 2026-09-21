@@ -287,6 +287,7 @@ AnimatedButton.displayName = "AnimatedButton";`,
     updatedDate: "2026-09-10",
     interactive: true,
     supportsColor: true,
+    hidden: true,
     highlights: [
       "Client-side pointer calculation with getBoundingClientRect() coordinate tracking",
       "600px radial gradient spotlight with exponential 40% falloff curve",
@@ -451,6 +452,7 @@ SpotlightCard.displayName = "SpotlightCard";`,
     updatedDate: "2026-09-10",
     interactive: true,
     supportsColor: true,
+    hidden: true,
     highlights: [
       "Four curated semantic color schemes with matching diffuse radial glow drop shadows",
       "Concentric dual-element ping pulse with 75% peak opacity and infinite loop",
@@ -1275,6 +1277,7 @@ export function GitHubActivity({
     updatedDate: "2026-09-10",
     interactive: true,
     supportsColor: false,
+    hidden: true,
     highlights: [
       "Asymmetric 3-column CSS Grid with automatic single-column mobile collapse",
       "Configurable colSpan spans (col-span-1, col-span-2, col-span-3) on desktop",
@@ -1437,12 +1440,20 @@ export const BentoCard = ({
   },
 };
 
-export const getAllComponents = (): ComponentRegistryItem[] => {
-  return Object.values(COMPONENT_REGISTRY);
+export const getAllComponents = (
+  includeHidden = false
+): ComponentRegistryItem[] => {
+  const items = Object.values(COMPONENT_REGISTRY);
+  if (includeHidden) return items;
+  return items.filter((item) => !item.hidden);
 };
 
 export const getComponentBySlug = (
-  slug: string
+  slug: string,
+  includeHidden = false
 ): ComponentRegistryItem | undefined => {
-  return COMPONENT_REGISTRY[slug];
+  const item = COMPONENT_REGISTRY[slug];
+  if (!item) return undefined;
+  if (item.hidden && !includeHidden) return undefined;
+  return item;
 };

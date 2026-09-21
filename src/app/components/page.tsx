@@ -8,6 +8,8 @@ import { getAllComponents } from "@/registry";
 import { HorizontalScale, Lines } from "@/registry/ui/scales";
 import { AnimatedButton } from "@/registry/ui/animated-button";
 import { SpotlightCard } from "@/registry/ui/spotlight-card";
+import { HookSidebar } from "@/registry/ui/hook-sidebar";
+import { GitHubActivity } from "@/registry/ui/github-activity";
 
 export default function ComponentsPage() {
   const allComponents = useMemo(() => getAllComponents(), []);
@@ -59,6 +61,24 @@ export default function ComponentsPage() {
         <div className="border border-orange-500/40 bg-zinc-950 px-3 py-1 text-xs text-orange-400">
           PRODUCTION
         </div>
+      </div>
+    ),
+    "hook-sidebar": (
+      <div className="w-48 bg-zinc-950/90 border border-white/10 rounded-xl p-3 pointer-events-none">
+        <HookSidebar
+          items={[
+            { label: "Overview" },
+            { label: "Components" },
+            { label: "Documentation" },
+          ]}
+          defaultValue={1}
+          color="#F97316"
+        />
+      </div>
+    ),
+    "github-activity": (
+      <div className="w-full max-w-72 pointer-events-none scale-75 origin-center">
+        <GitHubActivity totalContributions={1863} year={2025} />
       </div>
     ),
   };
