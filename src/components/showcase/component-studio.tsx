@@ -680,7 +680,10 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
           opacity: isFullscreen ? 0 : 1,
         }}
         transition={panelSpring}
-        className="shrink-0 bg-black flex flex-col overflow-hidden h-full z-20 border-r border-white/5"
+        className={cn(
+          "shrink-0 bg-black flex flex-col overflow-hidden h-full z-20 border-r border-white/5",
+          isFullscreen && "border-r-0",
+        )}
       >
         <div className="p-3.5 flex items-center justify-between h-14 shrink-0 border-b border-white/5">
           <motion.button
@@ -813,27 +816,21 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
 
       <motion.div
         animate={{
-          padding: isFullscreen ? "0px" : "14px",
-          gap: isFullscreen ? "0px" : "16px",
+          padding: "14px",
+          gap: "16px",
         }}
         transition={panelSpring}
-        className={cn(
-          "flex-1 flex overflow-hidden h-full relative p-3.5 gap-4",
-          isFullscreen && "p-0 gap-0",
-        )}
+        className="flex-1 flex overflow-hidden h-full relative p-3.5 gap-4"
       >
         <motion.main
           layout
           transition={panelSpring}
           animate={{
-            borderRadius: isFullscreen ? 0 : 24,
+            borderRadius: 24,
             scale: activePanel === "code" ? 0.985 : 1,
             opacity: activePanel === "code" ? 0.75 : 1,
           }}
-          className={cn(
-            "relative border border-white/8 bg-[#0f0f11] flex flex-col overflow-hidden h-full flex-1",
-            isFullscreen && "border-none",
-          )}
+          className="relative border border-white/8 bg-[#0f0f11] flex flex-col overflow-hidden h-full flex-1 rounded-3xl"
         >
           <div className="h-14 px-5 border-b border-white/5 flex items-center justify-between z-20 shrink-0 bg-[#0f0f11]/80 backdrop-blur-md">
             <div className="flex items-center gap-2.5 min-w-0">
