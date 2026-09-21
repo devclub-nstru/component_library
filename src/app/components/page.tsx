@@ -6,6 +6,7 @@ import { Footer } from "@/components/layout/footer";
 import { ComponentCard } from "@/components/showcase/component-card";
 import { getAllComponents } from "@/registry";
 import { HorizontalScale, Lines } from "@/registry/ui/scales";
+import { SparkleButton } from "@/registry/ui/sparkle-button";
 import { CandyButton } from "@/registry/ui/candy-button";
 import { AnimatedButton } from "@/registry/ui/animated-button";
 import { SpotlightCard } from "@/registry/ui/spotlight-card";
@@ -67,6 +68,11 @@ export default function ComponentsPage() {
       <div className="w-full max-w-70 flex flex-col gap-3">
         <HorizontalScale className="w-full h-8" />
         <Lines className="w-full h-10" />
+      </div>
+    ),
+    "sparkle-button": (
+      <div className="flex flex-col items-center gap-3 select-none">
+        <SparkleButton text="Generate Magic" activeText="Generating..." />
       </div>
     ),
     "candy-button": (
