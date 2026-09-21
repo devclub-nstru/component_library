@@ -39,6 +39,7 @@ import {
 } from "@/registry/ui/otp-input";
 import { CodeBlock } from "@/registry/ui/code-block";
 import { SmoothAccordion } from "@/registry/ui/smooth-accordion";
+import { Accordion } from "@/registry/ui/accordion";
 import { cn } from "@/lib/utils";
 
 interface ComponentStudioProps {
@@ -111,6 +112,11 @@ const ALL_CATEGORIES = [
   {
     label: "ACCORDIONS",
     items: [
+      {
+        label: "Blur Reveal Accordion",
+        slug: "accordion",
+        href: "/components/accordion",
+      },
       {
         label: "Smooth Accordion",
         slug: "smooth-accordion",
@@ -732,6 +738,36 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         return (
           <div className="w-full max-w-2xl flex items-center justify-center p-4">
             <CodeBlock color={color} />
+          </div>
+        );
+      case "accordion":
+        return (
+          <div className="w-full max-w-xl p-4 sm:p-6">
+            <Accordion
+              defaultIndex={0}
+              items={[
+                {
+                  title: "What is DevClub UI?",
+                  description:
+                    "DevClub UI is a curated collection of production-ready motion components built with React and Tailwind CSS, engineered for fluid micro-interactions and developer consoles.",
+                },
+                {
+                  title: "How does the blur reveal physics work?",
+                  description:
+                    "Text reveals character-by-character using optical blur filters and spring damping curves, creating a smooth blooming effect as accordion drawers unfold.",
+                },
+                {
+                  title: "Can I customize spring damping and stiffness?",
+                  description:
+                    "Yes, every physical property including stiffness, damping, mass, and stagger delay can be customized via props or overridden per instance.",
+                },
+                {
+                  title: "Is keyboard accessibility supported?",
+                  description:
+                    "Full WAI-ARIA pattern support with semantic buttons, aria-expanded states, and automatic reduced motion fallbacks for accessibility.",
+                },
+              ]}
+            />
           </div>
         );
       case "smooth-accordion":

@@ -16,6 +16,7 @@ import { AnimatedCounter } from "@/registry/ui/animated-counter";
 import { OtpInput } from "@/registry/ui/otp-input";
 import { CodeBlock } from "@/registry/ui/code-block";
 import { SmoothAccordion } from "@/registry/ui/smooth-accordion";
+import { Accordion } from "@/registry/ui/accordion";
 import { cn } from "@/lib/utils";
 
 function CounterPreview() {
@@ -157,6 +158,23 @@ export default function ComponentsPage() {
     "code-block": (
       <div className="w-full max-w-72 pointer-events-none scale-[0.68] origin-top-left overflow-hidden max-h-36 select-none">
         <CodeBlock color="#4ade80" />
+      </div>
+    ),
+    accordion: (
+      <div className="w-full max-w-72 pointer-events-none scale-90 origin-center">
+        <Accordion
+          defaultIndex={0}
+          items={[
+            {
+              title: "Letter Reveal",
+              description: "Smooth blur bloom and spring physics per letter.",
+            },
+            {
+              title: "Fluid Collapsing",
+              description: "Synchronized height unfolding and click-outside close.",
+            },
+          ]}
+        />
       </div>
     ),
     "smooth-accordion": (
