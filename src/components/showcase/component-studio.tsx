@@ -41,6 +41,10 @@ import { CodeBlock } from "@/registry/ui/code-block";
 import { SmoothAccordion } from "@/registry/ui/smooth-accordion";
 import { Accordion } from "@/registry/ui/accordion";
 import { DottedAccordion } from "@/registry/ui/dotted-accordion";
+import {
+  ProximitySidebar,
+  type ProximitySection,
+} from "@/registry/ui/proximity-sidebar";
 import { cn } from "@/lib/utils";
 
 interface ComponentStudioProps {
@@ -82,6 +86,11 @@ const ALL_CATEGORIES = [
         label: "Hook Sidebar",
         slug: "hook-sidebar",
         href: "/components/hook-sidebar",
+      },
+      {
+        label: "Proximity Sidebar",
+        slug: "proximity-sidebar",
+        href: "/components/proximity-sidebar",
       },
     ],
   },
@@ -181,6 +190,252 @@ const HOOK_SIDEBAR_DEMO_CATEGORIES = [
       { label: "Settings" },
     ],
   },
+];
+
+type DemoSection = ProximitySection & { description?: string };
+
+const PROXIMITY_DEMO_SECTIONS: DemoSection[] = [
+  { id: "overview", label: "Overview & Architecture", kind: "title", level: 1 },
+  {
+    id: "overview-design",
+    label: "System Design",
+    kind: "body",
+    description:
+      "A lightweight document navigation minimap designed to replace heavy table-of-contents blocks with intuitive spatial awareness.",
+  },
+  {
+    id: "overview-boundaries",
+    label: "Architectural Boundaries",
+    kind: "body",
+    description:
+      "Engineered without DOM wrappers, borders, or nested cards to integrate seamlessly into any article or documentation canvas.",
+  },
+  {
+    id: "overview-primitives",
+    label: "Core Primitives",
+    kind: "body",
+    description:
+      "Constructed using hardware-accelerated scaleX transforms anchored to the document edge to preserve zero-cost layout calculations.",
+  },
+  {
+    id: "overview-runtime",
+    label: "Runtime Efficiency",
+    kind: "body",
+    description:
+      "Zero layout shifts and sub-millisecond execution time make it well-suited for long-form documentation and interactive code references.",
+  },
+  {
+    id: "overview-telemetry",
+    label: "Telemetry Integration",
+    kind: "body",
+    description:
+      "Real-time scroll position feedback provides precise tracking of reader engagement without extraneous polling loops.",
+  },
+  {
+    id: "overview-topology",
+    label: "State Topology",
+    kind: "body",
+    description:
+      "Supports both controlled and uncontrolled active state bindings with optional external callbacks for seamless router synchronization.",
+  },
+
+  {
+    id: "motion-engine",
+    label: "Harmonic Motion Engine",
+    kind: "title",
+    level: 1,
+  },
+  {
+    id: "motion-springs",
+    label: "Spring Dynamics",
+    kind: "body",
+    description:
+      "Harmonic oscillator configuration (stiffness 350, damping 32, mass 0.6) yields physical elasticity without unwanted overshoot.",
+  },
+  {
+    id: "motion-cosine",
+    label: "Cosine Proximity",
+    kind: "body",
+    description:
+      "Cosine mathematical mapping ensures tangent boundaries at the perimeter of the proximity radius with zero sharp creases.",
+  },
+  {
+    id: "motion-damping",
+    label: "Damped Decay",
+    kind: "body",
+    description:
+      "When the cursor departs the sidebar boundary, dashes return to their baseline rests through smooth exponential decay.",
+  },
+  {
+    id: "motion-gpu",
+    label: "GPU scaleX Pipeline",
+    kind: "body",
+    description:
+      "Dash dimensions mutate strictly along the X axis via composited transform matrices, avoiding expensive style recalculations.",
+  },
+  {
+    id: "motion-thrash",
+    label: "Zero Layout Thrashing",
+    kind: "body",
+    description:
+      "Bounding client geometry is evaluated and cached on pointer entry and resize rather than executed per continuous pointermove event.",
+  },
+  {
+    id: "motion-origins",
+    label: "Transform Anchors",
+    kind: "body",
+    description:
+      "Supports left-center or right-center orientation anchors so lines extend naturally away from the document perimeter.",
+  },
+
+  {
+    id: "scroll-sync",
+    label: "Scroll Synchronization",
+    kind: "title",
+    level: 1,
+  },
+  {
+    id: "scroll-anchors",
+    label: "Viewport Anchors",
+    kind: "body",
+    description:
+      "Tracks reading position against a configurable vertical anchor offset (default 40% from the container top).",
+  },
+  {
+    id: "scroll-geometry",
+    label: "Intersection Geometry",
+    kind: "body",
+    description:
+      "Distance calculations determine the closest section boundary to prevent flickering between neighboring paragraphs.",
+  },
+  {
+    id: "scroll-raf",
+    label: "RequestAnimationFrame Sync",
+    kind: "body",
+    description:
+      "Scroll event listeners are debounced through animation frames to guarantee 60-120 FPS synchronization during continuous momentum scrolling.",
+  },
+  {
+    id: "scroll-containers",
+    label: "Container Hierarchy",
+    kind: "body",
+    description:
+      "Intelligently climbs the DOM hierarchy to detect overflow scroll parents or the window viewport dynamically.",
+  },
+  {
+    id: "scroll-glide",
+    label: "Bidirectional Glide",
+    kind: "body",
+    description:
+      "Clicking any dash triggers smooth scrollIntoView behavior that places the corresponding heading directly at the top of the viewport.",
+  },
+  {
+    id: "scroll-history",
+    label: "URL Hash Synchronization",
+    kind: "body",
+    description:
+      "Updates browser location history without disrupting scrolling or polluting the navigation history stack.",
+  },
+  {
+    id: "scroll-thresholds",
+    label: "Dynamic Thresholds",
+    kind: "body",
+    description:
+      "Responsive height adjustments adapt the active detection anchor across compact tablet views and large widescreen monitors.",
+  },
+
+  {
+    id: "interaction",
+    label: "Interactive Ergonomics",
+    kind: "title",
+    level: 1,
+  },
+  {
+    id: "inter-targets",
+    label: "Hit Target Sizing",
+    kind: "body",
+    description:
+      "Generous interactive hit heights ensure effortless targeting on touchscreens and mice while preserving hairline visual aesthetics.",
+  },
+  {
+    id: "inter-proximity",
+    label: "Proximity Radius",
+    kind: "body",
+    description:
+      "Configurable influence radius smoothly expands nearby dashes before the cursor even makes contact with the dash stroke.",
+  },
+  {
+    id: "inter-keyboard",
+    label: "Keyboard Stepping",
+    kind: "body",
+    description:
+      "Full ArrowUp and ArrowDown support allows keyboard users to step through document sections sequentially with auto-scrolling.",
+  },
+  {
+    id: "inter-focus",
+    label: "Focus Rings",
+    kind: "body",
+    description:
+      "Accessible focus-visible rings highlight the currently focused dash during keyboard tab traversal.",
+  },
+  {
+    id: "inter-aria",
+    label: "ARIA Landmarks",
+    kind: "body",
+    description:
+      "Proper role='navigation', aria-label='Page sections', and aria-current='location' tags provide complete screen reader compatibility.",
+  },
+
+  {
+    id: "performance",
+    label: "Performance & Reliability",
+    kind: "title",
+    level: 1,
+  },
+  {
+    id: "perf-framerate",
+    label: "120 FPS High Refresh",
+    kind: "body",
+    description:
+      "Tested on ProMotion and 144Hz gaming displays to ensure fluid cursor tracking without frame skipping.",
+  },
+  {
+    id: "perf-cached",
+    label: "Cached Rects",
+    kind: "body",
+    description:
+      "Eliminating synchronous getBoundingClientRect calls during motion transforms keeps CPU utilization below 1%.",
+  },
+  {
+    id: "perf-subpixel",
+    label: "Sub-pixel Compositing",
+    kind: "body",
+    description:
+      "Hairline line widths maintain crisp sub-pixel clarity across Retina, OLED, and standard DPI displays.",
+  },
+  {
+    id: "perf-memory",
+    label: "Memory Footprint",
+    kind: "body",
+    description:
+      "Minimal closure allocations and proper unmount teardown prevent memory leaks during long reading sessions.",
+  },
+  {
+    id: "perf-listeners",
+    label: "Passive Event Handlers",
+    kind: "body",
+    description:
+      "Scroll and resize listeners use passive flags to avoid blocking browser scrolling and input threads.",
+  },
+  {
+    id: "perf-bundle",
+    label: "Bundle Optimization",
+    kind: "body",
+    description:
+      "Zero dependencies beyond Motion and Tailwind keeps production bundle overhead under 3KB gzipped.",
+  },
+
+  { id: "appendix", label: "Specification Appendix", kind: "title", level: 1 },
 ];
 
 const PALETTE = [
@@ -363,6 +618,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     [
       "candy-button",
       "hook-sidebar",
+      "proximity-sidebar",
       "animated-button",
       "spotlight-card",
       "glowing-badge",
@@ -593,6 +849,52 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 />
               );
             })}
+          </div>
+        );
+      case "proximity-sidebar":
+        return (
+          <div className="w-full max-w-3xl h-140 flex items-start justify-center gap-12 select-text">
+            <div className="sticky top-0 shrink-0 select-none pt-0.5">
+              <ProximitySidebar
+                sections={PROXIMITY_DEMO_SECTIONS}
+                color={color}
+                side="left"
+              />
+            </div>
+            <div className="flex-1 h-full overflow-y-auto pr-6 space-y-7 scroll-smooth">
+              {PROXIMITY_DEMO_SECTIONS.map((sec, idx) => (
+                <div
+                  key={sec.id}
+                  id={sec.id}
+                  className="scroll-mt-4 space-y-1.5"
+                >
+                  {sec.kind === "title" ? (
+                    <div
+                      className={cn(
+                        "border-b border-white/8 pb-2",
+                        idx === 0 ? "pt-0" : "pt-5",
+                      )}
+                    >
+                      <span className="text-[10px] font-mono uppercase tracking-widest text-zinc-500 block leading-none">
+                        Section
+                      </span>
+                      <h2 className="text-base font-medium text-white tracking-tight mt-1 leading-tight">
+                        {sec.label}
+                      </h2>
+                    </div>
+                  ) : (
+                    <div className="space-y-1">
+                      <h3 className="text-xs font-mono uppercase tracking-wider text-zinc-300">
+                        {sec.label}
+                      </h3>
+                      <p className="text-xs leading-relaxed text-zinc-400 font-light">
+                        {sec.description}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
         );
       case "scales":
