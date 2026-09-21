@@ -45,6 +45,7 @@ import {
   ProximitySidebar,
   type ProximitySection,
 } from "@/registry/ui/proximity-sidebar";
+import { Dither } from "@/registry/ui/dither";
 import { AiOrb } from "@/registry/ui/ai-orb";
 import { cn } from "@/lib/utils";
 
@@ -152,6 +153,11 @@ const ALL_CATEGORIES = [
         label: "Status Badge",
         slug: "glowing-badge",
         href: "/components/glowing-badge",
+      },
+      {
+        label: "Dither",
+        slug: "dither",
+        href: "/components/dither",
       },
       {
         label: "AI Orb",
@@ -622,6 +628,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
   const supportsColor = Boolean(
     activeComponent.supportsColor ??
     [
+      "dither",
       "candy-button",
       "hook-sidebar",
       "proximity-sidebar",
@@ -902,6 +909,21 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 </div>
               ))}
             </div>
+          </div>
+        );
+      case "dither":
+        return (
+          <div className="w-full max-w-2xl h-80 rounded-2xl overflow-hidden border border-white/10 shadow-2xl relative">
+            <Dither
+              color1={color}
+              color2="#5227FF"
+              color3="#0A0A10"
+              grainAmount={0.15}
+              grainScale={2.0}
+              grainAnimated={true}
+              warpStrength={1.2}
+              timeSpeed={0.25}
+            />
           </div>
         );
       case "ai-orb":

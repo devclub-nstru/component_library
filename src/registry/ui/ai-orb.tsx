@@ -3,6 +3,7 @@
 import React, { useEffect, useMemo, useRef } from "react";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
+import { Dither } from "@/registry/ui/dither";
 
 export interface AiOrbProps {
   className?: string;
@@ -449,6 +450,20 @@ export function AiOrb({
           `,
         }}
       />
+
+      <div className="absolute inset-0 rounded-full overflow-hidden pointer-events-none z-15 mix-blend-screen opacity-55">
+        <Dither
+          color1={primaryColor}
+          color2={secondaryColor}
+          color3="#000000"
+          grainAmount={0.16}
+          grainScale={2.0}
+          grainAnimated={true}
+          warpStrength={1.2}
+          timeSpeed={speed * 0.25}
+          zoom={1.1}
+        />
+      </div>
 
       <div className="absolute inset-0 rounded-full pointer-events-none z-20 bg-[radial-gradient(circle_at_35%_30%,rgba(255,255,255,0.35)_0%,transparent_50%)]" />
 
