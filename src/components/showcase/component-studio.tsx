@@ -1155,45 +1155,44 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               {supportsColor && (
                 <div
                   key="floating-color-palette"
-                  className="pointer-events-auto rounded-full border border-white/10 bg-[#141416]/95 backdrop-blur-2xl px-3.5 py-2 shadow-[0_12px_36px_rgba(0,0,0,0.85)] flex items-center gap-2 select-none"
+                  className="pointer-events-auto rounded-full border border-white/12 bg-[#121215]/95 backdrop-blur-2xl p-1.5 shadow-[0_16px_40px_rgba(0,0,0,0.85),0_0_0_1px_rgba(255,255,255,0.06)] flex items-center gap-1.5 select-none"
                 >
-                  <div className="flex items-center gap-2">
-                    {PALETTE.map((p) => {
-                      const isSelected = activeColor === p.hex;
-                      return (
-                        <motion.button
-                          key={p.id}
-                          type="button"
-                          onClick={() => setActiveColor(p.hex)}
-                          title={p.label}
-                          animate={{
-                            scale: isSelected ? 1.12 : 1,
-                            opacity: isSelected ? 1 : 0.72,
-                          }}
-                          whileHover={{
-                            scale: isSelected ? 1.18 : 1.08,
-                            opacity: 1,
-                          }}
-                          whileTap={{ scale: 0.92 }}
-                          transition={microSpring}
+                  {PALETTE.map((p) => {
+                    const isSelected = activeColor === p.hex;
+                    return (
+                      <motion.button
+                        key={p.id}
+                        type="button"
+                        onClick={() => setActiveColor(p.hex)}
+                        title={p.label}
+                        whileHover={{ scale: 1.08 }}
+                        whileTap={{ scale: 0.92 }}
+                        transition={microSpring}
+                        className="relative w-8 h-8 rounded-full flex items-center justify-center cursor-pointer outline-none shrink-0"
+                      >
+                        {isSelected && (
+                          <motion.span
+                            layoutId="activeColorRing"
+                            className="absolute inset-0 rounded-full border-2 border-white shadow-[0_0_12px_rgba(255,255,255,0.4)] pointer-events-none"
+                            transition={{
+                              type: "spring",
+                              stiffness: 480,
+                              damping: 32,
+                            }}
+                          />
+                        )}
+                        <span
                           style={{ backgroundColor: p.hex }}
-                          className="relative w-7 h-7 rounded-xl cursor-pointer shadow-md flex items-center justify-center"
-                        >
-                          {isSelected && (
-                            <motion.span
-                              layoutId="activeColorRing"
-                              className="absolute -inset-1 rounded-2xl ring-2 ring-white/90 ring-offset-2 ring-offset-black pointer-events-none"
-                              transition={{
-                                type: "spring",
-                                stiffness: 500,
-                                damping: 35,
-                              }}
-                            />
+                          className={cn(
+                            "w-5.5 h-5.5 rounded-full shadow-xs transition-all duration-200",
+                            isSelected
+                              ? "opacity-100 scale-100"
+                              : "opacity-65 hover:opacity-90 scale-95 hover:scale-100",
                           )}
-                        </motion.button>
-                      );
-                    })}
-                  </div>
+                        />
+                      </motion.button>
+                    );
+                  })}
                 </div>
               )}
 
