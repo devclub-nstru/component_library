@@ -170,11 +170,13 @@ export default function ComponentsPage() {
           items={[
             {
               title: "Grid Architecture",
-              description: "Sharp rectangular geometry with continuous dotted guide lines.",
+              description:
+                "Sharp rectangular geometry with continuous dotted guide lines.",
             },
             {
               title: "Fade Mask Effect",
-              description: "Vertical and horizontal guidelines exceeding bounds with smooth masks.",
+              description:
+                "Vertical and horizontal guidelines exceeding bounds with smooth masks.",
             },
           ]}
         />
@@ -191,7 +193,8 @@ export default function ComponentsPage() {
             },
             {
               title: "Fluid Collapsing",
-              description: "Synchronized height unfolding and click-outside close.",
+              description:
+                "Synchronized height unfolding and click-outside close.",
             },
           ]}
         />

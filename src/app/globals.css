@@ -13,6 +13,7 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-poppins), sans-serif;
   --font-serif: var(--font-gambetta), Georgia, serif;
+  --font-poppins: var(--font-poppins), sans-serif;
 }
 
 body {

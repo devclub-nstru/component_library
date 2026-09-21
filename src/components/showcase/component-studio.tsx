@@ -1371,7 +1371,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 transition={microSpring}
                 type="button"
                 onClick={handleInstallCopy}
-                className="h-8 px-3 rounded-lg border border-white/10 bg-[#18181b]/90 hover:bg-[#222226] text-zinc-300 hover:text-white text-xs font-mono transition-colors cursor-pointer flex items-center gap-1.5 shadow-sm"
+                className="h-8 px-3 rounded-lg border border-white/10 bg-[#18181b]/90 hover:bg-[#222226] text-zinc-300 hover:text-white text-xs transition-colors cursor-pointer flex items-center gap-1.5 shadow-sm"
               >
                 {installCopied ? (
                   <>
@@ -1417,7 +1417,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 )}
               >
                 <CodeIcon className="w-3.5 h-3.5" />
-                <span className="font-mono text-[11px]">Code</span>
+                <span className="text-[11px]">Code</span>
               </motion.button>
 
               <motion.button
@@ -1436,7 +1436,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 )}
               >
                 <InfoCircledIcon className="w-3.5 h-3.5" />
-                <span className="font-mono text-[11px]">Info</span>
+                <span className="text-[11px]">Info</span>
               </motion.button>
             </div>
           </div>
@@ -1959,7 +1959,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         transition={microSpring}
                         type="button"
                         onClick={handleInstallCopy}
-                        className="border border-white/10 hover:border-white/20 bg-[#18181b] hover:bg-[#222226] text-zinc-300 hover:text-white px-3 py-1.5 rounded-lg text-xs font-mono transition-colors cursor-pointer"
+                        className="border border-white/10 hover:border-white/20 bg-[#18181b] hover:bg-[#222226] text-zinc-300 hover:text-white px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer"
                       >
                         {installCopied ? "Copied!" : "Install"}
                       </motion.button>
@@ -2035,8 +2035,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     className="flex items-center justify-between pb-2 border-b border-white/5"
                   >
                     <div className="flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-orange-500" />
-                      <span className="text-[10px] font-mono uppercase tracking-widest text-zinc-400 font-medium">
+                      <span className="text-[10px] uppercase tracking-widest text-zinc-400 font-medium">
                         {activeComponent.slug.replace("-", " ")}
                       </span>
                       <span className="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-white/5 text-zinc-400 border border-white/8">
