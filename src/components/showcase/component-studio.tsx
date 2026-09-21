@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
-import { AnimatePresence, motion, useDragControls } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import {
   ArrowRightIcon,
   CodeIcon,
@@ -17,7 +17,6 @@ import {
   DesktopIcon,
   MobileIcon,
   ViewGridIcon,
-  DragHandleDots2Icon,
   ResetIcon,
   ChevronDownIcon,
 } from "@radix-ui/react-icons";
@@ -274,7 +273,6 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     "desktop",
   );
   const [activeColor, setActiveColor] = useState<string>(PALETTE[3].hex);
-  const dragControls = useDragControls();
   const [hookDemoIndex, setHookDemoIndex] = useState(0);
   const [counterDemoValue, setCounterDemoValue] = useState(122337);
   const [sparkleConfig, setSparkleConfig] = useState({
@@ -1062,330 +1060,233 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
             </motion.div>
 
             <div className="absolute bottom-6 inset-x-0 flex justify-center pointer-events-none z-30">
-              <AnimatePresence>
-                {supportsColor && (
-                  <motion.div
-                    key="floating-color-palette"
-                    drag
-                    dragListener={false}
-                    dragControls={dragControls}
-                    dragMomentum={false}
-                    dragElastic={0.15}
-                    dragConstraints={{
-                      left: -260,
-                      right: 260,
-                      top: -360,
-                      bottom: 16,
-                    }}
-                    initial={{
-                      opacity: 0,
-                      y: 22,
-                      scale: 0.93,
-                      filter: "blur(6px)",
-                    }}
-                    animate={{
-                      opacity: 1,
-                      y: 0,
-                      scale: 1,
-                      filter: "blur(0px)",
-                    }}
-                    exit={{
-                      opacity: 0,
-                      y: 16,
-                      scale: 0.93,
-                      filter: "blur(6px)",
-                    }}
-                    transition={{
-                      type: "spring",
-                      stiffness: 400,
-                      damping: 32,
-                      mass: 0.8,
-                    }}
-                    className="pointer-events-auto rounded-full border border-white/10 bg-[#141416]/95 backdrop-blur-2xl px-3.5 py-2 shadow-[0_12px_36px_rgba(0,0,0,0.85)] flex items-center gap-2.5 select-none"
-                  >
-                    <div
-                      onPointerDown={(e) => dragControls.start(e)}
-                      className="cursor-grab active:cursor-grabbing text-zinc-500 hover:text-zinc-300 pr-1 flex items-center touch-none"
-                      title="Drag to move"
+              {supportsColor && (
+                <div
+                  key="floating-color-palette"
+                  className="pointer-events-auto rounded-full border border-white/10 bg-[#141416]/95 backdrop-blur-2xl px-3.5 py-2 shadow-[0_12px_36px_rgba(0,0,0,0.85)] flex items-center gap-2 select-none"
+                >
+                  <div className="flex items-center gap-2">
+                    {PALETTE.map((p) => {
+                      const isSelected = activeColor === p.hex;
+                      return (
+                        <motion.button
+                          key={p.id}
+                          type="button"
+                          onClick={() => setActiveColor(p.hex)}
+                          title={p.label}
+                          animate={{
+                            scale: isSelected ? 1.12 : 1,
+                            opacity: isSelected ? 1 : 0.72,
+                          }}
+                          whileHover={{
+                            scale: isSelected ? 1.18 : 1.08,
+                            opacity: 1,
+                          }}
+                          whileTap={{ scale: 0.92 }}
+                          transition={microSpring}
+                          style={{ backgroundColor: p.hex }}
+                          className="relative w-7 h-7 rounded-xl cursor-pointer shadow-md flex items-center justify-center"
+                        >
+                          {isSelected && (
+                            <motion.span
+                              layoutId="activeColorRing"
+                              className="absolute -inset-1 rounded-2xl ring-2 ring-white/90 ring-offset-2 ring-offset-black pointer-events-none"
+                              transition={{
+                                type: "spring",
+                                stiffness: 500,
+                                damping: 35,
+                              }}
+                            />
+                          )}
+                        </motion.button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {activeComponent.slug === "sparkle-button" && (
+                <div
+                  key="sparkle-customize-panel"
+                  className="pointer-events-auto rounded-2xl border border-white/10 bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-xl w-full mx-4 select-none flex flex-col gap-2.5"
+                >
+                  <div className="flex items-center justify-between px-1">
+                    <span className="text-xs font-semibold text-white/90 tracking-tight">
+                      Customize
+                    </span>
+                    <button
+                      type="button"
+                      onClick={resetSparkleConfig}
+                      className="text-[11px] text-zinc-400 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
                     >
-                      <DragHandleDots2Icon className="w-4 h-4" />
-                    </div>
+                      <ResetIcon className="w-3.5 h-3.5" />
+                      <span>Reset</span>
+                    </button>
+                  </div>
 
-                    <div className="flex items-center gap-2">
-                      {PALETTE.map((p) => {
-                        const isSelected = activeColor === p.hex;
-                        return (
-                          <motion.button
-                            key={p.id}
-                            type="button"
-                            onClick={() => setActiveColor(p.hex)}
-                            title={p.label}
-                            animate={{
-                              scale: isSelected ? 1.12 : 1,
-                              opacity: isSelected ? 1 : 0.72,
-                            }}
-                            whileHover={{
-                              scale: isSelected ? 1.18 : 1.08,
-                              opacity: 1,
-                            }}
-                            whileTap={{ scale: 0.92 }}
-                            transition={microSpring}
-                            style={{ backgroundColor: p.hex }}
-                            className="relative w-7 h-7 rounded-xl cursor-pointer shadow-md flex items-center justify-center"
-                          >
-                            {isSelected && (
-                              <motion.span
-                                layoutId="activeColorRing"
-                                className="absolute -inset-1 rounded-2xl ring-2 ring-white/90 ring-offset-2 ring-offset-black pointer-events-none"
-                                transition={{
-                                  type: "spring",
-                                  stiffness: 500,
-                                  damping: 35,
-                                }}
-                              />
-                            )}
-                          </motion.button>
-                        );
-                      })}
-                    </div>
-                  </motion.div>
-                )}
-
-                {activeComponent.slug === "sparkle-button" && (
-                  <motion.div
-                    key="sparkle-customize-panel"
-                    initial={{
-                      opacity: 0,
-                      y: 22,
-                      scale: 0.94,
-                      filter: "blur(6px)",
-                    }}
-                    animate={{
-                      opacity: 1,
-                      y: 0,
-                      scale: 1,
-                      filter: "blur(0px)",
-                    }}
-                    exit={{
-                      opacity: 0,
-                      y: 16,
-                      scale: 0.94,
-                      filter: "blur(6px)",
-                    }}
-                    transition={{
-                      type: "spring",
-                      stiffness: 400,
-                      damping: 32,
-                      mass: 0.8,
-                    }}
-                    className="pointer-events-auto rounded-2xl border border-white/10 bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-xl w-full mx-4 select-none flex flex-col gap-2.5"
-                  >
-                    <div className="flex items-center justify-between px-1">
-                      <span className="text-xs font-semibold text-white/90 tracking-tight">
-                        Customize
-                      </span>
+                  <div className="rounded-xl border border-white/5 bg-[#0b0b0e] p-1.5 flex flex-col gap-1.5">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-1.5">
                       <button
                         type="button"
-                        onClick={resetSparkleConfig}
-                        className="text-[11px] text-zinc-400 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                        onClick={() =>
+                          setSparkleConfig((prev) => ({
+                            ...prev,
+                            animateBy:
+                              prev.animateBy === "letters"
+                                ? "words"
+                                : "letters",
+                          }))
+                        }
+                        className="rounded-lg border border-white/5 bg-[#17171b] hover:bg-[#1f1f25] px-3 py-2 flex items-center justify-between text-xs transition-colors cursor-pointer"
                       >
-                        <ResetIcon className="w-3.5 h-3.5" />
-                        <span>Reset</span>
+                        <span className="text-zinc-400">Animate By</span>
+                        <span className="text-zinc-100 font-medium flex items-center gap-1.5">
+                          {sparkleConfig.animateBy === "letters"
+                            ? "Letters"
+                            : "Words"}
+                          <ChevronDownIcon className="w-3.5 h-3.5 text-zinc-400" />
+                        </span>
                       </button>
-                    </div>
 
-                    <div className="rounded-xl border border-white/5 bg-[#0b0b0e] p-1.5 flex flex-col gap-1.5">
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-1.5">
-                        <button
-                          type="button"
-                          onClick={() =>
-                            setSparkleConfig((prev) => ({
-                              ...prev,
-                              animateBy:
-                                prev.animateBy === "letters"
-                                  ? "words"
-                                  : "letters",
-                            }))
-                          }
-                          className="rounded-lg border border-white/5 bg-[#17171b] hover:bg-[#1f1f25] px-3 py-2 flex items-center justify-between text-xs transition-colors cursor-pointer"
-                        >
-                          <span className="text-zinc-400">Animate By</span>
-                          <span className="text-zinc-100 font-medium flex items-center gap-1.5">
-                            {sparkleConfig.animateBy === "letters"
-                              ? "Letters"
-                              : "Words"}
-                            <ChevronDownIcon className="w-3.5 h-3.5 text-zinc-400" />
-                          </span>
-                        </button>
-
-                        <button
-                          type="button"
-                          onClick={() =>
-                            setSparkleConfig((prev) => ({
-                              ...prev,
-                              direction:
-                                prev.direction === "top" ? "bottom" : "top",
-                            }))
-                          }
-                          className="rounded-lg border border-white/5 bg-[#17171b] hover:bg-[#1f1f25] px-3 py-2 flex items-center justify-between text-xs transition-colors cursor-pointer"
-                        >
-                          <span className="text-zinc-400">Direction</span>
-                          <span className="text-zinc-100 font-medium flex items-center gap-1.5">
-                            {sparkleConfig.direction === "top"
-                              ? "Top"
-                              : "Bottom"}
-                            <ChevronDownIcon className="w-3.5 h-3.5 text-zinc-400" />
-                          </span>
-                        </button>
-
-                        <div className="rounded-lg border border-white/5 bg-[#17171b] px-3 py-2 flex items-center justify-between gap-2.5 text-xs">
-                          <span className="text-zinc-400 shrink-0">Delay</span>
-                          <div className="h-3.5 w-px bg-white/10 shrink-0" />
-                          <input
-                            type="range"
-                            min="10"
-                            max="200"
-                            step="5"
-                            value={sparkleConfig.delay}
-                            onChange={(e) =>
-                              setSparkleConfig((prev) => ({
-                                ...prev,
-                                delay: Number(e.target.value),
-                              }))
-                            }
-                            className="w-full accent-white h-1 bg-white/10 rounded cursor-pointer"
-                          />
-                          <span className="text-zinc-100 font-mono font-medium shrink-0 min-w-10.5 text-right">
-                            {sparkleConfig.delay}ms
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-1.5">
-                        <div className="rounded-lg border border-white/5 bg-[#17171b] px-3 py-2 flex items-center justify-between gap-2.5 text-xs">
-                          <span className="text-zinc-400 shrink-0">Reveal</span>
-                          <div className="h-3.5 w-px bg-white/10 shrink-0" />
-                          <input
-                            type="range"
-                            min="0.15"
-                            max="0.60"
-                            step="0.05"
-                            value={sparkleConfig.stepDuration}
-                            onChange={(e) =>
-                              setSparkleConfig((prev) => ({
-                                ...prev,
-                                stepDuration: Number(e.target.value),
-                              }))
-                            }
-                            className="w-full accent-white h-1 bg-white/10 rounded cursor-pointer"
-                          />
-                          <span className="text-zinc-100 font-mono font-medium shrink-0 min-w-10.5 text-right">
-                            {(sparkleConfig.stepDuration * 1000).toFixed(0)}ms
-                          </span>
-                        </div>
-
-                        <div className="rounded-lg border border-white/5 bg-[#17171b] px-3 py-2 flex items-center justify-between gap-2.5 text-xs">
-                          <span className="text-zinc-400 shrink-0">
-                            Dissolve
-                          </span>
-                          <div className="h-3.5 w-px bg-white/10 shrink-0" />
-                          <input
-                            type="range"
-                            min="0.10"
-                            max="0.40"
-                            step="0.02"
-                            value={sparkleConfig.dissolveDuration}
-                            onChange={(e) =>
-                              setSparkleConfig((prev) => ({
-                                ...prev,
-                                dissolveDuration: Number(e.target.value),
-                              }))
-                            }
-                            className="w-full accent-white h-1 bg-white/10 rounded cursor-pointer"
-                          />
-                          <span className="text-zinc-100 font-mono font-medium shrink-0 min-w-10.5 text-right">
-                            {(sparkleConfig.dissolveDuration * 1000).toFixed(0)}
-                            ms
-                          </span>
-                        </div>
-
-                        <div className="rounded-lg border border-white/5 bg-[#17171b] px-3 py-2 flex items-center justify-between gap-2.5 text-xs">
-                          <span className="text-zinc-400 shrink-0">
-                            Stiffness
-                          </span>
-                          <div className="h-3.5 w-px bg-white/10 shrink-0" />
-                          <input
-                            type="range"
-                            min="150"
-                            max="500"
-                            step="10"
-                            value={sparkleConfig.springStiffness}
-                            onChange={(e) =>
-                              setSparkleConfig((prev) => ({
-                                ...prev,
-                                springStiffness: Number(e.target.value),
-                              }))
-                            }
-                            className="w-full accent-white h-1 bg-white/10 rounded cursor-pointer"
-                          />
-                          <span className="text-zinc-100 font-mono font-medium shrink-0 min-w-10.5 text-right">
-                            {sparkleConfig.springStiffness}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-
-                {activeComponent.slug === "otp-input" && (
-                  <motion.div
-                    key="otp-customize-panel"
-                    initial={{
-                      opacity: 0,
-                      y: 22,
-                      scale: 0.94,
-                      filter: "blur(6px)",
-                    }}
-                    animate={{
-                      opacity: 1,
-                      y: 0,
-                      scale: 1,
-                      filter: "blur(0px)",
-                    }}
-                    exit={{
-                      opacity: 0,
-                      y: 16,
-                      scale: 0.94,
-                      filter: "blur(6px)",
-                    }}
-                    transition={{
-                      type: "spring",
-                      stiffness: 400,
-                      damping: 32,
-                      mass: 0.8,
-                    }}
-                    className="pointer-events-auto rounded-2xl border border-white/10 bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-xl w-full mx-4 select-none flex flex-col gap-2.5"
-                  >
-                    <div className="flex items-center justify-between px-1">
-                      <span className="text-xs font-semibold text-white/90 tracking-tight">
-                        Customize
-                      </span>
                       <button
                         type="button"
-                        onClick={resetOtpConfig}
-                        className="text-[11px] text-zinc-400 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                        onClick={() =>
+                          setSparkleConfig((prev) => ({
+                            ...prev,
+                            direction:
+                              prev.direction === "top" ? "bottom" : "top",
+                          }))
+                        }
+                        className="rounded-lg border border-white/5 bg-[#17171b] hover:bg-[#1f1f25] px-3 py-2 flex items-center justify-between text-xs transition-colors cursor-pointer"
                       >
-                        <ResetIcon className="w-3.5 h-3.5" />
-                        <span>Reset</span>
+                        <span className="text-zinc-400">Direction</span>
+                        <span className="text-zinc-100 font-medium flex items-center gap-1.5">
+                          {sparkleConfig.direction === "top" ? "Top" : "Bottom"}
+                          <ChevronDownIcon className="w-3.5 h-3.5 text-zinc-400" />
+                        </span>
                       </button>
+
+                      <div className="rounded-lg border border-white/5 bg-[#17171b] px-3 py-2 flex items-center justify-between gap-2.5 text-xs">
+                        <span className="text-zinc-400 shrink-0">Delay</span>
+                        <div className="h-3.5 w-px bg-white/10 shrink-0" />
+                        <input
+                          type="range"
+                          min="10"
+                          max="200"
+                          step="5"
+                          value={sparkleConfig.delay}
+                          onChange={(e) =>
+                            setSparkleConfig((prev) => ({
+                              ...prev,
+                              delay: Number(e.target.value),
+                            }))
+                          }
+                          className="w-full accent-white h-1 bg-white/10 rounded cursor-pointer"
+                        />
+                        <span className="text-zinc-100 font-mono font-medium shrink-0 min-w-10.5 text-right">
+                          {sparkleConfig.delay}ms
+                        </span>
+                      </div>
                     </div>
 
-                    <div className="rounded-xl border border-white/5 bg-[#0b0b0e] p-1.5 flex flex-col gap-1.5">
-                      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-1.5 pb-1.5 border-b border-white/5">
-                        <div className="flex items-center gap-0.5 bg-[#17171b] p-1 rounded-xl border border-white/5">
-                          {(
-                            ["idle", "success", "error", "loading"] as const
-                          ).map((s) => (
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-1.5">
+                      <div className="rounded-lg border border-white/5 bg-[#17171b] px-3 py-2 flex items-center justify-between gap-2.5 text-xs">
+                        <span className="text-zinc-400 shrink-0">Reveal</span>
+                        <div className="h-3.5 w-px bg-white/10 shrink-0" />
+                        <input
+                          type="range"
+                          min="0.15"
+                          max="0.60"
+                          step="0.05"
+                          value={sparkleConfig.stepDuration}
+                          onChange={(e) =>
+                            setSparkleConfig((prev) => ({
+                              ...prev,
+                              stepDuration: Number(e.target.value),
+                            }))
+                          }
+                          className="w-full accent-white h-1 bg-white/10 rounded cursor-pointer"
+                        />
+                        <span className="text-zinc-100 font-mono font-medium shrink-0 min-w-10.5 text-right">
+                          {(sparkleConfig.stepDuration * 1000).toFixed(0)}ms
+                        </span>
+                      </div>
+
+                      <div className="rounded-lg border border-white/5 bg-[#17171b] px-3 py-2 flex items-center justify-between gap-2.5 text-xs">
+                        <span className="text-zinc-400 shrink-0">Dissolve</span>
+                        <div className="h-3.5 w-px bg-white/10 shrink-0" />
+                        <input
+                          type="range"
+                          min="0.10"
+                          max="0.40"
+                          step="0.02"
+                          value={sparkleConfig.dissolveDuration}
+                          onChange={(e) =>
+                            setSparkleConfig((prev) => ({
+                              ...prev,
+                              dissolveDuration: Number(e.target.value),
+                            }))
+                          }
+                          className="w-full accent-white h-1 bg-white/10 rounded cursor-pointer"
+                        />
+                        <span className="text-zinc-100 font-mono font-medium shrink-0 min-w-10.5 text-right">
+                          {(sparkleConfig.dissolveDuration * 1000).toFixed(0)}
+                          ms
+                        </span>
+                      </div>
+
+                      <div className="rounded-lg border border-white/5 bg-[#17171b] px-3 py-2 flex items-center justify-between gap-2.5 text-xs">
+                        <span className="text-zinc-400 shrink-0">
+                          Stiffness
+                        </span>
+                        <div className="h-3.5 w-px bg-white/10 shrink-0" />
+                        <input
+                          type="range"
+                          min="150"
+                          max="500"
+                          step="10"
+                          value={sparkleConfig.springStiffness}
+                          onChange={(e) =>
+                            setSparkleConfig((prev) => ({
+                              ...prev,
+                              springStiffness: Number(e.target.value),
+                            }))
+                          }
+                          className="w-full accent-white h-1 bg-white/10 rounded cursor-pointer"
+                        />
+                        <span className="text-zinc-100 font-mono font-medium shrink-0 min-w-10.5 text-right">
+                          {sparkleConfig.springStiffness}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeComponent.slug === "otp-input" && (
+                <div
+                  key="otp-customize-panel"
+                  className="pointer-events-auto rounded-2xl border border-white/10 bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-xl w-full mx-4 select-none flex flex-col gap-2.5"
+                >
+                  <div className="flex items-center justify-between px-1">
+                    <span className="text-xs font-semibold text-white/90 tracking-tight">
+                      Customize
+                    </span>
+                    <button
+                      type="button"
+                      onClick={resetOtpConfig}
+                      className="text-[11px] text-zinc-400 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                    >
+                      <ResetIcon className="w-3.5 h-3.5" />
+                      <span>Reset</span>
+                    </button>
+                  </div>
+
+                  <div className="rounded-xl border border-white/5 bg-[#0b0b0e] p-1.5 flex flex-col gap-1.5">
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-1.5 pb-1.5 border-b border-white/5">
+                      <div className="flex items-center gap-0.5 bg-[#17171b] p-1 rounded-xl border border-white/5">
+                        {(["idle", "success", "error", "loading"] as const).map(
+                          (s) => (
                             <button
                               key={s}
                               type="button"
@@ -1410,147 +1311,147 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               )}
                               <span className="relative z-10">{s}</span>
                             </button>
-                          ))}
-                        </div>
-
-                        <div className="flex items-center gap-1 bg-[#17171b] p-1 rounded-xl border border-white/5">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setOtpValue("729481");
-                              setOtpStatus("success");
-                            }}
-                            className="h-7 px-2.5 rounded-lg text-xs font-mono text-zinc-300 hover:text-white hover:bg-white/5 transition-colors cursor-pointer flex items-center justify-center"
-                          >
-                            Auto-fill
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setOtpValue("999999");
-                              setOtpStatus("error");
-                            }}
-                            className="h-7 px-2.5 rounded-lg text-xs font-mono text-zinc-300 hover:text-white hover:bg-white/5 transition-colors cursor-pointer flex items-center justify-center"
-                          >
-                            Error
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setOtpValue("");
-                              setOtpStatus("idle");
-                            }}
-                            className="h-7 px-2.5 rounded-lg text-xs font-mono text-zinc-300 hover:text-white hover:bg-white/5 transition-colors cursor-pointer flex items-center justify-center"
-                          >
-                            Clear
-                          </button>
-                        </div>
+                          ),
+                        )}
                       </div>
 
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
-                        <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3 flex items-center justify-between text-xs">
-                          <span className="text-zinc-400 text-xs font-medium">
-                            Size
-                          </span>
-                          <div className="flex items-center gap-0.5 bg-black/25 p-0.5 rounded-md border border-white/5">
-                            {(["sm", "md", "lg", "xl"] as const).map((sz) => (
-                              <button
-                                key={sz}
-                                type="button"
-                                onClick={() => setOtpSize(sz)}
-                                className={cn(
-                                  "relative px-2 py-0.5 rounded text-[11px] font-mono uppercase transition-colors cursor-pointer",
-                                  otpSize === sz
-                                    ? "text-black font-semibold"
-                                    : "text-zinc-400 hover:text-white",
-                                )}
-                              >
-                                {otpSize === sz && (
-                                  <motion.div
-                                    layoutId="activeOtpSizeIndicator"
-                                    transition={{
-                                      type: "spring",
-                                      stiffness: 450,
-                                      damping: 32,
-                                    }}
-                                    className="absolute inset-0 bg-white rounded shadow-xs"
-                                  />
-                                )}
-                                <span className="relative z-10">{sz}</span>
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-
+                      <div className="flex items-center gap-1 bg-[#17171b] p-1 rounded-xl border border-white/5">
                         <button
                           type="button"
                           onClick={() => {
-                            const variants: OtpVariant[] = [
-                              "default",
-                              "glass",
-                              "neon",
-                              "underlined",
-                            ];
-                            const nextIndex =
-                              (variants.indexOf(otpVariant) + 1) %
-                              variants.length;
-                            setOtpVariant(variants[nextIndex]);
+                            setOtpValue("729481");
+                            setOtpStatus("success");
                           }}
-                          className="h-9 rounded-lg border border-white/5 bg-[#17171b] hover:bg-[#1f1f25] px-3 flex items-center justify-between text-xs transition-colors cursor-pointer"
+                          className="h-7 px-2.5 rounded-lg text-xs font-mono text-zinc-300 hover:text-white hover:bg-white/5 transition-colors cursor-pointer flex items-center justify-center"
                         >
-                          <span className="text-zinc-400 text-xs font-medium">
-                            Variant
-                          </span>
-                          <span className="text-zinc-100 font-medium capitalize flex items-center gap-1.5 text-xs">
-                            {otpVariant}
-                            <ChevronDownIcon className="w-3.5 h-3.5 text-zinc-400" />
-                          </span>
+                          Auto-fill
                         </button>
-
                         <button
                           type="button"
-                          onClick={() => setOtpMask((m) => !m)}
-                          className="h-9 rounded-lg border border-white/5 bg-[#17171b] hover:bg-[#1f1f25] px-3 flex items-center justify-between text-xs transition-colors cursor-pointer"
+                          onClick={() => {
+                            setOtpValue("999999");
+                            setOtpStatus("error");
+                          }}
+                          className="h-7 px-2.5 rounded-lg text-xs font-mono text-zinc-300 hover:text-white hover:bg-white/5 transition-colors cursor-pointer flex items-center justify-center"
                         >
-                          <span className="text-zinc-400 text-xs font-medium">
-                            Mask (•)
-                          </span>
-                          <span
-                            className={cn(
-                              "px-2 py-0.5 rounded text-[11px] font-mono uppercase transition-colors",
-                              otpMask
-                                ? "bg-white text-black font-semibold"
-                                : "bg-white/5 text-zinc-400",
-                            )}
-                          >
-                            {otpMask ? "ON" : "OFF"}
-                          </span>
+                          Error
                         </button>
-
                         <button
                           type="button"
-                          onClick={() => setOtpGrouped((g) => !g)}
-                          className="h-9 rounded-lg border border-white/5 bg-[#17171b] hover:bg-[#1f1f25] px-3 flex items-center justify-between text-xs transition-colors cursor-pointer"
+                          onClick={() => {
+                            setOtpValue("");
+                            setOtpStatus("idle");
+                          }}
+                          className="h-7 px-2.5 rounded-lg text-xs font-mono text-zinc-300 hover:text-white hover:bg-white/5 transition-colors cursor-pointer flex items-center justify-center"
                         >
-                          <span className="text-zinc-400 text-xs font-medium">
-                            3-3 Split
-                          </span>
-                          <span
-                            className={cn(
-                              "px-2 py-0.5 rounded text-[11px] font-mono uppercase transition-colors",
-                              otpGrouped
-                                ? "bg-white text-black font-semibold"
-                                : "bg-white/5 text-zinc-400",
-                            )}
-                          >
-                            {otpGrouped ? "ON" : "OFF"}
-                          </span>
+                          Clear
                         </button>
                       </div>
                     </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                      <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                        <span className="text-zinc-400 text-xs font-medium">
+                          Size
+                        </span>
+                        <div className="flex items-center gap-0.5 bg-black/25 p-0.5 rounded-md border border-white/5">
+                          {(["sm", "md", "lg", "xl"] as const).map((sz) => (
+                            <button
+                              key={sz}
+                              type="button"
+                              onClick={() => setOtpSize(sz)}
+                              className={cn(
+                                "relative px-2 py-0.5 rounded text-[11px] font-mono uppercase transition-colors cursor-pointer",
+                                otpSize === sz
+                                  ? "text-black font-semibold"
+                                  : "text-zinc-400 hover:text-white",
+                              )}
+                            >
+                              {otpSize === sz && (
+                                <motion.div
+                                  layoutId="activeOtpSizeIndicator"
+                                  transition={{
+                                    type: "spring",
+                                    stiffness: 450,
+                                    damping: 32,
+                                  }}
+                                  className="absolute inset-0 bg-white rounded shadow-xs"
+                                />
+                              )}
+                              <span className="relative z-10">{sz}</span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const variants: OtpVariant[] = [
+                            "default",
+                            "glass",
+                            "neon",
+                            "underlined",
+                          ];
+                          const nextIndex =
+                            (variants.indexOf(otpVariant) + 1) %
+                            variants.length;
+                          setOtpVariant(variants[nextIndex]);
+                        }}
+                        className="h-9 rounded-lg border border-white/5 bg-[#17171b] hover:bg-[#1f1f25] px-3 flex items-center justify-between text-xs transition-colors cursor-pointer"
+                      >
+                        <span className="text-zinc-400 text-xs font-medium">
+                          Variant
+                        </span>
+                        <span className="text-zinc-100 font-medium capitalize flex items-center gap-1.5 text-xs">
+                          {otpVariant}
+                          <ChevronDownIcon className="w-3.5 h-3.5 text-zinc-400" />
+                        </span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setOtpMask((m) => !m)}
+                        className="h-9 rounded-lg border border-white/5 bg-[#17171b] hover:bg-[#1f1f25] px-3 flex items-center justify-between text-xs transition-colors cursor-pointer"
+                      >
+                        <span className="text-zinc-400 text-xs font-medium">
+                          Mask (•)
+                        </span>
+                        <span
+                          className={cn(
+                            "px-2 py-0.5 rounded text-[11px] font-mono uppercase transition-colors",
+                            otpMask
+                              ? "bg-white text-black font-semibold"
+                              : "bg-white/5 text-zinc-400",
+                          )}
+                        >
+                          {otpMask ? "ON" : "OFF"}
+                        </span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setOtpGrouped((g) => !g)}
+                        className="h-9 rounded-lg border border-white/5 bg-[#17171b] hover:bg-[#1f1f25] px-3 flex items-center justify-between text-xs transition-colors cursor-pointer"
+                      >
+                        <span className="text-zinc-400 text-xs font-medium">
+                          3-3 Split
+                        </span>
+                        <span
+                          className={cn(
+                            "px-2 py-0.5 rounded text-[11px] font-mono uppercase transition-colors",
+                            otpGrouped
+                              ? "bg-white text-black font-semibold"
+                              : "bg-white/5 text-zinc-400",
+                          )}
+                        >
+                          {otpGrouped ? "ON" : "OFF"}
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
