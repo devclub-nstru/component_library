@@ -27,6 +27,7 @@ import { BentoGrid, BentoCard } from "@/registry/ui/bento-grid";
 import { GlowingBadge } from "@/registry/ui/glowing-badge";
 import { HookSidebar } from "@/registry/ui/hook-sidebar";
 import { GitHubActivity } from "@/registry/ui/github-activity";
+import { AnimatedCounter } from "@/registry/ui/animated-counter";
 import { cn } from "@/lib/utils";
 
 interface ComponentStudioProps {
@@ -48,6 +49,11 @@ const ALL_CATEGORIES = [
         label: "GitHub activity",
         slug: "github-activity",
         href: "/components/github-activity",
+      },
+      {
+        label: "Animated Counter",
+        slug: "animated-counter",
+        href: "/components/animated-counter",
       },
     ],
   },
@@ -244,6 +250,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
   const [activeColor, setActiveColor] = useState<string>(PALETTE[3].hex);
   const dragControls = useDragControls();
   const [hookDemoIndex, setHookDemoIndex] = useState(0);
+  const [counterDemoValue, setCounterDemoValue] = useState(122337);
 
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [activePanel, setActivePanel] = useState<"none" | "info" | "code">(
@@ -270,6 +277,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
       "animated-button",
       "spotlight-card",
       "glowing-badge",
+      "animated-counter",
     ].includes(activeComponent.slug),
   );
 
@@ -497,6 +505,62 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
             </span>
           </div>
         );
+      case "animated-counter": {
+        const MAX = 150_000;
+        const ROLL = 0.5;
+        const TICKS = 41;
+        const marker = Math.round(
+          (Math.min(MAX, Math.max(0, counterDemoValue)) / MAX) * (TICKS - 1),
+        );
+
+        return (
+          <div className="flex h-full w-full flex-col items-center justify-center gap-14 p-6 select-none">
+            <AnimatedCounter
+              value={counterDemoValue}
+              duration={ROLL}
+              grouping="indian"
+              prefix={<span className="mr-0.5">₹</span>}
+              className="font-mono text-6xl font-bold tracking-tight text-white [&_[data-slot=animated-counter-mark]]:-mx-[0.1em] sm:text-7xl"
+            />
+
+            <div className="relative w-80 sm:w-96 max-w-full shrink-0 rounded-xl px-px has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-4 has-[:focus-visible]:outline-[#868593]">
+              <div aria-hidden className="flex h-8 w-full items-end justify-between">
+                {Array.from({ length: TICKS }, (_, index) =>
+                  index === marker ? (
+                    <span
+                      key={index}
+                      style={{ backgroundColor: color || "#FC4C01" }}
+                      className="-mx-[0.5px] h-7 w-[3px] rounded-full shrink-0"
+                    />
+                  ) : (
+                    <span
+                      key={index}
+                      className={`w-0.5 rounded-full shrink-0 transition-[height,background-color] duration-200 motion-reduce:transition-none ${
+                        index < marker
+                          ? "h-5 bg-[#EBEBF5]"
+                          : "h-3.5 bg-[#3C3C43]"
+                      }`}
+                    />
+                  ),
+                )}
+              </div>
+
+              <input
+                type="range"
+                min={0}
+                max={MAX}
+                step={1}
+                value={counterDemoValue}
+                aria-label="Counter value"
+                onChange={(event) =>
+                  setCounterDemoValue(event.target.valueAsNumber)
+                }
+                className="absolute inset-0 h-full w-full cursor-grab appearance-none bg-transparent opacity-0 outline-none active:cursor-grabbing"
+              />
+            </div>
+          </div>
+        );
+      }
       default:
         return (
           <div className="text-zinc-500 font-mono text-xs">

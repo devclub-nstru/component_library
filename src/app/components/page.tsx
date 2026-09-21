@@ -10,6 +10,53 @@ import { AnimatedButton } from "@/registry/ui/animated-button";
 import { SpotlightCard } from "@/registry/ui/spotlight-card";
 import { HookSidebar } from "@/registry/ui/hook-sidebar";
 import { GitHubActivity } from "@/registry/ui/github-activity";
+import { AnimatedCounter } from "@/registry/ui/animated-counter";
+import { cn } from "@/lib/utils";
+
+function CounterPreview() {
+  const [val, setVal] = React.useState(122337);
+
+  React.useEffect(() => {
+    const timer = setInterval(() => {
+      setVal((v) => (v === 122337 ? 84920 : v === 84920 ? 142100 : 122337));
+    }, 2800);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <div className="flex w-full flex-col items-center justify-center gap-4 py-3 select-none">
+      <AnimatedCounter
+        value={val}
+        duration={0.5}
+        grouping="indian"
+        prefix={<span className="mr-0.5">₹</span>}
+        className="font-mono text-3xl font-bold tracking-tight text-white [&_[data-slot=animated-counter-mark]]:-mx-[0.1em] sm:text-4xl"
+      />
+      <div className="flex items-center justify-between w-48 h-3 shrink-0">
+        {Array.from({ length: 28 }).map((_, i) => {
+          const progress = Math.min(
+            1,
+            Math.max(0, (val - 50000) / (150000 - 50000)),
+          );
+          const active = Math.round(progress * 27);
+          return (
+            <div
+              key={i}
+              className={cn(
+                "w-[1.5px]",
+                i === active
+                  ? "h-4 -my-0.5 bg-orange-500"
+                  : i < active
+                    ? "h-2.5 bg-white"
+                    : "h-2.5 bg-[#262626]",
+              )}
+            />
+          );
+        })}
+      </div>
+    </div>
+  );
+}
 
 export default function ComponentsPage() {
   const allComponents = useMemo(() => getAllComponents(), []);
@@ -81,6 +128,7 @@ export default function ComponentsPage() {
         <GitHubActivity totalContributions={1863} year={2025} />
       </div>
     ),
+    "animated-counter": <CounterPreview />,
   };
 
   const newReleases = allComponents.slice(0, 3);
