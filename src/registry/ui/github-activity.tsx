@@ -1,7 +1,14 @@
 "use client";
 
 import * as React from "react";
-import { useState, useRef, useMemo } from "react";
+import {
+  useState,
+  useRef,
+  useMemo,
+  useEffect,
+  createContext,
+  useContext,
+} from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@/lib/utils";
 
@@ -13,6 +20,8 @@ export type Contribution = {
   level: ContributionLevel;
 };
 
+export type Activity = Contribution;
+
 export type GitHubActivityVariant = "emerald" | "teal" | "github";
 
 export interface GitHubActivityProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -22,11 +31,27 @@ export interface GitHubActivityProps extends React.HTMLAttributes<HTMLDivElement
   totalContributions?: number;
   year?: number;
   contributions?: Contribution[];
+  data?: Contribution[];
   variant?: GitHubActivityVariant;
+  blockSize?: number;
+  blockGap?: number;
   className?: string;
 }
 
-const MONTHS = ["Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const MONTH_NAMES = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
 
 const VARIANT_CONFIGS: Record<
   GitHubActivityVariant,
@@ -79,17 +104,190 @@ const VARIANT_CONFIGS: Record<
   },
 };
 
-export function GitHubActivity({
+type Week = Array<Contribution | undefined>;
+
+type MonthLabel = {
+  weekIndex: number;
+  label: string;
+};
+
+function generateYearData(targetYear: number): Contribution[] {
+  const result: Contribution[] = [];
+  const start = new Date(targetYear, 0, 1);
+  const end = new Date(targetYear, 11, 31);
+
+  const current = new Date(start);
+  while (current <= end) {
+    const year = current.getFullYear();
+    const month = String(current.getMonth() + 1).padStart(2, "0");
+    const day = String(current.getDate()).padStart(2, "0");
+    const dateStr = `${year}-${month}-${day}`;
+
+    const seed =
+      (targetYear * 365 + (current.getMonth() + 1) * 31 + current.getDate()) *
+      17;
+    const pseudoRand = ((seed * 9301 + 49297) % 233280) / 233280;
+
+    let level: ContributionLevel = 0;
+    let count = 0;
+
+    if (pseudoRand > 0.82) {
+      level = 4;
+      count = 13 + Math.floor(pseudoRand * 12);
+    } else if (pseudoRand > 0.62) {
+      level = 3;
+      count = 7 + Math.floor(pseudoRand * 6);
+    } else if (pseudoRand > 0.42) {
+      level = 2;
+      count = 3 + Math.floor(pseudoRand * 4);
+    } else if (pseudoRand > 0.22) {
+      level = 1;
+      count = 1 + Math.floor(pseudoRand * 2);
+    }
+
+    result.push({
+      date: dateStr,
+      count,
+      level,
+    });
+
+    current.setDate(current.getDate() + 1);
+  }
+
+  return result;
+}
+
+function parseDateString(dateStr: string): Date {
+  const [y, m, d] = dateStr.split("-").map(Number);
+  return new Date(y, (m || 1) - 1, d || 1);
+}
+
+function formatDateDisplay(dateStr: string): string {
+  const date = parseDateString(dateStr);
+  const m = MONTH_NAMES[date.getMonth()];
+  const d = date.getDate();
+  const y = date.getFullYear();
+  return `${m} ${d}, ${y}`;
+}
+
+function groupIntoWeeks(data: Contribution[], weekStart = 0): Week[] {
+  if (!data || data.length === 0) return [];
+
+  const sorted = [...data].sort((a, b) => a.date.localeCompare(b.date));
+  const firstDate = parseDateString(sorted[0].date);
+  const firstDay = firstDate.getDay();
+
+  const leadingPadding = (firstDay - weekStart + 7) % 7;
+  const padded: Array<Contribution | undefined> = [
+    ...new Array(leadingPadding).fill(undefined),
+    ...sorted,
+  ];
+
+  const weeksCount = Math.ceil(padded.length / 7);
+  const weeks: Week[] = [];
+
+  for (let w = 0; w < weeksCount; w++) {
+    const weekSlice = padded.slice(w * 7, w * 7 + 7);
+    while (weekSlice.length < 7) {
+      weekSlice.push(undefined);
+    }
+    weeks.push(weekSlice);
+  }
+
+  return weeks;
+}
+
+function calculateMonthLabels(weeks: Week[]): MonthLabel[] {
+  const labels: MonthLabel[] = [];
+
+  weeks.forEach((week, weekIndex) => {
+    const validDay = week.find((day) => day !== undefined);
+    if (!validDay) return;
+
+    const date = parseDateString(validDay.date);
+    const month = MONTH_NAMES[date.getMonth()];
+    const prev = labels[labels.length - 1];
+
+    if (weekIndex === 0 || !prev || prev.label !== month) {
+      labels.push({ weekIndex, label: month });
+    }
+  });
+
+  return labels.filter(({ weekIndex }, index) => {
+    const minWeeks = 2;
+    if (index === 0) {
+      return labels[1] ? labels[1].weekIndex - weekIndex >= minWeeks : true;
+    }
+    if (index === labels.length - 1) {
+      return weeks.length - weekIndex >= minWeeks;
+    }
+    return true;
+  });
+}
+
+type ContributionGraphContextType = {
+  data: Contribution[];
+  weeks: Week[];
+  monthLabels: MonthLabel[];
+  blockSize: number;
+  blockGap: number;
+  totalContributions: number;
+  year: number;
+  variant: GitHubActivityVariant;
+  activeTheme: (typeof VARIANT_CONFIGS)["teal"];
+  hoveredCell: {
+    count: number;
+    date: string;
+    x: number;
+    y: number;
+    height: number;
+    isNearTop: boolean;
+  } | null;
+  setHoveredCell: React.Dispatch<
+    React.SetStateAction<{
+      count: number;
+      date: string;
+      x: number;
+      y: number;
+      height: number;
+      isNearTop: boolean;
+    } | null>
+  >;
+  containerRef: React.RefObject<HTMLDivElement | null>;
+  scrollRef: React.RefObject<HTMLDivElement | null>;
+};
+
+const ContributionGraphContext =
+  createContext<ContributionGraphContextType | null>(null);
+
+export function useContributionGraph() {
+  const context = useContext(ContributionGraphContext);
+  if (!context) {
+    throw new Error(
+      "ContributionGraph components must be used within a ContributionGraph provider",
+    );
+  }
+  return context;
+}
+
+export function ContributionGraph({
   username,
   title = "Commit Heatmap",
   subtitle,
-  year = 2025,
+  totalContributions: totalContributionsProp,
+  year = new Date().getFullYear(),
   contributions,
+  data: dataProp,
   variant = "teal",
+  blockSize = 10,
+  blockGap = 3,
   className,
+  children,
   ...props
-}: GitHubActivityProps) {
+}: GitHubActivityProps & { children?: React.ReactNode }) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
   const [hoveredCell, setHoveredCell] = useState<{
     count: number;
     date: string;
@@ -99,259 +297,390 @@ export function GitHubActivity({
     isNearTop: boolean;
   } | null>(null);
 
+  const rawData = dataProp || contributions;
+  const data = useMemo(() => {
+    if (rawData && rawData.length > 0) {
+      return rawData;
+    }
+    return generateYearData(year);
+  }, [rawData, year]);
+
+  const weeks = useMemo(() => groupIntoWeeks(data, 0), [data]);
+  const monthLabels = useMemo(() => calculateMonthLabels(weeks), [weeks]);
+
+  const calculatedTotal = useMemo(
+    () => data.reduce((sum, item) => sum + item.count, 0),
+    [data],
+  );
+
+  const totalContributions =
+    typeof totalContributionsProp === "number"
+      ? totalContributionsProp
+      : calculatedTotal;
+
   const activeTheme = VARIANT_CONFIGS[variant] || VARIANT_CONFIGS.teal;
 
-  const gridData = useMemo(() => {
-    const cols = 26;
-    const rows = 7;
-
-    if (contributions && contributions.length >= cols * rows) {
-      const matrix: {
-        level: ContributionLevel;
-        count: number;
-        date: string;
-      }[][] = [];
-      for (let c = 0; c < cols; c++) {
-        const colData = [];
-        for (let r = 0; r < rows; r++) {
-          colData.push(contributions[c * rows + r]);
-        }
-        matrix.push(colData);
+  useEffect(() => {
+    if (scrollRef.current && typeof window !== "undefined") {
+      if (window.innerWidth < 768) {
+        scrollRef.current.scrollLeft = scrollRef.current.scrollWidth;
       }
-      return matrix;
     }
+  }, [weeks.length]);
 
-    const matrix: {
-      level: ContributionLevel;
-      count: number;
-      date: string;
-    }[][] = [];
-    const monthNames = ["Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  return (
+    <ContributionGraphContext.Provider
+      value={{
+        data,
+        weeks,
+        monthLabels,
+        blockSize,
+        blockGap,
+        totalContributions,
+        year,
+        variant,
+        activeTheme,
+        hoveredCell,
+        setHoveredCell,
+        containerRef,
+        scrollRef,
+      }}
+    >
+      <div
+        ref={containerRef}
+        className={cn(
+          "relative w-full max-w-full sm:max-w-3xl rounded-2xl border border-white/10 bg-zinc-950/75 p-4 sm:p-6 backdrop-blur-xl shadow-[0_20px_48px_-10px_rgba(0,0,0,0.7),inset_0_1px_0_0_rgba(255,255,255,0.14)] select-none",
+          className,
+        )}
+        {...props}
+      >
+        {children || (
+          <>
+            <div className="relative z-10 flex flex-col pb-3 sm:pb-4 border-b border-white/6">
+              <span className="text-xs sm:text-sm font-semibold text-zinc-100 tracking-tight">
+                {title}
+              </span>
+              <span className="text-[11px] sm:text-xs text-zinc-400 font-normal">
+                {subtitle ||
+                  (username ? `@${username}` : "GitHub Contribution Matrix")}
+              </span>
+            </div>
 
-    for (let c = 0; c < cols; c++) {
-      const colData = [];
-      const monthIdx = Math.min(6, Math.floor((c / cols) * 7));
-      const dayOffset = ((c * 7) % 30) + 1;
+            <ContributionGraphCalendar />
 
-      for (let r = 0; r < rows; r++) {
-        const hash = ((c * 19 + r * 37 + 43) * 9301 + 49297) % 233280;
-        const rand = hash / 233280;
-        let level: ContributionLevel = 0;
-        let count = 0;
+            <ContributionGraphTooltip />
 
-        if (rand > 0.82) {
-          level = 4;
-          count = 13 + Math.floor(rand * 12);
-        } else if (rand > 0.64) {
-          level = 3;
-          count = 8 + Math.floor(rand * 5);
-        } else if (rand > 0.44) {
-          level = 2;
-          count = 4 + Math.floor(rand * 4);
-        } else if (rand > 0.24) {
-          level = 1;
-          count = 1 + Math.floor(rand * 3);
-        }
+            <ContributionGraphFooter>
+              <ContributionGraphTotalCount />
+              <ContributionGraphLegend />
+            </ContributionGraphFooter>
+          </>
+        )}
+      </div>
+    </ContributionGraphContext.Provider>
+  );
+}
 
-        colData.push({
-          level,
-          count,
-          date: `${monthNames[monthIdx]} ${((dayOffset + r - 1) % 30) + 1}, ${year}`,
-        });
-      }
-      matrix.push(colData);
-    }
-    return matrix;
-  }, [contributions, year]);
+export function ContributionGraphTooltip() {
+  const { hoveredCell, activeTheme } = useContributionGraph();
+
+  return (
+    <AnimatePresence>
+      {hoveredCell && (
+        <motion.div
+          key="activity-tooltip"
+          initial={{
+            opacity: 0,
+            scale: 0.92,
+            x: hoveredCell.x,
+            y: hoveredCell.isNearTop
+              ? hoveredCell.y + hoveredCell.height + 4
+              : hoveredCell.y - 4,
+          }}
+          animate={{
+            opacity: 1,
+            scale: 1,
+            x: hoveredCell.x,
+            y: hoveredCell.isNearTop
+              ? hoveredCell.y + hoveredCell.height + 8
+              : hoveredCell.y - 8,
+          }}
+          exit={{
+            opacity: 0,
+            scale: 0.92,
+            transition: { duration: 0.12, ease: "easeOut" },
+          }}
+          transition={{
+            type: "spring",
+            stiffness: 480,
+            damping: 32,
+            mass: 0.5,
+          }}
+          style={{
+            left: 0,
+            top: 0,
+            translateX: "-50%",
+            translateY: hoveredCell.isNearTop ? "0%" : "-100%",
+          }}
+          className="pointer-events-none absolute z-50 px-3 py-1.5 rounded-lg bg-zinc-900/95 backdrop-blur-md text-xs font-medium text-white border border-white/15 shadow-2xl whitespace-nowrap"
+        >
+          <div
+            className={cn(
+              "absolute left-1/2 -translate-x-1/2 w-0 h-0 border-x-4 border-x-transparent",
+              hoveredCell.isNearTop
+                ? "bottom-full border-b-4 border-b-zinc-900"
+                : "top-full border-t-4 border-t-zinc-900",
+            )}
+          />
+          <div className="flex items-center gap-1.5 font-medium">
+            <AnimatePresence mode="popLayout" initial={false}>
+              <motion.span
+                key={hoveredCell.count}
+                initial={{ opacity: 0, y: -3 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 3 }}
+                transition={{ duration: 0.14, ease: "easeOut" }}
+                className={cn("font-bold tabular-nums", activeTheme.text)}
+              >
+                {hoveredCell.count} commits
+              </motion.span>
+            </AnimatePresence>
+            <span className="text-zinc-400">on</span>
+            <AnimatePresence mode="popLayout" initial={false}>
+              <motion.span
+                key={hoveredCell.date}
+                initial={{ opacity: 0, y: -2 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 2 }}
+                transition={{ duration: 0.14, ease: "easeOut" }}
+                className="text-zinc-200 tabular-nums"
+              >
+                {formatDateDisplay(hoveredCell.date)}
+              </motion.span>
+            </AnimatePresence>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+
+export function ContributionGraphCalendar({
+  className,
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement> & {
+  children?: (props: {
+    activity: Contribution | undefined;
+    dayIndex: number;
+    weekIndex: number;
+  }) => React.ReactNode;
+}) {
+  const { weeks, monthLabels, blockSize, blockGap, scrollRef, setHoveredCell } =
+    useContributionGraph();
+
+  const totalWidth = weeks.length * (blockSize + blockGap) - blockGap;
 
   return (
     <div
-      ref={containerRef}
+      ref={scrollRef}
+      onScroll={() => setHoveredCell(null)}
       className={cn(
-        "relative w-full max-w-145 rounded-2xl border border-white/10 bg-zinc-950/75 p-4 sm:p-6 backdrop-blur-xl shadow-[0_20px_48px_-10px_rgba(0,0,0,0.7),inset_0_1px_0_0_rgba(255,255,255,0.14)] select-none",
+        "relative z-10 overflow-x-auto scrollbar-none pb-2 pt-2.5 -mx-1 px-1 sm:mx-0 sm:px-0",
         className,
       )}
       {...props}
     >
-      <div className="relative z-10 flex flex-col pb-3 sm:pb-4 border-b border-white/6">
-        <span className="text-xs sm:text-sm font-semibold text-zinc-100 tracking-tight">
-          {title}
-        </span>
-        <span className="text-[11px] sm:text-xs text-zinc-400 font-normal">
-          {subtitle ||
-            (username ? `@${username}` : "GitHub Contribution Matrix")}
-        </span>
-      </div>
-
-      <div className="relative z-10 overflow-x-auto scrollbar-none pb-2 pt-1 -mx-1 px-1 sm:mx-0 sm:px-0">
-        <div className="min-w-130 sm:min-w-0 w-full">
-          <div className="flex justify-between px-1 pt-2.5 pb-2 text-[10px] sm:text-[11px] font-medium text-zinc-400">
-            {MONTHS.map((m) => (
-              <span key={m}>{m}</span>
-            ))}
-          </div>
-
-          <div className="pb-2">
-            <div className="flex w-full justify-between items-center py-1">
-              {gridData.map((col, cIdx) => (
-                <div key={cIdx} className="flex flex-col gap-1 sm:gap-1.5">
-                  {col.map((cell, rIdx) => (
-                    <div
-                      key={rIdx}
-                      onMouseEnter={(e) => {
-                        const rect = e.currentTarget.getBoundingClientRect();
-                        const containerRect =
-                          containerRef.current?.getBoundingClientRect();
-                        const containerWidth = containerRect?.width || 560;
-                        const rawX = containerRect
-                          ? rect.left - containerRect.left + rect.width / 2
-                          : 0;
-                        const clampedX = Math.max(
-                          80,
-                          Math.min(containerWidth - 80, rawX),
-                        );
-                        const y = containerRect
-                          ? rect.top - containerRect.top
-                          : 0;
-                        setHoveredCell({
-                          count: cell.count,
-                          date: cell.date,
-                          x: clampedX,
-                          y,
-                          height: rect.height,
-                          isNearTop: y < 65,
-                        });
-                      }}
-                      onMouseLeave={() => setHoveredCell(null)}
-                      className={cn(
-                        "h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4 rounded-[2.5px] sm:rounded-[3.5px] transition-all duration-150 cursor-pointer",
-                        "hover:scale-125 hover:z-20 hover:ring-1 hover:ring-white/50",
-                        activeTheme.levels[cell.level],
-                      )}
-                    />
-                  ))}
-                </div>
-              ))}
-            </div>
-          </div>
+      <div
+        className="inline-flex flex-col select-none"
+        style={{ width: `${totalWidth}px` }}
+      >
+        <div
+          className="relative h-4 mb-2 text-[10px] sm:text-[11px] font-medium text-zinc-400"
+          style={{ width: `${totalWidth}px` }}
+        >
+          {monthLabels.map(({ label, weekIndex }) => (
+            <span
+              key={`${label}-${weekIndex}`}
+              className="absolute top-0 transition-opacity"
+              style={{
+                left: `${weekIndex * (blockSize + blockGap)}px`,
+              }}
+            >
+              {label}
+            </span>
+          ))}
         </div>
-      </div>
 
-      <AnimatePresence>
-        {hoveredCell && (
-          <motion.div
-            key="activity-tooltip"
-            initial={{
-              opacity: 0,
-              scale: 0.92,
-              x: hoveredCell.x,
-              y: hoveredCell.isNearTop
-                ? hoveredCell.y + hoveredCell.height + 4
-                : hoveredCell.y - 4,
-            }}
-            animate={{
-              opacity: 1,
-              scale: 1,
-              x: hoveredCell.x,
-              y: hoveredCell.isNearTop
-                ? hoveredCell.y + hoveredCell.height + 8
-                : hoveredCell.y - 8,
-            }}
-            exit={{
-              opacity: 0,
-              scale: 0.92,
-              transition: { duration: 0.12, ease: "easeOut" },
-            }}
-            transition={{
-              type: "spring",
-              stiffness: 480,
-              damping: 32,
-              mass: 0.5,
-            }}
-            style={{
-              left: 0,
-              top: 0,
-              translateX: "-50%",
-              translateY: hoveredCell.isNearTop ? "0%" : "-100%",
-            }}
-            className="pointer-events-none absolute z-50 px-3 py-1.5 rounded-lg bg-zinc-900/95 backdrop-blur-md text-xs font-medium text-white border border-white/15 shadow-2xl whitespace-nowrap"
-          >
+        <div className="flex" style={{ gap: `${blockGap}px` }}>
+          {weeks.map((week, weekIndex) => (
             <div
-              className={cn(
-                "absolute left-1/2 -translate-x-1/2 w-0 h-0 border-x-4 border-x-transparent",
-                hoveredCell.isNearTop
-                  ? "bottom-full border-b-4 border-b-zinc-900"
-                  : "top-full border-t-4 border-t-zinc-900",
-              )}
-            />
-            <div className="flex items-center gap-1.5 font-medium">
-              <AnimatePresence mode="popLayout" initial={false}>
-                <motion.span
-                  key={hoveredCell.count}
-                  initial={{ opacity: 0, y: -3 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 3 }}
-                  transition={{ duration: 0.14, ease: "easeOut" }}
-                  className={cn("font-bold tabular-nums", activeTheme.text)}
-                >
-                  {hoveredCell.count} commits
-                </motion.span>
-              </AnimatePresence>
-              <span className="text-zinc-400">on</span>
-              <AnimatePresence mode="popLayout" initial={false}>
-                <motion.span
-                  key={hoveredCell.date}
-                  initial={{ opacity: 0, y: -2 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 2 }}
-                  transition={{ duration: 0.14, ease: "easeOut" }}
-                  className="text-zinc-200 tabular-nums"
-                >
-                  {hoveredCell.date}
-                </motion.span>
-              </AnimatePresence>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+              key={weekIndex}
+              className="flex flex-col"
+              style={{ gap: `${blockGap}px` }}
+            >
+              {week.map((activity, dayIndex) => {
+                if (children) {
+                  return (
+                    <React.Fragment key={`${weekIndex}-${dayIndex}`}>
+                      {children({ activity, dayIndex, weekIndex })}
+                    </React.Fragment>
+                  );
+                }
 
-      <div className="relative z-10 flex items-center justify-between pt-3 sm:pt-3.5 border-t border-white/6 text-[11px] sm:text-xs text-zinc-400">
-        <span className="font-medium">Activity Level:</span>
-        <div className="flex items-center gap-1.5 sm:gap-2">
-          <span className="text-[11px] sm:text-xs text-zinc-400">Less</span>
-          <div
-            className={cn(
-              "w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 rounded-[2.5px] sm:rounded-[3px]",
-              activeTheme.levels[0],
-            )}
-          />
-          <div
-            className={cn(
-              "w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 rounded-[2.5px] sm:rounded-[3px]",
-              activeTheme.levels[1],
-            )}
-          />
-          <div
-            className={cn(
-              "w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 rounded-[2.5px] sm:rounded-[3px]",
-              activeTheme.levels[2],
-            )}
-          />
-          <div
-            className={cn(
-              "w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 rounded-[2.5px] sm:rounded-[3px]",
-              activeTheme.levels[3],
-            )}
-          />
-          <div
-            className={cn(
-              "w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 rounded-[2.5px] sm:rounded-[3px]",
-              activeTheme.levels[4],
-            )}
-          />
-          <span className="text-[11px] sm:text-xs text-zinc-400">More</span>
+                return (
+                  <ContributionGraphBlock
+                    key={`${weekIndex}-${dayIndex}`}
+                    activity={activity}
+                    dayIndex={dayIndex}
+                    weekIndex={weekIndex}
+                  />
+                );
+              })}
+            </div>
+          ))}
         </div>
       </div>
     </div>
   );
 }
+
+export function ContributionGraphBlock({
+  activity,
+  className,
+  ...props
+}: {
+  activity?: Contribution;
+  dayIndex?: number;
+  weekIndex?: number;
+} & React.HTMLAttributes<HTMLDivElement>) {
+  const { activeTheme, blockSize, setHoveredCell, containerRef } =
+    useContributionGraph();
+
+  if (!activity) {
+    return (
+      <div
+        style={{ width: `${blockSize}px`, height: `${blockSize}px` }}
+        className="pointer-events-none opacity-0"
+      />
+    );
+  }
+
+  const activateTooltip = (target: HTMLDivElement) => {
+    const rect = target.getBoundingClientRect();
+    const containerRect = containerRef.current?.getBoundingClientRect();
+    const containerWidth = containerRect?.width || 560;
+    const rawX = containerRect
+      ? rect.left - containerRect.left + rect.width / 2
+      : 0;
+    const clampedX = Math.max(75, Math.min(containerWidth - 75, rawX));
+    const y = containerRect ? rect.top - containerRect.top : 0;
+
+    setHoveredCell({
+      count: activity.count,
+      date: activity.date,
+      x: clampedX,
+      y,
+      height: rect.height,
+      isNearTop: y < 65,
+    });
+  };
+
+  return (
+    <div
+      onMouseEnter={(e) => activateTooltip(e.currentTarget)}
+      onMouseLeave={() => setHoveredCell(null)}
+      onClick={(e) => activateTooltip(e.currentTarget)}
+      style={{ width: `${blockSize}px`, height: `${blockSize}px` }}
+      className={cn(
+        "rounded-[2.5px] sm:rounded-[3px] transition-all duration-150 cursor-pointer",
+        "hover:scale-125 hover:z-20 hover:ring-1 hover:ring-white/50",
+        activeTheme.levels[activity.level],
+        className,
+      )}
+      {...props}
+    />
+  );
+}
+
+export function ContributionGraphFooter({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div
+      className={cn(
+        "relative z-10 flex flex-wrap items-center justify-between gap-2 pt-3 sm:pt-3.5 border-t border-white/6 text-[11px] sm:text-xs text-zinc-400",
+        className,
+      )}
+      {...props}
+    />
+  );
+}
+
+export function ContributionGraphTotalCount({
+  className,
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement> & {
+  children?: (props: { totalCount: number; year: number }) => React.ReactNode;
+}) {
+  const { totalContributions, year } = useContributionGraph();
+
+  if (children) {
+    return <>{children({ totalCount: totalContributions, year })}</>;
+  }
+
+  return (
+    <div className={cn("font-medium text-zinc-400", className)} {...props}>
+      {totalContributions.toLocaleString()} contributions in {year}
+    </div>
+  );
+}
+
+export function ContributionGraphLegend({
+  className,
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement> & {
+  children?: (props: { level: ContributionLevel }) => React.ReactNode;
+}) {
+  const { activeTheme, blockSize } = useContributionGraph();
+  const levels: ContributionLevel[] = [0, 1, 2, 3, 4];
+
+  if (children) {
+    return (
+      <div className={cn("flex items-center gap-1.5 sm:gap-2", className)}>
+        {levels.map((level) => (
+          <React.Fragment key={level}>{children({ level })}</React.Fragment>
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className={cn(
+        "flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs text-zinc-400",
+        className,
+      )}
+      {...props}
+    >
+      <span>Less</span>
+      {levels.map((level) => (
+        <div
+          key={level}
+          style={{ width: `${blockSize}px`, height: `${blockSize}px` }}
+          className={cn(
+            "rounded-[2.5px] sm:rounded-[3px]",
+            activeTheme.levels[level],
+          )}
+        />
+      ))}
+      <span>More</span>
+    </div>
+  );
+}
+
+export { ContributionGraph as GitHubActivity };
+export default ContributionGraph;
