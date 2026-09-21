@@ -13,7 +13,6 @@ import {
   CopyIcon,
   CheckIcon,
   ChevronRightIcon,
-  LayersIcon,
   DesktopIcon,
   MobileIcon,
   ViewGridIcon,
@@ -778,7 +777,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
 
         <div className="flex-1 overflow-hidden relative">
           <AnimatePresence initial={false} mode="popLayout">
-            {sidebarOpen ? (
+            {sidebarOpen && (
               <motion.div
                 key="sidebar-expanded"
                 initial={{ opacity: 0, x: -16 }}
@@ -826,49 +825,6 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       />
                     );
                   })}
-                </div>
-              </motion.div>
-            ) : (
-              <motion.div
-                key="sidebar-collapsed"
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={microSpring}
-                className="w-16 h-full flex flex-col items-center py-4 gap-4"
-              >
-                <Link
-                  href="/components"
-                  title="All Components"
-                  className="w-9 h-9 rounded-lg border border-white/5 bg-zinc-900/60 hover:bg-zinc-800 text-zinc-400 hover:text-white flex items-center justify-center transition-colors"
-                >
-                  <LayersIcon className="w-4 h-4" />
-                </Link>
-                <div className="w-6 h-px bg-white/5" />
-                <div className="flex flex-col gap-2">
-                  {CATEGORIES.map((cat, idx) => (
-                    <button
-                      key={cat.label}
-                      type="button"
-                      onClick={() => {
-                        const first = cat.items[0];
-                        if (first) {
-                          handleSelectSlug(first.slug);
-                        }
-                      }}
-                      title={cat.label}
-                      className={cn(
-                        "w-9 h-9 rounded-lg transition-colors font-mono text-[10px] flex items-center justify-center cursor-pointer",
-                        cat.items.some(
-                          (item) => item.slug === activeComponent.slug,
-                        )
-                          ? "bg-orange-500/15 text-orange-400 border border-orange-500/30"
-                          : "text-zinc-500 hover:text-zinc-200 hover:bg-white/5",
-                      )}
-                    >
-                      0{idx + 1}
-                    </button>
-                  ))}
                 </div>
               </motion.div>
             )}
@@ -1196,7 +1152,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           }
                           className="w-full accent-white h-1 bg-white/10 rounded cursor-pointer"
                         />
-                        <span className="text-zinc-100 font-mono font-medium shrink-0 min-w-10.5 text-right">
+                        <span className="text-zinc-100 font-medium shrink-0 min-w-10.5 text-right">
                           {sparkleConfig.delay}ms
                         </span>
                       </div>
@@ -1220,7 +1176,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           }
                           className="w-full accent-white h-1 bg-white/10 rounded cursor-pointer"
                         />
-                        <span className="text-zinc-100 font-mono font-medium shrink-0 min-w-10.5 text-right">
+                        <span className="text-zinc-100 font-medium shrink-0 min-w-10.5 text-right">
                           {(sparkleConfig.stepDuration * 1000).toFixed(0)}ms
                         </span>
                       </div>
@@ -1242,7 +1198,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           }
                           className="w-full accent-white h-1 bg-white/10 rounded cursor-pointer"
                         />
-                        <span className="text-zinc-100 font-mono font-medium shrink-0 min-w-10.5 text-right">
+                        <span className="text-zinc-100 font-medium shrink-0 min-w-10.5 text-right">
                           {(sparkleConfig.dissolveDuration * 1000).toFixed(0)}
                           ms
                         </span>
@@ -1267,7 +1223,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           }
                           className="w-full accent-white h-1 bg-white/10 rounded cursor-pointer"
                         />
-                        <span className="text-zinc-100 font-mono font-medium shrink-0 min-w-10.5 text-right">
+                        <span className="text-zinc-100 font-medium shrink-0 min-w-10.5 text-right">
                           {sparkleConfig.springStiffness}
                         </span>
                       </div>
@@ -1305,7 +1261,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               type="button"
                               onClick={() => setOtpStatus(s)}
                               className={cn(
-                                "relative h-7 px-2.5 rounded-lg text-xs font-mono capitalize transition-colors cursor-pointer flex items-center justify-center",
+                                "relative h-7 px-2.5 rounded-lg text-xs capitalize transition-colors cursor-pointer flex items-center justify-center",
                                 otpStatus === s
                                   ? "text-black font-semibold"
                                   : "text-zinc-400 hover:text-white",
@@ -1335,7 +1291,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             setOtpValue("729481");
                             setOtpStatus("success");
                           }}
-                          className="h-7 px-2.5 rounded-lg text-xs font-mono text-zinc-300 hover:text-white hover:bg-white/5 transition-colors cursor-pointer flex items-center justify-center"
+                          className="h-7 px-2.5 rounded-lg text-xs text-zinc-300 hover:text-white hover:bg-white/5 transition-colors cursor-pointer flex items-center justify-center"
                         >
                           Auto-fill
                         </button>
@@ -1374,7 +1330,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               type="button"
                               onClick={() => setOtpSize(sz)}
                               className={cn(
-                                "relative px-2 py-0.5 rounded text-[11px] font-mono uppercase transition-colors cursor-pointer",
+                                "relative px-2 py-0.5 rounded text-[11px] uppercase transition-colors cursor-pointer",
                                 otpSize === sz
                                   ? "text-black font-semibold"
                                   : "text-zinc-400 hover:text-white",
