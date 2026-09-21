@@ -18,6 +18,8 @@ import { CodeBlock } from "@/registry/ui/code-block";
 import { SmoothAccordion } from "@/registry/ui/smooth-accordion";
 import { Accordion } from "@/registry/ui/accordion";
 import { DottedAccordion } from "@/registry/ui/dotted-accordion";
+import { Dither } from "@/registry/ui/dither";
+import { AiOrb } from "@/registry/ui/ai-orb";
 import { cn } from "@/lib/utils";
 
 function CounterPreview() {
@@ -213,6 +215,25 @@ export default function ComponentsPage() {
             },
           ]}
         />
+      </div>
+    ),
+    dither: (
+      <div className="w-full h-44 rounded-lg overflow-hidden border border-white/10 relative pointer-events-none">
+        <Dither
+          color1="#FF9FFC"
+          color2="#5227FF"
+          color3="#0A0A10"
+          grainAmount={0.12}
+          grainScale={2.0}
+          warpStrength={1.0}
+          timeSpeed={0.25}
+          className="w-full h-full"
+        />
+      </div>
+    ),
+    "ai-orb": (
+      <div className="flex items-center justify-center p-2 scale-75 origin-center pointer-events-none">
+        <AiOrb size={130} />
       </div>
     ),
   };

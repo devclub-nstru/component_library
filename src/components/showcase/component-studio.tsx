@@ -913,7 +913,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         );
       case "dither":
         return (
-          <div className="w-full max-w-2xl h-80 rounded-2xl overflow-hidden border border-white/10 shadow-2xl relative">
+          <div className="absolute inset-0 w-full h-full overflow-hidden">
             <Dither
               color1={color}
               color2="#5227FF"
@@ -923,6 +923,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               grainAnimated={true}
               warpStrength={1.2}
               timeSpeed={0.25}
+              className="w-full h-full"
             />
           </div>
         );
@@ -1440,7 +1441,14 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
             </div>
           </div>
 
-          <div className="flex-1 flex items-center justify-center p-6 overflow-hidden relative">
+          <div
+            className={cn(
+              "flex-1 flex items-center justify-center overflow-hidden relative",
+              activeComponent.slug === "dither" && viewport === "desktop"
+                ? "p-0"
+                : "p-6",
+            )}
+          >
             <div className="absolute inset-0 bg-[radial-gradient(#27272a_1px,transparent_1px)] bg-size-[20px_20px] opacity-15 pointer-events-none" />
 
             <motion.div
@@ -1481,7 +1489,10 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.97, y: -10 }}
                   transition={panelSpring}
-                  className="w-full h-full flex items-center justify-center p-6 overflow-auto"
+                  className={cn(
+                    "w-full h-full flex items-center justify-center overflow-auto",
+                    activeComponent.slug === "dither" ? "p-0" : "p-6",
+                  )}
                 >
                   {renderComponentPreview(activeComponent.slug, activeColor)}
                 </motion.div>
