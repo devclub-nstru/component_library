@@ -350,86 +350,45 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     switch (slug) {
       case "candy-button":
         return (
-          <div className="w-full max-w-md bg-[#0c0c0e] border border-white/10 rounded-2xl p-6 shadow-2xl flex flex-col gap-6 select-none">
-            <div className="flex items-center justify-between pb-3 border-b border-white/8">
-              <div>
-                <h3 className="text-sm font-medium text-white">
-                  Candy Button System
-                </h3>
-                <p className="text-[11px] text-zinc-400 font-light mt-0.5">
-                  Specular glass reflection & radial convex lighting
-                </p>
-              </div>
-              <span
-                className="text-[10px] font-mono uppercase font-medium transition-colors duration-200"
-                style={{ color }}
+          <div className="flex flex-col items-center justify-center gap-7 select-none max-w-2xl w-full p-4">
+            <div className="flex flex-wrap items-center justify-center gap-3.5">
+              <CandyButton
+                color={color}
+                size="lg"
+                rightIcon={<ArrowRightIcon className="h-4 w-4" />}
               >
-                Tactile 3D
-              </span>
+                Interactive Action
+              </CandyButton>
+              <CandyButton color={color} size="default">
+                Get Started
+              </CandyButton>
+              <CandyButton color={color} size="sm">
+                Explore
+              </CandyButton>
+              <CandyButton color={color} size="icon">
+                <CheckIcon className="h-4 w-4" />
+              </CandyButton>
             </div>
 
-            <div className="flex flex-col gap-4">
-              <div className="flex flex-col gap-1.5">
-                <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
-                  Dynamic Studio Theme
-                </span>
-                <CandyButton
-                  color={color}
-                  size="default"
-                  className="w-full justify-between"
-                  rightIcon={<ArrowRightIcon className="h-4 w-4" />}
-                >
-                  <span>Interactive Action</span>
-                </CandyButton>
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
-                  Preset Gemstones
-                </span>
-                <div className="grid grid-cols-3 gap-2">
-                  <CandyButton variant="emerald" size="sm" className="w-full">
-                    Emerald
-                  </CandyButton>
-                  <CandyButton variant="ruby" size="sm" className="w-full">
-                    Ruby
-                  </CandyButton>
-                  <CandyButton variant="amber" size="sm" className="w-full">
-                    Amber
-                  </CandyButton>
-                  <CandyButton variant="violet" size="sm" className="w-full">
-                    Violet
-                  </CandyButton>
-                  <CandyButton variant="azure" size="sm" className="w-full">
-                    Azure
-                  </CandyButton>
-                  <CandyButton variant="obsidian" size="sm" className="w-full">
-                    Obsidian
-                  </CandyButton>
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
-                  Precision Sizing
-                </span>
-                <div className="flex items-center gap-2">
-                  <CandyButton variant="emerald" size="sm">
-                    Small
-                  </CandyButton>
-                  <CandyButton variant="emerald" size="default">
-                    Default
-                  </CandyButton>
-                  <CandyButton variant="emerald" size="icon">
-                    <CheckIcon className="h-4 w-4" />
-                  </CandyButton>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between pt-3 border-t border-white/8 text-[11px] font-mono text-zinc-500">
-              <span>Specular: 1px linear fade</span>
-              <span className="text-zinc-400">dradix Optics</span>
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              <CandyButton variant="emerald" size="default">
+                Emerald
+              </CandyButton>
+              <CandyButton variant="ruby" size="default">
+                Ruby
+              </CandyButton>
+              <CandyButton variant="amber" size="default">
+                Amber
+              </CandyButton>
+              <CandyButton variant="violet" size="default">
+                Violet
+              </CandyButton>
+              <CandyButton variant="azure" size="default">
+                Azure
+              </CandyButton>
+              <CandyButton variant="obsidian" size="default">
+                Obsidian
+              </CandyButton>
             </div>
           </div>
         );
@@ -617,7 +576,10 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
             />
 
             <div className="relative w-80 sm:w-96 max-w-full shrink-0 rounded-xl px-px has-focus-visible:outline-2 has-focus-visible:outline-offset-4 has-focus-visible:outline-[#868593]">
-              <div aria-hidden className="flex h-8 w-full items-end justify-between">
+              <div
+                aria-hidden
+                className="flex h-8 w-full items-end justify-between"
+              >
                 {Array.from({ length: TICKS }, (_, index) =>
                   index === marker ? (
                     <span

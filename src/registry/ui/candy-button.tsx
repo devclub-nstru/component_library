@@ -26,18 +26,18 @@ export interface CandyButtonProps extends React.ButtonHTMLAttributes<HTMLButtonE
 
 const variantStyles: Record<CandyButtonVariant, string> = {
   emerald:
-    "bg-[radial-gradient(95%_60%_at_50%_75%,#005451_0%,#002927_100%)] text-white shadow-[0px_4px_24px_-6px_rgba(0,60,58,0.6),inset_0px_1px_4px_0px_rgba(255,255,255,0.4),inset_0px_-2px_4px_0px_rgba(0,0,0,0.3)] hover:shadow-[0px_6px_28px_-4px_rgba(0,60,58,0.75),inset_0px_1px_4px_0px_rgba(255,255,255,0.5),inset_0px_-2px_4px_0px_rgba(0,0,0,0.3)]",
-  ruby: "bg-[radial-gradient(95%_60%_at_50%_75%,#dc2626_0%,#991b1b_100%)] text-white shadow-[0px_4px_24px_-6px_rgba(220,38,38,0.6),inset_0px_1px_4px_0px_rgba(255,255,255,0.4),inset_0px_-2px_4px_0px_rgba(0,0,0,0.3)] hover:shadow-[0px_6px_28px_-4px_rgba(220,38,38,0.75),inset_0px_1px_4px_0px_rgba(255,255,255,0.5),inset_0px_-2px_4px_0px_rgba(0,0,0,0.3)]",
+    "bg-[radial-gradient(120%_80%_at_50%_70%,#006a66_0%,#003835_100%)] text-white shadow-[0px_4px_24px_-6px_rgba(0,106,102,0.5),inset_0px_1px_4px_0px_rgba(255,255,255,0.4),inset_0px_-2px_4px_0px_rgba(0,0,0,0.15)] hover:shadow-[0px_6px_28px_-4px_rgba(0,106,102,0.65),inset_0px_1px_4px_0px_rgba(255,255,255,0.5),inset_0px_-2px_4px_0px_rgba(0,0,0,0.15)]",
+  ruby: "bg-[radial-gradient(120%_80%_at_50%_70%,#e11d48_0%,#9f1239_100%)] text-white shadow-[0px_4px_24px_-6px_rgba(225,29,72,0.5),inset_0px_1px_4px_0px_rgba(255,255,255,0.4),inset_0px_-2px_4px_0px_rgba(0,0,0,0.15)] hover:shadow-[0px_6px_28px_-4px_rgba(225,29,72,0.65),inset_0px_1px_4px_0px_rgba(255,255,255,0.5),inset_0px_-2px_4px_0px_rgba(0,0,0,0.15)]",
   amber:
-    "bg-[radial-gradient(95%_60%_at_50%_75%,#ea580c_0%,#9a3412_100%)] text-white shadow-[0px_4px_24px_-6px_rgba(234,88,12,0.6),inset_0px_1px_4px_0px_rgba(255,255,255,0.4),inset_0px_-2px_4px_0px_rgba(0,0,0,0.3)] hover:shadow-[0px_6px_28px_-4px_rgba(234,88,12,0.75),inset_0px_1px_4px_0px_rgba(255,255,255,0.5),inset_0px_-2px_4px_0px_rgba(0,0,0,0.3)]",
+    "bg-[radial-gradient(120%_80%_at_50%_70%,#f59e0b_0%,#b45309_100%)] text-white shadow-[0px_4px_24px_-6px_rgba(245,158,11,0.5),inset_0px_1px_4px_0px_rgba(255,255,255,0.4),inset_0px_-2px_4px_0px_rgba(0,0,0,0.15)] hover:shadow-[0px_6px_28px_-4px_rgba(245,158,11,0.65),inset_0px_1px_4px_0px_rgba(255,255,255,0.5),inset_0px_-2px_4px_0px_rgba(0,0,0,0.15)]",
   violet:
-    "bg-[radial-gradient(95%_60%_at_50%_75%,#7c3aed_0%,#4c1d95_100%)] text-white shadow-[0px_4px_24px_-6px_rgba(124,58,237,0.6),inset_0px_1px_4px_0px_rgba(255,255,255,0.4),inset_0px_-2px_4px_0px_rgba(0,0,0,0.3)] hover:shadow-[0px_6px_28px_-4px_rgba(124,58,237,0.75),inset_0px_1px_4px_0px_rgba(255,255,255,0.5),inset_0px_-2px_4px_0px_rgba(0,0,0,0.3)]",
+    "bg-[radial-gradient(120%_80%_at_50%_70%,#8b5cf6_0%,#581c87_100%)] text-white shadow-[0px_4px_24px_-6px_rgba(139,92,246,0.5),inset_0px_1px_4px_0px_rgba(255,255,255,0.4),inset_0px_-2px_4px_0px_rgba(0,0,0,0.15)] hover:shadow-[0px_6px_28px_-4px_rgba(139,92,246,0.65),inset_0px_1px_4px_0px_rgba(255,255,255,0.5),inset_0px_-2px_4px_0px_rgba(0,0,0,0.15)]",
   azure:
-    "bg-[radial-gradient(95%_60%_at_50%_75%,#0284c7_0%,#0369a1_100%)] text-white shadow-[0px_4px_24px_-6px_rgba(2,132,199,0.6),inset_0px_1px_4px_0px_rgba(255,255,255,0.4),inset_0px_-2px_4px_0px_rgba(0,0,0,0.3)] hover:shadow-[0px_6px_28px_-4px_rgba(2,132,199,0.75),inset_0px_1px_4px_0px_rgba(255,255,255,0.5),inset_0px_-2px_4px_0px_rgba(0,0,0,0.3)]",
+    "bg-[radial-gradient(120%_80%_at_50%_70%,#0ea5e9_0%,#0369a1_100%)] text-white shadow-[0px_4px_24px_-6px_rgba(14,165,233,0.5),inset_0px_1px_4px_0px_rgba(255,255,255,0.4),inset_0px_-2px_4px_0px_rgba(0,0,0,0.15)] hover:shadow-[0px_6px_28px_-4px_rgba(14,165,233,0.65),inset_0px_1px_4px_0px_rgba(255,255,255,0.5),inset_0px_-2px_4px_0px_rgba(0,0,0,0.15)]",
   obsidian:
-    "bg-[radial-gradient(95%_60%_at_50%_75%,#27272a_0%,#121214_100%)] text-zinc-100 border border-white/10 shadow-[0px_4px_24px_-6px_rgba(0,0,0,0.7),inset_0px_1px_3px_0px_rgba(255,255,255,0.25),inset_0px_-2px_4px_0px_rgba(0,0,0,0.4)] hover:shadow-[0px_6px_28px_-4px_rgba(0,0,0,0.85),inset_0px_1px_3px_0px_rgba(255,255,255,0.35),inset_0px_-2px_4px_0px_rgba(0,0,0,0.4)]",
+    "bg-[radial-gradient(120%_80%_at_50%_70%,#3f3f46_0%,#18181b_100%)] text-zinc-100 border border-white/10 shadow-[0px_4px_20px_-6px_rgba(0,0,0,0.4),inset_0px_1px_3px_0px_rgba(255,255,255,0.25),inset_0px_-2px_4px_0px_rgba(0,0,0,0.2)] hover:shadow-[0px_6px_24px_-4px_rgba(0,0,0,0.5),inset_0px_1px_3px_0px_rgba(255,255,255,0.35),inset_0px_-2px_4px_0px_rgba(0,0,0,0.2)]",
   pearl:
-    "bg-[radial-gradient(95%_60%_at_50%_75%,#ffffff_0%,#d4d4d8_100%)] text-zinc-950 shadow-[0px_4px_20px_-6px_rgba(255,255,255,0.35),inset_0px_1px_3px_0px_rgba(255,255,255,0.9),inset_0px_-2px_4px_0px_rgba(0,0,0,0.15)] hover:shadow-[0px_6px_24px_-4px_rgba(255,255,255,0.45),inset_0px_1px_3px_0px_rgba(255,255,255,1),inset_0px_-2px_4px_0px_rgba(0,0,0,0.15)]",
+    "bg-[radial-gradient(120%_80%_at_50%_70%,#ffffff_0%,#e4e4e7_100%)] text-zinc-950 shadow-[0px_4px_20px_-6px_rgba(255,255,255,0.35),inset_0px_1px_3px_0px_rgba(255,255,255,0.9),inset_0px_-2px_4px_0px_rgba(0,0,0,0.08)] hover:shadow-[0px_6px_24px_-4px_rgba(255,255,255,0.45),inset_0px_1px_3px_0px_rgba(255,255,255,1),inset_0px_-2px_4px_0px_rgba(0,0,0,0.08)]",
 };
 
 const sizeStyles: Record<CandyButtonSize, string> = {
@@ -72,10 +72,10 @@ export const CandyButton = React.forwardRef<
 
     const customStyle: React.CSSProperties = isCustom
       ? {
-          background: `radial-gradient(95% 60% at 50% 75%, ${color} 0%, color-mix(in srgb, ${color} 25%, black) 100%)`,
+          background: `radial-gradient(120% 80% at 50% 70%, ${color} 0%, color-mix(in srgb, ${color} 50%, black) 100%)`,
           boxShadow: glow
-            ? `0px 4px 24px -6px color-mix(in srgb, ${color} 65%, transparent), inset 0px 1px 4px 0px rgba(255, 255, 255, 0.45), inset 0px -2px 4px 0px rgba(0, 0, 0, 0.3)`
-            : `inset 0px 1px 4px 0px rgba(255, 255, 255, 0.45), inset 0px -2px 4px 0px rgba(0, 0, 0, 0.3)`,
+            ? `0px 4px 24px -6px color-mix(in srgb, ${color} 65%, transparent), inset 0px 1px 4px 0px rgba(255, 255, 255, 0.45), inset 0px -2px 4px 0px rgba(0, 0, 0, 0.15)`
+            : `inset 0px 1px 4px 0px rgba(255, 255, 255, 0.45), inset 0px -2px 4px 0px rgba(0, 0, 0, 0.15)`,
           color: "#ffffff",
           ...style,
         }
