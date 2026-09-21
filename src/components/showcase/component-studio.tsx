@@ -255,6 +255,13 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     return getComponentBySlug(selectedSlug) || component;
   }, [selectedSlug, component]);
 
+  const supportsColor = Boolean(
+    activeComponent.supportsColor ??
+      ["hook-sidebar", "animated-button", "spotlight-card", "glowing-badge"].includes(
+        activeComponent.slug,
+      ),
+  );
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -327,7 +334,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 </p>
               </div>
               <span
-                className="text-[10px] font-mono uppercase font-medium"
+                className="text-[10px] font-mono uppercase font-medium transition-colors duration-200"
                 style={{ color }}
               >
                 Spring
@@ -338,7 +345,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 variant="primary"
                 showArrow
                 style={{ backgroundColor: color }}
-                className="w-full justify-between"
+                className="w-full justify-between text-white shadow-lg transition-colors duration-200"
               >
                 <span>Primary Action</span>
               </AnimatedButton>
@@ -405,10 +412,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   Repeating linear gradient borders
                 </p>
               </div>
-              <span
-                className="text-[10px] font-mono uppercase font-medium"
-                style={{ color }}
-              >
+              <span className="text-[10px] font-mono uppercase font-medium text-zinc-400">
                 Grid
               </span>
             </div>
@@ -426,7 +430,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
           <div className="w-full max-w-md">
             <SpotlightCard
               className="p-6 border-white/10 bg-[#0c0c0e]"
-              spotlightColor={color}
+              spotlightColor={color.startsWith("#") ? `${color}30` : color}
             >
               <h4 className="text-base font-medium text-white">
                 Radial Spotlight
@@ -436,7 +440,12 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               </p>
               <div className="mt-6 pt-4 border-t border-white/8 flex items-center justify-between text-[11px] font-mono text-zinc-500">
                 <span>Tailwind CSS</span>
-                <span style={{ color }}>Active Theme</span>
+                <span
+                  className="transition-colors duration-200 font-medium"
+                  style={{ color }}
+                >
+                  Active Theme
+                </span>
               </div>
             </SpotlightCard>
           </div>
@@ -468,6 +477,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   borderColor: `${color}60`,
                   color,
                   boxShadow: `0 0 20px ${color}35`,
+                  transition:
+                    "color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease",
                 }}
               >
                 LIVE
@@ -572,7 +583,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             }
                           },
                         }))}
-                        color={activeColor}
+                        color="#F97316"
                         dashed={true}
                       />
                     );
@@ -829,54 +840,82 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               </AnimatePresence>
             </motion.div>
 
-            <motion.div
-              drag
-              dragListener={false}
-              dragControls={dragControls}
-              dragMomentum={false}
-              dragElastic={0.1}
-              dragConstraints={{
-                left: -260,
-                right: 260,
-                top: -350,
-                bottom: 20,
-              }}
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={panelSpring}
-              className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 rounded-full border border-white/10 bg-[#141416]/95 backdrop-blur-2xl px-3.5 py-2 shadow-[0_12px_36px_rgba(0,0,0,0.85)] flex items-center gap-2.5 select-none"
-            >
-              <div
-                onPointerDown={(e) => dragControls.start(e)}
-                className="cursor-grab active:cursor-grabbing text-zinc-500 hover:text-zinc-300 pr-1 flex items-center touch-none"
-              >
-                <DragHandleDots2Icon className="w-4 h-4" />
-              </div>
+            <div className="absolute bottom-6 inset-x-0 flex justify-center pointer-events-none z-30">
+              <AnimatePresence>
+                {supportsColor && (
+                  <motion.div
+                    key="floating-color-palette"
+                    drag
+                    dragListener={false}
+                    dragControls={dragControls}
+                    dragMomentum={false}
+                    dragElastic={0.15}
+                    dragConstraints={{
+                      left: -260,
+                      right: 260,
+                      top: -360,
+                      bottom: 16,
+                    }}
+                    initial={{ opacity: 0, y: 22, scale: 0.93, filter: "blur(6px)" }}
+                    animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+                    exit={{ opacity: 0, y: 16, scale: 0.93, filter: "blur(6px)" }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 400,
+                      damping: 32,
+                      mass: 0.8,
+                    }}
+                    className="pointer-events-auto rounded-full border border-white/10 bg-[#141416]/95 backdrop-blur-2xl px-3.5 py-2 shadow-[0_12px_36px_rgba(0,0,0,0.85)] flex items-center gap-2.5 select-none"
+                  >
+                    <div
+                      onPointerDown={(e) => dragControls.start(e)}
+                      className="cursor-grab active:cursor-grabbing text-zinc-500 hover:text-zinc-300 pr-1 flex items-center touch-none"
+                      title="Drag to move"
+                    >
+                      <DragHandleDots2Icon className="w-4 h-4" />
+                    </div>
 
-              <div className="flex items-center gap-2">
-                {PALETTE.map((p) => {
-                  const isSelected = activeColor === p.hex;
-                  return (
-                    <motion.button
-                      key={p.id}
-                      whileHover={{ scale: 1.12 }}
-                      whileTap={{ scale: 0.92 }}
-                      transition={microSpring}
-                      type="button"
-                      onClick={() => setActiveColor(p.hex)}
-                      title={p.label}
-                      style={{ backgroundColor: p.hex }}
-                      className={cn(
-                        "w-7 h-7 rounded-xl transition-all cursor-pointer shadow-md",
-                        isSelected
-                          ? "scale-110 ring-2 ring-white/90 ring-offset-2 ring-offset-black"
-                          : "opacity-75 hover:opacity-100",
-                      )}
-                    />
-                  );
-                })}
-              </div>
-            </motion.div>
+                    <div className="flex items-center gap-2">
+                      {PALETTE.map((p) => {
+                        const isSelected = activeColor === p.hex;
+                        return (
+                          <motion.button
+                            key={p.id}
+                            type="button"
+                            onClick={() => setActiveColor(p.hex)}
+                            title={p.label}
+                            animate={{
+                              scale: isSelected ? 1.12 : 1,
+                              opacity: isSelected ? 1 : 0.72,
+                            }}
+                            whileHover={{
+                              scale: isSelected ? 1.18 : 1.08,
+                              opacity: 1,
+                            }}
+                            whileTap={{ scale: 0.92 }}
+                            transition={microSpring}
+                            style={{ backgroundColor: p.hex }}
+                            className="relative w-7 h-7 rounded-xl cursor-pointer shadow-md flex items-center justify-center"
+                          >
+                            {isSelected && (
+                              <motion.span
+                                layoutId="activeColorRing"
+                                className="absolute -inset-1 rounded-2xl ring-2 ring-white/90 ring-offset-2 ring-offset-black pointer-events-none"
+                                transition={{
+                                  type: "spring",
+                                  stiffness: 500,
+                                  damping: 35,
+                                }}
+                              />
+                            )}
+                          </motion.button>
+                        );
+                      })}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
           </div>
 
           <AnimatePresence>

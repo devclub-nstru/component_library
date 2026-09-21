@@ -64,6 +64,7 @@ export interface ComponentItem {
   }[];
   props?: ComponentProp[];
   interactive?: boolean;
+  supportsColor?: boolean;
 }
 
 export interface ComponentRegistryItem extends ComponentItem {

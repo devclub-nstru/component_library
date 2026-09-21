@@ -58,7 +58,7 @@ const Rail = ({
     <motion.span
       aria-hidden
       initial={false}
-      style={{ color }}
+      style={{ color, transition: "color 0.25s ease" }}
       animate={{ opacity: visible && y !== null ? 1 : 0 }}
       transition={reduced ? { duration: 0 } : { duration: 0.2 }}
       className={cn("pointer-events-none absolute inset-0", className)}

@@ -13,6 +13,7 @@ export const COMPONENT_REGISTRY: Record<string, ComponentRegistryItem> = {
     createdDate: "2026-09-10",
     updatedDate: "2026-09-10",
     interactive: true,
+    supportsColor: false,
     highlights: [
       "Pure CSS repeating-linear-gradient shader rendering with zero JavaScript overhead",
       "Zero cumulative layout shift (CLS 0.0) with GPU-accelerated compositing",
@@ -116,6 +117,7 @@ export const Lines = ({ className }: { className?: string }) => {
     createdDate: "2026-09-10",
     updatedDate: "2026-09-10",
     interactive: true,
+    supportsColor: true,
     highlights: [
       "Four production-ready visual variants tuned for dark-mode interfaces",
       "Infinite 2-second linear-gradient shimmer light sweep with zero CPU overhead",
@@ -284,6 +286,7 @@ AnimatedButton.displayName = "AnimatedButton";`,
     createdDate: "2026-09-10",
     updatedDate: "2026-09-10",
     interactive: true,
+    supportsColor: true,
     highlights: [
       "Client-side pointer calculation with getBoundingClientRect() coordinate tracking",
       "600px radial gradient spotlight with exponential 40% falloff curve",
@@ -447,6 +450,7 @@ SpotlightCard.displayName = "SpotlightCard";`,
     createdDate: "2026-09-10",
     updatedDate: "2026-09-10",
     interactive: true,
+    supportsColor: true,
     highlights: [
       "Four curated semantic color schemes with matching diffuse radial glow drop shadows",
       "Concentric dual-element ping pulse with 75% peak opacity and infinite loop",
@@ -594,6 +598,7 @@ export const GlowingBadge = ({
     createdDate: "2026-09-20",
     updatedDate: "2026-09-20",
     interactive: true,
+    supportsColor: true,
     highlights: [
       "Continuous SVG vector path interpolation (M0.5 0a6 6 0 0 0 6 6H12) with 6px corner curve",
       "Real-time DOM element measuring with ResizeObserver and requestAnimationFrame",
@@ -960,6 +965,7 @@ export function HookSidebar({
     createdDate: "2026-09-20",
     updatedDate: "2026-09-20",
     interactive: true,
+    supportsColor: false,
     highlights: [
       "26×7 contribution cell matrix with pseudo-random seed distribution generator",
       "5-tier GitHub emerald color grading (bg-[#161b22] through bg-[#39d353])",
@@ -1268,6 +1274,7 @@ export function GitHubActivity({
     createdDate: "2026-09-10",
     updatedDate: "2026-09-10",
     interactive: true,
+    supportsColor: false,
     highlights: [
       "Asymmetric 3-column CSS Grid with automatic single-column mobile collapse",
       "Configurable colSpan spans (col-span-1, col-span-2, col-span-3) on desktop",
