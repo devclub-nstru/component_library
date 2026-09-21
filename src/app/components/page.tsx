@@ -20,6 +20,7 @@ import { Accordion } from "@/registry/ui/accordion";
 import { DottedAccordion } from "@/registry/ui/dotted-accordion";
 import { Dither } from "@/registry/ui/dither";
 import { AiOrb } from "@/registry/ui/ai-orb";
+import { TwitterCard } from "@/registry/ui/twitter-card";
 import { cn } from "@/lib/utils";
 
 function CounterPreview() {
@@ -75,6 +76,16 @@ export default function ComponentsPage() {
       <div className="w-full max-w-70 flex flex-col gap-3">
         <HorizontalScale className="w-full h-8" />
         <Lines className="w-full h-10" />
+      </div>
+    ),
+    "twitter-card": (
+      <div className="flex flex-col items-center justify-center scale-[0.62] origin-center select-none">
+        <TwitterCard
+          username="hey_krishnna"
+          name="KRISHNA 🤍"
+          staticCard={true}
+          enableCardTilt={false}
+        />
       </div>
     ),
     "otp-input": (

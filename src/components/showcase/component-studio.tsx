@@ -47,6 +47,7 @@ import {
 } from "@/registry/ui/proximity-sidebar";
 import { Dither } from "@/registry/ui/dither";
 import { AiOrb } from "@/registry/ui/ai-orb";
+import { TwitterCard } from "@/registry/ui/twitter-card";
 import { cn } from "@/lib/utils";
 
 interface ComponentStudioProps {
@@ -59,6 +60,11 @@ const ALL_CATEGORIES = [
     label: "DISPLAY",
     items: [
       { label: "Scales & Borders", slug: "scales", href: "/components/scales" },
+      {
+        label: "Twitter(X) Card",
+        slug: "twitter-card",
+        href: "/components/twitter-card",
+      },
       {
         label: "Spotlight Card",
         slug: "spotlight-card",
@@ -607,6 +613,26 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     setOtpGrouped(false);
   };
 
+  const [twitterCardConfig, setTwitterCardConfig] = useState({
+    username: "hey_krishnna",
+    staticCard: false,
+    enableCardTilt: true,
+    enableLinkTilt: true,
+    cardTiltMaxRotate: 6,
+    linkTiltMaxRotate: 5,
+  });
+
+  const resetTwitterCardConfig = () => {
+    setTwitterCardConfig({
+      username: "hey_krishnna",
+      staticCard: false,
+      enableCardTilt: true,
+      enableLinkTilt: true,
+      cardTiltMaxRotate: 6,
+      linkTiltMaxRotate: 5,
+    });
+  };
+
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [activePanel, setActivePanel] = useState<"none" | "info" | "code">(
     "none",
@@ -909,6 +935,19 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 </div>
               ))}
             </div>
+          </div>
+        );
+      case "twitter-card":
+        return (
+          <div className="flex h-full w-full items-center justify-center p-12 select-none">
+            <TwitterCard
+              username={twitterCardConfig.username}
+              staticCard={twitterCardConfig.staticCard}
+              enableCardTilt={twitterCardConfig.enableCardTilt}
+              enableLinkTilt={twitterCardConfig.enableLinkTilt}
+              cardTiltMaxRotate={twitterCardConfig.cardTiltMaxRotate}
+              linkTiltMaxRotate={twitterCardConfig.linkTiltMaxRotate}
+            />
           </div>
         );
       case "dither":
@@ -1695,6 +1734,166 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         />
                         <span className="text-zinc-100 font-medium shrink-0 min-w-10.5 text-right">
                           {sparkleConfig.springStiffness}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeComponent.slug === "twitter-card" && (
+                <div
+                  key="twitter-customize-panel"
+                  className="pointer-events-auto rounded-2xl border border-white/10 bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-xl w-full mx-4 select-none flex flex-col gap-2.5"
+                >
+                  <div className="flex items-center justify-between px-1">
+                    <span className="text-xs font-semibold text-white/90 tracking-tight">
+                      Customize
+                    </span>
+                    <button
+                      type="button"
+                      onClick={resetTwitterCardConfig}
+                      className="text-[11px] text-zinc-400 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                    >
+                      <ResetIcon className="w-3.5 h-3.5" />
+                      <span>Reset</span>
+                    </button>
+                  </div>
+
+                  <div className="rounded-xl border border-white/5 bg-[#0b0b0e] p-1.5 flex flex-col gap-1.5">
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-1.5 pb-1.5 border-b border-white/5">
+                      <div className="flex items-center gap-0.5 bg-[#17171b] p-1 rounded-xl border border-white/5">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setTwitterCardConfig((prev) => ({
+                              ...prev,
+                              staticCard: false,
+                            }))
+                          }
+                          className={cn(
+                            "relative h-7 px-3 rounded-lg text-xs transition-colors cursor-pointer flex items-center justify-center",
+                            !twitterCardConfig.staticCard
+                              ? "text-black font-semibold"
+                              : "text-zinc-400 hover:text-white",
+                          )}
+                        >
+                          {!twitterCardConfig.staticCard && (
+                            <motion.div
+                              layoutId="activeTwitterModeIndicator"
+                              transition={{
+                                type: "spring",
+                                stiffness: 450,
+                                damping: 32,
+                              }}
+                              className="absolute inset-0 bg-white rounded-lg shadow-xs"
+                            />
+                          )}
+                          <span className="relative z-10">Trigger Popover</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setTwitterCardConfig((prev) => ({
+                              ...prev,
+                              staticCard: true,
+                            }))
+                          }
+                          className={cn(
+                            "relative h-7 px-3 rounded-lg text-xs transition-colors cursor-pointer flex items-center justify-center",
+                            twitterCardConfig.staticCard
+                              ? "text-black font-semibold"
+                              : "text-zinc-400 hover:text-white",
+                          )}
+                        >
+                          {twitterCardConfig.staticCard && (
+                            <motion.div
+                              layoutId="activeTwitterModeIndicator"
+                              transition={{
+                                type: "spring",
+                                stiffness: 450,
+                                damping: 32,
+                              }}
+                              className="absolute inset-0 bg-white rounded-lg shadow-xs"
+                            />
+                          )}
+                          <span className="relative z-10">Static Card</span>
+                        </button>
+                      </div>
+
+                      <div className="flex items-center gap-1 bg-[#17171b] p-1 rounded-xl border border-white/5">
+                        {["hey_krishnna", "karpathy", "shadcn"].map(
+                          (handle) => (
+                            <button
+                              key={handle}
+                              type="button"
+                              onClick={() =>
+                                setTwitterCardConfig((prev) => ({
+                                  ...prev,
+                                  username: handle,
+                                }))
+                              }
+                              className={cn(
+                                "h-7 px-2.5 rounded-lg text-xs transition-colors cursor-pointer",
+                                twitterCardConfig.username === handle
+                                  ? "bg-white/10 text-white font-medium"
+                                  : "text-zinc-400 hover:text-white",
+                              )}
+                            >
+                              @{handle}
+                            </button>
+                          ),
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 pt-1">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setTwitterCardConfig((prev) => ({
+                            ...prev,
+                            enableCardTilt: !prev.enableCardTilt,
+                          }))
+                        }
+                        className="rounded-lg border border-white/5 bg-[#17171b] hover:bg-[#1f1f25] px-3 py-2 flex items-center justify-between text-xs transition-colors cursor-pointer"
+                      >
+                        <span className="text-zinc-400">Card 3D Tilt</span>
+                        <span
+                          className={cn(
+                            "font-medium",
+                            twitterCardConfig.enableCardTilt
+                              ? "text-emerald-400"
+                              : "text-zinc-500",
+                          )}
+                        >
+                          {twitterCardConfig.enableCardTilt
+                            ? "Enabled"
+                            : "Disabled"}
+                        </span>
+                      </button>
+
+                      <div className="rounded-lg border border-white/5 bg-[#17171b] px-3 py-2 flex items-center justify-between gap-2.5 text-xs">
+                        <span className="text-zinc-400 shrink-0">
+                          Tilt Angle
+                        </span>
+                        <div className="h-3.5 w-px bg-white/10 shrink-0" />
+                        <input
+                          type="range"
+                          min="2"
+                          max="18"
+                          step="1"
+                          value={twitterCardConfig.cardTiltMaxRotate}
+                          onChange={(e) =>
+                            setTwitterCardConfig((prev) => ({
+                              ...prev,
+                              cardTiltMaxRotate: Number(e.target.value),
+                            }))
+                          }
+                          className="w-full accent-white h-1 bg-white/10 rounded cursor-pointer"
+                        />
+                        <span className="text-zinc-100 font-medium shrink-0 min-w-8 text-right">
+                          {twitterCardConfig.cardTiltMaxRotate}°
                         </span>
                       </div>
                     </div>
