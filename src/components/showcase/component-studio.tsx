@@ -40,6 +40,7 @@ import {
 import { CodeBlock } from "@/registry/ui/code-block";
 import { SmoothAccordion } from "@/registry/ui/smooth-accordion";
 import { Accordion } from "@/registry/ui/accordion";
+import { DottedAccordion } from "@/registry/ui/dotted-accordion";
 import { cn } from "@/lib/utils";
 
 interface ComponentStudioProps {
@@ -112,6 +113,11 @@ const ALL_CATEGORIES = [
   {
     label: "ACCORDIONS",
     items: [
+      {
+        label: "Dotted Accordion",
+        slug: "dotted-accordion",
+        href: "/components/dotted-accordion",
+      },
       {
         label: "Blur Reveal Accordion",
         slug: "accordion",
@@ -738,6 +744,36 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         return (
           <div className="w-full max-w-2xl flex items-center justify-center p-4">
             <CodeBlock color={color} />
+          </div>
+        );
+      case "dotted-accordion":
+        return (
+          <div className="w-full max-w-2xl p-4 sm:p-6 flex items-center justify-center">
+            <DottedAccordion
+              defaultIndex={0}
+              items={[
+                {
+                  title: "Rectangular Grid Architecture",
+                  description:
+                    "Engineered with strict zero-radius rectangular geometry and flush contiguous boundary lines for technical developer dashboards and console layouts.",
+                },
+                {
+                  title: "Continuous Dotted Guidelines",
+                  description:
+                    "Boundary strokes morph into continuous dotted lines that extend beyond both horizontal and vertical axes with smooth opacity mask falloffs.",
+                },
+                {
+                  title: "Synchronized Drawer Mechanics",
+                  description:
+                    "Smooth height transitions perfectly synchronized with character reveals and adaptive spring damping curves.",
+                },
+                {
+                  title: "Full Keyboard Accessibility",
+                  description:
+                    "Compliant with WAI-ARIA accordion standards with semantic button controls, aria-expanded binding, and zero-latency reduced-motion fallbacks.",
+                },
+              ]}
+            />
           </div>
         );
       case "accordion":

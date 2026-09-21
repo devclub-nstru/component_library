@@ -5307,6 +5307,384 @@ export default Accordion;
       },
     ],
   },
+  "dotted-accordion": {
+    slug: "dotted-accordion",
+    name: "Dotted Accordion",
+    description: "Rectangular architectural accordion with contiguous flush items and continuous dotted crosshair guidelines exceeding bounds with smooth gradient masks.",
+    summary: "A precision-engineered technical accordion designed with strict zero-radius rectangular geometry, zero gap between items, and projecting boundary guidelines. On selection, the active item's horizontal and vertical boundaries transform into continuous dotted grid lines that extend beyond both axes and fade smoothly into transparency using linear gradient CSS masks. Includes letter-by-letter blur text reveals and synchronized spring transitions.",
+    category: "accordion",
+    tags: ["accordion", "dotted", "grid", "crosshair", "blueprint", "technical", "mask", "fade", "interactive"],
+    dependencies: ["clsx", "tailwind-merge", "motion"],
+    version: "1.0.0",
+    createdDate: "2026-09-22",
+    updatedDate: "2026-09-22",
+    interactive: true,
+    supportsColor: false,
+    highlights: [
+      "Zero-radius crisp rectangular geometry with zero gap between points",
+      "Continuous dotted boundary guidelines that project outward on both horizontal and vertical axes",
+      "Bilateral gradient mask effect fading extended guidelines smoothly to transparent",
+      "Active item selection illuminates bounding crosshairs with animated opacity transitions",
+      "Synchronized drawer height animation with character-by-character blooming blur text reveal",
+      "Monospace technical index prefixes and zero-radius square morphing indicators"
+    ],
+    anatomy: [
+      "<DottedAccordion> (Root container with projecting vertical and horizontal dotted framing guides)",
+      "<button> (Zero-radius trigger header housing monospace index prefix, title, and indicator)",
+      "<DottedBlurText> (Staggered typography blooming engine rendering within expanding drawer)"
+    ],
+    physics: {
+      engine: "Motion Spring & CSS Gradient Mask Shaders",
+      description: "Dual-axis height spring transitions combined with hardware-accelerated WebKit mask image linear-gradients.",
+      parameters: [
+        { label: "Height Transition", value: "380ms [0.16, 1, 0.3, 1]" },
+        { label: "Guideline Extension", value: "48px past boundary" },
+        { label: "Mask Falloff", value: "48px linear-gradient ramp" },
+        { label: "Letter Spring", value: "stiffness: 180, damping: 22, mass: 0.6" },
+        { label: "Line Style", value: "border-dotted border-white/70" },
+        { label: "Corner Radius", value: "0px (rounded-none)" },
+        { label: "Compositing", value: "GPU filter + transform + mask" }
+      ]
+    },
+    accessibility: {
+      role: "region",
+      aria: "Uses semantic button triggers with live aria-expanded state and aria-label accessibility on animated blur text.",
+      reducedMotion: "Instantaneous height and opacity changes with blur filter disabled when prefers-reduced-motion is active.",
+      keyboard: [
+        { key: "Tab", description: "Navigate between accordion item triggers." },
+        { key: "Enter / Space", description: "Expand or collapse the focused accordion item." }
+      ]
+    },
+    guidelines: {
+      recommended: [
+        "Technical developer consoles, terminal settings, and telemetry dashboards",
+        "CAD, engineering, and architectural product feature presentations",
+        "Developer tools requiring precision grid alignment and crosshair aesthetics"
+      ],
+      bestPractices: [
+        "Provide sufficient container padding (px-8 or px-12) so extended guidelines fade out naturally",
+        "Use technical monospace tags or prefixes to reinforce the architectural grid aesthetic",
+        "Enable reduced-motion fallbacks for users with vestibular sensitivities"
+      ]
+    },
+    props: [
+      {
+        name: "items",
+        type: "DottedAccordionItem[]",
+        defaultValue: "required",
+        description: "Array of items containing title, description, and optional tag strings.",
+      },
+      {
+        name: "defaultIndex",
+        type: "number | null",
+        defaultValue: "0",
+        description: "Index of the item that should be open by default on mount.",
+      },
+      {
+        name: "collapsible",
+        type: "boolean",
+        defaultValue: "true",
+        description: "Whether clicking an active item closes it.",
+      },
+      {
+        name: "extensionLength",
+        type: "number",
+        defaultValue: "48",
+        description: "Distance in pixels that dotted guidelines project outward beyond the accordion boundary.",
+      },
+      {
+        name: "letterDelay",
+        type: "number",
+        defaultValue: "auto",
+        description: "Custom stagger delay in seconds between consecutive characters.",
+      },
+      {
+        name: "stiffness",
+        type: "number",
+        defaultValue: "180",
+        description: "Spring stiffness coefficient for the vertical letter translation.",
+      },
+      {
+        name: "damping",
+        type: "number",
+        defaultValue: "22",
+        description: "Spring damping coefficient to control bouncing on letter arrival.",
+      },
+      {
+        name: "closeOnClickOutside",
+        type: "boolean",
+        defaultValue: "true",
+        description: "Whether clicking outside the accordion automatically closes any open items.",
+      },
+    ],
+    files: [
+      {
+        name: "dotted-accordion.tsx",
+        path: "registry/ui/dotted-accordion.tsx",
+        code: `"use client";
+
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useMemo,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
+import { motion, AnimatePresence, useReducedMotion } from "motion/react";
+import { cn } from "@/lib/utils";
+
+export interface DottedAccordionItem {
+  title: string;
+  description: string;
+}
+
+export interface DottedAccordionProps
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, "onToggle"> {
+  items: DottedAccordionItem[];
+  defaultIndex?: number | null;
+  collapsible?: boolean;
+  extensionLength?: number;
+  closeOnClickOutside?: boolean;
+  onToggle?: (index: number | null) => void;
+}
+
+export const DottedAccordion = forwardRef<HTMLDivElement, DottedAccordionProps>(
+  (
+    {
+      items,
+      className,
+      defaultIndex = 0,
+      collapsible = true,
+      extensionLength = 48,
+      closeOnClickOutside = true,
+      onToggle,
+      ...props
+    },
+    ref,
+  ) => {
+    const [activeIndex, setActiveIndex] = useState<number | null>(defaultIndex);
+    const innerRef = useRef<HTMLDivElement>(null);
+    const prefersReducedMotion = useReducedMotion();
+
+    useImperativeHandle(ref, () => innerRef.current as HTMLDivElement);
+
+    useEffect(() => {
+      if (!closeOnClickOutside) return;
+
+      const handleClickOutside = (event: MouseEvent) => {
+        if (
+          innerRef.current &&
+          !innerRef.current.contains(event.target as Node)
+        ) {
+          setActiveIndex(null);
+          onToggle?.(null);
+        }
+      };
+
+      document.addEventListener("mousedown", handleClickOutside);
+      return () =>
+        document.removeEventListener("mousedown", handleClickOutside);
+    }, [closeOnClickOutside, onToggle]);
+
+    const toggleAccordion = (index: number) => {
+      const nextIndex =
+        activeIndex === index ? (collapsible ? null : index) : index;
+      setActiveIndex(nextIndex);
+      onToggle?.(nextIndex);
+    };
+
+    const horizontalMaskStyle = useMemo(
+      () => ({
+        WebkitMaskImage: \`linear-gradient(to right, transparent, black \${extensionLength}px, black calc(100% - \${extensionLength}px), transparent)\`,
+        maskImage: \`linear-gradient(to right, transparent, black \${extensionLength}px, black calc(100% - \${extensionLength}px), transparent)\`,
+      }),
+      [extensionLength],
+    );
+
+    const verticalMaskStyle = useMemo(
+      () => ({
+        WebkitMaskImage: \`linear-gradient(to bottom, transparent, black \${extensionLength}px, black calc(100% - \${extensionLength}px), transparent)\`,
+        maskImage: \`linear-gradient(to bottom, transparent, black \${extensionLength}px, black calc(100% - \${extensionLength}px), transparent)\`,
+      }),
+      [extensionLength],
+    );
+
+    return (
+      <div className="relative py-12 px-8 sm:px-14 w-full flex justify-center overflow-visible select-none">
+        <div
+          ref={innerRef}
+          className={cn(
+            "relative w-full max-w-xl rounded-none border border-white/10 bg-black",
+            className,
+          )}
+          {...props}
+        >
+          <div className="flex flex-col gap-0 rounded-none divide-y divide-white/10 relative z-10">
+            {items.map((item, index) => {
+              const isOpen = activeIndex === index;
+
+              return (
+                <div
+                  key={index}
+                  className={cn(
+                    "relative rounded-none transition-colors duration-200",
+                    isOpen
+                      ? "bg-[#111116]"
+                      : "bg-[#0a0a0c] hover:bg-[#0f0f13]",
+                  )}
+                >
+                  <AnimatePresence>
+                    {isOpen && (
+                      <>
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.2 }}
+                          className="absolute top-0 -left-12 -right-12 h-0 border-t border-dotted border-white/70 pointer-events-none z-20"
+                          style={horizontalMaskStyle}
+                        />
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.2 }}
+                          className="absolute bottom-0 -left-12 -right-12 h-0 border-b border-dotted border-white/70 pointer-events-none z-20"
+                          style={horizontalMaskStyle}
+                        />
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.2 }}
+                          className="absolute left-0 -top-12 -bottom-12 w-0 border-l border-dotted border-white/70 pointer-events-none z-20"
+                          style={verticalMaskStyle}
+                        />
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.2 }}
+                          className="absolute right-0 -top-12 -bottom-12 w-0 border-r border-dotted border-white/70 pointer-events-none z-20"
+                          style={verticalMaskStyle}
+                        />
+                      </>
+                    )}
+                  </AnimatePresence>
+
+                  <button
+                    type="button"
+                    aria-expanded={isOpen}
+                    onClick={() => toggleAccordion(index)}
+                    className="group flex w-full cursor-pointer items-center justify-between px-5 py-4 text-left rounded-none transition-colors outline-none focus-visible:ring-1 focus-visible:ring-white/30"
+                  >
+                    <div className="flex items-center gap-3.5 min-w-0 flex-1">
+                      <span className="font-mono text-xs text-zinc-500 group-hover:text-zinc-400 transition-colors shrink-0 w-5">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <span
+                        className={cn(
+                          "text-sm font-medium tracking-tight transition-colors duration-200 truncate",
+                          isOpen
+                            ? "text-white"
+                            : "text-zinc-300 group-hover:text-white",
+                        )}
+                      >
+                        {item.title}
+                      </span>
+                    </div>
+
+                    <div className="relative flex items-center justify-center w-5 h-5 text-zinc-500 group-hover:text-zinc-200 transition-colors shrink-0 ml-3">
+                      <motion.span
+                        className="absolute h-[1.5px] w-3 bg-current rounded-none"
+                        animate={{ rotate: isOpen ? 180 : 0 }}
+                        transition={
+                          prefersReducedMotion
+                            ? { duration: 0 }
+                            : { type: "spring", stiffness: 320, damping: 24 }
+                        }
+                      />
+                      <motion.span
+                        className="absolute w-[1.5px] h-3 bg-current rounded-none"
+                        animate={{
+                          scaleY: isOpen ? 0 : 1,
+                          opacity: isOpen ? 0 : 1,
+                          rotate: isOpen ? 90 : 0,
+                        }}
+                        transition={
+                          prefersReducedMotion
+                            ? { duration: 0 }
+                            : { type: "spring", stiffness: 320, damping: 24 }
+                        }
+                      />
+                    </div>
+                  </button>
+
+                  <AnimatePresence initial={false}>
+                    {isOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{
+                          height: "auto",
+                          opacity: 1,
+                          transition: prefersReducedMotion
+                            ? { duration: 0 }
+                            : {
+                                height: {
+                                  duration: 0.32,
+                                  ease: [0.16, 1, 0.3, 1],
+                                },
+                                opacity: {
+                                  duration: 0.22,
+                                  ease: "easeOut",
+                                },
+                              },
+                        }}
+                        exit={{
+                          height: 0,
+                          opacity: 0,
+                          transition: prefersReducedMotion
+                            ? { duration: 0 }
+                            : {
+                                height: {
+                                  duration: 0.25,
+                                  ease: [0.16, 1, 0.3, 1],
+                                },
+                                opacity: {
+                                  duration: 0.15,
+                                  ease: "easeIn",
+                                },
+                              },
+                        }}
+                        className="overflow-hidden rounded-none"
+                      >
+                        <div
+                          className="cursor-pointer pl-13.5 pr-5 pb-5 pt-0.5 text-sm leading-relaxed text-zinc-400 font-light"
+                          onClick={() => toggleAccordion(index)}
+                        >
+                          {item.description}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    );
+  },
+);
+
+DottedAccordion.displayName = "DottedAccordion";
+
+export default DottedAccordion;
+`
+      },
+    ],
+  },
 };
 
 export const getAllComponents = (

@@ -17,6 +17,7 @@ import { OtpInput } from "@/registry/ui/otp-input";
 import { CodeBlock } from "@/registry/ui/code-block";
 import { SmoothAccordion } from "@/registry/ui/smooth-accordion";
 import { Accordion } from "@/registry/ui/accordion";
+import { DottedAccordion } from "@/registry/ui/dotted-accordion";
 import { cn } from "@/lib/utils";
 
 function CounterPreview() {
@@ -158,6 +159,23 @@ export default function ComponentsPage() {
     "code-block": (
       <div className="w-full max-w-72 pointer-events-none scale-[0.68] origin-top-left overflow-hidden max-h-36 select-none">
         <CodeBlock color="#4ade80" />
+      </div>
+    ),
+    "dotted-accordion": (
+      <div className="w-full max-w-72 pointer-events-none scale-85 origin-center">
+        <DottedAccordion
+          defaultIndex={0}
+          items={[
+            {
+              title: "Grid Architecture",
+              description: "Sharp rectangular geometry with continuous dotted guide lines.",
+            },
+            {
+              title: "Fade Mask Effect",
+              description: "Vertical and horizontal guidelines exceeding bounds with smooth masks.",
+            },
+          ]}
+        />
       </div>
     ),
     accordion: (
