@@ -38,6 +38,7 @@ import {
   type OtpSize,
   type OtpVariant,
 } from "@/registry/ui/otp-input";
+import { CodeBlock } from "@/registry/ui/code-block";
 import { cn } from "@/lib/utils";
 
 interface ComponentStudioProps {
@@ -64,6 +65,11 @@ const ALL_CATEGORIES = [
         label: "Animated Counter",
         slug: "animated-counter",
         href: "/components/animated-counter",
+      },
+      {
+        label: "Code Block",
+        slug: "code-block",
+        href: "/components/code-block",
       },
     ],
   },
@@ -339,6 +345,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
       "spotlight-card",
       "glowing-badge",
       "animated-counter",
+      "code-block",
     ].includes(activeComponent.slug),
   );
 
@@ -711,6 +718,12 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
           </div>
         );
       }
+      case "code-block":
+        return (
+          <div className="w-full max-w-2xl flex items-center justify-center p-4">
+            <CodeBlock color={color} />
+          </div>
+        );
       default:
         return (
           <div className="text-zinc-500 font-mono text-xs">
@@ -1555,15 +1568,17 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   </div>
 
                   <div className="flex-1 p-6 overflow-auto font-mono text-xs leading-relaxed bg-[#070709] select-text">
-                    <div className="flex">
-                      <div className="select-none text-zinc-600 text-right pr-5 shrink-0 space-y-0.5">
-                        {codeLines.map((_, i) => (
-                          <div key={i}>{i + 1}</div>
-                        ))}
-                      </div>
-                      <div className="flex-1 overflow-x-auto">
-                        {highlighted}
-                      </div>
+                    <div className="space-y-0.5">
+                      {codeLines.map((_, i) => (
+                        <div key={i} className="flex">
+                          <span className="w-8 shrink-0 select-none text-right pr-5 text-zinc-600 font-mono">
+                            {i + 1}
+                          </span>
+                          <div className="flex-1 overflow-x-auto">
+                            {highlighted[i]}
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </motion.div>

@@ -14,6 +14,7 @@ import { HookSidebar } from "@/registry/ui/hook-sidebar";
 import { GitHubActivity } from "@/registry/ui/github-activity";
 import { AnimatedCounter } from "@/registry/ui/animated-counter";
 import { OtpInput } from "@/registry/ui/otp-input";
+import { CodeBlock } from "@/registry/ui/code-block";
 import { cn } from "@/lib/utils";
 
 function CounterPreview() {
@@ -152,6 +153,11 @@ export default function ComponentsPage() {
       </div>
     ),
     "animated-counter": <CounterPreview />,
+    "code-block": (
+      <div className="w-full max-w-72 pointer-events-none scale-[0.68] origin-top-left overflow-hidden max-h-36 select-none">
+        <CodeBlock color="#4ade80" />
+      </div>
+    ),
   };
 
   const newReleases = allComponents.slice(0, 3);
