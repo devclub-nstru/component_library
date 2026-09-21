@@ -1236,12 +1236,12 @@ export function GitHubActivity({
     <div
       ref={containerRef}
       className={cn(
-        "relative w-full max-w-[580px] rounded-2xl border border-white/10 bg-zinc-950/75 p-6 backdrop-blur-xl shadow-[0_20px_48px_-10px_rgba(0,0,0,0.7),inset_0_1px_0_0_rgba(255,255,255,0.14)] select-none",
+        "relative w-full max-w-145 rounded-2xl border border-white/10 bg-zinc-950/75 p-6 backdrop-blur-xl shadow-[0_20px_48px_-10px_rgba(0,0,0,0.7),inset_0_1px_0_0_rgba(255,255,255,0.14)] select-none",
         className
       )}
       {...props}
     >
-      <div className="relative z-10 flex flex-col pb-4 border-b border-white/[0.06]">
+      <div className="relative z-10 flex flex-col pb-4 border-b border-white/6">
         <span className="text-sm font-semibold text-zinc-100 tracking-tight">
           {title}
         </span>
@@ -1372,7 +1372,7 @@ export function GitHubActivity({
         )}
       </AnimatePresence>
 
-      <div className="relative z-10 flex items-center justify-between pt-3.5 border-t border-white/[0.06] text-xs text-zinc-400">
+      <div className="relative z-10 flex items-center justify-between pt-3.5 border-t border-white/6 text-xs text-zinc-400">
         <span className="font-medium">Activity Level:</span>
         <div className="flex items-center gap-2">
           <span className="text-xs text-zinc-400">Less</span>
