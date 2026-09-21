@@ -30,7 +30,7 @@ function CounterPreview() {
         duration={0.5}
         grouping="indian"
         prefix={<span className="mr-0.5">₹</span>}
-        className="font-mono text-3xl font-bold tracking-tight text-white [&_[data-slot=animated-counter-mark]]:-mx-[0.1em] sm:text-4xl"
+        className="font-mono text-3xl font-bold tracking-tight text-white **:data-[slot=animated-counter-mark]:mx-[-0.1em] sm:text-4xl"
       />
       <div className="flex items-center justify-between w-48 h-3 shrink-0">
         {Array.from({ length: 28 }).map((_, i) => {

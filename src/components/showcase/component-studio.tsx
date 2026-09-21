@@ -520,17 +520,17 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               duration={ROLL}
               grouping="indian"
               prefix={<span className="mr-0.5">₹</span>}
-              className="font-mono text-6xl font-bold tracking-tight text-white [&_[data-slot=animated-counter-mark]]:-mx-[0.1em] sm:text-7xl"
+              className="font-mono text-6xl font-bold tracking-tight text-white **:data-[slot=animated-counter-mark]:mx-[-0.1em] sm:text-7xl"
             />
 
-            <div className="relative w-80 sm:w-96 max-w-full shrink-0 rounded-xl px-px has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-4 has-[:focus-visible]:outline-[#868593]">
+            <div className="relative w-80 sm:w-96 max-w-full shrink-0 rounded-xl px-px has-focus-visible:outline-2 has-focus-visible:outline-offset-4 has-focus-visible:outline-[#868593]">
               <div aria-hidden className="flex h-8 w-full items-end justify-between">
                 {Array.from({ length: TICKS }, (_, index) =>
                   index === marker ? (
                     <span
                       key={index}
                       style={{ backgroundColor: color || "#FC4C01" }}
-                      className="-mx-[0.5px] h-7 w-[3px] rounded-full shrink-0"
+                      className="mx-[-0.5px] h-7 w-0.75 rounded-full shrink-0"
                     />
                   ) : (
                     <span
