@@ -39,23 +39,79 @@ const CATEGORIES = [
     label: "DISPLAY",
     items: [
       { label: "Scales & Borders", slug: "scales", href: "/components/scales" },
-      { label: "Spotlight Card", slug: "spotlight-card", href: "/components/spotlight-card" },
-      { label: "GitHub activity", slug: "github-activity", href: "/components/github-activity" },
+      {
+        label: "Spotlight Card",
+        slug: "spotlight-card",
+        href: "/components/spotlight-card",
+      },
+      {
+        label: "GitHub activity",
+        slug: "github-activity",
+        href: "/components/github-activity",
+      },
     ],
   },
   {
     label: "NAVIGATION",
-    items: [{ label: "Hook Sidebar", slug: "hook-sidebar", href: "/components/hook-sidebar" }],
+    items: [
+      {
+        label: "Hook Sidebar",
+        slug: "hook-sidebar",
+        href: "/components/hook-sidebar",
+      },
+    ],
   },
   {
     label: "INPUTS",
-    items: [{ label: "Animated Button", slug: "animated-button", href: "/components/animated-button" }],
+    items: [
+      {
+        label: "Animated Button",
+        slug: "animated-button",
+        href: "/components/animated-button",
+      },
+    ],
   },
   {
     label: "LAYOUT & FEEDBACK",
     items: [
-      { label: "Bento Grid", slug: "bento-grid", href: "/components/bento-grid" },
-      { label: "Status Badge", slug: "glowing-badge", href: "/components/glowing-badge" },
+      {
+        label: "Bento Grid",
+        slug: "bento-grid",
+        href: "/components/bento-grid",
+      },
+      {
+        label: "Status Badge",
+        slug: "glowing-badge",
+        href: "/components/glowing-badge",
+      },
+    ],
+  },
+];
+
+const HOOK_SIDEBAR_DEMO_CATEGORIES = [
+  {
+    label: "PLATFORM",
+    items: [
+      { label: "Overview" },
+      { label: "Analytics" },
+      { label: "Activity" },
+    ],
+  },
+  {
+    label: "DEVELOPMENT",
+    items: [
+      { label: "Components" },
+      { label: "Hook Sidebar" },
+      { label: "Spotlight Card" },
+      { label: "Bento Grid" },
+    ],
+  },
+  {
+    label: "RESOURCES",
+    items: [
+      { label: "Documentation" },
+      { label: "API Reference" },
+      { label: "Settings" },
     ],
   },
 ];
@@ -174,13 +230,17 @@ function highlightCode(code: string) {
 export const ComponentStudio = ({ component }: ComponentStudioProps) => {
   const [selectedSlug, setSelectedSlug] = useState(component.slug);
   const [prevPropSlug, setPrevPropSlug] = useState(component.slug);
-  const [viewport, setViewport] = useState<"desktop" | "tablet" | "mobile">("desktop");
+  const [viewport, setViewport] = useState<"desktop" | "tablet" | "mobile">(
+    "desktop",
+  );
   const [activeColor, setActiveColor] = useState<string>(PALETTE[3].hex);
   const dragControls = useDragControls();
   const [hookDemoIndex, setHookDemoIndex] = useState(0);
 
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [activePanel, setActivePanel] = useState<"none" | "info" | "code">("none");
+  const [activePanel, setActivePanel] = useState<"none" | "info" | "code">(
+    "none",
+  );
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [installCopied, setInstallCopied] = useState(false);
   const [codeCopied, setCodeCopied] = useState(false);
@@ -259,10 +319,17 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
           <div className="w-full max-w-md bg-[#0c0c0e] border border-white/10 rounded-2xl p-6 shadow-2xl flex flex-col gap-6 select-none">
             <div className="flex items-center justify-between pb-3 border-b border-white/8">
               <div>
-                <h3 className="text-sm font-medium text-white">Interactive Action Stack</h3>
-                <p className="text-[11px] text-zinc-400 font-light mt-0.5">High-stiffness spring feedback & damping</p>
+                <h3 className="text-sm font-medium text-white">
+                  Interactive Action Stack
+                </h3>
+                <p className="text-[11px] text-zinc-400 font-light mt-0.5">
+                  High-stiffness spring feedback & damping
+                </p>
               </div>
-              <span className="text-[10px] font-mono uppercase font-medium" style={{ color }}>
+              <span
+                className="text-[10px] font-mono uppercase font-medium"
+                style={{ color }}
+              >
                 Spring
               </span>
             </div>
@@ -301,25 +368,29 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         return <GitHubActivity />;
       case "hook-sidebar":
         return (
-          <div className="w-full max-w-sm bg-[#0c0c0e] border border-white/10 rounded-2xl p-6 shadow-2xl flex flex-col gap-4">
-            <div className="flex items-center justify-between pb-2 border-b border-white/8">
-              <span className="text-xs font-mono uppercase text-zinc-400">Hook Rail Demonstration</span>
-              <span className="text-[10px] font-mono font-medium" style={{ color }}>
-                Stiffness: 420
-              </span>
-            </div>
-            <HookSidebar
-              label="SIDEBAR NAVIGATION"
-              value={hookDemoIndex}
-              onChange={setHookDemoIndex}
-              color={color}
-              items={[
-                { label: "Overview" },
-                { label: "Components" },
-                { label: "Documentation" },
-                { label: "Settings" },
-              ]}
-            />
+          <div className="w-full max-w-sm bg-[#0c0c0e] border border-white/10 rounded-2xl p-6 shadow-2xl flex flex-col gap-5">
+            {HOOK_SIDEBAR_DEMO_CATEGORIES.map((cat, catIdx) => {
+              const baseIndex = HOOK_SIDEBAR_DEMO_CATEGORIES.slice(
+                0,
+                catIdx,
+              ).reduce((acc, c) => acc + c.items.length, 0);
+              const activeIdx =
+                hookDemoIndex >= baseIndex &&
+                hookDemoIndex < baseIndex + cat.items.length
+                  ? hookDemoIndex - baseIndex
+                  : -1;
+
+              return (
+                <HookSidebar
+                  key={cat.label}
+                  label={cat.label}
+                  value={activeIdx}
+                  onChange={(idx) => setHookDemoIndex(baseIndex + idx)}
+                  color={color}
+                  items={cat.items}
+                />
+              );
+            })}
           </div>
         );
       case "scales":
@@ -327,10 +398,17 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
           <div className="w-full max-w-xl bg-[#0c0c0e] border border-white/10 rounded-2xl p-6 shadow-2xl flex flex-col gap-6">
             <div className="flex items-center justify-between pb-3 border-b border-white/8">
               <div>
-                <h3 className="text-sm font-medium text-white">Architectural Scales</h3>
-                <p className="text-[11px] text-zinc-400 font-light mt-0.5">Repeating linear gradient borders</p>
+                <h3 className="text-sm font-medium text-white">
+                  Architectural Scales
+                </h3>
+                <p className="text-[11px] text-zinc-400 font-light mt-0.5">
+                  Repeating linear gradient borders
+                </p>
               </div>
-              <span className="text-[10px] font-mono uppercase font-medium" style={{ color }}>
+              <span
+                className="text-[10px] font-mono uppercase font-medium"
+                style={{ color }}
+              >
                 Grid
               </span>
             </div>
@@ -346,8 +424,13 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
       case "spotlight-card":
         return (
           <div className="w-full max-w-md">
-            <SpotlightCard className="p-6 border-white/10 bg-[#0c0c0e]" spotlightColor={color}>
-              <h4 className="text-base font-medium text-white">Radial Spotlight</h4>
+            <SpotlightCard
+              className="p-6 border-white/10 bg-[#0c0c0e]"
+              spotlightColor={color}
+            >
+              <h4 className="text-base font-medium text-white">
+                Radial Spotlight
+              </h4>
               <p className="text-xs text-zinc-400 mt-2 font-light leading-relaxed">
                 Smooth cursor tracking with radial falloff gradient.
               </p>
@@ -362,8 +445,16 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         return (
           <div className="w-full max-w-lg bg-[#0c0c0e] border border-white/10 rounded-2xl p-6 shadow-2xl">
             <BentoGrid className="grid-cols-2 gap-3">
-              <BentoCard colSpan={1} title="Telemetry" description="Real-time event logging." />
-              <BentoCard colSpan={1} title="Throughput" description="Low latency processing." />
+              <BentoCard
+                colSpan={1}
+                title="Telemetry"
+                description="Real-time event logging."
+              />
+              <BentoCard
+                colSpan={1}
+                title="Throughput"
+                description="Low latency processing."
+              />
             </BentoGrid>
           </div>
         );
@@ -372,15 +463,27 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
           <div className="w-full max-w-md bg-[#0c0c0e] border border-white/10 rounded-2xl p-8 shadow-2xl flex flex-col items-center justify-center gap-4">
             <div className="flex items-center gap-3">
               <GlowingBadge>PRODUCTION</GlowingBadge>
-              <GlowingBadge style={{ borderColor: `${color}60`, color, boxShadow: `0 0 20px ${color}35` }}>
+              <GlowingBadge
+                style={{
+                  borderColor: `${color}60`,
+                  color,
+                  boxShadow: `0 0 20px ${color}35`,
+                }}
+              >
                 LIVE
               </GlowingBadge>
             </div>
-            <span className="text-xs font-mono text-zinc-500">Geometric status indicators</span>
+            <span className="text-xs font-mono text-zinc-500">
+              Geometric status indicators
+            </span>
           </div>
         );
       default:
-        return <div className="text-zinc-500 font-mono text-xs">Preview unavailable</div>;
+        return (
+          <div className="text-zinc-500 font-mono text-xs">
+            Preview unavailable
+          </div>
+        );
     }
   };
 
@@ -567,7 +670,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   title="Desktop (100%)"
                   className={cn(
                     "p-1.5 rounded-md transition-colors cursor-pointer",
-                    viewport === "desktop" ? "bg-white/15 text-white" : "text-zinc-500 hover:text-zinc-300"
+                    viewport === "desktop"
+                      ? "bg-white/15 text-white"
+                      : "text-zinc-500 hover:text-zinc-300",
                   )}
                 >
                   <DesktopIcon className="w-3.5 h-3.5" />
@@ -578,7 +683,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   title="Tablet (768px)"
                   className={cn(
                     "p-1.5 rounded-md transition-colors cursor-pointer",
-                    viewport === "tablet" ? "bg-white/15 text-white" : "text-zinc-500 hover:text-zinc-300"
+                    viewport === "tablet"
+                      ? "bg-white/15 text-white"
+                      : "text-zinc-500 hover:text-zinc-300",
                   )}
                 >
                   <ViewGridIcon className="w-3.5 h-3.5" />
@@ -589,7 +696,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   title="Mobile (390px)"
                   className={cn(
                     "p-1.5 rounded-md transition-colors cursor-pointer",
-                    viewport === "mobile" ? "bg-white/15 text-white" : "text-zinc-500 hover:text-zinc-300"
+                    viewport === "mobile"
+                      ? "bg-white/15 text-white"
+                      : "text-zinc-500 hover:text-zinc-300",
                   )}
                 >
                   <MobileIcon className="w-3.5 h-3.5" />
@@ -679,14 +788,25 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               layout
               transition={panelSpring}
               animate={{
-                width: viewport === "mobile" ? 390 : viewport === "tablet" ? 768 : "100%",
-                height: viewport === "mobile" ? 640 : viewport === "tablet" ? 520 : "100%",
-                borderRadius: viewport === "mobile" ? 40 : viewport === "tablet" ? 24 : 0,
+                width:
+                  viewport === "mobile"
+                    ? 390
+                    : viewport === "tablet"
+                      ? 768
+                      : "100%",
+                height:
+                  viewport === "mobile"
+                    ? 640
+                    : viewport === "tablet"
+                      ? 520
+                      : "100%",
+                borderRadius:
+                  viewport === "mobile" ? 40 : viewport === "tablet" ? 24 : 0,
               }}
               className={cn(
                 "relative flex flex-col items-center justify-center overflow-hidden transition-colors",
                 viewport !== "desktop" &&
-                  "border border-white/15 bg-[#09090b] shadow-[0_25px_60px_rgba(0,0,0,0.9)] my-auto max-h-[90vh]"
+                  "border border-white/15 bg-[#09090b] shadow-[0_25px_60px_rgba(0,0,0,0.9)] my-auto max-h-[90vh]",
               )}
             >
               {viewport === "mobile" && (
@@ -715,7 +835,12 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               dragControls={dragControls}
               dragMomentum={false}
               dragElastic={0.1}
-              dragConstraints={{ left: -260, right: 260, top: -350, bottom: 20 }}
+              dragConstraints={{
+                left: -260,
+                right: 260,
+                top: -350,
+                bottom: 20,
+              }}
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={panelSpring}
@@ -745,7 +870,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         "w-7 h-7 rounded-xl transition-all cursor-pointer shadow-md",
                         isSelected
                           ? "scale-110 ring-2 ring-white/90 ring-offset-2 ring-offset-black"
-                          : "opacity-75 hover:opacity-100"
+                          : "opacity-75 hover:opacity-100",
                       )}
                     />
                   );
@@ -860,7 +985,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           <div key={i}>{i + 1}</div>
                         ))}
                       </div>
-                      <div className="flex-1 overflow-x-auto">{highlighted}</div>
+                      <div className="flex-1 overflow-x-auto">
+                        {highlighted}
+                      </div>
                     </div>
                   </div>
                 </motion.div>
@@ -879,7 +1006,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               transition={panelSpring}
               className="shrink-0 h-full border border-white/8 bg-[#0c0c0e] rounded-3xl overflow-hidden flex flex-col"
             >
-              <div className="w-[440px] min-w-[440px] h-full p-6 sm:p-7 overflow-y-auto flex flex-col gap-6 scrollbar-none pb-12">
+              <div className="w-110 min-w-110 h-full p-6 sm:p-7 overflow-y-auto flex flex-col gap-6 scrollbar-none pb-12">
                 <motion.div
                   initial="hidden"
                   animate="visible"
@@ -928,41 +1055,64 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     )}
                   </motion.div>
 
-                  {activeComponent.highlights && activeComponent.highlights.length > 0 && (
-                    <motion.div variants={fadeVariants} className="space-y-2.5 pt-4 border-t border-white/8">
-                      <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
-                        Capabilities & Highlights
-                      </div>
-                      <div className="space-y-1.5">
-                        {activeComponent.highlights.map((h, i) => (
-                          <div key={i} className="flex items-start gap-2 text-xs text-zinc-300 font-light leading-relaxed">
-                            <span className="text-orange-500 text-[11px] font-mono shrink-0 select-none">›</span>
-                            <span>{h}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </motion.div>
-                  )}
+                  {activeComponent.highlights &&
+                    activeComponent.highlights.length > 0 && (
+                      <motion.div
+                        variants={fadeVariants}
+                        className="space-y-2.5 pt-4 border-t border-white/8"
+                      >
+                        <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
+                          Capabilities & Highlights
+                        </div>
+                        <div className="space-y-1.5">
+                          {activeComponent.highlights.map((h, i) => (
+                            <div
+                              key={i}
+                              className="flex items-start gap-2 text-xs text-zinc-300 font-light leading-relaxed"
+                            >
+                              <span className="text-orange-500 text-[11px] font-mono shrink-0 select-none">
+                                ›
+                              </span>
+                              <span>{h}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </motion.div>
+                    )}
 
-                  {activeComponent.anatomy && activeComponent.anatomy.length > 0 && (
-                    <motion.div variants={fadeVariants} className="space-y-2.5 pt-4 border-t border-white/8">
-                      <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
-                        Component Anatomy
-                      </div>
-                      <div className="border border-white/8 rounded-xl bg-black/40 p-3 space-y-1 font-mono text-[11px]">
-                        {activeComponent.anatomy.map((item, idx) => (
-                          <div key={idx} className="flex items-center gap-2 text-zinc-300">
-                            <span className="text-zinc-600 text-[10px] w-3 shrink-0 text-right">{idx + 1}</span>
-                            <span className="text-zinc-500">→</span>
-                            <span className="text-zinc-300 font-mono text-[11px]">{item}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </motion.div>
-                  )}
+                  {activeComponent.anatomy &&
+                    activeComponent.anatomy.length > 0 && (
+                      <motion.div
+                        variants={fadeVariants}
+                        className="space-y-2.5 pt-4 border-t border-white/8"
+                      >
+                        <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
+                          Component Anatomy
+                        </div>
+                        <div className="border border-white/8 rounded-xl bg-black/40 p-3 space-y-1 font-mono text-[11px]">
+                          {activeComponent.anatomy.map((item, idx) => (
+                            <div
+                              key={idx}
+                              className="flex items-center gap-2 text-zinc-300"
+                            >
+                              <span className="text-zinc-600 text-[10px] w-3 shrink-0 text-right">
+                                {idx + 1}
+                              </span>
+                              <span className="text-zinc-500">→</span>
+                              <span className="text-zinc-300 font-mono text-[11px]">
+                                {item}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </motion.div>
+                    )}
 
                   {activeComponent.physics && (
-                    <motion.div variants={fadeVariants} className="space-y-3 pt-4 border-t border-white/8">
+                    <motion.div
+                      variants={fadeVariants}
+                      className="space-y-3 pt-4 border-t border-white/8"
+                    >
                       <div className="flex items-center justify-between">
                         <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
                           Motion & Interaction Spec
@@ -984,12 +1134,21 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               </tr>
                             </thead>
                             <tbody className="divide-y divide-white/6 font-mono text-[11px]">
-                              {activeComponent.physics.parameters.map((param) => (
-                                <tr key={param.label} className="hover:bg-white/5 transition-colors">
-                                  <td className="p-2.5 text-zinc-400">{param.label}</td>
-                                  <td className="p-2.5 text-zinc-200">{param.value}</td>
-                                </tr>
-                              ))}
+                              {activeComponent.physics.parameters.map(
+                                (param) => (
+                                  <tr
+                                    key={param.label}
+                                    className="hover:bg-white/5 transition-colors"
+                                  >
+                                    <td className="p-2.5 text-zinc-400">
+                                      {param.label}
+                                    </td>
+                                    <td className="p-2.5 text-zinc-200">
+                                      {param.value}
+                                    </td>
+                                  </tr>
+                                ),
+                              )}
                             </tbody>
                           </table>
                         </div>
@@ -997,73 +1156,80 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     </motion.div>
                   )}
 
-                  {activeComponent.props && activeComponent.props.length > 0 && (
+                  {activeComponent.props &&
+                    activeComponent.props.length > 0 && (
+                      <motion.div
+                        variants={fadeVariants}
+                        className="space-y-3 pt-4 border-t border-white/8"
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
+                            Props Interface
+                          </div>
+                          <span className="text-[10px] font-mono text-zinc-500">
+                            {activeComponent.props.length} configurable
+                          </span>
+                        </div>
+                        <div className="border border-white/8 rounded-xl overflow-hidden bg-black/40">
+                          <table className="w-full text-left text-xs">
+                            <thead className="bg-zinc-950 border-b border-white/8 text-zinc-500 font-mono text-[10px] uppercase">
+                              <tr>
+                                <th className="p-2.5 font-medium">Prop</th>
+                                <th className="p-2.5 font-medium">Type</th>
+                                <th className="p-2.5 font-medium">Default</th>
+                                <th className="p-2.5 font-medium">
+                                  Description
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody className="divide-y divide-white/6 text-xs">
+                              {activeComponent.props.map((p) => (
+                                <tr
+                                  key={p.name}
+                                  className="hover:bg-white/5 transition-colors align-top"
+                                >
+                                  <td className="p-2.5 font-mono">
+                                    <div className="flex flex-col items-start gap-1">
+                                      <span className="bg-zinc-900 border border-white/10 px-2 py-0.5 rounded text-orange-400 text-[11px]">
+                                        {p.name}
+                                      </span>
+                                      {p.required && (
+                                        <span className="text-[9px] uppercase tracking-wider text-rose-400 font-medium font-mono">
+                                          Required
+                                        </span>
+                                      )}
+                                    </div>
+                                  </td>
+                                  <td className="p-2.5 text-zinc-400 font-mono text-[11px] break-all">
+                                    {p.type}
+                                  </td>
+                                  <td className="p-2.5 text-zinc-500 font-mono text-[11px]">
+                                    {p.defaultValue ?? "—"}
+                                  </td>
+                                  <td className="p-2.5 text-zinc-300 font-sans font-light leading-relaxed">
+                                    {p.description}
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </motion.div>
+                    )}
+
+                  {activeComponent.accessibility && (
                     <motion.div
                       variants={fadeVariants}
                       className="space-y-3 pt-4 border-t border-white/8"
                     >
                       <div className="flex items-center justify-between">
                         <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
-                          Props Interface
-                        </div>
-                        <span className="text-[10px] font-mono text-zinc-500">
-                          {activeComponent.props.length} configurable
-                        </span>
-                      </div>
-                      <div className="border border-white/8 rounded-xl overflow-hidden bg-black/40">
-                        <table className="w-full text-left text-xs">
-                          <thead className="bg-zinc-950 border-b border-white/8 text-zinc-500 font-mono text-[10px] uppercase">
-                            <tr>
-                              <th className="p-2.5 font-medium">Prop</th>
-                              <th className="p-2.5 font-medium">Type</th>
-                              <th className="p-2.5 font-medium">Default</th>
-                              <th className="p-2.5 font-medium">Description</th>
-                            </tr>
-                          </thead>
-                          <tbody className="divide-y divide-white/6 text-xs">
-                            {activeComponent.props.map((p) => (
-                              <tr
-                                key={p.name}
-                                className="hover:bg-white/5 transition-colors align-top"
-                              >
-                                <td className="p-2.5 font-mono">
-                                  <div className="flex flex-col items-start gap-1">
-                                    <span className="bg-zinc-900 border border-white/10 px-2 py-0.5 rounded text-orange-400 text-[11px]">
-                                      {p.name}
-                                    </span>
-                                    {p.required && (
-                                      <span className="text-[9px] uppercase tracking-wider text-rose-400 font-medium font-mono">
-                                        Required
-                                      </span>
-                                    )}
-                                  </div>
-                                </td>
-                                <td className="p-2.5 text-zinc-400 font-mono text-[11px] break-all">
-                                  {p.type}
-                                </td>
-                                <td className="p-2.5 text-zinc-500 font-mono text-[11px]">
-                                  {p.defaultValue ?? "—"}
-                                </td>
-                                <td className="p-2.5 text-zinc-300 font-sans font-light leading-relaxed">
-                                  {p.description}
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    </motion.div>
-                  )}
-
-                  {activeComponent.accessibility && (
-                    <motion.div variants={fadeVariants} className="space-y-3 pt-4 border-t border-white/8">
-                      <div className="flex items-center justify-between">
-                        <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
                           Accessibility & Shortcuts
                         </div>
                         {activeComponent.accessibility.role && (
                           <span className="text-[10px] font-mono text-zinc-400 bg-white/5 border border-white/8 px-2 py-0.5 rounded">
-                            role=&quot;{activeComponent.accessibility.role}&quot;
+                            role=&quot;{activeComponent.accessibility.role}
+                            &quot;
                           </span>
                         )}
                       </div>
@@ -1072,72 +1238,106 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           {activeComponent.accessibility.aria}
                         </p>
                       )}
-                      {activeComponent.accessibility.keyboard && activeComponent.accessibility.keyboard.length > 0 && (
-                        <div className="border border-white/8 rounded-xl overflow-hidden bg-black/40">
-                          <table className="w-full text-left text-xs">
-                            <thead className="bg-zinc-950 border-b border-white/8 text-zinc-500 font-mono text-[10px] uppercase">
-                              <tr>
-                                <th className="p-2.5 font-medium">Key</th>
-                                <th className="p-2.5 font-medium">Action</th>
-                              </tr>
-                            </thead>
-                            <tbody className="divide-y divide-white/6 text-xs">
-                              {activeComponent.accessibility.keyboard.map((kb) => (
-                                <tr key={kb.key} className="hover:bg-white/5 transition-colors align-top">
-                                  <td className="p-2.5 font-mono">
-                                    <kbd className="bg-zinc-900 border border-white/10 px-1.5 py-0.5 rounded text-zinc-200 text-[11px]">
-                                      {kb.key}
-                                    </kbd>
-                                  </td>
-                                  <td className="p-2.5 text-zinc-300 font-sans font-light leading-relaxed">
-                                    {kb.description}
-                                  </td>
+                      {activeComponent.accessibility.keyboard &&
+                        activeComponent.accessibility.keyboard.length > 0 && (
+                          <div className="border border-white/8 rounded-xl overflow-hidden bg-black/40">
+                            <table className="w-full text-left text-xs">
+                              <thead className="bg-zinc-950 border-b border-white/8 text-zinc-500 font-mono text-[10px] uppercase">
+                                <tr>
+                                  <th className="p-2.5 font-medium">Key</th>
+                                  <th className="p-2.5 font-medium">Action</th>
                                 </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-                      )}
+                              </thead>
+                              <tbody className="divide-y divide-white/6 text-xs">
+                                {activeComponent.accessibility.keyboard.map(
+                                  (kb) => (
+                                    <tr
+                                      key={kb.key}
+                                      className="hover:bg-white/5 transition-colors align-top"
+                                    >
+                                      <td className="p-2.5 font-mono">
+                                        <kbd className="bg-zinc-900 border border-white/10 px-1.5 py-0.5 rounded text-zinc-200 text-[11px]">
+                                          {kb.key}
+                                        </kbd>
+                                      </td>
+                                      <td className="p-2.5 text-zinc-300 font-sans font-light leading-relaxed">
+                                        {kb.description}
+                                      </td>
+                                    </tr>
+                                  ),
+                                )}
+                              </tbody>
+                            </table>
+                          </div>
+                        )}
                       {activeComponent.accessibility.reducedMotion && (
                         <div className="flex items-start gap-2 text-xs text-zinc-400 font-light leading-relaxed bg-zinc-950/60 border border-white/6 rounded-lg p-2.5">
-                          <span className="text-orange-400 text-[11px] font-mono select-none">✦</span>
-                          <span>{activeComponent.accessibility.reducedMotion}</span>
+                          <span className="text-orange-400 text-[11px] font-mono select-none">
+                            ✦
+                          </span>
+                          <span>
+                            {activeComponent.accessibility.reducedMotion}
+                          </span>
                         </div>
                       )}
                     </motion.div>
                   )}
 
                   {activeComponent.guidelines && (
-                    <motion.div variants={fadeVariants} className="space-y-3 pt-4 border-t border-white/8">
+                    <motion.div
+                      variants={fadeVariants}
+                      className="space-y-3 pt-4 border-t border-white/8"
+                    >
                       <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
                         Integration & Best Practices
                       </div>
                       {activeComponent.guidelines.recommended && (
                         <div className="space-y-1.5">
-                          <div className="text-[10px] font-mono uppercase text-zinc-500">Recommended Use</div>
-                          {activeComponent.guidelines.recommended.map((rec, i) => (
-                            <div key={i} className="flex items-start gap-2 text-xs text-zinc-300 font-light leading-relaxed">
-                              <span className="text-emerald-500 text-[11px] font-mono select-none">✓</span>
-                              <span>{rec}</span>
-                            </div>
-                          ))}
+                          <div className="text-[10px] font-mono uppercase text-zinc-500">
+                            Recommended Use
+                          </div>
+                          {activeComponent.guidelines.recommended.map(
+                            (rec, i) => (
+                              <div
+                                key={i}
+                                className="flex items-start gap-2 text-xs text-zinc-300 font-light leading-relaxed"
+                              >
+                                <span className="text-emerald-500 text-[11px] font-mono select-none">
+                                  ✓
+                                </span>
+                                <span>{rec}</span>
+                              </div>
+                            ),
+                          )}
                         </div>
                       )}
                       {activeComponent.guidelines.bestPractices && (
                         <div className="space-y-1.5 pt-2">
-                          <div className="text-[10px] font-mono uppercase text-zinc-500">Best Practices</div>
-                          {activeComponent.guidelines.bestPractices.map((bp, i) => (
-                            <div key={i} className="flex items-start gap-2 text-xs text-zinc-300 font-light leading-relaxed">
-                              <span className="text-orange-400 text-[11px] font-mono select-none">·</span>
-                              <span>{bp}</span>
-                            </div>
-                          ))}
+                          <div className="text-[10px] font-mono uppercase text-zinc-500">
+                            Best Practices
+                          </div>
+                          {activeComponent.guidelines.bestPractices.map(
+                            (bp, i) => (
+                              <div
+                                key={i}
+                                className="flex items-start gap-2 text-xs text-zinc-300 font-light leading-relaxed"
+                              >
+                                <span className="text-orange-400 text-[11px] font-mono select-none">
+                                  ·
+                                </span>
+                                <span>{bp}</span>
+                              </div>
+                            ),
+                          )}
                         </div>
                       )}
                     </motion.div>
                   )}
 
-                  <motion.div variants={fadeVariants} className="space-y-2.5 pt-4 border-t border-white/8">
+                  <motion.div
+                    variants={fadeVariants}
+                    className="space-y-2.5 pt-4 border-t border-white/8"
+                  >
                     <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
                       Dependencies & Source
                     </div>
@@ -1155,7 +1355,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     {activeComponent.files && activeComponent.files[0] && (
                       <div className="flex items-center justify-between text-[11px] font-mono text-zinc-500 bg-black/40 border border-white/8 rounded-lg px-3 py-2 mt-2">
                         <span>Source File</span>
-                        <span className="text-zinc-300">{activeComponent.files[0].path}</span>
+                        <span className="text-zinc-300">
+                          {activeComponent.files[0].path}
+                        </span>
                       </div>
                     )}
                   </motion.div>
