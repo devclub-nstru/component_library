@@ -50,6 +50,7 @@ import { AiOrb } from "@/registry/ui/ai-orb";
 import { TwitterCard } from "@/registry/ui/twitter-card";
 import { Toaster, toast } from "@/registry/ui/toast";
 import { TaskList } from "@/registry/ui/task-list";
+import { FileTree, type TreeNode } from "@/registry/ui/file-tree";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -102,6 +103,11 @@ const ALL_CATEGORIES = [
         label: "Proximity Sidebar",
         slug: "proximity-sidebar",
         href: "/components/proximity-sidebar",
+      },
+      {
+        label: "File Tree",
+        slug: "file-tree",
+        href: "/components/file-tree",
       },
     ],
   },
@@ -194,6 +200,68 @@ const CATEGORIES = ALL_CATEGORIES.map((cat) => ({
     return Boolean(comp && !comp.hidden);
   }),
 })).filter((cat) => cat.items.length > 0);
+
+const FILE_TREE_DEMO_DATA: TreeNode[] = [
+  {
+    id: "src",
+    label: "src",
+    children: [
+      {
+        id: "app",
+        label: "app",
+        children: [
+          { id: "page-ts", label: "page.tsx" },
+          { id: "layout-ts", label: "layout.tsx" },
+          { id: "globals-css", label: "globals.css" },
+        ],
+      },
+      {
+        id: "components",
+        label: "components",
+        children: [
+          { id: "hero-ts", label: "hero-section.tsx" },
+          { id: "navbar-ts", label: "navbar.tsx" },
+          { id: "footer-ts", label: "footer.tsx" },
+        ],
+      },
+      {
+        id: "registry",
+        label: "registry",
+        children: [
+          {
+            id: "ui-folder",
+            label: "ui",
+            children: [
+              { id: "file-tree-ts", label: "file-tree.tsx" },
+              { id: "smooth-accordion-ts", label: "smooth-accordion.tsx" },
+              { id: "spotlight-card-ts", label: "spotlight-card.tsx" },
+            ],
+          },
+          { id: "index-ts", label: "index.ts" },
+        ],
+      },
+      {
+        id: "lib",
+        label: "lib",
+        children: [
+          { id: "utils-ts", label: "utils.ts" },
+          { id: "registry-ts", label: "registry.ts" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "public",
+    label: "public",
+    children: [
+      { id: "favicon-ico", label: "favicon.ico" },
+      { id: "logo-svg", label: "logo.svg" },
+    ],
+  },
+  { id: "package-json", label: "package.json" },
+  { id: "tsconfig-json", label: "tsconfig.json" },
+  { id: "readme-md", label: "README.md" },
+];
 
 const HOOK_SIDEBAR_DEMO_CATEGORIES = [
   {
@@ -705,6 +773,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
       "animated-counter",
       "code-block",
       "task-list",
+      "file-tree",
     ].includes(activeComponent.slug),
   );
 
@@ -994,6 +1063,19 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               enableLinkTilt={twitterCardConfig.enableLinkTilt}
               cardTiltMaxRotate={twitterCardConfig.cardTiltMaxRotate}
               linkTiltMaxRotate={twitterCardConfig.linkTiltMaxRotate}
+            />
+          </div>
+        );
+      case "file-tree":
+        return (
+          <div className="w-full max-w-xs select-none">
+            <FileTree
+              data={FILE_TREE_DEMO_DATA}
+              defaultExpandedIds={["src", "registry", "ui-folder"]}
+              defaultSelectedIds={["file-tree-ts"]}
+              showLines={true}
+              showIcons={true}
+              selectable={true}
             />
           </div>
         );

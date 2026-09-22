@@ -184,8 +184,8 @@ export function TreeView({
               {Array.from({ length: level }).map((_, i) => (
                 <div
                   key={i}
-                  className="absolute top-0 bottom-0 border-l border-zinc-200 dark:border-zinc-800"
-                  style={{ left: `${i * indent + 14}px` }}
+                  className="absolute top-0 bottom-0 border-l border-zinc-200 dark:border-zinc-800/80"
+                  style={{ left: `${i * indent + 15}px` }}
                 />
               ))}
             </div>
@@ -231,7 +231,7 @@ export function TreeView({
             </div>
           )}
 
-          <span className="text-xs sm:text-sm truncate leading-none pt-[1px]">
+          <span className="text-xs sm:text-sm truncate leading-none pt-px">
             {node.label}
           </span>
         </div>
