@@ -163,6 +163,11 @@ const ALL_CATEGORIES = [
         href: "/components/glowing-badge",
       },
       {
+        label: "Toast",
+        slug: "toast",
+        href: "/components/toast",
+      },
+      {
         label: "Dither",
         slug: "dither",
         href: "/components/dither",
