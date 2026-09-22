@@ -51,6 +51,7 @@ import { TwitterCard } from "@/registry/ui/twitter-card";
 import { Toaster, toast } from "@/registry/ui/toast";
 import { TaskList } from "@/registry/ui/task-list";
 import { FileTree, type TreeNode } from "@/registry/ui/file-tree";
+import { SearchComposer } from "@/registry/ui/search-input";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -138,6 +139,11 @@ const ALL_CATEGORIES = [
         label: "Task List",
         slug: "task-list",
         href: "/components/task-list",
+      },
+      {
+        label: "Search Input",
+        slug: "search-input",
+        href: "/components/search-input",
       },
     ],
   },
@@ -685,6 +691,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
   const [otpSize, setOtpSize] = useState<OtpSize>("md");
   const [otpVariant, setOtpVariant] = useState<OtpVariant>("default");
   const [otpGrouped, setOtpGrouped] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
+  const [searchBusy, setSearchBusy] = useState(false);
 
   const resetOtpConfig = () => {
     setOtpStatus("idle");
@@ -864,6 +872,22 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 ) : undefined
               }
               groupSize={otpGrouped ? 3 : undefined}
+            />
+          </div>
+        );
+      case "search-input":
+        return (
+          <div className="flex flex-col items-center justify-center w-full max-w-xl mx-auto p-8">
+            <SearchComposer
+              value={searchValue}
+              onChange={setSearchValue}
+              onSubmit={() => {
+                setSearchBusy(true);
+                setTimeout(() => setSearchBusy(false), 2200);
+              }}
+              onClear={() => setSearchValue("")}
+              busy={searchBusy}
+              placeholder="What are we overthinking today?"
             />
           </div>
         );

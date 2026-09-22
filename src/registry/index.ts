@@ -9417,6 +9417,300 @@ export const FileTree = TreeView;
       },
     ],
   },
+  "search-input": {
+    slug: "search-input",
+    name: "Search Input",
+    description: "Voice-glow powered typing-reactive search composer with animated thinking orbs.",
+    summary: "An ultra-smooth, responsive search composer component inspired by modern AI search interfaces. Integrates voice-glow dynamic border beam lighting driven by keystroke energy decay physics, coupled with thinking-orbs 2D canvas particle loading indicators that transition smoothly between idle breathing and searching states.",
+    category: "inputs",
+    tags: ["search", "input", "voice-glow", "orb", "ai", "beam", "glow", "thinking-orbs", "form"],
+    dependencies: ["clsx", "tailwind-merge", "voice-glow", "thinking-orbs"],
+    version: "1.0.0",
+    createdDate: "2026-09-22",
+    updatedDate: "2026-09-22",
+    interactive: true,
+    supportsColor: false,
+    highlights: [
+      "Dynamic keystroke-reactive energy decay lighting powered by voice-glow VoiceBeam",
+      "Canvas-rendered thinking orb with fluid breathing and high-speed searching orbital states",
+      "Global shortcut listener with '/' trigger for instant keyboard-first focus",
+      "Backdrop blur-2xl glassmorphism panel with subtle border lighting and responsive hover/focus dynamics",
+      "Hydration-safe dual-stage mounting ensuring instant server render usability"
+    ],
+    anatomy: [
+      "<VoiceBeam> (Outer wrapper applying audio/energy reactive colorful perimeter glow)",
+      "<form> (Semantic search container with backdrop-blur-2xl and transition-colors)",
+      "<input> (Transparent text entry field with keystroke energy accumulator and keyboard shortcuts)",
+      "<button> (Submit action button with disabled states and tactile active scale)",
+      "<Orb> (Dynamic next/dynamic canvas loader displaying thinking-orbs animations)"
+    ],
+    physics: {
+      engine: "RAF Energy Decay & Thinking Orb Particle Simulation",
+      description: "Keystroke energy accumulator with 0.91 exponential decay loop per requestAnimationFrame, coupled with 2D canvas orbital particle mathematics.",
+      parameters: [
+        { label: "Energy Boost Per Key", value: "+0.5" },
+        { label: "Decay Factor", value: "0.91 / frame" },
+        { label: "VoiceBeam Strength", value: "0.9" },
+        { label: "Orb Base Size", value: "64px (rendered at 30px)" },
+        { label: "Orb Idle State", value: "breathing" },
+        { label: "Orb Busy State", value: "searching" }
+      ]
+    },
+    accessibility: {
+      role: "search",
+      aria: "Form carries role='search' with sr-only labels and live aria-label on the submit orb button.",
+      reducedMotion: "Thinking Orb automatically pauses or reduces motion when prefers-reduced-motion is detected."
+    },
+    guidelines: {
+      recommended: [
+        "Primary search and command interfaces in AI copilot applications",
+        "Interactive query bars on landing pages and discovery portals",
+        "Startup indexers and catalog exploration inputs"
+      ],
+      bestPractices: [
+        "Supply an onSubmit handler to capture query executions",
+        "Toggle the busy prop during asynchronous data fetching to transition the orb into searching state",
+        "Keep the parent container styled with dark panel themes for maximum voice glow contrast"
+      ]
+    },
+    props: [
+      {
+        name: "value",
+        type: "string",
+        defaultValue: "undefined",
+        description: "Controlled search query string."
+      },
+      {
+        name: "onChange",
+        type: "(value: string) => void",
+        defaultValue: "undefined",
+        description: "Callback fired whenever the input text changes."
+      },
+      {
+        name: "onSubmit",
+        type: "(value: string) => void",
+        defaultValue: "undefined",
+        description: "Callback triggered on Enter keypress or search button submission."
+      },
+      {
+        name: "onClear",
+        type: "() => void",
+        defaultValue: "undefined",
+        description: "Callback triggered when the Escape key is pressed."
+      },
+      {
+        name: "busy",
+        type: "boolean",
+        defaultValue: "false",
+        description: "Whether search or processing is actively in progress."
+      },
+      {
+        name: "placeholder",
+        type: "string",
+        defaultValue: "\"What are we overthinking today?\"",
+        description: "Placeholder text shown when input is empty."
+      },
+      {
+        name: "className",
+        type: "string",
+        defaultValue: "undefined",
+        description: "Optional custom CSS class name for the wrapper."
+      }
+    ],
+    files: [
+      {
+        name: "search-input.tsx",
+        path: "registry/ui/search-input.tsx",
+        code: `"use client";
+
+import { useEffect, useRef, useState } from "react";
+import { VoiceBeam } from "voice-glow";
+import { Orb } from "./fx/Orb";
+
+export type SearchComposerProps = {
+  value?: string;
+  defaultValue?: string;
+  onChange?: (v: string) => void;
+  onSubmit?: (v: string) => void;
+  onClear?: () => void;
+  busy?: boolean;
+  placeholder?: string;
+  className?: string;
+  autoFocus?: boolean;
+};
+
+export function SearchComposer({
+  value: controlledValue,
+  defaultValue = "",
+  onChange,
+  onSubmit,
+  onClear,
+  busy = false,
+  placeholder = "What are we overthinking today?",
+  className,
+  autoFocus = true,
+}: SearchComposerProps) {
+  const isControlled = controlledValue !== undefined;
+  const [internalValue, setInternalValue] = useState(defaultValue);
+  const currentValue = isControlled ? controlledValue : internalValue;
+
+  const input = useRef<HTMLInputElement>(null);
+  const energy = useRef(0);
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    setReady(true);
+    let raf = 0;
+    const tick = () => {
+      energy.current *= 0.91;
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, []);
+
+  useEffect(() => {
+    const typed = input.current?.value;
+    if (typed && typed !== currentValue) {
+      if (!isControlled) {
+        setInternalValue(typed);
+      }
+      onChange?.(typed);
+    }
+  }, [currentValue, isControlled, onChange]);
+
+  const submit = () => onSubmit?.(input.current?.value ?? currentValue);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const typing = document.activeElement instanceof HTMLInputElement;
+      if (e.key === "/" && !typing) {
+        e.preventDefault();
+        input.current?.focus();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  const form = (
+    <form
+      role="search"
+      onSubmit={(e) => {
+        e.preventDefault();
+        submit();
+      }}
+      className="flex w-full items-center gap-3 rounded-[5px] border border-line bg-panel/95 py-3 pl-6 pr-3 backdrop-blur-2xl transition-colors duration-300 focus-within:border-line-strong"
+    >
+      <label htmlFor="q" className="sr-only">
+        Describe an image
+      </label>
+      <input
+        id="q"
+        ref={input}
+        autoFocus={autoFocus}
+        autoComplete="off"
+        spellCheck={false}
+        maxLength={300}
+        value={currentValue}
+        onChange={(e) => {
+          energy.current = Math.min(1, energy.current + 0.5);
+          if (!isControlled) {
+            setInternalValue(e.target.value);
+          }
+          onChange?.(e.target.value);
+        }}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !e.nativeEvent.isComposing) {
+            e.preventDefault();
+            submit();
+          }
+          if (e.key === "Escape") {
+            if (!isControlled) {
+              setInternalValue("");
+            }
+            onClear?.();
+            input.current?.blur();
+          }
+        }}
+        placeholder={placeholder}
+        className="min-w-0 flex-1 bg-transparent py-2 text-[18px] leading-8 tracking-[-0.01em] text-text outline-none placeholder:text-faint"
+      />
+      <button
+        type="submit"
+        disabled={busy || currentValue.trim().length < 2}
+        aria-label={busy ? "Searching" : "Search"}
+        className="grid size-12 shrink-0 place-items-center rounded-[5px] border border-line transition-all duration-300 ease-out enabled:hover:border-line-strong enabled:hover:bg-white/6 enabled:active:scale-95 disabled:opacity-45"
+      >
+        <Orb state={busy ? "searching" : "breathing"} size={64} display={30} />
+      </button>
+    </form>
+  );
+
+  if (!ready) return form;
+
+  return (
+    <VoiceBeam
+      type="default"
+      theme="dark"
+      colorVariant="colorful"
+      level={() => energy.current}
+      processing={busy}
+      strength={0.9}
+      className={className ? \`w-full \${className}\` : "w-full"}
+    >
+      {form}
+    </VoiceBeam>
+  );
+}
+
+export const SearchInput = SearchComposer;
+export type SearchInputProps = SearchComposerProps;
+export { Orb, type OrbProps } from "./fx/Orb";
+`,
+      },
+      {
+        name: "Orb.tsx",
+        path: "registry/ui/fx/Orb.tsx",
+        code: `"use client";
+
+import dynamic from "next/dynamic";
+import type { OrbState } from "thinking-orbs";
+
+const ThinkingOrb = dynamic(
+  () => import("thinking-orbs").then((m) => m.ThinkingOrb),
+  { ssr: false }
+);
+
+export type OrbProps = {
+  state: OrbState;
+  size?: 64 | 20;
+  display?: number;
+  paused?: boolean;
+};
+
+export function Orb({ state, size = 64, display, paused }: OrbProps) {
+  const px = display ?? size;
+  return (
+    <span
+      className="inline-flex shrink-0 items-center justify-center"
+      style={{ width: px, height: px }}
+      aria-hidden
+    >
+      <ThinkingOrb
+        state={state}
+        size={size}
+        theme="dark"
+        paused={paused}
+        style={{ width: px, height: px, display: "block" }}
+      />
+    </span>
+  );
+}
+`,
+      },
+    ],
+  },
 };
 
 export const getAllComponents = (

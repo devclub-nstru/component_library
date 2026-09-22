@@ -23,6 +23,7 @@ import { AiOrb } from "@/registry/ui/ai-orb";
 import { TwitterCard } from "@/registry/ui/twitter-card";
 import { ToasterDemo } from "@/registry/ui/toast";
 import { TaskList } from "@/registry/ui/task-list";
+import { SearchComposer } from "@/registry/ui/search-input";
 import { cn } from "@/lib/utils";
 
 function CounterPreview() {
@@ -265,6 +266,19 @@ export default function ComponentsPage() {
             { id: "p1", label: "Refactor spring curves", done: false },
             { id: "p2", label: "Micro-particle bursts", done: true },
           ]}
+        />
+      </div>
+    ),
+    "search-input": (
+      <div className="w-full max-w-sm scale-90 origin-center pointer-events-none select-none px-2">
+        <SearchComposer
+          value="AI copilot"
+          onChange={() => {}}
+          onSubmit={() => {}}
+          onClear={() => {}}
+          busy={false}
+          placeholder="What are we overthinking today?"
+          autoFocus={false}
         />
       </div>
     ),

@@ -11,6 +11,12 @@
   --muted-foreground: #a1a1aa;
   --primary: #f4f4f5;
   --primary-foreground: #09090b;
+  --line: rgb(255 255 255 / 0.08);
+  --line-strong: rgb(255 255 255 / 0.16);
+  --panel: #151517;
+  --text: #f2f2f3;
+  --faint: #56565c;
+  --ink: #0b0b0c;
 }
 
 @theme inline {
@@ -21,6 +27,12 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-panel: var(--panel);
+  --color-text: var(--text);
+  --color-faint: var(--faint);
+  --color-ink: var(--ink);
   --font-sans: var(--font-poppins), sans-serif;
   --font-serif: var(--font-gambetta), Georgia, serif;
   --font-poppins: var(--font-poppins), sans-serif;
