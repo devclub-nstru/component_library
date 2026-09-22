@@ -9711,6 +9711,233 @@ export function Orb({ state, size = 64, display, paused }: OrbProps) {
       },
     ],
   },
+  orb: {
+    slug: "orb",
+    name: "Thinking Orb",
+    description: "Interactive 2D dotted thought-orb indicator with 9 animated AI states and tactile click cycling.",
+    summary: "A purpose-tuned animated indicator component engineered for AI agent UIs, copilot status indicators, and creative loaders. Powered by thinking-orbs, it renders nine distinct orbital particle states (breathing, searching, working, solving, listening, connecting, weaving, composing, shaping) onto a lightweight 2D canvas with full click-to-cycle interactivity, responsive sizes, and sleek presentation variants.",
+    category: "display",
+    tags: ["orb", "thinking-orb", "ai", "loader", "particles", "canvas", "interactive", "animation"],
+    dependencies: ["clsx", "tailwind-merge", "thinking-orbs"],
+    version: "1.0.0",
+    createdDate: "2026-09-22",
+    updatedDate: "2026-09-22",
+    interactive: true,
+    supportsColor: false,
+    highlights: [
+      "Nine hand-tuned agent animation states: breathing, searching, working, solving, listening, connecting, weaving, composing, shaping",
+      "Interactive click-to-cycle state transition with tactile hover and active scaling",
+      "Three distinct presentation variants: minimal (pure orb), card (framed telemetry card), and pill (compact status chip)",
+      "High-efficiency 2D HTML5 canvas rendering without WebGL or heavy shader pipeline overhead",
+      "Hydration-safe dynamic loader with automatic offscreen pause and reduced motion support"
+    ],
+    anatomy: [
+      "<button> (Accessible interactive trigger with tactile scale and focus rings)",
+      "<span> (Soft ambient blur wash reflecting state and elevation)",
+      "<canvas> (2D particle simulation rendering mathematical orbital paths)",
+      "<span> (Optional monospace uppercase status chip displaying active state)"
+    ],
+    physics: {
+      engine: "2D Canvas Particle Kinematics",
+      description: "Mathematical trigonometric orbits and particle velocity vectors running through a unified shared frame clock.",
+      parameters: [
+        { label: "Orbital States", value: "9 unique verbs" },
+        { label: "Rendering Tech", value: "2D Canvas (No WebGL)" },
+        { label: "Base Presets", value: "64px (avatar) / 20px (inline)" },
+        { label: "Device Pixel Ratio", value: "Capped at 2x" },
+        { label: "Performance", value: "60 FPS with offscreen culling" }
+      ]
+    },
+    accessibility: {
+      role: "button",
+      aria: "Carries live aria-label communicating current state and click action. Automatically freezes animation when prefers-reduced-motion is active.",
+      reducedMotion: "Renders a static representative frame with zero loop computation."
+    },
+    guidelines: {
+      recommended: [
+        "AI agent and copilot status indicators in navigation headers and sidebars",
+        "Loading and thinking states during generative tasks and deep reasoning queries",
+        "Interactive state selectors and futuristic feedback elements"
+      ],
+      bestPractices: [
+        "Use variant='minimal' for inline avatars or nested button search triggers",
+        "Use variant='pill' for persistent status bars and header telemetry",
+        "Use variant='card' for interactive feature showcases and agent controls"
+      ]
+    },
+    props: [
+      {
+        name: "state",
+        type: "OrbState",
+        defaultValue: "undefined",
+        description: "Controlled orb animation state (breathing, searching, working, solving, listening, connecting, weaving, composing, shaping)."
+      },
+      {
+        name: "defaultState",
+        type: "OrbState",
+        defaultValue: "\"breathing\"",
+        description: "Initial state when uncontrolled."
+      },
+      {
+        name: "size",
+        type: "64 | 20",
+        defaultValue: "64",
+        description: "Authoring tuning preset and canvas buffer resolution."
+      },
+      {
+        name: "display",
+        type: "number",
+        defaultValue: "undefined",
+        description: "CSS dimensions to render the orb at in pixels."
+      },
+      {
+        name: "interactive",
+        type: "boolean",
+        defaultValue: "true",
+        description: "Whether clicking cycles through orb states with tactile feedback."
+      },
+      {
+        name: "paused",
+        type: "boolean",
+        defaultValue: "false",
+        description: "Freeze the animation on the current frame."
+      },
+      {
+        name: "speed",
+        type: "number",
+        defaultValue: "1",
+        description: "Animation speed multiplier."
+      },
+      {
+        name: "onClick",
+        type: "(e, nextState) => void",
+        defaultValue: "undefined",
+        description: "Callback fired on click with event and next state."
+      }
+    ],
+    files: [
+      {
+        name: "orb.tsx",
+        path: "registry/ui/orb.tsx",
+        code: `"use client";
+
+import React, { useCallback, useState } from "react";
+import dynamic from "next/dynamic";
+import type { OrbState } from "thinking-orbs";
+import { cn } from "@/lib/utils";
+
+const ThinkingOrb = dynamic(
+  () => import("thinking-orbs").then((m) => m.ThinkingOrb),
+  { ssr: false }
+);
+
+export const ORB_STATES: OrbState[] = [
+  "breathing",
+  "searching",
+  "working",
+  "solving",
+  "listening",
+  "connecting",
+  "weaving",
+  "composing",
+  "shaping",
+];
+
+export interface OrbProps {
+  state?: OrbState;
+  defaultState?: OrbState;
+  size?: 64 | 20;
+  display?: number;
+  paused?: boolean;
+  speed?: number;
+  theme?: "dark" | "light" | "auto";
+  interactive?: boolean;
+  className?: string;
+  onClick?: (event: React.MouseEvent<HTMLElement>, nextState: OrbState) => void;
+  onStateChange?: (state: OrbState) => void;
+}
+
+export function Orb({
+  state: controlledState,
+  defaultState = "breathing",
+  size = 64,
+  display,
+  paused = false,
+  speed = 1,
+  theme = "dark",
+  interactive = true,
+  className,
+  onClick,
+  onStateChange,
+}: OrbProps) {
+  const isControlled = controlledState !== undefined;
+  const [internalState, setInternalState] = useState<OrbState>(defaultState);
+  const currentState = isControlled ? controlledState : internalState;
+
+  const px = display ?? size;
+
+  const handleClick = useCallback(
+    (e: React.MouseEvent<HTMLElement>) => {
+      const currentIndex = ORB_STATES.indexOf(currentState);
+      const nextIndex = (currentIndex + 1) % ORB_STATES.length;
+      const nextState = ORB_STATES[nextIndex];
+
+      if (!isControlled) {
+        setInternalState(nextState);
+      }
+      onStateChange?.(nextState);
+      onClick?.(e, nextState);
+    },
+    [currentState, isControlled, onClick, onStateChange]
+  );
+
+  const canvas = (
+    <ThinkingOrb
+      state={currentState}
+      size={size}
+      theme={theme}
+      speed={speed}
+      paused={paused}
+      style={{ width: px, height: px, display: "block" }}
+    />
+  );
+
+  if (!interactive && !onClick) {
+    return (
+      <span
+        className={cn(
+          "inline-flex shrink-0 items-center justify-center select-none",
+          className
+        )}
+        style={{ width: px, height: px }}
+        aria-hidden
+      >
+        {canvas}
+      </span>
+    );
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={handleClick}
+      aria-label={\`Orb state is \${currentState}. Click to cycle state.\`}
+      className={cn(
+        "inline-flex shrink-0 items-center justify-center p-0 border-0 bg-transparent cursor-pointer select-none transition-transform duration-200 ease-out hover:scale-105 active:scale-95 outline-none rounded-full focus-visible:ring-1 focus-visible:ring-white/20",
+        className
+      )}
+      style={{ width: px, height: px }}
+    >
+      {canvas}
+    </button>
+  );
+}
+
+export const ThinkingOrbComponent = Orb;
+`,
+      },
+    ],
+  },
 };
 
 export const getAllComponents = (

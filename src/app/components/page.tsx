@@ -24,6 +24,7 @@ import { TwitterCard } from "@/registry/ui/twitter-card";
 import { ToasterDemo } from "@/registry/ui/toast";
 import { TaskList } from "@/registry/ui/task-list";
 import { SearchComposer } from "@/registry/ui/search-input";
+import { Orb } from "@/registry/ui/orb";
 import { cn } from "@/lib/utils";
 
 function CounterPreview() {
@@ -280,6 +281,11 @@ export default function ComponentsPage() {
           placeholder="What are we overthinking today?"
           autoFocus={false}
         />
+      </div>
+    ),
+    orb: (
+      <div className="flex items-center justify-center p-3 select-none pointer-events-none">
+        <Orb display={72} size={64} interactive={false} />
       </div>
     ),
   };

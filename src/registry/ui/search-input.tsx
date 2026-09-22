@@ -119,7 +119,12 @@ export function SearchComposer({
         aria-label={busy ? "Searching" : "Search"}
         className="grid size-12 shrink-0 place-items-center rounded-[5px] border border-line transition-all duration-300 ease-out enabled:hover:border-line-strong enabled:hover:bg-white/6 enabled:active:scale-95 disabled:opacity-45"
       >
-        <Orb state={busy ? "searching" : "breathing"} size={64} display={30} />
+        <Orb
+          state={busy ? "searching" : "breathing"}
+          size={64}
+          display={30}
+          interactive={false}
+        />
       </button>
     </form>
   );

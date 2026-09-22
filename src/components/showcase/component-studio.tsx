@@ -52,6 +52,8 @@ import { Toaster, toast } from "@/registry/ui/toast";
 import { TaskList } from "@/registry/ui/task-list";
 import { FileTree, type TreeNode } from "@/registry/ui/file-tree";
 import { SearchComposer } from "@/registry/ui/search-input";
+import { Orb, ORB_STATES } from "@/registry/ui/orb";
+import type { OrbState } from "thinking-orbs";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -194,6 +196,11 @@ const ALL_CATEGORIES = [
         label: "AI Orb",
         slug: "ai-orb",
         href: "/components/ai-orb",
+      },
+      {
+        label: "Thinking Orb",
+        slug: "orb",
+        href: "/components/orb",
       },
     ],
   },
@@ -693,6 +700,17 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
   const [otpGrouped, setOtpGrouped] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [searchBusy, setSearchBusy] = useState(false);
+  const [orbStudioState, setOrbStudioState] = useState<OrbState>("breathing");
+  const [orbStudioSize, setOrbStudioSize] = useState<number>(120);
+  const [orbStudioSpeed, setOrbStudioSpeed] = useState<number>(1);
+  const [orbStudioPaused, setOrbStudioPaused] = useState<boolean>(false);
+
+  const resetOrbConfig = () => {
+    setOrbStudioState("breathing");
+    setOrbStudioSize(120);
+    setOrbStudioSpeed(1);
+    setOrbStudioPaused(false);
+  };
 
   const resetOtpConfig = () => {
     setOtpStatus("idle");
@@ -888,6 +906,19 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               onClear={() => setSearchValue("")}
               busy={searchBusy}
               placeholder="What are we overthinking today?"
+            />
+          </div>
+        );
+      case "orb":
+        return (
+          <div className="flex items-center justify-center w-full h-full min-h-96 select-none p-8">
+            <Orb
+              state={orbStudioState}
+              display={orbStudioSize}
+              size={orbStudioSize <= 32 ? 20 : 64}
+              speed={orbStudioSpeed}
+              paused={orbStudioPaused}
+              onClick={(_, nextState) => setOrbStudioState(nextState)}
             />
           </div>
         );
@@ -2413,6 +2444,153 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           )}
                         >
                           {otpGrouped ? "ON" : "OFF"}
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeComponent.slug === "orb" && (
+                <div
+                  key="orb-customize-panel"
+                  className="pointer-events-auto rounded-2xl border border-white/10 bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-2xl w-full mx-4 select-none flex flex-col gap-2.5"
+                >
+                  <div className="flex items-center justify-between px-1">
+                    <span className="text-xs font-semibold text-white/90 tracking-tight">
+                      Orb Controls
+                    </span>
+                    <button
+                      type="button"
+                      onClick={resetOrbConfig}
+                      className="text-[11px] text-zinc-400 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                    >
+                      <ResetIcon className="w-3.5 h-3.5" />
+                      <span>Reset</span>
+                    </button>
+                  </div>
+
+                  <div className="rounded-xl border border-white/5 bg-[#0b0b0e] p-2 flex flex-col gap-2">
+                    <div className="flex items-center gap-1 overflow-x-auto no-scrollbar bg-[#17171b] p-1 rounded-xl border border-white/5">
+                      {ORB_STATES.map((s) => (
+                        <button
+                          key={s}
+                          type="button"
+                          onClick={() => setOrbStudioState(s)}
+                          className={cn(
+                            "relative h-7 px-2.5 rounded-lg text-xs capitalize transition-colors cursor-pointer flex items-center justify-center shrink-0",
+                            orbStudioState === s
+                              ? "text-black font-semibold"
+                              : "text-zinc-400 hover:text-white"
+                          )}
+                        >
+                          {orbStudioState === s && (
+                            <motion.div
+                              layoutId="activeOrbStateIndicator"
+                              transition={{
+                                type: "spring",
+                                stiffness: 450,
+                                damping: 32,
+                              }}
+                              className="absolute inset-0 bg-white rounded-lg shadow-xs"
+                            />
+                          )}
+                          <span className="relative z-10">{s}</span>
+                        </button>
+                      ))}
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                      <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                        <span className="text-zinc-400 text-xs font-medium">
+                          Size
+                        </span>
+                        <div className="flex items-center gap-0.5 bg-black/25 p-0.5 rounded-md border border-white/5">
+                          {[
+                            { label: "S", value: 64 },
+                            { label: "M", value: 96 },
+                            { label: "L", value: 140 },
+                            { label: "XL", value: 180 },
+                          ].map((sz) => (
+                            <button
+                              key={sz.label}
+                              type="button"
+                              onClick={() => setOrbStudioSize(sz.value)}
+                              className={cn(
+                                "relative px-2 py-0.5 rounded text-[11px] font-mono transition-colors cursor-pointer",
+                                orbStudioSize === sz.value
+                                  ? "text-black font-semibold"
+                                  : "text-zinc-400 hover:text-white"
+                              )}
+                            >
+                              {orbStudioSize === sz.value && (
+                                <motion.div
+                                  layoutId="activeOrbSizeIndicator"
+                                  transition={{
+                                    type: "spring",
+                                    stiffness: 450,
+                                    damping: 32,
+                                  }}
+                                  className="absolute inset-0 bg-white rounded shadow-xs"
+                                />
+                              )}
+                              <span className="relative z-10">{sz.label}</span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                        <span className="text-zinc-400 text-xs font-medium">
+                          Speed
+                        </span>
+                        <div className="flex items-center gap-0.5 bg-black/25 p-0.5 rounded-md border border-white/5">
+                          {[0.5, 1, 1.5, 2].map((sp) => (
+                            <button
+                              key={sp}
+                              type="button"
+                              onClick={() => setOrbStudioSpeed(sp)}
+                              className={cn(
+                                "relative px-2 py-0.5 rounded text-[11px] font-mono transition-colors cursor-pointer",
+                                orbStudioSpeed === sp
+                                  ? "text-black font-semibold"
+                                  : "text-zinc-400 hover:text-white"
+                              )}
+                            >
+                              {orbStudioSpeed === sp && (
+                                <motion.div
+                                  layoutId="activeOrbSpeedIndicator"
+                                  transition={{
+                                    type: "spring",
+                                    stiffness: 450,
+                                    damping: 32,
+                                  }}
+                                  className="absolute inset-0 bg-white rounded shadow-xs"
+                                />
+                              )}
+                              <span className="relative z-10">{sp}x</span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => setOrbStudioPaused((p) => !p)}
+                        className="h-9 rounded-lg border border-white/5 bg-[#17171b] hover:bg-[#1f1f25] px-3 flex items-center justify-between text-xs transition-colors cursor-pointer"
+                      >
+                        <span className="text-zinc-400 text-xs font-medium">
+                          Motion
+                        </span>
+                        <span
+                          className={cn(
+                            "px-2 py-0.5 rounded text-[11px] font-mono uppercase transition-colors",
+                            !orbStudioPaused
+                              ? "bg-white text-black font-semibold"
+                              : "bg-white/5 text-zinc-400"
+                          )}
+                        >
+                          {orbStudioPaused ? "PAUSED" : "PLAYING"}
                         </span>
                       </button>
                     </div>
