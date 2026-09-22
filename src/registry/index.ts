@@ -9523,9 +9523,11 @@ export const FileTree = TreeView;
         path: "registry/ui/search-input.tsx",
         code: `"use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { VoiceBeam } from "voice-glow";
 import { Orb } from "./fx/Orb";
+
+const emptySubscribe = () => () => {};
 
 export type SearchComposerProps = {
   value?: string;
@@ -9546,7 +9548,7 @@ export function SearchComposer({
   onSubmit,
   onClear,
   busy = false,
-  placeholder = "What are we overthinking today?",
+  placeholder = "Describe a startup",
   className,
   autoFocus = true,
 }: SearchComposerProps) {
@@ -9556,10 +9558,9 @@ export function SearchComposer({
 
   const input = useRef<HTMLInputElement>(null);
   const energy = useRef(0);
-  const [ready, setReady] = useState(false);
+  const ready = useSyncExternalStore(emptySubscribe, () => true, () => false);
 
   useEffect(() => {
-    setReady(true);
     let raf = 0;
     const tick = () => {
       energy.current *= 0.91;
