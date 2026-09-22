@@ -22,6 +22,7 @@ import { Dither } from "@/registry/ui/dither";
 import { AiOrb } from "@/registry/ui/ai-orb";
 import { TwitterCard } from "@/registry/ui/twitter-card";
 import { ToasterDemo } from "@/registry/ui/toast";
+import { TaskList } from "@/registry/ui/task-list";
 import { cn } from "@/lib/utils";
 
 function CounterPreview() {
@@ -254,6 +255,17 @@ export default function ComponentsPage() {
     "ai-orb": (
       <div className="flex items-center justify-center p-2 scale-75 origin-center pointer-events-none">
         <AiOrb size={130} />
+      </div>
+    ),
+    "task-list": (
+      <div className="w-full max-w-72 scale-90 origin-center pointer-events-none select-none">
+        <TaskList
+          size="sm"
+          defaultTasks={[
+            { id: "p1", label: "Refactor spring curves", done: false },
+            { id: "p2", label: "Micro-particle bursts", done: true },
+          ]}
+        />
       </div>
     ),
   };

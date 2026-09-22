@@ -49,6 +49,7 @@ import { Dither } from "@/registry/ui/dither";
 import { AiOrb } from "@/registry/ui/ai-orb";
 import { TwitterCard } from "@/registry/ui/twitter-card";
 import { Toaster, toast } from "@/registry/ui/toast";
+import { TaskList } from "@/registry/ui/task-list";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -126,6 +127,11 @@ const ALL_CATEGORIES = [
         label: "Animated Button",
         slug: "animated-button",
         href: "/components/animated-button",
+      },
+      {
+        label: "Task List",
+        slug: "task-list",
+        href: "/components/task-list",
       },
     ],
   },
@@ -698,6 +704,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
       "glowing-badge",
       "animated-counter",
       "code-block",
+      "task-list",
     ].includes(activeComponent.slug),
   );
 
@@ -760,6 +767,12 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
 
   const renderComponentPreview = (slug: string, color: string) => {
     switch (slug) {
+      case "task-list":
+        return (
+          <div className="flex flex-col items-center justify-center w-full max-w-md mx-auto p-4 select-none">
+            <TaskList accent={color} />
+          </div>
+        );
       case "otp-input":
         return (
           <div className="flex flex-col items-center justify-center gap-5 select-none w-full p-8 min-h-55">
@@ -2018,7 +2031,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
 
                   <div className="rounded-xl border border-white/5 bg-[#0b0b0e] p-2 flex flex-col gap-2.5">
                     <div className="flex items-center justify-between gap-2">
-                      <span className="text-[11px] text-zinc-400">Position</span>
+                      <span className="text-[11px] text-zinc-400">
+                        Position
+                      </span>
                       <div className="flex items-center gap-1 bg-[#17171b] p-1 rounded-lg border border-white/5">
                         {(
                           [
@@ -2051,7 +2066,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     </div>
 
                     <div className="flex items-center justify-between gap-2 pt-1 border-t border-white/5">
-                      <span className="text-[11px] text-zinc-400">Rich Colors</span>
+                      <span className="text-[11px] text-zinc-400">
+                        Rich Colors
+                      </span>
                       <button
                         type="button"
                         onClick={() =>
@@ -2077,7 +2094,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     </div>
 
                     <div className="flex items-center justify-between gap-2 pt-1 border-t border-white/5">
-                      <span className="text-[11px] text-zinc-400">Expand on Hover</span>
+                      <span className="text-[11px] text-zinc-400">
+                        Expand on Hover
+                      </span>
                       <button
                         type="button"
                         onClick={() =>
