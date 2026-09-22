@@ -5405,8 +5405,8 @@ export function OtpInput({
     switch (variant) {
       case "glass":
         return cn(
-          "bg-white/[0.04] dark:bg-white/[0.03] backdrop-blur-md border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]",
-          filled && "border-white/25 bg-white/[0.08]",
+          "bg-white/4 dark:bg-white/3 backdrop-blur-md border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]",
+          filled && "border-white/25 bg-white/8",
           isFocused && "border-white/40 shadow-[0_0_20px_rgba(255,255,255,0.15)]"
         );
       case "neon":
