@@ -8619,7 +8619,7 @@ const FILLED: Stage[] = ["tick", "strike", "nudge", "settled", "unstrike"];
 const STRUCK: Stage[] = ["strike", "nudge", "settled"];
 
 const CARD =
-  "bg-zinc-900/70 border border-white/[0.08] shadow-[0_2px_8px_rgba(0,0,0,0.25)] hover:border-white/15 hover:bg-zinc-900/90 active:scale-[0.985] text-zinc-100 backdrop-blur-md";
+  "bg-zinc-900/70 border border-white/8 shadow-[0_2px_8px_rgba(0,0,0,0.25)] hover:border-white/15 hover:bg-zinc-900/90 active:scale-[0.985] text-zinc-100 backdrop-blur-md";
 const FOCUS =
   "outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-black";
 
