@@ -8171,6 +8171,273 @@ export default TwitterCard;
       },
     ],
   },
+  toast: {
+    slug: "toast",
+    name: "Toast",
+    description: "Sonner-powered toast notifications featuring ultra-smooth blur dissolving entry and exit transitions.",
+    summary: "Minimalist, high-performance toast notification system combining Sonner's stacking architecture with custom GPU-accelerated blur dissolving transitions. Features subtle 12px blur reveal on entry, smooth cubic-bezier physics, glassmorphic backdrop filters, and smooth vanishing exit animations across default, success, error, and async promise states.",
+    category: "feedback",
+    tags: ["toast", "notification", "sonner", "feedback", "blur", "dissolve", "animation"],
+    dependencies: ["sonner", "next-themes", "@radix-ui/react-slot", "class-variance-authority", "clsx", "tailwind-merge"],
+    version: "1.0.0",
+    createdDate: "2026-09-22",
+    updatedDate: "2026-09-22",
+    interactive: true,
+    supportsColor: false,
+    highlights: [
+      "Physics-tuned blur dissolving entrance transitioning from 12px blur to crisp clarity",
+      "Silky smooth vanishing exit animation dissolving into 14px blur and fading away",
+      "Native Sonner stacking architecture supporting interactive action and undo callbacks",
+      "High-density glassmorphic styling with backdrop-blur-md and subtle border hairlines",
+      "First-class async promise handling with animated spinners and automatic state resolution"
+    ],
+    anatomy: [
+      "<Toaster> (Global fixed notification viewport with position and theme orchestration)",
+      "<ToasterDemo> (Interactive action surface with default, success, error, and promise triggers)",
+      "<Button> (High-contrast interactive trigger primitive with tactile active scaling)"
+    ],
+    physics: {
+      engine: "GPU CSS Hardware-Accelerated Blur & Cubic Bezier",
+      description: "Sub-pixel calibrated cubic-bezier(0.16, 1, 0.3, 1) transition curves synchronizing opacity, scale, and backdrop blur filters with zero layout reflows.",
+      parameters: [
+        { label: "Entry Duration", value: "420ms" },
+        { label: "Exit Duration", value: "220ms" },
+        { label: "Blur Radius (Entry)", value: "12px -> 0px" },
+        { label: "Blur Radius (Exit)", value: "0px -> 14px" },
+        { label: "Easing Curve", value: "cubic-bezier(0.16, 1, 0.3, 1)" },
+        { label: "Backdrop Filter", value: "blur(16px)" }
+      ]
+    },
+    accessibility: {
+      role: "status / alert",
+      aria: "Uses ARIA live regions managed by Sonner for automatic screen-reader announcements of transient system alerts.",
+      reducedMotion: "Automatically suppresses blur filters and switches to instantaneous 150ms opacity fades when prefers-reduced-motion is detected."
+    },
+    guidelines: {
+      recommended: [
+        "Instant confirmation of destructive or reversible actions with Undo support",
+        "Form submission status updates, authentication notices, and API error reports",
+        "Asynchronous task progress monitoring via toast.promise with live resolution updates"
+      ],
+      bestPractices: [
+        "Render <Toaster /> once at the root level of your layout or modal boundary",
+        "Keep toast descriptions concise (under 80 characters) for rapid scanning",
+        "Provide clear undo action handlers for destructive operations"
+      ]
+    },
+    props: [
+      {
+        name: "theme",
+        type: '"light" | "dark" | "system"',
+        defaultValue: '"system"',
+        description: "Controls the active color scheme of notification cards.",
+      },
+      {
+        name: "position",
+        type: '"top-left" | "top-right" | "bottom-left" | "bottom-right" | "top-center" | "bottom-center"',
+        defaultValue: '"bottom-right"',
+        description: "Screen anchor location for incoming toasts.",
+      },
+      {
+        name: "richColors",
+        type: "boolean",
+        defaultValue: "false",
+        description: "Whether status toasts (success, error, warning, info) use saturated semantic accents.",
+      },
+      {
+        name: "expand",
+        type: "boolean",
+        defaultValue: "false",
+        description: "Whether toasts expand on hover to reveal stacked items.",
+      },
+      {
+        name: "duration",
+        type: "number",
+        defaultValue: "4000",
+        description: "Time in milliseconds before automatically dissolving and vanishing.",
+      },
+    ],
+    files: [
+      {
+        name: "sonner.tsx",
+        path: "components/ui/sonner.tsx",
+        code: `"use client";
+
+import React from "react";
+import { useTheme } from "next-themes";
+import { Toaster as Sonner, toast } from "sonner";
+
+type ToasterProps = React.ComponentProps<typeof Sonner>;
+
+const Toaster = ({ ...props }: ToasterProps) => {
+  const { theme = "system" } = useTheme();
+
+  return (
+    <Sonner
+      theme={theme as ToasterProps["theme"]}
+      className="toaster group"
+      toastOptions={{
+        classNames: {
+          toast:
+            "group toast group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:shadow-lg !h-auto",
+          description: "group-[.toast]:text-muted-foreground",
+          actionButton:
+            "group-[.toast]:bg-primary group-[.toast]:text-primary-foreground",
+          cancelButton:
+            "group-[.toast]:bg-muted group-[.toast]:text-muted-foreground",
+        },
+      }}
+      {...props}
+    />
+  );
+};
+
+export { Toaster, toast };
+export default Toaster;
+`,
+      },
+      {
+        name: "button.tsx",
+        path: "components/ui/button.tsx",
+        code: `"use client";
+
+import * as React from "react";
+import { Slot } from "@radix-ui/react-slot";
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/utils";
+
+const buttonVariants = cva(
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-xs font-medium tracking-wide transition-all duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-400 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-3.5 [&_svg]:shrink-0 cursor-pointer select-none ease-[cubic-bezier(0.16,1,0.3,1)]",
+  {
+    variants: {
+      variant: {
+        default:
+          "bg-white text-black hover:bg-zinc-200 active:scale-[0.97] shadow-sm",
+        destructive:
+          "bg-red-500/90 text-white hover:bg-red-500 active:scale-[0.97] shadow-sm",
+        outline:
+          "border border-white/15 bg-zinc-900/60 text-zinc-300 hover:border-white/30 hover:bg-zinc-800 hover:text-white active:scale-[0.97]",
+        secondary:
+          "bg-zinc-800 text-zinc-100 hover:bg-zinc-700 active:scale-[0.97]",
+        ghost: "hover:bg-white/10 hover:text-white active:scale-[0.97]",
+        link: "text-white underline-offset-4 hover:underline",
+      },
+      size: {
+        default: "h-9 px-4 py-2",
+        sm: "h-8 rounded-md px-3 text-xs",
+        lg: "h-10 rounded-lg px-6 text-sm",
+        icon: "h-9 w-9",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  },
+);
+
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
+  asChild?: boolean;
+}
+
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant, size, asChild = false, ...props }, ref) => {
+    const Comp = asChild ? Slot : "button";
+    return (
+      <Comp
+        className={cn(buttonVariants({ variant, size, className }))}
+        ref={ref}
+        {...props}
+      />
+    );
+  },
+);
+Button.displayName = "Button";
+
+export { Button, buttonVariants };
+export default Button;
+`,
+      },
+      {
+        name: "toast.tsx",
+        path: "registry/ui/toast.tsx",
+        code: `"use client";
+
+import React from "react";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Toaster } from "@/components/ui/sonner";
+
+export function ToasterDemo() {
+  return (
+    <div className="flex flex-col items-center justify-center gap-4 w-full select-none p-2">
+      <Toaster />
+      <div className="flex flex-wrap items-center justify-center gap-2.5">
+        <Button
+          variant="outline"
+          onClick={() =>
+            toast("Event has been created", {
+              description: "Sunday, December 03, 2023 at 9:00 AM",
+              action: {
+                label: "Undo",
+                onClick: () => console.log("Undo"),
+              },
+            })
+          }
+        >
+          Default Toast
+        </Button>
+
+        <Button
+          variant="outline"
+          onClick={() =>
+            toast.success("Success!", {
+              description: "Your action was completed successfully",
+            })
+          }
+        >
+          Success Toast
+        </Button>
+
+        <Button
+          variant="outline"
+          onClick={() =>
+            toast.error("Error!", {
+              description: "Something went wrong. Please try again.",
+            })
+          }
+        >
+          Error Toast
+        </Button>
+
+        <Button
+          variant="outline"
+          onClick={() =>
+            toast.promise(
+              new Promise((resolve) => setTimeout(resolve, 2000)),
+              {
+                loading: "Loading...",
+                success: "Promise resolved",
+                error: "Promise rejected",
+              }
+            )
+          }
+        >
+          Promise Toast
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+export { Toaster, toast };
+export default ToasterDemo;
+`,
+      },
+    ],
+  },
 };
 
 export const getAllComponents = (

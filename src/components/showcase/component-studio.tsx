@@ -48,6 +48,8 @@ import {
 import { Dither } from "@/registry/ui/dither";
 import { AiOrb } from "@/registry/ui/ai-orb";
 import { TwitterCard } from "@/registry/ui/twitter-card";
+import { Toaster, toast } from "@/registry/ui/toast";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 interface ComponentStudioProps {
@@ -633,6 +635,33 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     });
   };
 
+  const [toastConfig, setToastConfig] = useState<{
+    position:
+      | "top-left"
+      | "top-right"
+      | "bottom-left"
+      | "bottom-right"
+      | "top-center"
+      | "bottom-center";
+    richColors: boolean;
+    expand: boolean;
+    duration: number;
+  }>({
+    position: "bottom-right",
+    richColors: false,
+    expand: false,
+    duration: 4000,
+  });
+
+  const resetToastConfig = () => {
+    setToastConfig({
+      position: "bottom-right",
+      richColors: false,
+      expand: false,
+      duration: 4000,
+    });
+  };
+
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [activePanel, setActivePanel] = useState<"none" | "info" | "code">(
     "none",
@@ -970,6 +999,68 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         return (
           <div className="flex flex-col items-center justify-center p-12 min-h-80 w-full select-none">
             <AiOrb color={color} />
+          </div>
+        );
+      case "toast":
+        return (
+          <div className="flex flex-col items-center justify-center p-12 min-h-80 w-full select-none">
+            <Toaster
+              position={toastConfig.position}
+              richColors={toastConfig.richColors}
+              expand={toastConfig.expand}
+              duration={toastConfig.duration}
+            />
+            <div className="flex flex-wrap items-center justify-center gap-2.5">
+              <Button
+                variant="outline"
+                onClick={() =>
+                  toast("Event has been created", {
+                    description: "Sunday, December 03, 2023 at 9:00 AM",
+                    action: {
+                      label: "Undo",
+                      onClick: () => {},
+                    },
+                  })
+                }
+              >
+                Default Toast
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() =>
+                  toast.success("Success!", {
+                    description: "Your action was completed successfully",
+                  })
+                }
+              >
+                Success Toast
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() =>
+                  toast.error("Error!", {
+                    description: "Something went wrong. Please try again.",
+                  })
+                }
+              >
+                Error Toast
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() =>
+                  toast.promise(
+                    new Promise((resolve) => setTimeout(resolve, 2000)),
+                    {
+                      loading: "Loading...",
+                      success: "Promise resolved",
+                      error: "Promise rejected",
+                    },
+                  )
+                }
+              >
+                Promise Toast
+              </Button>
+            </div>
           </div>
         );
       case "scales":
@@ -1896,6 +1987,114 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           {twitterCardConfig.cardTiltMaxRotate}°
                         </span>
                       </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeComponent.slug === "toast" && (
+                <div
+                  key="toast-customize-panel"
+                  className="pointer-events-auto rounded-2xl border border-white/10 bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-xl w-full mx-4 select-none flex flex-col gap-2.5"
+                >
+                  <div className="flex items-center justify-between px-1">
+                    <span className="text-xs font-semibold text-white/90 tracking-tight">
+                      Toast Settings
+                    </span>
+                    <button
+                      type="button"
+                      onClick={resetToastConfig}
+                      className="text-[11px] text-zinc-400 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                    >
+                      <ResetIcon className="w-3.5 h-3.5" />
+                      <span>Reset</span>
+                    </button>
+                  </div>
+
+                  <div className="rounded-xl border border-white/5 bg-[#0b0b0e] p-2 flex flex-col gap-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-[11px] text-zinc-400">Position</span>
+                      <div className="flex items-center gap-1 bg-[#17171b] p-1 rounded-lg border border-white/5">
+                        {(
+                          [
+                            "bottom-right",
+                            "bottom-left",
+                            "top-right",
+                            "top-left",
+                          ] as const
+                        ).map((pos) => (
+                          <button
+                            key={pos}
+                            type="button"
+                            onClick={() =>
+                              setToastConfig((prev) => ({
+                                ...prev,
+                                position: pos,
+                              }))
+                            }
+                            className={cn(
+                              "text-[10px] px-2 py-1 rounded transition-colors cursor-pointer capitalize",
+                              toastConfig.position === pos
+                                ? "bg-white text-black font-semibold shadow-sm"
+                                : "text-zinc-400 hover:text-white",
+                            )}
+                          >
+                            {pos.replace("-", " ")}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between gap-2 pt-1 border-t border-white/5">
+                      <span className="text-[11px] text-zinc-400">Rich Colors</span>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setToastConfig((prev) => ({
+                            ...prev,
+                            richColors: !prev.richColors,
+                          }))
+                        }
+                        className={cn(
+                          "relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border border-transparent transition-colors duration-200 ease-in-out",
+                          toastConfig.richColors ? "bg-white" : "bg-zinc-800",
+                        )}
+                      >
+                        <span
+                          className={cn(
+                            "pointer-events-none inline-block h-4 w-4 transform rounded-full bg-black shadow-lg ring-0 transition duration-200 ease-in-out mt-0.5",
+                            toastConfig.richColors
+                              ? "translate-x-4"
+                              : "translate-x-0.5 bg-zinc-400",
+                          )}
+                        />
+                      </button>
+                    </div>
+
+                    <div className="flex items-center justify-between gap-2 pt-1 border-t border-white/5">
+                      <span className="text-[11px] text-zinc-400">Expand on Hover</span>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setToastConfig((prev) => ({
+                            ...prev,
+                            expand: !prev.expand,
+                          }))
+                        }
+                        className={cn(
+                          "relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border border-transparent transition-colors duration-200 ease-in-out",
+                          toastConfig.expand ? "bg-white" : "bg-zinc-800",
+                        )}
+                      >
+                        <span
+                          className={cn(
+                            "pointer-events-none inline-block h-4 w-4 transform rounded-full bg-black shadow-lg ring-0 transition duration-200 ease-in-out mt-0.5",
+                            toastConfig.expand
+                              ? "translate-x-4"
+                              : "translate-x-0.5 bg-zinc-400",
+                          )}
+                        />
+                      </button>
                     </div>
                   </div>
                 </div>

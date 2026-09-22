@@ -21,6 +21,7 @@ import { DottedAccordion } from "@/registry/ui/dotted-accordion";
 import { Dither } from "@/registry/ui/dither";
 import { AiOrb } from "@/registry/ui/ai-orb";
 import { TwitterCard } from "@/registry/ui/twitter-card";
+import { ToasterDemo } from "@/registry/ui/toast";
 import { cn } from "@/lib/utils";
 
 function CounterPreview() {
@@ -76,6 +77,11 @@ export default function ComponentsPage() {
       <div className="w-full max-w-70 flex flex-col gap-3">
         <HorizontalScale className="w-full h-8" />
         <Lines className="w-full h-10" />
+      </div>
+    ),
+    toast: (
+      <div className="w-full flex flex-col items-center justify-center scale-90 origin-center select-none">
+        <ToasterDemo />
       </div>
     ),
     "twitter-card": (
