@@ -50,6 +50,7 @@ import {
   type ProximitySection,
 } from "@/registry/ui/proximity-sidebar";
 import { Dither } from "@/registry/ui/dither";
+import { Noise, type NoiseMode } from "@/registry/ui/noise";
 import { AiOrb } from "@/registry/ui/ai-orb";
 import { TwitterCard } from "@/registry/ui/twitter-card";
 import { Toaster, toast } from "@/registry/ui/toast";
@@ -219,6 +220,11 @@ const ALL_CATEGORIES = [
         label: "Dither",
         slug: "dither",
         href: "/components/dither",
+      },
+      {
+        label: "Noise",
+        slug: "noise",
+        href: "/components/noise",
       },
       {
         label: "AI Orb",
@@ -777,6 +783,22 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     setGooeyNavElasticity("fluid");
   };
 
+  const [noiseMode, setNoiseMode] = useState<NoiseMode>("grain");
+  const [noiseAlpha, setNoiseAlpha] = useState(25);
+  const [noiseInterval, setNoiseInterval] = useState(1);
+  const [noiseScale, setNoiseScale] = useState(1);
+  const [noiseVignette, setNoiseVignette] = useState(true);
+  const [noiseScanlines, setNoiseScanlines] = useState(false);
+
+  const resetNoiseConfig = () => {
+    setNoiseMode("grain");
+    setNoiseAlpha(25);
+    setNoiseInterval(1);
+    setNoiseScale(1);
+    setNoiseVignette(true);
+    setNoiseScanlines(false);
+  };
+
   const resetOtpConfig = () => {
     setOtpStatus("idle");
     setOtpMask(false);
@@ -1239,6 +1261,21 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               grainAnimated={true}
               warpStrength={1.2}
               timeSpeed={0.25}
+              className="w-full h-full"
+            />
+          </div>
+        );
+      case "noise":
+        return (
+          <div className="absolute inset-0 w-full h-full overflow-hidden">
+            <Noise
+              mode={noiseMode}
+              patternAlpha={noiseAlpha}
+              patternRefreshInterval={noiseInterval}
+              patternScaleX={noiseScale}
+              patternScaleY={noiseScale}
+              vignette={noiseVignette}
+              scanlines={noiseScanlines}
               className="w-full h-full"
             />
           </div>
@@ -1822,7 +1859,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
           <div
             className={cn(
               "flex-1 flex items-center justify-center overflow-hidden relative",
-              activeComponent.slug === "dither" && viewport === "desktop"
+              (activeComponent.slug === "dither" ||
+                activeComponent.slug === "noise") &&
+                viewport === "desktop"
                 ? "p-0"
                 : "p-6",
             )}
@@ -1869,7 +1908,10 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   transition={panelSpring}
                   className={cn(
                     "w-full h-full flex items-center justify-center overflow-auto",
-                    activeComponent.slug === "dither" ? "p-0" : "p-6",
+                    activeComponent.slug === "dither" ||
+                      activeComponent.slug === "noise"
+                      ? "p-0"
+                      : "p-6",
                   )}
                 >
                   {renderComponentPreview(activeComponent.slug, activeColor)}
@@ -3064,6 +3106,202 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               <span className="relative z-10">{e}</span>
                             </button>
                           ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeComponent.slug === "noise" && (
+                <div
+                  key="noise-customize-panel"
+                  className="pointer-events-auto rounded-2xl border border-white/10 bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-2xl w-full mx-4 select-none flex flex-col gap-2.5"
+                >
+                  <div className="flex items-center justify-between px-1">
+                    <span className="text-xs font-semibold text-white/90 tracking-tight">
+                      Noise Background Controls
+                    </span>
+                    <button
+                      type="button"
+                      onClick={resetNoiseConfig}
+                      className="text-[11px] text-zinc-400 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                    >
+                      <ResetIcon className="w-3.5 h-3.5" />
+                      <span>Reset</span>
+                    </button>
+                  </div>
+
+                  <div className="rounded-xl border border-white/5 bg-[#0b0b0e] p-2 flex flex-col gap-2">
+                    <div className="flex items-center gap-1 bg-[#17171b] p-1 rounded-xl border border-white/5 w-full">
+                      {(
+                        [
+                          { id: "grain", label: "Film Grain" },
+                          { id: "static", label: "CRT Static" },
+                          { id: "dust", label: "Film Dust" },
+                        ] as const
+                      ).map((m) => (
+                        <button
+                          key={m.id}
+                          type="button"
+                          onClick={() => setNoiseMode(m.id)}
+                          className={cn(
+                            "relative flex-1 h-7.5 px-2 rounded-lg text-xs flex items-center justify-center transition-colors cursor-pointer select-none",
+                            noiseMode === m.id
+                              ? "text-black font-semibold"
+                              : "text-zinc-400 hover:text-white",
+                          )}
+                        >
+                          {noiseMode === m.id && (
+                            <motion.div
+                              layoutId="activeNoiseModeIndicator"
+                              transition={{
+                                type: "spring",
+                                stiffness: 450,
+                                damping: 32,
+                              }}
+                              className="absolute inset-0 bg-white rounded-lg shadow-xs"
+                            />
+                          )}
+                          <span className="relative z-10 truncate">
+                            {m.label}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                        <span className="text-zinc-400 text-xs font-medium shrink-0">
+                          Alpha
+                        </span>
+                        <div className="flex items-center gap-0.5 bg-black/25 p-0.5 rounded-md border border-white/5">
+                          {([10, 25, 50, 80] as const).map((a) => (
+                            <button
+                              key={a}
+                              type="button"
+                              onClick={() => setNoiseAlpha(a)}
+                              className={cn(
+                                "relative px-2 py-0.5 rounded text-[11px] font-mono transition-colors cursor-pointer select-none",
+                                noiseAlpha === a
+                                  ? "text-black font-semibold"
+                                  : "text-zinc-400 hover:text-white",
+                              )}
+                            >
+                              {noiseAlpha === a && (
+                                <motion.div
+                                  layoutId="activeNoiseAlphaIndicator"
+                                  transition={{
+                                    type: "spring",
+                                    stiffness: 450,
+                                    damping: 32,
+                                  }}
+                                  className="absolute inset-0 bg-white rounded shadow-xs"
+                                />
+                              )}
+                              <span className="relative z-10">{a}</span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                        <span className="text-zinc-400 text-xs font-medium shrink-0">
+                          Scale
+                        </span>
+                        <div className="flex items-center gap-0.5 bg-black/25 p-0.5 rounded-md border border-white/5">
+                          {([1, 2, 4] as const).map((s) => (
+                            <button
+                              key={s}
+                              type="button"
+                              onClick={() => setNoiseScale(s)}
+                              className={cn(
+                                "relative px-2 py-0.5 rounded text-[11px] font-mono transition-colors cursor-pointer select-none",
+                                noiseScale === s
+                                  ? "text-black font-semibold"
+                                  : "text-zinc-400 hover:text-white",
+                              )}
+                            >
+                              {noiseScale === s && (
+                                <motion.div
+                                  layoutId="activeNoiseScaleIndicator"
+                                  transition={{
+                                    type: "spring",
+                                    stiffness: 450,
+                                    damping: 32,
+                                  }}
+                                  className="absolute inset-0 bg-white rounded shadow-xs"
+                                />
+                              )}
+                              <span className="relative z-10">{s}x</span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                        <span className="text-zinc-400 text-xs font-medium shrink-0">
+                          Interval
+                        </span>
+                        <div className="flex items-center gap-0.5 bg-black/25 p-0.5 rounded-md border border-white/5">
+                          {([1, 2, 4] as const).map((iv) => (
+                            <button
+                              key={iv}
+                              type="button"
+                              onClick={() => setNoiseInterval(iv)}
+                              className={cn(
+                                "relative px-2 py-0.5 rounded text-[11px] font-mono transition-colors cursor-pointer select-none",
+                                noiseInterval === iv
+                                  ? "text-black font-semibold"
+                                  : "text-zinc-400 hover:text-white",
+                              )}
+                            >
+                              {noiseInterval === iv && (
+                                <motion.div
+                                  layoutId="activeNoiseIntervalIndicator"
+                                  transition={{
+                                    type: "spring",
+                                    stiffness: 450,
+                                    damping: 32,
+                                  }}
+                                  className="absolute inset-0 bg-white rounded shadow-xs"
+                                />
+                              )}
+                              <span className="relative z-10">{iv}f</span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                        <span className="text-zinc-400 text-xs font-medium shrink-0">
+                          Effects
+                        </span>
+                        <div className="flex items-center gap-1 bg-black/25 p-0.5 rounded-md border border-white/5">
+                          <button
+                            type="button"
+                            onClick={() => setNoiseVignette(!noiseVignette)}
+                            className={cn(
+                              "relative px-2.5 py-0.5 rounded text-[11px] font-medium transition-colors cursor-pointer select-none",
+                              noiseVignette
+                                ? "bg-white text-black font-semibold shadow-xs"
+                                : "text-zinc-400 hover:text-white",
+                            )}
+                          >
+                            Vignette
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setNoiseScanlines(!noiseScanlines)}
+                            className={cn(
+                              "relative px-2.5 py-0.5 rounded text-[11px] font-medium transition-colors cursor-pointer select-none",
+                              noiseScanlines
+                                ? "bg-white text-black font-semibold shadow-xs"
+                                : "text-zinc-400 hover:text-white",
+                            )}
+                          >
+                            CRT
+                          </button>
                         </div>
                       </div>
                     </div>

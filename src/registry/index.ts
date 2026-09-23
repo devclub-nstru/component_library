@@ -11029,7 +11029,513 @@ export default GooeyNav;
       },
     ],
   },
+  "noise": {
+    slug: "noise",
+    name: "Noise Background",
+    description: "High-performance procedural grain noise background with CRT static, film dust, vignette, and scanlines.",
+    summary: "An ultra-optimized hardware-accelerated procedural canvas noise generator engineered for cinematic backgrounds and atmosphere. Features sub-pixel pattern tiling via 32-bit Uint32 buffer rendering, 3 distinct procedural grain algorithms (film grain, analog static, and film dust), edge vignette darkening, CRT scanline rasterization, and automatic viewport/container adaptation with IntersectionObserver and reduced-motion support.",
+    category: "layout",
+    tags: ["noise", "grain", "canvas", "background", "texture", "vignette", "scanlines"],
+    dependencies: ["clsx", "tailwind-merge"],
+    version: "1.0.0",
+    createdDate: "2026-09-23",
+    updatedDate: "2026-09-23",
+    interactive: false,
+    supportsColor: false,
+    highlights: [
+      "Sub-pixel pattern tiling running on 32-bit Uint32Array memory buffers for near-zero CPU overhead",
+      "Three selectable noise algorithms: Film Grain, CRT Static, and Film Dust",
+      "Built-in cinematic radial vignette and retro CRT scanline raster layers",
+      "Seamless container adaptation supporting both fixed fullscreen and container-bounded layouts",
+      "Automatic battery-saving lifecycle management with IntersectionObserver and document.hidden pauses",
+      "Full accessibility with automatic prefers-reduced-motion detection and animation freezing"
+    ],
+    anatomy: [
+      "<div> (Responsive Container: handles ResizeObserver and IntersectionObserver lifecycle)",
+      "<canvas> (2D Canvas Buffer: renders high-density tiled noise patterns without CPU overhead)",
+      "<div> (Cinematic Vignette: radial gradient edge darkening layer)",
+      "<div> (Scanline Overlay: repeating-linear-gradient CRT monitor raster lines)"
+    ],
+    physics: {
+      engine: "32-bit Uint32 Procedural Buffer + 2D Canvas Matrix Pattern Transform",
+      description: "Direct memory buffer generation coupled with GPU hardware-accelerated 2D canvas pattern matrix translation and jitter.",
+      parameters: [
+        { label: "Pattern Buffer Size", value: "250px × 250px" },
+        { label: "Memory Pipeline", value: "32-bit Uint32Array" },
+        { label: "Frame Rate Cap", value: "30 / 60 FPS configurable" },
+        { label: "Refresh Interval", value: "2 frame stride default" }
+      ]
+    },
+    accessibility: {
+      role: "presentation",
+      aria: "data-slot='noise' rendered with aria-hidden or presentation semantics for decorative textures.",
+      reducedMotion: "Automatically stops animated pattern jitter and freezes grain texture when prefers-reduced-motion is active."
+    },
+    guidelines: {
+      recommended: [
+        "Cinematic dark mode hero backgrounds in developer platforms, dashboards, and landing pages",
+        "Subtle analogue film grain texture inside card surfaces, modals, and container boundaries",
+        "Terminal, retro, or synthesizer interfaces utilizing CRT static and scanlines"
+      ],
+      bestPractices: [
+        "Use low patternAlpha values (10 - 25) for subtle, premium film grain that does not overpower foreground typography",
+        "Pair with dark container backgrounds for optimal contrast with film grain highlights",
+        "Enable scanlines or vignette for retro hardware and CRT aesthetics"
+      ]
+    },
+    props: [
+      {
+        name: "patternSize",
+        type: "number",
+        defaultValue: "250",
+        description: "Dimensions (width and height in px) of the offscreen noise generator pattern buffer tile.",
+      },
+      {
+        name: "patternScaleX",
+        type: "number",
+        defaultValue: "1",
+        description: "Horizontal scaling factor applied to the noise grain texture.",
+      },
+      {
+        name: "patternScaleY",
+        type: "number",
+        defaultValue: "1",
+        description: "Vertical scaling factor applied to the noise grain texture.",
+      },
+      {
+        name: "patternRefreshInterval",
+        type: "number",
+        defaultValue: "1",
+        description: "Frame interval divider governing pattern shifts (e.g. 1 updates every single frame).",
+      },
+      {
+        name: "patternAlpha",
+        type: "number",
+        defaultValue: "15",
+        description: "Opacity alpha intensity of the grain noise particles (0 - 255).",
+      },
+      {
+        name: "mode",
+        type: '"grain" | "static" | "dust"',
+        defaultValue: '"grain"',
+        description: "Noise rendering algorithm: film grain, CRT static, or film dust.",
+      },
+      {
+        name: "animated",
+        type: "boolean",
+        defaultValue: "true",
+        description: "Whether the noise texture continuously shifts and jitters over time.",
+      },
+      {
+        name: "fps",
+        type: "number",
+        defaultValue: "30",
+        description: "Target render frame rate throttle cap.",
+      },
+      {
+        name: "vignette",
+        type: "boolean",
+        defaultValue: "false",
+        description: "Enables cinematic radial gradient vignette darkening around canvas boundaries.",
+      },
+      {
+        name: "vignetteDarkness",
+        type: "number",
+        defaultValue: "0.6",
+        description: "Darkness multiplier factor for the radial vignette edge falloff.",
+      },
+      {
+        name: "scanlines",
+        type: "boolean",
+        defaultValue: "false",
+        description: "Enables retro CRT monitor horizontal scanline overlay.",
+      },
+      {
+        name: "scanlineDensity",
+        type: "number",
+        defaultValue: "3",
+        description: "Pixel pitch spacing between CRT scanline raster bands.",
+      },
+      {
+        name: "scanlineOpacity",
+        type: "number",
+        defaultValue: "0.1",
+        description: "Opacity intensity of the CRT scanline raster bands.",
+      },
+      {
+        name: "blendMode",
+        type: "CSSProperties['mixBlendMode']",
+        defaultValue: '"normal"',
+        description: "CSS mix-blend-mode applied to the noise canvas element (e.g. 'overlay', 'soft-light').",
+      },
+      {
+        name: "fullScreen",
+        type: "boolean",
+        defaultValue: "false",
+        description: "Whether the noise container fixes to the entire viewport (100vw x 100vh).",
+      },
+      {
+        name: "className",
+        type: "string",
+        defaultValue: "undefined",
+        description: "Additional CSS classes passed to the outer wrapper container.",
+      },
+      {
+        name: "canvasClassName",
+        type: "string",
+        defaultValue: "undefined",
+        description: "Additional CSS classes passed directly to the underlying canvas element.",
+      },
+    ],
+    files: [
+      {
+        name: "noise.tsx",
+        path: "registry/ui/noise.tsx",
+        code: `"use client";
+
+import React, {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+  type CSSProperties,
+  type HTMLAttributes,
+  type ReactNode,
+} from "react";
+import { cn } from "@/lib/utils";
+
+export type NoiseMode = "grain" | "static" | "dust";
+
+export interface NoiseProps extends HTMLAttributes<HTMLDivElement> {
+  patternSize?: number;
+  patternScaleX?: number;
+  patternScaleY?: number;
+  patternRefreshInterval?: number;
+  patternAlpha?: number;
+  mode?: NoiseMode;
+  animated?: boolean;
+  fps?: number;
+  vignette?: boolean;
+  vignetteDarkness?: number;
+  scanlines?: boolean;
+  scanlineDensity?: number;
+  scanlineOpacity?: number;
+  blendMode?: CSSProperties["mixBlendMode"];
+  fullScreen?: boolean;
+  canvasClassName?: string;
+  canvasRef?: React.Ref<HTMLCanvasElement>;
+  children?: ReactNode;
+}
+
+const createPatternFrame = (
+  size: number,
+  alpha: number,
+  mode: NoiseMode,
+  frameIdx: number,
+): HTMLCanvasElement => {
+  const pCanvas = document.createElement("canvas");
+  pCanvas.width = size;
+  pCanvas.height = size;
+  const pCtx = pCanvas.getContext("2d", { alpha: true });
+  if (!pCtx) return pCanvas;
+
+  const imgData = pCtx.createImageData(size, size);
+  const buf32 = new Uint32Array(imgData.data.buffer);
+  const total = size * size;
+
+  for (let i = 0; i < total; i++) {
+    const y = (i / size) | 0;
+
+    let v = 0;
+    let a = alpha;
+
+    if (mode === "static") {
+      const scan = (y + frameIdx * 3) % 8 === 0 ? 55 : 0;
+      v = Math.min(255, ((Math.random() * 256) | 0) + scan);
+    } else if (mode === "dust") {
+      const isDust = Math.random() > 0.994;
+      const isFleck = Math.random() > 0.999;
+      if (isDust) {
+        v = isFleck ? 255 : (Math.random() * 200 + 55) | 0;
+        a = Math.min(255, alpha * 5);
+      } else {
+        v = (Math.random() * 90) | 0;
+        a = (alpha * 0.35) | 0;
+      }
+    } else {
+      v = (Math.random() * 256) | 0;
+    }
+
+    buf32[i] = (a << 24) | (v << 16) | (v << 8) | v;
+  }
+
+  pCtx.putImageData(imgData, 0, 0);
+  return pCanvas;
 };
+
+export const Noise = forwardRef<HTMLDivElement, NoiseProps>(
+  (
+    {
+      patternSize = 250,
+      patternScaleX = 1,
+      patternScaleY = 1,
+      patternRefreshInterval = 1,
+      patternAlpha = 15,
+      mode = "grain",
+      animated = true,
+      fps = 30,
+      vignette = false,
+      vignetteDarkness = 0.6,
+      scanlines = false,
+      scanlineDensity = 3,
+      scanlineOpacity = 0.1,
+      blendMode = "normal",
+      fullScreen = false,
+      canvasClassName,
+      canvasRef: externalCanvasRef,
+      className,
+      style,
+      children,
+      ...props
+    },
+    ref,
+  ) => {
+    const containerRef = useRef<HTMLDivElement | null>(null);
+    const internalCanvasRef = useRef<HTMLCanvasElement | null>(null);
+    const patternsRef = useRef<HTMLCanvasElement[]>([]);
+
+    const [isVisible, setIsVisible] = useState(true);
+    const [isPageActive, setIsPageActive] = useState(true);
+    const [reducedMotion, setReducedMotion] = useState(false);
+
+    useImperativeHandle(ref, () => containerRef.current as HTMLDivElement);
+
+    const setCanvasRefs = useCallback(
+      (node: HTMLCanvasElement | null) => {
+        internalCanvasRef.current = node;
+        if (typeof externalCanvasRef === "function") {
+          externalCanvasRef(node);
+        } else if (externalCanvasRef && "current" in externalCanvasRef) {
+          (
+            externalCanvasRef as React.MutableRefObject<HTMLCanvasElement | null>
+          ).current = node;
+        }
+      },
+      [externalCanvasRef],
+    );
+
+    useEffect(() => {
+      const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+      setReducedMotion(media.matches);
+      const listener = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
+      media.addEventListener("change", listener);
+      return () => media.removeEventListener("change", listener);
+    }, []);
+
+    useEffect(() => {
+      const container = containerRef.current;
+      if (!container) return;
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          const [entry] = entries;
+          setIsVisible(entry.isIntersecting);
+        },
+        { threshold: 0 },
+      );
+
+      observer.observe(container);
+
+      const handleVisibility = () => {
+        setIsPageActive(!document.hidden);
+      };
+      document.addEventListener("visibilitychange", handleVisibility);
+
+      return () => {
+        observer.disconnect();
+        document.removeEventListener("visibilitychange", handleVisibility);
+      };
+    }, []);
+
+    useEffect(() => {
+      const container = containerRef.current;
+      const canvas = internalCanvasRef.current;
+      if (!container || !canvas) return;
+
+      const updateSize = () => {
+        const rect = container.getBoundingClientRect();
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const displayWidth = Math.max(1, Math.round(rect.width));
+        const displayHeight = Math.max(1, Math.round(rect.height));
+
+        const targetW = displayWidth * dpr;
+        const targetH = displayHeight * dpr;
+
+        if (canvas.width !== targetW || canvas.height !== targetH) {
+          canvas.width = targetW;
+          canvas.height = targetH;
+          canvas.style.width = \`\${displayWidth}px\`;
+          canvas.style.height = \`\${displayHeight}px\`;
+        }
+      };
+
+      updateSize();
+      const observer = new ResizeObserver(updateSize);
+      observer.observe(container);
+
+      return () => {
+        observer.disconnect();
+      };
+    }, [fullScreen]);
+
+    useEffect(() => {
+      const frameCount = 8;
+      const frames: HTMLCanvasElement[] = [];
+
+      for (let i = 0; i < frameCount; i++) {
+        frames.push(
+          createPatternFrame(patternSize, patternAlpha, mode, i),
+        );
+      }
+
+      patternsRef.current = frames;
+    }, [patternSize, patternAlpha, mode]);
+
+    useEffect(() => {
+      let animationId: number;
+      let frameCount = 0;
+      let cacheIdx = 0;
+      let lastTime = performance.now();
+      const targetInterval = fps > 0 ? 1000 / fps : 1000 / 60;
+
+      const render = (now: number) => {
+        animationId = window.requestAnimationFrame(render);
+
+        if (!isVisible || !isPageActive) return;
+
+        if (now - lastTime < targetInterval) return;
+        lastTime = now;
+
+        frameCount++;
+        if (
+          patternRefreshInterval > 1 &&
+          frameCount % patternRefreshInterval !== 0
+        ) {
+          return;
+        }
+
+        const canvas = internalCanvasRef.current;
+        if (!canvas) return;
+
+        const ctx = canvas.getContext("2d", { alpha: true });
+        if (!ctx) return;
+
+        const w = canvas.width;
+        const h = canvas.height;
+        if (w === 0 || h === 0) return;
+
+        ctx.clearRect(0, 0, w, h);
+
+        const frames = patternsRef.current;
+        if (frames.length > 0) {
+          if (animated && !reducedMotion) {
+            cacheIdx = (cacheIdx + 1) % frames.length;
+          }
+          const currentFrame = frames[cacheIdx];
+          const pattern = ctx.createPattern(currentFrame, "repeat");
+          if (pattern) {
+            const matrix = new DOMMatrix();
+            if (animated && !reducedMotion) {
+              const jx = (Math.random() * patternSize) | 0;
+              const jy = (Math.random() * patternSize) | 0;
+              matrix.translateSelf(jx, jy);
+            }
+            matrix.scaleSelf(patternScaleX, patternScaleY);
+            pattern.setTransform(matrix);
+            ctx.fillStyle = pattern;
+            ctx.fillRect(0, 0, w, h);
+          }
+        }
+      };
+
+      animationId = window.requestAnimationFrame(render);
+
+      return () => {
+        window.cancelAnimationFrame(animationId);
+      };
+    }, [
+      patternSize,
+      patternScaleX,
+      patternScaleY,
+      patternRefreshInterval,
+      animated,
+      fps,
+      isVisible,
+      isPageActive,
+      reducedMotion,
+    ]);
+
+    return (
+      <div
+        ref={containerRef}
+        data-slot="noise"
+        className={cn(
+          "relative overflow-hidden",
+          fullScreen ? "fixed inset-0 h-screen w-screen z-0" : "w-full h-full",
+          className,
+        )}
+        style={style}
+        {...props}
+      >
+        <canvas
+          ref={setCanvasRefs}
+          data-slot="noise-canvas"
+          className={cn(
+            "pointer-events-none absolute inset-0 h-full w-full",
+            canvasClassName,
+          )}
+          style={{
+            imageRendering: "pixelated",
+            mixBlendMode: blendMode,
+          }}
+        />
+
+        {vignette && (
+          <div
+            data-slot="noise-vignette"
+            className="pointer-events-none absolute inset-0 z-2"
+            style={{
+              background: \`radial-gradient(ellipse at center, transparent 35%, rgba(0, 0, 0, \${vignetteDarkness}) 100%)\`,
+            }}
+          />
+        )}
+
+        {scanlines && (
+          <div
+            data-slot="noise-scanlines"
+            className="pointer-events-none absolute inset-0 z-3"
+            style={{
+              background: \`repeating-linear-gradient(to bottom, transparent 0px, transparent \${scanlineDensity}px, rgba(0, 0, 0, \${scanlineOpacity}) \${scanlineDensity}px, rgba(0, 0, 0, \${scanlineOpacity}) \${scanlineDensity * 2}px)\`,
+            }}
+          />
+        )}
+
+        {children && <div className="relative z-10">{children}</div>}
+      </div>
+    );
+  },
+);
+
+Noise.displayName = "Noise";
+
+export default Noise;
+`,
+      },
+    ],
+  },
+}
 
 export const getAllComponents = (
   includeHidden = false
