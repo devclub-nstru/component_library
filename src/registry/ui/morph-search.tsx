@@ -487,10 +487,7 @@ export function MorphSearch({
   return (
     <div
       ref={containerRef}
-      className={cn(
-        "relative w-full max-w-[560px] mx-auto select-none",
-        className,
-      )}
+      className={cn("relative w-full max-w-140 mx-auto select-none", className)}
     >
       <motion.div
         layout
@@ -506,7 +503,7 @@ export function MorphSearch({
         <motion.div
           layout="position"
           transition={reduceMotion ? fadeTween : springMorph}
-          className="relative flex h-[58px] items-center px-6 gap-3"
+          className="relative flex h-14.5 items-center px-6 gap-3"
         >
           <div className="relative flex-1 flex items-center h-full min-w-0">
             <input
