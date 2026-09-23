@@ -12,7 +12,12 @@ import {
 } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion, useReducedMotion, useSpring, useTransform } from "motion/react";
+import {
+  motion,
+  useReducedMotion,
+  useSpring,
+  useTransform,
+} from "motion/react";
 import { cn } from "@/lib/utils";
 
 const SPRING_TUNING = {
@@ -191,9 +196,7 @@ function Segment({
       initial={false}
       animate={radii}
       transition={
-        reduced
-          ? { duration: 0 }
-          : { type: "spring", ...springConfig }
+        reduced ? { duration: 0 } : { type: "spring", ...springConfig }
       }
     >
       {hasSeam && (
@@ -248,7 +251,9 @@ function NavLabel({
     className: cn(
       "relative z-10 flex cursor-pointer items-center justify-center whitespace-nowrap font-medium outline-none transition-all duration-300 ease-out select-none active:scale-95 focus-visible:ring-1 focus-visible:ring-white/30",
       SIZES[size].label,
-      isActive ? "opacity-100" : "text-zinc-400 hover:text-white opacity-80 hover:opacity-100",
+      isActive
+        ? "opacity-100"
+        : "text-zinc-400 hover:text-white opacity-80 hover:opacity-100",
     ),
     style: isActive ? { color: activeLabelColor } : undefined,
     onClick: onSelect,
@@ -323,8 +328,7 @@ export function GooeyNav({
       ? "bg-white/6 backdrop-blur-md border border-white/10"
       : "bg-[#18181b] border border-white/8";
 
-  const fill = (i: number) =>
-    i === active ? computedActiveColor : "#18181b";
+  const fill = (i: number) => (i === active ? computedActiveColor : "#18181b");
 
   const handleKeyDown = (e: KeyboardEvent<HTMLUListElement>) => {
     if (e.key === "ArrowRight") {
@@ -385,7 +389,9 @@ export function GooeyNav({
               className={cn(
                 "transition-all duration-300 ease-out",
                 baseSurface,
-                isActive && variant === "glow" && "shadow-[0_0_24px_var(--glow-color)]",
+                isActive &&
+                  variant === "glow" &&
+                  "shadow-[0_0_24px_var(--glow-color)]",
               )}
               style={
                 {

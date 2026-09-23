@@ -854,20 +854,20 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     activeComponent.slug !== "liquid-toggle" &&
     activeComponent.slug !== "gooey-nav" &&
     (activeComponent.supportsColor ??
-    [
-      "dither",
-      "candy-button",
-      "hook-sidebar",
-      "proximity-sidebar",
-      "ai-orb",
-      "animated-button",
-      "spotlight-card",
-      "glowing-badge",
-      "animated-counter",
-      "code-block",
-      "task-list",
-      "file-tree",
-    ].includes(activeComponent.slug)),
+      [
+        "dither",
+        "candy-button",
+        "hook-sidebar",
+        "proximity-sidebar",
+        "ai-orb",
+        "animated-button",
+        "spotlight-card",
+        "glowing-badge",
+        "animated-counter",
+        "code-block",
+        "task-list",
+        "file-tree",
+      ].includes(activeComponent.slug)),
   );
 
   useEffect(() => {
@@ -2905,7 +2905,11 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     <div className="flex items-center gap-1 bg-[#17171b] p-1 rounded-xl border border-white/5 w-full">
                       {(
                         [
-                          { id: "orange", label: "Orange", dot: "bg-[#FC4C01]" },
+                          {
+                            id: "orange",
+                            label: "Orange",
+                            dot: "bg-[#FC4C01]",
+                          },
                           {
                             id: "emerald",
                             label: "Emerald",
