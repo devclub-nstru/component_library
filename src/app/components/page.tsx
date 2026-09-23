@@ -26,6 +26,7 @@ import { TaskList } from "@/registry/ui/task-list";
 import { SearchComposer } from "@/registry/ui/search-input";
 import { Orb } from "@/registry/ui/orb";
 import { LiquidToggle } from "@/registry/ui/liquid-toggle";
+import { GooeyNav } from "@/registry/ui/gooey-nav";
 import { cn } from "@/lib/utils";
 
 function CounterPreview() {
@@ -292,6 +293,16 @@ export default function ComponentsPage() {
     "liquid-toggle": (
       <div className="flex items-center justify-center p-3 select-none pointer-events-none">
         <LiquidToggle defaultChecked={true} size="md" color="monochrome" />
+      </div>
+    ),
+    "gooey-nav": (
+      <div className="flex items-center justify-center p-3 select-none pointer-events-none scale-85 origin-center">
+        <GooeyNav
+          items={["Deploy", "Builds", "Logs"]}
+          defaultValue={0}
+          size="sm"
+          color="orange"
+        />
       </div>
     ),
   };

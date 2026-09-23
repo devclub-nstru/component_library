@@ -18,6 +18,10 @@ import {
   ViewGridIcon,
   ResetIcon,
   ChevronDownIcon,
+  LayersIcon,
+  RocketIcon,
+  BarChartIcon,
+  GearIcon,
 } from "@radix-ui/react-icons";
 import { ComponentRegistryItem } from "@/types/component";
 import { getComponentBySlug } from "@/registry";
@@ -60,6 +64,14 @@ import {
   type LiquidToggleColor,
   type LiquidToggleViscosity,
 } from "@/registry/ui/liquid-toggle";
+import {
+  GooeyNav,
+  type GooeyNavSize,
+  type GooeyNavColor,
+  type GooeyNavVariant,
+  type GooeyNavElasticity,
+  type GooeyNavItem,
+} from "@/registry/ui/gooey-nav";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -117,6 +129,11 @@ const ALL_CATEGORIES = [
         label: "File Tree",
         slug: "file-tree",
         href: "/components/file-tree",
+      },
+      {
+        label: "Gooey Nav",
+        slug: "gooey-nav",
+        href: "/components/gooey-nav",
       },
     ],
   },
@@ -224,6 +241,13 @@ const CATEGORIES = ALL_CATEGORIES.map((cat) => ({
     return Boolean(comp && !comp.hidden);
   }),
 })).filter((cat) => cat.items.length > 0);
+
+const GOOEY_DEMO_ITEMS: GooeyNavItem[] = [
+  { label: "Overview", icon: <LayersIcon className="w-3.5 h-3.5" /> },
+  { label: "Deployments", icon: <RocketIcon className="w-3.5 h-3.5" /> },
+  { label: "Analytics", icon: <BarChartIcon className="w-3.5 h-3.5" /> },
+  { label: "Settings", icon: <GearIcon className="w-3.5 h-3.5" /> },
+];
 
 const FILE_TREE_DEMO_DATA: TreeNode[] = [
   {
@@ -737,6 +761,22 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     setLiquidViscosity("fluid");
   };
 
+  const [gooeyNavIndex, setGooeyNavIndex] = useState(0);
+  const [gooeyNavSize, setGooeyNavSize] = useState<GooeyNavSize>("md");
+  const [gooeyNavColor, setGooeyNavColor] = useState<GooeyNavColor>("orange");
+  const [gooeyNavVariant, setGooeyNavVariant] =
+    useState<GooeyNavVariant>("solid");
+  const [gooeyNavElasticity, setGooeyNavElasticity] =
+    useState<GooeyNavElasticity>("fluid");
+
+  const resetGooeyNavConfig = () => {
+    setGooeyNavIndex(0);
+    setGooeyNavSize("md");
+    setGooeyNavColor("orange");
+    setGooeyNavVariant("solid");
+    setGooeyNavElasticity("fluid");
+  };
+
   const resetOtpConfig = () => {
     setOtpStatus("idle");
     setOtpMask(false);
@@ -812,6 +852,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
 
   const supportsColor = Boolean(
     activeComponent.slug !== "liquid-toggle" &&
+    activeComponent.slug !== "gooey-nav" &&
     (activeComponent.supportsColor ??
     [
       "dither",
@@ -957,6 +998,20 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               size={liquidSize}
               color={liquidColor}
               viscosity={liquidViscosity}
+            />
+          </div>
+        );
+      case "gooey-nav":
+        return (
+          <div className="flex items-center justify-center w-full h-full min-h-96 select-none p-8">
+            <GooeyNav
+              items={GOOEY_DEMO_ITEMS}
+              value={gooeyNavIndex}
+              onChange={setGooeyNavIndex}
+              size={gooeyNavSize}
+              color={gooeyNavColor}
+              variant={gooeyNavVariant}
+              elasticity={gooeyNavElasticity}
             />
           </div>
         );
@@ -2818,6 +2873,191 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                 />
                               )}
                               <span className="relative z-10">{v}</span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeComponent.slug === "gooey-nav" && (
+                <div
+                  key="gooey-nav-customize-panel"
+                  className="pointer-events-auto rounded-2xl border border-white/10 bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-2xl w-full mx-4 select-none flex flex-col gap-2.5"
+                >
+                  <div className="flex items-center justify-between px-1">
+                    <span className="text-xs font-semibold text-white/90 tracking-tight">
+                      Gooey Nav Controls
+                    </span>
+                    <button
+                      type="button"
+                      onClick={resetGooeyNavConfig}
+                      className="text-[11px] text-zinc-400 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                    >
+                      <ResetIcon className="w-3.5 h-3.5" />
+                      <span>Reset</span>
+                    </button>
+                  </div>
+
+                  <div className="rounded-xl border border-white/5 bg-[#0b0b0e] p-2 flex flex-col gap-2">
+                    <div className="flex items-center gap-1 bg-[#17171b] p-1 rounded-xl border border-white/5 w-full">
+                      {(
+                        [
+                          { id: "orange", label: "Orange", dot: "bg-[#FC4C01]" },
+                          {
+                            id: "emerald",
+                            label: "Emerald",
+                            dot: "bg-emerald-400",
+                          },
+                          {
+                            id: "violet",
+                            label: "Violet",
+                            dot: "bg-violet-400",
+                          },
+                          { id: "cyan", label: "Cyan", dot: "bg-cyan-400" },
+                          { id: "amber", label: "Amber", dot: "bg-amber-400" },
+                          {
+                            id: "monochrome",
+                            label: "Mono",
+                            dot: "bg-zinc-200",
+                          },
+                        ] as const
+                      ).map((c) => (
+                        <button
+                          key={c.id}
+                          type="button"
+                          onClick={() => setGooeyNavColor(c.id)}
+                          className={cn(
+                            "relative flex-1 h-7.5 px-2 rounded-lg text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer select-none",
+                            gooeyNavColor === c.id
+                              ? "text-black font-semibold"
+                              : "text-zinc-400 hover:text-white",
+                          )}
+                        >
+                          {gooeyNavColor === c.id && (
+                            <motion.div
+                              layoutId="activeGooeyColorIndicator"
+                              transition={{
+                                type: "spring",
+                                stiffness: 450,
+                                damping: 32,
+                              }}
+                              className="absolute inset-0 bg-white rounded-lg shadow-xs"
+                            />
+                          )}
+                          <span
+                            className={cn(
+                              "relative z-10 w-2 h-2 rounded-full shrink-0 shadow-xs",
+                              c.dot,
+                            )}
+                          />
+                          <span className="relative z-10 truncate">
+                            {c.label}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                      <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                        <span className="text-zinc-400 text-xs font-medium shrink-0">
+                          Size
+                        </span>
+                        <div className="flex items-center gap-0.5 bg-black/25 p-0.5 rounded-md border border-white/5">
+                          {(["xs", "sm", "md", "lg"] as const).map((sz) => (
+                            <button
+                              key={sz}
+                              type="button"
+                              onClick={() => setGooeyNavSize(sz)}
+                              className={cn(
+                                "relative px-2 py-0.5 rounded text-[11px] font-mono uppercase transition-colors cursor-pointer",
+                                gooeyNavSize === sz
+                                  ? "text-black font-semibold"
+                                  : "text-zinc-400 hover:text-white",
+                              )}
+                            >
+                              {gooeyNavSize === sz && (
+                                <motion.div
+                                  layoutId="activeGooeySizeIndicator"
+                                  transition={{
+                                    type: "spring",
+                                    stiffness: 450,
+                                    damping: 32,
+                                  }}
+                                  className="absolute inset-0 bg-white rounded shadow-xs"
+                                />
+                              )}
+                              <span className="relative z-10">{sz}</span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                        <span className="text-zinc-400 text-xs font-medium shrink-0">
+                          Variant
+                        </span>
+                        <div className="flex items-center gap-0.5 bg-black/25 p-0.5 rounded-md border border-white/5">
+                          {(["solid", "glow", "glass"] as const).map((v) => (
+                            <button
+                              key={v}
+                              type="button"
+                              onClick={() => setGooeyNavVariant(v)}
+                              className={cn(
+                                "relative px-2 py-0.5 rounded text-[11px] capitalize transition-colors cursor-pointer",
+                                gooeyNavVariant === v
+                                  ? "text-black font-semibold"
+                                  : "text-zinc-400 hover:text-white",
+                              )}
+                            >
+                              {gooeyNavVariant === v && (
+                                <motion.div
+                                  layoutId="activeGooeyVariantIndicator"
+                                  transition={{
+                                    type: "spring",
+                                    stiffness: 450,
+                                    damping: 32,
+                                  }}
+                                  className="absolute inset-0 bg-white rounded shadow-xs"
+                                />
+                              )}
+                              <span className="relative z-10">{v}</span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                        <span className="text-zinc-400 text-xs font-medium shrink-0">
+                          Motion
+                        </span>
+                        <div className="flex items-center gap-0.5 bg-black/25 p-0.5 rounded-md border border-white/5">
+                          {(["fluid", "elastic", "smooth"] as const).map((e) => (
+                            <button
+                              key={e}
+                              type="button"
+                              onClick={() => setGooeyNavElasticity(e)}
+                              className={cn(
+                                "relative px-2 py-0.5 rounded text-[11px] capitalize transition-colors cursor-pointer",
+                                gooeyNavElasticity === e
+                                  ? "text-black font-semibold"
+                                  : "text-zinc-400 hover:text-white",
+                              )}
+                            >
+                              {gooeyNavElasticity === e && (
+                                <motion.div
+                                  layoutId="activeGooeyMotionIndicator"
+                                  transition={{
+                                    type: "spring",
+                                    stiffness: 450,
+                                    damping: 32,
+                                  }}
+                                  className="absolute inset-0 bg-white rounded shadow-xs"
+                                />
+                              )}
+                              <span className="relative z-10">{e}</span>
                             </button>
                           ))}
                         </div>
