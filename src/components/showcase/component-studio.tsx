@@ -74,6 +74,7 @@ import {
   type GooeyNavElasticity,
   type GooeyNavItem,
 } from "@/registry/ui/gooey-nav";
+import { PromptInput } from "@/registry/ui/ai-input";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -196,6 +197,11 @@ const ALL_CATEGORIES = [
         label: "Morph Search",
         slug: "morph-search",
         href: "/components/morph-search",
+      },
+      {
+        label: "AI Input",
+        slug: "ai-input",
+        href: "/components/ai-input",
       },
     ],
   },
@@ -818,6 +824,26 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     setOtpGrouped(false);
   };
 
+  const [aiInputValue, setAiInputValue] = useState("");
+  const [aiInputVariant, setAiInputVariant] = useState<"default" | "glow" | "minimal">("default");
+  const [aiInputPlaceholder, setAiInputPlaceholder] = useState("Ask anything");
+  const [aiInputAllowAttachments, setAiInputAllowAttachments] = useState(true);
+  const [aiInputAllowVoice, setAiInputAllowVoice] = useState(true);
+  const [aiInputAllowModelSelect, setAiInputAllowModelSelect] = useState(true);
+  const [aiInputAllowEffortSelect, setAiInputAllowEffortSelect] = useState(true);
+  const [aiInputMaxWidth, setAiInputMaxWidth] = useState<number>(480);
+
+  const resetAiInputConfig = () => {
+    setAiInputValue("");
+    setAiInputVariant("default");
+    setAiInputPlaceholder("Ask anything");
+    setAiInputAllowAttachments(true);
+    setAiInputAllowVoice(true);
+    setAiInputAllowModelSelect(true);
+    setAiInputAllowEffortSelect(true);
+    setAiInputMaxWidth(480);
+  };
+
   const [twitterCardConfig, setTwitterCardConfig] = useState({
     username: "hey_krishnna",
     staticCard: false,
@@ -1013,6 +1039,23 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         return (
           <div className="flex items-center justify-center w-full max-w-xl mx-auto p-8">
             <MorphSearch />
+          </div>
+        );
+      case "ai-input":
+        return (
+          <div className="flex items-center justify-center w-full min-h-110 p-4 sm:p-8 select-none">
+            <PromptInput
+              value={aiInputValue}
+              onChange={setAiInputValue}
+              placeholder={aiInputPlaceholder}
+              allowAttachments={aiInputAllowAttachments}
+              allowVoice={aiInputAllowVoice}
+              allowModelSelect={aiInputAllowModelSelect}
+              allowEffortSelect={aiInputAllowEffortSelect}
+              maxWidth={aiInputMaxWidth}
+              variant={aiInputVariant}
+              accentColor={color}
+            />
           </div>
         );
       case "orb":
@@ -3321,6 +3364,200 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           </button>
                         </div>
                       </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeComponent.slug === "ai-input" && (
+                <div
+                  key="ai-input-customize-panel"
+                  className="pointer-events-auto rounded-2xl border border-white/10 bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-2xl w-full mx-4 select-none flex flex-col gap-2.5"
+                >
+                  <div className="flex items-center justify-between px-1">
+                    <span className="text-xs font-semibold text-white/90 tracking-tight">
+                      AI Input Customization
+                    </span>
+                    <button
+                      type="button"
+                      onClick={resetAiInputConfig}
+                      className="text-[11px] text-zinc-400 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                    >
+                      <ResetIcon className="w-3.5 h-3.5" />
+                      <span>Reset</span>
+                    </button>
+                  </div>
+
+                  <div className="rounded-xl border border-white/5 bg-[#0b0b0e] p-2 flex flex-col gap-2">
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-1.5 pb-1 border-b border-white/5">
+                      <div className="flex items-center gap-1 bg-[#17171b] p-1 rounded-xl border border-white/5 flex-1">
+                        {(
+                          [
+                            { id: "default", label: "Default Glass" },
+                            { id: "glow", label: "Ambient Glow" },
+                            { id: "minimal", label: "Minimal Hairline" },
+                          ] as const
+                        ).map((v) => (
+                          <button
+                            key={v.id}
+                            type="button"
+                            onClick={() => setAiInputVariant(v.id)}
+                            className={cn(
+                              "relative flex-1 h-7.5 px-2 rounded-lg text-xs font-medium flex items-center justify-center transition-colors cursor-pointer select-none",
+                              aiInputVariant === v.id
+                                ? "text-black font-semibold"
+                                : "text-zinc-400 hover:text-white",
+                            )}
+                          >
+                            {aiInputVariant === v.id && (
+                              <motion.div
+                                layoutId="activeAiInputVariantIndicator"
+                                transition={{
+                                  type: "spring",
+                                  stiffness: 450,
+                                  damping: 32,
+                                }}
+                                className="absolute inset-0 bg-white rounded-lg shadow-xs"
+                              />
+                            )}
+                            <span className="relative z-10 truncate">
+                              {v.label}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+
+                      <div className="flex items-center gap-1 bg-[#17171b] p-1 rounded-xl border border-white/5">
+                        {[
+                          { label: "Compact", value: 380 },
+                          { label: "Default", value: 480 },
+                          { label: "Wide", value: 560 },
+                          { label: "Full", value: 640 },
+                        ].map((sz) => (
+                          <button
+                            key={sz.value}
+                            type="button"
+                            onClick={() => setAiInputMaxWidth(sz.value)}
+                            className={cn(
+                              "relative px-2.5 h-7 rounded-lg text-xs font-medium transition-colors cursor-pointer flex items-center justify-center select-none",
+                              aiInputMaxWidth === sz.value
+                                ? "text-black font-semibold"
+                                : "text-zinc-400 hover:text-white",
+                            )}
+                          >
+                            {aiInputMaxWidth === sz.value && (
+                              <motion.div
+                                layoutId="activeAiInputWidthIndicator"
+                                transition={{
+                                  type: "spring",
+                                  stiffness: 450,
+                                  damping: 32,
+                                }}
+                                className="absolute inset-0 bg-white rounded-lg shadow-xs"
+                              />
+                            )}
+                            <span className="relative z-10">{sz.label}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
+                      <button
+                        type="button"
+                        onClick={() => setAiInputAllowAttachments((v) => !v)}
+                        className={cn(
+                          "h-8 px-2.5 rounded-lg border text-xs font-medium flex items-center justify-between transition-colors cursor-pointer",
+                          aiInputAllowAttachments
+                            ? "border-white/20 bg-white/10 text-white"
+                            : "border-white/5 bg-[#17171b] text-zinc-500 hover:text-zinc-300",
+                        )}
+                      >
+                        <span>Attachments</span>
+                        <span className="text-[10px] font-mono uppercase">
+                          {aiInputAllowAttachments ? "ON" : "OFF"}
+                        </span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setAiInputAllowVoice((v) => !v)}
+                        className={cn(
+                          "h-8 px-2.5 rounded-lg border text-xs font-medium flex items-center justify-between transition-colors cursor-pointer",
+                          aiInputAllowVoice
+                            ? "border-white/20 bg-white/10 text-white"
+                            : "border-white/5 bg-[#17171b] text-zinc-500 hover:text-zinc-300",
+                        )}
+                      >
+                        <span>Voice</span>
+                        <span className="text-[10px] font-mono uppercase">
+                          {aiInputAllowVoice ? "ON" : "OFF"}
+                        </span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setAiInputAllowModelSelect((v) => !v)}
+                        className={cn(
+                          "h-8 px-2.5 rounded-lg border text-xs font-medium flex items-center justify-between transition-colors cursor-pointer",
+                          aiInputAllowModelSelect
+                            ? "border-white/20 bg-white/10 text-white"
+                            : "border-white/5 bg-[#17171b] text-zinc-500 hover:text-zinc-300",
+                        )}
+                      >
+                        <span>Models</span>
+                        <span className="text-[10px] font-mono uppercase">
+                          {aiInputAllowModelSelect ? "ON" : "OFF"}
+                        </span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setAiInputAllowEffortSelect((v) => !v)}
+                        className={cn(
+                          "h-8 px-2.5 rounded-lg border text-xs font-medium flex items-center justify-between transition-colors cursor-pointer",
+                          aiInputAllowEffortSelect
+                            ? "border-white/20 bg-white/10 text-white"
+                            : "border-white/5 bg-[#17171b] text-zinc-500 hover:text-zinc-300",
+                        )}
+                      >
+                        <span>Effort</span>
+                        <span className="text-[10px] font-mono uppercase">
+                          {aiInputAllowEffortSelect ? "ON" : "OFF"}
+                        </span>
+                      </button>
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-1.5 pt-1 border-t border-white/5">
+                      <div className="flex items-center gap-1.5 overflow-x-auto py-0.5">
+                        <span className="text-[11px] text-zinc-500 shrink-0 font-medium pl-1">
+                          Try prompt:
+                        </span>
+                        {[
+                          "Build an animated dashboard",
+                          "Explain quantum annealing",
+                          "Polish dark mode theme",
+                        ].map((promptText) => (
+                          <button
+                            key={promptText}
+                            type="button"
+                            onClick={() => setAiInputValue(promptText)}
+                            className="h-6 px-2 rounded-md bg-[#17171b] hover:bg-[#222228] border border-white/5 text-[11px] text-zinc-300 hover:text-white transition-colors cursor-pointer truncate max-w-40"
+                          >
+                            {promptText}
+                          </button>
+                        ))}
+                      </div>
+
+                      {aiInputValue && (
+                        <button
+                          type="button"
+                          onClick={() => setAiInputValue("")}
+                          className="h-6 px-2 rounded-md text-[11px] text-zinc-400 hover:text-white transition-colors cursor-pointer shrink-0"
+                        >
+                          Clear
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>

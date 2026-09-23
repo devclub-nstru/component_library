@@ -28,6 +28,7 @@ import { MorphSearch } from "@/registry/ui/morph-search";
 import { Orb } from "@/registry/ui/orb";
 import { LiquidToggle } from "@/registry/ui/liquid-toggle";
 import { GooeyNav } from "@/registry/ui/gooey-nav";
+import { PromptInput } from "@/registry/ui/ai-input";
 import { cn } from "@/lib/utils";
 
 function CounterPreview() {
@@ -312,6 +313,11 @@ export default function ComponentsPage() {
           size="sm"
           color="orange"
         />
+      </div>
+    ),
+    "ai-input": (
+      <div className="w-full flex items-center justify-center scale-90 origin-center pointer-events-none select-none px-2">
+        <PromptInput placeholder="Ask anything" />
       </div>
     ),
   };

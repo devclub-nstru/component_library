@@ -280,20 +280,18 @@ export function MorphSearch({
     return () => clearInterval(interval);
   }, [reduceMotion]);
 
-  useEffect(() => {
+  const [prevQuery, setPrevQuery] = useState(query);
+  if (query !== prevQuery) {
+    setPrevQuery(query);
     setPollVotes({});
     setCompletedTodos({});
     setTimerRunning(false);
-    setTimerTimeLeft(null);
-  }, [query]);
-
-  useEffect(() => {
-    if (detected.type === "timer" && detected.timer) {
-      if (timerTimeLeft === null) {
-        setTimerTimeLeft(detected.timer.seconds);
-      }
-    }
-  }, [detected, timerTimeLeft]);
+    setTimerTimeLeft(
+      detected.type === "timer" && detected.timer
+        ? detected.timer.seconds
+        : null,
+    );
+  }
 
   useEffect(() => {
     if (!timerRunning || timerTimeLeft === null || timerTimeLeft <= 0) return;
