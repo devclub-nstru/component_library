@@ -25,6 +25,7 @@ import { ToasterDemo } from "@/registry/ui/toast";
 import { TaskList } from "@/registry/ui/task-list";
 import { SearchComposer } from "@/registry/ui/search-input";
 import { Orb } from "@/registry/ui/orb";
+import { LiquidToggle } from "@/registry/ui/liquid-toggle";
 import { cn } from "@/lib/utils";
 
 function CounterPreview() {
@@ -286,6 +287,11 @@ export default function ComponentsPage() {
     orb: (
       <div className="flex items-center justify-center p-3 select-none pointer-events-none">
         <Orb display={72} size={64} interactive={false} />
+      </div>
+    ),
+    "liquid-toggle": (
+      <div className="flex items-center justify-center p-3 select-none pointer-events-none">
+        <LiquidToggle defaultChecked={true} size="md" color="monochrome" />
       </div>
     ),
   };

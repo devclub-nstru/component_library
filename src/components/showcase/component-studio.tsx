@@ -54,6 +54,12 @@ import { FileTree, type TreeNode } from "@/registry/ui/file-tree";
 import { SearchComposer } from "@/registry/ui/search-input";
 import { Orb, ORB_STATES } from "@/registry/ui/orb";
 import type { OrbState } from "thinking-orbs";
+import {
+  LiquidToggle,
+  type LiquidToggleSize,
+  type LiquidToggleColor,
+  type LiquidToggleViscosity,
+} from "@/registry/ui/liquid-toggle";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -146,6 +152,11 @@ const ALL_CATEGORIES = [
         label: "Search Input",
         slug: "search-input",
         href: "/components/search-input",
+      },
+      {
+        label: "Liquid Toggle",
+        slug: "liquid-toggle",
+        href: "/components/liquid-toggle",
       },
     ],
   },
@@ -712,6 +723,20 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     setOrbStudioPaused(false);
   };
 
+  const [liquidChecked, setLiquidChecked] = useState(true);
+  const [liquidSize, setLiquidSize] = useState<LiquidToggleSize>("md");
+  const [liquidColor, setLiquidColor] =
+    useState<LiquidToggleColor>("monochrome");
+  const [liquidViscosity, setLiquidViscosity] =
+    useState<LiquidToggleViscosity>("fluid");
+
+  const resetLiquidConfig = () => {
+    setLiquidChecked(true);
+    setLiquidSize("md");
+    setLiquidColor("monochrome");
+    setLiquidViscosity("fluid");
+  };
+
   const resetOtpConfig = () => {
     setOtpStatus("idle");
     setOtpMask(false);
@@ -786,7 +811,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
   }, [selectedSlug, component]);
 
   const supportsColor = Boolean(
-    activeComponent.supportsColor ??
+    activeComponent.slug !== "liquid-toggle" &&
+    (activeComponent.supportsColor ??
     [
       "dither",
       "candy-button",
@@ -800,7 +826,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
       "code-block",
       "task-list",
       "file-tree",
-    ].includes(activeComponent.slug),
+    ].includes(activeComponent.slug)),
   );
 
   useEffect(() => {
@@ -919,6 +945,18 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               speed={orbStudioSpeed}
               paused={orbStudioPaused}
               onClick={(_, nextState) => setOrbStudioState(nextState)}
+            />
+          </div>
+        );
+      case "liquid-toggle":
+        return (
+          <div className="flex items-center justify-center w-full h-full min-h-96 select-none p-8">
+            <LiquidToggle
+              checked={liquidChecked}
+              onChange={setLiquidChecked}
+              size={liquidSize}
+              color={liquidColor}
+              viscosity={liquidViscosity}
             />
           </div>
         );
@@ -2481,7 +2519,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             "relative h-7 px-2.5 rounded-lg text-xs capitalize transition-colors cursor-pointer flex items-center justify-center shrink-0",
                             orbStudioState === s
                               ? "text-black font-semibold"
-                              : "text-zinc-400 hover:text-white"
+                              : "text-zinc-400 hover:text-white",
                           )}
                         >
                           {orbStudioState === s && (
@@ -2520,7 +2558,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                 "relative px-2 py-0.5 rounded text-[11px] font-mono transition-colors cursor-pointer",
                                 orbStudioSize === sz.value
                                   ? "text-black font-semibold"
-                                  : "text-zinc-400 hover:text-white"
+                                  : "text-zinc-400 hover:text-white",
                               )}
                             >
                               {orbStudioSize === sz.value && (
@@ -2554,7 +2592,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                 "relative px-2 py-0.5 rounded text-[11px] font-mono transition-colors cursor-pointer",
                                 orbStudioSpeed === sp
                                   ? "text-black font-semibold"
-                                  : "text-zinc-400 hover:text-white"
+                                  : "text-zinc-400 hover:text-white",
                               )}
                             >
                               {orbStudioSpeed === sp && (
@@ -2587,12 +2625,203 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             "px-2 py-0.5 rounded text-[11px] font-mono uppercase transition-colors",
                             !orbStudioPaused
                               ? "bg-white text-black font-semibold"
-                              : "bg-white/5 text-zinc-400"
+                              : "bg-white/5 text-zinc-400",
                           )}
                         >
                           {orbStudioPaused ? "PAUSED" : "PLAYING"}
                         </span>
                       </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeComponent.slug === "liquid-toggle" && (
+                <div
+                  key="liquid-toggle-customize-panel"
+                  className="pointer-events-auto rounded-2xl border border-white/10 bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-2xl w-full mx-4 select-none flex flex-col gap-2.5"
+                >
+                  <div className="flex items-center justify-between px-1">
+                    <span className="text-xs font-semibold text-white/90 tracking-tight">
+                      Liquid Toggle Controls
+                    </span>
+                    <button
+                      type="button"
+                      onClick={resetLiquidConfig}
+                      className="text-[11px] text-zinc-400 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                    >
+                      <ResetIcon className="w-3.5 h-3.5" />
+                      <span>Reset</span>
+                    </button>
+                  </div>
+
+                  <div className="rounded-xl border border-white/5 bg-[#0b0b0e] p-2 flex flex-col gap-2">
+                    <div className="flex items-center gap-1 bg-[#17171b] p-1 rounded-xl border border-white/5 w-full">
+                      {(
+                        [
+                          {
+                            id: "monochrome",
+                            label: "Monochrome",
+                            dot: "bg-zinc-200",
+                          },
+                          {
+                            id: "emerald",
+                            label: "Emerald",
+                            dot: "bg-emerald-400",
+                          },
+                          {
+                            id: "violet",
+                            label: "Violet",
+                            dot: "bg-violet-400",
+                          },
+                          {
+                            id: "amber",
+                            label: "Amber",
+                            dot: "bg-amber-400",
+                          },
+                          { id: "cyan", label: "Cyan", dot: "bg-cyan-400" },
+                        ] as const
+                      ).map((c) => (
+                        <button
+                          key={c.id}
+                          type="button"
+                          onClick={() => setLiquidColor(c.id)}
+                          className={cn(
+                            "relative flex-1 h-7.5 px-2 rounded-lg text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer select-none",
+                            liquidColor === c.id
+                              ? "text-black font-semibold"
+                              : "text-zinc-400 hover:text-white",
+                          )}
+                        >
+                          {liquidColor === c.id && (
+                            <motion.div
+                              layoutId="activeLiquidColorIndicator"
+                              transition={{
+                                type: "spring",
+                                stiffness: 450,
+                                damping: 32,
+                              }}
+                              className="absolute inset-0 bg-white rounded-lg shadow-xs"
+                            />
+                          )}
+                          <span
+                            className={cn(
+                              "relative z-10 w-2 h-2 rounded-full shrink-0 shadow-xs",
+                              c.dot,
+                            )}
+                          />
+                          <span className="relative z-10 truncate">
+                            {c.label}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                      <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                        <span className="text-zinc-400 text-xs font-medium shrink-0">
+                          State
+                        </span>
+                        <div className="flex items-center gap-0.5 bg-black/25 p-0.5 rounded-md border border-white/5">
+                          {[
+                            { label: "OFF", value: false },
+                            { label: "ON", value: true },
+                          ].map((st) => (
+                            <button
+                              key={st.label}
+                              type="button"
+                              onClick={() => setLiquidChecked(st.value)}
+                              className={cn(
+                                "relative px-2.5 py-0.5 rounded text-[11px] font-mono transition-colors cursor-pointer",
+                                liquidChecked === st.value
+                                  ? "text-black font-semibold"
+                                  : "text-zinc-400 hover:text-white",
+                              )}
+                            >
+                              {liquidChecked === st.value && (
+                                <motion.div
+                                  layoutId="activeLiquidStateIndicator"
+                                  transition={{
+                                    type: "spring",
+                                    stiffness: 450,
+                                    damping: 32,
+                                  }}
+                                  className="absolute inset-0 bg-white rounded shadow-xs"
+                                />
+                              )}
+                              <span className="relative z-10">{st.label}</span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                        <span className="text-zinc-400 text-xs font-medium shrink-0">
+                          Size
+                        </span>
+                        <div className="flex items-center gap-0.5 bg-black/25 p-0.5 rounded-md border border-white/5">
+                          {(["sm", "md", "lg"] as const).map((sz) => (
+                            <button
+                              key={sz}
+                              type="button"
+                              onClick={() => setLiquidSize(sz)}
+                              className={cn(
+                                "relative px-2 py-0.5 rounded text-[11px] font-mono uppercase transition-colors cursor-pointer",
+                                liquidSize === sz
+                                  ? "text-black font-semibold"
+                                  : "text-zinc-400 hover:text-white",
+                              )}
+                            >
+                              {liquidSize === sz && (
+                                <motion.div
+                                  layoutId="activeLiquidSizeIndicator"
+                                  transition={{
+                                    type: "spring",
+                                    stiffness: 450,
+                                    damping: 32,
+                                  }}
+                                  className="absolute inset-0 bg-white rounded shadow-xs"
+                                />
+                              )}
+                              <span className="relative z-10">{sz}</span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                        <span className="text-zinc-400 text-xs font-medium shrink-0">
+                          Viscosity
+                        </span>
+                        <div className="flex items-center gap-0.5 bg-black/25 p-0.5 rounded-md border border-white/5">
+                          {(["fluid", "jelly"] as const).map((v) => (
+                            <button
+                              key={v}
+                              type="button"
+                              onClick={() => setLiquidViscosity(v)}
+                              className={cn(
+                                "relative px-2.5 py-0.5 rounded text-[11px] capitalize transition-colors cursor-pointer",
+                                liquidViscosity === v
+                                  ? "text-black font-semibold"
+                                  : "text-zinc-400 hover:text-white",
+                              )}
+                            >
+                              {liquidViscosity === v && (
+                                <motion.div
+                                  layoutId="activeLiquidViscosityIndicator"
+                                  transition={{
+                                    type: "spring",
+                                    stiffness: 450,
+                                    damping: 32,
+                                  }}
+                                  className="absolute inset-0 bg-white rounded shadow-xs"
+                                />
+                              )}
+                              <span className="relative z-10">{v}</span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
