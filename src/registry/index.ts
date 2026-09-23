@@ -10580,7 +10580,7 @@ export function LiquidToggle({
       },
       {
         name: "elasticity",
-        type: '"fluid" | "elastic" | "smooth"',
+        type: '"fluid" | "elastic"',
         defaultValue: '"fluid"',
         description: "Spring dynamics preset governing transition stiffness and damping.",
       },
@@ -10627,7 +10627,6 @@ import { cn } from "@/lib/utils";
 const SPRING_TUNING = {
   fluid: { stiffness: 220, damping: 24, mass: 0.9 },
   elastic: { stiffness: 320, damping: 18, mass: 1 },
-  smooth: { stiffness: 170, damping: 26, mass: 1.1 },
 } as const;
 
 const NECK_BREAK = 0.44;

@@ -3034,13 +3034,13 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           Motion
                         </span>
                         <div className="flex items-center gap-0.5 bg-black/25 p-0.5 rounded-md border border-white/5">
-                          {(["fluid", "elastic", "smooth"] as const).map((e) => (
+                          {(["fluid", "elastic"] as const).map((e) => (
                             <button
                               key={e}
                               type="button"
                               onClick={() => setGooeyNavElasticity(e)}
                               className={cn(
-                                "relative px-2 py-0.5 rounded text-[11px] capitalize transition-colors cursor-pointer",
+                                "relative px-2.5 py-0.5 rounded text-[11px] capitalize transition-colors cursor-pointer",
                                 gooeyNavElasticity === e
                                   ? "text-black font-semibold"
                                   : "text-zinc-400 hover:text-white",
