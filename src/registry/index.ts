@@ -11723,7 +11723,7 @@ export default Noise;
     createdDate: "2026-09-24",
     updatedDate: "2026-09-24",
     interactive: true,
-    supportsColor: true,
+    supportsColor: false,
     highlights: [
       "Fluid spring physics expanding from compact 48px bar to multi-line textarea with zero layout flicker",
       "Morphing text with smooth subpixel width transitions on model and effort switches",

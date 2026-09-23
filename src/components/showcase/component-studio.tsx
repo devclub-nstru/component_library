@@ -22,6 +22,7 @@ import {
   RocketIcon,
   BarChartIcon,
   GearIcon,
+  PlusIcon,
 } from "@radix-ui/react-icons";
 import { ComponentRegistryItem } from "@/types/component";
 import { getComponentBySlug } from "@/registry";
@@ -74,7 +75,7 @@ import {
   type GooeyNavElasticity,
   type GooeyNavItem,
 } from "@/registry/ui/gooey-nav";
-import { PromptInput } from "@/registry/ui/ai-input";
+import { PromptInput, type PromptInputRef } from "@/registry/ui/ai-input";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -824,16 +825,21 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     setOtpGrouped(false);
   };
 
+  const promptInputRef = React.useRef<PromptInputRef>(null);
   const [aiInputValue, setAiInputValue] = useState("");
-  const [aiInputVariant, setAiInputVariant] = useState<"default" | "glow" | "minimal">("default");
+  const [aiInputVariant, setAiInputVariant] = useState<
+    "default" | "glow" | "minimal"
+  >("default");
   const [aiInputPlaceholder, setAiInputPlaceholder] = useState("Ask anything");
   const [aiInputAllowAttachments, setAiInputAllowAttachments] = useState(true);
   const [aiInputAllowVoice, setAiInputAllowVoice] = useState(true);
   const [aiInputAllowModelSelect, setAiInputAllowModelSelect] = useState(true);
-  const [aiInputAllowEffortSelect, setAiInputAllowEffortSelect] = useState(true);
+  const [aiInputAllowEffortSelect, setAiInputAllowEffortSelect] =
+    useState(true);
   const [aiInputMaxWidth, setAiInputMaxWidth] = useState<number>(480);
 
   const resetAiInputConfig = () => {
+    promptInputRef.current?.clear();
     setAiInputValue("");
     setAiInputVariant("default");
     setAiInputPlaceholder("Ask anything");
@@ -912,6 +918,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
   const supportsColor = Boolean(
     activeComponent.slug !== "liquid-toggle" &&
     activeComponent.slug !== "gooey-nav" &&
+    activeComponent.slug !== "ai-input" &&
     (activeComponent.supportsColor ??
       [
         "dither",
@@ -1045,6 +1052,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         return (
           <div className="flex items-center justify-center w-full min-h-110 p-4 sm:p-8 select-none">
             <PromptInput
+              ref={promptInputRef}
               value={aiInputValue}
               onChange={setAiInputValue}
               placeholder={aiInputPlaceholder}
@@ -1054,7 +1062,11 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               allowEffortSelect={aiInputAllowEffortSelect}
               maxWidth={aiInputMaxWidth}
               variant={aiInputVariant}
-              accentColor={color}
+              onSubmit={(val, meta) => {
+                toast.success(`Prompt sent to ${meta.model}`, {
+                  description: `${meta.effort} effort • ${meta.attachments.length} attachment${meta.attachments.length === 1 ? "" : "s"}`,
+                });
+              }}
             />
           </div>
         );
@@ -3376,7 +3388,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 >
                   <div className="flex items-center justify-between px-1">
                     <span className="text-xs font-semibold text-white/90 tracking-tight">
-                      AI Input Customization
+                      AI Input Controls
                     </span>
                     <button
                       type="button"
@@ -3528,6 +3540,47 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       </button>
                     </div>
 
+                    <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          promptInputRef.current?.addAttachment(
+                            new File([""], "dashboard-mockup.png", {
+                              type: "image/png",
+                            }),
+                            "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&auto=format&fit=crop&q=80",
+                            800,
+                            600,
+                          );
+                        }}
+                        className="h-7 px-2.5 rounded-lg border border-white/10 bg-[#17171b] hover:bg-white/10 hover:border-white/20 text-xs font-medium text-zinc-300 hover:text-white transition-all flex items-center gap-1.5 cursor-pointer"
+                      >
+                        <PlusIcon className="w-3.5 h-3.5 text-zinc-400" />
+                        <span>Attach Mockup</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          promptInputRef.current?.startVoice();
+                        }}
+                        className="h-7 px-2.5 rounded-lg border border-white/10 bg-[#17171b] hover:bg-white/10 hover:border-white/20 text-xs font-medium text-zinc-300 hover:text-white transition-all flex items-center gap-1.5 cursor-pointer"
+                      >
+                        <span>Simulate Voice</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          promptInputRef.current?.expand();
+                          promptInputRef.current?.focus();
+                        }}
+                        className="h-7 px-2.5 rounded-lg border border-white/10 bg-[#17171b] hover:bg-white/10 hover:border-white/20 text-xs font-medium text-zinc-300 hover:text-white transition-all flex items-center gap-1.5 cursor-pointer"
+                      >
+                        <span>Expand Composer</span>
+                      </button>
+                    </div>
+
                     <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-1.5 pt-1 border-t border-white/5">
                       <div className="flex items-center gap-1.5 overflow-x-auto py-0.5">
                         <span className="text-[11px] text-zinc-500 shrink-0 font-medium pl-1">
@@ -3552,7 +3605,10 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       {aiInputValue && (
                         <button
                           type="button"
-                          onClick={() => setAiInputValue("")}
+                          onClick={() => {
+                            setAiInputValue("");
+                            promptInputRef.current?.collapse();
+                          }}
                           className="h-6 px-2 rounded-md text-[11px] text-zinc-400 hover:text-white transition-colors cursor-pointer shrink-0"
                         >
                           Clear
