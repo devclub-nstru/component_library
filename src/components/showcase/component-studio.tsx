@@ -167,14 +167,29 @@ const ALL_CATEGORIES = [
         href: "/components/task-list",
       },
       {
-        label: "Search Input",
-        slug: "search-input",
-        href: "/components/search-input",
-      },
-      {
         label: "Liquid Toggle",
         slug: "liquid-toggle",
         href: "/components/liquid-toggle",
+      },
+    ],
+  },
+  {
+    label: "AI STUFF",
+    items: [
+      {
+        label: "AI Orb",
+        slug: "ai-orb",
+        href: "/components/ai-orb",
+      },
+      {
+        label: "Thinking Orb",
+        slug: "orb",
+        href: "/components/orb",
+      },
+      {
+        label: "Search Input",
+        slug: "search-input",
+        href: "/components/search-input",
       },
     ],
   },
@@ -225,16 +240,6 @@ const ALL_CATEGORIES = [
         label: "Noise",
         slug: "noise",
         href: "/components/noise",
-      },
-      {
-        label: "AI Orb",
-        slug: "ai-orb",
-        href: "/components/ai-orb",
-      },
-      {
-        label: "Thinking Orb",
-        slug: "orb",
-        href: "/components/orb",
       },
     ],
   },
@@ -1729,7 +1734,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
           <div className="h-14 px-5 border-b border-white/5 flex items-center justify-between z-20 shrink-0 bg-[#0f0f11]/80 backdrop-blur-md">
             <div className="flex items-center gap-2.5 min-w-0">
               <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 shrink-0">
-                {activeComponent.category}
+                {activeComponent.category.replace("-", " ")}
               </span>
               <span className="text-zinc-700 shrink-0">/</span>
               <span className="text-xs font-sans font-medium text-white tracking-tight truncate">
@@ -3456,7 +3461,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         {activeComponent.slug.replace("-", " ")}
                       </span>
                       <span className="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-white/5 text-zinc-400 border border-white/8">
-                        {activeComponent.category}
+                        {activeComponent.category.replace("-", " ")}
                       </span>
                       <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-orange-500/10 text-orange-400 border border-orange-500/20">
                         v{activeComponent.version}

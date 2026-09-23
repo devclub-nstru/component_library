@@ -7,7 +7,8 @@ export type ComponentCategory =
   | "scales"
   | "display"
   | "inputs"
-  | "accordion";
+  | "accordion"
+  | "ai-stuff";
 
 export interface ComponentProp {
   name: string;

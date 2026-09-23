@@ -23,4 +23,5 @@ export const CATEGORIES = [
   { id: "cards", label: "Cards & Bento" },
   { id: "feedback", label: "Badges & Feedback" },
   { id: "layout", label: "Layout & Grids" },
+  { id: "ai-stuff", label: "AI Stuff" },
 ];
