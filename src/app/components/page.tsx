@@ -24,6 +24,7 @@ import { TwitterCard } from "@/registry/ui/twitter-card";
 import { ToasterDemo } from "@/registry/ui/toast";
 import { TaskList } from "@/registry/ui/task-list";
 import { SearchComposer } from "@/registry/ui/search-input";
+import { MorphSearch } from "@/registry/ui/morph-search";
 import { Orb } from "@/registry/ui/orb";
 import { LiquidToggle } from "@/registry/ui/liquid-toggle";
 import { GooeyNav } from "@/registry/ui/gooey-nav";
@@ -281,6 +282,14 @@ export default function ComponentsPage() {
           onClear={() => {}}
           busy={false}
           placeholder="What are we overthinking today?"
+          autoFocus={false}
+        />
+      </div>
+    ),
+    "morph-search": (
+      <div className="w-full max-w-sm scale-90 origin-center pointer-events-none select-none px-2">
+        <MorphSearch
+          placeholder="pizza or burgers for friday?"
           autoFocus={false}
         />
       </div>

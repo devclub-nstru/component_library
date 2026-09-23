@@ -57,6 +57,7 @@ import { Toaster, toast } from "@/registry/ui/toast";
 import { TaskList } from "@/registry/ui/task-list";
 import { FileTree, type TreeNode } from "@/registry/ui/file-tree";
 import { SearchComposer } from "@/registry/ui/search-input";
+import { MorphSearch } from "@/registry/ui/morph-search";
 import { Orb, ORB_STATES } from "@/registry/ui/orb";
 import type { OrbState } from "thinking-orbs";
 import {
@@ -190,6 +191,11 @@ const ALL_CATEGORIES = [
         label: "Search Input",
         slug: "search-input",
         href: "/components/search-input",
+      },
+      {
+        label: "Morph Search",
+        slug: "morph-search",
+        href: "/components/morph-search",
       },
     ],
   },
@@ -1001,6 +1007,12 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               busy={searchBusy}
               placeholder="What are we overthinking today?"
             />
+          </div>
+        );
+      case "morph-search":
+        return (
+          <div className="flex items-center justify-center w-full max-w-xl mx-auto p-8">
+            <MorphSearch />
           </div>
         );
       case "orb":

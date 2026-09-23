@@ -9712,6 +9712,171 @@ export function Orb({ state, size = 64, display, paused }: OrbProps) {
       },
     ],
   },
+  "morph-search": {
+    slug: "morph-search",
+    name: "Morph Search",
+    description: "Adaptive morphing search bar with cycling placeholder, spring physics, and intent card morphs.",
+    summary: "An ultra-fluid adaptive search bar inspired by Shapeshift. Features a pill-shaped input with continuous cycling placeholders, spring-driven opening and closing morphs, and interactive contextual card transformations for polls, events, checklists, timers, expense splits, and instant search queries.",
+    category: "ai-stuff",
+    tags: ["search", "input", "morph", "shapeshift", "spring", "motion", "card", "intent"],
+    dependencies: ["clsx", "tailwind-merge", "motion"],
+    version: "1.0.0",
+    createdDate: "2026-09-23",
+    updatedDate: "2026-09-23",
+    interactive: true,
+    supportsColor: false,
+    highlights: [
+      "Smooth layout morphing from closed pill to expanded command card with spring physics",
+      "Dynamic cycling placeholder with smooth vertical crossfade and blur transition",
+      "Contextual intent morphs: interactive polls, event schedules, task checklists, timers, and bill splits",
+      "Full keyboard accessibility with '/' and 'Cmd+K' triggers, Escape closing, and Enter submission",
+      "Strict typography-first design with zero icons, zero emojis, and zero side borders"
+    ],
+    anatomy: [
+      "<MorphSearch> (Main interactive container with spring layout morph)",
+      "<input> (Search and prompt text input)",
+      "<CyclingPlaceholder> (Animated crossfading prompt suggestions)",
+      "<PollCard> (Interactive voting options with live percentage bars)",
+      "<EventCard> (Schedule preview with time and attendee tags)",
+      "<ChecklistCard> (Interactive tasks with completion toggles)",
+      "<TimerCard> (Focus countdown with active controls)",
+      "<SplitCard> (Bill split breakdown per person)"
+    ],
+    physics: {
+      engine: "Motion Spring Solver",
+      description: "Custom spring transition on container layout with 420 stiffness and 32 damping for immediate tactile response without overshoot.",
+      parameters: [
+        { label: "Stiffness", value: "420" },
+        { label: "Damping", value: "32" },
+        { label: "Mass", value: "0.85" },
+        { label: "Closed Radius", value: "28px" },
+        { label: "Opened Radius", value: "24px" }
+      ]
+    },
+    accessibility: {
+      role: "search",
+      aria: "Carries semantic input attributes, labelled search action buttons, and keyboard shortcuts.",
+      reducedMotion: "Automatically suppresses cycling animations and replaces spring layouts with soft opacity fades."
+    },
+    guidelines: {
+      recommended: [
+        "Primary search bar and copilot entry points",
+        "Interactive command palettes and multi-intent query prompts",
+        "Landing page search demonstrations and productivity tools"
+      ],
+      bestPractices: [
+        "Provide an onSubmit callback to handle confirmed user prompts",
+        "Keep placeholder examples relevant to your application's domain",
+        "Use subtle backdrop-blur panels for elevated contrast"
+      ]
+    },
+    props: [
+      {
+        name: "value",
+        type: "string",
+        defaultValue: "undefined",
+        description: "Controlled search query string."
+      },
+      {
+        name: "defaultValue",
+        type: "string",
+        defaultValue: "\"\"",
+        description: "Initial uncontrolled query string."
+      },
+      {
+        name: "onChange",
+        type: "(value: string) => void",
+        defaultValue: "undefined",
+        description: "Callback fired whenever the input text changes."
+      },
+      {
+        name: "onSubmit",
+        type: "(value: string, intent?: string) => void",
+        defaultValue: "undefined",
+        description: "Callback fired when Enter is pressed or an action is submitted."
+      },
+      {
+        name: "onClear",
+        type: "() => void",
+        defaultValue: "undefined",
+        description: "Callback fired when query is cleared."
+      },
+      {
+        name: "placeholder",
+        type: "string",
+        defaultValue: "undefined",
+        description: "Custom placeholder text to override cycling placeholders."
+      },
+      {
+        name: "className",
+        type: "string",
+        defaultValue: "undefined",
+        description: "Optional custom CSS class name for the wrapper."
+      },
+      {
+        name: "autoFocus",
+        type: "boolean",
+        defaultValue: "false",
+        description: "Whether the input should auto-focus on initial mount."
+      }
+    ],
+    files: [
+      {
+        name: "morph-search.tsx",
+        path: "registry/ui/morph-search.tsx",
+        code: `"use client";
+
+import React, {
+  useCallback,
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import {
+  AnimatePresence,
+  motion,
+  useReducedMotion,
+  type Transition,
+} from "motion/react";
+import {
+  Calendar,
+  Check,
+  CheckSquare,
+  Clock,
+  CornerDownLeft,
+  Pause,
+  PieChart,
+  Play,
+  RotateCcw,
+  Search,
+  Sparkles,
+  Timer,
+  User,
+  Vote,
+  X,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+
+export interface MorphSearchProps {
+  value?: string;
+  defaultValue?: string;
+  onChange?: (value: string) => void;
+  onSubmit?: (value: string, intent?: string) => void;
+  onClear?: () => void;
+  placeholder?: string;
+  className?: string;
+  autoFocus?: boolean;
+}
+
+export function MorphSearch(props: MorphSearchProps) {
+  return null;
+}
+`,
+      },
+    ],
+  },
   orb: {
     slug: "orb",
     name: "Thinking Orb",
