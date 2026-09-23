@@ -25,3 +25,40 @@ export const CATEGORIES = [
   { id: "layout", label: "Layout & Grids" },
   { id: "ai-stuff", label: "AI Stuff" },
 ];
+
+export interface DocsNavItem {
+  title: string;
+  href: string;
+  badge?: string;
+}
+
+export interface DocsNavSection {
+  title: string;
+  items: DocsNavItem[];
+}
+
+export const DOCS_NAV: DocsNavSection[] = [
+  {
+    title: "Getting Started",
+    items: [
+      { title: "Introduction", href: "/docs" },
+      { title: "Installation", href: "/docs/installation" },
+    ],
+  },
+  {
+    title: "Design System",
+    items: [
+      { title: "Theming", href: "/docs/theming" },
+      { title: "Typeset", href: "/docs/typeset" },
+    ],
+  },
+  {
+    title: "Tooling & Platform",
+    items: [
+      { title: "CLI", href: "/docs/cli" },
+      { title: "Skills", href: "/docs/skills", badge: "Agentic" },
+      { title: "Registry", href: "/docs/registry", badge: "v1.0" },
+    ],
+  },
+];
+
