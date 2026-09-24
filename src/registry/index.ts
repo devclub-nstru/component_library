@@ -11908,7 +11908,7 @@ export default Noise;
     name: "Mac Slider",
     description: "Liquid glass slider with squircle normal map refraction, specular rim sheen, and tactile spring physics.",
     summary: "A native-feeling macOS slider component built with physics-based liquid glass optics and damped harmonic oscillator springs. Features real-time squircle normal-map displacement, specular edge reflections, and dynamic transparency that shifts from solid white at rest to optical glass when dragged, coupled with responsive track scrubbing, multiple sizes, materials, and keyboard navigation.",
-    category: "inputs",
+    category: "apple-ui",
     tags: ["slider", "range", "liquid-glass", "refraction", "macos", "physics", "spring", "apple"],
     dependencies: ["clsx", "tailwind-merge", "motion"],
     version: "1.0.0",

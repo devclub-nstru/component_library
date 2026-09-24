@@ -233,6 +233,16 @@ const ALL_CATEGORIES = [
     ],
   },
   {
+    label: "APPLE UI",
+    items: [
+      {
+        label: "Mac Slider",
+        slug: "mac-slider",
+        href: "/components/mac-slider",
+      },
+    ],
+  },
+  {
     label: "LAYOUT & FEEDBACK",
     items: [
       {
@@ -2878,12 +2888,24 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       {(
                         [
                           { id: "blue", label: "Blue", dot: "bg-blue-500" },
-                          { id: "emerald", label: "Emerald", dot: "bg-emerald-400" },
-                          { id: "violet", label: "Violet", dot: "bg-violet-400" },
+                          {
+                            id: "emerald",
+                            label: "Emerald",
+                            dot: "bg-emerald-400",
+                          },
+                          {
+                            id: "violet",
+                            label: "Violet",
+                            dot: "bg-violet-400",
+                          },
                           { id: "amber", label: "Amber", dot: "bg-amber-400" },
                           { id: "rose", label: "Rose", dot: "bg-rose-400" },
                           { id: "cyan", label: "Cyan", dot: "bg-cyan-400" },
-                          { id: "monochrome", label: "Graphite", dot: "bg-zinc-200" },
+                          {
+                            id: "monochrome",
+                            label: "Graphite",
+                            dot: "bg-zinc-200",
+                          },
                         ] as const
                       ).map((c) => (
                         <button
@@ -3116,9 +3138,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           step="0.5"
                           value={macSliderBlurLevel}
                           onChange={(e) =>
-                            setMacSliderBlurLevel(
-                              parseFloat(e.target.value),
-                            )
+                            setMacSliderBlurLevel(parseFloat(e.target.value))
                           }
                           className="w-full accent-white h-1 bg-white/10 rounded cursor-pointer"
                         />

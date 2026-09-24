@@ -8,7 +8,8 @@ export type ComponentCategory =
   | "display"
   | "inputs"
   | "accordion"
-  | "ai-stuff";
+  | "ai-stuff"
+  | "apple-ui";
 
 export interface ComponentProp {
   name: string;
