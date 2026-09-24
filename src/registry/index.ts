@@ -9989,6 +9989,12 @@ export function MorphSearch(props: MorphSearchProps) {
         description: "Animation speed multiplier."
       },
       {
+        name: "color",
+        type: "string",
+        defaultValue: "undefined",
+        description: "Optional ink tint color (hex or rgb). Defaults to white on dark substrates."
+      },
+      {
         name: "onClick",
         type: "(e, nextState) => void",
         defaultValue: "undefined",
@@ -10023,6 +10029,24 @@ export const ORB_STATES: OrbState[] = [
   "shaping",
 ];
 
+export interface OrbColorOption {
+  label: string;
+  value?: string;
+  hex: string;
+}
+
+export const ORB_COLORS: OrbColorOption[] = [
+  { label: "Default", value: undefined, hex: "#ffffff" },
+  { label: "Beige", value: "#e8d8c8", hex: "#e8d8c8" },
+  { label: "Red", value: "#ef4444", hex: "#ef4444" },
+  { label: "Amber", value: "#f59e0b", hex: "#f59e0b" },
+  { label: "Emerald", value: "#10b981", hex: "#10b981" },
+  { label: "Cyan", value: "#06b6d4", hex: "#06b6d4" },
+  { label: "Blue", value: "#3b82f6", hex: "#3b82f6" },
+  { label: "Violet", value: "#8b5cf6", hex: "#8b5cf6" },
+  { label: "Rose", value: "#ec4899", hex: "#ec4899" },
+];
+
 export interface OrbProps {
   state?: OrbState;
   defaultState?: OrbState;
@@ -10031,6 +10055,7 @@ export interface OrbProps {
   paused?: boolean;
   speed?: number;
   theme?: "dark" | "light" | "auto";
+  color?: string;
   interactive?: boolean;
   className?: string;
   onClick?: (event: React.MouseEvent<HTMLElement>, nextState: OrbState) => void;
@@ -10045,6 +10070,7 @@ export function Orb({
   paused = false,
   speed = 1,
   theme = "dark",
+  color,
   interactive = true,
   className,
   onClick,
@@ -10078,6 +10104,7 @@ export function Orb({
       theme={theme}
       speed={speed}
       paused={paused}
+      color={color}
       style={{ width: px, height: px, display: "block" }}
     />
   );

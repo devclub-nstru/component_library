@@ -60,7 +60,7 @@ import { TaskList } from "@/registry/ui/task-list";
 import { FileTree, type TreeNode } from "@/registry/ui/file-tree";
 import { SearchComposer } from "@/registry/ui/search-input";
 import { MorphSearch } from "@/registry/ui/morph-search";
-import { Orb, ORB_STATES } from "@/registry/ui/orb";
+import { Orb, ORB_STATES, ORB_COLORS } from "@/registry/ui/orb";
 import type { OrbState } from "thinking-orbs";
 import {
   LiquidToggle,
@@ -797,12 +797,16 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
   const [orbStudioSize, setOrbStudioSize] = useState<number>(120);
   const [orbStudioSpeed, setOrbStudioSpeed] = useState<number>(1);
   const [orbStudioPaused, setOrbStudioPaused] = useState<boolean>(false);
+  const [orbStudioColor, setOrbStudioColor] = useState<string | undefined>(
+    undefined,
+  );
 
   const resetOrbConfig = () => {
     setOrbStudioState("breathing");
     setOrbStudioSize(120);
     setOrbStudioSpeed(1);
     setOrbStudioPaused(false);
+    setOrbStudioColor(undefined);
   };
 
   const [liquidChecked, setLiquidChecked] = useState(true);
@@ -1000,6 +1004,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     activeComponent.slug !== "ai-input" &&
     activeComponent.slug !== "mac-slider" &&
     activeComponent.slug !== "pixel-card" &&
+    activeComponent.slug !== "orb" &&
     (activeComponent.supportsColor ??
       [
         "dither",
@@ -1160,6 +1165,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               size={orbStudioSize <= 32 ? 20 : 64}
               speed={orbStudioSpeed}
               paused={orbStudioPaused}
+              color={orbStudioColor}
               onClick={(_, nextState) => setOrbStudioState(nextState)}
             />
           </div>
@@ -3038,9 +3044,17 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   className="pointer-events-auto rounded-2xl border border-white/10 bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-2xl w-full mx-4 select-none flex flex-col gap-2.5"
                 >
                   <div className="flex items-center justify-between px-1">
-                    <span className="text-xs font-semibold text-white/90 tracking-tight">
-                      Orb Controls
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-semibold text-white/90 tracking-tight">
+                        Orb Controls
+                      </span>
+                      {orbStudioColor && (
+                        <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-white/10 text-zinc-300">
+                          {ORB_COLORS.find((c) => c.value === orbStudioColor)
+                            ?.label || "Custom"}
+                        </span>
+                      )}
+                    </div>
                     <button
                       type="button"
                       onClick={resetOrbConfig}
@@ -3081,12 +3095,58 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       ))}
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                      <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3 flex items-center justify-between text-xs">
-                        <span className="text-zinc-400 text-xs font-medium">
+                    <div className="flex items-center gap-1 overflow-x-auto no-scrollbar bg-[#17171b] p-1 rounded-xl border border-white/5">
+                      <span className="text-zinc-400 text-xs font-medium px-2.5 shrink-0">
+                        Color
+                      </span>
+                      <div className="h-3.5 w-px bg-white/10 shrink-0 mr-1" />
+                      <div className="flex items-center gap-1 shrink-0">
+                        {ORB_COLORS.map((c) => {
+                          const isSelected = orbStudioColor === c.value;
+                          return (
+                            <button
+                              key={c.label}
+                              type="button"
+                              onClick={() => setOrbStudioColor(c.value)}
+                              className={cn(
+                                "relative h-7 px-2.5 rounded-lg text-xs transition-colors cursor-pointer flex items-center gap-1.5 shrink-0",
+                                isSelected
+                                  ? "text-black font-semibold"
+                                  : "text-zinc-400 hover:text-white hover:bg-white/5",
+                              )}
+                            >
+                              {isSelected && (
+                                <motion.div
+                                  layoutId="activeOrbColorIndicator"
+                                  transition={{
+                                    type: "spring",
+                                    stiffness: 450,
+                                    damping: 32,
+                                  }}
+                                  className="absolute inset-0 bg-white rounded-lg shadow-xs"
+                                />
+                              )}
+                              <span
+                                className={cn(
+                                  "relative z-10 w-2 h-2 rounded-full shrink-0",
+                                  c.value === undefined &&
+                                    "border border-zinc-500",
+                                )}
+                                style={{ backgroundColor: c.hex }}
+                              />
+                              <span className="relative z-10">{c.label}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3 flex items-center justify-between text-xs min-w-0 overflow-hidden">
+                        <span className="text-zinc-400 text-xs font-medium shrink-0">
                           Size
                         </span>
-                        <div className="flex items-center gap-0.5 bg-black/25 p-0.5 rounded-md border border-white/5">
+                        <div className="flex items-center gap-0.5 bg-black/25 p-0.5 rounded-md border border-white/5 shrink-0">
                           {[
                             { label: "S", value: 64 },
                             { label: "M", value: 96 },
@@ -3098,7 +3158,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               type="button"
                               onClick={() => setOrbStudioSize(sz.value)}
                               className={cn(
-                                "relative px-2 py-0.5 rounded text-[11px] font-mono transition-colors cursor-pointer",
+                                "relative px-2 py-0.5 rounded text-[11px] font-mono transition-colors cursor-pointer shrink-0",
                                 orbStudioSize === sz.value
                                   ? "text-black font-semibold"
                                   : "text-zinc-400 hover:text-white",
@@ -3121,18 +3181,18 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         </div>
                       </div>
 
-                      <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3 flex items-center justify-between text-xs">
-                        <span className="text-zinc-400 text-xs font-medium">
+                      <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3 flex items-center justify-between text-xs min-w-0 overflow-hidden">
+                        <span className="text-zinc-400 text-xs font-medium shrink-0">
                           Speed
                         </span>
-                        <div className="flex items-center gap-0.5 bg-black/25 p-0.5 rounded-md border border-white/5">
+                        <div className="flex items-center gap-0.5 bg-black/25 p-0.5 rounded-md border border-white/5 shrink-0">
                           {[0.5, 1, 1.5, 2].map((sp) => (
                             <button
                               key={sp}
                               type="button"
                               onClick={() => setOrbStudioSpeed(sp)}
                               className={cn(
-                                "relative px-2 py-0.5 rounded text-[11px] font-mono transition-colors cursor-pointer",
+                                "relative px-2 py-0.5 rounded text-[11px] font-mono transition-colors cursor-pointer shrink-0",
                                 orbStudioSpeed === sp
                                   ? "text-black font-semibold"
                                   : "text-zinc-400 hover:text-white",
@@ -3154,26 +3214,71 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           ))}
                         </div>
                       </div>
+                    </div>
 
-                      <button
-                        type="button"
-                        onClick={() => setOrbStudioPaused((p) => !p)}
-                        className="h-9 rounded-lg border border-white/5 bg-[#17171b] hover:bg-[#1f1f25] px-3 flex items-center justify-between text-xs transition-colors cursor-pointer"
-                      >
+                    <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3 flex items-center justify-between text-xs min-w-0 overflow-hidden">
+                      <div className="flex items-center gap-2 shrink-0">
                         <span className="text-zinc-400 text-xs font-medium">
                           Motion
                         </span>
-                        <span
+                        <span className="text-[11px] text-zinc-500 font-mono hidden sm:inline">
+                          {orbStudioPaused ? "Paused" : "Active"}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-0.5 bg-black/25 p-0.5 rounded-md border border-white/5 shrink-0">
+                        <button
+                          type="button"
+                          onClick={() => setOrbStudioPaused(false)}
                           className={cn(
-                            "px-2 py-0.5 rounded text-[11px] font-mono uppercase transition-colors",
+                            "relative px-2.5 py-0.5 rounded text-[11px] font-medium transition-colors cursor-pointer shrink-0",
                             !orbStudioPaused
-                              ? "bg-white text-black font-semibold"
-                              : "bg-white/5 text-zinc-400",
+                              ? "text-black font-semibold"
+                              : "text-zinc-400 hover:text-white",
                           )}
                         >
-                          {orbStudioPaused ? "PAUSED" : "PLAYING"}
-                        </span>
-                      </button>
+                          {!orbStudioPaused && (
+                            <motion.div
+                              layoutId="activeOrbMotionIndicator"
+                              transition={{
+                                type: "spring",
+                                stiffness: 450,
+                                damping: 32,
+                              }}
+                              className="absolute inset-0 bg-white rounded shadow-xs"
+                            />
+                          )}
+                          <span className="relative z-10 flex items-center gap-1.5">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                            Playing
+                          </span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setOrbStudioPaused(true)}
+                          className={cn(
+                            "relative px-2.5 py-0.5 rounded text-[11px] font-medium transition-colors cursor-pointer shrink-0",
+                            orbStudioPaused
+                              ? "text-black font-semibold"
+                              : "text-zinc-400 hover:text-white",
+                          )}
+                        >
+                          {orbStudioPaused && (
+                            <motion.div
+                              layoutId="activeOrbMotionIndicator"
+                              transition={{
+                                type: "spring",
+                                stiffness: 450,
+                                damping: 32,
+                              }}
+                              className="absolute inset-0 bg-white rounded shadow-xs"
+                            />
+                          )}
+                          <span className="relative z-10 flex items-center gap-1.5">
+                            <span className="w-1.5 h-1.5 rounded-full bg-zinc-400" />
+                            Paused
+                          </span>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
