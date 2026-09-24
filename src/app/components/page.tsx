@@ -29,6 +29,7 @@ import { Orb } from "@/registry/ui/orb";
 import { LiquidToggle } from "@/registry/ui/liquid-toggle";
 import { GooeyNav } from "@/registry/ui/gooey-nav";
 import { PromptInput } from "@/registry/ui/ai-input";
+import { MacSlider } from "@/registry/ui/mac-slider";
 import { cn } from "@/lib/utils";
 
 function CounterPreview() {
@@ -303,6 +304,11 @@ export default function ComponentsPage() {
     "liquid-toggle": (
       <div className="flex items-center justify-center p-3 select-none pointer-events-none">
         <LiquidToggle defaultChecked={true} size="md" color="monochrome" />
+      </div>
+    ),
+    "mac-slider": (
+      <div className="w-full flex items-center justify-center p-2 pointer-events-none scale-75 origin-center">
+        <MacSlider defaultValue={45} />
       </div>
     ),
     "gooey-nav": (

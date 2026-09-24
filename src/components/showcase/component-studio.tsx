@@ -76,6 +76,12 @@ import {
   type GooeyNavItem,
 } from "@/registry/ui/gooey-nav";
 import { PromptInput, type PromptInputRef } from "@/registry/ui/ai-input";
+import {
+  MacSlider,
+  type MacSliderColor,
+  type MacSliderSize,
+  type MacSliderMaterial,
+} from "@/registry/ui/mac-slider";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -785,6 +791,31 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     setLiquidViscosity("fluid");
   };
 
+  const [macSliderVal, setMacSliderVal] = useState(45);
+  const [macSliderColor, setMacSliderColor] = useState<MacSliderColor>("blue");
+  const [macSliderSize, setMacSliderSize] = useState<MacSliderSize>("md");
+  const [macSliderMaterial, setMacSliderMaterial] =
+    useState<MacSliderMaterial>("liquid");
+  const [macSliderForceActive, setMacSliderForceActive] = useState(false);
+  const [macSliderSpecularOpacity, setMacSliderSpecularOpacity] = useState(0.4);
+  const [macSliderSpecularSaturation, setMacSliderSpecularSaturation] =
+    useState(6);
+  const [macSliderRefractionLevel, setMacSliderRefractionLevel] =
+    useState(0.28);
+  const [macSliderBlurLevel, setMacSliderBlurLevel] = useState(0);
+
+  const resetMacSliderConfig = () => {
+    setMacSliderVal(45);
+    setMacSliderColor("blue");
+    setMacSliderSize("md");
+    setMacSliderMaterial("liquid");
+    setMacSliderForceActive(false);
+    setMacSliderSpecularOpacity(0.4);
+    setMacSliderSpecularSaturation(6);
+    setMacSliderRefractionLevel(0.28);
+    setMacSliderBlurLevel(0);
+  };
+
   const [gooeyNavIndex, setGooeyNavIndex] = useState(0);
   const [gooeyNavSize, setGooeyNavSize] = useState<GooeyNavSize>("md");
   const [gooeyNavColor, setGooeyNavColor] = useState<GooeyNavColor>("orange");
@@ -919,6 +950,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     activeComponent.slug !== "liquid-toggle" &&
     activeComponent.slug !== "gooey-nav" &&
     activeComponent.slug !== "ai-input" &&
+    activeComponent.slug !== "mac-slider" &&
     (activeComponent.supportsColor ??
       [
         "dither",
@@ -1092,6 +1124,23 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               size={liquidSize}
               color={liquidColor}
               viscosity={liquidViscosity}
+            />
+          </div>
+        );
+      case "mac-slider":
+        return (
+          <div className="flex flex-col items-center justify-center w-full h-full min-h-96 select-none p-4 sm:p-8">
+            <MacSlider
+              value={macSliderVal}
+              onChange={setMacSliderVal}
+              color={macSliderColor}
+              size={macSliderSize}
+              material={macSliderMaterial}
+              forceActive={macSliderForceActive}
+              specularOpacity={macSliderSpecularOpacity}
+              specularSaturation={macSliderSpecularSaturation}
+              refractionLevel={macSliderRefractionLevel}
+              blurLevel={macSliderBlurLevel}
             />
           </div>
         );
@@ -2800,6 +2849,283 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           {orbStudioPaused ? "PAUSED" : "PLAYING"}
                         </span>
                       </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeComponent.slug === "mac-slider" && (
+                <div
+                  key="mac-slider-customize-panel"
+                  className="pointer-events-auto rounded-2xl border border-white/10 bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-2xl w-full mx-4 select-none flex flex-col gap-2.5"
+                >
+                  <div className="flex items-center justify-between px-1">
+                    <span className="text-xs font-semibold text-white/90 tracking-tight">
+                      Mac Slider Controls
+                    </span>
+                    <button
+                      type="button"
+                      onClick={resetMacSliderConfig}
+                      className="text-[11px] text-zinc-400 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                    >
+                      <ResetIcon className="w-3.5 h-3.5" />
+                      <span>Reset</span>
+                    </button>
+                  </div>
+
+                  <div className="rounded-xl border border-white/5 bg-[#0b0b0e] p-2 flex flex-col gap-2">
+                    <div className="flex items-center gap-1 bg-[#17171b] p-1 rounded-xl border border-white/5 w-full">
+                      {(
+                        [
+                          { id: "blue", label: "Blue", dot: "bg-blue-500" },
+                          { id: "emerald", label: "Emerald", dot: "bg-emerald-400" },
+                          { id: "violet", label: "Violet", dot: "bg-violet-400" },
+                          { id: "amber", label: "Amber", dot: "bg-amber-400" },
+                          { id: "rose", label: "Rose", dot: "bg-rose-400" },
+                          { id: "cyan", label: "Cyan", dot: "bg-cyan-400" },
+                          { id: "monochrome", label: "Graphite", dot: "bg-zinc-200" },
+                        ] as const
+                      ).map((c) => (
+                        <button
+                          key={c.id}
+                          type="button"
+                          onClick={() => setMacSliderColor(c.id)}
+                          className={cn(
+                            "relative flex-1 h-7.5 px-2 rounded-lg text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer select-none",
+                            macSliderColor === c.id
+                              ? "text-black font-semibold"
+                              : "text-zinc-400 hover:text-white",
+                          )}
+                        >
+                          {macSliderColor === c.id && (
+                            <motion.div
+                              layoutId="activeMacSliderColorIndicator"
+                              transition={{
+                                type: "spring",
+                                stiffness: 450,
+                                damping: 32,
+                              }}
+                              className="absolute inset-0 bg-white rounded-lg shadow-xs"
+                            />
+                          )}
+                          <span
+                            className={cn(
+                              "relative z-10 w-2 h-2 rounded-full shrink-0 shadow-xs",
+                              c.dot,
+                            )}
+                          />
+                          <span className="relative z-10 truncate hidden sm:inline">
+                            {c.label}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                        <span className="text-zinc-400 text-xs font-medium shrink-0">
+                          Size
+                        </span>
+                        <div className="flex items-center gap-0.5 bg-black/30 p-0.5 rounded-md border border-white/5">
+                          {(["sm", "md", "lg"] as const).map((sz) => (
+                            <button
+                              key={sz}
+                              type="button"
+                              onClick={() => setMacSliderSize(sz)}
+                              className={cn(
+                                "relative px-2.5 py-0.5 rounded text-[11px] font-mono uppercase transition-colors cursor-pointer",
+                                macSliderSize === sz
+                                  ? "text-black font-semibold"
+                                  : "text-zinc-400 hover:text-white",
+                              )}
+                            >
+                              {macSliderSize === sz && (
+                                <motion.div
+                                  layoutId="activeMacSliderSizeIndicator"
+                                  transition={{
+                                    type: "spring",
+                                    stiffness: 450,
+                                    damping: 32,
+                                  }}
+                                  className="absolute inset-0 bg-white rounded shadow-xs"
+                                />
+                              )}
+                              <span className="relative z-10">{sz}</span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                        <span className="text-zinc-400 text-xs font-medium shrink-0">
+                          Lens State
+                        </span>
+                        <div className="flex items-center gap-0.5 bg-black/30 p-0.5 rounded-md border border-white/5">
+                          {[
+                            { label: "Rest", value: false },
+                            { label: "Expanded", value: true },
+                          ].map((st) => (
+                            <button
+                              key={st.label}
+                              type="button"
+                              onClick={() => setMacSliderForceActive(st.value)}
+                              className={cn(
+                                "relative px-2.5 py-0.5 rounded text-[11px] font-mono transition-colors cursor-pointer",
+                                macSliderForceActive === st.value
+                                  ? "text-black font-semibold"
+                                  : "text-zinc-400 hover:text-white",
+                              )}
+                            >
+                              {macSliderForceActive === st.value && (
+                                <motion.div
+                                  layoutId="activeMacSliderForceActiveIndicator"
+                                  transition={{
+                                    type: "spring",
+                                    stiffness: 450,
+                                    damping: 32,
+                                  }}
+                                  className="absolute inset-0 bg-white rounded shadow-xs"
+                                />
+                              )}
+                              <span className="relative z-10">{st.label}</span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                      <span className="text-zinc-400 text-xs font-medium shrink-0">
+                        Glass Material
+                      </span>
+                      <div className="flex items-center gap-0.5 bg-black/30 p-0.5 rounded-md border border-white/5">
+                        {(
+                          [
+                            { id: "liquid", label: "Liquid" },
+                            { id: "frosted", label: "Frosted" },
+                            { id: "clear", label: "Clear" },
+                          ] as const
+                        ).map((m) => (
+                          <button
+                            key={m.id}
+                            type="button"
+                            onClick={() => setMacSliderMaterial(m.id)}
+                            className={cn(
+                              "relative px-3.5 py-0.5 rounded text-[11px] font-mono transition-colors cursor-pointer",
+                              macSliderMaterial === m.id
+                                ? "text-black font-semibold"
+                                : "text-zinc-400 hover:text-white",
+                            )}
+                          >
+                            {macSliderMaterial === m.id && (
+                              <motion.div
+                                layoutId="activeMacSliderMaterialIndicator"
+                                transition={{
+                                  type: "spring",
+                                  stiffness: 450,
+                                  damping: 32,
+                                }}
+                                className="absolute inset-0 bg-white rounded shadow-xs"
+                              />
+                            )}
+                            <span className="relative z-10">{m.label}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 border-t border-white/5">
+                      <div className="rounded-lg border border-white/5 bg-[#17171b] px-3 py-2 flex items-center justify-between gap-2.5 text-xs">
+                        <span className="w-18 shrink-0 text-zinc-400 text-[11px] font-medium">
+                          Specular
+                        </span>
+                        <div className="h-3.5 w-px bg-white/10 shrink-0" />
+                        <input
+                          type="range"
+                          min="0"
+                          max="1"
+                          step="0.01"
+                          value={macSliderSpecularOpacity}
+                          onChange={(e) =>
+                            setMacSliderSpecularOpacity(
+                              parseFloat(e.target.value),
+                            )
+                          }
+                          className="w-full accent-white h-1 bg-white/10 rounded cursor-pointer"
+                        />
+                        <span className="w-12 text-right font-mono text-[11px] text-zinc-100 tabular-nums shrink-0 font-medium">
+                          {macSliderSpecularOpacity.toFixed(2)}
+                        </span>
+                      </div>
+
+                      <div className="rounded-lg border border-white/5 bg-[#17171b] px-3 py-2 flex items-center justify-between gap-2.5 text-xs">
+                        <span className="w-18 shrink-0 text-zinc-400 text-[11px] font-medium">
+                          Saturation
+                        </span>
+                        <div className="h-3.5 w-px bg-white/10 shrink-0" />
+                        <input
+                          type="range"
+                          min="0"
+                          max="50"
+                          step="1"
+                          value={macSliderSpecularSaturation}
+                          onChange={(e) =>
+                            setMacSliderSpecularSaturation(
+                              parseFloat(e.target.value),
+                            )
+                          }
+                          className="w-full accent-white h-1 bg-white/10 rounded cursor-pointer"
+                        />
+                        <span className="w-12 text-right font-mono text-[11px] text-zinc-100 tabular-nums shrink-0 font-medium">
+                          {macSliderSpecularSaturation}
+                        </span>
+                      </div>
+
+                      <div className="rounded-lg border border-white/5 bg-[#17171b] px-3 py-2 flex items-center justify-between gap-2.5 text-xs">
+                        <span className="w-18 shrink-0 text-zinc-400 text-[11px] font-medium">
+                          Refraction
+                        </span>
+                        <div className="h-3.5 w-px bg-white/10 shrink-0" />
+                        <input
+                          type="range"
+                          min="0"
+                          max="1"
+                          step="0.01"
+                          value={macSliderRefractionLevel}
+                          onChange={(e) =>
+                            setMacSliderRefractionLevel(
+                              parseFloat(e.target.value),
+                            )
+                          }
+                          className="w-full accent-white h-1 bg-white/10 rounded cursor-pointer"
+                        />
+                        <span className="w-12 text-right font-mono text-[11px] text-zinc-100 tabular-nums shrink-0 font-medium">
+                          {macSliderRefractionLevel.toFixed(2)}
+                        </span>
+                      </div>
+
+                      <div className="rounded-lg border border-white/5 bg-[#17171b] px-3 py-2 flex items-center justify-between gap-2.5 text-xs">
+                        <span className="w-18 shrink-0 text-zinc-400 text-[11px] font-medium">
+                          Blur
+                        </span>
+                        <div className="h-3.5 w-px bg-white/10 shrink-0" />
+                        <input
+                          type="range"
+                          min="0"
+                          max="40"
+                          step="0.5"
+                          value={macSliderBlurLevel}
+                          onChange={(e) =>
+                            setMacSliderBlurLevel(
+                              parseFloat(e.target.value),
+                            )
+                          }
+                          className="w-full accent-white h-1 bg-white/10 rounded cursor-pointer"
+                        />
+                        <span className="w-12 text-right font-mono text-[11px] text-zinc-100 tabular-nums shrink-0 font-medium">
+                          {macSliderBlurLevel.toFixed(1)}px
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
