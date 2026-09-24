@@ -414,9 +414,6 @@ export const SpotlightSearch: React.FC<SpotlightSearchProps> = ({
           </span>
 
           <div className="relative flex-1 flex items-center h-full overflow-hidden">
-            {!query && (
-              <span className="w-[1.5px] h-4.5 bg-white/70 animate-pulse mr-1 inline-block shrink-0 rounded-full" />
-            )}
             <input
               id={inputId}
               ref={inputRef}
