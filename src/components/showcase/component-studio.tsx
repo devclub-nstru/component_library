@@ -82,10 +82,8 @@ import {
   type MacSliderSize,
   type MacSliderMaterial,
 } from "@/registry/ui/mac-slider";
-import {
-  MacSwitch,
-  type MacSwitchColor,
-} from "@/registry/ui/mac-switch";
+import { MacSwitch, type MacSwitchColor } from "@/registry/ui/mac-switch";
+import { SpotlightSearch } from "@/registry/ui/spotlight-search";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -248,6 +246,11 @@ const ALL_CATEGORIES = [
         label: "Mac Switch",
         slug: "mac-switch",
         href: "/components/mac-switch",
+      },
+      {
+        label: "Spotlight Search",
+        slug: "spotlight-search",
+        href: "/components/spotlight-search",
       },
     ],
   },
@@ -1169,6 +1172,12 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         return (
           <div className="flex flex-col items-center justify-center w-full h-full min-h-96 select-none p-4 sm:p-8">
             <MacSwitch defaultChecked={true} color={macSwitchColor} />
+          </div>
+        );
+      case "spotlight-search":
+        return (
+          <div className="flex flex-col items-center justify-center w-full h-full min-h-96 select-none p-4 sm:p-8">
+            <SpotlightSearch />
           </div>
         );
       case "gooey-nav":

@@ -31,6 +31,7 @@ import { GooeyNav } from "@/registry/ui/gooey-nav";
 import { PromptInput } from "@/registry/ui/ai-input";
 import { MacSlider } from "@/registry/ui/mac-slider";
 import { MacSwitch } from "@/registry/ui/mac-switch";
+import { SpotlightSearch } from "@/registry/ui/spotlight-search";
 import { cn } from "@/lib/utils";
 
 function CounterPreview() {
@@ -315,6 +316,11 @@ export default function ComponentsPage() {
     "mac-switch": (
       <div className="w-full flex items-center justify-center p-2 pointer-events-none scale-75 origin-center">
         <MacSwitch defaultChecked={true} />
+      </div>
+    ),
+    "spotlight-search": (
+      <div className="w-full flex items-center justify-center p-2 pointer-events-none scale-70 origin-center">
+        <SpotlightSearch />
       </div>
     ),
     "gooey-nav": (
