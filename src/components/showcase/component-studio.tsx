@@ -878,6 +878,24 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     setNoiseScanlines(false);
   };
 
+  const [pixelVariant, setPixelVariant] = useState<
+    "default" | "blue" | "yellow" | "pink" | "purple" | "emerald"
+  >("default");
+  const [pixelPattern, setPixelPattern] = useState<
+    "wave" | "matrix" | "scan" | "cross"
+  >("wave");
+  const [pixelSpeed, setPixelSpeed] = useState<number>(25);
+  const [pixelNoise, setPixelNoise] = useState<number>(0);
+  const [pixelGap, setPixelGap] = useState<number>(6);
+
+  const resetPixelConfig = () => {
+    setPixelVariant("default");
+    setPixelPattern("wave");
+    setPixelSpeed(25);
+    setPixelNoise(0);
+    setPixelGap(6);
+  };
+
   const resetOtpConfig = () => {
     setOtpStatus("idle");
     setOtpMask(false);
@@ -981,6 +999,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     activeComponent.slug !== "gooey-nav" &&
     activeComponent.slug !== "ai-input" &&
     activeComponent.slug !== "mac-slider" &&
+    activeComponent.slug !== "pixel-card" &&
     (activeComponent.supportsColor ??
       [
         "dither",
@@ -990,7 +1009,6 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         "ai-orb",
         "animated-button",
         "spotlight-card",
-        "pixel-card",
         "glowing-badge",
         "animated-counter",
         "code-block",
@@ -1564,9 +1582,12 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
           <div className="w-full max-w-md flex justify-center">
             <PixelCard
               className="w-full max-w-72 aspect-4/5 p-6 border-white/10 bg-[#0c0c0e]"
-              variant="default"
+              variant={pixelVariant}
+              pattern={pixelPattern}
+              speed={pixelSpeed}
+              noise={pixelNoise}
+              gap={pixelGap}
               maxTilt={6}
-              spotlightColor={color.startsWith("#") ? `${color}25` : color}
             />
           </div>
         );
