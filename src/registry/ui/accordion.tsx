@@ -277,7 +277,7 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
                     "overflow-hidden rounded-xl border transition-all duration-300",
                     isOpen
                       ? "border-black/10 bg-white shadow-sm dark:border-white/20 dark:bg-[#121217] dark:shadow-[0_12px_32px_rgba(0,0,0,0.4)]"
-                      : "border-transparent bg-white shadow-xs hover:border-black/5 dark:border-white/8 dark:bg-[#0c0c0e]/90 dark:hover:border-white/15 dark:hover:bg-[#101014]"
+                      : "border-transparent bg-white shadow-xs hover:border-black/5 dark:border-white/8 dark:bg-[#0c0c0e]/90 dark:hover:border-white/15 dark:hover:bg-[#101014]",
                   )}
                 >
                   <button
@@ -291,7 +291,7 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
                         "transition-colors duration-200",
                         isOpen
                           ? "text-gray-950 dark:text-white"
-                          : "text-gray-800 dark:text-zinc-200"
+                          : "text-gray-800 dark:text-zinc-200",
                       )}
                     >
                       {item.title}

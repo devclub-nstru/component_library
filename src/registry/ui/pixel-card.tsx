@@ -17,8 +17,13 @@ export type PixelCardVariant =
   | "purple"
   | "emerald";
 
-export interface PixelCardProps extends React.HTMLAttributes<HTMLDivElement> {
+export type PixelCardPattern = "wave" | "matrix" | "scan" | "cross";
+
+export interface PixelCardProps
+  extends React.HTMLAttributes<HTMLDivElement> {
   variant?: PixelCardVariant;
+  pattern?: PixelCardPattern;
+  noise?: number;
   gap?: number;
   speed?: number;
   colors?: string;
@@ -113,6 +118,8 @@ export const PixelCard = React.forwardRef<HTMLDivElement, PixelCardProps>(
   (
     {
       variant = "default",
+      pattern = "wave",
+      noise = 0,
       gap,
       speed,
       colors,
@@ -131,7 +138,7 @@ export const PixelCard = React.forwardRef<HTMLDivElement, PixelCardProps>(
       onBlur,
       ...props
     },
-    ref,
+    ref
   ) => {
     const containerRef = useRef<HTMLDivElement | null>(null);
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -156,7 +163,7 @@ export const PixelCard = React.forwardRef<HTMLDivElement, PixelCardProps>(
 
     const isReducedMotion = useRef(
       typeof window !== "undefined" &&
-        window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches
     ).current;
 
     const variantCfg = VARIANTS[variant] || VARIANTS.default;
@@ -178,7 +185,7 @@ export const PixelCard = React.forwardRef<HTMLDivElement, PixelCardProps>(
 
       const dpr = Math.min(
         typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1,
-        2,
+        2
       );
       canvas.width = Math.floor(width * dpr);
       canvas.height = Math.floor(height * dpr);
@@ -206,8 +213,7 @@ export const PixelCard = React.forwardRef<HTMLDivElement, PixelCardProps>(
           const x = xOffset + col * step;
           const y = yOffset + row * step;
           const color =
-            colorList[Math.floor(Math.random() * colorList.length)] ||
-            "#38bdf8";
+            colorList[Math.floor(Math.random() * colorList.length)] || "#38bdf8";
           const maxSize = 1.1 + Math.random() * 1.3;
           pixelGrid.push({
             x,
@@ -261,26 +267,91 @@ export const PixelCard = React.forwardRef<HTMLDivElement, PixelCardProps>(
             const dy = p.y - pointer.y;
             const dist = Math.sqrt(dx * dx + dy * dy);
 
-            if (dist <= waveRadius) {
-              const waveIntensity = Math.min(
-                1,
-                Math.max(0, (waveRadius - dist) / 45),
-              );
-              const proximity = Math.max(0, 1 - dist / 130);
-              const proximityBoost = proximity * proximity;
-              const harmonicWave =
-                Math.sin(time * effectiveSpeed + p.phase) * 0.5 + 0.5;
+            if (pattern === "wave") {
+              if (dist <= waveRadius) {
+                const waveIntensity = Math.min(
+                  1,
+                  Math.max(0, (waveRadius - dist) / 45)
+                );
+                const proximity = Math.max(0, 1 - dist / 130);
+                const proximityBoost = proximity * proximity;
+                const harmonicWave =
+                  Math.sin(time * effectiveSpeed + p.phase) * 0.5 + 0.5;
+                const pulse =
+                  Math.sin(time * (effectiveSpeed * 1.2) - dist * 0.03) * 0.5 +
+                  0.5;
+
+                targetSize =
+                  p.maxSize *
+                  waveIntensity *
+                  (0.3 + 0.55 * harmonicWave + proximityBoost * 0.65);
+                targetAlpha = Math.min(
+                  1,
+                  0.2 + 0.65 * pulse + proximityBoost * 0.4
+                );
+              }
+            } else if (pattern === "matrix") {
+              const colOffset = Math.sin(p.x * 0.08) * 120;
+              const streamY =
+                ((time * (effectiveSpeed * 160) + colOffset) %
+                  (height + 120)) -
+                60;
+              const streamDist = Math.abs(p.y - streamY);
+              const streamIntensity = Math.max(0, 1 - streamDist / 60);
+              const proximity = Math.max(0, 1 - dist / 120);
               const pulse =
-                Math.sin(time * (effectiveSpeed * 1.2) - dist * 0.03) * 0.5 +
+                Math.sin(time * (effectiveSpeed * 2) + p.phase) * 0.5 + 0.5;
+
+              targetSize =
+                p.maxSize * (0.2 + 0.8 * streamIntensity + proximity * 0.5);
+              targetAlpha = Math.min(
+                1,
+                0.2 + 0.8 * streamIntensity * pulse + proximity * 0.4
+              );
+            } else if (pattern === "scan") {
+              const scanAngle = time * (effectiveSpeed * 0.9);
+              const cx = width / 2;
+              const cy = height / 2;
+              const relX = p.x - cx;
+              const relY = p.y - cy;
+              const beamDist = Math.abs(
+                relX * Math.cos(scanAngle) + relY * Math.sin(scanAngle)
+              );
+              const beamIntensity = Math.max(0, 1 - beamDist / 45);
+              const proximity = Math.max(0, 1 - dist / 120);
+
+              targetSize =
+                p.maxSize * (0.25 + 0.75 * beamIntensity + proximity * 0.5);
+              targetAlpha = Math.min(
+                1,
+                0.2 + 0.8 * beamIntensity + proximity * 0.4
+              );
+            } else if (pattern === "cross") {
+              const lineDist = Math.min(Math.abs(dx), Math.abs(dy));
+              const lineIntensity = Math.max(0, 1 - lineDist / 32);
+              const proximity = Math.max(0, 1 - dist / 130);
+              const pulse =
+                Math.sin(time * (effectiveSpeed * 1.5) - dist * 0.035) * 0.5 +
                 0.5;
 
               targetSize =
-                p.maxSize *
-                waveIntensity *
-                (0.3 + 0.55 * harmonicWave + proximityBoost * 0.65);
+                p.maxSize * (0.25 + 0.75 * lineIntensity + proximity * 0.5);
               targetAlpha = Math.min(
                 1,
-                0.2 + 0.65 * pulse + proximityBoost * 0.4,
+                0.2 + 0.8 * lineIntensity * pulse + proximity * 0.4
+              );
+            }
+
+            if (noise > 0) {
+              const noiseSeed =
+                Math.sin(p.x * 12.9898 + p.y * 78.233 + time * 14) *
+                43758.5453;
+              const pseudoRand = noiseSeed - Math.floor(noiseSeed);
+              const noiseDelta = (pseudoRand - 0.5) * noise * 1.1;
+              targetSize = Math.max(0, targetSize * (1 + noiseDelta));
+              targetAlpha = Math.min(
+                1,
+                Math.max(0, targetAlpha * (1 + noiseDelta * 0.7))
               );
             }
           }
@@ -308,7 +379,7 @@ export const PixelCard = React.forwardRef<HTMLDivElement, PixelCardProps>(
           ctx.clearRect(0, 0, width, height);
         }
       },
-      [finalSpeed, isReducedMotion],
+      [finalSpeed, isReducedMotion, noise, pattern]
     );
 
     const startAnimation = useCallback(() => {
@@ -349,7 +420,7 @@ export const PixelCard = React.forwardRef<HTMLDivElement, PixelCardProps>(
       {
         scope: containerRef,
         dependencies: [enableTilt, isReducedMotion, tick],
-      },
+      }
     );
 
     useEffect(() => {
@@ -512,11 +583,11 @@ export const PixelCard = React.forwardRef<HTMLDivElement, PixelCardProps>(
         onFocus={finalNoFocus ? undefined : handleFocus}
         onBlur={finalNoFocus ? undefined : handleBlur}
         className={cn(
-          "group relative isolate flex flex-col items-center justify-center overflow-hidden rounded-2xl border border-white/8 bg-black/80 text-zinc-100 select-none",
+          "group relative isolate flex flex-col items-center justify-center overflow-hidden rounded-2xl border border-white/[0.08] bg-black/80 text-zinc-100 select-none",
           "transition-[border-color,box-shadow] duration-500 hover:border-white/20 hover:shadow-2xl hover:shadow-black/60",
           "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-sky-500/60 focus-visible:ring-offset-1 focus-visible:ring-offset-black",
-          "transform-3d will-change-transform",
-          className,
+          "[transform-style:preserve-3d] [will-change:transform]",
+          className
         )}
         {...props}
       >
@@ -555,13 +626,13 @@ export const PixelCard = React.forwardRef<HTMLDivElement, PixelCardProps>(
           className="pointer-events-none absolute inset-0 block h-full w-full rounded-[inherit]"
         />
         {children && (
-          <div className="relative z-10 flex h-full w-full flex-col items-center justify-center transform-3d transform-[translateZ(18px)] pointer-events-auto">
+          <div className="relative z-10 flex h-full w-full flex-col items-center justify-center [transform-style:preserve-3d] [transform:translateZ(18px)] pointer-events-auto">
             {children}
           </div>
         )}
       </div>
     );
-  },
+  }
 );
 
 PixelCard.displayName = "PixelCard";

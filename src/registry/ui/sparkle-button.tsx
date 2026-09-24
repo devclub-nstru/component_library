@@ -1,6 +1,12 @@
 "use client";
 
-import React, { useState, useMemo, useRef, useLayoutEffect, useEffect } from "react";
+import React, {
+  useState,
+  useMemo,
+  useRef,
+  useLayoutEffect,
+  useEffect,
+} from "react";
 import { motion, AnimatePresence, type HTMLMotionProps } from "motion/react";
 import { cn } from "@/lib/utils";
 
@@ -8,8 +14,10 @@ export type SparkleButtonSize = "sm" | "default" | "lg";
 export type BlurAnimateBy = "letters" | "words";
 export type BlurDirection = "top" | "bottom";
 
-export interface SparkleButtonProps
-  extends Omit<HTMLMotionProps<"button">, "children"> {
+export interface SparkleButtonProps extends Omit<
+  HTMLMotionProps<"button">,
+  "children"
+> {
   text?: string;
   activeText?: string;
   loading?: boolean;
@@ -108,9 +116,7 @@ export const SparkleButton = React.forwardRef<
       return () => window.removeEventListener("resize", updateMeasurements);
     }, [text, activeText, size]);
 
-    const targetWidth = isLoading
-      ? measuredWidths.active
-      : measuredWidths.idle;
+    const targetWidth = isLoading ? measuredWidths.active : measuredWidths.idle;
     const currentTargetText = isLoading ? activeText : text;
 
     const segments = useMemo(() => {

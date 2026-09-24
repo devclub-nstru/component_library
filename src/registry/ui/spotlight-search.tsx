@@ -1,11 +1,6 @@
 "use client";
 
-import React, {
-  useId,
-  useRef,
-  useState,
-  useMemo,
-} from "react";
+import React, { useId, useRef, useState, useMemo } from "react";
 import { AnimatePresence, motion, type Transition } from "motion/react";
 import { cn } from "@/lib/utils";
 
@@ -265,7 +260,8 @@ export const SpotlightSearch: React.FC<SpotlightSearchProps> = ({
   };
 
   const handleFilterToggle = (filterIdSelected: SpotlightFilterId) => {
-    const nextFilter = currentFilter === filterIdSelected ? null : filterIdSelected;
+    const nextFilter =
+      currentFilter === filterIdSelected ? null : filterIdSelected;
     if (!isControlledFilter) {
       setUncontrolledFilter(nextFilter);
     }
@@ -351,7 +347,11 @@ export const SpotlightSearch: React.FC<SpotlightSearchProps> = ({
             width="140%"
             height="140%"
           >
-            <feGaussianBlur in="SourceGraphic" stdDeviation="5.5" result="blur" />
+            <feGaussianBlur
+              in="SourceGraphic"
+              stdDeviation="5.5"
+              result="blur"
+            />
             <feColorMatrix
               in="blur"
               type="matrix"

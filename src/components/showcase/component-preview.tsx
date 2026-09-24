@@ -24,7 +24,7 @@ export const ComponentPreview = ({
     <div
       className={cn(
         "rounded-xl border border-zinc-800 bg-zinc-950 overflow-hidden",
-        className
+        className,
       )}
     >
       <div className="flex items-center justify-between border-b border-zinc-800 bg-zinc-900/40 px-4 py-2">
@@ -35,7 +35,7 @@ export const ComponentPreview = ({
               "flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors cursor-pointer",
               activeTab === "preview"
                 ? "bg-zinc-800 text-white"
-                : "text-zinc-400 hover:text-zinc-200"
+                : "text-zinc-400 hover:text-zinc-200",
             )}
           >
             <EyeOpenIcon className="h-3.5 w-3.5" />
@@ -47,7 +47,7 @@ export const ComponentPreview = ({
               "flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors cursor-pointer",
               activeTab === "code"
                 ? "bg-zinc-800 text-white"
-                : "text-zinc-400 hover:text-zinc-200"
+                : "text-zinc-400 hover:text-zinc-200",
             )}
           >
             <CodeIcon className="h-3.5 w-3.5" />

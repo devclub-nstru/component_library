@@ -1563,7 +1563,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         return (
           <div className="w-full max-w-md flex justify-center">
             <PixelCard
-              className="w-full max-w-72 aspect-[4/5] p-6 border-white/10 bg-[#0c0c0e]"
+              className="w-full max-w-72 aspect-4/5 p-6 border-white/10 bg-[#0c0c0e]"
               variant="default"
               maxTilt={6}
               spotlightColor={color.startsWith("#") ? `${color}25` : color}

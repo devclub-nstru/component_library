@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 
 const ThinkingOrb = dynamic(
   () => import("thinking-orbs").then((m) => m.ThinkingOrb),
-  { ssr: false }
+  { ssr: false },
 );
 
 export const ORB_STATES: OrbState[] = [
@@ -67,7 +67,7 @@ export function Orb({
       onStateChange?.(nextState);
       onClick?.(e, nextState);
     },
-    [currentState, isControlled, onClick, onStateChange]
+    [currentState, isControlled, onClick, onStateChange],
   );
 
   const canvas = (
@@ -86,7 +86,7 @@ export function Orb({
       <span
         className={cn(
           "inline-flex shrink-0 items-center justify-center select-none",
-          className
+          className,
         )}
         style={{ width: px, height: px }}
         aria-hidden
@@ -103,7 +103,7 @@ export function Orb({
       aria-label={`Orb state is ${currentState}. Click to cycle state.`}
       className={cn(
         "inline-flex shrink-0 items-center justify-center p-0 border-0 bg-transparent cursor-pointer select-none transition-transform duration-200 ease-out hover:scale-105 active:scale-95 outline-none rounded-full focus-visible:ring-1 focus-visible:ring-white/20",
-        className
+        className,
       )}
       style={{ width: px, height: px }}
     >

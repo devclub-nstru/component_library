@@ -193,19 +193,26 @@ export const Footer = () => {
         </div>
 
         <div className="border-t border-white/8 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-500">
-          <p>
-            © {new Date().getFullYear()} devclub. All rights reserved.
-          </p>
+          <p>© {new Date().getFullYear()} devclub. All rights reserved.</p>
           <div className="flex items-center gap-4">
-            <Link href="/terms" className="hover:text-zinc-300 transition-colors">
+            <Link
+              href="/terms"
+              className="hover:text-zinc-300 transition-colors"
+            >
               Terms
             </Link>
             <span>•</span>
-            <Link href="/privacy" className="hover:text-zinc-300 transition-colors">
+            <Link
+              href="/privacy"
+              className="hover:text-zinc-300 transition-colors"
+            >
               Privacy
             </Link>
             <span>•</span>
-            <Link href="/docs/registry" className="hover:text-zinc-300 transition-colors">
+            <Link
+              href="/docs/registry"
+              className="hover:text-zinc-300 transition-colors"
+            >
               Registry
             </Link>
           </div>

@@ -50,14 +50,11 @@ export function ToasterDemo() {
         <Button
           variant="outline"
           onClick={() =>
-            toast.promise(
-              new Promise((resolve) => setTimeout(resolve, 2000)),
-              {
-                loading: "Loading...",
-                success: "Promise resolved",
-                error: "Promise rejected",
-              }
-            )
+            toast.promise(new Promise((resolve) => setTimeout(resolve, 2000)), {
+              loading: "Loading...",
+              success: "Promise resolved",
+              error: "Promise rejected",
+            })
           }
         >
           Promise Toast

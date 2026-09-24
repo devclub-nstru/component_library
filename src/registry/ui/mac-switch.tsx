@@ -349,13 +349,8 @@ export const MacSwitch: React.FC<MacSwitchProps> = ({
 
   const currentTheme = SWITCH_COLORS[color] ?? SWITCH_COLORS.green;
   const currentSize = SWITCH_SIZES[size] ?? SWITCH_SIZES.md;
-  const {
-    sliderWidth,
-    sliderHeight,
-    thumbWidth,
-    thumbHeight,
-    bezelWidth,
-  } = currentSize;
+  const { sliderWidth, sliderHeight, thumbWidth, thumbHeight, bezelWidth } =
+    currentSize;
 
   const thumbRadius = thumbHeight / 2;
   const THUMB_REST_SCALE = 0.65;
@@ -367,7 +362,8 @@ export const MacSwitch: React.FC<MacSwitchProps> = ({
     -THUMB_REST_OFFSET + (sliderHeight - thumbHeight * THUMB_REST_SCALE) / 2;
 
   const isControlled = controlledChecked !== undefined;
-  const [uncontrolledChecked, setUncontrolledChecked] = useState(defaultChecked);
+  const [uncontrolledChecked, setUncontrolledChecked] =
+    useState(defaultChecked);
   const isChecked = isControlled ? controlledChecked : uncontrolledChecked;
 
   const checked = useMotionValue(isChecked ? 1 : 0);
@@ -390,9 +386,8 @@ export const MacSwitch: React.FC<MacSwitchProps> = ({
     }
   }, [controlledChecked, checked, xDragRatio]);
 
-  const active = useTransform(
-    (): number =>
-      forceActiveMotion.get() > 0.5 || pointerDown.get() > 0.5 ? 1 : 0,
+  const active = useTransform((): number =>
+    forceActiveMotion.get() > 0.5 || pointerDown.get() > 0.5 ? 1 : 0,
   );
 
   const blur = useMotionValue(blurLevel);
@@ -449,13 +444,7 @@ export const MacSwitch: React.FC<MacSwitchProps> = ({
   const considerChecked = useTransform((): number => {
     const x = xDragRatio.get();
     const c = checked.get();
-    return pointerDown.get() > 0.5
-      ? x > 0.5
-        ? 1
-        : 0
-      : c > 0.5
-        ? 1
-        : 0;
+    return pointerDown.get() > 0.5 ? (x > 0.5 ? 1 : 0) : c > 0.5 ? 1 : 0;
   });
 
   const backgroundColor = useTransform(
