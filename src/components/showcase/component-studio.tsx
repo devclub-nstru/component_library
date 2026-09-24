@@ -82,6 +82,10 @@ import {
   type MacSliderSize,
   type MacSliderMaterial,
 } from "@/registry/ui/mac-slider";
+import {
+  MacSwitch,
+  type MacSwitchColor,
+} from "@/registry/ui/mac-switch";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -239,6 +243,11 @@ const ALL_CATEGORIES = [
         label: "Mac Slider",
         slug: "mac-slider",
         href: "/components/mac-slider",
+      },
+      {
+        label: "Mac Switch",
+        slug: "mac-switch",
+        href: "/components/mac-switch",
       },
     ],
   },
@@ -826,6 +835,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     setMacSliderBlurLevel(0);
   };
 
+  const [macSwitchColor, setMacSwitchColor] = useState<MacSwitchColor>("green");
+
   const [gooeyNavIndex, setGooeyNavIndex] = useState(0);
   const [gooeyNavSize, setGooeyNavSize] = useState<GooeyNavSize>("md");
   const [gooeyNavColor, setGooeyNavColor] = useState<GooeyNavColor>("orange");
@@ -1152,6 +1163,12 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               refractionLevel={macSliderRefractionLevel}
               blurLevel={macSliderBlurLevel}
             />
+          </div>
+        );
+      case "mac-switch":
+        return (
+          <div className="flex flex-col items-center justify-center w-full h-full min-h-96 select-none p-4 sm:p-8">
+            <MacSwitch defaultChecked={true} color={macSwitchColor} />
           </div>
         );
       case "gooey-nav":
@@ -3148,6 +3165,60 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       </div>
                     </div>
                   </div>
+                </div>
+              )}
+
+              {activeComponent.slug === "mac-switch" && (
+                <div
+                  key="mac-switch-color-palette"
+                  className="pointer-events-auto rounded-full border border-white/12 bg-[#121215]/95 backdrop-blur-2xl p-1.5 shadow-[0_16px_40px_rgba(0,0,0,0.85),0_0_0_1px_rgba(255,255,255,0.06)] flex items-center gap-1.5 select-none"
+                >
+                  {(
+                    [
+                      { id: "green", label: "Green", hex: "#34C759" },
+                      { id: "blue", label: "Blue", hex: "#007AFF" },
+                      { id: "purple", label: "Purple", hex: "#AF52DE" },
+                      { id: "orange", label: "Orange", hex: "#FF9500" },
+                      { id: "pink", label: "Pink", hex: "#FF2D55" },
+                      { id: "amber", label: "Amber", hex: "#FFCC00" },
+                      { id: "monochrome", label: "Graphite", hex: "#8E8E93" },
+                    ] as const
+                  ).map((c) => {
+                    const isSelected = macSwitchColor === c.id;
+                    return (
+                      <motion.button
+                        key={c.id}
+                        type="button"
+                        onClick={() => setMacSwitchColor(c.id)}
+                        title={c.label}
+                        whileHover={{ scale: 1.08 }}
+                        whileTap={{ scale: 0.92 }}
+                        transition={microSpring}
+                        className="relative w-8 h-8 rounded-full flex items-center justify-center cursor-pointer outline-none shrink-0"
+                      >
+                        {isSelected && (
+                          <motion.span
+                            layoutId="activeMacSwitchColorRing"
+                            className="absolute inset-0 rounded-full border-2 border-white shadow-[0_0_12px_rgba(255,255,255,0.4)] pointer-events-none"
+                            transition={{
+                              type: "spring",
+                              stiffness: 480,
+                              damping: 32,
+                            }}
+                          />
+                        )}
+                        <span
+                          style={{ backgroundColor: c.hex }}
+                          className={cn(
+                            "w-5.5 h-5.5 rounded-full shadow-xs transition-all duration-200",
+                            isSelected
+                              ? "opacity-100 scale-100"
+                              : "opacity-65 hover:opacity-90 scale-95 hover:scale-100",
+                          )}
+                        />
+                      </motion.button>
+                    );
+                  })}
                 </div>
               )}
 

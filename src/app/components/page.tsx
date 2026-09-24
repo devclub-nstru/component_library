@@ -30,6 +30,7 @@ import { LiquidToggle } from "@/registry/ui/liquid-toggle";
 import { GooeyNav } from "@/registry/ui/gooey-nav";
 import { PromptInput } from "@/registry/ui/ai-input";
 import { MacSlider } from "@/registry/ui/mac-slider";
+import { MacSwitch } from "@/registry/ui/mac-switch";
 import { cn } from "@/lib/utils";
 
 function CounterPreview() {
@@ -309,6 +310,11 @@ export default function ComponentsPage() {
     "mac-slider": (
       <div className="w-full flex items-center justify-center p-2 pointer-events-none scale-75 origin-center">
         <MacSlider defaultValue={45} />
+      </div>
+    ),
+    "mac-switch": (
+      <div className="w-full flex items-center justify-center p-2 pointer-events-none scale-75 origin-center">
+        <MacSwitch defaultChecked={true} />
       </div>
     ),
     "gooey-nav": (
