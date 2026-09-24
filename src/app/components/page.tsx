@@ -10,6 +10,7 @@ import { SparkleButton } from "@/registry/ui/sparkle-button";
 import { CandyButton } from "@/registry/ui/candy-button";
 import { AnimatedButton } from "@/registry/ui/animated-button";
 import { SpotlightCard } from "@/registry/ui/spotlight-card";
+import { PixelCard } from "@/registry/ui/pixel-card";
 import { HookSidebar } from "@/registry/ui/hook-sidebar";
 import { GitHubActivity } from "@/registry/ui/github-activity";
 import { AnimatedCounter } from "@/registry/ui/animated-counter";
@@ -139,6 +140,13 @@ export default function ComponentsPage() {
           GPU Accelerated
         </div>
       </SpotlightCard>
+    ),
+    "pixel-card": (
+      <PixelCard
+        className="w-full max-w-60 aspect-4/5 border-white/10 bg-black/80"
+        variant="default"
+        maxTilt={6}
+      />
     ),
     "bento-grid": (
       <div className="w-full max-w-70 grid grid-cols-2 gap-2">

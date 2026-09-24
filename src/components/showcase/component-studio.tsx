@@ -31,6 +31,7 @@ import { CandyButton } from "@/registry/ui/candy-button";
 import { AnimatedButton } from "@/registry/ui/animated-button";
 import { HorizontalScale, VerticalScale, Lines } from "@/registry/ui/scales";
 import { SpotlightCard } from "@/registry/ui/spotlight-card";
+import { PixelCard } from "@/registry/ui/pixel-card";
 import { BentoGrid, BentoCard } from "@/registry/ui/bento-grid";
 import { GlowingBadge } from "@/registry/ui/glowing-badge";
 import { HookSidebar } from "@/registry/ui/hook-sidebar";
@@ -106,6 +107,11 @@ const ALL_CATEGORIES = [
         label: "Spotlight Card",
         slug: "spotlight-card",
         href: "/components/spotlight-card",
+      },
+      {
+        label: "Pixel Card",
+        slug: "pixel-card",
+        href: "/components/pixel-card",
       },
       {
         label: "GitHub activity",
@@ -984,6 +990,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         "ai-orb",
         "animated-button",
         "spotlight-card",
+        "pixel-card",
         "glowing-badge",
         "animated-counter",
         "code-block",
@@ -1550,6 +1557,17 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 </span>
               </div>
             </SpotlightCard>
+          </div>
+        );
+      case "pixel-card":
+        return (
+          <div className="w-full max-w-md flex justify-center">
+            <PixelCard
+              className="w-full max-w-72 aspect-[4/5] p-6 border-white/10 bg-[#0c0c0e]"
+              variant="default"
+              maxTilt={6}
+              spotlightColor={color.startsWith("#") ? `${color}25` : color}
+            />
           </div>
         );
       case "bento-grid":
