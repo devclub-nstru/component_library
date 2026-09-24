@@ -3846,6 +3846,263 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 </div>
               )}
 
+              {activeComponent.slug === "pixel-card" && (
+                <div
+                  key="pixel-card-customize-panel"
+                  className="pointer-events-auto rounded-2xl border border-white/10 bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-xl w-full mx-4 select-none flex flex-col gap-2.5"
+                >
+                  <div className="flex items-center justify-between px-1">
+                    <span className="text-xs font-semibold text-white/90 tracking-tight">
+                      Pixel Card Controls
+                    </span>
+                    <button
+                      type="button"
+                      onClick={resetPixelConfig}
+                      className="text-[11px] text-zinc-400 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                    >
+                      <ResetIcon className="w-3.5 h-3.5" />
+                      <span>Reset</span>
+                    </button>
+                  </div>
+
+                  <div className="rounded-xl border border-white/5 bg-[#0b0b0e] p-2 flex flex-col gap-1.5">
+                    <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3 flex items-center gap-3 text-xs">
+                      <span className="w-14 text-zinc-400 text-xs font-medium shrink-0">
+                        Pattern
+                      </span>
+                      <div className="flex-1 flex items-center gap-1 bg-black/30 p-0.5 rounded-md border border-white/5">
+                        {(
+                          [
+                            { id: "wave", label: "Wave" },
+                            { id: "matrix", label: "Matrix" },
+                            { id: "scan", label: "Scan" },
+                            { id: "cross", label: "Cross" },
+                          ] as const
+                        ).map((p) => (
+                          <button
+                            key={p.id}
+                            type="button"
+                            onClick={() => setPixelPattern(p.id)}
+                            className={cn(
+                              "relative flex-1 h-6.5 px-2 rounded text-[11px] font-medium flex items-center justify-center transition-colors cursor-pointer select-none",
+                              pixelPattern === p.id
+                                ? "text-black font-semibold"
+                                : "text-zinc-400 hover:text-white",
+                            )}
+                          >
+                            {pixelPattern === p.id && (
+                              <motion.div
+                                layoutId="activePixelPatternIndicator"
+                                transition={{
+                                  type: "spring",
+                                  stiffness: 450,
+                                  damping: 32,
+                                }}
+                                className="absolute inset-0 bg-white rounded shadow-xs"
+                              />
+                            )}
+                            <span className="relative z-10 truncate">
+                              {p.label}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3 flex items-center gap-3 text-xs">
+                      <span className="w-14 text-zinc-400 text-xs font-medium shrink-0">
+                        Color
+                      </span>
+                      <div className="flex-1 flex items-center gap-1 bg-black/30 p-0.5 rounded-md border border-white/5">
+                        {(
+                          [
+                            { id: "default", label: "Cyan", dot: "bg-sky-400" },
+                            { id: "blue", label: "Blue", dot: "bg-blue-500" },
+                            {
+                              id: "emerald",
+                              label: "Matrix",
+                              dot: "bg-emerald-400",
+                            },
+                            {
+                              id: "yellow",
+                              label: "Amber",
+                              dot: "bg-amber-400",
+                            },
+                            { id: "pink", label: "Rose", dot: "bg-rose-400" },
+                            {
+                              id: "purple",
+                              label: "Violet",
+                              dot: "bg-purple-400",
+                            },
+                          ] as const
+                        ).map((v) => (
+                          <button
+                            key={v.id}
+                            type="button"
+                            onClick={() => setPixelVariant(v.id)}
+                            className={cn(
+                              "relative flex-1 h-6.5 px-1.5 rounded text-[11px] font-medium flex items-center justify-center gap-1.5 transition-colors cursor-pointer select-none",
+                              pixelVariant === v.id
+                                ? "text-black font-semibold"
+                                : "text-zinc-400 hover:text-white",
+                            )}
+                          >
+                            {pixelVariant === v.id && (
+                              <motion.div
+                                layoutId="activePixelVariantIndicator"
+                                transition={{
+                                  type: "spring",
+                                  stiffness: 450,
+                                  damping: 32,
+                                }}
+                                className="absolute inset-0 bg-white rounded shadow-xs"
+                              />
+                            )}
+                            <span
+                              className={cn(
+                                "relative z-10 w-2 h-2 rounded-full shrink-0",
+                                v.dot,
+                              )}
+                            />
+                            <span className="relative z-10 truncate">
+                              {v.label}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3 flex items-center gap-3 text-xs">
+                      <span className="w-14 text-zinc-400 text-xs font-medium shrink-0">
+                        Speed
+                      </span>
+                      <div className="flex-1 flex items-center gap-1 bg-black/30 p-0.5 rounded-md border border-white/5">
+                        {(
+                          [
+                            { val: 12, label: "Slow" },
+                            { val: 25, label: "Normal" },
+                            { val: 45, label: "Fast" },
+                            { val: 70, label: "Turbo" },
+                          ] as const
+                        ).map((s) => (
+                          <button
+                            key={s.val}
+                            type="button"
+                            onClick={() => setPixelSpeed(s.val)}
+                            className={cn(
+                              "relative flex-1 h-6.5 px-2 rounded text-[11px] font-medium flex items-center justify-center transition-colors cursor-pointer select-none",
+                              pixelSpeed === s.val
+                                ? "text-black font-semibold"
+                                : "text-zinc-400 hover:text-white",
+                            )}
+                          >
+                            {pixelSpeed === s.val && (
+                              <motion.div
+                                layoutId="activePixelSpeedIndicator"
+                                transition={{
+                                  type: "spring",
+                                  stiffness: 450,
+                                  damping: 32,
+                                }}
+                                className="absolute inset-0 bg-white rounded shadow-xs"
+                              />
+                            )}
+                            <span className="relative z-10 truncate">
+                              {s.label}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3 flex items-center gap-3 text-xs">
+                      <span className="w-14 text-zinc-400 text-xs font-medium shrink-0">
+                        Noise
+                      </span>
+                      <div className="flex-1 flex items-center gap-1 bg-black/30 p-0.5 rounded-md border border-white/5">
+                        {(
+                          [
+                            { val: 0, label: "Off" },
+                            { val: 0.25, label: "Subtle" },
+                            { val: 0.5, label: "Medium" },
+                            { val: 0.85, label: "Glitch" },
+                          ] as const
+                        ).map((n) => (
+                          <button
+                            key={n.val}
+                            type="button"
+                            onClick={() => setPixelNoise(n.val)}
+                            className={cn(
+                              "relative flex-1 h-6.5 px-2 rounded text-[11px] font-medium flex items-center justify-center transition-colors cursor-pointer select-none",
+                              pixelNoise === n.val
+                                ? "text-black font-semibold"
+                                : "text-zinc-400 hover:text-white",
+                            )}
+                          >
+                            {pixelNoise === n.val && (
+                              <motion.div
+                                layoutId="activePixelNoiseIndicator"
+                                transition={{
+                                  type: "spring",
+                                  stiffness: 450,
+                                  damping: 32,
+                                }}
+                                className="absolute inset-0 bg-white rounded shadow-xs"
+                              />
+                            )}
+                            <span className="relative z-10 truncate">
+                              {n.label}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3 flex items-center gap-3 text-xs">
+                      <span className="w-14 text-zinc-400 text-xs font-medium shrink-0">
+                        Density
+                      </span>
+                      <div className="flex-1 flex items-center gap-1 bg-black/30 p-0.5 rounded-md border border-white/5">
+                        {(
+                          [
+                            { val: 4, label: "Dense" },
+                            { val: 6, label: "Balanced" },
+                            { val: 9, label: "Sparse" },
+                          ] as const
+                        ).map((g) => (
+                          <button
+                            key={g.val}
+                            type="button"
+                            onClick={() => setPixelGap(g.val)}
+                            className={cn(
+                              "relative flex-1 h-6.5 px-2 rounded text-[11px] font-medium flex items-center justify-center transition-colors cursor-pointer select-none",
+                              pixelGap === g.val
+                                ? "text-black font-semibold"
+                                : "text-zinc-400 hover:text-white",
+                            )}
+                          >
+                            {pixelGap === g.val && (
+                              <motion.div
+                                layoutId="activePixelGapIndicator"
+                                transition={{
+                                  type: "spring",
+                                  stiffness: 450,
+                                  damping: 32,
+                                }}
+                                className="absolute inset-0 bg-white rounded shadow-xs"
+                              />
+                            )}
+                            <span className="relative z-10 truncate">
+                              {g.label}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {activeComponent.slug === "ai-input" && (
                 <div
                   key="ai-input-customize-panel"
