@@ -58,6 +58,7 @@ import { TwitterCard } from "@/registry/ui/twitter-card";
 import { Toaster, toast } from "@/registry/ui/toast";
 import { TaskList } from "@/registry/ui/task-list";
 import { FileTree, type TreeNode } from "@/registry/ui/file-tree";
+import { GitHubButton } from "@/components/ui/github-button";
 import { SearchComposer } from "@/registry/ui/search-input";
 import { MorphSearch } from "@/registry/ui/morph-search";
 import { Orb, ORB_STATES, ORB_COLORS } from "@/registry/ui/orb";
@@ -2075,6 +2076,47 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         )}
       >
         <div className="p-3.5 flex items-center justify-between h-14 shrink-0 border-b border-white/5">
+          {sidebarOpen ? (
+            <Link
+              href="/"
+              className="flex items-center gap-2 group text-white hover:opacity-85 transition-opacity"
+              title="DevClub Home"
+            >
+              <div className="w-6 h-6 rounded-md bg-orange-500 flex items-center justify-center p-1 text-black shadow-sm">
+                <svg
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  className="w-full h-full stroke-black"
+                  strokeWidth="1.6"
+                >
+                  <rect x="1.5" y="1.5" width="13" height="13" rx="1" />
+                  <line x1="1.5" y1="1.5" x2="14.5" y2="14.5" />
+                  <line x1="14.5" y1="1.5" x2="1.5" y2="14.5" />
+                </svg>
+              </div>
+              <span className="font-sans font-semibold text-sm tracking-tight text-white">
+                devclub
+              </span>
+            </Link>
+          ) : (
+            <Link
+              href="/"
+              className="w-8 h-8 rounded-lg bg-orange-500 flex items-center justify-center p-1.5 text-black hover:opacity-90 transition-opacity"
+              title="DevClub Home"
+            >
+              <svg
+                viewBox="0 0 16 16"
+                fill="none"
+                className="w-full h-full stroke-black"
+                strokeWidth="1.6"
+              >
+                <rect x="1.5" y="1.5" width="13" height="13" rx="1" />
+                <line x1="1.5" y1="1.5" x2="14.5" y2="14.5" />
+                <line x1="14.5" y1="1.5" x2="1.5" y2="14.5" />
+              </svg>
+            </Link>
+          )}
+
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.92 }}
@@ -2180,9 +2222,12 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         >
           <div className="h-14 px-5 border-b border-white/5 flex items-center justify-between z-20 shrink-0 bg-[#0f0f11]/80 backdrop-blur-md">
             <div className="flex items-center gap-2.5 min-w-0">
-              <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 shrink-0">
+              <Link
+                href="/components"
+                className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 hover:text-white transition-colors shrink-0"
+              >
                 {activeComponent.category.replace("-", " ")}
-              </span>
+              </Link>
               <span className="text-zinc-700 shrink-0">/</span>
               <span className="text-xs font-sans font-medium text-white tracking-tight truncate">
                 {activeComponent.name}
@@ -2231,6 +2276,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   <MobileIcon className="w-3.5 h-3.5" />
                 </button>
               </div>
+
+              <GitHubButton className="h-8 px-2.5 rounded-lg text-xs" />
 
               <motion.button
                 whileHover={{ scale: 1.03 }}

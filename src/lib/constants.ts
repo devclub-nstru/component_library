@@ -4,7 +4,7 @@ export const SITE_CONFIG = {
   url: "https://devclub.co",
   ogImage: "https://wallpapercave.com/wp/wp4140937.jpg",
   links: {
-    github: "https://github.com",
+    github: "https://github.com/devclub-nstru/component_library",
     twitter: "https://twitter.com",
     discord: "https://discord.gg",
   },

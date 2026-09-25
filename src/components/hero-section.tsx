@@ -17,7 +17,7 @@ const LANDMARK_POINTS = [
 
 export default function HeroSection() {
   return (
-    <section className="relative h-screen w-full bg-[#050505] text-[#f4f4f5] flex flex-col justify-between overflow-hidden select-none">
+    <section className="relative flex-1 min-h-[calc(100vh-4rem)] w-full bg-[#050505] text-[#f4f4f5] flex flex-col justify-between overflow-hidden select-none">
       <div className="absolute inset-0 w-full h-full pointer-events-none select-none z-0">
         <Image
           src="/COMP-HE.png"
@@ -37,7 +37,7 @@ export default function HeroSection() {
             className={cn(
               "h-full border-r border-dashed border-white/8",
               i >= 6 && "hidden sm:block",
-              i >= 8 && "hidden md:block"
+              i >= 8 && "hidden md:block",
             )}
           />
         ))}
@@ -72,52 +72,12 @@ export default function HeroSection() {
 
       <RepeatingLineScale className="absolute top-0 left-0 right-0 z-30 pointer-events-none" />
 
-      <header className="relative z-30 w-full px-6 sm:px-10 md:px-14 pt-8 pb-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-5 h-5 border border-white flex items-center justify-center p-0.5">
-            <svg
-              viewBox="0 0 16 16"
-              fill="none"
-              className="w-full h-full stroke-white"
-              strokeWidth="1.2"
-            >
-              <rect x="1" y="1" width="14" height="14" />
-              <line x1="1" y1="1" x2="15" y2="15" />
-              <line x1="15" y1="1" x2="1" y2="15" />
-            </svg>
-          </div>
-          <span className="font-sans text-xl font-medium tracking-tight text-white">
-            devclub
-          </span>
-        </div>
+      <div className="flex-1" />
 
-        <nav className="flex items-center gap-6 text-xs text-white/80 font-mono">
-          <a
-            href="/components"
-            className="hover:text-white transition-colors cursor-pointer"
-          >
-            Components
-          </a>
-          <a
-            href="/docs"
-            className="hover:text-white transition-colors cursor-pointer"
-          >
-            Docs
-          </a>
-          <a
-            href="https://github.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-white transition-colors cursor-pointer"
-          >
-            GitHub
-          </a>
-        </nav>
-      </header>
-
-      <div className="relative z-30 w-full max-w-4xl px-6 sm:px-10 md:px-14 pb-10">
+      <div className="relative z-30 w-full max-w-4xl px-6 sm:px-10 md:px-14 pb-12">
         <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl lg:text-[46px] font-normal leading-[1.18] text-white/95 tracking-tight">
-          Recent news about agricultural innovations driven by material advances and robotics
+          Recent news about agricultural innovations driven by material advances
+          and robotics
         </h1>
       </div>
 
@@ -131,7 +91,7 @@ export const RepeatingLineScale = ({ className }: { className?: string }) => {
     <div
       className={cn(
         "h-3 w-full bg-[repeating-linear-gradient(90deg,rgba(255,255,255,0.12)_0px,rgba(255,255,255,0.12)_1px,transparent_1px,transparent_8px)] border-y border-white/6",
-        className
+        className,
       )}
     />
   );

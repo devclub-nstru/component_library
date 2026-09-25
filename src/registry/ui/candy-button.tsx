@@ -14,7 +14,12 @@ export type CandyButtonVariant =
 
 export type CandyButtonSize = "sm" | "default" | "lg" | "icon";
 
-export interface CandyButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface CandyButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  as?: React.ElementType;
+  href?: string;
+  target?: string;
+  rel?: string;
   variant?: CandyButtonVariant;
   size?: CandyButtonSize;
   color?: string;
@@ -48,11 +53,12 @@ const sizeStyles: Record<CandyButtonSize, string> = {
 };
 
 export const CandyButton = React.forwardRef<
-  HTMLButtonElement,
+  HTMLElement,
   CandyButtonProps
 >(
   (
     {
+      as,
       className,
       children,
       variant = "emerald",
@@ -68,6 +74,7 @@ export const CandyButton = React.forwardRef<
     },
     ref,
   ) => {
+    const Component = (as || (props.href ? "a" : "button")) as React.ElementType;
     const isCustom = Boolean(color);
 
     const customStyle: React.CSSProperties = isCustom
@@ -81,10 +88,15 @@ export const CandyButton = React.forwardRef<
         }
       : (style ?? {});
 
+    const buttonProps =
+      Component === "button"
+        ? { disabled }
+        : { "aria-disabled": disabled, role: "button" };
+
     return (
-      <button
+      <Component
         ref={ref}
-        disabled={disabled}
+        {...buttonProps}
         style={customStyle}
         className={cn(
           "relative inline-flex items-center justify-center font-medium leading-none tracking-[0.01em] select-none overflow-hidden cursor-pointer transition-all duration-200 ease-out active:scale-[0.98] active:brightness-95 hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-black disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed",
@@ -103,7 +115,7 @@ export const CandyButton = React.forwardRef<
           {children}
           {rightIcon && <span className="shrink-0">{rightIcon}</span>}
         </span>
-      </button>
+      </Component>
     );
   },
 );
