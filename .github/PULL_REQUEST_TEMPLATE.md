@@ -15,13 +15,13 @@ Fixes #
 
 Select all that apply:
 
-- [ ] 🚀 **New Component**: Addition of a new animated UI primitive or WebGL shader
-- [ ] 🐛 **Bug Fix**: Non-breaking fix for an existing component or layout issue
-- [ ] ⚡ **Performance Optimization**: GPU shader tuning, GSAP memory cleanup, or bundle size reduction
-- [ ] ✨ **Enhancement**: New variant, improved interaction physics, or additional prop
-- [ ] ♿ **Accessibility**: ARIA improvement, keyboard focus management, or reduced-motion support
-- [ ] 📝 **Documentation**: Improvements, examples, or corrections to `/docs` or README
-- [ ] 🛠️ **Chore / Tooling**: Build configuration, dependencies, or GitHub workflows
+- [ ] **New Component**: Addition of a new animated UI primitive or WebGL shader
+- [ ] **Bug Fix**: Non-breaking fix for an existing component or layout issue
+- [ ] **Performance Optimization**: GPU shader tuning, GSAP memory cleanup, or bundle size reduction
+- [ ] **Enhancement**: New variant, improved interaction physics, or additional prop
+- [ ] **Accessibility**: ARIA improvement, keyboard focus management, or reduced-motion support
+- [ ] **Documentation**: Improvements, examples, or corrections to `/docs` or README
+- [ ] **Chore / Tooling**: Build configuration, dependencies, or GitHub workflows
 
 ---
 
