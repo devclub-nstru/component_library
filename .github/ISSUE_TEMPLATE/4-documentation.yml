@@ -1,0 +1,44 @@
+name: "Documentation Improvement"
+description: "Report a documentation error, outdated code snippet, broken link, or propose better docs"
+title: "[Docs]: "
+labels: ["documentation", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Accurate documentation ensures a great developer experience. Thank you for helping us maintain high quality docs!
+
+  - type: input
+    id: page_url
+    attributes:
+      label: Documentation Page or Component Route
+      description: Provide the link or path to the affected documentation page.
+      placeholder: e.g. /docs/installation, /docs/cli, /components/mac-switch
+    validations:
+      required: true
+
+  - type: textarea
+    id: issue_description
+    attributes:
+      label: What is wrong or missing?
+      description: Describe the typo, broken code snippet, missing prop explanation, or outdated guideline.
+      placeholder: The code example for MacSwitch uses a deprecated prop or the import statement is missing...
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggested_fix
+    attributes:
+      label: Suggested Correction (Optional)
+      description: Provide the corrected text or updated code snippet if available.
+      placeholder: Proposed markdown or code update...
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: pr_intent
+    attributes:
+      label: Contribution
+      options:
+        - label: I am willing to submit a pull request fixing this documentation issue.
+          required: false

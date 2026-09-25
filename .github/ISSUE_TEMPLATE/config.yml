@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: DevClub Community & Discussions
+    url: https://github.com/devclub-nstru/component_library/discussions
+    about: Ask questions, share ideas, and connect with other developers using DevClub UI.
+  - name: Security Vulnerability Report
+    url: https://github.com/devclub-nstru/component_library/security/advisories/new
+    about: Report security issues privately through GitHub Advisories or security@devclub.co.
+  - name: DevClub UI Showcase
+    url: https://devclubcompo.vercel.app
+    about: Browse live interactive previews, prop controls, and code snippets.

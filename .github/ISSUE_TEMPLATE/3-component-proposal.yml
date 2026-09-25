@@ -1,0 +1,91 @@
+name: "Component Proposal"
+description: "Propose a brand-new animated UI component or WebGL shader primitive for the registry"
+title: "[Proposal]: "
+labels: ["component-proposal", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        DevClub UI welcomes proposals for new high-performance, animated UI primitives and GPU shaders. Please check the current [Component Registry](https://devclub.co/components) before proposing.
+
+  - type: input
+    id: component_name
+    attributes:
+      label: Component Name
+      description: What should this component be called?
+      placeholder: e.g. DynamicIsland, MagneticCursor, HolographicCard, MatrixRain
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Component Category
+      description: Which category does this component belong to?
+      options:
+        - Animated Controls & Buttons
+        - 3D WebGL Shaders & Canvas FX
+        - Layout & Bento Grids
+        - Navigation & Menus
+        - Inputs & Form Controls
+        - Cards & Content Surfaces
+        - Feedback, Toasts & Overlays
+        - Data Visualization & Badges
+    validations:
+      required: true
+
+  - type: dropdown
+    id: tech_stack
+    attributes:
+      label: Primary Animation Engine
+      description: Which animation technology would this component rely on?
+      options:
+        - GSAP 3 + @gsap/react (Timelines & Scopes)
+        - WebGL 2.0 / OGL (Fragment Shaders)
+        - Framer Motion / Motion (Spring Layouts & Gestures)
+        - Pure Tailwind CSS + CSS Keyframes
+        - Hybrid (e.g. GSAP + WebGL)
+    validations:
+      required: true
+
+  - type: textarea
+    id: concept
+    attributes:
+      label: Concept & Micro-Interactions
+      description: Describe the visual appearance, state transitions, and physics behaviors.
+      placeholder: Describe the component's resting state, hover effects, active interactions, and spring physics...
+    validations:
+      required: true
+
+  - type: textarea
+    id: props
+    attributes:
+      label: Proposed Component Props
+      description: List the core props and options the component should expose.
+      placeholder: |
+        - `size?: 'sm' | 'md' | 'lg'`
+        - `speed?: number`
+        - `interactive?: boolean`
+        - `colorScheme?: string`
+    validations:
+      required: true
+
+  - type: textarea
+    id: visual_references
+    attributes:
+      label: Visual References & Inspirations
+      description: Attach or link to live demos, Dribbble shots, screen recordings, or design specs.
+      placeholder: Links to inspirations, videos, or CodePens...
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: contribution_intent
+    attributes:
+      label: Contribution Intent
+      description: Would you like to build and submit this component yourself?
+      options:
+        - label: I plan to build this component and submit a Pull Request following the CONTRIBUTING.md guidelines.
+          required: false
+        - label: I would like the core team / community to develop this component.
+          required: false

@@ -1,0 +1,121 @@
+name: "Bug Report"
+description: "File an issue describing unexpected behavior, rendering flaws, or animation glitches in DevClub UI"
+title: "[Bug]: "
+labels: ["bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting an issue! Please check [existing issues](https://github.com/devclub-nstru/component_library/issues) first to see if this problem has already been documented.
+
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: Pre-flight Verification
+      description: Confirm that you have checked the existing repository state.
+      options:
+        - label: I have verified that this issue has not already been reported.
+          required: true
+        - label: I am using the latest version of DevClub UI and its dependencies.
+          required: false
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component Affected
+      description: Select the specific component where the issue occurs.
+      options:
+        - Accordion / SmoothAccordion / DottedAccordion
+        - AIOrb / Orb
+        - AIInput
+        - AnimatedButton / CandyButton / SparkleButton
+        - AnimatedCounter
+        - BentoGrid
+        - CodeBlock
+        - Dither / Noise / Scales
+        - FileTree
+        - GitHubActivity
+        - GlowingBadge
+        - GooeyNav
+        - HookSidebar / ProximitySidebar
+        - LiquidToggle
+        - MacSlider
+        - MacSwitch
+        - MorphSearch / SearchInput / SpotlightSearch
+        - OTPInput
+        - PixelCard / SpotlightCard / TwitterCard
+        - TaskList
+        - Toast
+        - Component Studio / Showcase (/components)
+        - Documentation (/docs)
+        - Core Utilities / CLI
+        - Other (Specify in description)
+    validations:
+      required: true
+
+  - type: input
+    id: environment
+    attributes:
+      label: Environment & Framework Versions
+      description: Specify your project stack details.
+      placeholder: Next.js 16.3.4, React 19.2.8, Tailwind CSS v4.0, GSAP 3.15.0
+    validations:
+      required: true
+
+  - type: input
+    id: browser
+    attributes:
+      label: Browser & Operating System
+      description: Specify your browser and OS.
+      placeholder: Chrome 134 on macOS Sequoia / Safari 18 on iOS 18 / Firefox 136 on Windows 11
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description of the Bug
+      description: Provide a clear and concise description of what the problem is.
+      placeholder: A clear description of the bug and what happened...
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: Provide step-by-step instructions to reproduce the issue.
+      placeholder: |
+        1. Import '<MacSwitch />' into a Next.js App Router client component
+        2. Set prop 'color="green"'
+        3. Click to toggle state
+        4. Observe unexpected layout shift or animation glitch
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What did you expect to happen?
+      placeholder: The component should animate smoothly without layout shifts or console warnings.
+    validations:
+      required: true
+
+  - type: input
+    id: reproduction_url
+    attributes:
+      label: Minimal Reproduction URL
+      description: Provide a link to a minimal reproduction (StackBlitz, CodeSandbox, or GitHub repo).
+      placeholder: https://stackblitz.com/edit/...
+    validations:
+      required: false
+
+  - type: textarea
+    id: media
+    attributes:
+      label: Screenshots or Screen Recordings
+      description: Drag and drop screenshots or screen recordings (GIF / WebM / MP4) demonstrating the issue.
+      placeholder: Drag and drop images or videos here...
+    validations:
+      required: false

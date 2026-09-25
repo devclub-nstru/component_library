@@ -1,0 +1,31 @@
+area/components:
+  - changed-files:
+      - any-glob-to-any-file: "src/registry/ui/**/*"
+
+area/registry:
+  - changed-files:
+      - any-glob-to-any-file: "src/registry/**/*"
+
+area/app:
+  - changed-files:
+      - any-glob-to-any-file: "src/app/**/*"
+
+area/docs:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/app/docs/**/*"
+          - "*.md"
+
+area/skills:
+  - changed-files:
+      - any-glob-to-any-file: "skills/**/*"
+
+area/ci:
+  - changed-files:
+      - any-glob-to-any-file: ".github/**/*"
+
+area/dependencies:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "package.json"
+          - "package-lock.json"

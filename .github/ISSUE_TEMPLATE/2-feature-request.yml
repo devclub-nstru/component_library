@@ -1,0 +1,85 @@
+name: "Feature Request"
+description: "Suggest an improvement, new variant, or enhancement to an existing DevClub UI component"
+title: "[Feat]: "
+labels: ["enhancement", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for suggesting an enhancement! Please check [existing issues and feature requests](https://github.com/devclub-nstru/component_library/issues) to avoid duplicate proposals.
+
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: Pre-flight Verification
+      description: Confirm that you have checked existing requests.
+      options:
+        - label: I have verified that this feature has not already been requested.
+          required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Feature Category
+      description: Select the area of enhancement.
+      options:
+        - New Component Variant / Style Preset
+        - Animation & Physics Enhancement
+        - WebGL / OGL Shader Feature
+        - Accessibility & Keyboard Navigation (WCAG 2.1 AA)
+        - Performance & Frame-rate Optimization
+        - Component Studio & Showcase UX
+        - Documentation & Code Copying DX
+        - CLI Tooling & Registry Integration
+    validations:
+      required: true
+
+  - type: input
+    id: target_component
+    attributes:
+      label: Target Component / Feature
+      description: Name of the component or system you want to enhance.
+      placeholder: e.g. SpotlightSearch, MacSwitch, Dither, CLI
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement / Motivation
+      description: Is your feature request related to a problem or missing capability?
+      placeholder: A clear and concise description of what the current limitation is...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution & Behavior
+      description: Describe how the new feature should work.
+      placeholder: A clear description of the behavior, styling, and animations you would like to see...
+    validations:
+      required: true
+
+  - type: textarea
+    id: api_design
+    attributes:
+      label: Proposed API / Props (Optional)
+      description: If you have ideas for prop names or component composition, describe them here.
+      placeholder: |
+        <MacSwitch
+          variant="glow"
+          hapticFeedback={true}
+          springConfig={{ stiffness: 300, damping: 20 }}
+        />
+    validations:
+      required: false
+
+  - type: textarea
+    id: references
+    attributes:
+      label: Visual References & Inspirations (Optional)
+      description: Links to videos, Dribbble shots, Twitter demos, or interactive sites showcasing this pattern.
+      placeholder: https://...
+    validations:
+      required: false
