@@ -28,7 +28,7 @@ git clone https://github.com/YOUR_USERNAME/dev-club-components.git
 cd dev-club-components
 
 # Set up upstream remote
-git remote add upstream https://github.com/Heyykrishnna/dev-club-components.git
+git remote add upstream https://github.com/devclub-nstru/component_library.git
 ```
 
 ### 3. Install Dependencies
@@ -206,7 +206,7 @@ npm run build
    git push origin feature/add-awesome-component
    ```
 
-   Open a Pull Request targeting the `main` branch of `Heyykrishnna/dev-club-components`.
+   Open a Pull Request targeting the `main` branch of `devclub-nstru/component_library`.
 
 4. **PR Review**:
    Maintainers will review your code for responsiveness, animation performance, accessibility, and registry metadata completeness.

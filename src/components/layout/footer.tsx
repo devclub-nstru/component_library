@@ -172,7 +172,7 @@ export const Footer = () => {
               </li>
               <li>
                 <a
-                  href="https://github.com/Heyykrishnna/dev-club-components/blob/main/LICENSE"
+                  href="https://github.com/devclub-nstru/component_library/blob/main/LICENSE"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-foreground transition-colors"
