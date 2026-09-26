@@ -435,7 +435,7 @@ function AttachmentThumb({
         animationFillMode: "backwards",
       }}
       className={cn(
-        "group relative size-12 shrink-0 overflow-hidden rounded-xl border border-white/10 bg-zinc-900/90 outline-none",
+        "group relative size-12 shrink-0 overflow-hidden rounded-xl border border-zinc-200 bg-zinc-100 dark:border-white/10 dark:bg-zinc-900/90 outline-none",
         "transition-transform duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.04] active:scale-[0.96]",
         "animate-in fade-in slide-in-from-top-3 zoom-in-90 duration-300",
       )}
@@ -465,7 +465,7 @@ function AttachmentThumb({
             onRemove(attachment.id);
           }}
           className={cn(
-            "m-1 flex size-4 items-center justify-center rounded-full bg-zinc-950/90 text-zinc-300 shadow-sm transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] hover:bg-white hover:text-black hover:scale-110",
+            "m-1 flex size-4 items-center justify-center rounded-full bg-zinc-200/90 text-zinc-600 dark:bg-zinc-950/90 dark:text-zinc-300 shadow-sm transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] hover:bg-zinc-900 hover:text-white dark:hover:bg-white dark:hover:text-black hover:scale-110",
             isHovered
               ? "opacity-100 scale-100"
               : "opacity-0 scale-50 pointer-events-none",
@@ -570,7 +570,7 @@ function AttachmentGalleryModal({
             ? "0 28px 70px -15px rgba(0, 0, 0, 0.7)"
             : "0 0 0 0 transparent",
         }}
-        className="bg-zinc-950 border border-white/10"
+        className="bg-zinc-100 border border-zinc-200 dark:bg-zinc-950 dark:border-white/10"
         onTransitionEnd={() => {
           if (phase === "closing") onClose();
         }}
@@ -592,8 +592,8 @@ function AttachmentGalleryModal({
           transform: isOpen ? "scale(1)" : "scale(0.8)",
         }}
         className={cn(
-          "fixed right-5 top-5 flex size-9 items-center justify-center rounded-full bg-zinc-900/90 text-zinc-300 shadow-lg border border-white/10 backdrop-blur-sm",
-          "transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:bg-zinc-800 hover:text-white",
+          "fixed right-5 top-5 flex size-9 items-center justify-center rounded-full bg-white/90 text-zinc-700 dark:bg-zinc-900/90 dark:text-zinc-300 shadow-lg border border-zinc-200 dark:border-white/10 backdrop-blur-sm",
+          "transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-white",
           !isOpen && "pointer-events-none",
         )}
         aria-label="Close image preview"
@@ -1237,7 +1237,7 @@ export const PromptInput = React.forwardRef<PromptInputRef, PromptInputProps>(
                   ? "transform 0.16s ease-out, opacity 0.16s ease-out"
                   : "transform 0.42s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease-out",
               }}
-              className="border border-white/10 border-b-0 bg-[#161619]/95 backdrop-blur-xl rounded-t-2xl px-2.5 pt-2 pb-1 flex items-start gap-2 overflow-x-auto prompt-scrollbar"
+              className="border border-zinc-200 dark:border-white/10 border-b-0 bg-zinc-50/95 dark:bg-[#161619]/95 backdrop-blur-xl rounded-t-2xl px-2.5 pt-2 pb-1 flex items-start gap-2 overflow-x-auto prompt-scrollbar"
             >
               {attachments.map((attachment, index) => (
                 <AttachmentThumb
@@ -1272,13 +1272,13 @@ export const PromptInput = React.forwardRef<PromptInputRef, PromptInputProps>(
               boxShadow: customGlowShadow,
             }}
             className={cn(
-              "relative w-full border bg-[#0c0c0e]/95 backdrop-blur-xl shadow-[0_16px_40px_rgba(0,0,0,0.6)] z-10 transition-colors duration-200",
+              "relative w-full border bg-white/95 dark:bg-[#0c0c0e]/95 backdrop-blur-xl shadow-[0_4px_20px_rgba(0,0,0,0.08)] dark:shadow-[0_16px_40px_rgba(0,0,0,0.6)] z-10 transition-colors duration-200",
               variant === "glow"
-                ? "border-white/20"
+                ? "border-zinc-300 dark:border-white/20"
                 : variant === "minimal"
-                  ? "border-white/8 bg-[#09090b]/90"
-                  : "border-white/12",
-              "focus-within:border-white/30 focus-within:ring-1 focus-within:ring-white/20 hover:border-white/20",
+                  ? "border-zinc-200 dark:border-white/8 dark:bg-[#09090b]/90"
+                  : "border-zinc-200 dark:border-white/12",
+              "focus-within:border-zinc-400 focus-within:ring-1 focus-within:ring-zinc-300 dark:focus-within:border-white/30 dark:focus-within:ring-white/20 hover:border-zinc-300 dark:hover:border-white/20",
               expanded ? "cursor-text" : "cursor-default",
               disabled && "opacity-60 pointer-events-none",
             )}
@@ -1315,7 +1315,7 @@ export const PromptInput = React.forwardRef<PromptInputRef, PromptInputProps>(
                   : "opacity 0.25s ease-out, transform 0.25s ease-out, height 0.42s cubic-bezier(0.16, 1, 0.3, 1)",
               }}
               className={cn(
-                "prompt-scrollbar absolute top-0 inset-x-0 z-1 w-full resize-none bg-transparent pl-4 pr-12 py-3.5 text-sm leading-5.5 text-zinc-100 outline-none placeholder:font-medium placeholder:text-zinc-500 cursor-text",
+                "prompt-scrollbar absolute top-0 inset-x-0 z-1 w-full resize-none bg-transparent pl-4 pr-12 py-3.5 text-sm leading-5.5 text-zinc-900 dark:text-zinc-100 outline-none placeholder:font-medium placeholder:text-zinc-400 dark:placeholder:text-zinc-500 cursor-text",
                 expanded
                   ? "opacity-100 scale-100 translate-y-0"
                   : "opacity-0 scale-95 -translate-y-1 pointer-events-none",
@@ -1326,11 +1326,11 @@ export const PromptInput = React.forwardRef<PromptInputRef, PromptInputProps>(
 
             <div
               ref={topFadeRef}
-              className="absolute left-4 right-12 top-0 z-2 h-7 bg-linear-to-b from-[#0c0c0e] via-[#0c0c0e]/85 to-transparent pointer-events-none opacity-0 transition-opacity duration-150"
+              className="absolute left-4 right-12 top-0 z-2 h-7 bg-linear-to-b from-white dark:from-[#0c0c0e] via-white/85 dark:via-[#0c0c0e]/85 to-transparent pointer-events-none opacity-0 transition-opacity duration-150"
             />
             <div
               ref={bottomFadeRef}
-              className="absolute left-4 right-12 z-2 h-7 bg-linear-to-t from-[#0c0c0e] via-[#0c0c0e]/85 to-transparent pointer-events-none opacity-0"
+              className="absolute left-4 right-12 z-2 h-7 bg-linear-to-t from-white dark:from-[#0c0c0e] via-white/85 dark:via-[#0c0c0e]/85 to-transparent pointer-events-none opacity-0"
               style={{
                 top: `${textareaHeight - 28}px`,
                 transition: isSmoothResize
@@ -1348,7 +1348,7 @@ export const PromptInput = React.forwardRef<PromptInputRef, PromptInputProps>(
                   : "all 0.38s cubic-bezier(0.16, 1, 0.3, 1)",
               }}
               className={cn(
-                "absolute inset-x-0 top-0 z-1 cursor-text pl-4 pr-12 py-3.75 text-left text-sm font-medium leading-4.25 text-zinc-500 outline-none select-none",
+                "absolute inset-x-0 top-0 z-1 cursor-text pl-4 pr-12 py-3.75 text-left text-sm font-medium leading-4.25 text-zinc-400 dark:text-zinc-500 outline-none select-none",
                 !expanded
                   ? "opacity-100 scale-100 translate-y-0"
                   : "opacity-0 scale-105 translate-y-1 pointer-events-none",
@@ -1386,8 +1386,8 @@ export const PromptInput = React.forwardRef<PromptInputRef, PromptInputProps>(
                       setIsModelSelectOpen((prev) => !prev);
                     }}
                     className={cn(
-                      "group flex items-center gap-1.5 rounded-full px-2.5 py-1 text-zinc-400 transition-all duration-200 outline-none hover:bg-white/10 hover:text-zinc-100 cursor-pointer select-none",
-                      isModelSelectOpen ? "bg-white/10 text-white" : "",
+                      "group flex items-center gap-1.5 rounded-full px-2.5 py-1 text-zinc-500 dark:text-zinc-400 transition-all duration-200 outline-none hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-white/10 dark:hover:text-zinc-100 cursor-pointer select-none",
+                      isModelSelectOpen ? "bg-zinc-100 text-zinc-900 dark:bg-white/10 dark:text-white" : "",
                     )}
                     aria-label={`Select model. Current: ${activeModel}`}
                   >
@@ -1431,7 +1431,7 @@ export const PromptInput = React.forwardRef<PromptInputRef, PromptInputProps>(
                       }
                     }}
                     className={cn(
-                      "absolute bottom-full left-0 mb-2.5 z-50 w-48 rounded-2xl border border-white/10 bg-[#121215]/95 p-1 shadow-2xl backdrop-blur-2xl flex flex-col gap-0.5 transition-all duration-300 select-none",
+                      "absolute bottom-full left-0 mb-2.5 z-50 w-48 rounded-2xl border border-zinc-200 dark:border-white/10 bg-white/95 dark:bg-[#121215]/95 p-1 shadow-xl dark:shadow-2xl backdrop-blur-2xl flex flex-col gap-0.5 transition-all duration-300 select-none",
                       isModelSelectOpen
                         ? "opacity-100 scale-100 translate-y-0 pointer-events-auto ease-[cubic-bezier(0.16,1,0.3,1)]"
                         : "opacity-0 scale-95 translate-y-2 pointer-events-none ease-[cubic-bezier(0.16,1,0.3,1)]",
@@ -1440,7 +1440,7 @@ export const PromptInput = React.forwardRef<PromptInputRef, PromptInputProps>(
                     <div className="relative flex flex-col gap-0.5">
                       <div
                         style={hoverStyle}
-                        className="absolute left-0 right-0 top-0 h-8 -z-10 rounded-xl bg-white/10 pointer-events-none"
+                        className="absolute left-0 right-0 top-0 h-8 -z-10 rounded-xl bg-zinc-100 dark:bg-white/10 pointer-events-none"
                       />
                       {normalizedModels.map((m, idx) => {
                         const isSelected = m.name === activeModel;
@@ -1464,8 +1464,8 @@ export const PromptInput = React.forwardRef<PromptInputRef, PromptInputProps>(
                             className={cn(
                               "group relative flex h-8 w-full items-center justify-between rounded-xl px-2.5 py-1.5 text-left text-xs font-medium transition-colors outline-none active:scale-[0.98] cursor-pointer",
                               isSelected
-                                ? "text-white font-semibold"
-                                : "text-zinc-400 hover:text-zinc-200",
+                                ? "text-zinc-900 font-semibold dark:text-white"
+                                : "text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200",
                             )}
                           >
                             <span className="flex items-center gap-2">
@@ -1482,7 +1482,7 @@ export const PromptInput = React.forwardRef<PromptInputRef, PromptInputProps>(
                               <span>{m.name}</span>
                             </span>
                             {isSelected && (
-                              <span className="text-white">
+                              <span className="text-zinc-900 dark:text-white">
                                 <CheckIcon />
                               </span>
                             )}
@@ -1499,7 +1499,7 @@ export const PromptInput = React.forwardRef<PromptInputRef, PromptInputProps>(
                   type="button"
                   onMouseDown={(e) => e.preventDefault()}
                   onClick={cycleEffort}
-                  className="group flex items-center gap-1.5 rounded-full px-2.5 py-1 text-zinc-400 transition-all duration-200 hover:bg-white/10 hover:text-zinc-100 outline-none cursor-pointer select-none"
+                  className="group flex items-center gap-1.5 rounded-full px-2.5 py-1 text-zinc-500 dark:text-zinc-400 transition-all duration-200 hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-white/10 dark:hover:text-zinc-100 outline-none cursor-pointer select-none"
                   aria-label={`Cycle effort level. Current: ${currentEffort}`}
                 >
                   <DynamicBarsIcon level={currentEffort} />
@@ -1515,7 +1515,7 @@ export const PromptInput = React.forwardRef<PromptInputRef, PromptInputProps>(
                   onMouseDown={(e) => e.preventDefault()}
                   onClick={openFileChooser}
                   disabled={attachments.length >= maxAttachments || disabled}
-                  className="ml-auto flex size-7 items-center justify-center rounded-full text-zinc-400 transition-all duration-200 hover:bg-white/10 hover:text-zinc-100 outline-none cursor-pointer disabled:opacity-40 disabled:pointer-events-none select-none"
+                  className="ml-auto flex size-7 items-center justify-center rounded-full text-zinc-500 dark:text-zinc-400 transition-all duration-200 hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-white/10 dark:hover:text-zinc-100 outline-none cursor-pointer disabled:opacity-40 disabled:pointer-events-none select-none"
                   aria-label="Attach images"
                 >
                   <PlusIcon />
@@ -1534,10 +1534,13 @@ export const PromptInput = React.forwardRef<PromptInputRef, PromptInputProps>(
               {audioData.map((val, i) => (
                 <div
                   key={i}
-                  className="w-1 rounded-full transition-[height] duration-75 ease-out"
+                  className={cn(
+                    "w-1 rounded-full transition-[height] duration-75 ease-out",
+                    !accentColor && "bg-zinc-900 dark:bg-white",
+                  )}
                   style={{
                     height: `${Math.max(4, val * 24)}px`,
-                    backgroundColor: accentColor || "#ffffff",
+                    ...(accentColor ? { backgroundColor: accentColor } : {}),
                   }}
                 />
               ))}
@@ -1559,10 +1562,10 @@ export const PromptInput = React.forwardRef<PromptInputRef, PromptInputProps>(
                     : "Use voice input"
               }
               style={{
-                backgroundColor: accentColor || "#ffffff",
-                color: accentColor ? "#000000" : "#000000",
+                backgroundColor: accentColor || undefined,
+                color: accentColor ? "#000000" : undefined,
               }}
-              className="absolute right-2 bottom-2 z-10 flex h-8 w-8 items-center justify-center rounded-full transition-all duration-300 hover:opacity-90 active:scale-95 outline-none focus-visible:ring-2 focus-visible:ring-white/40 cursor-pointer shadow-sm"
+              className="absolute right-2 bottom-2 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-zinc-900 text-white dark:bg-white dark:text-black transition-all duration-300 hover:opacity-90 active:scale-95 outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 dark:focus-visible:ring-white/40 cursor-pointer shadow-sm"
             >
               <span className="relative flex h-full w-full items-center justify-center">
                 <span
