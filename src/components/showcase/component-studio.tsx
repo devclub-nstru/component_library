@@ -2450,7 +2450,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         </button>
                       </div>
 
-                      <div className="grid grid-cols-4 gap-1 p-1 bg-muted/50 dark:bg-zinc-900/80 rounded-lg border border-border/60">
+                      <div className="relative grid grid-cols-4 gap-1 p-1 bg-muted/50 dark:bg-zinc-900/80 rounded-lg border border-border/60">
                         {INSTALL_TOOLS.map((t) => {
                           const isActive = installTool === t.id;
                           return (
@@ -2459,13 +2459,25 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               type="button"
                               onClick={() => handleSelectTool(t.id)}
                               className={cn(
-                                "py-1 text-xs font-mono rounded-md transition-all cursor-pointer text-center",
+                                "relative py-1 text-xs font-mono rounded-md transition-colors cursor-pointer text-center select-none",
                                 isActive
-                                  ? "bg-background dark:bg-zinc-800 text-foreground dark:text-white font-medium shadow-xs border border-border/60"
+                                  ? "text-foreground dark:text-white font-medium"
                                   : "text-muted-foreground hover:text-foreground",
                               )}
                             >
-                              {t.label}
+                              {isActive && (
+                                <motion.div
+                                  layoutId="active-install-tool-pill"
+                                  transition={{
+                                    type: "spring",
+                                    stiffness: 480,
+                                    damping: 32,
+                                    mass: 0.8,
+                                  }}
+                                  className="absolute inset-0 bg-background dark:bg-[#27272a] rounded-md shadow-xs border border-border/60 z-0"
+                                />
+                              )}
+                              <span className="relative z-10">{t.label}</span>
                             </button>
                           );
                         })}
@@ -2523,6 +2535,34 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             title="Copy shadcn command"
                           >
                             {copiedToolKey === "shadcn_url" ? (
+                              <CheckIcon className="w-3.5 h-3.5 text-emerald-400" />
+                            ) : (
+                              <CopyIcon className="w-3.5 h-3.5" />
+                            )}
+                          </button>
+                        </div>
+
+                        <div className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/40 transition-colors border border-transparent hover:border-border text-xs">
+                          <div className="flex flex-col min-w-0 pr-2">
+                            <span className="font-medium text-foreground text-[11px]">
+                              Shadcn (unpkg direct)
+                            </span>
+                            <span className="text-[11px] font-mono text-muted-foreground truncate select-all">
+                              {`npx shadcn@latest add https://unpkg.com/@devclubnst/ui@latest/public/r/${activeComponent.slug}.json`}
+                            </span>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              handleCustomCopy(
+                                "shadcn_unpkg",
+                                `npx shadcn@latest add https://unpkg.com/@devclubnst/ui@latest/public/r/${activeComponent.slug}.json`,
+                              )
+                            }
+                            className="shrink-0 p-1.5 rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                            title="Copy unpkg shadcn command"
+                          >
+                            {copiedToolKey === "shadcn_unpkg" ? (
                               <CheckIcon className="w-3.5 h-3.5 text-emerald-400" />
                             ) : (
                               <CopyIcon className="w-3.5 h-3.5" />

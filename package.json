@@ -15,6 +15,7 @@
   "files": [
     "registry.json",
     "public/r",
+    "r",
     "src/registry",
     "bin"
   ],
