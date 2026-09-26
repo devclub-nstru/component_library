@@ -1,0 +1,141 @@
+{
+  "slug": "bento-grid",
+  "name": "Bento Grid",
+  "description": "Responsive 3-column asymmetric layout grid for high-impact feature displays.",
+  "summary": "An asymmetric modular layout grid inspired by Japanese bento box architecture and modern product showcase decks. Utilizes a responsive 3-column CSS Grid system (grid-cols-1 md:grid-cols-3) with configurable colSpan props on child BentoCard containers (1, 2, or 3 columns). Accommodates visual graphic headers, accent iconography, and typography with smooth 300ms hover border brightening.",
+  "category": "layout",
+  "tags": [
+    "bento",
+    "grid",
+    "layout",
+    "cards",
+    "responsive",
+    "showcase"
+  ],
+  "dependencies": [
+    "clsx",
+    "tailwind-merge"
+  ],
+  "version": "1.0.0",
+  "createdDate": "2026-09-10",
+  "updatedDate": "2026-09-10",
+  "interactive": true,
+  "supportsColor": false,
+  "hidden": true,
+  "highlights": [
+    "Asymmetric 3-column CSS Grid with automatic single-column mobile collapse",
+    "Configurable colSpan spans (col-span-1, col-span-2, col-span-3) on desktop",
+    "Compound component pattern (BentoGrid + BentoCard) with type-safe interfaces",
+    "Subtle hover border brightening and background tinting with 300ms transition",
+    "Header viewport slot accommodating interactive previews, charts, and media"
+  ],
+  "anatomy": [
+    "<BentoGrid> (CSS Grid container with 16px gap spacing and max-w-7xl auto centering)",
+    "<BentoCard> (Flex container card with customizable colSpan, border, and background)",
+    "<div> (Header Slot: optional top container for diagrams, screenshots, or code previews)",
+    "<div> (Icon + Title: flex row with hover color transitions and font-semibold styling)",
+    "<p> (Description: light zinc-400 typography with relaxed leading for high readability)"
+  ],
+  "physics": {
+    "engine": "CSS Grid & Transition Matrix",
+    "description": "Zero-overhead responsive CSS Grid with CSS transition-all hover state transitions.",
+    "parameters": [
+      {
+        "label": "Columns (Desktop)",
+        "value": "3 columns (1fr 1fr 1fr)"
+      },
+      {
+        "label": "Columns (Mobile)",
+        "value": "1 column stack"
+      },
+      {
+        "label": "Grid Gap",
+        "value": "16px (gap-4)"
+      },
+      {
+        "label": "Hover Duration",
+        "value": "300ms transition-all"
+      },
+      {
+        "label": "Border Transition",
+        "value": "border-zinc-800 to border-zinc-700"
+      }
+    ]
+  },
+  "accessibility": {
+    "role": "region",
+    "aria": "Accepts aria-labelledby linked to the main section heading for screen readers.",
+    "reducedMotion": "Pure CSS transitions instantly respect prefers-reduced-motion media queries.",
+    "keyboard": [
+      {
+        "key": "Tab",
+        "description": "Standard keyboard tab navigation passes cleanly to interactive items inside cards."
+      }
+    ]
+  },
+  "guidelines": {
+    "recommended": [
+      "Product feature comparison sections on SaaS landing pages",
+      "Architecture overview matrices and capability grids",
+      "Design system component galleries and capability highlights"
+    ],
+    "bestPractices": [
+      "Group cards in complementary row sums that total 3 columns (e.g. 2 + 1, 1 + 1 + 1, or 3)",
+      "Place the most visually complex card with an interactive header in a 2-colSpan slot",
+      "Use subtle borders and deep zinc backgrounds (#0c0c0e or zinc-950) to retain clean contrast"
+    ]
+  },
+  "props": [
+    {
+      "name": "colSpan",
+      "type": "1 | 2 | 3",
+      "defaultValue": "1",
+      "description": "Number of grid columns spanned by BentoCard on medium and larger viewports (md:col-span-1, md:col-span-2, or md:col-span-3)."
+    },
+    {
+      "name": "title",
+      "type": "string",
+      "required": true,
+      "defaultValue": "undefined",
+      "description": "Feature headline displayed on the BentoCard."
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "required": true,
+      "defaultValue": "undefined",
+      "description": "Secondary explanatory paragraph detailing feature value and capabilities."
+    },
+    {
+      "name": "header",
+      "type": "React.ReactNode",
+      "defaultValue": "undefined",
+      "description": "Visual graphic, preview element, screenshot, or interactive canvas rendered above card content."
+    },
+    {
+      "name": "icon",
+      "type": "React.ReactNode",
+      "defaultValue": "undefined",
+      "description": "Icon element displayed beside the card title with hover color transitions."
+    },
+    {
+      "name": "children",
+      "type": "React.ReactNode",
+      "defaultValue": "undefined",
+      "description": "Child BentoCard elements or custom elements rendered inside BentoGrid."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "defaultValue": "undefined",
+      "description": "Additional CSS utility classes passed to BentoGrid or BentoCard."
+    }
+  ],
+  "files": [
+    {
+      "name": "bento-grid.tsx",
+      "path": "registry/ui/bento-grid.tsx",
+      "code": "import React from \"react\";\nimport { cn } from \"@/lib/utils\";\n\nexport type BentoGridProps = React.HTMLAttributes<HTMLDivElement>;\n\nexport const BentoGrid = ({\n  className,\n  children,\n  ...props\n}: BentoGridProps) => {\n  return (\n    <div\n      className={cn(\n        \"grid grid-cols-1 md:grid-cols-3 gap-4 max-w-7xl mx-auto w-full\",\n        className,\n      )}\n      {...props}\n    >\n      {children}\n    </div>\n  );\n};\n\nexport interface BentoCardProps extends React.HTMLAttributes<HTMLDivElement> {\n  header?: React.ReactNode;\n  icon?: React.ReactNode;\n  title: string;\n  description: string;\n  colSpan?: 1 | 2 | 3;\n}\n\nexport const BentoCard = ({\n  className,\n  header,\n  icon,\n  title,\n  description,\n  colSpan = 1,\n  ...props\n}: BentoCardProps) => {\n  const colSpanClasses = {\n    1: \"md:col-span-1\",\n    2: \"md:col-span-2\",\n    3: \"md:col-span-3\",\n  };\n\n  return (\n    <div\n      className={cn(\n        \"group relative flex flex-col justify-between overflow-hidden rounded-xl border border-zinc-200/80 bg-white/70 p-6 transition-all duration-300 hover:border-zinc-300 hover:bg-zinc-50/80 hover:shadow-xl dark:border-zinc-800/80 dark:bg-zinc-950/50 dark:hover:border-zinc-700 dark:hover:bg-zinc-900/40\",\n        colSpanClasses[colSpan],\n        className,\n      )}\n      {...props}\n    >\n      <div className=\"flex flex-col gap-3\">\n        {header && <div className=\"overflow-hidden rounded-lg\">{header}</div>}\n        <div className=\"flex items-center gap-2\">\n          {icon && (\n            <div className=\"text-zinc-500 group-hover:text-blue-500 dark:text-zinc-400 dark:group-hover:text-blue-400 transition-colors\">\n              {icon}\n            </div>\n          )}\n          <h3 className=\"font-semibold text-zinc-900 dark:text-zinc-100 text-base tracking-tight\">\n            {title}\n          </h3>\n        </div>\n        <p className=\"text-xs text-zinc-600 dark:text-zinc-400 font-light leading-relaxed\">\n          {description}\n        </p>\n      </div>\n    </div>\n  );\n};\n"
+    }
+  ]
+}

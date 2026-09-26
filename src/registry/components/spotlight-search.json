@@ -1,0 +1,177 @@
+{
+  "slug": "spotlight-search",
+  "name": "Spotlight Search",
+  "description": "Apple-inspired Spotlight search bar with fluid capsule-to-quad-button expansion, staggered harmonic spring physics, and real-time category filtering.",
+  "summary": "An ultra-fluid macOS Spotlight search bar component engineered with harmonic spring physics and dynamic layout morphing. At rest, it presents an iconic 480px glass capsule search bar with pulsing caret and dark frosted aesthetics. Upon hover, keyboard focus, or text input, the search capsule smoothly compresses to 248px while seamlessly breaking into four 48px circular action buttons (Applications, Folders, Workspaces, and Documents) with staggered spring kinematics, zero cumulative layout shift (total width fixed at 480px), full keyboard navigation, active category filters, and an interactive search results tray.",
+  "category": "apple-ui",
+  "tags": [
+    "spotlight",
+    "search",
+    "apple",
+    "macos",
+    "spring",
+    "hover-expand",
+    "morph",
+    "filter",
+    "capsule",
+    "glassmorphism"
+  ],
+  "dependencies": [
+    "clsx",
+    "tailwind-merge",
+    "motion"
+  ],
+  "version": "1.0.0",
+  "createdDate": "2026-09-24",
+  "updatedDate": "2026-09-24",
+  "interactive": true,
+  "supportsColor": false,
+  "highlights": [
+    "Seamless layout morphing from a single unified 480px capsule into a search input and four satellite action buttons",
+    "Viscous SVG gooey liquid layer creating organic metaball neck stretching and detachment during expansion and fusion during collapse",
+    "Continuous absolute coordinate transforms ensuring zero flexbox layout reflows and zero cumulative layout shift",
+    "Deliberate friction-damped spring kinematics (stiffness: 170, damping: 24, mass: 1.0) for luxurious Apple liquid gliding",
+    "High-fidelity macOS icons: Apple 'A' Applications, system Folders, multi-tier Workspaces, and Folded Documents",
+    "Real-time category-based filtering with dynamic placeholder hints and active filter badge dismissals",
+    "Interactive results tray with keyboard arrow-key navigation (ArrowUp, ArrowDown, Enter, Escape)",
+    "Micro-tooled hover tooltips with scale-in micro springs and dark frosted glass backdrop styling"
+  ],
+  "anatomy": [
+    "<svg> (Scoped filter definition with feGaussianBlur stdDeviation 5.5 and high-contrast feColorMatrix alpha thresholding)",
+    "<div> (Gooey liquid backdrop layer with capsule and button blobs under the SVG goo filter)",
+    "<motion.div> (Morphing search capsule with dark frosted glass, white border highlights, and search icon)",
+    "<input> (Accessible text input with dynamic placeholder and keyboard navigation)",
+    "<motion.div> (Satellite filter button cluster with staggered spring transitions and custom SVG iconography)",
+    "<motion.div> (Expandable floating search results tray with item metadata and shortcut badges)"
+  ],
+  "physics": {
+    "engine": "Friction-Damped Harmonic Oscillator & SVG Metaball Shader",
+    "description": "Slow, viscous spring physics governing capsule width compression and button translation, coupled with GPU-accelerated SVG gooey thresholding.",
+    "parameters": [
+      {
+        "label": "Spring Stiffness",
+        "value": "170"
+      },
+      {
+        "label": "Spring Damping (Friction)",
+        "value": "24"
+      },
+      {
+        "label": "Spring Mass",
+        "value": "1.0"
+      },
+      {
+        "label": "Gooey Blur",
+        "value": "5.5px Gaussian"
+      },
+      {
+        "label": "Gooey Matrix",
+        "value": "20A - 9 (alpha threshold)"
+      },
+      {
+        "label": "Rest Width",
+        "value": "480px"
+      },
+      {
+        "label": "Active Width",
+        "value": "248px"
+      },
+      {
+        "label": "Total Width",
+        "value": "480px (fixed)"
+      }
+    ]
+  },
+  "accessibility": {
+    "role": "search",
+    "aria": "aria-label on search input and filter buttons, title tooltips, full keyboard navigation with Escape to clear, ArrowUp/ArrowDown to select, and Enter to submit.",
+    "reducedMotion": "Responsive spring animations respect reduced motion preferences with graceful CSS fallback transitions."
+  },
+  "guidelines": {
+    "recommended": [
+      "Top-level global search command bars in modern macOS or web applications",
+      "Interactive command palettes with categorical drill-downs",
+      "Desktop-inspired navigation interfaces requiring high visual polish"
+    ],
+    "bestPractices": [
+      "Keep total container width constrained to prevent surrounding layout shifts during hover expansion",
+      "Provide meaningful category filters corresponding to the application's core data models",
+      "Pair with keyboard shortcuts (e.g. ⌘K) to open or focus the search input"
+    ]
+  },
+  "props": [
+    {
+      "name": "value",
+      "type": "string",
+      "defaultValue": "undefined",
+      "description": "Controlled search query string."
+    },
+    {
+      "name": "defaultValue",
+      "type": "string",
+      "defaultValue": "\"\"",
+      "description": "Initial uncontrolled search query string."
+    },
+    {
+      "name": "onChange",
+      "type": "(value: string) => void",
+      "defaultValue": "undefined",
+      "description": "Callback fired when the search query changes."
+    },
+    {
+      "name": "onSubmit",
+      "type": "(value: string, activeFilter: SpotlightFilterId | null) => void",
+      "defaultValue": "undefined",
+      "description": "Callback fired when a search result is selected or Enter is pressed."
+    },
+    {
+      "name": "activeFilter",
+      "type": "SpotlightFilterId | null",
+      "defaultValue": "undefined",
+      "description": "Controlled active category filter ('apps' | 'folders' | 'layers' | 'docs' | null)."
+    },
+    {
+      "name": "onFilterChange",
+      "type": "(filter: SpotlightFilterId | null) => void",
+      "defaultValue": "undefined",
+      "description": "Callback fired when the active category filter changes."
+    },
+    {
+      "name": "placeholder",
+      "type": "string",
+      "defaultValue": "\"Spotlight Search\"",
+      "description": "Placeholder text shown when no filter is active."
+    },
+    {
+      "name": "items",
+      "type": "SpotlightItem[]",
+      "defaultValue": "DEFAULT_ITEMS",
+      "description": "List of searchable items with id, title, category, subtitle, and shortcut."
+    },
+    {
+      "name": "showResults",
+      "type": "boolean",
+      "defaultValue": "true",
+      "description": "Whether to display the floating results tray on input focus."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "defaultValue": "undefined",
+      "description": "Additional CSS class names for outer container."
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "Whether the search bar and filter buttons are disabled."
+    }
+  ],
+  "files": [
+    {
+      "name": "spotlight-search.tsx",
+      "path": "registry/ui/spotlight-search.tsx",
+      "code": "\"use client\";\n\nimport React, { useId, useRef, useState, useMemo } from \"react\";\nimport { AnimatePresence, motion, type Transition } from \"motion/react\";\nimport { cn } from \"@/lib/utils\";\n\nexport type SpotlightFilterId = \"apps\" | \"folders\" | \"layers\" | \"docs\";\n\nexport interface SpotlightItem {\n  id: string;\n  title: string;\n  category: SpotlightFilterId;\n  subtitle?: string;\n  shortcut?: string;\n}\n\nexport interface SpotlightSearchProps {\n  value?: string;\n  defaultValue?: string;\n  onChange?: (value: string) => void;\n  onSubmit?: (value: string, activeFilter: SpotlightFilterId | null) => void;\n  activeFilter?: SpotlightFilterId | null;\n  onFilterChange?: (filter: SpotlightFilterId | null) => void;\n  placeholder?: string;\n  items?: SpotlightItem[];\n  showResults?: boolean;\n  className?: string;\n  disabled?: boolean;\n}\n\nconst DEFAULT_ITEMS: SpotlightItem[] = [\n  { id: \"1\", title: \"Xcode\", category: \"apps\", subtitle: \"Developer Tools\" },\n  { id: \"2\", title: \"Safari\", category: \"apps\", subtitle: \"Web Browser\" },\n  { id: \"3\", title: \"Figma\", category: \"apps\", subtitle: \"Vector Graphics\" },\n  { id: \"4\", title: \"Terminal\", category: \"apps\", subtitle: \"Utilities\" },\n  { id: \"5\", title: \"Music\", category: \"apps\", subtitle: \"Entertainment\" },\n  {\n    id: \"6\",\n    title: \"Projects\",\n    category: \"folders\",\n    subtitle: \"~/Developer/Projects\",\n  },\n  { id: \"7\", title: \"Documents\", category: \"folders\", subtitle: \"~/Documents\" },\n  { id: \"8\", title: \"Downloads\", category: \"folders\", subtitle: \"~/Downloads\" },\n  {\n    id: \"9\",\n    title: \"Quick Note\",\n    category: \"layers\",\n    subtitle: \"Shortcut\",\n    shortcut: \"⌘⇧N\",\n  },\n  {\n    id: \"10\",\n    title: \"Color Picker\",\n    category: \"layers\",\n    subtitle: \"Utility\",\n    shortcut: \"⌥⌘C\",\n  },\n  {\n    id: \"11\",\n    title: \"design-system.fig\",\n    category: \"docs\",\n    subtitle: \"Figma Document\",\n  },\n  {\n    id: \"12\",\n    title: \"roadmap-2026.pdf\",\n    category: \"docs\",\n    subtitle: \"PDF Document\",\n  },\n  {\n    id: \"13\",\n    title: \"architecture.md\",\n    category: \"docs\",\n    subtitle: \"Markdown File\",\n  },\n];\n\nconst fluidSpring: Transition = {\n  type: \"spring\",\n  stiffness: 170,\n  damping: 24,\n  mass: 1.0,\n};\n\nconst microSpring: Transition = {\n  type: \"spring\",\n  stiffness: 380,\n  damping: 26,\n  mass: 0.8,\n};\n\nfunction AppsIcon() {\n  return (\n    <svg\n      viewBox=\"0 0 24 24\"\n      width=\"18\"\n      height=\"18\"\n      fill=\"none\"\n      stroke=\"currentColor\"\n      strokeWidth=\"1.9\"\n      strokeLinecap=\"round\"\n      strokeLinejoin=\"round\"\n      aria-hidden=\"true\"\n    >\n      <path d=\"M12 3.5L4.5 19h4\" />\n      <path d=\"M12 3.5l7.5 15.5h-4\" />\n      <path d=\"M7 14.5h10\" />\n      <circle cx=\"12\" cy=\"7\" r=\"0.75\" fill=\"currentColor\" stroke=\"none\" />\n    </svg>\n  );\n}\n\nfunction FolderIcon() {\n  return (\n    <svg\n      viewBox=\"0 0 24 24\"\n      width=\"18\"\n      height=\"18\"\n      fill=\"none\"\n      stroke=\"currentColor\"\n      strokeWidth=\"1.8\"\n      strokeLinecap=\"round\"\n      strokeLinejoin=\"round\"\n      aria-hidden=\"true\"\n    >\n      <path d=\"M3.5 7.5A2 2 0 0 1 5.5 5.5h3.2c.6 0 1.2.3 1.6.8l1.2 1.4c.4.5 1 .8 1.6.8H18.5a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2v-10z\" />\n    </svg>\n  );\n}\n\nfunction LayersIcon() {\n  return (\n    <svg\n      viewBox=\"0 0 24 24\"\n      width=\"18\"\n      height=\"18\"\n      fill=\"none\"\n      stroke=\"currentColor\"\n      strokeWidth=\"1.8\"\n      strokeLinecap=\"round\"\n      strokeLinejoin=\"round\"\n      aria-hidden=\"true\"\n    >\n      <path d=\"M12 3L3 8l9 5 9-5-9-5z\" />\n      <path d=\"M3 13l9 5 9-5\" />\n      <path d=\"M3 18l9 5 9-5\" />\n    </svg>\n  );\n}\n\nfunction DocsIcon() {\n  return (\n    <svg\n      viewBox=\"0 0 24 24\"\n      width=\"18\"\n      height=\"18\"\n      fill=\"none\"\n      stroke=\"currentColor\"\n      strokeWidth=\"1.8\"\n      strokeLinecap=\"round\"\n      strokeLinejoin=\"round\"\n      aria-hidden=\"true\"\n    >\n      <path d=\"M14 2H6a2 2 0 0 0-2 2v12\" />\n      <rect x=\"8\" y=\"6\" width=\"12\" height=\"16\" rx=\"2\" />\n      <path d=\"M14 2v4a2 2 0 0 0 2 2h4\" />\n    </svg>\n  );\n}\n\nfunction SearchIcon() {\n  return (\n    <svg\n      viewBox=\"0 0 24 24\"\n      width=\"19\"\n      height=\"19\"\n      fill=\"none\"\n      stroke=\"currentColor\"\n      strokeWidth=\"2\"\n      strokeLinecap=\"round\"\n      strokeLinejoin=\"round\"\n      aria-hidden=\"true\"\n    >\n      <circle cx=\"11\" cy=\"11\" r=\"7.5\" />\n      <path d=\"m20.5 20.5-4.2-4.2\" />\n    </svg>\n  );\n}\n\nconst FILTER_BUTTONS = [\n  { id: \"apps\" as const, label: \"Applications\", icon: AppsIcon },\n  { id: \"folders\" as const, label: \"Folders\", icon: FolderIcon },\n  { id: \"layers\" as const, label: \"Workspaces\", icon: LayersIcon },\n  { id: \"docs\" as const, label: \"Documents\", icon: DocsIcon },\n];\n\nexport const SpotlightSearch: React.FC<SpotlightSearchProps> = ({\n  value: controlledValue,\n  defaultValue = \"\",\n  onChange,\n  onSubmit,\n  activeFilter: controlledFilter,\n  onFilterChange,\n  placeholder = \"Spotlight Search\",\n  items = DEFAULT_ITEMS,\n  showResults = true,\n  className,\n  disabled = false,\n}) => {\n  const generatedId = useId();\n  const filterId = `spotlight-gooey-${generatedId.replace(/:/g, \"\")}`;\n  const inputId = useId();\n  const inputRef = useRef<HTMLInputElement>(null);\n  const containerRef = useRef<HTMLDivElement>(null);\n\n  const [isHovered, setIsHovered] = useState(false);\n  const [isFocused, setIsFocused] = useState(false);\n  const [hoveredButtonId, setHoveredButtonId] = useState<string | null>(null);\n\n  const isControlled = controlledValue !== undefined;\n  const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue);\n  const query = isControlled ? controlledValue : uncontrolledValue;\n\n  const isControlledFilter = controlledFilter !== undefined;\n  const [uncontrolledFilter, setUncontrolledFilter] =\n    useState<SpotlightFilterId | null>(null);\n  const currentFilter = isControlledFilter\n    ? controlledFilter\n    : uncontrolledFilter;\n\n  const [highlightedIndex, setHighlightedIndex] = useState(0);\n\n  const isExpanded = isHovered || isFocused || query.length > 0;\n\n  const filteredItems = useMemo(() => {\n    return items.filter((item) => {\n      const matchesFilter = !currentFilter || item.category === currentFilter;\n      const clean = query.trim().toLowerCase();\n      if (!clean) return matchesFilter;\n      const matchesQuery =\n        item.title.toLowerCase().includes(clean) ||\n        (item.subtitle && item.subtitle.toLowerCase().includes(clean));\n      return matchesFilter && matchesQuery;\n    });\n  }, [items, currentFilter, query]);\n\n  const safeHighlightedIndex =\n    filteredItems.length > 0\n      ? Math.min(Math.max(0, highlightedIndex), filteredItems.length - 1)\n      : 0;\n\n  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {\n    const val = e.target.value;\n    if (!isControlled) {\n      setUncontrolledValue(val);\n    }\n    setHighlightedIndex(0);\n    onChange?.(val);\n  };\n\n  const handleFilterToggle = (filterIdSelected: SpotlightFilterId) => {\n    const nextFilter =\n      currentFilter === filterIdSelected ? null : filterIdSelected;\n    if (!isControlledFilter) {\n      setUncontrolledFilter(nextFilter);\n    }\n    setHighlightedIndex(0);\n    onFilterChange?.(nextFilter);\n    inputRef.current?.focus();\n  };\n\n  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {\n    if (e.key === \"Escape\") {\n      if (query) {\n        if (!isControlled) setUncontrolledValue(\"\");\n        onChange?.(\"\");\n      } else {\n        inputRef.current?.blur();\n      }\n    } else if (e.key === \"ArrowDown\") {\n      e.preventDefault();\n      setHighlightedIndex((prev) =>\n        filteredItems.length ? (prev + 1) % filteredItems.length : 0,\n      );\n    } else if (e.key === \"ArrowUp\") {\n      e.preventDefault();\n      setHighlightedIndex((prev) =>\n        filteredItems.length\n          ? (prev - 1 + filteredItems.length) % filteredItems.length\n          : 0,\n      );\n    } else if (e.key === \"Enter\") {\n      e.preventDefault();\n      const selected = filteredItems[safeHighlightedIndex];\n      if (selected) {\n        onSubmit?.(selected.title, currentFilter);\n      } else {\n        onSubmit?.(query, currentFilter);\n      }\n    }\n  };\n\n  const dynamicPlaceholder = useMemo(() => {\n    if (!currentFilter) return placeholder;\n    switch (currentFilter) {\n      case \"apps\":\n        return \"Search Applications...\";\n      case \"folders\":\n        return \"Search Folders...\";\n      case \"layers\":\n        return \"Search Workspaces...\";\n      case \"docs\":\n        return \"Search Documents...\";\n      default:\n        return placeholder;\n    }\n  }, [currentFilter, placeholder]);\n\n  return (\n    <div\n      ref={containerRef}\n      onMouseEnter={() => setIsHovered(true)}\n      onMouseLeave={() => {\n        setIsHovered(false);\n        setHoveredButtonId(null);\n      }}\n      className={cn(\n        \"relative flex flex-col items-center select-none\",\n        disabled && \"opacity-50 pointer-events-none\",\n        className,\n      )}\n      style={{ width: 480 }}\n    >\n      <svg\n        width=\"0\"\n        height=\"0\"\n        className=\"pointer-events-none absolute -z-10 opacity-0 overflow-hidden\"\n        aria-hidden=\"true\"\n      >\n        <defs>\n          <filter\n            id={filterId}\n            colorInterpolationFilters=\"sRGB\"\n            x=\"-20%\"\n            y=\"-20%\"\n            width=\"140%\"\n            height=\"140%\"\n          >\n            <feGaussianBlur\n              in=\"SourceGraphic\"\n              stdDeviation=\"5.5\"\n              result=\"blur\"\n            />\n            <feColorMatrix\n              in=\"blur\"\n              type=\"matrix\"\n              values=\"1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -9\"\n            />\n          </filter>\n        </defs>\n      </svg>\n\n      <div className=\"relative w-full h-12 overflow-visible\">\n        <div\n          className=\"pointer-events-none absolute inset-0 overflow-visible\"\n          style={{ filter: `url(#${filterId})` }}\n        >\n          <motion.div\n            initial={false}\n            animate={{\n              width: isExpanded ? 248 : 480,\n            }}\n            transition={fluidSpring}\n            className=\"absolute left-0 top-0 h-12 rounded-full bg-zinc-200/90 dark:bg-[#1c1c1f]\"\n          />\n\n          {FILTER_BUTTONS.map((btn, idx) => (\n            <motion.div\n              key={`gooey-blob-${btn.id}`}\n              initial={false}\n              animate={{\n                x: isExpanded ? 258 + idx * 58 : 248,\n                scale: isExpanded ? 1 : 0.3,\n                opacity: isExpanded ? 1 : 0,\n              }}\n              transition={{\n                ...fluidSpring,\n                delay: isExpanded\n                  ? idx * 0.035\n                  : (FILTER_BUTTONS.length - 1 - idx) * 0.025,\n              }}\n              className=\"absolute left-0 top-0 w-12 h-12 rounded-full bg-zinc-200/90 dark:bg-[#1c1c1f]\"\n            />\n          ))}\n        </div>\n\n        <motion.div\n          initial={false}\n          animate={{\n            width: isExpanded ? 248 : 480,\n          }}\n          transition={fluidSpring}\n          onClick={() => inputRef.current?.focus()}\n          className={cn(\n            \"absolute left-0 top-0 h-12 flex items-center px-4 rounded-full border transition-colors cursor-text select-none\",\n            \"bg-white/90 backdrop-blur-2xl border-zinc-200 dark:bg-[#1c1c1f]/85 dark:border-white/12\",\n            \"shadow-[0_8px_32px_rgba(0,0,0,0.08),inset_0_1px_1.5px_rgba(255,255,255,0.8)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.6),inset_0_1px_1.5px_rgba(255,255,255,0.12)]\",\n            isFocused &&\n              \"border-zinc-400 ring-1 ring-zinc-300 dark:border-white/30 dark:ring-white/20\",\n          )}\n        >\n          <span className=\"shrink-0 text-zinc-400 mr-2.5 flex items-center justify-center\">\n            <SearchIcon />\n          </span>\n\n          <div className=\"relative flex-1 flex items-center h-full overflow-hidden\">\n            <input\n              id={inputId}\n              ref={inputRef}\n              type=\"text\"\n              value={query}\n              onChange={handleInputChange}\n              onFocus={() => setIsFocused(true)}\n              onBlur={() => setIsFocused(false)}\n              onKeyDown={handleKeyDown}\n              placeholder={dynamicPlaceholder}\n              autoComplete=\"off\"\n              spellCheck=\"false\"\n              className=\"w-full bg-transparent text-[15px] font-normal text-zinc-900 placeholder:text-zinc-400 outline-none caret-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-400 dark:caret-white\"\n            />\n          </div>\n\n          {currentFilter && (\n            <motion.button\n              initial={{ scale: 0.8, opacity: 0 }}\n              animate={{ scale: 1, opacity: 1 }}\n              exit={{ scale: 0.8, opacity: 0 }}\n              type=\"button\"\n              onClick={(e) => {\n                e.stopPropagation();\n                handleFilterToggle(currentFilter);\n              }}\n              className=\"ml-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono uppercase bg-zinc-100 hover:bg-zinc-200 text-zinc-700 dark:bg-white/10 dark:hover:bg-white/20 dark:text-zinc-300 transition-colors\"\n            >\n              {currentFilter}\n            </motion.button>\n          )}\n        </motion.div>\n\n        {FILTER_BUTTONS.map((btn, idx) => {\n          const IconComponent = btn.icon;\n          const isActive = currentFilter === btn.id;\n          const isHoveredBtn = hoveredButtonId === btn.id;\n          const targetX = 258 + idx * 58;\n\n          return (\n            <motion.div\n              key={btn.id}\n              initial={false}\n              animate={{\n                x: isExpanded ? targetX : 248,\n                scale: isExpanded ? 1 : 0.3,\n                opacity: isExpanded ? 1 : 0,\n                pointerEvents: isExpanded ? \"auto\" : \"none\",\n              }}\n              transition={{\n                ...fluidSpring,\n                delay: isExpanded\n                  ? idx * 0.035\n                  : (FILTER_BUTTONS.length - 1 - idx) * 0.025,\n                opacity: {\n                  duration: 0.22,\n                  delay: isExpanded ? 0.05 + idx * 0.035 : 0,\n                },\n              }}\n              className=\"absolute left-0 top-0 w-12 h-12\"\n            >\n              <motion.button\n                type=\"button\"\n                whileHover={{ scale: 1.08 }}\n                whileTap={{ scale: 0.92 }}\n                transition={microSpring}\n                onMouseEnter={() => setHoveredButtonId(btn.id)}\n                onMouseLeave={() => setHoveredButtonId(null)}\n                onClick={() => handleFilterToggle(btn.id)}\n                className={cn(\n                  \"w-full h-full rounded-full flex items-center justify-center cursor-pointer outline-none transition-colors\",\n                  \"bg-white/90 backdrop-blur-2xl border border-zinc-200 dark:bg-[#1c1c1f]/85 dark:border-white/12\",\n                  \"shadow-[0_8px_32px_rgba(0,0,0,0.08),inset_0_1px_1.5px_rgba(255,255,255,0.8)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.6),inset_0_1px_1.5px_rgba(255,255,255,0.12)]\",\n                  isActive\n                    ? \"border-zinc-900/40 bg-zinc-100 text-zinc-950 shadow-[0_0_16px_rgba(0,0,0,0.1)] dark:border-white/40 dark:bg-white/20 dark:text-white dark:shadow-[0_0_16px_rgba(255,255,255,0.2)]\"\n                    : \"text-zinc-500 hover:text-zinc-900 hover:border-zinc-300 dark:text-zinc-400 dark:hover:text-white dark:hover:border-white/25\",\n                )}\n                aria-label={btn.label}\n                title={btn.label}\n              >\n                <IconComponent />\n              </motion.button>\n\n              <AnimatePresence>\n                {isHoveredBtn && isExpanded && (\n                  <motion.div\n                    initial={{ opacity: 0, y: 6, scale: 0.9 }}\n                    animate={{ opacity: 1, y: 0, scale: 1 }}\n                    exit={{ opacity: 0, y: 4, scale: 0.9 }}\n                    transition={microSpring}\n                    className=\"absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-md bg-zinc-900/90 border border-zinc-700 text-[10px] text-zinc-100 font-medium whitespace-nowrap pointer-events-none z-50 shadow-lg dark:bg-black/90 dark:border-white/10 dark:text-zinc-200\"\n                  >\n                    {btn.label}\n                  </motion.div>\n                )}\n              </AnimatePresence>\n            </motion.div>\n          );\n        })}\n      </div>\n\n      <AnimatePresence>\n        {showResults &&\n          isFocused &&\n          (query.trim().length > 0 || currentFilter) && (\n            <motion.div\n              initial={{ opacity: 0, y: -6, scale: 0.98 }}\n              animate={{ opacity: 1, y: 10, scale: 1 }}\n              exit={{ opacity: 0, y: -6, scale: 0.98 }}\n              transition={fluidSpring}\n              className={cn(\n                \"absolute top-full inset-x-0 z-40 rounded-2xl border border-zinc-200 bg-white/95 backdrop-blur-3xl shadow-[0_24px_60px_rgba(0,0,0,0.1)] p-2 overflow-hidden flex flex-col gap-1 dark:border-white/12 dark:bg-[#141416]/95 dark:shadow-[0_24px_60px_rgba(0,0,0,0.85)]\",\n              )}\n            >\n              {filteredItems.length === 0 ? (\n                <div className=\"py-6 text-center text-xs text-zinc-500 dark:text-zinc-500\">\n                  No matching results found\n                </div>\n              ) : (\n                <div className=\"flex flex-col gap-0.5 max-h-64 overflow-y-auto pr-1\">\n                  {filteredItems.map((item, idx) => {\n                    const isHighlighted = idx === safeHighlightedIndex;\n                    return (\n                      <button\n                        key={item.id}\n                        type=\"button\"\n                        onMouseEnter={() => setHighlightedIndex(idx)}\n                        onClick={() => onSubmit?.(item.title, currentFilter)}\n                        className={cn(\n                          \"relative flex items-center justify-between px-3 py-2 rounded-xl text-left transition-colors cursor-pointer w-full select-none\",\n                          isHighlighted\n                            ? \"bg-zinc-100 text-zinc-950 dark:bg-white/10 dark:text-white\"\n                            : \"text-zinc-700 hover:bg-zinc-50 dark:text-zinc-300 dark:hover:bg-white/5\",\n                        )}\n                      >\n                        <div className=\"flex items-center gap-2.5 overflow-hidden\">\n                          <span className=\"w-6 h-6 rounded-lg bg-zinc-100 border border-zinc-200 flex items-center justify-center shrink-0 text-zinc-500 dark:bg-white/5 dark:border-white/10 dark:text-zinc-400\">\n                            {item.category === \"apps\" && <AppsIcon />}\n                            {item.category === \"folders\" && <FolderIcon />}\n                            {item.category === \"layers\" && <LayersIcon />}\n                            {item.category === \"docs\" && <DocsIcon />}\n                          </span>\n                          <div className=\"flex flex-col min-w-0\">\n                            <span className=\"text-xs font-medium truncate text-zinc-900 dark:text-zinc-100\">\n                              {item.title}\n                            </span>\n                            {item.subtitle && (\n                              <span className=\"text-[10px] text-zinc-500 dark:text-zinc-500 truncate\">\n                                {item.subtitle}\n                              </span>\n                            )}\n                          </div>\n                        </div>\n\n                        {item.shortcut && (\n                          <span className=\"text-[10px] font-mono text-zinc-500 px-1.5 py-0.5 rounded bg-zinc-100 border border-zinc-200 shrink-0 ml-2 dark:bg-white/5 dark:border-white/5\">\n                            {item.shortcut}\n                          </span>\n                        )}\n                      </button>\n                    );\n                  })}\n                </div>\n              )}\n            </motion.div>\n          )}\n      </AnimatePresence>\n    </div>\n  );\n};\n"
+    }
+  ]
+}

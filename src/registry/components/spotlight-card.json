@@ -1,0 +1,127 @@
+{
+  "slug": "spotlight-card",
+  "name": "Spotlight Card",
+  "description": "Card container with cursor-following radial gradient glow effect.",
+  "summary": "A dynamic glassmorphic card container that tracks pointer coordinates within its bounding box in real time. It calculates Cartesian cursor offsets relative to the element's top-left corner (clientX - left, clientY - top) and projects a soft 600px radial gradient lighting mask centered under the cursor with smooth 300ms opacity fades on boundary crossing, creating an illuminated spotlight aesthetic across dark surfaces.",
+  "category": "cards",
+  "tags": [
+    "card",
+    "spotlight",
+    "hover",
+    "interactive",
+    "radial-gradient",
+    "glassmorphism"
+  ],
+  "dependencies": [
+    "clsx",
+    "tailwind-merge"
+  ],
+  "version": "1.0.0",
+  "createdDate": "2026-09-10",
+  "updatedDate": "2026-09-10",
+  "interactive": true,
+  "supportsColor": true,
+  "hidden": true,
+  "highlights": [
+    "Client-side pointer calculation with getBoundingClientRect() coordinate tracking",
+    "600px radial gradient spotlight with exponential 40% falloff curve",
+    "Instantaneous coordinate binding directly to CSS radial-gradient styles",
+    "Smooth 300ms opacity transition during cursor boundary entry and departure",
+    "Backdrop blur integration (backdrop-blur-md) with semi-transparent zinc-950 surfaces"
+  ],
+  "anatomy": [
+    "<div> (Relative rounded card wrapper with border containment and hover border brightening)",
+    "<div> (Spotlight Beam: pointer-events-none absolute mask rendering radial gradient)",
+    "<div> (Content Layer: relative z-10 container preserving interactive child element clickability)"
+  ],
+  "physics": {
+    "engine": "Pointer Event Matrix & Radial Shader",
+    "description": "Real-time client pointer coordinate mapping calculating relative Cartesian offsets with CSS opacity decay.",
+    "parameters": [
+      {
+        "label": "Spotlight Radius",
+        "value": "600px circle"
+      },
+      {
+        "label": "Decay Curve",
+        "value": "Radial transparent at 40%"
+      },
+      {
+        "label": "Fade Duration",
+        "value": "300ms transition-opacity"
+      },
+      {
+        "label": "Coordinate Mapping",
+        "value": "Cartesian offset (x, y)"
+      },
+      {
+        "label": "Backdrop Filter",
+        "value": "12px blur-md"
+      },
+      {
+        "label": "Compositing",
+        "value": "GPU layer isolated"
+      }
+    ]
+  },
+  "accessibility": {
+    "role": "region",
+    "aria": "Accepts aria-labelledby or aria-describedby for container identification.",
+    "reducedMotion": "Radial gradient renders with static position or instant opacity when motion is reduced.",
+    "keyboard": [
+      {
+        "key": "Tab",
+        "description": "Standard keyboard tab navigation passes cleanly to interactive child elements."
+      },
+      {
+        "key": "Enter / Space",
+        "description": "Triggers card onClick callback if interactive handler is assigned."
+      }
+    ]
+  },
+  "guidelines": {
+    "recommended": [
+      "Feature matrices and product highlights in modern SaaS landing pages",
+      "Interactive pricing tiers and subscription comparison modules",
+      "Developer portfolio project showcases and case study links"
+    ],
+    "bestPractices": [
+      "Use subtle accent colors with low opacity (0.12 - 0.20) to prevent content unreadability",
+      "Combine with high-contrast text and dark slate/zinc background surfaces",
+      "Keep card interactive children inside the relative z-10 layer to prevent pointer event masking"
+    ]
+  },
+  "props": [
+    {
+      "name": "spotlightColor",
+      "type": "string",
+      "defaultValue": "\"rgba(59, 130, 246, 0.15)\"",
+      "description": "CSS RGBA, HSLA, or hex color string defining the center glow of the 600px radial light cone."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "defaultValue": "undefined",
+      "description": "Additional Tailwind or CSS classes applied to the root card container."
+    },
+    {
+      "name": "children",
+      "type": "React.ReactNode",
+      "defaultValue": "undefined",
+      "description": "Card content, headlines, telemetry, or icons rendered above the spotlight beam."
+    },
+    {
+      "name": "onClick",
+      "type": "(event: React.MouseEvent<HTMLDivElement>) => void",
+      "defaultValue": "undefined",
+      "description": "Optional click handler for making the spotlight card act as an interactive clickable surface."
+    }
+  ],
+  "files": [
+    {
+      "name": "spotlight-card.tsx",
+      "path": "registry/ui/spotlight-card.tsx",
+      "code": "\"use client\";\n\nimport React, { useRef, useState } from \"react\";\nimport { cn } from \"@/lib/utils\";\n\nexport interface SpotlightCardProps extends React.HTMLAttributes<HTMLDivElement> {\n  spotlightColor?: string;\n}\n\nexport const SpotlightCard = React.forwardRef<\n  HTMLDivElement,\n  SpotlightCardProps\n>(\n  (\n    {\n      className,\n      children,\n      spotlightColor = \"rgba(59, 130, 246, 0.15)\",\n      ...props\n    },\n    ref,\n  ) => {\n    const divRef = useRef<HTMLDivElement>(null);\n    const [position, setPosition] = useState<{ x: number; y: number }>({\n      x: 0,\n      y: 0,\n    });\n    const [opacity, setOpacity] = useState(0);\n\n    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {\n      if (!divRef.current) return;\n      const rect = divRef.current.getBoundingClientRect();\n      setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });\n    };\n\n    const handleMouseEnter = () => {\n      setOpacity(1);\n    };\n\n    const handleMouseLeave = () => {\n      setOpacity(0);\n    };\n\n    return (\n      <div\n        ref={(node) => {\n          divRef.current = node;\n          if (typeof ref === \"function\") {\n            ref(node);\n          } else if (ref) {\n            ref.current = node;\n          }\n        }}\n        onMouseMove={handleMouseMove}\n        onMouseEnter={handleMouseEnter}\n        onMouseLeave={handleMouseLeave}\n        className={cn(\n          \"relative overflow-hidden rounded-xl border border-zinc-200 bg-white/80 p-6 backdrop-blur-md transition-colors duration-200 hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-950/60 dark:hover:border-zinc-700\",\n          className,\n        )}\n        {...props}\n      >\n        <div\n          className=\"pointer-events-none absolute -inset-px transition-opacity duration-300\"\n          style={{\n            opacity,\n            background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, ${spotlightColor}, transparent 40%)`,\n          }}\n        />\n        <div className=\"relative z-10\">{children}</div>\n      </div>\n    );\n  },\n);\n\nSpotlightCard.displayName = \"SpotlightCard\";\n"
+    }
+  ]
+}

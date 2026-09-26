@@ -1,0 +1,142 @@
+{
+  "slug": "smooth-accordion",
+  "name": "Smooth Accordion",
+  "description": "Fluid collapsible accordion with synchronized layout transitions and smooth blur-reveal mechanics.",
+  "summary": "An ultra-smooth collapsible accordion designed for developer portals, FAQs, and settings panels. Features simultaneous synchronized collapsing and expanding where one item smoothly closes while another expands without layout stutter. Answers emerge through an optical blur-to-sharp transition and vertical translation curve. Supports single exclusive or multiple modes, custom accent colors, and multiple visual variants.",
+  "category": "accordion",
+  "tags": [
+    "accordion",
+    "collapse",
+    "motion",
+    "blur",
+    "spring",
+    "sync",
+    "faq",
+    "interactive"
+  ],
+  "dependencies": [
+    "clsx",
+    "tailwind-merge",
+    "motion",
+    "@radix-ui/react-icons"
+  ],
+  "version": "1.0.0",
+  "createdDate": "2026-09-21",
+  "updatedDate": "2026-09-21",
+  "interactive": true,
+  "supportsColor": false,
+  "highlights": [
+    "Simultaneous synchronized expansion and collapse with zero layout jitter",
+    "Dynamic optical blur-reveal transition on expandable content with staggered delay",
+    "Spring-calibrated 180° indicator rotation with dampening",
+    "Three dark-mode tailored variants: separated cards, connected bordered list, and ghost",
+    "Compound component architecture with full keyboard and ARIA accessibility",
+    "Adaptive prefers-reduced-motion fallback ensuring instant zero-motion toggling"
+  ],
+  "anatomy": [
+    "<Accordion> (Root state provider and layout wrapper supporting single/multiple modes)",
+    "<AccordionItem> (Context-bound item with active state styling and borders)",
+    "<AccordionTrigger> (Accessible button trigger housing title, subtitle, badge, and animated chevron)",
+    "<AccordionContent> (Synchronized animated container with height collapse and delayed blur-to-sharp filter)"
+  ],
+  "physics": {
+    "engine": "Framer Motion Spring & Bezier Filter Transitions",
+    "description": "Synchronized dual-axis height expansion and CSS filter blur interpolation using cubic-bezier(0.16, 1, 0.3, 1).",
+    "parameters": [
+      {
+        "label": "Height Transition",
+        "value": "380ms [0.16, 1, 0.3, 1]"
+      },
+      {
+        "label": "Content Delay",
+        "value": "80ms staggered reveal"
+      },
+      {
+        "label": "Blur Reveal",
+        "value": "8px -> 0px (340ms)"
+      },
+      {
+        "label": "Opacity Curve",
+        "value": "0 -> 1 (340ms)"
+      },
+      {
+        "label": "Chevron Spring",
+        "value": "stiffness: 320, damping: 24"
+      },
+      {
+        "label": "Sync Mode",
+        "value": "Concurrent enter/exit"
+      },
+      {
+        "label": "Compositing",
+        "value": "GPU filter + transform"
+      }
+    ]
+  },
+  "accessibility": {
+    "role": "region",
+    "aria": "Each trigger links to its corresponding content via aria-controls and aria-labelledby with live aria-expanded state.",
+    "reducedMotion": "Instantaneous height and opacity changes with blur filter disabled when prefers-reduced-motion is active.",
+    "keyboard": [
+      {
+        "key": "Tab",
+        "description": "Navigate between accordion item triggers."
+      },
+      {
+        "key": "Enter / Space",
+        "description": "Expand or collapse the focused accordion item."
+      }
+    ]
+  },
+  "guidelines": {
+    "recommended": [
+      "Product FAQ sections and documentation feature breakdowns",
+      "Configurable settings and preference panels in developer dashboards",
+      "Nested multi-section information architectures requiring clean spatial hierarchy"
+    ],
+    "bestPractices": [
+      "Use variant='separated' for high-emphasis feature FAQs with distinct cards",
+      "Use variant='bordered' inside modals or compact settings lists",
+      "Enable single mode when content is lengthy to prevent vertical scrolling fatigue"
+    ]
+  },
+  "props": [
+    {
+      "name": "type",
+      "type": "'single' | 'multiple'",
+      "defaultValue": "'single'",
+      "description": "Determines whether one item or multiple items can be expanded simultaneously."
+    },
+    {
+      "name": "collapsible",
+      "type": "boolean",
+      "defaultValue": "true",
+      "description": "When type is 'single', allows closing an active item by clicking it again."
+    },
+    {
+      "name": "variant",
+      "type": "'separated' | 'bordered' | 'ghost'",
+      "defaultValue": "'separated'",
+      "description": "Visual styling variant for the accordion containers and borders."
+    },
+    {
+      "name": "blurAmount",
+      "type": "number",
+      "defaultValue": "8",
+      "description": "Intensity of the entrance and exit blur effect in pixels."
+    },
+    {
+      "name": "items",
+      "type": "AccordionItemData[]",
+      "defaultValue": "undefined",
+      "description": "Optional declarative array of items to render without writing JSX compound children."
+    }
+  ],
+  "files": [
+    {
+      "name": "smooth-accordion.tsx",
+      "path": "registry/ui/smooth-accordion.tsx",
+      "code": "\"use client\";\n\nimport * as React from \"react\";\nimport {\n  useState,\n  useCallback,\n  useMemo,\n  createContext,\n  useContext,\n  useId,\n} from \"react\";\nimport { motion, AnimatePresence, useReducedMotion } from \"motion/react\";\nimport { ChevronDownIcon } from \"@radix-ui/react-icons\";\nimport { cn } from \"@/lib/utils\";\n\nexport type AccordionType = \"single\" | \"multiple\";\nexport type AccordionVariant = \"separated\" | \"bordered\" | \"ghost\";\n\nexport interface AccordionItemData {\n  value: string;\n  title: React.ReactNode;\n  subtitle?: React.ReactNode;\n  badge?: React.ReactNode;\n  icon?: React.ReactNode;\n  content: React.ReactNode;\n  disabled?: boolean;\n}\n\ninterface AccordionContextValue {\n  type: AccordionType;\n  expanded: string[];\n  toggleItem: (val: string) => void;\n  variant: AccordionVariant;\n  blurAmount: number;\n}\n\nconst AccordionContext = createContext<AccordionContextValue | null>(null);\n\nfunction useAccordion() {\n  const context = useContext(AccordionContext);\n  if (!context) {\n    throw new Error(\"Accordion components must be used within an Accordion\");\n  }\n  return context;\n}\n\ninterface AccordionItemContextValue {\n  value: string;\n  isOpen: boolean;\n  disabled?: boolean;\n  triggerId: string;\n  contentId: string;\n}\n\nconst AccordionItemContext = createContext<AccordionItemContextValue | null>(\n  null,\n);\n\nfunction useAccordionItem() {\n  const context = useContext(AccordionItemContext);\n  if (!context) {\n    throw new Error(\n      \"AccordionTrigger and AccordionContent must be used within an AccordionItem\",\n    );\n  }\n  return context;\n}\n\nexport interface AccordionProps extends Omit<\n  React.HTMLAttributes<HTMLDivElement>,\n  \"defaultValue\" | \"onChange\"\n> {\n  type?: AccordionType;\n  value?: string | string[];\n  defaultValue?: string | string[];\n  onValueChange?: (value: string | string[]) => void;\n  collapsible?: boolean;\n  variant?: AccordionVariant;\n  blurAmount?: number;\n  items?: AccordionItemData[];\n}\n\nexport function Accordion({\n  type = \"single\",\n  value: controlledValue,\n  defaultValue,\n  onValueChange,\n  collapsible = true,\n  variant = \"separated\",\n  blurAmount = 8,\n  items,\n  children,\n  className,\n  ...props\n}: AccordionProps) {\n  const [internalExpanded, setInternalExpanded] = useState<string[]>(() => {\n    if (defaultValue !== undefined) {\n      return Array.isArray(defaultValue) ? defaultValue : [defaultValue];\n    }\n    return [];\n  });\n\n  const isControlled = controlledValue !== undefined;\n  const currentExpanded = useMemo(() => {\n    if (isControlled) {\n      return Array.isArray(controlledValue)\n        ? controlledValue\n        : controlledValue\n          ? [controlledValue]\n          : [];\n    }\n    return internalExpanded;\n  }, [isControlled, controlledValue, internalExpanded]);\n\n  const toggleItem = useCallback(\n    (itemValue: string) => {\n      let next: string[];\n      if (type === \"single\") {\n        const isCurrentOpen = currentExpanded.includes(itemValue);\n        if (isCurrentOpen) {\n          next = collapsible ? [] : [itemValue];\n        } else {\n          next = [itemValue];\n        }\n      } else {\n        if (currentExpanded.includes(itemValue)) {\n          next = currentExpanded.filter((v) => v !== itemValue);\n        } else {\n          next = [...currentExpanded, itemValue];\n        }\n      }\n\n      if (!isControlled) {\n        setInternalExpanded(next);\n      }\n\n      if (onValueChange) {\n        onValueChange(type === \"single\" ? (next[0] ?? \"\") : next);\n      }\n    },\n    [type, currentExpanded, collapsible, isControlled, onValueChange],\n  );\n\n  return (\n    <AccordionContext.Provider\n      value={{\n        type,\n        expanded: currentExpanded,\n        toggleItem,\n        variant,\n        blurAmount,\n      }}\n    >\n      <div\n        className={cn(\n          \"w-full select-none\",\n          variant === \"separated\" && \"flex flex-col gap-2.5\",\n          variant === \"bordered\" &&\n            \"rounded-xl border border-zinc-200 divide-y divide-zinc-200 overflow-hidden bg-white/90 dark:border-white/8 dark:divide-white/8 dark:bg-[#0c0c0e]/80\",\n          variant === \"ghost\" &&\n            \"flex flex-col divide-y divide-zinc-200 dark:divide-white/5\",\n          className,\n        )}\n        {...props}\n      >\n        {items\n          ? items.map((item) => (\n              <AccordionItem\n                key={item.value}\n                value={item.value}\n                disabled={item.disabled}\n              >\n                <AccordionTrigger\n                  badge={item.badge}\n                  icon={item.icon}\n                  subtitle={item.subtitle}\n                >\n                  {item.title}\n                </AccordionTrigger>\n                <AccordionContent>{item.content}</AccordionContent>\n              </AccordionItem>\n            ))\n          : children}\n      </div>\n    </AccordionContext.Provider>\n  );\n}\n\nexport interface AccordionItemProps extends React.HTMLAttributes<HTMLDivElement> {\n  value: string;\n  disabled?: boolean;\n}\n\nexport function AccordionItem({\n  value,\n  disabled = false,\n  className,\n  children,\n  ...props\n}: AccordionItemProps) {\n  const { expanded, variant } = useAccordion();\n  const id = useId();\n  const triggerId = `accordion-trigger-${id}`;\n  const contentId = `accordion-content-${id}`;\n  const isOpen = expanded.includes(value);\n\n  return (\n    <AccordionItemContext.Provider\n      value={{ value, isOpen, disabled, triggerId, contentId }}\n    >\n      <div\n        className={cn(\n          \"group transition-all duration-300\",\n          variant === \"separated\" && [\n            \"rounded-xl border border-zinc-200/90 bg-white/90 backdrop-blur-sm overflow-hidden hover:border-zinc-300 hover:bg-zinc-50/90 dark:border-white/8 dark:bg-[#0c0c0e]/80 dark:hover:border-white/15 dark:hover:bg-[#101014]/90\",\n            isOpen &&\n              \"border-zinc-300 bg-white shadow-md dark:border-white/20 dark:bg-[#121217]/95 dark:shadow-[0_12px_32px_rgba(0,0,0,0.4)]\",\n          ],\n          variant === \"bordered\" && [\n            \"transition-colors\",\n            isOpen && \"bg-zinc-50/80 dark:bg-[#121217]/60\",\n          ],\n          variant === \"ghost\" && [\n            \"transition-colors rounded-lg\",\n            isOpen && \"bg-zinc-100/60 dark:bg-white/3\",\n          ],\n          disabled && \"opacity-45 pointer-events-none\",\n          className,\n        )}\n        {...props}\n      >\n        {children}\n      </div>\n    </AccordionItemContext.Provider>\n  );\n}\n\nexport interface AccordionTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {\n  badge?: React.ReactNode;\n  icon?: React.ReactNode;\n  subtitle?: React.ReactNode;\n}\n\nexport function AccordionTrigger({\n  children,\n  badge,\n  icon,\n  subtitle,\n  className,\n  ...props\n}: AccordionTriggerProps) {\n  const { toggleItem } = useAccordion();\n  const { value, isOpen, disabled, triggerId, contentId } = useAccordionItem();\n  const prefersReducedMotion = useReducedMotion();\n\n  return (\n    <button\n      type=\"button\"\n      id={triggerId}\n      aria-controls={contentId}\n      aria-expanded={isOpen}\n      disabled={disabled}\n      onClick={() => toggleItem(value)}\n      className={cn(\n        \"w-full flex items-center justify-between gap-4 p-4 text-left cursor-pointer transition-colors outline-none focus-visible:ring-1 focus-visible:ring-foreground/30 dark:focus-visible:ring-white/30\",\n        className,\n      )}\n      {...props}\n    >\n      <div className=\"flex items-center gap-3 min-w-0 flex-1\">\n        {icon && (\n          <span className=\"shrink-0 text-zinc-500 group-hover:text-zinc-800 dark:text-zinc-400 dark:group-hover:text-zinc-200 transition-colors\">\n            {icon}\n          </span>\n        )}\n        <div className=\"flex flex-col min-w-0 flex-1\">\n          <div className=\"flex items-center gap-2.5 flex-wrap\">\n            <span\n              className={cn(\n                \"text-sm font-medium tracking-tight transition-colors duration-200\",\n                isOpen\n                  ? \"text-zinc-950 dark:text-white\"\n                  : \"text-zinc-700 group-hover:text-zinc-950 dark:text-zinc-200 dark:group-hover:text-white\",\n              )}\n            >\n              {children}\n            </span>\n            {badge && (\n              <span className=\"shrink-0 text-[10px] font-mono px-2 py-0.5 rounded-full border border-zinc-200 bg-zinc-100 text-zinc-600 group-hover:text-zinc-800 dark:border-white/10 dark:bg-white/5 dark:text-zinc-400 dark:group-hover:text-zinc-300\">\n                {badge}\n              </span>\n            )}\n          </div>\n          {subtitle && (\n            <span className=\"text-xs text-zinc-500 dark:text-zinc-400 font-light mt-0.5 truncate\">\n              {subtitle}\n            </span>\n          )}\n        </div>\n      </div>\n\n      <motion.div\n        animate={{ rotate: isOpen ? 180 : 0 }}\n        transition={\n          prefersReducedMotion\n            ? { duration: 0 }\n            : { type: \"spring\", stiffness: 320, damping: 24 }\n        }\n        className=\"shrink-0 w-6 h-6 rounded-md flex items-center justify-center text-zinc-400 group-hover:text-zinc-700 dark:text-zinc-400 dark:group-hover:text-white transition-colors\"\n      >\n        <ChevronDownIcon className=\"w-4 h-4\" />\n      </motion.div>\n    </button>\n  );\n}\n\nexport type AccordionContentProps = React.HTMLAttributes<HTMLDivElement>;\n\nexport function AccordionContent({\n  children,\n  className,\n  ...props\n}: AccordionContentProps) {\n  const { blurAmount } = useAccordion();\n  const { isOpen, triggerId, contentId } = useAccordionItem();\n  const prefersReducedMotion = useReducedMotion();\n\n  return (\n    <AnimatePresence initial={false}>\n      {isOpen && (\n        <motion.div\n          id={contentId}\n          role=\"region\"\n          aria-labelledby={triggerId}\n          initial={{ height: 0 }}\n          animate={{\n            height: \"auto\",\n            transition: prefersReducedMotion\n              ? { duration: 0 }\n              : { duration: 0.38, ease: [0.16, 1, 0.3, 1] },\n          }}\n          exit={{\n            height: 0,\n            transition: prefersReducedMotion\n              ? { duration: 0 }\n              : { duration: 0.3, ease: [0.16, 1, 0.3, 1] },\n          }}\n          className=\"overflow-hidden\"\n        >\n          <motion.div\n            initial={{\n              opacity: 0,\n              filter: `blur(${blurAmount}px)`,\n              y: -8,\n            }}\n            animate={{\n              opacity: 1,\n              filter: \"blur(0px)\",\n              y: 0,\n              transition: prefersReducedMotion\n                ? { duration: 0 }\n                : {\n                    delay: 0.08,\n                    duration: 0.34,\n                    ease: [0.16, 1, 0.3, 1],\n                  },\n            }}\n            exit={{\n              opacity: 0,\n              filter: `blur(${blurAmount}px)`,\n              y: -4,\n              transition: prefersReducedMotion\n                ? { duration: 0 }\n                : {\n                    duration: 0.18,\n                    ease: \"easeInOut\",\n                  },\n            }}\n          >\n            <div\n              className={cn(\n                \"px-4 pb-4.5 pt-0 text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 font-light leading-relaxed\",\n                className,\n              )}\n              {...props}\n            >\n              {children}\n            </div>\n          </motion.div>\n        </motion.div>\n      )}\n    </AnimatePresence>\n  );\n}\n\nexport const SmoothAccordion = Accordion;\n"
+    }
+  ]
+}

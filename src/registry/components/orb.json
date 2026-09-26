@@ -1,0 +1,146 @@
+{
+  "slug": "orb",
+  "name": "Thinking Orb",
+  "description": "Interactive 2D dotted thought-orb indicator with 9 animated AI states and tactile click cycling.",
+  "summary": "A purpose-tuned animated indicator component engineered for AI agent UIs, copilot status indicators, and creative loaders. Powered by thinking-orbs, it renders nine distinct orbital particle states (breathing, searching, working, solving, listening, connecting, weaving, composing, shaping) onto a lightweight 2D canvas with full click-to-cycle interactivity, responsive sizes, and sleek presentation variants.",
+  "category": "ai-stuff",
+  "tags": [
+    "orb",
+    "thinking-orb",
+    "ai",
+    "loader",
+    "particles",
+    "canvas",
+    "interactive",
+    "animation"
+  ],
+  "dependencies": [
+    "clsx",
+    "tailwind-merge",
+    "thinking-orbs"
+  ],
+  "version": "1.0.0",
+  "createdDate": "2026-09-22",
+  "updatedDate": "2026-09-22",
+  "interactive": true,
+  "supportsColor": false,
+  "highlights": [
+    "Nine hand-tuned agent animation states: breathing, searching, working, solving, listening, connecting, weaving, composing, shaping",
+    "Interactive click-to-cycle state transition with tactile hover and active scaling",
+    "Three distinct presentation variants: minimal (pure orb), card (framed telemetry card), and pill (compact status chip)",
+    "High-efficiency 2D HTML5 canvas rendering without WebGL or heavy shader pipeline overhead",
+    "Hydration-safe dynamic loader with automatic offscreen pause and reduced motion support"
+  ],
+  "anatomy": [
+    "<button> (Accessible interactive trigger with tactile scale and focus rings)",
+    "<span> (Soft ambient blur wash reflecting state and elevation)",
+    "<canvas> (2D particle simulation rendering mathematical orbital paths)",
+    "<span> (Optional monospace uppercase status chip displaying active state)"
+  ],
+  "physics": {
+    "engine": "2D Canvas Particle Kinematics",
+    "description": "Mathematical trigonometric orbits and particle velocity vectors running through a unified shared frame clock.",
+    "parameters": [
+      {
+        "label": "Orbital States",
+        "value": "9 unique verbs"
+      },
+      {
+        "label": "Rendering Tech",
+        "value": "2D Canvas (No WebGL)"
+      },
+      {
+        "label": "Base Presets",
+        "value": "64px (avatar) / 20px (inline)"
+      },
+      {
+        "label": "Device Pixel Ratio",
+        "value": "Capped at 2x"
+      },
+      {
+        "label": "Performance",
+        "value": "60 FPS with offscreen culling"
+      }
+    ]
+  },
+  "accessibility": {
+    "role": "button",
+    "aria": "Carries live aria-label communicating current state and click action. Automatically freezes animation when prefers-reduced-motion is active.",
+    "reducedMotion": "Renders a static representative frame with zero loop computation."
+  },
+  "guidelines": {
+    "recommended": [
+      "AI agent and copilot status indicators in navigation headers and sidebars",
+      "Loading and thinking states during generative tasks and deep reasoning queries",
+      "Interactive state selectors and futuristic feedback elements"
+    ],
+    "bestPractices": [
+      "Use variant='minimal' for inline avatars or nested button search triggers",
+      "Use variant='pill' for persistent status bars and header telemetry",
+      "Use variant='card' for interactive feature showcases and agent controls"
+    ]
+  },
+  "props": [
+    {
+      "name": "state",
+      "type": "OrbState",
+      "defaultValue": "undefined",
+      "description": "Controlled orb animation state (breathing, searching, working, solving, listening, connecting, weaving, composing, shaping)."
+    },
+    {
+      "name": "defaultState",
+      "type": "OrbState",
+      "defaultValue": "\"breathing\"",
+      "description": "Initial state when uncontrolled."
+    },
+    {
+      "name": "size",
+      "type": "64 | 20",
+      "defaultValue": "64",
+      "description": "Authoring tuning preset and canvas buffer resolution."
+    },
+    {
+      "name": "display",
+      "type": "number",
+      "defaultValue": "undefined",
+      "description": "CSS dimensions to render the orb at in pixels."
+    },
+    {
+      "name": "interactive",
+      "type": "boolean",
+      "defaultValue": "true",
+      "description": "Whether clicking cycles through orb states with tactile feedback."
+    },
+    {
+      "name": "paused",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "Freeze the animation on the current frame."
+    },
+    {
+      "name": "speed",
+      "type": "number",
+      "defaultValue": "1",
+      "description": "Animation speed multiplier."
+    },
+    {
+      "name": "color",
+      "type": "string",
+      "defaultValue": "undefined",
+      "description": "Optional ink tint color (hex or rgb). Defaults to white on dark substrates."
+    },
+    {
+      "name": "onClick",
+      "type": "(e, nextState) => void",
+      "defaultValue": "undefined",
+      "description": "Callback fired on click with event and next state."
+    }
+  ],
+  "files": [
+    {
+      "name": "orb.tsx",
+      "path": "registry/ui/orb.tsx",
+      "code": "\"use client\";\n\nimport React, { useCallback, useState } from \"react\";\nimport dynamic from \"next/dynamic\";\nimport type { OrbState } from \"thinking-orbs\";\nimport { cn } from \"@/lib/utils\";\n\nconst ThinkingOrb = dynamic(\n  () => import(\"thinking-orbs\").then((m) => m.ThinkingOrb),\n  { ssr: false },\n);\n\nexport const ORB_STATES: OrbState[] = [\n  \"breathing\",\n  \"searching\",\n  \"working\",\n  \"solving\",\n  \"listening\",\n  \"connecting\",\n  \"weaving\",\n  \"composing\",\n  \"shaping\",\n];\n\nexport interface OrbColorOption {\n  label: string;\n  value?: string;\n  hex: string;\n}\n\nexport const ORB_COLORS: OrbColorOption[] = [\n  { label: \"Default\", value: undefined, hex: \"#ffffff\" },\n  { label: \"Beige\", value: \"#e8d8c8\", hex: \"#e8d8c8\" },\n  { label: \"Red\", value: \"#ef4444\", hex: \"#ef4444\" },\n  { label: \"Amber\", value: \"#f59e0b\", hex: \"#f59e0b\" },\n  { label: \"Emerald\", value: \"#10b981\", hex: \"#10b981\" },\n  { label: \"Cyan\", value: \"#06b6d4\", hex: \"#06b6d4\" },\n  { label: \"Blue\", value: \"#3b82f6\", hex: \"#3b82f6\" },\n  { label: \"Violet\", value: \"#8b5cf6\", hex: \"#8b5cf6\" },\n  { label: \"Rose\", value: \"#ec4899\", hex: \"#ec4899\" },\n];\n\nexport interface OrbProps {\n  state?: OrbState;\n  defaultState?: OrbState;\n  size?: 64 | 20;\n  display?: number;\n  paused?: boolean;\n  speed?: number;\n  theme?: \"dark\" | \"light\" | \"auto\";\n  color?: string;\n  interactive?: boolean;\n  className?: string;\n  onClick?: (event: React.MouseEvent<HTMLElement>, nextState: OrbState) => void;\n  onStateChange?: (state: OrbState) => void;\n}\n\nexport function Orb({\n  state: controlledState,\n  defaultState = \"breathing\",\n  size = 64,\n  display,\n  paused = false,\n  speed = 1,\n  theme = \"dark\",\n  color,\n  interactive = true,\n  className,\n  onClick,\n  onStateChange,\n}: OrbProps) {\n  const isControlled = controlledState !== undefined;\n  const [internalState, setInternalState] = useState<OrbState>(defaultState);\n  const currentState = isControlled ? controlledState : internalState;\n\n  const px = display ?? size;\n\n  const handleClick = useCallback(\n    (e: React.MouseEvent<HTMLElement>) => {\n      const currentIndex = ORB_STATES.indexOf(currentState);\n      const nextIndex = (currentIndex + 1) % ORB_STATES.length;\n      const nextState = ORB_STATES[nextIndex];\n\n      if (!isControlled) {\n        setInternalState(nextState);\n      }\n      onStateChange?.(nextState);\n      onClick?.(e, nextState);\n    },\n    [currentState, isControlled, onClick, onStateChange],\n  );\n\n  const canvas = (\n    <ThinkingOrb\n      state={currentState}\n      size={size}\n      theme={theme}\n      speed={speed}\n      paused={paused}\n      color={color}\n      style={{ width: px, height: px, display: \"block\" }}\n    />\n  );\n\n  if (!interactive && !onClick) {\n    return (\n      <span\n        className={cn(\n          \"inline-flex shrink-0 items-center justify-center select-none\",\n          className,\n        )}\n        style={{ width: px, height: px }}\n        aria-hidden\n      >\n        {canvas}\n      </span>\n    );\n  }\n\n  return (\n    <button\n      type=\"button\"\n      onClick={handleClick}\n      aria-label={`Orb state is ${currentState}. Click to cycle state.`}\n      className={cn(\n        \"inline-flex shrink-0 items-center justify-center p-0 border-0 bg-transparent cursor-pointer select-none transition-transform duration-200 ease-out hover:scale-105 active:scale-95 outline-none rounded-full focus-visible:ring-1 focus-visible:ring-white/20\",\n        className,\n      )}\n      style={{ width: px, height: px }}\n    >\n      {canvas}\n    </button>\n  );\n}\n\nexport const ThinkingOrbComponent = Orb;\n"
+    }
+  ]
+}

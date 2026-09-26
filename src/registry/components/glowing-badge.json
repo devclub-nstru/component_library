@@ -1,0 +1,121 @@
+{
+  "slug": "glowing-badge",
+  "name": "Glowing Badge",
+  "description": "Compact status and tag badge with glowing borders and pulsing indicator.",
+  "summary": "A compact status indicator engineered for system health monitors, live telemetry badges, server status widgets, and release chips. Features vibrant chromatic color palettes (blue, emerald, amber, violet) with diffused outer glow box-shadows and an animated concentric ping pulse dot indicator that visually communicates active background tasks, live connectivity, or nominal status.",
+  "category": "feedback",
+  "tags": [
+    "badge",
+    "status",
+    "glow",
+    "indicator",
+    "pulse",
+    "live-data",
+    "telemetry"
+  ],
+  "dependencies": [
+    "clsx",
+    "tailwind-merge"
+  ],
+  "version": "1.0.0",
+  "createdDate": "2026-09-10",
+  "updatedDate": "2026-09-10",
+  "interactive": true,
+  "supportsColor": true,
+  "hidden": true,
+  "highlights": [
+    "Four curated semantic color schemes with matching diffuse radial glow drop shadows",
+    "Concentric dual-element ping pulse with 75% peak opacity and infinite loop",
+    "Compact uppercase monospace typography tailored for developer interfaces",
+    "Zero-JS CSS-only animation for exceptional performance in dense data tables",
+    "Flexible pill geometry supporting arbitrary child icons, metrics, or labels"
+  ],
+  "anatomy": [
+    "<div> (Badge Shell: inline-flex container with rounded pill border, background, and radial box shadow)",
+    "<span> (Pulse Ring: expanding ping ring with animate-ping keyframe effect)",
+    "<span> (Core Dot: solid static colored dot anchoring the pulse animation)",
+    "<span> (Label: monospace text container displaying status text)"
+  ],
+  "physics": {
+    "engine": "CSS Keyframe Ping & Diffuse Shadow",
+    "description": "Infinite 1-second CSS keyframe animation expanding a concentric ring with opacity decay.",
+    "parameters": [
+      {
+        "label": "Ping Duration",
+        "value": "1000ms cubic-bezier(0, 0, 0.2, 1) infinite"
+      },
+      {
+        "label": "Glow Radius",
+        "value": "12px outer blur shadow"
+      },
+      {
+        "label": "Dot Diameter",
+        "value": "6px (1.5rem / 6px)"
+      },
+      {
+        "label": "Border Weight",
+        "value": "1px hairline border"
+      },
+      {
+        "label": "Execution Impact",
+        "value": "0ms JavaScript runtime"
+      }
+    ]
+  },
+  "accessibility": {
+    "role": "status",
+    "aria": "Accepts aria-live='polite' or aria-label for live telemetry status announcements.",
+    "reducedMotion": "Pulse ping animation automatically pauses when prefers-reduced-motion is active.",
+    "keyboard": [
+      {
+        "key": "Non-interactive",
+        "description": "Focus passes through unless wrapped in an interactive anchor or button."
+      }
+    ]
+  },
+  "guidelines": {
+    "recommended": [
+      "Production vs Staging environment indicators in application headers",
+      "API gateway health and database cluster status chips",
+      "Live streaming, build pipeline status, and real-time telemetry markers"
+    ],
+    "bestPractices": [
+      "Use emerald for nominal/healthy, amber for degraded/warning, blue for active/syncing, violet for beta/preview",
+      "Keep status text concise (1 to 2 words, e.g., 'SYSTEM_ACTIVE', 'NOMINAL')",
+      "Pair with monospace numerals for real-time uptime or latency metrics"
+    ]
+  },
+  "props": [
+    {
+      "name": "variant",
+      "type": "\"blue\" | \"emerald\" | \"amber\" | \"violet\"",
+      "defaultValue": "\"blue\"",
+      "description": "Color palette controlling border tint, diffuse glow shadow, and pulse dot color: blue, emerald, amber, or violet."
+    },
+    {
+      "name": "pulse",
+      "type": "boolean",
+      "defaultValue": "true",
+      "description": "Enable or disable the animated concentric ping pulse dot indicator."
+    },
+    {
+      "name": "children",
+      "type": "React.ReactNode",
+      "defaultValue": "undefined",
+      "description": "Status label, count, or text rendered inside the badge pill."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "defaultValue": "undefined",
+      "description": "Additional CSS classes to customize pill borders, spacing, or typography."
+    }
+  ],
+  "files": [
+    {
+      "name": "glowing-badge.tsx",
+      "path": "registry/ui/glowing-badge.tsx",
+      "code": "import React from \"react\";\nimport { cn } from \"@/lib/utils\";\n\nexport interface GlowingBadgeProps extends React.HTMLAttributes<HTMLDivElement> {\n  variant?: \"blue\" | \"emerald\" | \"amber\" | \"violet\" | \"default\";\n  pulse?: boolean;\n}\n\nexport const GlowingBadge = ({\n  className,\n  children,\n  variant = \"default\",\n  pulse = true,\n  ...props\n}: GlowingBadgeProps) => {\n  const variantStyles = {\n    blue: \"border-blue-500/30 bg-blue-50 text-blue-700 shadow-[0_0_12px_rgba(59,130,246,0.15)] dark:bg-blue-950/40 dark:text-blue-400\",\n    emerald:\n      \"border-emerald-500/30 bg-emerald-50 text-emerald-700 shadow-[0_0_12px_rgba(16,185,129,0.15)] dark:bg-emerald-950/40 dark:text-emerald-400\",\n    amber:\n      \"border-amber-500/30 bg-amber-50 text-amber-700 shadow-[0_0_12px_rgba(245,158,11,0.15)] dark:bg-amber-950/40 dark:text-amber-400\",\n    violet:\n      \"border-violet-500/30 bg-violet-50 text-violet-700 shadow-[0_0_12px_rgba(139,92,246,0.15)] dark:bg-violet-950/40 dark:text-violet-400\",\n    default:\n      \"border-zinc-300 bg-zinc-100 text-zinc-800 dark:border-white/20 dark:bg-zinc-950 dark:text-zinc-300\",\n  };\n\n  const dotColors = {\n    blue: \"bg-blue-600 dark:bg-blue-400\",\n    emerald: \"bg-emerald-600 dark:bg-emerald-400\",\n    amber: \"bg-amber-600 dark:bg-amber-400\",\n    violet: \"bg-violet-600 dark:bg-violet-400\",\n    default: \"bg-current\",\n  };\n\n  return (\n    <div\n      className={cn(\n        \"inline-flex items-center gap-1.5 border px-2.5 py-0.5 text-[11px] font-mono uppercase tracking-wider transition-all duration-200\",\n        variantStyles[variant],\n        className,\n      )}\n      {...props}\n    >\n      {pulse && (\n        <span className=\"relative flex h-1.5 w-1.5\">\n          <span\n            className={cn(\n              \"absolute inline-flex h-full w-full animate-ping rounded-full opacity-75\",\n              dotColors[variant],\n            )}\n          />\n          <span\n            className={cn(\n              \"relative inline-flex h-1.5 w-1.5 rounded-full\",\n              dotColors[variant],\n            )}\n          />\n        </span>\n      )}\n      <span>{children}</span>\n    </div>\n  );\n};\n"
+    }
+  ]
+}

@@ -1,0 +1,217 @@
+{
+  "slug": "twitter-card",
+  "name": "Twitter(X) Card",
+  "description": "Interactive Twitter (X) profile card component featuring magnetic 3D tilt, spring physics, and real-time public profile data fetching.",
+  "summary": "An interactive Twitter (X) profile card component engineered with harmonic spring physics, 3D perspective mouse tracking, and real-time public profile synchronization via the FXTwitter API. Supports fluid popover reveal with isolated hit bridging to prevent cursor jitter, magnetic tilt angles, and static standalone rendering mode with full theme support.",
+  "category": "cards",
+  "tags": [
+    "twitter",
+    "x",
+    "card",
+    "3d",
+    "tilt",
+    "popover",
+    "spring",
+    "motion",
+    "profile"
+  ],
+  "dependencies": [
+    "clsx",
+    "tailwind-merge",
+    "motion"
+  ],
+  "version": "1.0.0",
+  "createdDate": "2026-09-22",
+  "updatedDate": "2026-09-22",
+  "interactive": true,
+  "supportsColor": false,
+  "highlights": [
+    "Real-time profile data fetching from FXTwitter API with automatic avatar upscaling and AbortController synchronization",
+    "Harmonic spring physics (stiffness 300, damping 24) with independent link and card 3D tilt axes",
+    "Zero-jitter popover positioning using decoupled geometric centering and motion matrix rotation",
+    "Seamless hover hit-bridge avoiding cursor gaps between trigger and floating profile popover",
+    "Dual rendering modes: interactive link trigger with popover or standalone static 3D tilt card",
+    "Comprehensive accessibility support with prefers-reduced-motion fallbacks and keyboard focus boundaries"
+  ],
+  "anatomy": [
+    "<div> (Inline root container with label prefix and perspective viewport)",
+    "<motion.div> (Magnetic link trigger with 3D spring tilt on cursor hover)",
+    "<div> (Isolated absolute centering container preventing transform collisions)",
+    "<motion.div> (Floating popover card with 3D tilt, blur bloom, and hit bridge)",
+    "<img> (Avatar and banner containers with fallback gradients and silhouettes)"
+  ],
+  "physics": {
+    "engine": "Motion Spring Dynamics (300 stiffness, 24 damping)",
+    "description": "Normalized cursor offset coordinates mapped to dual spring oscillators driving 3D rotation along the X and Y axes with zero layout repaints.",
+    "parameters": [
+      {
+        "label": "Spring Stiffness",
+        "value": "300"
+      },
+      {
+        "label": "Damping Coefficient",
+        "value": "24"
+      },
+      {
+        "label": "Mass Factor",
+        "value": "0.6"
+      },
+      {
+        "label": "Max Card Tilt",
+        "value": "5deg (configurable via cardTiltMaxRotate)"
+      },
+      {
+        "label": "Max Link Tilt",
+        "value": "5deg (configurable via linkTiltMaxRotate)"
+      },
+      {
+        "label": "Perspective Depth",
+        "value": "1000px"
+      }
+    ]
+  },
+  "accessibility": {
+    "role": "region",
+    "aria": "Descriptive aria-label attributes for external profile links and verification badges.",
+    "reducedMotion": "Bypasses 3D spring tilt and instant opacity transitions when prefers-reduced-motion is active.",
+    "keyboard": [
+      {
+        "key": "Tab",
+        "description": "Focus onto profile link anchor trigger."
+      },
+      {
+        "key": "Enter / Space",
+        "description": "Open external profile URL in a new browser tab."
+      }
+    ]
+  },
+  "guidelines": {
+    "recommended": [
+      "Creator credits, team author bios, and portfolio contact links",
+      "Community and open source repository contributor recognition cards",
+      "Sponsor showcase panels and founder profile previews"
+    ],
+    "bestPractices": [
+      "Provide a username prop with valid Twitter handle; API data will populate automatically",
+      "Supply fallback name and avatarUrl for fast initial rendering or offline environments",
+      "Use staticCard={true} when embedding directly within grid columns or dashboards"
+    ]
+  },
+  "props": [
+    {
+      "name": "username",
+      "type": "string",
+      "required": true,
+      "description": "The X (Twitter) username (handle) of the profile."
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "defaultValue": "'Twitter User'",
+      "description": "The fallback display name of the profile."
+    },
+    {
+      "name": "avatarUrl",
+      "type": "string",
+      "defaultValue": "undefined",
+      "description": "Optional custom URL or fallback for the avatar image."
+    },
+    {
+      "name": "bannerUrl",
+      "type": "string",
+      "defaultValue": "undefined",
+      "description": "Optional custom URL or fallback for the profile banner image."
+    },
+    {
+      "name": "staticCard",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "If true, renders the card statically without the link/popover interaction."
+    },
+    {
+      "name": "joinedDate",
+      "type": "string",
+      "defaultValue": "undefined",
+      "description": "Explicit joined date text override."
+    },
+    {
+      "name": "year",
+      "type": "number | string",
+      "defaultValue": "2026",
+      "description": "Fallback year for the joined date text."
+    },
+    {
+      "name": "text",
+      "type": "string",
+      "defaultValue": "'Follow me on'",
+      "description": "Prefix description text displayed before the link."
+    },
+    {
+      "name": "linkText",
+      "type": "string",
+      "defaultValue": "'X'",
+      "description": "Text content for the profile link trigger."
+    },
+    {
+      "name": "href",
+      "type": "string",
+      "defaultValue": "undefined",
+      "description": "Custom profile URL override (defaults to https://x.com/${username})."
+    },
+    {
+      "name": "enableLinkTilt",
+      "type": "boolean",
+      "defaultValue": "true",
+      "description": "Whether to enable mouse tracking 3D tilt effect on the link trigger."
+    },
+    {
+      "name": "linkTiltMaxRotate",
+      "type": "number",
+      "defaultValue": "5",
+      "description": "Maximum tilt angle in degrees for the link rotation."
+    },
+    {
+      "name": "enableCardTilt",
+      "type": "boolean",
+      "defaultValue": "true",
+      "description": "Whether to enable mouse tracking 3D tilt effect on the card."
+    },
+    {
+      "name": "cardTiltMaxRotate",
+      "type": "number",
+      "defaultValue": "5",
+      "description": "Maximum tilt angle in degrees for the card rotation."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "defaultValue": "undefined",
+      "description": "Additional CSS classes to style the outer container."
+    },
+    {
+      "name": "popoverClassName",
+      "type": "string",
+      "defaultValue": "undefined",
+      "description": "Additional CSS classes to style the popup card container."
+    },
+    {
+      "name": "linkClassName",
+      "type": "string",
+      "defaultValue": "undefined",
+      "description": "Additional CSS classes to style the anchor trigger element."
+    },
+    {
+      "name": "labelClassName",
+      "type": "string",
+      "defaultValue": "undefined",
+      "description": "Additional CSS classes to style the label description text."
+    }
+  ],
+  "files": [
+    {
+      "name": "twitter-card.tsx",
+      "path": "registry/ui/twitter-card.tsx",
+      "code": "\"use client\";\n\nimport React, { useCallback, useEffect, useRef, useState } from \"react\";\nimport {\n  motion,\n  useMotionValue,\n  useReducedMotion,\n  useSpring,\n  useTransform,\n} from \"motion/react\";\nimport { cn } from \"@/lib/utils\";\n\nexport interface TwitterCardProps {\n  username: string;\n  name?: string;\n  avatarUrl?: string;\n  bannerUrl?: string;\n  staticCard?: boolean;\n  joinedDate?: string;\n  year?: number | string;\n  text?: string;\n  linkText?: string;\n  href?: string;\n  enableLinkTilt?: boolean;\n  linkTiltMaxRotate?: number;\n  enableCardTilt?: boolean;\n  cardTiltMaxRotate?: number;\n  className?: string;\n  popoverClassName?: string;\n  linkClassName?: string;\n  labelClassName?: string;\n}\n\nconst XIcon = ({ className }: { className?: string }) => (\n  <svg viewBox=\"0 0 24 24\" className={cn(\"fill-current\", className)}>\n    <path d=\"M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z\" />\n  </svg>\n);\n\nconst VerifiedBadge = ({ className }: { className?: string }) => (\n  <svg\n    viewBox=\"0 0 22 22\"\n    className={cn(\"shrink-0 fill-current\", className)}\n    aria-label=\"Verified account\"\n  >\n    <path d=\"M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.27-1.9-.14-.635.13-1.22.436-1.69.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.136 2.136 5.408-5.407 1.293 1.292-6.701 6.709z\" />\n  </svg>\n);\n\nconst LocationIcon = ({ className }: { className?: string }) => (\n  <svg\n    viewBox=\"0 0 24 24\"\n    fill=\"none\"\n    stroke=\"currentColor\"\n    strokeWidth=\"2\"\n    strokeLinecap=\"round\"\n    strokeLinejoin=\"round\"\n    className={cn(\"shrink-0\", className)}\n  >\n    <path d=\"M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z\" />\n    <circle cx=\"12\" cy=\"10\" r=\"3\" />\n  </svg>\n);\n\nconst LinkIcon = ({ className }: { className?: string }) => (\n  <svg\n    viewBox=\"0 0 24 24\"\n    fill=\"none\"\n    stroke=\"currentColor\"\n    strokeWidth=\"2\"\n    strokeLinecap=\"round\"\n    strokeLinejoin=\"round\"\n    className={cn(\"shrink-0\", className)}\n  >\n    <path d=\"M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71\" />\n    <path d=\"M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71\" />\n  </svg>\n);\n\nconst CalendarIcon = ({ className }: { className?: string }) => (\n  <svg\n    viewBox=\"0 0 24 24\"\n    fill=\"none\"\n    stroke=\"currentColor\"\n    strokeWidth=\"2\"\n    strokeLinecap=\"round\"\n    strokeLinejoin=\"round\"\n    className={cn(\"shrink-0\", className)}\n  >\n    <rect width=\"18\" height=\"18\" x=\"3\" y=\"4\" rx=\"2\" ry=\"2\" />\n    <line x1=\"16\" x2=\"16\" y1=\"2\" y2=\"6\" />\n    <line x1=\"8\" x2=\"8\" y1=\"2\" y2=\"6\" />\n    <line x1=\"3\" x2=\"21\" y1=\"10\" y2=\"10\" />\n  </svg>\n);\n\nconst DefaultAvatar = ({ className }: { className?: string }) => (\n  <div\n    className={cn(\n      \"flex h-full w-full items-center justify-center bg-neutral-200 text-neutral-500 dark:bg-neutral-800 dark:text-neutral-400\",\n      className,\n    )}\n  >\n    <svg viewBox=\"0 0 24 24\" className=\"h-8 w-8 fill-current\">\n      <path d=\"M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z\" />\n    </svg>\n  </div>\n);\n\nexport const TwitterCard = ({\n  username,\n  name = \"Twitter User\",\n  avatarUrl,\n  bannerUrl,\n  staticCard = false,\n  joinedDate,\n  year = 2026,\n  text = \"Follow me on\",\n  linkText = \"X\",\n  href,\n  enableLinkTilt = true,\n  linkTiltMaxRotate = 5,\n  enableCardTilt = true,\n  cardTiltMaxRotate = 5,\n  className,\n  popoverClassName,\n  linkClassName,\n  labelClassName,\n}: TwitterCardProps) => {\n  const prefersReducedMotion = useReducedMotion();\n  const [isHovered, setIsHovered] = useState(false);\n  const [failedAvatar, setFailedAvatar] = useState<string | null>(null);\n  const [failedBanner, setFailedBanner] = useState<string | null>(null);\n\n  const profileUrl = href || `https://x.com/${username}`;\n  const linkRef = useRef<HTMLDivElement>(null);\n  const cardRef = useRef<HTMLDivElement>(null);\n\n  const [profile, setProfile] = useState({\n    name: name || \"Twitter User\",\n    avatarUrl: avatarUrl || \"\",\n    bannerUrl: bannerUrl || \"\",\n    bio: \"This user hasn't added a bio yet.\",\n    following: 0,\n    followers: 0,\n    joinedDate: joinedDate || `Joined ${year}`,\n    location: \"\",\n    website: null as { url: string; display_url: string } | null,\n    verified: false,\n  });\n\n  useEffect(() => {\n    if (!username) return;\n\n    let isMounted = true;\n    const controller = new AbortController();\n\n    fetch(`https://api.fxtwitter.com/${username}`, {\n      signal: controller.signal,\n    })\n      .then((res) => {\n        if (!res.ok) throw new Error(\"API request failed\");\n        return res.json();\n      })\n      .then((data) => {\n        if (!isMounted) return;\n\n        if (data.code === 200 && data.user) {\n          const user = data.user;\n          const formattedJoined = user.joined\n            ? `Joined ${new Date(user.joined).toLocaleDateString(\"en-US\", {\n                month: \"long\",\n                year: \"numeric\",\n              })}`\n            : joinedDate || `Joined ${year}`;\n\n          setProfile({\n            name: user.name || name || \"Twitter User\",\n            avatarUrl:\n              user.avatar_url?.replace(\"_normal\", \"_400x400\") ||\n              avatarUrl ||\n              \"\",\n            bannerUrl: user.banner_url || bannerUrl || \"\",\n            bio: user.description || \"This user hasn't added a bio yet.\",\n            following: user.following ?? 0,\n            followers: user.followers ?? 0,\n            joinedDate: formattedJoined,\n            location: user.location || \"\",\n            website: user.website || null,\n            verified: Boolean(user.verification?.verified),\n          });\n        }\n      })\n      .catch(() => {});\n\n    return () => {\n      isMounted = false;\n      controller.abort();\n    };\n  }, [username, name, avatarUrl, bannerUrl, joinedDate, year]);\n\n  const linkX = useMotionValue(0);\n  const linkY = useMotionValue(0);\n  const linkSpringX = useSpring(linkX, { stiffness: 320, damping: 24 });\n  const linkSpringY = useSpring(linkY, { stiffness: 320, damping: 24 });\n\n  const linkRotateX = useTransform(\n    linkSpringY,\n    [-1, 1],\n    [linkTiltMaxRotate, -linkTiltMaxRotate],\n  );\n  const linkRotateY = useTransform(\n    linkSpringX,\n    [-1, 1],\n    [-linkTiltMaxRotate, linkTiltMaxRotate],\n  );\n\n  const cardX = useMotionValue(0);\n  const cardY = useMotionValue(0);\n  const cardSpringX = useSpring(cardX, {\n    stiffness: 300,\n    damping: 24,\n    mass: 0.6,\n  });\n  const cardSpringY = useSpring(cardY, {\n    stiffness: 300,\n    damping: 24,\n    mass: 0.6,\n  });\n\n  const cardRotateX = useTransform(\n    cardSpringY,\n    [-1, 1],\n    [cardTiltMaxRotate, -cardTiltMaxRotate],\n  );\n  const cardRotateY = useTransform(\n    cardSpringX,\n    [-1, 1],\n    [-cardTiltMaxRotate, cardTiltMaxRotate],\n  );\n\n  const handleLinkMouseMove = useCallback(\n    (e: React.MouseEvent<HTMLDivElement>) => {\n      if (!enableLinkTilt || !linkRef.current || prefersReducedMotion) return;\n      const rect = linkRef.current.getBoundingClientRect();\n      const nx = (e.clientX - rect.left - rect.width / 2) / (rect.width / 2);\n      const ny = (e.clientY - rect.top - rect.height / 2) / (rect.height / 2);\n      linkX.set(Math.max(-1, Math.min(1, nx)));\n      linkY.set(Math.max(-1, Math.min(1, ny)));\n    },\n    [enableLinkTilt, linkX, linkY, prefersReducedMotion],\n  );\n\n  const handleCardMouseMove = useCallback(\n    (e: React.MouseEvent<HTMLDivElement>) => {\n      if (!enableCardTilt || !cardRef.current || prefersReducedMotion) return;\n      const rect = cardRef.current.getBoundingClientRect();\n      const nx = (e.clientX - rect.left - rect.width / 2) / (rect.width / 2);\n      const ny = (e.clientY - rect.top - rect.height / 2) / (rect.height / 2);\n      cardX.set(Math.max(-1, Math.min(1, nx)));\n      cardY.set(Math.max(-1, Math.min(1, ny)));\n    },\n    [enableCardTilt, cardX, cardY, prefersReducedMotion],\n  );\n\n  const handleContainerMouseLeave = useCallback(() => {\n    setIsHovered(false);\n    linkX.set(0);\n    linkY.set(0);\n    cardX.set(0);\n    cardY.set(0);\n  }, [linkX, linkY, cardX, cardY]);\n\n  const handleStaticMouseLeave = useCallback(() => {\n    cardX.set(0);\n    cardY.set(0);\n  }, [cardX, cardY]);\n\n  const formatCount = (count: number | string | undefined): string => {\n    if (count === undefined || count === null) return \"0\";\n    if (typeof count === \"string\") return count;\n    if (count >= 1000000) {\n      return `${(count / 1000000).toFixed(1).replace(/\\.0$/, \"\")}M`;\n    }\n    if (count >= 1000) {\n      return `${(count / 1000).toFixed(1).replace(/\\.0$/, \"\")}K`;\n    }\n    return count.toLocaleString(\"en-US\");\n  };\n\n  const ProfileLink = staticCard ? \"span\" : \"a\";\n\n  const cardContent = (\n    <div className=\"flex flex-col text-left\">\n      <div className=\"relative -mx-4 -mt-4 h-24 overflow-hidden rounded-t-2xl bg-neutral-100 dark:bg-neutral-900\">\n        {profile.bannerUrl && failedBanner !== profile.bannerUrl ? (\n          <img\n            src={profile.bannerUrl}\n            alt=\"Profile Banner\"\n            onError={() => setFailedBanner(profile.bannerUrl)}\n            className=\"h-full w-full object-cover\"\n          />\n        ) : (\n          <div className=\"h-full w-full bg-linear-to-r from-neutral-200 via-neutral-300 to-neutral-200 dark:from-neutral-900 dark:via-neutral-800 dark:to-neutral-900\" />\n        )}\n      </div>\n\n      <div className=\"relative mb-2 flex items-start justify-between\">\n        <div className=\"relative z-10 -mt-8 h-16 w-16 overflow-hidden rounded-full border-4 border-white bg-neutral-100 shadow-md dark:border-neutral-950 dark:bg-neutral-900\">\n          {profile.avatarUrl && failedAvatar !== profile.avatarUrl ? (\n            <img\n              src={profile.avatarUrl}\n              alt={`${profile.name}'s Avatar`}\n              onError={() => setFailedAvatar(profile.avatarUrl)}\n              className=\"h-full w-full object-cover\"\n            />\n          ) : (\n            <DefaultAvatar />\n          )}\n        </div>\n\n        <ProfileLink\n          {...(!staticCard\n            ? {\n                href: profileUrl,\n                target: \"_blank\",\n                rel: \"noopener noreferrer\",\n              }\n            : {})}\n          className=\"mt-2 text-neutral-400 transition-colors hover:text-neutral-900 dark:text-neutral-500 dark:hover:text-neutral-200\"\n          aria-label={`View @${username} on X`}\n        >\n          <XIcon className=\"h-5 w-5\" />\n        </ProfileLink>\n      </div>\n\n      <div className=\"flex flex-col\">\n        <div className=\"flex items-center gap-1.5\">\n          <span className=\"text-base font-semibold leading-snug tracking-tight text-neutral-900 dark:text-white\">\n            {profile.name}\n          </span>\n          {profile.verified && (\n            <VerifiedBadge className=\"h-4 w-4 text-sky-500 dark:text-sky-400\" />\n          )}\n        </div>\n        <ProfileLink\n          {...(!staticCard\n            ? {\n                href: profileUrl,\n                target: \"_blank\",\n                rel: \"noopener noreferrer\",\n              }\n            : {})}\n          className=\"text-sm text-neutral-500 transition-colors hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-200\"\n        >\n          @{username}\n        </ProfileLink>\n      </div>\n\n      <p className=\"mt-2.5 text-sm leading-relaxed text-neutral-800 dark:text-neutral-200\">\n        {profile.bio}\n      </p>\n\n      <div className=\"mt-2.5 flex flex-wrap gap-x-4 gap-y-1.5 text-xs text-neutral-500 dark:text-neutral-400\">\n        {profile.location && (\n          <div className=\"flex items-center gap-1.5\">\n            <LocationIcon className=\"h-3.5 w-3.5\" />\n            <span>{profile.location}</span>\n          </div>\n        )}\n\n        {profile.website && (\n          <div className=\"flex items-center gap-1.5\">\n            <LinkIcon className=\"h-3.5 w-3.5\" />\n            <ProfileLink\n              {...(!staticCard\n                ? {\n                    href: profile.website.url,\n                    target: \"_blank\",\n                    rel: \"noopener noreferrer\",\n                  }\n                : {})}\n              className=\"text-sky-600 hover:underline dark:text-sky-400\"\n            >\n              {profile.website.display_url}\n            </ProfileLink>\n          </div>\n        )}\n\n        {profile.joinedDate && (\n          <div className=\"flex items-center gap-1.5\">\n            <CalendarIcon className=\"h-3.5 w-3.5\" />\n            <span>{profile.joinedDate}</span>\n          </div>\n        )}\n      </div>\n\n      <div className=\"mt-3 flex items-center gap-4 text-sm\">\n        <div className=\"flex items-center gap-1\">\n          <span className=\"font-semibold text-neutral-900 dark:text-white\">\n            {formatCount(profile.following)}\n          </span>\n          <span className=\"text-neutral-500 dark:text-neutral-400\">\n            Following\n          </span>\n        </div>\n        <div className=\"flex items-center gap-1\">\n          <span className=\"font-semibold text-neutral-900 dark:text-white\">\n            {formatCount(profile.followers)}\n          </span>\n          <span className=\"text-neutral-500 dark:text-neutral-400\">\n            Followers\n          </span>\n        </div>\n      </div>\n    </div>\n  );\n\n  if (staticCard) {\n    return (\n      <div\n        className={cn(\n          \"relative inline-block w-80 perspective-[1000px]\",\n          className,\n        )}\n      >\n        <motion.div\n          ref={cardRef}\n          onMouseMove={handleCardMouseMove}\n          onMouseLeave={handleStaticMouseLeave}\n          style={\n            enableCardTilt && !prefersReducedMotion\n              ? {\n                  rotateX: cardRotateX,\n                  rotateY: cardRotateY,\n                  transformStyle: \"preserve-3d\",\n                }\n              : undefined\n          }\n          className={cn(\n            \"w-80 rounded-2xl border border-dashed border-neutral-300 bg-white/95 p-4 shadow-xl backdrop-blur-md transition-colors dark:border-neutral-800 dark:bg-neutral-950/80\",\n            popoverClassName,\n          )}\n        >\n          {cardContent}\n        </motion.div>\n      </div>\n    );\n  }\n\n  return (\n    <div className={cn(\"inline-flex items-center gap-1.5\", className)}>\n      <span\n        className={cn(\n          \"text-lg font-medium text-neutral-900/60 transition-colors dark:text-neutral-100/60\",\n          labelClassName,\n        )}\n      >\n        {text}\n      </span>\n\n      <div\n        className=\"relative inline-flex flex-col items-center perspective-[1000px]\"\n        onMouseEnter={() => setIsHovered(true)}\n        onMouseLeave={handleContainerMouseLeave}\n      >\n        <motion.div\n          ref={linkRef}\n          onMouseMove={handleLinkMouseMove}\n          style={\n            enableLinkTilt && !prefersReducedMotion\n              ? {\n                  rotateX: linkRotateX,\n                  rotateY: linkRotateY,\n                  transformStyle: \"preserve-3d\",\n                }\n              : undefined\n          }\n          className=\"cursor-pointer\"\n        >\n          <a\n            href={profileUrl}\n            target=\"_blank\"\n            rel=\"noopener noreferrer\"\n            className=\"inline-block\"\n          >\n            <span\n              className={cn(\n                \"text-lg font-medium text-neutral-900/60 underline underline-offset-4 transition-colors duration-200 hover:text-neutral-900 dark:text-neutral-100/60 dark:hover:text-neutral-100\",\n                linkClassName,\n              )}\n            >\n              {linkText}\n            </span>\n          </a>\n        </motion.div>\n\n        <div className=\"pointer-events-none absolute bottom-full left-1/2 z-50 mb-3.5 -translate-x-1/2\">\n          <motion.div\n            ref={cardRef}\n            onMouseMove={handleCardMouseMove}\n            initial=\"hidden\"\n            animate={isHovered ? \"visible\" : \"hidden\"}\n            variants={{\n              hidden: {\n                opacity: 0,\n                y: 8,\n                scale: 0.97,\n                filter: \"blur(2px)\",\n                pointerEvents: \"none\",\n                transition: {\n                  duration: 0.15,\n                  ease: \"easeIn\",\n                },\n              },\n              visible: {\n                opacity: 1,\n                y: 0,\n                scale: 1,\n                filter: \"blur(0px)\",\n                pointerEvents: \"auto\",\n                transition: {\n                  type: \"spring\",\n                  damping: 24,\n                  stiffness: 300,\n                },\n              },\n            }}\n            style={\n              enableCardTilt && !prefersReducedMotion\n                ? {\n                    rotateX: cardRotateX,\n                    rotateY: cardRotateY,\n                    transformStyle: \"preserve-3d\",\n                  }\n                : undefined\n            }\n            className={cn(\n              \"w-80 rounded-2xl border border-dashed border-neutral-300 bg-white/95 p-4 shadow-2xl backdrop-blur-xl transition-colors select-text dark:border-neutral-800 dark:bg-neutral-950/85\",\n              \"after:absolute after:top-full after:left-0 after:h-4 after:w-full after:content-['']\",\n              popoverClassName,\n            )}\n          >\n            {cardContent}\n          </motion.div>\n        </div>\n      </div>\n    </div>\n  );\n};\n\nexport default TwitterCard;\n"
+    }
+  ]
+}

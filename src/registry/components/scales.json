@@ -1,0 +1,98 @@
+{
+  "slug": "scales",
+  "name": "Scales & Borders",
+  "description": "Symmetric repeating linear gradient borders and geometric scale dividers.",
+  "summary": "Technical boundary elements and geometric scale dividers engineered to replace generic horizontal rules with architectural, sci-fi, and developer console aesthetics. Built entirely with pure CSS repeating linear gradients (315deg angle with 14px pitch and 1px sub-pixel line calibration) and theme-driven CSS custom properties (--pattern-line, --pattern), delivering high-density boundary aesthetics with zero JavaScript runtime overhead.",
+  "category": "scales",
+  "tags": [
+    "borders",
+    "scales",
+    "divider",
+    "linear-gradient",
+    "geometric",
+    "pattern"
+  ],
+  "dependencies": [
+    "clsx",
+    "tailwind-merge"
+  ],
+  "version": "1.0.0",
+  "createdDate": "2026-09-10",
+  "updatedDate": "2026-09-10",
+  "interactive": true,
+  "supportsColor": false,
+  "highlights": [
+    "Pure CSS repeating-linear-gradient shader rendering with zero JavaScript overhead",
+    "Zero cumulative layout shift (CLS 0.0) with GPU-accelerated compositing",
+    "Three specialized geometric layout variants: HorizontalScale, VerticalScale, and Lines",
+    "Themeable token variables (--pattern-line, --pattern) for seamless light/dark adaptation",
+    "Sub-pixel calibrated 14px repeating tile pitch with 1px hairline boundary strokes"
+  ],
+  "anatomy": [
+    "<HorizontalScale> (40px horizontal ribbon with diagonal 315° repeating hatch marks)",
+    "<VerticalScale> (40px vertical divider with diagonal 315° repeating hatch marks)",
+    "<Lines> (56px horizontal scanline guide with high-density repeating lines)"
+  ],
+  "physics": {
+    "engine": "CSS Repeating Gradient Shader",
+    "description": "Zero-runtime GPU rasterized gradient stripes calculated via repeating linear-gradient geometry without layout repaints.",
+    "parameters": [
+      {
+        "label": "Shader Angle",
+        "value": "315deg diagonal"
+      },
+      {
+        "label": "Tile Pitch",
+        "value": "14px × 14px repeat"
+      },
+      {
+        "label": "Hairline Weight",
+        "value": "1px stroke (var(--pattern-line))"
+      },
+      {
+        "label": "Horizontal Height",
+        "value": "40px (h-10)"
+      },
+      {
+        "label": "Lines Height",
+        "value": "56px (h-14)"
+      },
+      {
+        "label": "Runtime Overhead",
+        "value": "0ms / Pure CSS"
+      }
+    ]
+  },
+  "accessibility": {
+    "role": "separator",
+    "aria": "aria-hidden='true' when purely decorative, or role='separator' with aria-orientation when separating semantic document regions.",
+    "reducedMotion": "Static CSS background gradient pattern; completely unaffected by motion preferences."
+  },
+  "guidelines": {
+    "recommended": [
+      "Technical panel dividers in developer tools, IDE views, and engineering dashboards",
+      "Header and footer section breaks in technical documentation sites",
+      "Visual framing boundaries around code editors, telemetry viewers, and terminal displays"
+    ],
+    "bestPractices": [
+      "Define --pattern-line and --pattern in your theme root for consistent contrast across light and dark modes",
+      "Use VerticalScale inside flex containers with h-full for crisp column separation",
+      "Apply h-auto or custom height classes to adapt the scale to your layout grid"
+    ]
+  },
+  "props": [
+    {
+      "name": "className",
+      "type": "string",
+      "defaultValue": "undefined",
+      "description": "Additional CSS classes to customize dimensions, border colors, or pattern line token overrides."
+    }
+  ],
+  "files": [
+    {
+      "name": "scales.tsx",
+      "path": "registry/ui/scales.tsx",
+      "code": "import React from \"react\";\nimport { cn } from \"@/lib/utils\";\n\nexport const HorizontalScale = ({ className }: { className?: string }) => {\n  return (\n    <div\n      className={cn(\n        \"h-10 w-full bg-[repeating-linear-gradient(315deg,var(--pattern-line)_0px,var(--pattern-line)_1px,transparent_1px,transparent_10px)] bg-size-[14px_14px] border-y border-(--pattern)\",\n        className\n      )}\n    />\n  );\n};\n\nexport const VerticalScale = ({ className }: { className?: string }) => {\n  return (\n    <div\n      className={cn(\n        \"w-10 h-full bg-[repeating-linear-gradient(315deg,var(--pattern-line)_0px,var(--pattern-line)_1px,transparent_1px,transparent_10px)] bg-size-[14px_14px] border-x border-(--pattern)\",\n        className\n      )}\n    />\n  );\n};\n\nexport const Lines = ({ className }: { className?: string }) => {\n  return (\n    <div\n      className={cn(\n        \"h-14 w-full bg-[repeating-linear-gradient(to_bottom,var(--pattern-line)_0,var(--pattern-line)_1px,transparent_1px,transparent_0.5rem)] border-y border-(--pattern)\",\n        className\n      )}\n    />\n  );\n};\n"
+    }
+  ]
+}
