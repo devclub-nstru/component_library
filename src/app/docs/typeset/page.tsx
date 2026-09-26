@@ -51,71 +51,74 @@ export default function DocsTypesetPage() {
         </p>
       </div>
 
-      <section className="space-y-3">
+      <section className="space-y-4">
         <h2 className="text-base sm:text-lg font-sans font-semibold tracking-tight text-foreground">
           Font Family Pairings
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 pt-1">
-          <div className="border border-border bg-card p-4 space-y-1.5">
-            <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+          <div className="rounded-2xl border border-border/80 bg-card/40 p-5 space-y-2 transition-all hover:border-foreground/20 hover:bg-muted/20">
+            <span className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-sans font-medium tracking-wide uppercase bg-muted text-muted-foreground border border-border/60">
               Display Serif
             </span>
             <h3 className="text-xl font-serif text-foreground">Gambetta</h3>
-            <p className="text-[11px] text-muted-foreground font-light leading-relaxed">
-              Used for hero titles, quotes, and primary section headers. Conveys
-              craft, timelessness, and prestige.
+            <p className="text-xs text-muted-foreground font-light leading-relaxed">
+              Used for hero titles, quotes, and primary section headers. Conveys craft, timelessness, and prestige.
             </p>
           </div>
-          <div className="border border-border bg-card p-4 space-y-1.5">
-            <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+          <div className="rounded-2xl border border-border/80 bg-card/40 p-5 space-y-2 transition-all hover:border-foreground/20 hover:bg-muted/20">
+            <span className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-sans font-medium tracking-wide uppercase bg-muted text-muted-foreground border border-border/60">
               Interface Sans
             </span>
             <h3 className="text-xl font-sans font-medium text-foreground">
               Poppins
             </h3>
-            <p className="text-[11px] text-muted-foreground font-light leading-relaxed">
-              Used for interactive controls, paragraph bodies, and inputs.
-              Clean, geometric, and effortless to scan.
+            <p className="text-xs text-muted-foreground font-light leading-relaxed">
+              Used for interactive controls, paragraph bodies, and inputs. Clean, geometric, and effortless to scan.
             </p>
           </div>
-          <div className="border border-border bg-card p-4 space-y-1.5">
-            <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+          <div className="rounded-2xl border border-border/80 bg-card/40 p-5 space-y-2 transition-all hover:border-foreground/20 hover:bg-muted/20">
+            <span className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-sans font-medium tracking-wide uppercase bg-muted text-muted-foreground border border-border/60">
               Technical Mono
             </span>
             <h3 className="text-xl font-mono text-foreground">JetBrains Mono</h3>
-            <p className="text-[11px] text-muted-foreground font-light leading-relaxed">
-              Used for code blocks, badges, category indicators, API routes, and
-              uppercase micro-labels.
+            <p className="text-xs text-muted-foreground font-light leading-relaxed">
+              Used strictly for code blocks, terminal snippets, API payload fields, and technical parameters.
             </p>
           </div>
         </div>
       </section>
 
-      <section className="space-y-3">
+      <section className="space-y-4">
         <h2 className="text-base sm:text-lg font-sans font-semibold tracking-tight text-foreground">
           Typographic Hierarchy & Scale
         </h2>
-        <div className="overflow-x-auto border border-border">
-          <table className="w-full text-left text-[11px]">
-            <thead className="bg-muted border-b border-border font-mono text-muted-foreground">
+        <div className="overflow-x-auto rounded-2xl border border-border/80 bg-card/40 shadow-sm">
+          <table className="w-full text-left font-sans text-xs">
+            <thead className="bg-muted/60 border-b border-border/80 text-muted-foreground">
               <tr>
-                <th className="p-2.5">Role</th>
-                <th className="p-2.5">Font</th>
-                <th className="p-2.5">Size & Weight</th>
-                <th className="p-2.5">Preview</th>
+                <th className="p-3 font-medium">Role</th>
+                <th className="p-3 font-medium">Font Family</th>
+                <th className="p-3 font-medium">Size & Weight</th>
+                <th className="p-3 font-medium">Sample Preview</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-border text-foreground">
+            <tbody className="divide-y divide-border/60 text-foreground">
               {TYPE_SCALES.map((item) => (
-                <tr key={item.role} className="hover:bg-muted/40">
-                  <td className="p-2.5 font-mono font-medium text-foreground">
-                    {item.role}
+                <tr key={item.role} className="hover:bg-muted/30 transition-colors">
+                  <td className="p-3">
+                    <code className="font-mono text-[11px] px-2 py-0.5 rounded-full bg-muted border border-border/80 text-foreground font-medium">
+                      {item.role}
+                    </code>
                   </td>
-                  <td className="p-2.5 font-mono text-muted-foreground">{item.font}</td>
-                  <td className="p-2.5 font-mono text-muted-foreground">
+                  <td className="p-3 text-muted-foreground font-sans">
+                    {item.font}
+                  </td>
+                  <td className="p-3 font-mono text-[11px] text-muted-foreground">
                     {item.size} ({item.weight})
                   </td>
-                  <td className="p-2.5 text-foreground">{item.sample}</td>
+                  <td className="p-3 text-foreground font-light">
+                    {item.sample}
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -127,14 +130,15 @@ export default function DocsTypesetPage() {
         <h2 className="text-base sm:text-lg font-sans font-semibold tracking-tight text-foreground">
           Font Setup in Next.js
         </h2>
-        <p className="text-xs text-muted-foreground font-light leading-relaxed">
+        <p className="text-xs sm:text-[13px] text-muted-foreground font-light leading-relaxed">
           Configure fonts via Next.js Google Fonts and local font loader in{" "}
           <code className="text-foreground">src/app/layout.tsx</code>:
         </p>
-        <CodeBlock
-          filename="src/app/layout.tsx"
-          language="tsx"
-          code={`import { Poppins } from "next/font/google";
+        <div className="rounded-2xl border border-border/80 bg-card/40 p-4 sm:p-5">
+          <CodeBlock
+            filename="src/app/layout.tsx"
+            language="tsx"
+            code={`import { Poppins } from "next/font/google";
 import localFont from "next/font/local";
 
 const poppins = Poppins({
@@ -149,7 +153,8 @@ const gambetta = localFont({
   variable: "--font-gambetta",
   display: "swap",
 });`}
-        />
+          />
+        </div>
       </section>
     </article>
   );

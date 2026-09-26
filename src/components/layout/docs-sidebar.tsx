@@ -10,6 +10,7 @@ import {
   ChevronRightIcon,
   ExternalLinkIcon,
 } from "@radix-ui/react-icons";
+import { cn } from "@/lib/utils";
 
 export function DocsSidebar() {
   const pathname = usePathname();
@@ -21,7 +22,7 @@ export function DocsSidebar() {
         <button
           type="button"
           onClick={() => setIsOpen(!isOpen)}
-          className="flex items-center gap-2 text-xs font-mono text-muted-foreground hover:text-foreground cursor-pointer"
+          className="flex items-center gap-2 text-xs font-sans text-muted-foreground hover:text-foreground cursor-pointer"
         >
           {isOpen ? (
             <Cross2Icon className="h-4 w-4" />
@@ -30,10 +31,10 @@ export function DocsSidebar() {
           )}
           <span>Documentation Menu</span>
         </button>
-        <span className="text-[11px] font-mono text-muted-foreground">
+        <span className="text-xs font-sans text-muted-foreground capitalize">
           {pathname === "/docs"
             ? "Introduction"
-            : pathname.replace("/docs/", "").toUpperCase()}
+            : pathname.replace("/docs/", "")}
         </span>
       </div>
 
@@ -51,8 +52,8 @@ export function DocsSidebar() {
       >
         <div className="space-y-8">
           {DOCS_NAV.map((section) => (
-            <div key={section.title} className="space-y-2.5">
-              <h4 className="text-[11px] font-mono uppercase tracking-widest text-muted-foreground font-semibold">
+            <div key={section.title} className="space-y-2">
+              <h4 className="text-[11px] font-sans font-medium uppercase tracking-wider text-muted-foreground/80 px-2 select-none">
                 {section.title}
               </h4>
               <ul className="space-y-1">
@@ -65,24 +66,26 @@ export function DocsSidebar() {
                       <Link
                         href={item.href}
                         onClick={() => setIsOpen(false)}
-                        className={`group flex items-center justify-between px-3 py-2 text-xs font-mono transition-all border ${
+                        className={cn(
+                          "group flex items-center justify-between px-3 py-2 rounded-xl text-xs font-sans transition-all",
                           isActive
-                            ? "border-foreground/20 bg-foreground/10 text-foreground font-medium"
-                            : "border-transparent text-muted-foreground hover:border-border hover:bg-foreground/5 hover:text-foreground"
-                        }`}
+                            ? "bg-foreground/5 dark:bg-white/10 text-foreground font-medium shadow-xs"
+                            : "text-muted-foreground hover:bg-muted/60 hover:text-foreground",
+                        )}
                       >
                         <div className="flex items-center gap-2">
                           <ChevronRightIcon
-                            className={`h-3 w-3 transition-transform ${
+                            className={cn(
+                              "h-3.5 w-3.5 transition-transform duration-150",
                               isActive
                                 ? "text-foreground translate-x-0.5"
-                                : "text-muted-foreground group-hover:text-foreground"
-                            }`}
+                                : "text-muted-foreground/60 group-hover:text-foreground",
+                            )}
                           />
                           <span>{item.title}</span>
                         </div>
                         {item.badge && (
-                          <span className="text-[9px] font-mono px-1.5 py-0.5 border border-border bg-foreground/5 text-muted-foreground">
+                          <span className="text-[10px] font-sans font-medium px-2 py-0.5 rounded-full bg-foreground/5 text-muted-foreground border border-border/50">
                             {item.badge}
                           </span>
                         )}
@@ -95,15 +98,15 @@ export function DocsSidebar() {
           ))}
 
           <div className="pt-4 border-t border-border space-y-2">
-            <h4 className="text-[11px] font-mono uppercase tracking-widest text-muted-foreground font-semibold">
-              Showcase
+            <h4 className="text-[11px] font-sans font-medium uppercase tracking-wider text-muted-foreground/80 px-2 select-none">
+              Library
             </h4>
             <Link
               href="/components"
-              className="flex items-center justify-between px-3 py-2 text-xs font-mono border border-transparent text-muted-foreground hover:border-border hover:bg-foreground/5 hover:text-foreground transition-all"
+              className="flex items-center justify-between px-3 py-2 rounded-xl text-xs font-sans text-muted-foreground hover:bg-muted/60 hover:text-foreground transition-all"
             >
-              <span>Explore Components</span>
-              <ExternalLinkIcon className="h-3.5 w-3.5 text-muted-foreground" />
+              <span>Browse Components</span>
+              <ExternalLinkIcon className="h-3.5 w-3.5 text-muted-foreground/60" />
             </Link>
           </div>
         </div>

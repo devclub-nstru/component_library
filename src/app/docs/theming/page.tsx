@@ -71,28 +71,30 @@ export default function DocsThemingPage() {
         <h2 className="text-base sm:text-lg font-sans font-semibold tracking-tight text-foreground">
           CSS Design Tokens
         </h2>
-        <p className="text-xs text-muted-foreground font-light leading-relaxed">
+        <p className="text-xs sm:text-[13px] text-muted-foreground font-light leading-relaxed">
           All components reference semantic CSS variables declared on the root element and dark selector. Below is the reference table of core palette tokens:
         </p>
-        <div className="overflow-x-auto border border-border">
-          <table className="w-full text-left font-mono text-[11px]">
-            <thead className="bg-muted border-b border-border text-muted-foreground">
+        <div className="overflow-x-auto rounded-2xl border border-border/80 bg-card/40 shadow-sm">
+          <table className="w-full text-left font-sans text-xs">
+            <thead className="bg-muted/60 border-b border-border/80 text-muted-foreground">
               <tr>
-                <th className="p-2.5">Variable</th>
-                <th className="p-2.5">Values (Light / Dark)</th>
-                <th className="p-2.5">Usage</th>
+                <th className="p-3 font-medium">Variable</th>
+                <th className="p-3 font-medium">Values (Light / Dark)</th>
+                <th className="p-3 font-medium">Usage</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-border text-foreground">
+            <tbody className="divide-y divide-border/60 text-foreground">
               {THEME_TOKENS.map((item) => (
-                <tr key={item.token} className="hover:bg-muted/40">
-                  <td className="p-2.5 font-semibold text-foreground">
-                    {item.token}
+                <tr key={item.token} className="hover:bg-muted/30 transition-colors">
+                  <td className="p-3">
+                    <code className="font-mono text-[11px] px-2 py-0.5 rounded-full bg-muted border border-border/80 text-foreground">
+                      {item.token}
+                    </code>
                   </td>
-                  <td className="p-2.5 text-muted-foreground">
+                  <td className="p-3 font-mono text-[11px] text-muted-foreground">
                     {item.value}
                   </td>
-                  <td className="p-2.5 font-sans font-light text-muted-foreground">
+                  <td className="p-3 text-xs text-muted-foreground font-light">
                     {item.usage}
                   </td>
                 </tr>
@@ -106,13 +108,14 @@ export default function DocsThemingPage() {
         <h2 className="text-base sm:text-lg font-sans font-semibold tracking-tight text-foreground">
           Tailwind CSS v4 Integration
         </h2>
-        <p className="text-xs text-muted-foreground font-light leading-relaxed">
+        <p className="text-xs sm:text-[13px] text-muted-foreground font-light leading-relaxed">
           Tailwind CSS v4 introduces native theme tokens and custom variants:
         </p>
-        <CodeBlock
-          filename="src/app/globals.css"
-          language="css"
-          code={`@import "tailwindcss";
+        <div className="rounded-2xl border border-border/80 bg-card/40 p-4 sm:p-5">
+          <CodeBlock
+            filename="src/app/globals.css"
+            language="css"
+            code={`@import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -131,26 +134,29 @@ export default function DocsThemingPage() {
   --muted: #18181b;
   --muted-foreground: #a1a1aa;
 }`}
-        />
+          />
+        </div>
       </section>
 
-      <section className="space-y-3">
-        <h2 className="text-base sm:text-lg font-sans font-semibold tracking-tight text-foreground">
-          Smooth View Transitions
-        </h2>
-        <p className="text-xs text-muted-foreground font-light leading-relaxed">
-          AnimatedThemeToggler uses the native View Transitions API with polygon clipping paths to deliver ultra-smooth, 60fps circular and geometric ripples across the entire document canvas.
-        </p>
-      </section>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="rounded-2xl border border-border/80 bg-card/40 p-5 space-y-2">
+          <h2 className="text-base font-sans font-semibold tracking-tight text-foreground">
+            Smooth View Transitions
+          </h2>
+          <p className="text-xs text-muted-foreground font-light leading-relaxed">
+            AnimatedThemeToggler uses the native View Transitions API with polygon clipping paths to deliver ultra-smooth, 60fps circular and geometric ripples across the canvas.
+          </p>
+        </div>
 
-      <section className="space-y-3">
-        <h2 className="text-base sm:text-lg font-sans font-semibold tracking-tight text-foreground">
-          Accessibility & Contrast
-        </h2>
-        <p className="text-xs text-muted-foreground font-light leading-relaxed">
-          Foreground and background tokens meet WCAG AAA standards with a contrast ratio exceeding 18:1 in both light and dark modes. Muted text meets WCAG AA standards with a ratio exceeding 5.2:1.
-        </p>
-      </section>
+        <div className="rounded-2xl border border-border/80 bg-card/40 p-5 space-y-2">
+          <h2 className="text-base font-sans font-semibold tracking-tight text-foreground">
+            Accessibility & Contrast
+          </h2>
+          <p className="text-xs text-muted-foreground font-light leading-relaxed">
+            Foreground and background tokens meet WCAG AAA standards with a contrast ratio exceeding 18:1 in both light and dark modes. Muted text meets WCAG AA standards.
+          </p>
+        </div>
+      </div>
     </article>
   );
 }

@@ -50,7 +50,7 @@ export const Navbar = ({ showThemeToggle }: NavbarProps = {}) => {
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-150",
+                    "px-3.5 py-1.5 rounded-full text-xs font-sans font-medium transition-all duration-150",
                     isActive
                       ? "text-foreground bg-foreground/10 font-semibold"
                       : "text-muted-foreground hover:text-foreground hover:bg-foreground/5",
@@ -67,7 +67,7 @@ export const Navbar = ({ showThemeToggle }: NavbarProps = {}) => {
           <GitHubButton />
 
           {shouldShowThemeToggle && (
-            <AnimatedThemeToggler className="relative flex items-center justify-center w-9 h-9 rounded-xl border border-border bg-foreground/5 hover:bg-foreground/10 text-foreground transition-all duration-200 cursor-pointer shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20 shrink-0" />
+            <AnimatedThemeToggler className="relative flex items-center justify-center w-9 h-9 rounded-full border border-border bg-foreground/5 hover:bg-foreground/10 text-foreground transition-all duration-200 cursor-pointer shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20 shrink-0" />
           )}
 
           <CandyButton
@@ -85,7 +85,7 @@ export const Navbar = ({ showThemeToggle }: NavbarProps = {}) => {
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
-            className="md:hidden w-9 h-9 rounded-xl border border-border bg-foreground/5 hover:bg-foreground/10 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors cursor-pointer shrink-0"
+            className="md:hidden w-9 h-9 rounded-full border border-border bg-foreground/5 hover:bg-foreground/10 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors cursor-pointer shrink-0"
           >
             {mobileMenuOpen ? (
               <Cross2Icon className="h-4 w-4" />

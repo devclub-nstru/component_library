@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { cn } from "../lib/utils";
 
 const LANDMARK_POINTS = [
@@ -74,10 +75,10 @@ export default function HeroSection() {
 
       <div className="flex-1" />
 
-      <div className="relative z-30 w-full max-w-4xl px-6 sm:px-10 md:px-14 pb-12">
-        <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl lg:text-[46px] font-normal leading-[1.18] text-foreground dark:text-white/95 tracking-tight transition-colors duration-200">
-          Recent news about agricultural innovations driven by material advances
-          and robotics
+      <div className="relative z-30 w-full max-w-4xl px-6 sm:px-10 md:px-14 pb-14 space-y-5">
+        <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl  font-normal leading-[1.14] text-foreground dark:text-white/95 tracking-tight transition-colors duration-200">
+          Tactile animated interface components crafted with physical
+          elasticity, shaders, and micro-interactions.
         </h1>
       </div>
 

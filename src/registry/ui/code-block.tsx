@@ -161,14 +161,14 @@ export const CodeBlock = ({
   return (
     <div className={cn("relative w-full max-w-2xl select-text", className)}>
       {filename && (
-        <div className="mb-2 text-xs font-mono text-muted-foreground">
+        <div className="mb-2.5 text-xs font-sans font-medium text-muted-foreground">
           {filename}
         </div>
       )}
       <button
         type="button"
         onClick={handleCopy}
-        className="absolute top-0 right-0 z-10 flex h-8 w-8 items-center justify-center rounded-lg border border-border dark:border-white/10 bg-muted/40 dark:bg-white/4 text-muted-foreground dark:text-zinc-400 backdrop-blur-sm transition-colors hover:border-foreground/20 dark:hover:border-white/20 hover:bg-muted dark:hover:bg-white/8 hover:text-foreground dark:hover:text-white cursor-pointer"
+        className="absolute top-0 right-0 z-10 flex h-8 w-8 items-center justify-center rounded-full border border-border dark:border-white/10 bg-muted/40 dark:bg-white/4 text-muted-foreground dark:text-zinc-400 backdrop-blur-sm transition-colors hover:border-foreground/20 dark:hover:border-white/20 hover:bg-muted dark:hover:bg-white/8 hover:text-foreground dark:hover:text-white cursor-pointer"
         title={copied ? "Copied" : "Copy code"}
       >
         {copied ? (
