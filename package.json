@@ -1,7 +1,15 @@
 {
-  "name": "devclub-co",
-  "version": "0.1.0",
-  "private": true,
+  "name": "@devclubnst/ui",
+  "version": "1.0.0",
+  "description": "DevClub UI animated component primitives",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "registry"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",
