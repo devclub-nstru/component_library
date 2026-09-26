@@ -9,49 +9,49 @@ export const metadata = {
 export default function DocsRegistryPage() {
   return (
     <article className="space-y-10">
-      <div className="space-y-2 border-b border-white/10 pb-6">
-        <h1 className="text-2xl sm:text-4xl font-serif font-normal tracking-tight text-white">
+      <div className="space-y-2 border-b border-border pb-6">
+        <h1 className="text-2xl sm:text-4xl font-serif font-normal tracking-tight text-foreground">
           Registry Specification
         </h1>
-        <p className="text-xs sm:text-[13px] text-zinc-400 font-light leading-relaxed">
+        <p className="text-xs sm:text-[13px] text-muted-foreground font-light leading-relaxed">
           DevClub UI distributes components via an open JSON registry specification that can be consumed by CLI tools, automated agents, or custom build pipelines.
         </p>
       </div>
 
       <section className="space-y-3">
-        <h2 className="text-base sm:text-lg font-sans font-semibold tracking-tight text-white">
+        <h2 className="text-base sm:text-lg font-sans font-semibold tracking-tight text-foreground">
           REST Endpoints
         </h2>
-        <p className="text-xs text-zinc-400 font-light leading-relaxed">
+        <p className="text-xs text-muted-foreground font-light leading-relaxed">
           The registry exposes clean REST endpoints to search, filter, and fetch component source code programmatically:
         </p>
         <div className="space-y-2.5 font-mono">
-          <div className="p-3 border border-white/10 bg-black/60 space-y-1">
+          <div className="p-3 border border-border bg-card space-y-1">
             <div className="flex items-center justify-between text-xs">
-              <span className="text-emerald-400 font-bold">GET /api/components</span>
-              <span className="text-zinc-500 text-[10px]">List Catalog</span>
+              <span className="text-emerald-500 dark:text-emerald-400 font-bold">GET /api/components</span>
+              <span className="text-muted-foreground text-[10px]">List Catalog</span>
             </div>
-            <p className="text-[11px] text-zinc-400 font-sans font-light">
-              Returns all available registry components. Supports query parameters <code className="text-zinc-200">?category=</code>, <code className="text-zinc-200">?q=</code>, and <code className="text-zinc-200">?tag=</code>.
+            <p className="text-[11px] text-muted-foreground font-sans font-light">
+              Returns all available registry components. Supports query parameters <code className="text-foreground">?category=</code>, <code className="text-foreground">?q=</code>, and <code className="text-foreground">?tag=</code>.
             </p>
           </div>
 
-          <div className="p-3 border border-white/10 bg-black/60 space-y-1">
+          <div className="p-3 border border-border bg-card space-y-1">
             <div className="flex items-center justify-between text-xs">
-              <span className="text-emerald-400 font-bold">GET /api/components/[slug]</span>
-              <span className="text-zinc-500 text-[10px]">Fetch Component Detail</span>
+              <span className="text-emerald-500 dark:text-emerald-400 font-bold">GET /api/components/[slug]</span>
+              <span className="text-muted-foreground text-[10px]">Fetch Component Detail</span>
             </div>
-            <p className="text-[11px] text-zinc-400 font-sans font-light">
+            <p className="text-[11px] text-muted-foreground font-sans font-light">
               Returns the complete JSON schema for a single component, including raw TSX source code, dependencies, and metadata.
             </p>
           </div>
 
-          <div className="p-3 border border-white/10 bg-black/60 space-y-1">
+          <div className="p-3 border border-border bg-card space-y-1">
             <div className="flex items-center justify-between text-xs">
-              <span className="text-emerald-400 font-bold">GET /api/health</span>
-              <span className="text-zinc-500 text-[10px]">Health & Diagnostics</span>
+              <span className="text-emerald-500 dark:text-emerald-400 font-bold">GET /api/health</span>
+              <span className="text-muted-foreground text-[10px]">Health & Diagnostics</span>
             </div>
-            <p className="text-[11px] text-zinc-400 font-sans font-light">
+            <p className="text-[11px] text-muted-foreground font-sans font-light">
               Diagnostic status check returning active component counts and API uptime.
             </p>
           </div>
@@ -59,10 +59,10 @@ export default function DocsRegistryPage() {
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-base sm:text-lg font-sans font-semibold tracking-tight text-white">
+        <h2 className="text-base sm:text-lg font-sans font-semibold tracking-tight text-foreground">
           Registry Item Schema
         </h2>
-        <p className="text-xs text-zinc-400 font-light leading-relaxed">
+        <p className="text-xs text-muted-foreground font-light leading-relaxed">
           Each component definition in the registry adheres to the following TypeScript interface:
         </p>
         <CodeBlock
@@ -84,11 +84,11 @@ export default function DocsRegistryPage() {
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-base sm:text-lg font-sans font-semibold tracking-tight text-white">
+        <h2 className="text-base sm:text-lg font-sans font-semibold tracking-tight text-foreground">
           Sample Response Payload
         </h2>
-        <p className="text-xs text-zinc-400 font-light leading-relaxed">
-          Executing a GET request against <code className="text-white">/api/components/noise</code> produces the following response:
+        <p className="text-xs text-muted-foreground font-light leading-relaxed">
+          Executing a GET request against <code className="text-foreground">/api/components/noise</code> produces the following response:
         </p>
         <CodeBlock
           filename="Response (application/json)"

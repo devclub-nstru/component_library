@@ -23,17 +23,17 @@ export function DocsPagination() {
       : null;
 
   return (
-    <div className="pt-10 mt-16 border-t border-white/10 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 font-mono">
+    <div className="pt-10 mt-16 border-t border-border flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 font-mono">
       {prevItem ? (
         <Link
           href={prevItem.href}
-          className="group flex flex-col items-start gap-1 p-4 border border-white/10 hover:border-white/30 bg-black/40 hover:bg-white/5 transition-all text-left flex-1"
+          className="group flex flex-col items-start gap-1 p-4 border border-border hover:border-foreground/30 bg-card hover:bg-muted transition-all text-left flex-1"
         >
-          <div className="flex items-center gap-1.5 text-[11px] text-zinc-500 group-hover:text-zinc-300">
+          <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground group-hover:text-foreground">
             <ArrowLeftIcon className="h-3 w-3 transition-transform group-hover:-translate-x-0.5" />
             <span>Previous</span>
           </div>
-          <span className="text-sm font-sans font-medium text-zinc-200 group-hover:text-white">
+          <span className="text-sm font-sans font-medium text-foreground">
             {prevItem.title}
           </span>
         </Link>
@@ -44,13 +44,13 @@ export function DocsPagination() {
       {nextItem && (
         <Link
           href={nextItem.href}
-          className="group flex flex-col items-end gap-1 p-4 border border-white/10 hover:border-white/30 bg-black/40 hover:bg-white/5 transition-all text-right flex-1"
+          className="group flex flex-col items-end gap-1 p-4 border border-border hover:border-foreground/30 bg-card hover:bg-muted transition-all text-right flex-1"
         >
-          <div className="flex items-center gap-1.5 text-[11px] text-zinc-500 group-hover:text-zinc-300">
+          <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground group-hover:text-foreground">
             <span>Next</span>
             <ArrowRightIcon className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
           </div>
-          <span className="text-sm font-sans font-medium text-zinc-200 group-hover:text-white">
+          <span className="text-sm font-sans font-medium text-foreground">
             {nextItem.title}
           </span>
         </Link>

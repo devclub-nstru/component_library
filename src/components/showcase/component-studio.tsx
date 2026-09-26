@@ -59,6 +59,7 @@ import { Toaster, toast } from "@/registry/ui/toast";
 import { TaskList } from "@/registry/ui/task-list";
 import { FileTree, type TreeNode } from "@/registry/ui/file-tree";
 import { GitHubButton } from "@/components/ui/github-button";
+import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
 import { SearchComposer } from "@/registry/ui/search-input";
 import { MorphSearch } from "@/registry/ui/morph-search";
 import { Orb, ORB_STATES, ORB_COLORS } from "@/registry/ui/orb";
@@ -2082,18 +2083,6 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               className="flex items-center gap-2 group text-white hover:opacity-85 transition-opacity"
               title="DevClub Home"
             >
-              <div className="w-6 h-6 rounded-md bg-orange-500 flex items-center justify-center p-1 text-black shadow-sm">
-                <svg
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  className="w-full h-full stroke-black"
-                  strokeWidth="1.6"
-                >
-                  <rect x="1.5" y="1.5" width="13" height="13" rx="1" />
-                  <line x1="1.5" y1="1.5" x2="14.5" y2="14.5" />
-                  <line x1="14.5" y1="1.5" x2="1.5" y2="14.5" />
-                </svg>
-              </div>
               <span className="font-sans font-semibold text-sm tracking-tight text-white">
                 devclub
               </span>
@@ -2278,6 +2267,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               </div>
 
               <GitHubButton className="h-8 px-2.5 rounded-lg text-xs" />
+              <AnimatedThemeToggler className="h-8 w-8 rounded-lg border border-border bg-foreground/5 hover:bg-foreground/10 text-foreground transition-colors cursor-pointer flex items-center justify-center shrink-0 [&_svg]:size-3.5 shadow-sm" />
 
               <motion.button
                 whileHover={{ scale: 1.03 }}

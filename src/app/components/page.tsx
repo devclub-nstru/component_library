@@ -52,7 +52,7 @@ function CounterPreview() {
         duration={0.5}
         grouping="indian"
         prefix={<span className="mr-0.5">₹</span>}
-        className="font-mono text-3xl font-bold tracking-tight text-white **:data-[slot=animated-counter-mark]:mx-[-0.1em] sm:text-4xl"
+        className="font-mono text-3xl font-bold tracking-tight text-foreground **:data-[slot=animated-counter-mark]:mx-[-0.1em] sm:text-4xl"
       />
       <div className="flex items-center justify-between w-48 h-3 shrink-0">
         {Array.from({ length: 28 }).map((_, i) => {
@@ -352,15 +352,15 @@ export default function ComponentsPage() {
   const displayComponents = allComponents.slice(3);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#050505] text-[#f4f4f5]">
+    <div className="min-h-screen flex flex-col bg-background text-foreground transition-colors duration-200">
       <Navbar />
 
       <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
         <div className="flex flex-col items-center text-center mb-16 sm:mb-20">
-          <h1 className="font-serif text-3xl sm:text-5xl font-normal tracking-tight text-white max-w-3xl leading-tight">
+          <h1 className="font-serif text-3xl sm:text-5xl font-normal tracking-tight text-foreground max-w-3xl leading-tight">
             20+ rare and unique components
           </h1>
-          <p className="text-zinc-400 text-sm sm:text-base max-w-2xl mt-4 font-light leading-relaxed">
+          <p className="text-muted-foreground text-sm sm:text-base max-w-2xl mt-4 font-light leading-relaxed">
             Every component is a single file you own, not a dependency you
             install. Built with clean geometry, minimal aesthetics, and high
             performance.
@@ -370,7 +370,7 @@ export default function ComponentsPage() {
         <div className="space-y-16">
           <section>
             <div className="flex items-center gap-2 mb-6">
-              <h2 className="text-sm sm:text-xl font-medium font-serif text-white tracking-tight">
+              <h2 className="text-sm sm:text-xl font-medium font-serif text-foreground tracking-tight">
                 New releases
               </h2>
               <span className="text-xs font-mono font-medium text-orange-500">
@@ -393,7 +393,7 @@ export default function ComponentsPage() {
           {displayComponents.length > 0 && (
             <section>
               <div className="flex items-center gap-2 mb-6">
-                <h2 className="text-sm sm:text-xl font-medium font-serif text-white tracking-tight">
+                <h2 className="text-sm sm:text-xl font-medium font-serif text-foreground tracking-tight">
                   Display
                 </h2>
                 <span className="text-xs font-mono font-medium text-orange-500">

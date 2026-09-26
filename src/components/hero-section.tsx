@@ -17,7 +17,7 @@ const LANDMARK_POINTS = [
 
 export default function HeroSection() {
   return (
-    <section className="relative flex-1 min-h-[calc(100vh-4rem)] w-full bg-[#050505] text-[#f4f4f5] flex flex-col justify-between overflow-hidden select-none">
+    <section className="relative flex-1 min-h-[calc(100vh-4rem)] w-full bg-background text-foreground flex flex-col justify-between overflow-hidden select-none transition-colors duration-200">
       <div className="absolute inset-0 w-full h-full pointer-events-none select-none z-0">
         <Image
           src="/COMP-HE.png"
@@ -25,9 +25,9 @@ export default function HeroSection() {
           fill
           priority
           draggable={false}
-          className="object-cover object-center pointer-events-none select-none contrast-110"
+          className="object-cover object-center pointer-events-none select-none contrast-105 dark:contrast-110 opacity-75 dark:opacity-100 transition-opacity"
         />
-        <div className="absolute inset-0 bg-black/25 pointer-events-none" />
+        <div className="absolute inset-0 bg-white/45 dark:bg-black/30 pointer-events-none transition-colors duration-200" />
       </div>
 
       <div className="absolute inset-0 pointer-events-none z-10 grid grid-cols-6 sm:grid-cols-8 md:grid-cols-12 h-full w-full">
@@ -35,7 +35,7 @@ export default function HeroSection() {
           <div
             key={i}
             className={cn(
-              "h-full border-r border-dashed border-white/8",
+              "h-full border-r border-dashed border-border dark:border-white/8",
               i >= 6 && "hidden sm:block",
               i >= 8 && "hidden md:block",
             )}
@@ -45,14 +45,14 @@ export default function HeroSection() {
 
       <div className="absolute inset-0 pointer-events-none z-20">
         <svg
-          className="absolute inset-0 w-full h-full"
+          className="absolute inset-0 w-full h-full text-foreground/25 dark:text-white/20"
           viewBox="0 0 100 100"
           preserveAspectRatio="none"
         >
           <polygon
             points={LANDMARK_POINTS.map((p) => `${p.x},${p.y}`).join(" ")}
             fill="none"
-            stroke="rgba(255,255,255,0.18)"
+            stroke="currentColor"
             strokeWidth="0.25"
             strokeDasharray="1 1"
           />
@@ -61,7 +61,7 @@ export default function HeroSection() {
         {LANDMARK_POINTS.map((point) => (
           <div
             key={point.id}
-            className="absolute w-2 h-2 -ml-1 -mt-1 bg-white rounded-full shadow-[0_0_4px_rgba(255,255,255,0.9)]"
+            className="absolute w-2 h-2 -ml-1 -mt-1 bg-foreground dark:bg-white rounded-full shadow-[0_0_6px_rgba(0,0,0,0.3)] dark:shadow-[0_0_6px_rgba(255,255,255,0.9)]"
             style={{
               left: `${point.x}%`,
               top: `${point.y}%`,
@@ -75,7 +75,7 @@ export default function HeroSection() {
       <div className="flex-1" />
 
       <div className="relative z-30 w-full max-w-4xl px-6 sm:px-10 md:px-14 pb-12">
-        <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl lg:text-[46px] font-normal leading-[1.18] text-white/95 tracking-tight">
+        <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl lg:text-[46px] font-normal leading-[1.18] text-foreground dark:text-white/95 tracking-tight transition-colors duration-200">
           Recent news about agricultural innovations driven by material advances
           and robotics
         </h1>
@@ -90,7 +90,7 @@ export const RepeatingLineScale = ({ className }: { className?: string }) => {
   return (
     <div
       className={cn(
-        "h-3 w-full bg-[repeating-linear-gradient(90deg,rgba(255,255,255,0.12)_0px,rgba(255,255,255,0.12)_1px,transparent_1px,transparent_8px)] border-y border-white/6",
+        "h-3 w-full bg-[repeating-linear-gradient(90deg,currentColor_0px,currentColor_1px,transparent_1px,transparent_8px)] text-border-subtle border-y border-border",
         className,
       )}
     />

@@ -1,6 +1,29 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
+  --background: #fdfdfd;
+  --foreground: #09090b;
+  --border-subtle: rgba(0, 0, 0, 0.08);
+  --border-hairline: rgba(0, 0, 0, 0.14);
+  --pattern-line: rgba(0, 0, 0, 0.06);
+  --border: rgba(0, 0, 0, 0.12);
+  --muted: #f4f4f5;
+  --muted-foreground: #71717a;
+  --primary: #18181b;
+  --primary-foreground: #ffffff;
+  --line: rgba(0, 0, 0, 0.08);
+  --line-strong: rgba(0, 0, 0, 0.14);
+  --panel: #ffffff;
+  --text: #09090b;
+  --faint: #a1a1aa;
+  --ink: #ffffff;
+  --card: #ffffff;
+  --card-foreground: #09090b;
+}
+
+.dark {
   --background: #050505;
   --foreground: #f4f4f5;
   --border-subtle: rgba(255, 255, 255, 0.08);
@@ -17,12 +40,16 @@
   --text: #f2f2f3;
   --faint: #56565c;
   --ink: #0b0b0c;
+  --card: #0c0c0e;
+  --card-foreground: #f4f4f5;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-border: var(--border);
+  --color-border-subtle: var(--border-subtle);
+  --color-border-hairline: var(--border-hairline);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-primary: var(--primary);
@@ -33,9 +60,46 @@
   --color-text: var(--text);
   --color-faint: var(--faint);
   --color-ink: var(--ink);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
   --font-sans: var(--font-poppins), sans-serif;
   --font-serif: var(--font-gambetta), Georgia, serif;
   --font-poppins: var(--font-poppins), sans-serif;
+}
+
+html[data-magicui-theme-vt="active"] *,
+html[data-magicui-theme-vt="active"] *::before,
+html[data-magicui-theme-vt="active"] *::after {
+  transition: none !important;
+}
+
+::view-transition-group(root) {
+  animation-duration: 0.4s;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+  transform-origin: center;
+  will-change: clip-path;
+}
+
+::view-transition-image-pair(root) {
+  isolation: auto;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  z-index: 9999;
+}
+
+[data-magicui-theme-vt="active"]::view-transition-new(root) {
+  clip-path: var(--magicui-theme-vt-clip-from, circle(0px at 50% 50%));
 }
 
 body {
@@ -46,8 +110,8 @@ body {
 }
 
 ::selection {
-  background: rgba(255, 255, 255, 0.2);
-  color: #ffffff;
+  background: var(--line-strong);
+  color: var(--foreground);
 }
 
 ::-webkit-scrollbar {
@@ -56,21 +120,23 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #050505;
+  background: var(--background);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #27272a;
+  background: var(--muted-foreground);
+  opacity: 0.4;
+  border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #3f3f46;
+  background: var(--foreground);
 }
 
 [data-sonner-toaster] {
-  --normal-bg: rgba(9, 9, 11, 0.88);
-  --normal-border: rgba(255, 255, 255, 0.12);
-  --normal-text: #f4f4f5;
+  --normal-bg: var(--panel);
+  --normal-border: var(--border);
+  --normal-text: var(--foreground);
 }
 
 [data-sonner-toast] {
@@ -121,4 +187,3 @@ body {
     transition: opacity 150ms ease !important;
   }
 }
-

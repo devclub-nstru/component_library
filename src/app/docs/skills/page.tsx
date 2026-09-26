@@ -18,47 +18,47 @@ const SKILL_MODULES = [
 export default function DocsSkillsPage() {
   return (
     <article className="space-y-10">
-      <div className="space-y-2 border-b border-white/10 pb-6">
-        <h1 className="text-2xl sm:text-4xl font-serif font-normal tracking-tight text-white">
+      <div className="space-y-2 border-b border-border pb-6">
+        <h1 className="text-2xl sm:text-4xl font-serif font-normal tracking-tight text-foreground">
           Agent Skills
         </h1>
-        <p className="text-xs sm:text-[13px] text-zinc-400 font-light leading-relaxed">
+        <p className="text-xs sm:text-[13px] text-muted-foreground font-light leading-relaxed">
           Specialized prompt rules, API schemas, and animation constraints that empower AI coding assistants to write and maintain DevClub UI code with 100% architectural fidelity.
         </p>
       </div>
 
       <section className="space-y-3">
-        <h2 className="text-base sm:text-lg font-sans font-semibold tracking-tight text-white">
+        <h2 className="text-base sm:text-lg font-sans font-semibold tracking-tight text-foreground">
           What are Agent Skills?
         </h2>
-        <p className="text-xs text-zinc-400 font-light leading-relaxed">
+        <p className="text-xs text-muted-foreground font-light leading-relaxed">
           Agent Skills are modular instruction sets recognized by modern agentic development environments like Claude Code, Cursor, Antigravity, and GitHub Copilot. Instead of generic hallucinations, skills provide your agent with exact design tokens, GSAP lifecycle rules, and WebGL cleanup patterns.
         </p>
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-base sm:text-lg font-sans font-semibold tracking-tight text-white">
+        <h2 className="text-base sm:text-lg font-sans font-semibold tracking-tight text-foreground">
           Included GSAP Skill Index
         </h2>
-        <p className="text-xs text-zinc-400 font-light leading-relaxed">
-          DevClub UI ships with built-in skills indexed via <code className="text-white">skills/llms.txt</code>. When pair-programming with an agent, it reads these skills before generating animations:
+        <p className="text-xs text-muted-foreground font-light leading-relaxed">
+          DevClub UI ships with built-in skills indexed via <code className="text-foreground">skills/llms.txt</code>. When pair-programming with an agent, it reads these skills before generating animations:
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
           {SKILL_MODULES.map((skill) => (
-            <div key={skill.name} className="p-3 border border-white/10 bg-zinc-950/60 space-y-1">
-              <span className="font-mono text-[11px] text-emerald-400 font-semibold">{skill.name}</span>
-              <p className="text-[11px] text-zinc-400 font-light leading-relaxed">{skill.purpose}</p>
+            <div key={skill.name} className="p-3 border border-border bg-card space-y-1">
+              <span className="font-mono text-[11px] text-emerald-500 dark:text-emerald-400 font-semibold">{skill.name}</span>
+              <p className="text-[11px] text-muted-foreground font-light leading-relaxed">{skill.purpose}</p>
             </div>
           ))}
         </div>
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-base sm:text-lg font-sans font-semibold tracking-tight text-white">
+        <h2 className="text-base sm:text-lg font-sans font-semibold tracking-tight text-foreground">
           llms.txt Agent Discovery
         </h2>
-        <p className="text-xs text-zinc-400 font-light leading-relaxed">
-          The <code className="text-white">skills/llms.txt</code> index defines trigger keywords and capabilities for every animation module:
+        <p className="text-xs text-muted-foreground font-light leading-relaxed">
+          The <code className="text-foreground">skills/llms.txt</code> index defines trigger keywords and capabilities for every animation module:
         </p>
         <CodeBlock
           filename="skills/llms.txt"
@@ -77,11 +77,11 @@ gsap-performance
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-base sm:text-lg font-sans font-semibold tracking-tight text-white">
+        <h2 className="text-base sm:text-lg font-sans font-semibold tracking-tight text-foreground">
           Using with Cursor & Claude Code
         </h2>
-        <p className="text-xs text-zinc-400 font-light leading-relaxed">
-          Add DevClub guidelines to your project&apos;s agent rules (<code className="text-white">.cursorrules</code>, <code className="text-white">CLAUDE.md</code>, or <code className="text-white">AGENTS.md</code>):
+        <p className="text-xs text-muted-foreground font-light leading-relaxed">
+          Add DevClub guidelines to your project&apos;s agent rules (<code className="text-foreground">.cursorrules</code>, <code className="text-foreground">CLAUDE.md</code>, or <code className="text-foreground">AGENTS.md</code>):
         </p>
         <CodeBlock
           filename="AGENTS.md"
@@ -90,7 +90,7 @@ gsap-performance
 1. Always inspect the skills/ directory before writing animations.
 2. Wrap React animations in @gsap/react useGSAP() or gsap.context().
 3. Never use raw setInterval or CSS keyframes when GSAP covers the behavior.
-4. Strictly follow monochromatic CSS tokens (--background, --foreground, --border).`}
+4. Strictly follow design tokens (--background, --foreground, --border).`}
         />
       </section>
     </article>
