@@ -165,7 +165,7 @@ To contribute a new component to DevClub UI:
    - `props`: Exhaustive props specification table.
    - `files`: File object array including exact string code for the component (automatically synchronized via `npm run registry:sync`).
 
-   Then export the component in `src/registry/components/index.ts` and `src/registry/index.ts`.
+   Then export the component in `src/registry/components/index.ts` and `src/registry/index.ts`, and run `npm run registry:sync` to synchronize the catalog and public shadcn registry files in `public/r/`.
 
 3. **Verify in Local Server**:
    Ensure your component renders correctly at `http://localhost:3000/components/your-component-slug` and responds to query filters.

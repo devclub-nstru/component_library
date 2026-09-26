@@ -48,6 +48,16 @@ export default function DocsRegistryPage() {
 
           <div className="p-3 border border-border bg-card space-y-1">
             <div className="flex items-center justify-between text-xs">
+              <span className="text-emerald-500 dark:text-emerald-400 font-bold">GET /r/registry.json</span>
+              <span className="text-muted-foreground text-[10px]">Shadcn Registry Index</span>
+            </div>
+            <p className="text-[11px] text-muted-foreground font-sans font-light">
+              Open shadcn-compatible schema catalog. Individual components can be installed directly via <code className="text-foreground">npx shadcn@latest add https://devclub.co/r/[name].json</code>.
+            </p>
+          </div>
+
+          <div className="p-3 border border-border bg-card space-y-1">
+            <div className="flex items-center justify-between text-xs">
               <span className="text-emerald-500 dark:text-emerald-400 font-bold">GET /api/health</span>
               <span className="text-muted-foreground text-[10px]">Health & Diagnostics</span>
             </div>

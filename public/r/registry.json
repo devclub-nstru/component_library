@@ -1,0 +1,631 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "devclubnst",
+  "homepage": "https://devclub.co",
+  "items": [
+    {
+      "name": "accordion",
+      "type": "registry:ui",
+      "title": "Blur Reveal Accordion",
+      "description": "Interactive accordion with synchronized height expansion and smooth letter-by-letter blur text reveals.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge",
+        "motion"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/accordion.tsx",
+          "type": "registry:ui",
+          "target": "@ui/accordion.tsx"
+        }
+      ]
+    },
+    {
+      "name": "ai-input",
+      "type": "registry:ui",
+      "title": "AI Input",
+      "description": "Ultra-smooth expandable AI prompt composer with model selection, effort control, attachments tray, and voice visualizer.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/ai-input.tsx",
+          "type": "registry:ui",
+          "target": "@ui/ai-input.tsx"
+        }
+      ]
+    },
+    {
+      "name": "ai-orb",
+      "type": "registry:ui",
+      "title": "AI Orb",
+      "description": "Luminescent AI generation sphere with native WebGL Bayer 8x8 dithered plasma and animated letter wave typography.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge",
+        "motion"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/ai-orb.tsx",
+          "type": "registry:ui",
+          "target": "@ui/ai-orb.tsx"
+        }
+      ]
+    },
+    {
+      "name": "animated-button",
+      "type": "registry:ui",
+      "title": "Animated Button",
+      "description": "Multi-variant interactive button with shimmering effects and micro-interactions.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge",
+        "@radix-ui/react-icons"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/animated-button.tsx",
+          "type": "registry:ui",
+          "target": "@ui/animated-button.tsx"
+        }
+      ]
+    },
+    {
+      "name": "animated-counter",
+      "type": "registry:ui",
+      "title": "Animated Counter",
+      "description": "High-precision rolling drum counter with spring physics, acoustic feedback, and reactive typography.",
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/animated-counter.tsx",
+          "type": "registry:ui",
+          "target": "@ui/animated-counter.tsx"
+        }
+      ]
+    },
+    {
+      "name": "bento-grid",
+      "type": "registry:ui",
+      "title": "Bento Grid",
+      "description": "Responsive 3-column asymmetric layout grid for high-impact feature displays.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/bento-grid.tsx",
+          "type": "registry:ui",
+          "target": "@ui/bento-grid.tsx"
+        }
+      ]
+    },
+    {
+      "name": "candy-button",
+      "type": "registry:ui",
+      "title": "Candy Button",
+      "description": "Tactile glossy button with specular reflection highlights, multi-layer depth shadows, and full color customization.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/candy-button.tsx",
+          "type": "registry:ui",
+          "target": "@ui/candy-button.tsx"
+        }
+      ]
+    },
+    {
+      "name": "code-block",
+      "type": "registry:ui",
+      "title": "Code Block",
+      "description": "Minimal syntax-highlighted code block with line numbers, copy action, and accent color customization.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge",
+        "@radix-ui/react-icons"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/code-block.tsx",
+          "type": "registry:ui",
+          "target": "@ui/code-block.tsx"
+        }
+      ]
+    },
+    {
+      "name": "dither",
+      "type": "registry:ui",
+      "title": "Dither",
+      "description": "Hardware-accelerated procedural WebGL dithered grainient with fluid warping, noise, and animated grain.",
+      "dependencies": [
+        "ogl"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/dither.tsx",
+          "type": "registry:ui",
+          "target": "@ui/dither.tsx"
+        }
+      ]
+    },
+    {
+      "name": "dotted-accordion",
+      "type": "registry:ui",
+      "title": "Dotted Accordion",
+      "description": "Rectangular architectural accordion with contiguous flush items and continuous dotted crosshair guidelines exceeding bounds with smooth gradient masks.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge",
+        "motion"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/dotted-accordion.tsx",
+          "type": "registry:ui",
+          "target": "@ui/dotted-accordion.tsx"
+        }
+      ]
+    },
+    {
+      "name": "file-tree",
+      "type": "registry:ui",
+      "title": "File Tree",
+      "description": "Smooth, interactive file tree component with guide lines, nested folder expansion, selection, and keyboard navigation.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge",
+        "motion",
+        "lucide-react"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/file-tree.tsx",
+          "type": "registry:ui",
+          "target": "@ui/file-tree.tsx"
+        }
+      ]
+    },
+    {
+      "name": "github-activity",
+      "type": "registry:ui",
+      "title": "GitHub Activity",
+      "description": "A minimalist, glass-inspired contribution heatmap matrix with interactive hover feedback and activity tiers.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge",
+        "motion"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/github-activity.tsx",
+          "type": "registry:ui",
+          "target": "@ui/github-activity.tsx"
+        }
+      ]
+    },
+    {
+      "name": "glowing-badge",
+      "type": "registry:ui",
+      "title": "Glowing Badge",
+      "description": "Compact status and tag badge with glowing borders and pulsing indicator.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/glowing-badge.tsx",
+          "type": "registry:ui",
+          "target": "@ui/glowing-badge.tsx"
+        }
+      ]
+    },
+    {
+      "name": "gooey-nav",
+      "type": "registry:ui",
+      "title": "Gooey Nav",
+      "description": "Segmented tab navigation with dynamic organic bezier neck stretching and corner radius morphing.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge",
+        "motion"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/gooey-nav.tsx",
+          "type": "registry:ui",
+          "target": "@ui/gooey-nav.tsx"
+        }
+      ]
+    },
+    {
+      "name": "hook-sidebar",
+      "type": "registry:ui",
+      "title": "Hook Sidebar",
+      "description": "Collapsible navigation sidebar with animated traveling spring rail and curved elbow hook.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge",
+        "motion"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/hook-sidebar.tsx",
+          "type": "registry:ui",
+          "target": "@ui/hook-sidebar.tsx"
+        }
+      ]
+    },
+    {
+      "name": "liquid-toggle",
+      "type": "registry:ui",
+      "title": "Liquid Toggle",
+      "description": "Organic liquid goo physics switch with fluid meta-ball fusion and spring dynamics.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/liquid-toggle.tsx",
+          "type": "registry:ui",
+          "target": "@ui/liquid-toggle.tsx"
+        }
+      ]
+    },
+    {
+      "name": "mac-slider",
+      "type": "registry:ui",
+      "title": "Mac Slider",
+      "description": "Liquid glass slider with squircle normal map refraction, specular rim sheen, and tactile spring physics.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge",
+        "motion"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/mac-slider.tsx",
+          "type": "registry:ui",
+          "target": "@ui/mac-slider.tsx"
+        }
+      ]
+    },
+    {
+      "name": "mac-switch",
+      "type": "registry:ui",
+      "title": "Mac Switch",
+      "description": "Apple-inspired macOS liquid glass switch with refractive lip bezel optics, spring-loaded tactile thumb kinematics, and customizable color themes.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge",
+        "motion"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/mac-switch.tsx",
+          "type": "registry:ui",
+          "target": "@ui/mac-switch.tsx"
+        }
+      ]
+    },
+    {
+      "name": "morph-search",
+      "type": "registry:ui",
+      "title": "Morph Search",
+      "description": "Adaptive morphing search bar with cycling placeholder, spring physics, and intent card morphs.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge",
+        "motion"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/morph-search.tsx",
+          "type": "registry:ui",
+          "target": "@ui/morph-search.tsx"
+        }
+      ]
+    },
+    {
+      "name": "noise",
+      "type": "registry:ui",
+      "title": "Noise",
+      "description": "High-performance procedural grain noise background with CRT static, film dust, vignette, and scanlines.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/noise.tsx",
+          "type": "registry:ui",
+          "target": "@ui/noise.tsx"
+        }
+      ]
+    },
+    {
+      "name": "orb",
+      "type": "registry:ui",
+      "title": "Thinking Orb",
+      "description": "Interactive 2D dotted thought-orb indicator with 9 animated AI states and tactile click cycling.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge",
+        "thinking-orbs"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/orb.tsx",
+          "type": "registry:ui",
+          "target": "@ui/orb.tsx"
+        }
+      ]
+    },
+    {
+      "name": "otp-input",
+      "type": "registry:ui",
+      "title": "OTP Input",
+      "description": "Ultra-smooth physics-based one-time password input with rolling character tumblers, sliding focus halo, kinetic caret stretching, and celebration choreography.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge",
+        "motion"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/otp-input.tsx",
+          "type": "registry:ui",
+          "target": "@ui/otp-input.tsx"
+        }
+      ]
+    },
+    {
+      "name": "pixel-card",
+      "type": "registry:ui",
+      "title": "Pixel Card",
+      "description": "Interactive card with synchronized harmonic pixel matrix, cursor proximity excitation, and 3D perspective tilt.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge",
+        "gsap",
+        "@gsap/react"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/pixel-card.tsx",
+          "type": "registry:ui",
+          "target": "@ui/pixel-card.tsx"
+        }
+      ]
+    },
+    {
+      "name": "proximity-sidebar",
+      "type": "registry:ui",
+      "title": "Proximity Sidebar",
+      "description": "Dynamic document navigation minimap with smooth spring-physics cursor proximity expansion and scroll tracking.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge",
+        "motion"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/proximity-sidebar.tsx",
+          "type": "registry:ui",
+          "target": "@ui/proximity-sidebar.tsx"
+        }
+      ]
+    },
+    {
+      "name": "scales",
+      "type": "registry:ui",
+      "title": "Scales & Borders",
+      "description": "Symmetric repeating linear gradient borders and geometric scale dividers.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/scales.tsx",
+          "type": "registry:ui",
+          "target": "@ui/scales.tsx"
+        }
+      ]
+    },
+    {
+      "name": "search-input",
+      "type": "registry:ui",
+      "title": "Search Input",
+      "description": "Voice-glow powered typing-reactive search composer with animated thinking orbs.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge",
+        "voice-glow",
+        "thinking-orbs"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/search-input.tsx",
+          "type": "registry:ui",
+          "target": "@ui/search-input.tsx"
+        },
+        {
+          "path": "src/registry/ui/fx/Orb.tsx",
+          "type": "registry:ui",
+          "target": "@ui/fx/Orb.tsx"
+        }
+      ]
+    },
+    {
+      "name": "smooth-accordion",
+      "type": "registry:ui",
+      "title": "Smooth Accordion",
+      "description": "Fluid collapsible accordion with synchronized layout transitions and smooth blur-reveal mechanics.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge",
+        "motion",
+        "@radix-ui/react-icons"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/smooth-accordion.tsx",
+          "type": "registry:ui",
+          "target": "@ui/smooth-accordion.tsx"
+        }
+      ]
+    },
+    {
+      "name": "sparkle-button",
+      "type": "registry:ui",
+      "title": "Sparkle Button",
+      "description": "Monochromatic AI generation button featuring staggered letter-wave luminescence, smooth fade-and-blur morphing, and gentle star flare pulsing.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge",
+        "motion"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/sparkle-button.tsx",
+          "type": "registry:ui",
+          "target": "@ui/sparkle-button.tsx"
+        }
+      ]
+    },
+    {
+      "name": "spotlight-card",
+      "type": "registry:ui",
+      "title": "Spotlight Card",
+      "description": "Card container with cursor-following radial gradient glow effect.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/spotlight-card.tsx",
+          "type": "registry:ui",
+          "target": "@ui/spotlight-card.tsx"
+        }
+      ]
+    },
+    {
+      "name": "spotlight-search",
+      "type": "registry:ui",
+      "title": "Spotlight Search",
+      "description": "Apple-inspired Spotlight search bar with fluid capsule-to-quad-button expansion, staggered harmonic spring physics, and real-time category filtering.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge",
+        "motion"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/spotlight-search.tsx",
+          "type": "registry:ui",
+          "target": "@ui/spotlight-search.tsx"
+        }
+      ]
+    },
+    {
+      "name": "task-list",
+      "type": "registry:ui",
+      "title": "Task List",
+      "description": "Interactive todo task list featuring micro-particle spark bursts, ambient glow halos, smooth SVG ring morphing, and fluid spring layout reordering.",
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/task-list.tsx",
+          "type": "registry:ui",
+          "target": "@ui/task-list.tsx"
+        }
+      ]
+    },
+    {
+      "name": "theme-toggle",
+      "type": "registry:ui",
+      "title": "Theme Toggle",
+      "description": "View Transitions API powered theme toggle button with tactile obsidian candy styling, geometric clip-path ripples, and seamless mode synchronization.",
+      "dependencies": [
+        "lucide-react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/theme-toggle.tsx",
+          "type": "registry:ui",
+          "target": "@ui/theme-toggle.tsx"
+        }
+      ]
+    },
+    {
+      "name": "toast",
+      "type": "registry:ui",
+      "title": "Toast",
+      "description": "Sonner-powered toast notifications featuring ultra-smooth blur dissolving entry and exit transitions.",
+      "dependencies": [
+        "sonner",
+        "next-themes",
+        "@radix-ui/react-slot",
+        "class-variance-authority",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/sonner.tsx",
+          "type": "registry:ui",
+          "target": "@ui/sonner.tsx"
+        },
+        {
+          "path": "src/components/ui/button.tsx",
+          "type": "registry:ui",
+          "target": "@ui/button.tsx"
+        },
+        {
+          "path": "src/registry/ui/toast.tsx",
+          "type": "registry:ui",
+          "target": "@ui/toast.tsx"
+        }
+      ]
+    },
+    {
+      "name": "twitter-card",
+      "type": "registry:ui",
+      "title": "Twitter Card",
+      "description": "Interactive Twitter (X) profile card component featuring magnetic 3D tilt, spring physics, and real-time public profile data fetching.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge",
+        "motion"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/twitter-card.tsx",
+          "type": "registry:ui",
+          "target": "@ui/twitter-card.tsx"
+        }
+      ]
+    }
+  ]
+}

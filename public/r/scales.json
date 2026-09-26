@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "scales",
+  "type": "registry:ui",
+  "title": "Scales & Borders",
+  "description": "Symmetric repeating linear gradient borders and geometric scale dividers.",
+  "dependencies": [
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "src/registry/ui/scales.tsx",
+      "content": "import React from \"react\";\nimport { cn } from \"@/lib/utils\";\n\nexport const HorizontalScale = ({ className }: { className?: string }) => {\n  return (\n    <div\n      className={cn(\n        \"h-10 w-full bg-[repeating-linear-gradient(315deg,var(--pattern-line)_0px,var(--pattern-line)_1px,transparent_1px,transparent_10px)] bg-size-[14px_14px] border-y border-(--pattern)\",\n        className\n      )}\n    />\n  );\n};\n\nexport const VerticalScale = ({ className }: { className?: string }) => {\n  return (\n    <div\n      className={cn(\n        \"w-10 h-full bg-[repeating-linear-gradient(315deg,var(--pattern-line)_0px,var(--pattern-line)_1px,transparent_1px,transparent_10px)] bg-size-[14px_14px] border-x border-(--pattern)\",\n        className\n      )}\n    />\n  );\n};\n\nexport const Lines = ({ className }: { className?: string }) => {\n  return (\n    <div\n      className={cn(\n        \"h-14 w-full bg-[repeating-linear-gradient(to_bottom,var(--pattern-line)_0,var(--pattern-line)_1px,transparent_1px,transparent_0.5rem)] border-y border-(--pattern)\",\n        className\n      )}\n    />\n  );\n};\n",
+      "type": "registry:ui",
+      "target": "@ui/scales.tsx"
+    }
+  ]
+}

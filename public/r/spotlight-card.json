@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "spotlight-card",
+  "type": "registry:ui",
+  "title": "Spotlight Card",
+  "description": "Card container with cursor-following radial gradient glow effect.",
+  "dependencies": [
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "src/registry/ui/spotlight-card.tsx",
+      "content": "\"use client\";\n\nimport React, { useRef, useState } from \"react\";\nimport { cn } from \"@/lib/utils\";\n\nexport interface SpotlightCardProps extends React.HTMLAttributes<HTMLDivElement> {\n  spotlightColor?: string;\n}\n\nexport const SpotlightCard = React.forwardRef<\n  HTMLDivElement,\n  SpotlightCardProps\n>(\n  (\n    {\n      className,\n      children,\n      spotlightColor = \"rgba(59, 130, 246, 0.15)\",\n      ...props\n    },\n    ref,\n  ) => {\n    const divRef = useRef<HTMLDivElement>(null);\n    const [position, setPosition] = useState<{ x: number; y: number }>({\n      x: 0,\n      y: 0,\n    });\n    const [opacity, setOpacity] = useState(0);\n\n    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {\n      if (!divRef.current) return;\n      const rect = divRef.current.getBoundingClientRect();\n      setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });\n    };\n\n    const handleMouseEnter = () => {\n      setOpacity(1);\n    };\n\n    const handleMouseLeave = () => {\n      setOpacity(0);\n    };\n\n    return (\n      <div\n        ref={(node) => {\n          divRef.current = node;\n          if (typeof ref === \"function\") {\n            ref(node);\n          } else if (ref) {\n            ref.current = node;\n          }\n        }}\n        onMouseMove={handleMouseMove}\n        onMouseEnter={handleMouseEnter}\n        onMouseLeave={handleMouseLeave}\n        className={cn(\n          \"relative overflow-hidden rounded-xl border border-zinc-200 bg-white/80 p-6 backdrop-blur-md transition-colors duration-200 hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-950/60 dark:hover:border-zinc-700\",\n          className,\n        )}\n        {...props}\n      >\n        <div\n          className=\"pointer-events-none absolute -inset-px transition-opacity duration-300\"\n          style={{\n            opacity,\n            background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, ${spotlightColor}, transparent 40%)`,\n          }}\n        />\n        <div className=\"relative z-10\">{children}</div>\n      </div>\n    );\n  },\n);\n\nSpotlightCard.displayName = \"SpotlightCard\";\n",
+      "type": "registry:ui",
+      "target": "@ui/spotlight-card.tsx"
+    }
+  ]
+}
