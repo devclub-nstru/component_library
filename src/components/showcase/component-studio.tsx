@@ -3081,7 +3081,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       <span className="text-[11px] text-muted-foreground dark:text-zinc-400">
                         Transition Shape
                       </span>
-                      <div className="flex items-center gap-1 bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5 overflow-x-auto scrollbar-none no-scrollbar [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                      <div className="flex items-center gap-1 bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5 overflow-x-auto scrollbar-none no-scrollbar [&::-webkit-scrollbar]:hidden">
                         {(
                           [
                             "circle",
@@ -3444,7 +3444,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   </div>
 
                   <div className="rounded-xl border border-border dark:border-white/5 bg-muted/40 dark:bg-[#0b0b0e] p-2 flex flex-col gap-2">
-                    <div className="flex items-center gap-1 overflow-x-auto scrollbar-none no-scrollbar [scrollbar-width:none] [&::-webkit-scrollbar]:hidden bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5">
+                    <div className="flex items-center gap-1 overflow-x-auto scrollbar-none no-scrollbar [&::-webkit-scrollbar]:hidden bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5">
                       {ORB_STATES.map((s) => (
                         <button
                           key={s}
@@ -3473,7 +3473,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       ))}
                     </div>
 
-                    <div className="flex items-center gap-1 overflow-x-auto scrollbar-none no-scrollbar [scrollbar-width:none] [&::-webkit-scrollbar]:hidden bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5">
+                    <div className="flex items-center gap-1 overflow-x-auto scrollbar-none no-scrollbar [&::-webkit-scrollbar]:hidden bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5">
                       <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium px-2.5 shrink-0">
                         Color
                       </span>
@@ -4780,7 +4780,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     </div>
 
                     <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-1.5 pt-1 border-t border-border dark:border-white/5">
-                      <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none no-scrollbar [scrollbar-width:none] [&::-webkit-scrollbar]:hidden py-0.5">
+                      <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none no-scrollbar [&::-webkit-scrollbar]:hidden py-0.5">
                         <span className="text-[11px] text-muted-foreground dark:text-zinc-500 shrink-0 font-medium pl-1">
                           Try prompt:
                         </span>
