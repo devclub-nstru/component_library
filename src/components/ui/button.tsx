@@ -11,15 +11,16 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-white text-black hover:bg-zinc-200 active:scale-[0.97] shadow-sm",
+          "bg-zinc-900 text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200 active:scale-[0.97] shadow-xs",
         destructive:
-          "bg-red-500/90 text-white hover:bg-red-500 active:scale-[0.97] shadow-sm",
+          "bg-red-500/90 text-white hover:bg-red-500 active:scale-[0.97] shadow-xs",
         outline:
-          "border border-white/15 bg-zinc-900/60 text-zinc-300 hover:border-white/30 hover:bg-zinc-800 hover:text-white active:scale-[0.97]",
+          "border border-zinc-200 bg-white text-zinc-800 hover:border-zinc-300 hover:bg-zinc-100 hover:text-zinc-950 dark:border-white/15 dark:bg-zinc-900/60 dark:text-zinc-300 dark:hover:border-white/30 dark:hover:bg-zinc-800 dark:hover:text-white active:scale-[0.97]",
         secondary:
-          "bg-zinc-800 text-zinc-100 hover:bg-zinc-700 active:scale-[0.97]",
-        ghost: "hover:bg-white/10 hover:text-white active:scale-[0.97]",
-        link: "text-white underline-offset-4 hover:underline",
+          "bg-zinc-100 text-zinc-900 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700 active:scale-[0.97]",
+        ghost:
+          "hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-white/10 dark:hover:text-white active:scale-[0.97]",
+        link: "text-zinc-900 dark:text-white underline-offset-4 hover:underline",
       },
       size: {
         default: "h-9 px-4 py-2",

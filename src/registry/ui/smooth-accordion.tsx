@@ -156,8 +156,9 @@ export function Accordion({
           "w-full select-none",
           variant === "separated" && "flex flex-col gap-2.5",
           variant === "bordered" &&
-            "rounded-xl border border-white/8 divide-y divide-white/8 overflow-hidden bg-[#0c0c0e]/80",
-          variant === "ghost" && "flex flex-col divide-y divide-white/5",
+            "rounded-xl border border-zinc-200 divide-y divide-zinc-200 overflow-hidden bg-white/90 dark:border-white/8 dark:divide-white/8 dark:bg-[#0c0c0e]/80",
+          variant === "ghost" &&
+            "flex flex-col divide-y divide-zinc-200 dark:divide-white/5",
           className,
         )}
         {...props}
@@ -211,18 +212,17 @@ export function AccordionItem({
         className={cn(
           "group transition-all duration-300",
           variant === "separated" && [
-            "rounded-xl border border-white/8 bg-[#0c0c0e]/80 backdrop-blur-sm overflow-hidden",
-            "hover:border-white/15 hover:bg-[#101014]/90",
+            "rounded-xl border border-zinc-200/90 bg-white/90 backdrop-blur-sm overflow-hidden hover:border-zinc-300 hover:bg-zinc-50/90 dark:border-white/8 dark:bg-[#0c0c0e]/80 dark:hover:border-white/15 dark:hover:bg-[#101014]/90",
             isOpen &&
-              "border-white/20 bg-[#121217]/95 shadow-[0_12px_32px_rgba(0,0,0,0.4)]",
+              "border-zinc-300 bg-white shadow-md dark:border-white/20 dark:bg-[#121217]/95 dark:shadow-[0_12px_32px_rgba(0,0,0,0.4)]",
           ],
           variant === "bordered" && [
             "transition-colors",
-            isOpen && "bg-[#121217]/60",
+            isOpen && "bg-zinc-50/80 dark:bg-[#121217]/60",
           ],
           variant === "ghost" && [
             "transition-colors rounded-lg",
-            isOpen && "bg-white/3",
+            isOpen && "bg-zinc-100/60 dark:bg-white/3",
           ],
           disabled && "opacity-45 pointer-events-none",
           className,
@@ -262,14 +262,14 @@ export function AccordionTrigger({
       disabled={disabled}
       onClick={() => toggleItem(value)}
       className={cn(
-        "w-full flex items-center justify-between gap-4 p-4 text-left cursor-pointer transition-colors outline-none focus-visible:ring-1 focus-visible:ring-white/30",
+        "w-full flex items-center justify-between gap-4 p-4 text-left cursor-pointer transition-colors outline-none focus-visible:ring-1 focus-visible:ring-foreground/30 dark:focus-visible:ring-white/30",
         className,
       )}
       {...props}
     >
       <div className="flex items-center gap-3 min-w-0 flex-1">
         {icon && (
-          <span className="shrink-0 text-zinc-400 group-hover:text-zinc-200 transition-colors">
+          <span className="shrink-0 text-zinc-500 group-hover:text-zinc-800 dark:text-zinc-400 dark:group-hover:text-zinc-200 transition-colors">
             {icon}
           </span>
         )}
@@ -278,19 +278,21 @@ export function AccordionTrigger({
             <span
               className={cn(
                 "text-sm font-medium tracking-tight transition-colors duration-200",
-                isOpen ? "text-white" : "text-zinc-200 group-hover:text-white",
+                isOpen
+                  ? "text-zinc-950 dark:text-white"
+                  : "text-zinc-700 group-hover:text-zinc-950 dark:text-zinc-200 dark:group-hover:text-white",
               )}
             >
               {children}
             </span>
             {badge && (
-              <span className="shrink-0 text-[10px] font-mono px-2 py-0.5 rounded-full border border-white/10 bg-white/5 text-zinc-400 group-hover:text-zinc-300">
+              <span className="shrink-0 text-[10px] font-mono px-2 py-0.5 rounded-full border border-zinc-200 bg-zinc-100 text-zinc-600 group-hover:text-zinc-800 dark:border-white/10 dark:bg-white/5 dark:text-zinc-400 dark:group-hover:text-zinc-300">
                 {badge}
               </span>
             )}
           </div>
           {subtitle && (
-            <span className="text-xs text-zinc-400 font-light mt-0.5 truncate">
+            <span className="text-xs text-zinc-500 dark:text-zinc-400 font-light mt-0.5 truncate">
               {subtitle}
             </span>
           )}
@@ -304,7 +306,7 @@ export function AccordionTrigger({
             ? { duration: 0 }
             : { type: "spring", stiffness: 320, damping: 24 }
         }
-        className="shrink-0 w-6 h-6 rounded-md flex items-center justify-center text-zinc-400 group-hover:text-white transition-colors"
+        className="shrink-0 w-6 h-6 rounded-md flex items-center justify-center text-zinc-400 group-hover:text-zinc-700 dark:text-zinc-400 dark:group-hover:text-white transition-colors"
       >
         <ChevronDownIcon className="w-4 h-4" />
       </motion.div>
@@ -377,7 +379,7 @@ export function AccordionContent({
           >
             <div
               className={cn(
-                "px-4 pb-4.5 pt-0 text-xs sm:text-sm text-zinc-400 font-light leading-relaxed",
+                "px-4 pb-4.5 pt-0 text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 font-light leading-relaxed",
                 className,
               )}
               {...props}

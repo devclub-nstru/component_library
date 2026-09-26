@@ -14,9 +14,16 @@ import { GitHubButton } from "@/components/ui/github-button";
 import { CandyButton } from "@/registry/ui/candy-button";
 import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
 
-export const Navbar = () => {
+export interface NavbarProps {
+  showThemeToggle?: boolean;
+}
+
+export const Navbar = ({ showThemeToggle }: NavbarProps = {}) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
+  const isHomePage = pathname === "/";
+  const shouldShowThemeToggle =
+    showThemeToggle !== undefined ? showThemeToggle : !isHomePage;
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/85 backdrop-blur-xl transition-colors duration-200">
@@ -59,7 +66,9 @@ export const Navbar = () => {
         <div className="flex items-center gap-2.5 sm:gap-3">
           <GitHubButton />
 
-          <AnimatedThemeToggler className="relative flex items-center justify-center w-9 h-9 rounded-xl border border-border bg-foreground/5 hover:bg-foreground/10 text-foreground transition-all duration-200 cursor-pointer shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20 shrink-0" />
+          {shouldShowThemeToggle && (
+            <AnimatedThemeToggler className="relative flex items-center justify-center w-9 h-9 rounded-xl border border-border bg-foreground/5 hover:bg-foreground/10 text-foreground transition-all duration-200 cursor-pointer shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20 shrink-0" />
+          )}
 
           <CandyButton
             as={Link}

@@ -205,7 +205,7 @@ function Segment({
           width={span}
           viewBox={`0 0 ${span} ${NECK_H}`}
           preserveAspectRatio="none"
-          className="pointer-events-none absolute top-0 right-full h-full overflow-visible text-[#18181b]"
+          className="pointer-events-none absolute top-0 right-full h-full overflow-visible"
         >
           <defs>
             <linearGradient id={gradientId} x1="0" x2="1" y1="0" y2="0">
@@ -249,11 +249,11 @@ function NavLabel({
     "data-slot": "gooey-nav-item",
     "data-active": isActive,
     className: cn(
-      "relative z-10 flex cursor-pointer items-center justify-center whitespace-nowrap font-medium outline-none transition-all duration-300 ease-out select-none active:scale-95 focus-visible:ring-1 focus-visible:ring-white/30",
+      "relative z-10 flex cursor-pointer items-center justify-center whitespace-nowrap font-medium outline-none transition-all duration-300 ease-out select-none active:scale-95 focus-visible:ring-1 focus-visible:ring-zinc-400 dark:focus-visible:ring-white/30",
       SIZES[size].label,
       isActive
         ? "opacity-100"
-        : "text-zinc-400 hover:text-white opacity-80 hover:opacity-100",
+        : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-white opacity-80 hover:opacity-100",
     ),
     style: isActive ? { color: activeLabelColor } : undefined,
     onClick: onSelect,
@@ -313,7 +313,35 @@ export function GooeyNav({
   const corner = radius ?? SIZES[size].radius;
   const springConfig = SPRING_TUNING[elasticity];
 
-  const preset = COLOR_PRESETS[color] ?? COLOR_PRESETS.orange;
+  const [isDark, setIsDark] = useState(true);
+
+  useEffect(() => {
+    const checkDark = () => {
+      setIsDark(document.documentElement.classList.contains("dark"));
+    };
+    checkDark();
+    const observer = new MutationObserver(checkDark);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+    return () => observer.disconnect();
+  }, []);
+
+  const monoPreset = isDark
+    ? COLOR_PRESETS.monochrome
+    : {
+        hex: "#18181b",
+        text: "#ffffff",
+        glow: "rgba(24,24,27,0.15)",
+        dot: "bg-zinc-900",
+      };
+
+  const preset =
+    color === "monochrome"
+      ? monoPreset
+      : (COLOR_PRESETS[color] ?? COLOR_PRESETS.orange);
+
   const computedActiveColor = customActiveColor ?? preset.hex;
   const computedLabelColor = customActiveLabelColor ?? preset.text;
 
@@ -325,10 +353,12 @@ export function GooeyNav({
 
   const baseSurface =
     variant === "glass"
-      ? "bg-white/6 backdrop-blur-md border border-white/10"
-      : "bg-[#18181b] border border-white/8";
+      ? "bg-zinc-200/50 backdrop-blur-md border border-zinc-300/80 shadow-xs dark:bg-white/6 dark:border-white/10 dark:shadow-none"
+      : "bg-zinc-100 border border-zinc-200/80 shadow-xs dark:bg-[#18181b] dark:border-white/8 dark:shadow-none";
 
-  const fill = (i: number) => (i === active ? computedActiveColor : "#18181b");
+  const inactiveFill = isDark ? "#18181b" : "#f4f4f5";
+  const fill = (i: number) =>
+    i === active ? computedActiveColor : inactiveFill;
 
   const handleKeyDown = (e: KeyboardEvent<HTMLUListElement>) => {
     if (e.key === "ArrowRight") {

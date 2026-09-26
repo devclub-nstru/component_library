@@ -343,29 +343,32 @@ export function OtpInput({
     switch (variant) {
       case "glass":
         return cn(
-          "bg-white/4 dark:bg-white/3 backdrop-blur-md border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]",
-          filled && "border-white/25 bg-white/8",
+          "bg-black/[0.03] dark:bg-white/3 backdrop-blur-md border border-black/10 dark:border-white/10 shadow-[inset_0_1px_1px_rgba(0,0,0,0.05)] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]",
+          filled &&
+            "border-black/25 bg-black/[0.06] dark:border-white/25 dark:bg-white/8",
           isFocused &&
-            "border-white/40 shadow-[0_0_20px_rgba(255,255,255,0.15)]",
+            "border-black/40 shadow-[0_0_20px_rgba(0,0,0,0.1)] dark:border-white/40 dark:shadow-[0_0_20px_rgba(255,255,255,0.15)]",
         );
       case "neon":
         return cn(
-          "bg-zinc-950 border border-zinc-800 shadow-[0_0_12px_rgba(0,0,0,0.5)]",
-          filled && "border-zinc-600 shadow-[0_0_16px_rgba(255,255,255,0.06)]",
+          "bg-zinc-100 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-800 shadow-[0_0_12px_rgba(0,0,0,0.05)] dark:shadow-[0_0_12px_rgba(0,0,0,0.5)]",
+          filled &&
+            "border-zinc-500 shadow-[0_0_16px_rgba(0,0,0,0.08)] dark:border-zinc-600 dark:shadow-[0_0_16px_rgba(255,255,255,0.06)]",
           isFocused &&
-            "border-zinc-300 shadow-[0_0_24px_rgba(255,255,255,0.2)]",
+            "border-zinc-900 shadow-[0_0_24px_rgba(0,0,0,0.15)] dark:border-zinc-300 dark:shadow-[0_0_24px_rgba(255,255,255,0.2)]",
         );
       case "underlined":
         return cn(
-          "bg-transparent border-b-2 rounded-none! border-zinc-700 shadow-none",
-          filled && "border-zinc-400",
-          isFocused && "border-white",
+          "bg-transparent border-b-2 rounded-none! border-zinc-300 dark:border-zinc-700 shadow-none",
+          filled && "border-zinc-600 dark:border-zinc-400",
+          isFocused && "border-zinc-950 dark:border-white",
         );
       default:
         return cn(
-          "bg-[#F4F4F9] dark:bg-[#161619] border border-black/5 dark:border-white/10 shadow-[0_2px_8px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.08)]",
-          filled && "dark:border-white/20 border-black/15 dark:bg-[#1a1a1e]",
-          isFocused && "dark:border-white/35 border-black/25",
+          "bg-zinc-100/90 dark:bg-[#161619] border border-black/10 dark:border-white/10 shadow-[0_2px_8px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.8)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.08)]",
+          filled &&
+            "border-black/25 dark:border-white/20 bg-zinc-200/60 dark:bg-[#1a1a1e]",
+          isFocused && "border-black/40 dark:border-white/35",
         );
     }
   };
@@ -416,7 +419,7 @@ export function OtpInput({
                     layout: reduceMotion ? { duration: 0 } : SIZE_SPRING,
                   }}
                   aria-hidden="true"
-                  className="shrink-0 flex items-center justify-center text-zinc-400 dark:text-zinc-600 px-0.5"
+                  className="shrink-0 flex items-center justify-center text-zinc-500 dark:text-zinc-600 px-0.5"
                 >
                   {separator}
                 </motion.div>
@@ -510,9 +513,9 @@ export function OtpInput({
                         mass: 0.6,
                       }}
                       className={cn(
-                        "pointer-events-none absolute -inset-0.5 rounded-[inherit] border-2 border-white/60 dark:border-white/50 shadow-[0_0_18px_rgba(255,255,255,0.2)] z-20",
+                        "pointer-events-none absolute -inset-0.5 rounded-[inherit] border-2 border-zinc-950/60 shadow-[0_0_18px_rgba(0,0,0,0.12)] dark:border-white/50 dark:shadow-[0_0_18px_rgba(255,255,255,0.2)] z-20",
                         variant === "underlined" &&
-                          "border-0 border-b-2 rounded-none! shadow-[0_4px_12px_rgba(255,255,255,0.3)] inset-x-0 -bottom-0.5 top-auto h-0.5",
+                          "border-0 border-b-2 rounded-none! shadow-[0_4px_12px_rgba(0,0,0,0.15)] dark:shadow-[0_4px_12px_rgba(255,255,255,0.3)] inset-x-0 -bottom-0.5 top-auto h-0.5",
                         status === "error" &&
                           "border-red-500/80 shadow-[0_0_20px_rgba(239,68,68,0.4)]",
                       )}
@@ -715,7 +718,7 @@ export function OtpInput({
                     ease: "linear",
                   },
             }}
-            className="pointer-events-none absolute left-0 top-1/2 w-0.5 rounded-full bg-black dark:bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)] z-30"
+            className="pointer-events-none absolute left-0 top-1/2 w-0.5 rounded-full bg-black dark:bg-white shadow-[0_0_8px_rgba(0,0,0,0.25)] dark:shadow-[0_0_8px_rgba(255,255,255,0.8)] z-30"
           />
         )}
       </motion.div>

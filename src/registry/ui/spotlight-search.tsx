@@ -372,7 +372,7 @@ export const SpotlightSearch: React.FC<SpotlightSearchProps> = ({
               width: isExpanded ? 248 : 480,
             }}
             transition={fluidSpring}
-            className="absolute left-0 top-0 h-12 rounded-full bg-[#1c1c1f]"
+            className="absolute left-0 top-0 h-12 rounded-full bg-zinc-200/90 dark:bg-[#1c1c1f]"
           />
 
           {FILTER_BUTTONS.map((btn, idx) => (
@@ -390,7 +390,7 @@ export const SpotlightSearch: React.FC<SpotlightSearchProps> = ({
                   ? idx * 0.035
                   : (FILTER_BUTTONS.length - 1 - idx) * 0.025,
               }}
-              className="absolute left-0 top-0 w-12 h-12 rounded-full bg-[#1c1c1f]"
+              className="absolute left-0 top-0 w-12 h-12 rounded-full bg-zinc-200/90 dark:bg-[#1c1c1f]"
             />
           ))}
         </div>
@@ -404,9 +404,10 @@ export const SpotlightSearch: React.FC<SpotlightSearchProps> = ({
           onClick={() => inputRef.current?.focus()}
           className={cn(
             "absolute left-0 top-0 h-12 flex items-center px-4 rounded-full border transition-colors cursor-text select-none",
-            "bg-[#1c1c1f]/85 backdrop-blur-2xl border-white/12",
-            "shadow-[0_8px_32px_rgba(0,0,0,0.6),inset_0_1px_1.5px_rgba(255,255,255,0.12)]",
-            isFocused && "border-white/30 ring-1 ring-white/20",
+            "bg-white/90 backdrop-blur-2xl border-zinc-200 dark:bg-[#1c1c1f]/85 dark:border-white/12",
+            "shadow-[0_8px_32px_rgba(0,0,0,0.08),inset_0_1px_1.5px_rgba(255,255,255,0.8)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.6),inset_0_1px_1.5px_rgba(255,255,255,0.12)]",
+            isFocused &&
+              "border-zinc-400 ring-1 ring-zinc-300 dark:border-white/30 dark:ring-white/20",
           )}
         >
           <span className="shrink-0 text-zinc-400 mr-2.5 flex items-center justify-center">
@@ -426,7 +427,7 @@ export const SpotlightSearch: React.FC<SpotlightSearchProps> = ({
               placeholder={dynamicPlaceholder}
               autoComplete="off"
               spellCheck="false"
-              className="w-full bg-transparent text-[15px] font-normal text-zinc-100 placeholder:text-zinc-400 outline-none caret-white"
+              className="w-full bg-transparent text-[15px] font-normal text-zinc-900 placeholder:text-zinc-400 outline-none caret-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-400 dark:caret-white"
             />
           </div>
 
@@ -440,7 +441,7 @@ export const SpotlightSearch: React.FC<SpotlightSearchProps> = ({
                 e.stopPropagation();
                 handleFilterToggle(currentFilter);
               }}
-              className="ml-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono uppercase bg-white/10 hover:bg-white/20 text-zinc-300 transition-colors"
+              className="ml-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono uppercase bg-zinc-100 hover:bg-zinc-200 text-zinc-700 dark:bg-white/10 dark:hover:bg-white/20 dark:text-zinc-300 transition-colors"
             >
               {currentFilter}
             </motion.button>
@@ -485,11 +486,11 @@ export const SpotlightSearch: React.FC<SpotlightSearchProps> = ({
                 onClick={() => handleFilterToggle(btn.id)}
                 className={cn(
                   "w-full h-full rounded-full flex items-center justify-center cursor-pointer outline-none transition-colors",
-                  "bg-[#1c1c1f]/85 backdrop-blur-2xl border",
-                  "shadow-[0_8px_32px_rgba(0,0,0,0.6),inset_0_1px_1.5px_rgba(255,255,255,0.12)]",
+                  "bg-white/90 backdrop-blur-2xl border border-zinc-200 dark:bg-[#1c1c1f]/85 dark:border-white/12",
+                  "shadow-[0_8px_32px_rgba(0,0,0,0.08),inset_0_1px_1.5px_rgba(255,255,255,0.8)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.6),inset_0_1px_1.5px_rgba(255,255,255,0.12)]",
                   isActive
-                    ? "border-white/40 bg-white/20 text-white shadow-[0_0_16px_rgba(255,255,255,0.2)]"
-                    : "border-white/12 text-zinc-400 hover:text-white hover:border-white/25",
+                    ? "border-zinc-900/40 bg-zinc-100 text-zinc-950 shadow-[0_0_16px_rgba(0,0,0,0.1)] dark:border-white/40 dark:bg-white/20 dark:text-white dark:shadow-[0_0_16px_rgba(255,255,255,0.2)]"
+                    : "text-zinc-500 hover:text-zinc-900 hover:border-zinc-300 dark:text-zinc-400 dark:hover:text-white dark:hover:border-white/25",
                 )}
                 aria-label={btn.label}
                 title={btn.label}
@@ -504,7 +505,7 @@ export const SpotlightSearch: React.FC<SpotlightSearchProps> = ({
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 4, scale: 0.9 }}
                     transition={microSpring}
-                    className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-md bg-black/90 border border-white/10 text-[10px] text-zinc-200 font-medium whitespace-nowrap pointer-events-none z-50 shadow-lg"
+                    className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-md bg-zinc-900/90 border border-zinc-700 text-[10px] text-zinc-100 font-medium whitespace-nowrap pointer-events-none z-50 shadow-lg dark:bg-black/90 dark:border-white/10 dark:text-zinc-200"
                   >
                     {btn.label}
                   </motion.div>
@@ -525,11 +526,11 @@ export const SpotlightSearch: React.FC<SpotlightSearchProps> = ({
               exit={{ opacity: 0, y: -6, scale: 0.98 }}
               transition={fluidSpring}
               className={cn(
-                "absolute top-full inset-x-0 z-40 rounded-2xl border border-white/12 bg-[#141416]/95 backdrop-blur-3xl shadow-[0_24px_60px_rgba(0,0,0,0.85)] p-2 overflow-hidden flex flex-col gap-1",
+                "absolute top-full inset-x-0 z-40 rounded-2xl border border-zinc-200 bg-white/95 backdrop-blur-3xl shadow-[0_24px_60px_rgba(0,0,0,0.1)] p-2 overflow-hidden flex flex-col gap-1 dark:border-white/12 dark:bg-[#141416]/95 dark:shadow-[0_24px_60px_rgba(0,0,0,0.85)]",
               )}
             >
               {filteredItems.length === 0 ? (
-                <div className="py-6 text-center text-xs text-zinc-500">
+                <div className="py-6 text-center text-xs text-zinc-500 dark:text-zinc-500">
                   No matching results found
                 </div>
               ) : (
@@ -545,23 +546,23 @@ export const SpotlightSearch: React.FC<SpotlightSearchProps> = ({
                         className={cn(
                           "relative flex items-center justify-between px-3 py-2 rounded-xl text-left transition-colors cursor-pointer w-full select-none",
                           isHighlighted
-                            ? "bg-white/10 text-white"
-                            : "text-zinc-300 hover:bg-white/5",
+                            ? "bg-zinc-100 text-zinc-950 dark:bg-white/10 dark:text-white"
+                            : "text-zinc-700 hover:bg-zinc-50 dark:text-zinc-300 dark:hover:bg-white/5",
                         )}
                       >
                         <div className="flex items-center gap-2.5 overflow-hidden">
-                          <span className="w-6 h-6 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center shrink-0 text-zinc-400">
+                          <span className="w-6 h-6 rounded-lg bg-zinc-100 border border-zinc-200 flex items-center justify-center shrink-0 text-zinc-500 dark:bg-white/5 dark:border-white/10 dark:text-zinc-400">
                             {item.category === "apps" && <AppsIcon />}
                             {item.category === "folders" && <FolderIcon />}
                             {item.category === "layers" && <LayersIcon />}
                             {item.category === "docs" && <DocsIcon />}
                           </span>
                           <div className="flex flex-col min-w-0">
-                            <span className="text-xs font-medium truncate text-zinc-100">
+                            <span className="text-xs font-medium truncate text-zinc-900 dark:text-zinc-100">
                               {item.title}
                             </span>
                             {item.subtitle && (
-                              <span className="text-[10px] text-zinc-500 truncate">
+                              <span className="text-[10px] text-zinc-500 dark:text-zinc-500 truncate">
                                 {item.subtitle}
                               </span>
                             )}
@@ -569,7 +570,7 @@ export const SpotlightSearch: React.FC<SpotlightSearchProps> = ({
                         </div>
 
                         {item.shortcut && (
-                          <span className="text-[10px] font-mono text-zinc-500 px-1.5 py-0.5 rounded bg-white/5 border border-white/5 shrink-0 ml-2">
+                          <span className="text-[10px] font-mono text-zinc-500 px-1.5 py-0.5 rounded bg-zinc-100 border border-zinc-200 shrink-0 ml-2 dark:bg-white/5 dark:border-white/5">
                             {item.shortcut}
                           </span>
                         )}

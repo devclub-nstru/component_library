@@ -70,25 +70,25 @@ const DASH_PRESETS: Record<SectionKind, DashPreset> = {
     base: 54,
     bump: 36,
     thickness: 1.5,
-    className: "bg-white",
+    className: "bg-zinc-900 dark:bg-white",
   },
   subtitle: {
     base: 40,
     bump: 42,
     thickness: 1.25,
-    className: "bg-zinc-300",
+    className: "bg-zinc-700 dark:bg-zinc-300",
   },
   section: {
     base: 26,
     bump: 48,
     thickness: 1,
-    className: "bg-zinc-600",
+    className: "bg-zinc-400 dark:bg-zinc-600",
   },
   body: {
     base: 22,
     bump: 48,
     thickness: 1,
-    className: "bg-zinc-600",
+    className: "bg-zinc-400 dark:bg-zinc-600",
   },
 };
 
@@ -204,8 +204,11 @@ const Dash = ({
           active
             ? color
               ? ""
-              : "bg-white shadow-[0_0_8px_rgba(255,255,255,0.7)]"
-            : cn(preset.className, "group-hover:bg-zinc-200"),
+              : "bg-zinc-950 dark:bg-white shadow-[0_0_8px_rgba(0,0,0,0.3)] dark:shadow-[0_0_8px_rgba(255,255,255,0.7)]"
+            : cn(
+                preset.className,
+                "group-hover:bg-zinc-950 dark:group-hover:bg-zinc-200",
+              ),
         )}
         style={{
           backgroundColor: active && color ? color : undefined,

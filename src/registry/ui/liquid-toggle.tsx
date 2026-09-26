@@ -82,43 +82,43 @@ const TUNING = {
 
 const COLOR_STYLES = {
   monochrome: {
-    activeBlob: "bg-[#f4f4f5]",
-    inactiveBlob: "bg-[#71717a]",
+    activeBlob: "bg-zinc-900 dark:bg-[#f4f4f5]",
+    inactiveBlob: "bg-zinc-400 dark:bg-[#71717a]",
     trackOn:
-      "border-white/20 bg-white/10 shadow-[0_0_20px_rgba(255,255,255,0.1)]",
-    trackOff: "border-white/8 bg-white/4",
-    aura: "bg-white/10",
+      "border-zinc-300 bg-zinc-200/80 shadow-[0_0_20px_rgba(0,0,0,0.06)] dark:border-white/20 dark:bg-white/10 dark:shadow-[0_0_20px_rgba(255,255,255,0.1)]",
+    trackOff: "border-zinc-200 bg-zinc-100 dark:border-white/8 dark:bg-white/4",
+    aura: "bg-zinc-300/40 dark:bg-white/10",
   },
   emerald: {
-    activeBlob: "bg-[#34d399]",
-    inactiveBlob: "bg-[#71717a]",
+    activeBlob: "bg-[#059669] dark:bg-[#34d399]",
+    inactiveBlob: "bg-zinc-400 dark:bg-[#71717a]",
     trackOn:
-      "border-emerald-500/30 bg-emerald-500/10 shadow-[0_0_24px_rgba(52,211,153,0.2)]",
-    trackOff: "border-white/8 bg-white/4",
+      "border-emerald-500/40 bg-emerald-500/20 shadow-[0_0_24px_rgba(16,185,129,0.2)] dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:shadow-[0_0_24px_rgba(52,211,153,0.2)]",
+    trackOff: "border-zinc-200 bg-zinc-100 dark:border-white/8 dark:bg-white/4",
     aura: "bg-emerald-400/20",
   },
   violet: {
-    activeBlob: "bg-[#a78bfa]",
-    inactiveBlob: "bg-[#71717a]",
+    activeBlob: "bg-[#7c3aed] dark:bg-[#a78bfa]",
+    inactiveBlob: "bg-zinc-400 dark:bg-[#71717a]",
     trackOn:
-      "border-violet-500/30 bg-violet-500/10 shadow-[0_0_24px_rgba(167,139,250,0.2)]",
-    trackOff: "border-white/8 bg-white/4",
+      "border-violet-500/40 bg-violet-500/20 shadow-[0_0_24px_rgba(139,92,246,0.2)] dark:border-violet-500/30 dark:bg-violet-500/10 dark:shadow-[0_0_24px_rgba(167,139,250,0.2)]",
+    trackOff: "border-zinc-200 bg-zinc-100 dark:border-white/8 dark:bg-white/4",
     aura: "bg-violet-400/20",
   },
   amber: {
-    activeBlob: "bg-[#fbbf24]",
-    inactiveBlob: "bg-[#71717a]",
+    activeBlob: "bg-[#d97706] dark:bg-[#fbbf24]",
+    inactiveBlob: "bg-zinc-400 dark:bg-[#71717a]",
     trackOn:
-      "border-amber-500/30 bg-amber-500/10 shadow-[0_0_24px_rgba(251,191,36,0.2)]",
-    trackOff: "border-white/8 bg-white/4",
+      "border-amber-500/40 bg-amber-500/20 shadow-[0_0_24px_rgba(245,158,11,0.2)] dark:border-amber-500/30 dark:bg-amber-500/10 dark:shadow-[0_0_24px_rgba(251,191,36,0.2)]",
+    trackOff: "border-zinc-200 bg-zinc-100 dark:border-white/8 dark:bg-white/4",
     aura: "bg-amber-400/20",
   },
   cyan: {
-    activeBlob: "bg-[#22d3ee]",
-    inactiveBlob: "bg-[#71717a]",
+    activeBlob: "bg-[#0891b2] dark:bg-[#22d3ee]",
+    inactiveBlob: "bg-zinc-400 dark:bg-[#71717a]",
     trackOn:
-      "border-cyan-500/30 bg-cyan-500/10 shadow-[0_0_24px_rgba(34,211,238,0.2)]",
-    trackOff: "border-white/8 bg-white/4",
+      "border-cyan-500/40 bg-cyan-500/20 shadow-[0_0_24px_rgba(6,182,212,0.2)] dark:border-cyan-500/30 dark:bg-cyan-500/10 dark:shadow-[0_0_24px_rgba(34,211,238,0.2)]",
+    trackOff: "border-zinc-200 bg-zinc-100 dark:border-white/8 dark:bg-white/4",
     aura: "bg-cyan-400/20",
   },
 } as const;

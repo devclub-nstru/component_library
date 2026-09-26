@@ -492,10 +492,10 @@ export function MorphSearch({
         transition={reduceMotion ? fadeTween : springMorph}
         style={{ borderRadius: 28 }}
         className={cn(
-          "relative overflow-hidden border border-white/10 bg-[#0d0d12]/95 backdrop-blur-2xl",
+          "relative overflow-hidden border border-zinc-200/80 bg-white/95 backdrop-blur-2xl dark:border-white/10 dark:bg-[#0d0d12]/95",
           isOpen
-            ? "border-white/20 shadow-[0_24px_64px_rgba(0,0,0,0.7),0_0_0_1px_rgba(255,255,255,0.06)]"
-            : "hover:border-white/15 shadow-[0_8px_32px_rgba(0,0,0,0.36),0_1px_1px_rgba(255,255,255,0.04)]",
+            ? "border-zinc-300 shadow-[0_24px_64px_rgba(0,0,0,0.08),0_0_0_1px_rgba(0,0,0,0.04)] dark:border-white/20 dark:shadow-[0_24px_64px_rgba(0,0,0,0.7),0_0_0_1px_rgba(255,255,255,0.06)]"
+            : "hover:border-zinc-300 shadow-[0_8px_32px_rgba(0,0,0,0.06),0_1px_1px_rgba(0,0,0,0.02)] dark:hover:border-white/15 dark:shadow-[0_8px_32px_rgba(0,0,0,0.36),0_1px_1px_rgba(255,255,255,0.04)]",
         )}
       >
         <motion.div
@@ -514,7 +514,7 @@ export function MorphSearch({
               onFocus={handleOpen}
               onChange={(e) => updateQuery(e.target.value)}
               onKeyDown={handleKeyDown}
-              className="w-full bg-transparent text-[17px] font-normal tracking-[-0.01em] text-white caret-white outline-none placeholder:text-transparent"
+              className="w-full bg-transparent text-[17px] font-normal tracking-[-0.01em] text-zinc-900 caret-zinc-900 dark:text-white dark:caret-white outline-none placeholder:text-transparent"
               aria-label="Search or enter prompt"
             />
 
@@ -535,7 +535,7 @@ export function MorphSearch({
                         : { opacity: 0, y: -8, filter: "blur(4px)" }
                     }
                     transition={fadeTween}
-                    className="truncate text-[17px] font-normal tracking-[-0.01em] text-zinc-400"
+                    className="truncate text-[17px] font-normal tracking-[-0.01em] text-zinc-400 dark:text-zinc-400"
                   >
                     {placeholder ?? PLACEHOLDERS[placeholderIndex]}
                   </motion.span>
@@ -549,7 +549,7 @@ export function MorphSearch({
               <button
                 type="button"
                 onClick={handleClear}
-                className="text-xs text-zinc-400 hover:text-white px-1.5 py-0.5 rounded transition-colors cursor-pointer"
+                className="text-xs text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white px-1.5 py-0.5 rounded transition-colors cursor-pointer"
                 aria-label="Clear input"
               >
                 Clear
@@ -560,7 +560,7 @@ export function MorphSearch({
               <button
                 type="button"
                 onClick={handleOpen}
-                className="flex items-center rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-[11px] font-mono text-zinc-400 hover:text-white hover:border-white/20 transition-colors cursor-pointer"
+                className="flex items-center rounded-full border border-zinc-200 bg-zinc-100/80 px-2 py-0.5 text-[11px] font-mono text-zinc-500 hover:text-zinc-900 hover:border-zinc-300 dark:border-white/10 dark:bg-white/5 dark:text-zinc-400 dark:hover:text-white dark:hover:border-white/20 transition-colors cursor-pointer"
               >
                 <span>/</span>
               </button>
@@ -568,7 +568,7 @@ export function MorphSearch({
               <button
                 type="button"
                 onClick={handleClose}
-                className="flex items-center rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-[11px] font-mono text-zinc-400 hover:text-white hover:border-white/20 transition-colors cursor-pointer"
+                className="flex items-center rounded-full border border-zinc-200 bg-zinc-100/80 px-2 py-0.5 text-[11px] font-mono text-zinc-500 hover:text-zinc-900 hover:border-zinc-300 dark:border-white/10 dark:bg-white/5 dark:text-zinc-400 dark:hover:text-white dark:hover:border-white/20 transition-colors cursor-pointer"
               >
                 <span>ESC</span>
               </button>
@@ -594,17 +594,19 @@ export function MorphSearch({
               transition={
                 reduceMotion ? fadeTween : { ...springMorph, delay: 0.02 }
               }
-              className="w-full overflow-hidden border-t border-white/8"
+              className="w-full overflow-hidden border-t border-zinc-200/80 dark:border-white/8"
             >
               <div className="p-5 flex flex-col gap-4">
                 {detected.type === "poll" && detected.poll && (
-                  <div className="flex flex-col gap-3 rounded-xl border border-white/8 bg-white/2 p-4">
+                  <div className="flex flex-col gap-3 rounded-xl border border-zinc-200/80 bg-zinc-50/60 p-4 dark:border-white/8 dark:bg-white/2">
                     <div className="flex items-center justify-between text-xs text-zinc-400">
-                      <span className="font-medium text-zinc-300">Poll</span>
+                      <span className="font-medium text-zinc-700 dark:text-zinc-300">
+                        Poll
+                      </span>
                       <span>Select an option to vote</span>
                     </div>
 
-                    <h3 className="text-[15px] font-medium text-white">
+                    <h3 className="text-[15px] font-medium text-zinc-900 dark:text-white">
                       {detected.poll.title}
                     </h3>
 
@@ -625,18 +627,18 @@ export function MorphSearch({
                             key={idx}
                             type="button"
                             onClick={() => voteOnPoll(idx)}
-                            className="group relative flex items-center justify-between overflow-hidden rounded-lg border border-white/8 bg-white/4 px-3.5 py-2.5 text-left text-xs transition-colors hover:border-white/15 hover:bg-white/7 cursor-pointer"
+                            className="group relative flex items-center justify-between overflow-hidden rounded-lg border border-zinc-200/80 bg-zinc-100/60 px-3.5 py-2.5 text-left text-xs transition-colors hover:border-zinc-300 hover:bg-zinc-100 dark:border-white/8 dark:bg-white/4 dark:hover:border-white/15 dark:hover:bg-white/7 cursor-pointer"
                           >
                             <motion.div
-                              className="absolute inset-y-0 left-0 bg-white/10"
+                              className="absolute inset-y-0 left-0 bg-zinc-900/10 dark:bg-white/10"
                               initial={{ width: "0%" }}
                               animate={{ width: `${pct}%` }}
                               transition={springMorph}
                             />
-                            <span className="relative z-10 font-medium text-zinc-200 group-hover:text-white">
+                            <span className="relative z-10 font-medium text-zinc-800 group-hover:text-zinc-950 dark:text-zinc-200 dark:group-hover:text-white">
                               {opt}
                             </span>
-                            <span className="relative z-10 font-mono text-zinc-400 tabular-nums">
+                            <span className="relative z-10 font-mono text-zinc-500 dark:text-zinc-400 tabular-nums">
                               {pct}%
                             </span>
                           </button>
@@ -645,14 +647,14 @@ export function MorphSearch({
                     </div>
 
                     <div className="flex items-center justify-between pt-1">
-                      <span className="text-[11px] text-zinc-400">
+                      <span className="text-[11px] text-zinc-500 dark:text-zinc-400">
                         {Object.values(pollVotes).reduce((a, b) => a + b, 0)}{" "}
                         total votes
                       </span>
                       <button
                         type="button"
                         onClick={saveCurrentItem}
-                        className="flex items-center rounded-full bg-white px-3 py-1 text-xs font-medium text-zinc-950 hover:bg-zinc-200 transition-colors cursor-pointer"
+                        className="flex items-center rounded-full bg-zinc-900 px-3 py-1 text-xs font-medium text-white hover:bg-zinc-800 dark:bg-white dark:text-zinc-950 dark:hover:bg-zinc-200 transition-colors cursor-pointer"
                       >
                         <span>Save Poll</span>
                       </button>
@@ -661,21 +663,23 @@ export function MorphSearch({
                 )}
 
                 {detected.type === "event" && detected.event && (
-                  <div className="flex flex-col gap-3 rounded-xl border border-white/8 bg-white/2 p-4">
+                  <div className="flex flex-col gap-3 rounded-xl border border-zinc-200/80 bg-zinc-50/60 p-4 dark:border-white/8 dark:bg-white/2">
                     <div className="flex items-center justify-between text-xs text-zinc-400">
-                      <span className="font-medium text-zinc-300">Event</span>
+                      <span className="font-medium text-zinc-700 dark:text-zinc-300">
+                        Event
+                      </span>
                       <span>Scheduled Meeting</span>
                     </div>
 
-                    <h3 className="text-[15px] font-medium text-white">
+                    <h3 className="text-[15px] font-medium text-zinc-900 dark:text-white">
                       {detected.event.title}
                     </h3>
 
                     <div className="flex flex-wrap items-center gap-2">
-                      <div className="rounded-md border border-white/8 bg-white/4 px-2.5 py-1 text-xs text-zinc-300">
+                      <div className="rounded-md border border-zinc-200 bg-zinc-100 px-2.5 py-1 text-xs text-zinc-700 dark:border-white/8 dark:bg-white/4 dark:text-zinc-300">
                         <span>{detected.event.time}</span>
                       </div>
-                      <div className="rounded-md border border-white/8 bg-white/4 px-2.5 py-1 text-xs text-zinc-300">
+                      <div className="rounded-md border border-zinc-200 bg-zinc-100 px-2.5 py-1 text-xs text-zinc-700 dark:border-white/8 dark:bg-white/4 dark:text-zinc-300">
                         <span>{detected.event.attendee}</span>
                       </div>
                     </div>
@@ -684,7 +688,7 @@ export function MorphSearch({
                       <button
                         type="button"
                         onClick={saveCurrentItem}
-                        className="flex items-center rounded-full bg-white px-3 py-1 text-xs font-medium text-zinc-950 hover:bg-zinc-200 transition-colors cursor-pointer"
+                        className="flex items-center rounded-full bg-zinc-900 px-3 py-1 text-xs font-medium text-white hover:bg-zinc-800 dark:bg-white dark:text-zinc-950 dark:hover:bg-zinc-200 transition-colors cursor-pointer"
                       >
                         <span>Save Event</span>
                       </button>
@@ -693,9 +697,9 @@ export function MorphSearch({
                 )}
 
                 {detected.type === "todo" && detected.todo && (
-                  <div className="flex flex-col gap-3 rounded-xl border border-white/8 bg-white/2 p-4">
+                  <div className="flex flex-col gap-3 rounded-xl border border-zinc-200/80 bg-zinc-50/60 p-4 dark:border-white/8 dark:bg-white/2">
                     <div className="flex items-center justify-between text-xs text-zinc-400">
-                      <span className="font-medium text-zinc-300">
+                      <span className="font-medium text-zinc-700 dark:text-zinc-300">
                         Checklist
                       </span>
                       <span>
@@ -712,22 +716,22 @@ export function MorphSearch({
                             key={idx}
                             type="button"
                             onClick={() => toggleTodo(idx)}
-                            className="flex items-center gap-2.5 rounded-lg border border-white/6 bg-white/3 px-3 py-2 text-left text-xs transition-colors hover:bg-white/6 cursor-pointer"
+                            className="flex items-center gap-2.5 rounded-lg border border-zinc-200/60 bg-zinc-100/40 px-3 py-2 text-left text-xs transition-colors hover:bg-zinc-100/80 dark:border-white/6 dark:bg-white/3 dark:hover:bg-white/6 cursor-pointer"
                           >
                             <span
                               className={cn(
                                 "flex size-3.5 shrink-0 rounded-sm border transition-colors",
                                 done
-                                  ? "border-white bg-white"
-                                  : "border-white/30",
+                                  ? "border-zinc-900 bg-zinc-900 dark:border-white dark:bg-white"
+                                  : "border-zinc-300 dark:border-white/30",
                               )}
                             />
                             <span
                               className={cn(
                                 "font-normal transition-all",
                                 done
-                                  ? "text-zinc-500 line-through"
-                                  : "text-zinc-200",
+                                  ? "text-zinc-400 line-through dark:text-zinc-500"
+                                  : "text-zinc-800 dark:text-zinc-200",
                               )}
                             >
                               {item}
@@ -741,7 +745,7 @@ export function MorphSearch({
                       <button
                         type="button"
                         onClick={saveCurrentItem}
-                        className="flex items-center rounded-full bg-white px-3 py-1 text-xs font-medium text-zinc-950 hover:bg-zinc-200 transition-colors cursor-pointer"
+                        className="flex items-center rounded-full bg-zinc-900 px-3 py-1 text-xs font-medium text-white hover:bg-zinc-800 dark:bg-white dark:text-zinc-950 dark:hover:bg-zinc-200 transition-colors cursor-pointer"
                       >
                         <span>Save Tasks</span>
                       </button>
@@ -750,14 +754,16 @@ export function MorphSearch({
                 )}
 
                 {detected.type === "timer" && detected.timer && (
-                  <div className="flex flex-col gap-3 rounded-xl border border-white/8 bg-white/2 p-4">
+                  <div className="flex flex-col gap-3 rounded-xl border border-zinc-200/80 bg-zinc-50/60 p-4 dark:border-white/8 dark:bg-white/2">
                     <div className="flex items-center justify-between text-xs text-zinc-400">
-                      <span className="font-medium text-zinc-300">Timer</span>
+                      <span className="font-medium text-zinc-700 dark:text-zinc-300">
+                        Timer
+                      </span>
                       <span>{detected.timer.label}</span>
                     </div>
 
                     <div className="flex items-center justify-between py-2">
-                      <span className="font-mono text-3xl font-medium tracking-tight text-white">
+                      <span className="font-mono text-3xl font-medium tracking-tight text-zinc-900 dark:text-white">
                         {formatTimer(timerTimeLeft ?? detected.timer.seconds)}
                       </span>
 
@@ -765,7 +771,7 @@ export function MorphSearch({
                         <button
                           type="button"
                           onClick={() => setTimerRunning((p) => !p)}
-                          className="flex items-center rounded-full bg-white px-3 py-1 text-xs font-medium text-zinc-950 hover:bg-zinc-200 transition-colors cursor-pointer"
+                          className="flex items-center rounded-full bg-zinc-900 px-3 py-1 text-xs font-medium text-white hover:bg-zinc-800 dark:bg-white dark:text-zinc-950 dark:hover:bg-zinc-200 transition-colors cursor-pointer"
                         >
                           {timerRunning ? "Pause" : "Start"}
                         </button>
@@ -775,14 +781,14 @@ export function MorphSearch({
                             setTimerRunning(false);
                             setTimerTimeLeft(detected.timer?.seconds ?? 1500);
                           }}
-                          className="flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-zinc-400 hover:text-white transition-colors cursor-pointer"
+                          className="flex items-center rounded-full border border-zinc-200 bg-zinc-100 px-3 py-1 text-xs text-zinc-600 hover:text-zinc-900 dark:border-white/10 dark:bg-white/5 dark:text-zinc-400 dark:hover:text-white transition-colors cursor-pointer"
                         >
                           Reset
                         </button>
                         <button
                           type="button"
                           onClick={saveCurrentItem}
-                          className="flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-zinc-300 hover:text-white transition-colors cursor-pointer"
+                          className="flex items-center rounded-full border border-zinc-200 bg-zinc-100 px-3 py-1 text-xs text-zinc-700 hover:text-zinc-900 dark:border-white/10 dark:bg-white/5 dark:text-zinc-300 dark:hover:text-white transition-colors cursor-pointer"
                         >
                           Save
                         </button>
@@ -792,9 +798,9 @@ export function MorphSearch({
                 )}
 
                 {detected.type === "split" && detected.split && (
-                  <div className="flex flex-col gap-3 rounded-xl border border-white/8 bg-white/2 p-4">
+                  <div className="flex flex-col gap-3 rounded-xl border border-zinc-200/80 bg-zinc-50/60 p-4 dark:border-white/8 dark:bg-white/2">
                     <div className="flex items-center justify-between text-xs text-zinc-400">
-                      <span className="font-medium text-zinc-300">
+                      <span className="font-medium text-zinc-700 dark:text-zinc-300">
                         Split Bill
                       </span>
                       <span>
@@ -803,8 +809,10 @@ export function MorphSearch({
                     </div>
 
                     <div className="flex items-baseline justify-between py-1">
-                      <span className="text-xs text-zinc-400">Each pays</span>
-                      <span className="font-mono text-2xl font-semibold text-white">
+                      <span className="text-xs text-zinc-500 dark:text-zinc-400">
+                        Each pays
+                      </span>
+                      <span className="font-mono text-2xl font-semibold text-zinc-900 dark:text-white">
                         ₹{detected.split.perPerson}
                       </span>
                     </div>
@@ -817,12 +825,12 @@ export function MorphSearch({
                         }).map((_, i) => (
                           <div
                             key={i}
-                            className="flex flex-col items-center justify-center rounded-lg border border-white/6 bg-white/3 py-2 text-center"
+                            className="flex flex-col items-center justify-center rounded-lg border border-zinc-200/60 bg-zinc-100/40 py-2 text-center dark:border-white/6 dark:bg-white/3"
                           >
-                            <span className="text-[10px] text-zinc-500">
+                            <span className="text-[10px] text-zinc-500 dark:text-zinc-500">
                               Person {i + 1}
                             </span>
-                            <span className="font-mono text-xs font-medium text-zinc-200">
+                            <span className="font-mono text-xs font-medium text-zinc-800 dark:text-zinc-200">
                               {splitData.perPerson}
                             </span>
                           </div>
@@ -834,7 +842,7 @@ export function MorphSearch({
                       <button
                         type="button"
                         onClick={saveCurrentItem}
-                        className="flex items-center rounded-full bg-white px-3 py-1 text-xs font-medium text-zinc-950 hover:bg-zinc-200 transition-colors cursor-pointer"
+                        className="flex items-center rounded-full bg-zinc-900 px-3 py-1 text-xs font-medium text-white hover:bg-zinc-800 dark:bg-white dark:text-zinc-950 dark:hover:bg-zinc-200 transition-colors cursor-pointer"
                       >
                         <span>Save Split</span>
                       </button>
@@ -844,7 +852,7 @@ export function MorphSearch({
 
                 {detected.type === "search" && query.trim() && (
                   <div className="flex flex-col gap-1.5">
-                    <div className="px-1 text-[11px] font-medium text-zinc-400 uppercase tracking-wider">
+                    <div className="px-1 text-[11px] font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                       Search Results
                     </div>
                     {searchResults.length > 0 ? (
@@ -856,23 +864,23 @@ export function MorphSearch({
                             updateQuery(item.title);
                             saveCurrentItem();
                           }}
-                          className="group flex items-center justify-between rounded-lg border border-transparent px-3 py-2 text-left text-xs transition-colors hover:border-white/8 hover:bg-white/5 cursor-pointer"
+                          className="group flex items-center justify-between rounded-lg border border-transparent px-3 py-2 text-left text-xs transition-colors hover:border-zinc-200 hover:bg-zinc-100/70 dark:hover:border-white/8 dark:hover:bg-white/5 cursor-pointer"
                         >
                           <div className="flex flex-col">
-                            <span className="font-medium text-zinc-200 group-hover:text-white">
+                            <span className="font-medium text-zinc-800 group-hover:text-zinc-950 dark:text-zinc-200 dark:group-hover:text-white">
                               {item.title}
                             </span>
-                            <span className="text-[11px] text-zinc-500">
+                            <span className="text-[11px] text-zinc-500 dark:text-zinc-500">
                               {item.desc}
                             </span>
                           </div>
-                          <span className="rounded-full border border-white/8 bg-white/4 px-2 py-0.5 text-[10px] text-zinc-400">
+                          <span className="rounded-full border border-zinc-200 bg-zinc-100 px-2 py-0.5 text-[10px] text-zinc-600 dark:border-white/8 dark:bg-white/4 dark:text-zinc-400">
                             {item.category}
                           </span>
                         </button>
                       ))
                     ) : (
-                      <div className="py-6 text-center text-xs text-zinc-500">
+                      <div className="py-6 text-center text-xs text-zinc-500 dark:text-zinc-500">
                         No matches found for &quot;{query}&quot;
                       </div>
                     )}
@@ -897,8 +905,8 @@ export function MorphSearch({
                             className={cn(
                               "flex items-center rounded-full border px-3 py-1 text-xs transition-colors cursor-pointer",
                               isSelected
-                                ? "border-white/25 bg-white/10 text-white"
-                                : "border-white/8 bg-white/4 text-zinc-400 hover:border-white/15 hover:text-zinc-200",
+                                ? "border-zinc-900 bg-zinc-900 text-white dark:border-white/25 dark:bg-white/10 dark:text-white"
+                                : "border-zinc-200 bg-zinc-100 text-zinc-600 hover:border-zinc-300 hover:text-zinc-900 dark:border-white/8 dark:bg-white/4 dark:text-zinc-400 dark:hover:border-white/15 dark:hover:text-zinc-200",
                             )}
                           >
                             <span>{chip.label}</span>
@@ -908,7 +916,7 @@ export function MorphSearch({
                     </div>
 
                     <div className="flex flex-col gap-1 pt-1">
-                      <span className="px-1 text-[11px] font-medium text-zinc-500 uppercase tracking-wider">
+                      <span className="px-1 text-[11px] font-medium text-zinc-500 dark:text-zinc-500 uppercase tracking-wider">
                         Suggested Prompts
                       </span>
                       {PLACEHOLDERS.slice(0, 4).map((p, i) => (
@@ -916,7 +924,7 @@ export function MorphSearch({
                           key={i}
                           type="button"
                           onClick={() => updateQuery(p)}
-                          className="flex items-center justify-between rounded-lg px-2.5 py-1.5 text-left text-xs text-zinc-300 hover:bg-white/5 hover:text-white transition-colors cursor-pointer"
+                          className="flex items-center justify-between rounded-lg px-2.5 py-1.5 text-left text-xs text-zinc-700 hover:bg-zinc-100 hover:text-zinc-950 dark:text-zinc-300 dark:hover:bg-white/5 dark:hover:text-white transition-colors cursor-pointer"
                         >
                           <span className="truncate">{p}</span>
                         </button>
@@ -938,7 +946,7 @@ export function MorphSearch({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 6 }}
             transition={reduceMotion ? fadeTween : springMorph}
-            className="mt-3 flex flex-col gap-1 rounded-[22px] border border-white/10 bg-[#0d0d12]/95 backdrop-blur-2xl p-2 shadow-[0_8px_32px_rgba(0,0,0,0.36)]"
+            className="mt-3 flex flex-col gap-1 rounded-[22px] border border-zinc-200/80 bg-white/95 backdrop-blur-2xl p-2 shadow-[0_8px_32px_rgba(0,0,0,0.06)] dark:border-white/10 dark:bg-[#0d0d12]/95 dark:shadow-[0_8px_32px_rgba(0,0,0,0.36)]"
           >
             <AnimatePresence initial={false}>
               {savedItems.map((item) => (
@@ -949,14 +957,14 @@ export function MorphSearch({
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.96 }}
                   transition={reduceMotion ? fadeTween : springMorph}
-                  className="group relative flex items-center justify-between rounded-xl px-3 py-2.5 transition-colors hover:bg-white/5 cursor-pointer"
+                  className="group relative flex items-center justify-between rounded-xl px-3 py-2.5 transition-colors hover:bg-zinc-100/70 dark:hover:bg-white/5 cursor-pointer"
                   onClick={() => reopenItem(item)}
                 >
                   <div className="flex items-center gap-2.5 min-w-0 flex-1 pr-3">
-                    <span className="shrink-0 rounded-md border border-white/10 bg-white/5 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wider text-zinc-400">
+                    <span className="shrink-0 rounded-md border border-zinc-200 bg-zinc-100 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wider text-zinc-600 dark:border-white/10 dark:bg-white/5 dark:text-zinc-400">
                       {item.intent}
                     </span>
-                    <span className="truncate text-[14px] text-zinc-200 group-hover:text-white">
+                    <span className="truncate text-[14px] text-zinc-800 group-hover:text-zinc-950 dark:text-zinc-200 dark:group-hover:text-white">
                       {item.summary}
                     </span>
                   </div>
@@ -966,7 +974,7 @@ export function MorphSearch({
                       e.stopPropagation();
                       removeItem(item.id);
                     }}
-                    className="shrink-0 rounded px-1.5 py-0.5 text-xs text-zinc-500 hover:text-zinc-200 transition-colors cursor-pointer"
+                    className="shrink-0 rounded px-1.5 py-0.5 text-xs text-zinc-400 hover:text-zinc-800 dark:text-zinc-500 dark:hover:text-zinc-200 transition-colors cursor-pointer"
                   >
                     Delete
                   </button>

@@ -766,6 +766,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
   const [hookDemoIndex, setHookDemoIndex] = useState(0);
   const [counterDemoValue, setCounterDemoValue] = useState(122337);
   const [sparkleConfig, setSparkleConfig] = useState({
+    variant: "default" as "default" | "outline" | "glass",
+    size: "lg" as "sm" | "default" | "lg",
     animateBy: "letters" as "letters" | "words",
     direction: "top" as "top" | "bottom",
     delay: 40,
@@ -777,6 +779,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
 
   const resetSparkleConfig = () => {
     setSparkleConfig({
+      variant: "default",
+      size: "lg",
       animateBy: "letters",
       direction: "top",
       delay: 40,
@@ -1107,7 +1111,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               mask={otpMask}
               separator={
                 otpGrouped ? (
-                  <span className="w-2.5 h-0.5 rounded-full bg-zinc-600 dark:bg-zinc-700" />
+                  <span className="w-2.5 h-0.5 rounded-full bg-zinc-400 dark:bg-zinc-700" />
                 ) : undefined
               }
               groupSize={otpGrouped ? 3 : undefined}
@@ -1231,7 +1235,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         return (
           <div className="flex items-center justify-center select-none w-full p-8 min-h-55">
             <SparkleButton
-              size="lg"
+              variant={sparkleConfig.variant}
+              size={sparkleConfig.size}
               text="Generate Magic"
               activeText="Generating..."
               animateBy={sparkleConfig.animateBy}
@@ -1290,13 +1295,13 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         );
       case "animated-button":
         return (
-          <div className="w-full max-w-md bg-[#0c0c0e] border border-white/10 rounded-2xl p-6 shadow-2xl flex flex-col gap-6 select-none">
-            <div className="flex items-center justify-between pb-3 border-b border-white/8">
+          <div className="w-full max-w-md bg-card dark:bg-[#0c0c0e] border border-border dark:border-white/10 rounded-2xl p-6 shadow-2xl flex flex-col gap-6 select-none">
+            <div className="flex items-center justify-between pb-3 border-b border-border dark:border-white/8">
               <div>
-                <h3 className="text-sm font-medium text-white">
+                <h3 className="text-sm font-medium text-foreground dark:text-white">
                   Interactive Action Stack
                 </h3>
-                <p className="text-[11px] text-zinc-400 font-light mt-0.5">
+                <p className="text-[11px] text-muted-foreground dark:text-zinc-400 font-light mt-0.5">
                   High-stiffness spring feedback & damping
                 </p>
               </div>
@@ -1332,9 +1337,11 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 <span>Shimmer Glow</span>
               </AnimatedButton>
             </div>
-            <div className="flex items-center justify-between pt-3 border-t border-white/8 text-[11px] font-mono text-zinc-500">
+            <div className="flex items-center justify-between pt-3 border-t border-border dark:border-white/8 text-[11px] font-mono text-muted-foreground dark:text-zinc-500">
               <span>Stiffness: 420, Damping: 34</span>
-              <span className="text-zinc-400">GPU Accelerated</span>
+              <span className="text-muted-foreground dark:text-zinc-400">
+                GPU Accelerated
+              </span>
             </div>
           </div>
         );
@@ -1342,7 +1349,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         return <GitHubActivity />;
       case "hook-sidebar":
         return (
-          <div className="w-full max-w-sm bg-[#0c0c0e] border border-white/10 rounded-2xl p-6 shadow-2xl flex flex-col gap-5">
+          <div className="w-full max-w-sm bg-card dark:bg-[#0c0c0e] border border-border dark:border-white/10 rounded-2xl p-6 shadow-2xl flex flex-col gap-5">
             {HOOK_SIDEBAR_DEMO_CATEGORIES.map((cat, catIdx) => {
               const baseIndex = HOOK_SIDEBAR_DEMO_CATEGORIES.slice(
                 0,
@@ -1387,23 +1394,23 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   {sec.kind === "title" ? (
                     <div
                       className={cn(
-                        "border-b border-white/8 pb-2",
+                        "border-b border-border dark:border-white/8 pb-2",
                         idx === 0 ? "pt-0" : "pt-5",
                       )}
                     >
-                      <span className="text-[10px] font-mono uppercase tracking-widest text-zinc-500 block leading-none">
+                      <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground dark:text-zinc-500 block leading-none">
                         Section
                       </span>
-                      <h2 className="text-base font-medium text-white tracking-tight mt-1 leading-tight">
+                      <h2 className="text-base font-medium text-foreground dark:text-white tracking-tight mt-1 leading-tight">
                         {sec.label}
                       </h2>
                     </div>
                   ) : (
                     <div className="space-y-1">
-                      <h3 className="text-xs font-mono uppercase tracking-wider text-zinc-300">
+                      <h3 className="text-xs font-mono uppercase tracking-wider text-foreground/90 dark:text-zinc-300">
                         {sec.label}
                       </h3>
-                      <p className="text-xs leading-relaxed text-zinc-400 font-light">
+                      <p className="text-xs leading-relaxed text-muted-foreground dark:text-zinc-400 font-light">
                         {sec.description}
                       </p>
                     </div>
@@ -1540,13 +1547,13 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         );
       case "scales":
         return (
-          <div className="w-full max-w-xl bg-[#0c0c0e] border border-white/10 rounded-2xl p-6 shadow-2xl flex flex-col gap-6">
-            <div className="flex items-center justify-between pb-3 border-b border-white/8">
+          <div className="w-full max-w-xl bg-card dark:bg-[#0c0c0e] border border-border dark:border-white/10 rounded-2xl p-6 shadow-2xl flex flex-col gap-6">
+            <div className="flex items-center justify-between pb-3 border-b border-border dark:border-white/8">
               <div>
-                <h3 className="text-sm font-medium text-white">
+                <h3 className="text-sm font-medium text-foreground dark:text-white">
                   Architectural Scales
                 </h3>
-                <p className="text-[11px] text-zinc-400 font-light mt-0.5">
+                <p className="text-[11px] text-muted-foreground dark:text-zinc-400 font-light mt-0.5">
                   Repeating linear gradient borders
                 </p>
               </div>
@@ -1564,16 +1571,16 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         return (
           <div className="w-full max-w-md">
             <SpotlightCard
-              className="p-6 border-white/10 bg-[#0c0c0e]"
+              className="p-6 border-border dark:border-white/10 bg-card dark:bg-[#0c0c0e]"
               spotlightColor={color.startsWith("#") ? `${color}30` : color}
             >
-              <h4 className="text-base font-medium text-white">
+              <h4 className="text-base font-medium text-foreground dark:text-white">
                 Radial Spotlight
               </h4>
-              <p className="text-xs text-zinc-400 mt-2 font-light leading-relaxed">
+              <p className="text-xs text-muted-foreground dark:text-zinc-400 mt-2 font-light leading-relaxed">
                 Smooth cursor tracking with radial falloff gradient.
               </p>
-              <div className="mt-6 pt-4 border-t border-white/8 flex items-center justify-between text-[11px] font-mono text-zinc-500">
+              <div className="mt-6 pt-4 border-t border-border dark:border-white/8 flex items-center justify-between text-[11px] font-mono text-muted-foreground dark:text-zinc-500">
                 <span>Tailwind CSS</span>
                 <span
                   className="transition-colors duration-200 font-medium"
@@ -1590,7 +1597,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
           <div className="w-full max-w-6xl flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-12 p-4 sm:p-6 select-none">
             <div className="w-full max-w-72 shrink-0 flex items-center justify-center">
               <PixelCard
-                className="w-full aspect-4/5 p-6 border-white/10 bg-[#0c0c0e]"
+                className="w-full aspect-4/5 p-6 border-border dark:border-white/10 bg-card dark:bg-[#0c0c0e]"
                 variant={pixelVariant}
                 pattern={pixelPattern}
                 speed={pixelSpeed}
@@ -1600,27 +1607,27 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               />
             </div>
 
-            <div className="w-full max-w-xl shrink-0 rounded-2xl border border-white/10 bg-[#121215]/95 backdrop-blur-2xl p-4 sm:p-5 shadow-[0_16px_40px_rgba(0,0,0,0.85)] flex flex-col gap-3">
+            <div className="w-full max-w-xl shrink-0 rounded-2xl border border-border dark:border-white/10 bg-card/95 dark:bg-[#121215]/95 backdrop-blur-2xl p-4 sm:p-5 shadow-[0_16px_40px_rgba(0,0,0,0.08)] dark:shadow-[0_16px_40px_rgba(0,0,0,0.85)] flex flex-col gap-3">
               <div className="flex items-center justify-between px-1">
-                <span className="text-xs font-semibold text-white/90 tracking-tight">
+                <span className="text-xs font-semibold text-foreground dark:text-white/90 tracking-tight">
                   Pixel Card Controls
                 </span>
                 <button
                   type="button"
                   onClick={resetPixelConfig}
-                  className="text-[11px] text-zinc-400 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                  className="text-[11px] text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
                 >
                   <ResetIcon className="w-3.5 h-3.5" />
                   <span>Reset</span>
                 </button>
               </div>
 
-              <div className="rounded-xl border border-white/5 bg-[#0b0b0e] p-2 sm:p-2.5 flex flex-col gap-2">
-                <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3.5 flex items-center gap-3 text-xs">
-                  <span className="w-16 text-zinc-400 text-xs font-medium shrink-0">
+              <div className="rounded-xl border border-border dark:border-white/5 bg-muted/40 dark:bg-[#0b0b0e] p-2 sm:p-2.5 flex flex-col gap-2">
+                <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3.5 flex items-center gap-3 text-xs">
+                  <span className="w-16 text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                     Pattern
                   </span>
-                  <div className="flex-1 min-w-0 flex items-center gap-1 bg-black/30 p-0.5 rounded-md border border-white/5 overflow-hidden">
+                  <div className="flex-1 min-w-0 flex items-center gap-1 bg-muted/80 dark:bg-black/30 p-0.5 rounded-md border border-border dark:border-white/5 overflow-hidden">
                     {(
                       [
                         { id: "wave", label: "Wave" },
@@ -1636,8 +1643,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         className={cn(
                           "relative flex-1 min-w-0 h-6.5 px-2 rounded text-[11px] font-medium flex items-center justify-center transition-colors cursor-pointer select-none",
                           pixelPattern === p.id
-                            ? "text-black font-semibold"
-                            : "text-zinc-400 hover:text-white",
+                            ? "text-background font-semibold dark:text-black"
+                            : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
                         )}
                       >
                         {pixelPattern === p.id && (
@@ -1648,7 +1655,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               stiffness: 450,
                               damping: 32,
                             }}
-                            className="absolute inset-0 bg-white rounded shadow-xs"
+                            className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
                           />
                         )}
                         <span className="relative z-10 truncate">
@@ -1659,11 +1666,11 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   </div>
                 </div>
 
-                <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3.5 flex items-center gap-3 text-xs">
-                  <span className="w-16 text-zinc-400 text-xs font-medium shrink-0">
+                <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3.5 flex items-center gap-3 text-xs">
+                  <span className="w-16 text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                     Color
                   </span>
-                  <div className="flex-1 min-w-0 flex items-center gap-1 bg-black/30 p-0.5 rounded-md border border-white/5 overflow-hidden">
+                  <div className="flex-1 min-w-0 flex items-center gap-1 bg-muted/80 dark:bg-black/30 p-0.5 rounded-md border border-border dark:border-white/5 overflow-hidden">
                     {(
                       [
                         { id: "default", label: "Cyan", dot: "bg-sky-400" },
@@ -1689,8 +1696,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         className={cn(
                           "relative flex-1 min-w-0 h-6.5 px-1.5 sm:px-2 rounded text-[11px] font-medium flex items-center justify-center gap-1.5 transition-colors cursor-pointer select-none",
                           pixelVariant === v.id
-                            ? "text-black font-semibold"
-                            : "text-zinc-400 hover:text-white",
+                            ? "text-background font-semibold dark:text-black"
+                            : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
                         )}
                       >
                         {pixelVariant === v.id && (
@@ -1701,7 +1708,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               stiffness: 450,
                               damping: 32,
                             }}
-                            className="absolute inset-0 bg-white rounded shadow-xs"
+                            className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
                           />
                         )}
                         <span
@@ -1718,11 +1725,11 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   </div>
                 </div>
 
-                <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3.5 flex items-center gap-3 text-xs">
-                  <span className="w-16 text-zinc-400 text-xs font-medium shrink-0">
+                <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3.5 flex items-center gap-3 text-xs">
+                  <span className="w-16 text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                     Speed
                   </span>
-                  <div className="flex-1 min-w-0 flex items-center gap-1 bg-black/30 p-0.5 rounded-md border border-white/5 overflow-hidden">
+                  <div className="flex-1 min-w-0 flex items-center gap-1 bg-muted/80 dark:bg-black/30 p-0.5 rounded-md border border-border dark:border-white/5 overflow-hidden">
                     {(
                       [
                         { val: 12, label: "Slow" },
@@ -1738,8 +1745,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         className={cn(
                           "relative flex-1 min-w-0 h-6.5 px-2 rounded text-[11px] font-medium flex items-center justify-center transition-colors cursor-pointer select-none",
                           pixelSpeed === s.val
-                            ? "text-black font-semibold"
-                            : "text-zinc-400 hover:text-white",
+                            ? "text-background font-semibold dark:text-black"
+                            : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
                         )}
                       >
                         {pixelSpeed === s.val && (
@@ -1750,7 +1757,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               stiffness: 450,
                               damping: 32,
                             }}
-                            className="absolute inset-0 bg-white rounded shadow-xs"
+                            className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
                           />
                         )}
                         <span className="relative z-10 truncate">
@@ -1761,11 +1768,11 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   </div>
                 </div>
 
-                <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3.5 flex items-center gap-3 text-xs">
-                  <span className="w-16 text-zinc-400 text-xs font-medium shrink-0">
+                <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3.5 flex items-center gap-3 text-xs">
+                  <span className="w-16 text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                     Noise
                   </span>
-                  <div className="flex-1 min-w-0 flex items-center gap-1 bg-black/30 p-0.5 rounded-md border border-white/5 overflow-hidden">
+                  <div className="flex-1 min-w-0 flex items-center gap-1 bg-muted/80 dark:bg-black/30 p-0.5 rounded-md border border-border dark:border-white/5 overflow-hidden">
                     {(
                       [
                         { val: 0, label: "Off" },
@@ -1781,8 +1788,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         className={cn(
                           "relative flex-1 min-w-0 h-6.5 px-2 rounded text-[11px] font-medium flex items-center justify-center transition-colors cursor-pointer select-none",
                           pixelNoise === n.val
-                            ? "text-black font-semibold"
-                            : "text-zinc-400 hover:text-white",
+                            ? "text-background font-semibold dark:text-black"
+                            : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
                         )}
                       >
                         {pixelNoise === n.val && (
@@ -1793,7 +1800,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               stiffness: 450,
                               damping: 32,
                             }}
-                            className="absolute inset-0 bg-white rounded shadow-xs"
+                            className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
                           />
                         )}
                         <span className="relative z-10 truncate">
@@ -1804,11 +1811,11 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   </div>
                 </div>
 
-                <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3.5 flex items-center gap-3 text-xs">
-                  <span className="w-16 text-zinc-400 text-xs font-medium shrink-0">
+                <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3.5 flex items-center gap-3 text-xs">
+                  <span className="w-16 text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                     Density
                   </span>
-                  <div className="flex-1 min-w-0 flex items-center gap-1 bg-black/30 p-0.5 rounded-md border border-white/5 overflow-hidden">
+                  <div className="flex-1 min-w-0 flex items-center gap-1 bg-muted/80 dark:bg-black/30 p-0.5 rounded-md border border-border dark:border-white/5 overflow-hidden">
                     {(
                       [
                         { val: 4, label: "Dense" },
@@ -1823,8 +1830,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         className={cn(
                           "relative flex-1 min-w-0 h-6.5 px-2 rounded text-[11px] font-medium flex items-center justify-center transition-colors cursor-pointer select-none",
                           pixelGap === g.val
-                            ? "text-black font-semibold"
-                            : "text-zinc-400 hover:text-white",
+                            ? "text-background font-semibold dark:text-black"
+                            : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
                         )}
                       >
                         {pixelGap === g.val && (
@@ -1835,7 +1842,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               stiffness: 450,
                               damping: 32,
                             }}
-                            className="absolute inset-0 bg-white rounded shadow-xs"
+                            className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
                           />
                         )}
                         <span className="relative z-10 truncate">
@@ -1851,7 +1858,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         );
       case "bento-grid":
         return (
-          <div className="w-full max-w-lg bg-[#0c0c0e] border border-white/10 rounded-2xl p-6 shadow-2xl">
+          <div className="w-full max-w-lg bg-card dark:bg-[#0c0c0e] border border-border dark:border-white/10 rounded-2xl p-6 shadow-2xl">
             <BentoGrid className="grid-cols-2 gap-3">
               <BentoCard
                 colSpan={1}
@@ -1868,7 +1875,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         );
       case "glowing-badge":
         return (
-          <div className="w-full max-w-md bg-[#0c0c0e] border border-white/10 rounded-2xl p-8 shadow-2xl flex flex-col items-center justify-center gap-4">
+          <div className="w-full max-w-md bg-card dark:bg-[#0c0c0e] border border-border dark:border-white/10 rounded-2xl p-8 shadow-2xl flex flex-col items-center justify-center gap-4">
             <div className="flex items-center gap-3">
               <GlowingBadge>PRODUCTION</GlowingBadge>
               <GlowingBadge
@@ -1883,7 +1890,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 LIVE
               </GlowingBadge>
             </div>
-            <span className="text-xs font-mono text-zinc-500">
+            <span className="text-xs font-mono text-muted-foreground dark:text-zinc-500">
               Geometric status indicators
             </span>
           </div>
@@ -1903,7 +1910,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               duration={ROLL}
               grouping="indian"
               prefix={<span className="mr-0.5">₹</span>}
-              className="font-mono text-6xl font-bold tracking-tight text-white **:data-[slot=animated-counter-mark]:mx-[-0.1em] sm:text-7xl"
+              className="font-mono text-6xl font-bold tracking-tight text-foreground dark:text-white **:data-[slot=animated-counter-mark]:mx-[-0.1em] sm:text-7xl"
             />
 
             <div className="relative w-80 sm:w-96 max-w-full shrink-0 rounded-xl px-px has-focus-visible:outline-2 has-focus-visible:outline-offset-4 has-focus-visible:outline-[#868593]">
@@ -1923,8 +1930,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       key={index}
                       className={`w-0.5 rounded-full shrink-0 transition-[height,background-color] duration-200 motion-reduce:transition-none ${
                         index < marker
-                          ? "h-5 bg-[#EBEBF5]"
-                          : "h-3.5 bg-[#3C3C43]"
+                          ? "h-5 bg-zinc-800 dark:bg-[#EBEBF5]"
+                          : "h-3.5 bg-zinc-300 dark:bg-[#3C3C43]"
                       }`}
                     />
                   ),
@@ -2063,7 +2070,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
   };
 
   return (
-    <div className="h-screen w-screen bg-black text-[#f4f4f5] flex overflow-hidden select-none">
+    <div className="h-screen w-screen bg-background text-foreground flex overflow-hidden select-none">
       <motion.aside
         initial={false}
         animate={{
@@ -2072,38 +2079,23 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         }}
         transition={panelSpring}
         className={cn(
-          "shrink-0 bg-black flex flex-col overflow-hidden h-full z-20 border-r border-white/5",
+          "shrink-0 bg-background flex flex-col overflow-hidden h-full z-20 border-r border-border",
           isFullscreen && "border-r-0",
         )}
       >
-        <div className="p-3.5 flex items-center justify-between h-14 shrink-0 border-b border-white/5">
+        <div className="p-3.5 flex items-center justify-between h-14 shrink-0 border-b border-border">
           {sidebarOpen ? (
             <Link
               href="/"
-              className="flex items-center gap-2 group text-white hover:opacity-85 transition-opacity"
+              className="flex items-center gap-2 group text-foreground hover:opacity-85 transition-opacity"
               title="DevClub Home"
             >
-              <span className="font-sans font-semibold text-sm tracking-tight text-white">
+              <span className="font-sans font-semibold text-sm tracking-tight text-foreground">
                 devclub
               </span>
             </Link>
           ) : (
-            <Link
-              href="/"
-              className="w-8 h-8 rounded-lg bg-orange-500 flex items-center justify-center p-1.5 text-black hover:opacity-90 transition-opacity"
-              title="DevClub Home"
-            >
-              <svg
-                viewBox="0 0 16 16"
-                fill="none"
-                className="w-full h-full stroke-black"
-                strokeWidth="1.6"
-              >
-                <rect x="1.5" y="1.5" width="13" height="13" rx="1" />
-                <line x1="1.5" y1="1.5" x2="14.5" y2="14.5" />
-                <line x1="14.5" y1="1.5" x2="1.5" y2="14.5" />
-              </svg>
-            </Link>
+            <div></div>
           )}
 
           <motion.button
@@ -2112,7 +2104,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
             transition={microSpring}
             type="button"
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="w-8 h-8 rounded-lg border border-white/10 bg-[#18181b] hover:bg-[#222226] text-zinc-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+            className="w-8 h-8 rounded-lg border border-border bg-card dark:bg-[#18181b] hover:bg-muted dark:hover:bg-[#222226] text-muted-foreground hover:text-foreground flex items-center justify-center transition-colors cursor-pointer"
             title={sidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
           >
             <motion.div
@@ -2147,10 +2139,10 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               >
                 <Link
                   href="/components"
-                  className="flex items-center justify-between text-xs font-medium text-zinc-300 hover:text-orange-400 transition-colors tracking-tight px-1 py-1"
+                  className="flex items-center justify-between text-xs font-medium text-muted-foreground hover:text-orange-500 transition-colors tracking-tight px-1 py-1"
                 >
                   <span>All Components</span>
-                  <ChevronRightIcon className="w-3.5 h-3.5 text-zinc-600" />
+                  <ChevronRightIcon className="w-3.5 h-3.5 text-muted-foreground" />
                 </Link>
 
                 <div className="space-y-6">
@@ -2207,24 +2199,24 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
             scale: activePanel === "code" ? 0.985 : 1,
             opacity: activePanel === "code" ? 0.75 : 1,
           }}
-          className="relative border border-white/8 bg-[#0f0f11] flex flex-col overflow-hidden h-full flex-1 rounded-3xl"
+          className="relative border border-border bg-card dark:bg-[#0f0f11] flex flex-col overflow-hidden h-full flex-1 rounded-3xl"
         >
-          <div className="h-14 px-5 border-b border-white/5 flex items-center justify-between z-20 shrink-0 bg-[#0f0f11]/80 backdrop-blur-md">
+          <div className="h-14 px-5 border-b border-border flex items-center justify-between z-20 shrink-0 bg-card/80 dark:bg-[#0f0f11]/80 backdrop-blur-md">
             <div className="flex items-center gap-2.5 min-w-0">
               <Link
                 href="/components"
-                className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 hover:text-white transition-colors shrink-0"
+                className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors shrink-0"
               >
                 {activeComponent.category.replace("-", " ")}
               </Link>
-              <span className="text-zinc-700 shrink-0">/</span>
-              <span className="text-xs font-sans font-medium text-white tracking-tight truncate">
+              <span className="text-border shrink-0">/</span>
+              <span className="text-xs font-sans font-medium text-foreground tracking-tight truncate">
                 {activeComponent.name}
               </span>
             </div>
 
             <div className="flex items-center gap-2">
-              <div className="flex items-center p-0.5 rounded-lg border border-white/10 bg-[#18181b]/90 shadow-sm mr-1">
+              <div className="flex items-center p-0.5 rounded-lg border border-border bg-muted/60 dark:bg-[#18181b]/90 shadow-sm mr-1">
                 <button
                   type="button"
                   onClick={() => setViewport("desktop")}
@@ -2232,8 +2224,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   className={cn(
                     "p-1.5 rounded-md transition-colors cursor-pointer",
                     viewport === "desktop"
-                      ? "bg-white/15 text-white"
-                      : "text-zinc-500 hover:text-zinc-300",
+                      ? "bg-background dark:bg-white/15 text-foreground dark:text-white shadow-xs"
+                      : "text-muted-foreground hover:text-foreground",
                   )}
                 >
                   <DesktopIcon className="w-3.5 h-3.5" />
@@ -2245,8 +2237,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   className={cn(
                     "p-1.5 rounded-md transition-colors cursor-pointer",
                     viewport === "tablet"
-                      ? "bg-white/15 text-white"
-                      : "text-zinc-500 hover:text-zinc-300",
+                      ? "bg-background dark:bg-white/15 text-foreground dark:text-white shadow-xs"
+                      : "text-muted-foreground hover:text-foreground",
                   )}
                 >
                   <ViewGridIcon className="w-3.5 h-3.5" />
@@ -2258,8 +2250,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   className={cn(
                     "p-1.5 rounded-md transition-colors cursor-pointer",
                     viewport === "mobile"
-                      ? "bg-white/15 text-white"
-                      : "text-zinc-500 hover:text-zinc-300",
+                      ? "bg-background dark:bg-white/15 text-foreground dark:text-white shadow-xs"
+                      : "text-muted-foreground hover:text-foreground",
                   )}
                 >
                   <MobileIcon className="w-3.5 h-3.5" />
@@ -2267,7 +2259,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               </div>
 
               <GitHubButton className="h-8 px-2.5 rounded-lg text-xs" />
-              <AnimatedThemeToggler className="h-8 w-8 rounded-lg border border-border bg-foreground/5 hover:bg-foreground/10 text-foreground transition-colors cursor-pointer flex items-center justify-center shrink-0 [&_svg]:size-3.5 shadow-sm" />
+              <AnimatedThemeToggler className="w-8 h-8 rounded-lg border border-border bg-muted/60 hover:bg-muted dark:bg-[#18181b]/90 dark:hover:bg-[#222226] text-muted-foreground hover:text-foreground dark:text-zinc-300 dark:hover:text-white transition-colors cursor-pointer flex items-center justify-center shrink-0 [&_svg]:size-3.5 shadow-sm" />
 
               <motion.button
                 whileHover={{ scale: 1.03 }}
@@ -2275,7 +2267,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 transition={microSpring}
                 type="button"
                 onClick={handleInstallCopy}
-                className="h-8 px-3 rounded-lg border border-white/10 bg-[#18181b]/90 hover:bg-[#222226] text-zinc-300 hover:text-white text-xs transition-colors cursor-pointer flex items-center gap-1.5 shadow-sm"
+                className="h-8 px-3 rounded-lg border border-border bg-muted/60 hover:bg-muted dark:bg-[#18181b]/90 dark:hover:bg-[#222226] text-muted-foreground hover:text-foreground dark:text-zinc-300 dark:hover:text-white text-xs transition-colors cursor-pointer flex items-center gap-1.5 shadow-sm"
               >
                 {installCopied ? (
                   <>
@@ -2296,7 +2288,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 title={
                   isFullscreen ? "Exit Fullscreen (Esc)" : "Enter Fullscreen"
                 }
-                className="w-8 h-8 rounded-lg border border-white/10 bg-[#18181b]/90 hover:bg-[#222226] text-zinc-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer shadow-sm"
+                className="w-8 h-8 rounded-lg border border-border bg-muted/60 hover:bg-muted dark:bg-[#18181b]/90 dark:hover:bg-[#222226] text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white flex items-center justify-center transition-colors cursor-pointer shadow-sm"
               >
                 {isFullscreen ? (
                   <ExitFullScreenIcon className="w-3.5 h-3.5" />
@@ -2316,8 +2308,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 className={cn(
                   "h-8 px-2.5 rounded-lg border flex items-center gap-1.5 text-xs transition-all cursor-pointer shadow-sm",
                   activePanel === "code"
-                    ? "border-orange-500/80 text-orange-400 bg-orange-500/15 shadow-orange-500/10 shadow-md font-medium"
-                    : "border-white/10 bg-[#18181b]/90 hover:bg-[#222226] text-zinc-400 hover:text-white",
+                    ? "border-orange-500/80 text-orange-600 dark:text-orange-400 bg-orange-500/10 dark:bg-orange-500/15 shadow-orange-500/10 shadow-md font-medium"
+                    : "border-border bg-muted/60 hover:bg-muted dark:bg-[#18181b]/90 dark:hover:bg-[#222226] text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
                 )}
               >
                 <CodeIcon className="w-3.5 h-3.5" />
@@ -2335,8 +2327,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 className={cn(
                   "h-8 px-2.5 rounded-lg border flex items-center gap-1.5 text-xs transition-all cursor-pointer shadow-sm",
                   activePanel === "info"
-                    ? "border-orange-500/80 text-orange-400 bg-orange-500/15 shadow-orange-500/10 shadow-md font-medium"
-                    : "border-white/10 bg-[#18181b]/90 hover:bg-[#222226] text-zinc-400 hover:text-white",
+                    ? "border-orange-500/80 text-orange-600 dark:text-orange-400 bg-orange-500/10 dark:bg-orange-500/15 shadow-orange-500/10 shadow-md font-medium"
+                    : "border-border bg-muted/60 hover:bg-muted dark:bg-[#18181b]/90 dark:hover:bg-[#222226] text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
                 )}
               >
                 <InfoCircledIcon className="w-3.5 h-3.5" />
@@ -2355,7 +2347,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 : "p-6",
             )}
           >
-            <div className="absolute inset-0 bg-[radial-gradient(#27272a_1px,transparent_1px)] bg-size-[20px_20px] opacity-15 pointer-events-none" />
+            <div className="absolute inset-0 bg-[radial-gradient(currentColor_1px,transparent_1px)] text-foreground/8 bg-size-[20px_20px] pointer-events-none" />
 
             <motion.div
               layout
@@ -2379,7 +2371,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               className={cn(
                 "relative flex flex-col items-center justify-center overflow-hidden transition-colors",
                 viewport !== "desktop" &&
-                  "border border-white/15 bg-[#09090b] shadow-[0_25px_60px_rgba(0,0,0,0.9)] my-auto max-h-[90vh]",
+                  "border border-border bg-background dark:bg-[#09090b] shadow-[0_25px_60px_rgba(0,0,0,0.08)] dark:shadow-[0_25px_60px_rgba(0,0,0,0.9)] my-auto max-h-[90vh]",
               )}
             >
               {viewport === "mobile" && (
@@ -2412,7 +2404,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               {supportsColor && (
                 <div
                   key="floating-color-palette"
-                  className="pointer-events-auto rounded-full border border-white/12 bg-[#121215]/95 backdrop-blur-2xl p-1.5 shadow-[0_16px_40px_rgba(0,0,0,0.85),0_0_0_1px_rgba(255,255,255,0.06)] flex items-center gap-1.5 select-none"
+                  className="pointer-events-auto rounded-full border border-border bg-card/95 dark:bg-[#121215]/95 backdrop-blur-2xl p-1.5 shadow-[0_16px_40px_rgba(0,0,0,0.1),0_0_0_1px_rgba(0,0,0,0.06)] dark:shadow-[0_16px_40px_rgba(0,0,0,0.85),0_0_0_1px_rgba(255,255,255,0.06)] flex items-center gap-1.5 select-none"
                 >
                   {PALETTE.map((p) => {
                     const isSelected = activeColor === p.hex;
@@ -2430,7 +2422,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         {isSelected && (
                           <motion.span
                             layoutId="activeColorRing"
-                            className="absolute inset-0 rounded-full border-2 border-white shadow-[0_0_12px_rgba(255,255,255,0.4)] pointer-events-none"
+                            className="absolute inset-0 rounded-full border-2 border-foreground dark:border-white shadow-[0_0_12px_rgba(0,0,0,0.2)] dark:shadow-[0_0_12px_rgba(255,255,255,0.4)] pointer-events-none"
                             transition={{
                               type: "spring",
                               stiffness: 480,
@@ -2456,23 +2448,106 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               {activeComponent.slug === "sparkle-button" && (
                 <div
                   key="sparkle-customize-panel"
-                  className="pointer-events-auto rounded-2xl border border-white/10 bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-xl w-full mx-4 select-none flex flex-col gap-2.5"
+                  className="pointer-events-auto rounded-2xl border border-border dark:border-white/10 bg-card/95 dark:bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-[0_16px_40px_rgba(0,0,0,0.08)] dark:shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-xl w-full mx-4 select-none flex flex-col gap-2.5"
                 >
                   <div className="flex items-center justify-between px-1">
-                    <span className="text-xs font-semibold text-white/90 tracking-tight">
+                    <span className="text-xs font-semibold text-foreground dark:text-white/90 tracking-tight">
                       Customize
                     </span>
                     <button
                       type="button"
                       onClick={resetSparkleConfig}
-                      className="text-[11px] text-zinc-400 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                      className="text-[11px] text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
                     >
                       <ResetIcon className="w-3.5 h-3.5" />
                       <span>Reset</span>
                     </button>
                   </div>
 
-                  <div className="rounded-xl border border-white/5 bg-[#0b0b0e] p-1.5 flex flex-col gap-1.5">
+                  <div className="rounded-xl border border-border dark:border-white/5 bg-muted/40 dark:bg-[#0b0b0e] p-1.5 flex flex-col gap-1.5">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 pb-1.5 border-b border-border dark:border-white/5">
+                      <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                        <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium">
+                          Variant
+                        </span>
+                        <div className="flex items-center gap-0.5 bg-muted/80 dark:bg-black/25 p-0.5 rounded-md border border-border dark:border-white/5">
+                          {(["default", "outline", "glass"] as const).map(
+                            (v) => (
+                              <button
+                                key={v}
+                                type="button"
+                                onClick={() =>
+                                  setSparkleConfig((prev) => ({
+                                    ...prev,
+                                    variant: v,
+                                  }))
+                                }
+                                className={cn(
+                                  "relative px-2 py-0.5 rounded text-[11px] capitalize transition-colors cursor-pointer",
+                                  sparkleConfig.variant === v
+                                    ? "text-background font-semibold dark:text-black"
+                                    : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
+                                )}
+                              >
+                                {sparkleConfig.variant === v && (
+                                  <motion.div
+                                    layoutId="activeSparkleVariantIndicator"
+                                    transition={{
+                                      type: "spring",
+                                      stiffness: 450,
+                                      damping: 32,
+                                    }}
+                                    className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
+                                  />
+                                )}
+                                <span className="relative z-10">{v}</span>
+                              </button>
+                            ),
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                        <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium">
+                          Size
+                        </span>
+                        <div className="flex items-center gap-0.5 bg-muted/80 dark:bg-black/25 p-0.5 rounded-md border border-border dark:border-white/5">
+                          {(["sm", "default", "lg"] as const).map((sz) => (
+                            <button
+                              key={sz}
+                              type="button"
+                              onClick={() =>
+                                setSparkleConfig((prev) => ({
+                                  ...prev,
+                                  size: sz,
+                                }))
+                              }
+                              className={cn(
+                                "relative px-2 py-0.5 rounded text-[11px] uppercase transition-colors cursor-pointer",
+                                sparkleConfig.size === sz
+                                  ? "text-background font-semibold dark:text-black"
+                                  : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
+                              )}
+                            >
+                              {sparkleConfig.size === sz && (
+                                <motion.div
+                                  layoutId="activeSparkleSizeIndicator"
+                                  transition={{
+                                    type: "spring",
+                                    stiffness: 450,
+                                    damping: 32,
+                                  }}
+                                  className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
+                                />
+                              )}
+                              <span className="relative z-10">
+                                {sz === "default" ? "MD" : sz}
+                              </span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-1.5">
                       <button
                         type="button"
@@ -2485,14 +2560,16 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                 : "letters",
                           }))
                         }
-                        className="rounded-lg border border-white/5 bg-[#17171b] hover:bg-[#1f1f25] px-3 py-2 flex items-center justify-between text-xs transition-colors cursor-pointer"
+                        className="rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] hover:bg-muted dark:hover:bg-[#1f1f25] px-3 py-2 flex items-center justify-between text-xs transition-colors cursor-pointer"
                       >
-                        <span className="text-zinc-400">Animate By</span>
-                        <span className="text-zinc-100 font-medium flex items-center gap-1.5">
+                        <span className="text-muted-foreground dark:text-zinc-400">
+                          Animate By
+                        </span>
+                        <span className="text-foreground dark:text-zinc-100 font-medium flex items-center gap-1.5">
                           {sparkleConfig.animateBy === "letters"
                             ? "Letters"
                             : "Words"}
-                          <ChevronDownIcon className="w-3.5 h-3.5 text-zinc-400" />
+                          <ChevronDownIcon className="w-3.5 h-3.5 text-muted-foreground dark:text-zinc-400" />
                         </span>
                       </button>
 
@@ -2505,18 +2582,22 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               prev.direction === "top" ? "bottom" : "top",
                           }))
                         }
-                        className="rounded-lg border border-white/5 bg-[#17171b] hover:bg-[#1f1f25] px-3 py-2 flex items-center justify-between text-xs transition-colors cursor-pointer"
+                        className="rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] hover:bg-muted dark:hover:bg-[#1f1f25] px-3 py-2 flex items-center justify-between text-xs transition-colors cursor-pointer"
                       >
-                        <span className="text-zinc-400">Direction</span>
-                        <span className="text-zinc-100 font-medium flex items-center gap-1.5">
+                        <span className="text-muted-foreground dark:text-zinc-400">
+                          Direction
+                        </span>
+                        <span className="text-foreground dark:text-zinc-100 font-medium flex items-center gap-1.5">
                           {sparkleConfig.direction === "top" ? "Top" : "Bottom"}
-                          <ChevronDownIcon className="w-3.5 h-3.5 text-zinc-400" />
+                          <ChevronDownIcon className="w-3.5 h-3.5 text-muted-foreground dark:text-zinc-400" />
                         </span>
                       </button>
 
-                      <div className="rounded-lg border border-white/5 bg-[#17171b] px-3 py-2 flex items-center justify-between gap-2.5 text-xs">
-                        <span className="text-zinc-400 shrink-0">Delay</span>
-                        <div className="h-3.5 w-px bg-white/10 shrink-0" />
+                      <div className="rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 py-2 flex items-center justify-between gap-2.5 text-xs">
+                        <span className="text-muted-foreground dark:text-zinc-400 shrink-0">
+                          Delay
+                        </span>
+                        <div className="h-3.5 w-px bg-border dark:bg-white/10 shrink-0" />
                         <input
                           type="range"
                           min="10"
@@ -2529,18 +2610,20 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               delay: Number(e.target.value),
                             }))
                           }
-                          className="w-full accent-white h-1 bg-white/10 rounded cursor-pointer"
+                          className="w-full accent-foreground dark:accent-white h-1 bg-foreground/15 dark:bg-white/10 rounded cursor-pointer"
                         />
-                        <span className="text-zinc-100 font-medium shrink-0 min-w-10.5 text-right">
+                        <span className="text-foreground dark:text-zinc-100 font-medium shrink-0 min-w-10.5 text-right">
                           {sparkleConfig.delay}ms
                         </span>
                       </div>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-1.5">
-                      <div className="rounded-lg border border-white/5 bg-[#17171b] px-3 py-2 flex items-center justify-between gap-2.5 text-xs">
-                        <span className="text-zinc-400 shrink-0">Reveal</span>
-                        <div className="h-3.5 w-px bg-white/10 shrink-0" />
+                      <div className="rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 py-2 flex items-center justify-between gap-2.5 text-xs">
+                        <span className="text-muted-foreground dark:text-zinc-400 shrink-0">
+                          Reveal
+                        </span>
+                        <div className="h-3.5 w-px bg-border dark:bg-white/10 shrink-0" />
                         <input
                           type="range"
                           min="0.15"
@@ -2553,16 +2636,18 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               stepDuration: Number(e.target.value),
                             }))
                           }
-                          className="w-full accent-white h-1 bg-white/10 rounded cursor-pointer"
+                          className="w-full accent-foreground dark:accent-white h-1 bg-foreground/15 dark:bg-white/10 rounded cursor-pointer"
                         />
-                        <span className="text-zinc-100 font-medium shrink-0 min-w-10.5 text-right">
+                        <span className="text-foreground dark:text-zinc-100 font-medium shrink-0 min-w-10.5 text-right">
                           {(sparkleConfig.stepDuration * 1000).toFixed(0)}ms
                         </span>
                       </div>
 
-                      <div className="rounded-lg border border-white/5 bg-[#17171b] px-3 py-2 flex items-center justify-between gap-2.5 text-xs">
-                        <span className="text-zinc-400 shrink-0">Dissolve</span>
-                        <div className="h-3.5 w-px bg-white/10 shrink-0" />
+                      <div className="rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 py-2 flex items-center justify-between gap-2.5 text-xs">
+                        <span className="text-muted-foreground dark:text-zinc-400 shrink-0">
+                          Dissolve
+                        </span>
+                        <div className="h-3.5 w-px bg-border dark:bg-white/10 shrink-0" />
                         <input
                           type="range"
                           min="0.10"
@@ -2575,19 +2660,19 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               dissolveDuration: Number(e.target.value),
                             }))
                           }
-                          className="w-full accent-white h-1 bg-white/10 rounded cursor-pointer"
+                          className="w-full accent-foreground dark:accent-white h-1 bg-foreground/15 dark:bg-white/10 rounded cursor-pointer"
                         />
-                        <span className="text-zinc-100 font-medium shrink-0 min-w-10.5 text-right">
+                        <span className="text-foreground dark:text-zinc-100 font-medium shrink-0 min-w-10.5 text-right">
                           {(sparkleConfig.dissolveDuration * 1000).toFixed(0)}
                           ms
                         </span>
                       </div>
 
-                      <div className="rounded-lg border border-white/5 bg-[#17171b] px-3 py-2 flex items-center justify-between gap-2.5 text-xs">
-                        <span className="text-zinc-400 shrink-0">
+                      <div className="rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 py-2 flex items-center justify-between gap-2.5 text-xs">
+                        <span className="text-muted-foreground dark:text-zinc-400 shrink-0">
                           Stiffness
                         </span>
-                        <div className="h-3.5 w-px bg-white/10 shrink-0" />
+                        <div className="h-3.5 w-px bg-border dark:bg-white/10 shrink-0" />
                         <input
                           type="range"
                           min="150"
@@ -2600,9 +2685,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               springStiffness: Number(e.target.value),
                             }))
                           }
-                          className="w-full accent-white h-1 bg-white/10 rounded cursor-pointer"
+                          className="w-full accent-foreground dark:accent-white h-1 bg-foreground/15 dark:bg-white/10 rounded cursor-pointer"
                         />
-                        <span className="text-zinc-100 font-medium shrink-0 min-w-10.5 text-right">
+                        <span className="text-foreground dark:text-zinc-100 font-medium shrink-0 min-w-10.5 text-right">
                           {sparkleConfig.springStiffness}
                         </span>
                       </div>
@@ -2614,25 +2699,25 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               {activeComponent.slug === "twitter-card" && (
                 <div
                   key="twitter-customize-panel"
-                  className="pointer-events-auto rounded-2xl border border-white/10 bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-xl w-full mx-4 select-none flex flex-col gap-2.5"
+                  className="pointer-events-auto rounded-2xl border border-border dark:border-white/10 bg-card/95 dark:bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-xl dark:shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-xl w-full mx-4 select-none flex flex-col gap-2.5"
                 >
                   <div className="flex items-center justify-between px-1">
-                    <span className="text-xs font-semibold text-white/90 tracking-tight">
+                    <span className="text-xs font-semibold text-foreground dark:text-white/90 tracking-tight">
                       Customize
                     </span>
                     <button
                       type="button"
                       onClick={resetTwitterCardConfig}
-                      className="text-[11px] text-zinc-400 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                      className="text-[11px] text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
                     >
                       <ResetIcon className="w-3.5 h-3.5" />
                       <span>Reset</span>
                     </button>
                   </div>
 
-                  <div className="rounded-xl border border-white/5 bg-[#0b0b0e] p-1.5 flex flex-col gap-1.5">
-                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-1.5 pb-1.5 border-b border-white/5">
-                      <div className="flex items-center gap-0.5 bg-[#17171b] p-1 rounded-xl border border-white/5">
+                  <div className="rounded-xl border border-border dark:border-white/5 bg-muted/40 dark:bg-[#0b0b0e] p-1.5 flex flex-col gap-1.5">
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-1.5 pb-1.5 border-b border-border dark:border-white/5">
+                      <div className="flex items-center gap-0.5 bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5">
                         <button
                           type="button"
                           onClick={() =>
@@ -2644,8 +2729,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           className={cn(
                             "relative h-7 px-3 rounded-lg text-xs transition-colors cursor-pointer flex items-center justify-center",
                             !twitterCardConfig.staticCard
-                              ? "text-black font-semibold"
-                              : "text-zinc-400 hover:text-white",
+                              ? "text-background font-semibold dark:text-black"
+                              : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
                           )}
                         >
                           {!twitterCardConfig.staticCard && (
@@ -2656,7 +2741,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                 stiffness: 450,
                                 damping: 32,
                               }}
-                              className="absolute inset-0 bg-white rounded-lg shadow-xs"
+                              className="absolute inset-0 bg-foreground dark:bg-white rounded-lg shadow-xs"
                             />
                           )}
                           <span className="relative z-10">Trigger Popover</span>
@@ -2672,8 +2757,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           className={cn(
                             "relative h-7 px-3 rounded-lg text-xs transition-colors cursor-pointer flex items-center justify-center",
                             twitterCardConfig.staticCard
-                              ? "text-black font-semibold"
-                              : "text-zinc-400 hover:text-white",
+                              ? "text-background font-semibold dark:text-black"
+                              : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
                           )}
                         >
                           {twitterCardConfig.staticCard && (
@@ -2684,14 +2769,14 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                 stiffness: 450,
                                 damping: 32,
                               }}
-                              className="absolute inset-0 bg-white rounded-lg shadow-xs"
+                              className="absolute inset-0 bg-foreground dark:bg-white rounded-lg shadow-xs"
                             />
                           )}
                           <span className="relative z-10">Static Card</span>
                         </button>
                       </div>
 
-                      <div className="flex items-center gap-1 bg-[#17171b] p-1 rounded-xl border border-white/5">
+                      <div className="flex items-center gap-1 bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5">
                         {["hey_krishnna", "karpathy", "shadcn"].map(
                           (handle) => (
                             <button
@@ -2706,8 +2791,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               className={cn(
                                 "h-7 px-2.5 rounded-lg text-xs transition-colors cursor-pointer",
                                 twitterCardConfig.username === handle
-                                  ? "bg-white/10 text-white font-medium"
-                                  : "text-zinc-400 hover:text-white",
+                                  ? "bg-foreground/10 dark:bg-white/10 text-foreground dark:text-white font-medium"
+                                  : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
                               )}
                             >
                               @{handle}
@@ -2726,15 +2811,17 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             enableCardTilt: !prev.enableCardTilt,
                           }))
                         }
-                        className="rounded-lg border border-white/5 bg-[#17171b] hover:bg-[#1f1f25] px-3 py-2 flex items-center justify-between text-xs transition-colors cursor-pointer"
+                        className="rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] hover:bg-muted dark:hover:bg-[#1f1f25] px-3 py-2 flex items-center justify-between text-xs transition-colors cursor-pointer"
                       >
-                        <span className="text-zinc-400">Card 3D Tilt</span>
+                        <span className="text-muted-foreground dark:text-zinc-400">
+                          Card 3D Tilt
+                        </span>
                         <span
                           className={cn(
                             "font-medium",
                             twitterCardConfig.enableCardTilt
-                              ? "text-emerald-400"
-                              : "text-zinc-500",
+                              ? "text-emerald-600 dark:text-emerald-400"
+                              : "text-muted-foreground dark:text-zinc-500",
                           )}
                         >
                           {twitterCardConfig.enableCardTilt
@@ -2743,11 +2830,11 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         </span>
                       </button>
 
-                      <div className="rounded-lg border border-white/5 bg-[#17171b] px-3 py-2 flex items-center justify-between gap-2.5 text-xs">
-                        <span className="text-zinc-400 shrink-0">
+                      <div className="rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 py-2 flex items-center justify-between gap-2.5 text-xs">
+                        <span className="text-muted-foreground dark:text-zinc-400 shrink-0">
                           Tilt Angle
                         </span>
-                        <div className="h-3.5 w-px bg-white/10 shrink-0" />
+                        <div className="h-3.5 w-px bg-border dark:bg-white/10 shrink-0" />
                         <input
                           type="range"
                           min="2"
@@ -2760,9 +2847,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               cardTiltMaxRotate: Number(e.target.value),
                             }))
                           }
-                          className="w-full accent-white h-1 bg-white/10 rounded cursor-pointer"
+                          className="w-full accent-foreground dark:accent-white h-1 bg-foreground/15 dark:bg-white/10 rounded cursor-pointer"
                         />
-                        <span className="text-zinc-100 font-medium shrink-0 min-w-8 text-right">
+                        <span className="text-foreground dark:text-zinc-100 font-medium shrink-0 min-w-8 text-right">
                           {twitterCardConfig.cardTiltMaxRotate}°
                         </span>
                       </div>
@@ -2774,28 +2861,28 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               {activeComponent.slug === "toast" && (
                 <div
                   key="toast-customize-panel"
-                  className="pointer-events-auto rounded-2xl border border-white/10 bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-xl w-full mx-4 select-none flex flex-col gap-2.5"
+                  className="pointer-events-auto rounded-2xl border border-border dark:border-white/10 bg-card/95 dark:bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-xl dark:shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-xl w-full mx-4 select-none flex flex-col gap-2.5"
                 >
                   <div className="flex items-center justify-between px-1">
-                    <span className="text-xs font-semibold text-white/90 tracking-tight">
+                    <span className="text-xs font-semibold text-foreground dark:text-white/90 tracking-tight">
                       Toast Settings
                     </span>
                     <button
                       type="button"
                       onClick={resetToastConfig}
-                      className="text-[11px] text-zinc-400 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                      className="text-[11px] text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
                     >
                       <ResetIcon className="w-3.5 h-3.5" />
                       <span>Reset</span>
                     </button>
                   </div>
 
-                  <div className="rounded-xl border border-white/5 bg-[#0b0b0e] p-2 flex flex-col gap-2.5">
+                  <div className="rounded-xl border border-border dark:border-white/5 bg-muted/40 dark:bg-[#0b0b0e] p-2 flex flex-col gap-2.5">
                     <div className="flex items-center justify-between gap-2">
-                      <span className="text-[11px] text-zinc-400">
+                      <span className="text-[11px] text-muted-foreground dark:text-zinc-400">
                         Position
                       </span>
-                      <div className="flex items-center gap-1 bg-[#17171b] p-1 rounded-lg border border-white/5">
+                      <div className="flex items-center gap-1 bg-muted/80 dark:bg-[#17171b] p-1 rounded-lg border border-border dark:border-white/5">
                         {(
                           [
                             "bottom-right",
@@ -2816,8 +2903,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             className={cn(
                               "text-[10px] px-2 py-1 rounded transition-colors cursor-pointer capitalize",
                               toastConfig.position === pos
-                                ? "bg-white text-black font-semibold shadow-sm"
-                                : "text-zinc-400 hover:text-white",
+                                ? "bg-foreground text-background font-semibold dark:bg-white dark:text-black shadow-xs"
+                                : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
                             )}
                           >
                             {pos.replace("-", " ")}
@@ -2826,8 +2913,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between gap-2 pt-1 border-t border-white/5">
-                      <span className="text-[11px] text-zinc-400">
+                    <div className="flex items-center justify-between gap-2 pt-1 border-t border-border dark:border-white/5">
+                      <span className="text-[11px] text-muted-foreground dark:text-zinc-400">
                         Rich Colors
                       </span>
                       <button
@@ -2839,23 +2926,25 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           }))
                         }
                         className={cn(
-                          "relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border border-transparent transition-colors duration-200 ease-in-out",
-                          toastConfig.richColors ? "bg-white" : "bg-zinc-800",
+                          "relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full p-0.5 items-center transition-colors duration-200 ease-in-out",
+                          toastConfig.richColors
+                            ? "bg-foreground dark:bg-white"
+                            : "bg-muted-foreground/30 dark:bg-zinc-800",
                         )}
                       >
                         <span
                           className={cn(
-                            "pointer-events-none inline-block h-4 w-4 transform rounded-full bg-black shadow-lg ring-0 transition duration-200 ease-in-out mt-0.5",
+                            "pointer-events-none inline-block h-4 w-4 transform rounded-full bg-background dark:bg-black shadow-xs ring-0 transition duration-200 ease-in-out",
                             toastConfig.richColors
                               ? "translate-x-4"
-                              : "translate-x-0.5 bg-zinc-400",
+                              : "translate-x-0 bg-background dark:bg-zinc-400",
                           )}
                         />
                       </button>
                     </div>
 
-                    <div className="flex items-center justify-between gap-2 pt-1 border-t border-white/5">
-                      <span className="text-[11px] text-zinc-400">
+                    <div className="flex items-center justify-between gap-2 pt-1 border-t border-border dark:border-white/5">
+                      <span className="text-[11px] text-muted-foreground dark:text-zinc-400">
                         Expand on Hover
                       </span>
                       <button
@@ -2867,16 +2956,18 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           }))
                         }
                         className={cn(
-                          "relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border border-transparent transition-colors duration-200 ease-in-out",
-                          toastConfig.expand ? "bg-white" : "bg-zinc-800",
+                          "relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full p-0.5 items-center transition-colors duration-200 ease-in-out",
+                          toastConfig.expand
+                            ? "bg-foreground dark:bg-white"
+                            : "bg-muted-foreground/30 dark:bg-zinc-800",
                         )}
                       >
                         <span
                           className={cn(
-                            "pointer-events-none inline-block h-4 w-4 transform rounded-full bg-black shadow-lg ring-0 transition duration-200 ease-in-out mt-0.5",
+                            "pointer-events-none inline-block h-4 w-4 transform rounded-full bg-background dark:bg-black shadow-xs ring-0 transition duration-200 ease-in-out",
                             toastConfig.expand
                               ? "translate-x-4"
-                              : "translate-x-0.5 bg-zinc-400",
+                              : "translate-x-0 bg-background dark:bg-zinc-400",
                           )}
                         />
                       </button>
@@ -2888,25 +2979,25 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               {activeComponent.slug === "otp-input" && (
                 <div
                   key="otp-customize-panel"
-                  className="pointer-events-auto rounded-2xl border border-white/10 bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-xl w-full mx-4 select-none flex flex-col gap-2.5"
+                  className="pointer-events-auto rounded-2xl border border-border dark:border-white/10 bg-card/95 dark:bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-xl dark:shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-xl w-full mx-4 select-none flex flex-col gap-2.5"
                 >
                   <div className="flex items-center justify-between px-1">
-                    <span className="text-xs font-semibold text-white/90 tracking-tight">
+                    <span className="text-xs font-semibold text-foreground dark:text-white/90 tracking-tight">
                       Customize
                     </span>
                     <button
                       type="button"
                       onClick={resetOtpConfig}
-                      className="text-[11px] text-zinc-400 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                      className="text-[11px] text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
                     >
                       <ResetIcon className="w-3.5 h-3.5" />
                       <span>Reset</span>
                     </button>
                   </div>
 
-                  <div className="rounded-xl border border-white/5 bg-[#0b0b0e] p-1.5 flex flex-col gap-1.5">
-                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-1.5 pb-1.5 border-b border-white/5">
-                      <div className="flex items-center gap-0.5 bg-[#17171b] p-1 rounded-xl border border-white/5">
+                  <div className="rounded-xl border border-border dark:border-white/5 bg-muted/40 dark:bg-[#0b0b0e] p-1.5 flex flex-col gap-1.5">
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-1.5 pb-1.5 border-b border-border dark:border-white/5">
+                      <div className="flex items-center gap-0.5 bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5">
                         {(["idle", "success", "error", "loading"] as const).map(
                           (s) => (
                             <button
@@ -2916,8 +3007,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               className={cn(
                                 "relative h-7 px-2.5 rounded-lg text-xs capitalize transition-colors cursor-pointer flex items-center justify-center",
                                 otpStatus === s
-                                  ? "text-black font-semibold"
-                                  : "text-zinc-400 hover:text-white",
+                                  ? "text-background font-semibold dark:text-black"
+                                  : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
                               )}
                             >
                               {otpStatus === s && (
@@ -2928,7 +3019,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                     stiffness: 450,
                                     damping: 32,
                                   }}
-                                  className="absolute inset-0 bg-white rounded-lg shadow-xs"
+                                  className="absolute inset-0 bg-foreground dark:bg-white rounded-lg shadow-xs"
                                 />
                               )}
                               <span className="relative z-10">{s}</span>
@@ -2937,14 +3028,14 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         )}
                       </div>
 
-                      <div className="flex items-center gap-1 bg-[#17171b] p-1 rounded-xl border border-white/5">
+                      <div className="flex items-center gap-1 bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5">
                         <button
                           type="button"
                           onClick={() => {
                             setOtpValue("729481");
                             setOtpStatus("success");
                           }}
-                          className="h-7 px-2.5 rounded-lg text-xs text-zinc-300 hover:text-white hover:bg-white/5 transition-colors cursor-pointer flex items-center justify-center"
+                          className="h-7 px-2.5 rounded-lg text-xs text-foreground/80 dark:text-zinc-300 hover:text-foreground dark:hover:text-white hover:bg-muted dark:hover:bg-white/5 transition-colors cursor-pointer flex items-center justify-center"
                         >
                           Auto-fill
                         </button>
@@ -2954,7 +3045,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             setOtpValue("999999");
                             setOtpStatus("error");
                           }}
-                          className="h-7 px-2.5 rounded-lg text-xs font-mono text-zinc-300 hover:text-white hover:bg-white/5 transition-colors cursor-pointer flex items-center justify-center"
+                          className="h-7 px-2.5 rounded-lg text-xs font-mono text-foreground/80 dark:text-zinc-300 hover:text-foreground dark:hover:text-white hover:bg-muted dark:hover:bg-white/5 transition-colors cursor-pointer flex items-center justify-center"
                         >
                           Error
                         </button>
@@ -2964,7 +3055,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             setOtpValue("");
                             setOtpStatus("idle");
                           }}
-                          className="h-7 px-2.5 rounded-lg text-xs font-mono text-zinc-300 hover:text-white hover:bg-white/5 transition-colors cursor-pointer flex items-center justify-center"
+                          className="h-7 px-2.5 rounded-lg text-xs font-mono text-foreground/80 dark:text-zinc-300 hover:text-foreground dark:hover:text-white hover:bg-muted dark:hover:bg-white/5 transition-colors cursor-pointer flex items-center justify-center"
                         >
                           Clear
                         </button>
@@ -2972,11 +3063,11 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
-                      <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3 flex items-center justify-between text-xs">
-                        <span className="text-zinc-400 text-xs font-medium">
+                      <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                        <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium">
                           Size
                         </span>
-                        <div className="flex items-center gap-0.5 bg-black/25 p-0.5 rounded-md border border-white/5">
+                        <div className="flex items-center gap-0.5 bg-muted/80 dark:bg-black/25 p-0.5 rounded-md border border-border dark:border-white/5">
                           {(["sm", "md", "lg", "xl"] as const).map((sz) => (
                             <button
                               key={sz}
@@ -2985,8 +3076,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               className={cn(
                                 "relative px-2 py-0.5 rounded text-[11px] uppercase transition-colors cursor-pointer",
                                 otpSize === sz
-                                  ? "text-black font-semibold"
-                                  : "text-zinc-400 hover:text-white",
+                                  ? "text-background font-semibold dark:text-black"
+                                  : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
                               )}
                             >
                               {otpSize === sz && (
@@ -2997,7 +3088,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                     stiffness: 450,
                                     damping: 32,
                                   }}
-                                  className="absolute inset-0 bg-white rounded shadow-xs"
+                                  className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
                                 />
                               )}
                               <span className="relative z-10">{sz}</span>
@@ -3006,45 +3097,58 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         </div>
                       </div>
 
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const variants: OtpVariant[] = [
-                            "default",
-                            "glass",
-                            "neon",
-                            "underlined",
-                          ];
-                          const nextIndex =
-                            (variants.indexOf(otpVariant) + 1) %
-                            variants.length;
-                          setOtpVariant(variants[nextIndex]);
-                        }}
-                        className="h-9 rounded-lg border border-white/5 bg-[#17171b] hover:bg-[#1f1f25] px-3 flex items-center justify-between text-xs transition-colors cursor-pointer"
-                      >
-                        <span className="text-zinc-400 text-xs font-medium">
+                      <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                        <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium">
                           Variant
                         </span>
-                        <span className="text-zinc-100 font-medium capitalize flex items-center gap-1.5 text-xs">
-                          {otpVariant}
-                          <ChevronDownIcon className="w-3.5 h-3.5 text-zinc-400" />
-                        </span>
-                      </button>
+                        <div className="flex items-center gap-0.5 bg-muted/80 dark:bg-black/25 p-0.5 rounded-md border border-border dark:border-white/5">
+                          {(
+                            ["default", "glass", "neon", "underlined"] as const
+                          ).map((v) => (
+                            <button
+                              key={v}
+                              type="button"
+                              onClick={() => setOtpVariant(v)}
+                              className={cn(
+                                "relative px-1.5 py-0.5 rounded text-[10px] capitalize transition-colors cursor-pointer",
+                                otpVariant === v
+                                  ? "text-background font-semibold dark:text-black"
+                                  : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
+                              )}
+                            >
+                              {otpVariant === v && (
+                                <motion.div
+                                  layoutId="activeOtpVariantIndicator"
+                                  transition={{
+                                    type: "spring",
+                                    stiffness: 450,
+                                    damping: 32,
+                                  }}
+                                  className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
+                                />
+                              )}
+                              <span className="relative z-10">
+                                {v === "underlined" ? "Underline" : v}
+                              </span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
 
                       <button
                         type="button"
                         onClick={() => setOtpMask((m) => !m)}
-                        className="h-9 rounded-lg border border-white/5 bg-[#17171b] hover:bg-[#1f1f25] px-3 flex items-center justify-between text-xs transition-colors cursor-pointer"
+                        className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] hover:bg-muted dark:hover:bg-[#1f1f25] px-3 flex items-center justify-between text-xs transition-colors cursor-pointer"
                       >
-                        <span className="text-zinc-400 text-xs font-medium">
+                        <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium">
                           Mask (•)
                         </span>
                         <span
                           className={cn(
                             "px-2 py-0.5 rounded text-[11px] font-mono uppercase transition-colors",
                             otpMask
-                              ? "bg-white text-black font-semibold"
-                              : "bg-white/5 text-zinc-400",
+                              ? "bg-foreground text-background font-semibold dark:bg-white dark:text-black"
+                              : "bg-muted text-muted-foreground dark:bg-white/5 dark:text-zinc-400",
                           )}
                         >
                           {otpMask ? "ON" : "OFF"}
@@ -3054,17 +3158,17 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       <button
                         type="button"
                         onClick={() => setOtpGrouped((g) => !g)}
-                        className="h-9 rounded-lg border border-white/5 bg-[#17171b] hover:bg-[#1f1f25] px-3 flex items-center justify-between text-xs transition-colors cursor-pointer"
+                        className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] hover:bg-muted dark:hover:bg-[#1f1f25] px-3 flex items-center justify-between text-xs transition-colors cursor-pointer"
                       >
-                        <span className="text-zinc-400 text-xs font-medium">
+                        <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium">
                           3-3 Split
                         </span>
                         <span
                           className={cn(
                             "px-2 py-0.5 rounded text-[11px] font-mono uppercase transition-colors",
                             otpGrouped
-                              ? "bg-white text-black font-semibold"
-                              : "bg-white/5 text-zinc-400",
+                              ? "bg-foreground text-background font-semibold dark:bg-white dark:text-black"
+                              : "bg-muted text-muted-foreground dark:bg-white/5 dark:text-zinc-400",
                           )}
                         >
                           {otpGrouped ? "ON" : "OFF"}
@@ -3078,15 +3182,15 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               {activeComponent.slug === "orb" && (
                 <div
                   key="orb-customize-panel"
-                  className="pointer-events-auto rounded-2xl border border-white/10 bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-2xl w-full mx-4 select-none flex flex-col gap-2.5"
+                  className="pointer-events-auto rounded-2xl border border-border dark:border-white/10 bg-card/95 dark:bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-xl dark:shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-2xl w-full mx-4 select-none flex flex-col gap-2.5"
                 >
                   <div className="flex items-center justify-between px-1">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-semibold text-white/90 tracking-tight">
+                      <span className="text-xs font-semibold text-foreground dark:text-white/90 tracking-tight">
                         Orb Controls
                       </span>
                       {orbStudioColor && (
-                        <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-white/10 text-zinc-300">
+                        <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-muted text-muted-foreground dark:bg-white/10 dark:text-zinc-300">
                           {ORB_COLORS.find((c) => c.value === orbStudioColor)
                             ?.label || "Custom"}
                         </span>
@@ -3095,15 +3199,15 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     <button
                       type="button"
                       onClick={resetOrbConfig}
-                      className="text-[11px] text-zinc-400 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                      className="text-[11px] text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
                     >
                       <ResetIcon className="w-3.5 h-3.5" />
                       <span>Reset</span>
                     </button>
                   </div>
 
-                  <div className="rounded-xl border border-white/5 bg-[#0b0b0e] p-2 flex flex-col gap-2">
-                    <div className="flex items-center gap-1 overflow-x-auto no-scrollbar bg-[#17171b] p-1 rounded-xl border border-white/5">
+                  <div className="rounded-xl border border-border dark:border-white/5 bg-muted/40 dark:bg-[#0b0b0e] p-2 flex flex-col gap-2">
+                    <div className="flex items-center gap-1 overflow-x-auto no-scrollbar bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5">
                       {ORB_STATES.map((s) => (
                         <button
                           key={s}
@@ -3112,8 +3216,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           className={cn(
                             "relative h-7 px-2.5 rounded-lg text-xs capitalize transition-colors cursor-pointer flex items-center justify-center shrink-0",
                             orbStudioState === s
-                              ? "text-black font-semibold"
-                              : "text-zinc-400 hover:text-white",
+                              ? "text-background font-semibold dark:text-black"
+                              : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
                           )}
                         >
                           {orbStudioState === s && (
@@ -3124,7 +3228,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                 stiffness: 450,
                                 damping: 32,
                               }}
-                              className="absolute inset-0 bg-white rounded-lg shadow-xs"
+                              className="absolute inset-0 bg-foreground dark:bg-white rounded-lg shadow-xs"
                             />
                           )}
                           <span className="relative z-10">{s}</span>
@@ -3132,11 +3236,11 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       ))}
                     </div>
 
-                    <div className="flex items-center gap-1 overflow-x-auto no-scrollbar bg-[#17171b] p-1 rounded-xl border border-white/5">
-                      <span className="text-zinc-400 text-xs font-medium px-2.5 shrink-0">
+                    <div className="flex items-center gap-1 overflow-x-auto no-scrollbar bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5">
+                      <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium px-2.5 shrink-0">
                         Color
                       </span>
-                      <div className="h-3.5 w-px bg-white/10 shrink-0 mr-1" />
+                      <div className="h-3.5 w-px bg-border dark:bg-white/10 shrink-0 mr-1" />
                       <div className="flex items-center gap-1 shrink-0">
                         {ORB_COLORS.map((c) => {
                           const isSelected = orbStudioColor === c.value;
@@ -3148,8 +3252,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               className={cn(
                                 "relative h-7 px-2.5 rounded-lg text-xs transition-colors cursor-pointer flex items-center gap-1.5 shrink-0",
                                 isSelected
-                                  ? "text-black font-semibold"
-                                  : "text-zinc-400 hover:text-white hover:bg-white/5",
+                                  ? "text-background font-semibold dark:text-black"
+                                  : "text-muted-foreground hover:text-foreground hover:bg-muted dark:text-zinc-400 dark:hover:text-white dark:hover:bg-white/5",
                               )}
                             >
                               {isSelected && (
@@ -3160,14 +3264,14 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                     stiffness: 450,
                                     damping: 32,
                                   }}
-                                  className="absolute inset-0 bg-white rounded-lg shadow-xs"
+                                  className="absolute inset-0 bg-foreground dark:bg-white rounded-lg shadow-xs"
                                 />
                               )}
                               <span
                                 className={cn(
                                   "relative z-10 w-2 h-2 rounded-full shrink-0",
                                   c.value === undefined &&
-                                    "border border-zinc-500",
+                                    "border border-zinc-400 dark:border-zinc-500",
                                 )}
                                 style={{ backgroundColor: c.hex }}
                               />
@@ -3179,11 +3283,11 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3 flex items-center justify-between text-xs min-w-0 overflow-hidden">
-                        <span className="text-zinc-400 text-xs font-medium shrink-0">
+                      <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 flex items-center justify-between text-xs min-w-0 overflow-hidden">
+                        <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                           Size
                         </span>
-                        <div className="flex items-center gap-0.5 bg-black/25 p-0.5 rounded-md border border-white/5 shrink-0">
+                        <div className="flex items-center gap-0.5 bg-muted/80 dark:bg-black/25 p-0.5 rounded-md border border-border dark:border-white/5 shrink-0">
                           {[
                             { label: "S", value: 64 },
                             { label: "M", value: 96 },
@@ -3197,8 +3301,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               className={cn(
                                 "relative px-2 py-0.5 rounded text-[11px] font-mono transition-colors cursor-pointer shrink-0",
                                 orbStudioSize === sz.value
-                                  ? "text-black font-semibold"
-                                  : "text-zinc-400 hover:text-white",
+                                  ? "text-background font-semibold dark:text-black"
+                                  : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
                               )}
                             >
                               {orbStudioSize === sz.value && (
@@ -3209,7 +3313,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                     stiffness: 450,
                                     damping: 32,
                                   }}
-                                  className="absolute inset-0 bg-white rounded shadow-xs"
+                                  className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
                                 />
                               )}
                               <span className="relative z-10">{sz.label}</span>
@@ -3218,11 +3322,11 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         </div>
                       </div>
 
-                      <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3 flex items-center justify-between text-xs min-w-0 overflow-hidden">
-                        <span className="text-zinc-400 text-xs font-medium shrink-0">
+                      <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 flex items-center justify-between text-xs min-w-0 overflow-hidden">
+                        <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                           Speed
                         </span>
-                        <div className="flex items-center gap-0.5 bg-black/25 p-0.5 rounded-md border border-white/5 shrink-0">
+                        <div className="flex items-center gap-0.5 bg-muted/80 dark:bg-black/25 p-0.5 rounded-md border border-border dark:border-white/5 shrink-0">
                           {[0.5, 1, 1.5, 2].map((sp) => (
                             <button
                               key={sp}
@@ -3231,8 +3335,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               className={cn(
                                 "relative px-2 py-0.5 rounded text-[11px] font-mono transition-colors cursor-pointer shrink-0",
                                 orbStudioSpeed === sp
-                                  ? "text-black font-semibold"
-                                  : "text-zinc-400 hover:text-white",
+                                  ? "text-background font-semibold dark:text-black"
+                                  : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
                               )}
                             >
                               {orbStudioSpeed === sp && (
@@ -3243,7 +3347,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                     stiffness: 450,
                                     damping: 32,
                                   }}
-                                  className="absolute inset-0 bg-white rounded shadow-xs"
+                                  className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
                                 />
                               )}
                               <span className="relative z-10">{sp}x</span>
@@ -3253,24 +3357,24 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       </div>
                     </div>
 
-                    <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3 flex items-center justify-between text-xs min-w-0 overflow-hidden">
+                    <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 flex items-center justify-between text-xs min-w-0 overflow-hidden">
                       <div className="flex items-center gap-2 shrink-0">
-                        <span className="text-zinc-400 text-xs font-medium">
+                        <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium">
                           Motion
                         </span>
-                        <span className="text-[11px] text-zinc-500 font-mono hidden sm:inline">
+                        <span className="text-[11px] text-muted-foreground dark:text-zinc-500 font-mono hidden sm:inline">
                           {orbStudioPaused ? "Paused" : "Active"}
                         </span>
                       </div>
-                      <div className="flex items-center gap-0.5 bg-black/25 p-0.5 rounded-md border border-white/5 shrink-0">
+                      <div className="flex items-center gap-0.5 bg-muted/80 dark:bg-black/25 p-0.5 rounded-md border border-border dark:border-white/5 shrink-0">
                         <button
                           type="button"
                           onClick={() => setOrbStudioPaused(false)}
                           className={cn(
                             "relative px-2.5 py-0.5 rounded text-[11px] font-medium transition-colors cursor-pointer shrink-0",
                             !orbStudioPaused
-                              ? "text-black font-semibold"
-                              : "text-zinc-400 hover:text-white",
+                              ? "text-background font-semibold dark:text-black"
+                              : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
                           )}
                         >
                           {!orbStudioPaused && (
@@ -3281,7 +3385,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                 stiffness: 450,
                                 damping: 32,
                               }}
-                              className="absolute inset-0 bg-white rounded shadow-xs"
+                              className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
                             />
                           )}
                           <span className="relative z-10 flex items-center gap-1.5">
@@ -3295,8 +3399,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           className={cn(
                             "relative px-2.5 py-0.5 rounded text-[11px] font-medium transition-colors cursor-pointer shrink-0",
                             orbStudioPaused
-                              ? "text-black font-semibold"
-                              : "text-zinc-400 hover:text-white",
+                              ? "text-background font-semibold dark:text-black"
+                              : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
                           )}
                         >
                           {orbStudioPaused && (
@@ -3307,11 +3411,11 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                 stiffness: 450,
                                 damping: 32,
                               }}
-                              className="absolute inset-0 bg-white rounded shadow-xs"
+                              className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
                             />
                           )}
                           <span className="relative z-10 flex items-center gap-1.5">
-                            <span className="w-1.5 h-1.5 rounded-full bg-zinc-400" />
+                            <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground dark:bg-zinc-400" />
                             Paused
                           </span>
                         </button>
@@ -3324,24 +3428,24 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               {activeComponent.slug === "mac-slider" && (
                 <div
                   key="mac-slider-customize-panel"
-                  className="pointer-events-auto rounded-2xl border border-white/10 bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-2xl w-full mx-4 select-none flex flex-col gap-2.5"
+                  className="pointer-events-auto rounded-2xl border border-border dark:border-white/10 bg-card/95 dark:bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-xl dark:shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-2xl w-full mx-4 select-none flex flex-col gap-2.5"
                 >
                   <div className="flex items-center justify-between px-1">
-                    <span className="text-xs font-semibold text-white/90 tracking-tight">
+                    <span className="text-xs font-semibold text-foreground dark:text-white/90 tracking-tight">
                       Mac Slider Controls
                     </span>
                     <button
                       type="button"
                       onClick={resetMacSliderConfig}
-                      className="text-[11px] text-zinc-400 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                      className="text-[11px] text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
                     >
                       <ResetIcon className="w-3.5 h-3.5" />
                       <span>Reset</span>
                     </button>
                   </div>
 
-                  <div className="rounded-xl border border-white/5 bg-[#0b0b0e] p-2 flex flex-col gap-2">
-                    <div className="flex items-center gap-1 bg-[#17171b] p-1 rounded-xl border border-white/5 w-full">
+                  <div className="rounded-xl border border-border dark:border-white/5 bg-muted/40 dark:bg-[#0b0b0e] p-2 flex flex-col gap-2">
+                    <div className="flex items-center gap-1 bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5 w-full">
                       {(
                         [
                           { id: "blue", label: "Blue", dot: "bg-blue-500" },
@@ -3361,7 +3465,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           {
                             id: "monochrome",
                             label: "Graphite",
-                            dot: "bg-zinc-200",
+                            dot: "bg-zinc-700 dark:bg-zinc-200",
                           },
                         ] as const
                       ).map((c) => (
@@ -3372,8 +3476,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           className={cn(
                             "relative flex-1 h-7.5 px-2 rounded-lg text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer select-none",
                             macSliderColor === c.id
-                              ? "text-black font-semibold"
-                              : "text-zinc-400 hover:text-white",
+                              ? "text-background font-semibold dark:text-black"
+                              : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
                           )}
                         >
                           {macSliderColor === c.id && (
@@ -3384,7 +3488,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                 stiffness: 450,
                                 damping: 32,
                               }}
-                              className="absolute inset-0 bg-white rounded-lg shadow-xs"
+                              className="absolute inset-0 bg-foreground dark:bg-white rounded-lg shadow-xs"
                             />
                           )}
                           <span
@@ -3401,11 +3505,11 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3 flex items-center justify-between text-xs">
-                        <span className="text-zinc-400 text-xs font-medium shrink-0">
+                      <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                        <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                           Size
                         </span>
-                        <div className="flex items-center gap-0.5 bg-black/30 p-0.5 rounded-md border border-white/5">
+                        <div className="flex items-center gap-0.5 bg-muted/80 dark:bg-black/30 p-0.5 rounded-md border border-border dark:border-white/5">
                           {(["sm", "md", "lg"] as const).map((sz) => (
                             <button
                               key={sz}
@@ -3414,8 +3518,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               className={cn(
                                 "relative px-2.5 py-0.5 rounded text-[11px] font-mono uppercase transition-colors cursor-pointer",
                                 macSliderSize === sz
-                                  ? "text-black font-semibold"
-                                  : "text-zinc-400 hover:text-white",
+                                  ? "text-background font-semibold dark:text-black"
+                                  : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
                               )}
                             >
                               {macSliderSize === sz && (
@@ -3426,7 +3530,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                     stiffness: 450,
                                     damping: 32,
                                   }}
-                                  className="absolute inset-0 bg-white rounded shadow-xs"
+                                  className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
                                 />
                               )}
                               <span className="relative z-10">{sz}</span>
@@ -3435,11 +3539,11 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         </div>
                       </div>
 
-                      <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3 flex items-center justify-between text-xs">
-                        <span className="text-zinc-400 text-xs font-medium shrink-0">
+                      <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                        <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                           Lens State
                         </span>
-                        <div className="flex items-center gap-0.5 bg-black/30 p-0.5 rounded-md border border-white/5">
+                        <div className="flex items-center gap-0.5 bg-muted/80 dark:bg-black/30 p-0.5 rounded-md border border-border dark:border-white/5">
                           {[
                             { label: "Rest", value: false },
                             { label: "Expanded", value: true },
@@ -3451,8 +3555,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               className={cn(
                                 "relative px-2.5 py-0.5 rounded text-[11px] font-mono transition-colors cursor-pointer",
                                 macSliderForceActive === st.value
-                                  ? "text-black font-semibold"
-                                  : "text-zinc-400 hover:text-white",
+                                  ? "text-background font-semibold dark:text-black"
+                                  : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
                               )}
                             >
                               {macSliderForceActive === st.value && (
@@ -3463,7 +3567,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                     stiffness: 450,
                                     damping: 32,
                                   }}
-                                  className="absolute inset-0 bg-white rounded shadow-xs"
+                                  className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
                                 />
                               )}
                               <span className="relative z-10">{st.label}</span>
@@ -3473,11 +3577,11 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       </div>
                     </div>
 
-                    <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3 flex items-center justify-between text-xs">
-                      <span className="text-zinc-400 text-xs font-medium shrink-0">
+                    <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                      <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                         Glass Material
                       </span>
-                      <div className="flex items-center gap-0.5 bg-black/30 p-0.5 rounded-md border border-white/5">
+                      <div className="flex items-center gap-0.5 bg-muted/80 dark:bg-black/30 p-0.5 rounded-md border border-border dark:border-white/5">
                         {(
                           [
                             { id: "liquid", label: "Liquid" },
@@ -3492,8 +3596,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             className={cn(
                               "relative px-3.5 py-0.5 rounded text-[11px] font-mono transition-colors cursor-pointer",
                               macSliderMaterial === m.id
-                                ? "text-black font-semibold"
-                                : "text-zinc-400 hover:text-white",
+                                ? "text-background font-semibold dark:text-black"
+                                : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
                             )}
                           >
                             {macSliderMaterial === m.id && (
@@ -3504,7 +3608,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                   stiffness: 450,
                                   damping: 32,
                                 }}
-                                className="absolute inset-0 bg-white rounded shadow-xs"
+                                className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
                               />
                             )}
                             <span className="relative z-10">{m.label}</span>
@@ -3513,12 +3617,12 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 border-t border-white/5">
-                      <div className="rounded-lg border border-white/5 bg-[#17171b] px-3 py-2 flex items-center justify-between gap-2.5 text-xs">
-                        <span className="w-18 shrink-0 text-zinc-400 text-[11px] font-medium">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 border-t border-border dark:border-white/5">
+                      <div className="rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 py-2 flex items-center justify-between gap-2.5 text-xs">
+                        <span className="w-18 shrink-0 text-muted-foreground dark:text-zinc-400 text-[11px] font-medium">
                           Specular
                         </span>
-                        <div className="h-3.5 w-px bg-white/10 shrink-0" />
+                        <div className="h-3.5 w-px bg-border dark:bg-white/10 shrink-0" />
                         <input
                           type="range"
                           min="0"
@@ -3530,18 +3634,18 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               parseFloat(e.target.value),
                             )
                           }
-                          className="w-full accent-white h-1 bg-white/10 rounded cursor-pointer"
+                          className="w-full accent-foreground dark:accent-white h-1 bg-foreground/15 dark:bg-white/10 rounded cursor-pointer"
                         />
-                        <span className="w-12 text-right font-mono text-[11px] text-zinc-100 tabular-nums shrink-0 font-medium">
+                        <span className="w-12 text-right font-mono text-[11px] text-foreground dark:text-zinc-100 tabular-nums shrink-0 font-medium">
                           {macSliderSpecularOpacity.toFixed(2)}
                         </span>
                       </div>
 
-                      <div className="rounded-lg border border-white/5 bg-[#17171b] px-3 py-2 flex items-center justify-between gap-2.5 text-xs">
-                        <span className="w-18 shrink-0 text-zinc-400 text-[11px] font-medium">
+                      <div className="rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 py-2 flex items-center justify-between gap-2.5 text-xs">
+                        <span className="w-18 shrink-0 text-muted-foreground dark:text-zinc-400 text-[11px] font-medium">
                           Saturation
                         </span>
-                        <div className="h-3.5 w-px bg-white/10 shrink-0" />
+                        <div className="h-3.5 w-px bg-border dark:bg-white/10 shrink-0" />
                         <input
                           type="range"
                           min="0"
@@ -3553,18 +3657,18 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               parseFloat(e.target.value),
                             )
                           }
-                          className="w-full accent-white h-1 bg-white/10 rounded cursor-pointer"
+                          className="w-full accent-foreground dark:accent-white h-1 bg-foreground/15 dark:bg-white/10 rounded cursor-pointer"
                         />
-                        <span className="w-12 text-right font-mono text-[11px] text-zinc-100 tabular-nums shrink-0 font-medium">
+                        <span className="w-12 text-right font-mono text-[11px] text-foreground dark:text-zinc-100 tabular-nums shrink-0 font-medium">
                           {macSliderSpecularSaturation}
                         </span>
                       </div>
 
-                      <div className="rounded-lg border border-white/5 bg-[#17171b] px-3 py-2 flex items-center justify-between gap-2.5 text-xs">
-                        <span className="w-18 shrink-0 text-zinc-400 text-[11px] font-medium">
+                      <div className="rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 py-2 flex items-center justify-between gap-2.5 text-xs">
+                        <span className="w-18 shrink-0 text-muted-foreground dark:text-zinc-400 text-[11px] font-medium">
                           Refraction
                         </span>
-                        <div className="h-3.5 w-px bg-white/10 shrink-0" />
+                        <div className="h-3.5 w-px bg-border dark:bg-white/10 shrink-0" />
                         <input
                           type="range"
                           min="0"
@@ -3576,18 +3680,18 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               parseFloat(e.target.value),
                             )
                           }
-                          className="w-full accent-white h-1 bg-white/10 rounded cursor-pointer"
+                          className="w-full accent-foreground dark:accent-white h-1 bg-foreground/15 dark:bg-white/10 rounded cursor-pointer"
                         />
-                        <span className="w-12 text-right font-mono text-[11px] text-zinc-100 tabular-nums shrink-0 font-medium">
+                        <span className="w-12 text-right font-mono text-[11px] text-foreground dark:text-zinc-100 tabular-nums shrink-0 font-medium">
                           {macSliderRefractionLevel.toFixed(2)}
                         </span>
                       </div>
 
-                      <div className="rounded-lg border border-white/5 bg-[#17171b] px-3 py-2 flex items-center justify-between gap-2.5 text-xs">
-                        <span className="w-18 shrink-0 text-zinc-400 text-[11px] font-medium">
+                      <div className="rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 py-2 flex items-center justify-between gap-2.5 text-xs">
+                        <span className="w-18 shrink-0 text-muted-foreground dark:text-zinc-400 text-[11px] font-medium">
                           Blur
                         </span>
-                        <div className="h-3.5 w-px bg-white/10 shrink-0" />
+                        <div className="h-3.5 w-px bg-border dark:bg-white/10 shrink-0" />
                         <input
                           type="range"
                           min="0"
@@ -3597,9 +3701,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           onChange={(e) =>
                             setMacSliderBlurLevel(parseFloat(e.target.value))
                           }
-                          className="w-full accent-white h-1 bg-white/10 rounded cursor-pointer"
+                          className="w-full accent-foreground dark:accent-white h-1 bg-foreground/15 dark:bg-white/10 rounded cursor-pointer"
                         />
-                        <span className="w-12 text-right font-mono text-[11px] text-zinc-100 tabular-nums shrink-0 font-medium">
+                        <span className="w-12 text-right font-mono text-[11px] text-foreground dark:text-zinc-100 tabular-nums shrink-0 font-medium">
                           {macSliderBlurLevel.toFixed(1)}px
                         </span>
                       </div>
@@ -3611,7 +3715,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               {activeComponent.slug === "mac-switch" && (
                 <div
                   key="mac-switch-color-palette"
-                  className="pointer-events-auto rounded-full border border-white/12 bg-[#121215]/95 backdrop-blur-2xl p-1.5 shadow-[0_16px_40px_rgba(0,0,0,0.85),0_0_0_1px_rgba(255,255,255,0.06)] flex items-center gap-1.5 select-none"
+                  className="pointer-events-auto rounded-full border border-border dark:border-white/12 bg-card/95 dark:bg-[#121215]/95 backdrop-blur-2xl p-1.5 shadow-xl dark:shadow-[0_16px_40px_rgba(0,0,0,0.85),0_0_0_1px_rgba(255,255,255,0.06)] flex items-center gap-1.5 select-none"
                 >
                   {(
                     [
@@ -3639,7 +3743,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         {isSelected && (
                           <motion.span
                             layoutId="activeMacSwitchColorRing"
-                            className="absolute inset-0 rounded-full border-2 border-white shadow-[0_0_12px_rgba(255,255,255,0.4)] pointer-events-none"
+                            className="absolute inset-0 rounded-full border-2 border-foreground dark:border-white shadow-[0_0_12px_rgba(0,0,0,0.2)] dark:shadow-[0_0_12px_rgba(255,255,255,0.4)] pointer-events-none"
                             transition={{
                               type: "spring",
                               stiffness: 480,
@@ -3665,30 +3769,30 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               {activeComponent.slug === "liquid-toggle" && (
                 <div
                   key="liquid-toggle-customize-panel"
-                  className="pointer-events-auto rounded-2xl border border-white/10 bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-2xl w-full mx-4 select-none flex flex-col gap-2.5"
+                  className="pointer-events-auto rounded-2xl border border-border dark:border-white/10 bg-card/95 dark:bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-xl dark:shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-2xl w-full mx-4 select-none flex flex-col gap-2.5"
                 >
                   <div className="flex items-center justify-between px-1">
-                    <span className="text-xs font-semibold text-white/90 tracking-tight">
+                    <span className="text-xs font-semibold text-foreground dark:text-white/90 tracking-tight">
                       Liquid Toggle Controls
                     </span>
                     <button
                       type="button"
                       onClick={resetLiquidConfig}
-                      className="text-[11px] text-zinc-400 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                      className="text-[11px] text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
                     >
                       <ResetIcon className="w-3.5 h-3.5" />
                       <span>Reset</span>
                     </button>
                   </div>
 
-                  <div className="rounded-xl border border-white/5 bg-[#0b0b0e] p-2 flex flex-col gap-2">
-                    <div className="flex items-center gap-1 bg-[#17171b] p-1 rounded-xl border border-white/5 w-full">
+                  <div className="rounded-xl border border-border dark:border-white/5 bg-muted/40 dark:bg-[#0b0b0e] p-2 flex flex-col gap-2">
+                    <div className="flex items-center gap-1 bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5 w-full">
                       {(
                         [
                           {
                             id: "monochrome",
                             label: "Monochrome",
-                            dot: "bg-zinc-200",
+                            dot: "bg-zinc-700 dark:bg-zinc-200",
                           },
                           {
                             id: "emerald",
@@ -3715,8 +3819,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           className={cn(
                             "relative flex-1 h-7.5 px-2 rounded-lg text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer select-none",
                             liquidColor === c.id
-                              ? "text-black font-semibold"
-                              : "text-zinc-400 hover:text-white",
+                              ? "text-background font-semibold dark:text-black"
+                              : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
                           )}
                         >
                           {liquidColor === c.id && (
@@ -3727,7 +3831,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                 stiffness: 450,
                                 damping: 32,
                               }}
-                              className="absolute inset-0 bg-white rounded-lg shadow-xs"
+                              className="absolute inset-0 bg-foreground dark:bg-white rounded-lg shadow-xs"
                             />
                           )}
                           <span
@@ -3744,11 +3848,11 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                      <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3 flex items-center justify-between text-xs">
-                        <span className="text-zinc-400 text-xs font-medium shrink-0">
+                      <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                        <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                           State
                         </span>
-                        <div className="flex items-center gap-0.5 bg-black/25 p-0.5 rounded-md border border-white/5">
+                        <div className="flex items-center gap-0.5 bg-muted/80 dark:bg-black/25 p-0.5 rounded-md border border-border dark:border-white/5">
                           {[
                             { label: "OFF", value: false },
                             { label: "ON", value: true },
@@ -3760,8 +3864,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               className={cn(
                                 "relative px-2.5 py-0.5 rounded text-[11px] font-mono transition-colors cursor-pointer",
                                 liquidChecked === st.value
-                                  ? "text-black font-semibold"
-                                  : "text-zinc-400 hover:text-white",
+                                  ? "text-background font-semibold dark:text-black"
+                                  : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
                               )}
                             >
                               {liquidChecked === st.value && (
@@ -3772,7 +3876,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                     stiffness: 450,
                                     damping: 32,
                                   }}
-                                  className="absolute inset-0 bg-white rounded shadow-xs"
+                                  className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
                                 />
                               )}
                               <span className="relative z-10">{st.label}</span>
@@ -3781,11 +3885,11 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         </div>
                       </div>
 
-                      <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3 flex items-center justify-between text-xs">
-                        <span className="text-zinc-400 text-xs font-medium shrink-0">
+                      <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                        <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                           Size
                         </span>
-                        <div className="flex items-center gap-0.5 bg-black/25 p-0.5 rounded-md border border-white/5">
+                        <div className="flex items-center gap-0.5 bg-muted/80 dark:bg-black/25 p-0.5 rounded-md border border-border dark:border-white/5">
                           {(["sm", "md", "lg"] as const).map((sz) => (
                             <button
                               key={sz}
@@ -3794,8 +3898,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               className={cn(
                                 "relative px-2 py-0.5 rounded text-[11px] font-mono uppercase transition-colors cursor-pointer",
                                 liquidSize === sz
-                                  ? "text-black font-semibold"
-                                  : "text-zinc-400 hover:text-white",
+                                  ? "text-background font-semibold dark:text-black"
+                                  : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
                               )}
                             >
                               {liquidSize === sz && (
@@ -3806,7 +3910,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                     stiffness: 450,
                                     damping: 32,
                                   }}
-                                  className="absolute inset-0 bg-white rounded shadow-xs"
+                                  className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
                                 />
                               )}
                               <span className="relative z-10">{sz}</span>
@@ -3815,11 +3919,11 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         </div>
                       </div>
 
-                      <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3 flex items-center justify-between text-xs">
-                        <span className="text-zinc-400 text-xs font-medium shrink-0">
+                      <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                        <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                           Viscosity
                         </span>
-                        <div className="flex items-center gap-0.5 bg-black/25 p-0.5 rounded-md border border-white/5">
+                        <div className="flex items-center gap-0.5 bg-muted/80 dark:bg-black/25 p-0.5 rounded-md border border-border dark:border-white/5">
                           {(["fluid", "jelly"] as const).map((v) => (
                             <button
                               key={v}
@@ -3828,8 +3932,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               className={cn(
                                 "relative px-2.5 py-0.5 rounded text-[11px] capitalize transition-colors cursor-pointer",
                                 liquidViscosity === v
-                                  ? "text-black font-semibold"
-                                  : "text-zinc-400 hover:text-white",
+                                  ? "text-background font-semibold dark:text-black"
+                                  : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
                               )}
                             >
                               {liquidViscosity === v && (
@@ -3840,7 +3944,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                     stiffness: 450,
                                     damping: 32,
                                   }}
-                                  className="absolute inset-0 bg-white rounded shadow-xs"
+                                  className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
                                 />
                               )}
                               <span className="relative z-10">{v}</span>
@@ -3856,24 +3960,24 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               {activeComponent.slug === "gooey-nav" && (
                 <div
                   key="gooey-nav-customize-panel"
-                  className="pointer-events-auto rounded-2xl border border-white/10 bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-2xl w-full mx-4 select-none flex flex-col gap-2.5"
+                  className="pointer-events-auto rounded-2xl border border-border dark:border-white/10 bg-card/95 dark:bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-xl dark:shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-2xl w-full mx-4 select-none flex flex-col gap-2.5"
                 >
                   <div className="flex items-center justify-between px-1">
-                    <span className="text-xs font-semibold text-white/90 tracking-tight">
+                    <span className="text-xs font-semibold text-foreground dark:text-white/90 tracking-tight">
                       Gooey Nav Controls
                     </span>
                     <button
                       type="button"
                       onClick={resetGooeyNavConfig}
-                      className="text-[11px] text-zinc-400 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                      className="text-[11px] text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
                     >
                       <ResetIcon className="w-3.5 h-3.5" />
                       <span>Reset</span>
                     </button>
                   </div>
 
-                  <div className="rounded-xl border border-white/5 bg-[#0b0b0e] p-2 flex flex-col gap-2">
-                    <div className="flex items-center gap-1 bg-[#17171b] p-1 rounded-xl border border-white/5 w-full">
+                  <div className="rounded-xl border border-border dark:border-white/5 bg-muted/40 dark:bg-[#0b0b0e] p-2 flex flex-col gap-2">
+                    <div className="flex items-center gap-1 bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5 w-full">
                       {(
                         [
                           {
@@ -3896,7 +4000,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           {
                             id: "monochrome",
                             label: "Mono",
-                            dot: "bg-zinc-200",
+                            dot: "bg-zinc-700 dark:bg-zinc-200",
                           },
                         ] as const
                       ).map((c) => (
@@ -3907,8 +4011,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           className={cn(
                             "relative flex-1 h-7.5 px-2 rounded-lg text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer select-none",
                             gooeyNavColor === c.id
-                              ? "text-black font-semibold"
-                              : "text-zinc-400 hover:text-white",
+                              ? "text-background font-semibold dark:text-black"
+                              : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
                           )}
                         >
                           {gooeyNavColor === c.id && (
@@ -3919,7 +4023,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                 stiffness: 450,
                                 damping: 32,
                               }}
-                              className="absolute inset-0 bg-white rounded-lg shadow-xs"
+                              className="absolute inset-0 bg-foreground dark:bg-white rounded-lg shadow-xs"
                             />
                           )}
                           <span
@@ -3936,11 +4040,11 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                      <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3 flex items-center justify-between text-xs">
-                        <span className="text-zinc-400 text-xs font-medium shrink-0">
+                      <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                        <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                           Size
                         </span>
-                        <div className="flex items-center gap-0.5 bg-black/25 p-0.5 rounded-md border border-white/5">
+                        <div className="flex items-center gap-0.5 bg-muted/80 dark:bg-black/25 p-0.5 rounded-md border border-border dark:border-white/5">
                           {(["xs", "sm", "md", "lg"] as const).map((sz) => (
                             <button
                               key={sz}
@@ -3949,8 +4053,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               className={cn(
                                 "relative px-2 py-0.5 rounded text-[11px] font-mono uppercase transition-colors cursor-pointer",
                                 gooeyNavSize === sz
-                                  ? "text-black font-semibold"
-                                  : "text-zinc-400 hover:text-white",
+                                  ? "text-background font-semibold dark:text-black"
+                                  : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
                               )}
                             >
                               {gooeyNavSize === sz && (
@@ -3961,7 +4065,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                     stiffness: 450,
                                     damping: 32,
                                   }}
-                                  className="absolute inset-0 bg-white rounded shadow-xs"
+                                  className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
                                 />
                               )}
                               <span className="relative z-10">{sz}</span>
@@ -3970,11 +4074,11 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         </div>
                       </div>
 
-                      <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3 flex items-center justify-between text-xs">
-                        <span className="text-zinc-400 text-xs font-medium shrink-0">
+                      <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                        <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                           Variant
                         </span>
-                        <div className="flex items-center gap-0.5 bg-black/25 p-0.5 rounded-md border border-white/5">
+                        <div className="flex items-center gap-0.5 bg-muted/80 dark:bg-black/25 p-0.5 rounded-md border border-border dark:border-white/5">
                           {(["solid", "glow", "glass"] as const).map((v) => (
                             <button
                               key={v}
@@ -3983,8 +4087,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               className={cn(
                                 "relative px-2 py-0.5 rounded text-[11px] capitalize transition-colors cursor-pointer",
                                 gooeyNavVariant === v
-                                  ? "text-black font-semibold"
-                                  : "text-zinc-400 hover:text-white",
+                                  ? "text-background font-semibold dark:text-black"
+                                  : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
                               )}
                             >
                               {gooeyNavVariant === v && (
@@ -3995,7 +4099,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                     stiffness: 450,
                                     damping: 32,
                                   }}
-                                  className="absolute inset-0 bg-white rounded shadow-xs"
+                                  className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
                                 />
                               )}
                               <span className="relative z-10">{v}</span>
@@ -4004,11 +4108,11 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         </div>
                       </div>
 
-                      <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3 flex items-center justify-between text-xs">
-                        <span className="text-zinc-400 text-xs font-medium shrink-0">
+                      <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                        <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                           Motion
                         </span>
-                        <div className="flex items-center gap-0.5 bg-black/25 p-0.5 rounded-md border border-white/5">
+                        <div className="flex items-center gap-0.5 bg-muted/80 dark:bg-black/25 p-0.5 rounded-md border border-border dark:border-white/5">
                           {(["fluid", "elastic"] as const).map((e) => (
                             <button
                               key={e}
@@ -4017,8 +4121,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               className={cn(
                                 "relative px-2.5 py-0.5 rounded text-[11px] capitalize transition-colors cursor-pointer",
                                 gooeyNavElasticity === e
-                                  ? "text-black font-semibold"
-                                  : "text-zinc-400 hover:text-white",
+                                  ? "text-background font-semibold dark:text-black"
+                                  : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
                               )}
                             >
                               {gooeyNavElasticity === e && (
@@ -4029,7 +4133,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                     stiffness: 450,
                                     damping: 32,
                                   }}
-                                  className="absolute inset-0 bg-white rounded shadow-xs"
+                                  className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
                                 />
                               )}
                               <span className="relative z-10">{e}</span>
@@ -4045,24 +4149,24 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               {activeComponent.slug === "noise" && (
                 <div
                   key="noise-customize-panel"
-                  className="pointer-events-auto rounded-2xl border border-white/10 bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-2xl w-full mx-4 select-none flex flex-col gap-2.5"
+                  className="pointer-events-auto rounded-2xl border border-border dark:border-white/10 bg-card/95 dark:bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-xl dark:shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-2xl w-full mx-4 select-none flex flex-col gap-2.5"
                 >
                   <div className="flex items-center justify-between px-1">
-                    <span className="text-xs font-semibold text-white/90 tracking-tight">
+                    <span className="text-xs font-semibold text-foreground dark:text-white/90 tracking-tight">
                       Noise Background Controls
                     </span>
                     <button
                       type="button"
                       onClick={resetNoiseConfig}
-                      className="text-[11px] text-zinc-400 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                      className="text-[11px] text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
                     >
                       <ResetIcon className="w-3.5 h-3.5" />
                       <span>Reset</span>
                     </button>
                   </div>
 
-                  <div className="rounded-xl border border-white/5 bg-[#0b0b0e] p-2 flex flex-col gap-2">
-                    <div className="flex items-center gap-1 bg-[#17171b] p-1 rounded-xl border border-white/5 w-full">
+                  <div className="rounded-xl border border-border dark:border-white/5 bg-muted/40 dark:bg-[#0b0b0e] p-2 flex flex-col gap-2">
+                    <div className="flex items-center gap-1 bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5 w-full">
                       {(
                         [
                           { id: "grain", label: "Film Grain" },
@@ -4077,8 +4181,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           className={cn(
                             "relative flex-1 h-7.5 px-2 rounded-lg text-xs flex items-center justify-center transition-colors cursor-pointer select-none",
                             noiseMode === m.id
-                              ? "text-black font-semibold"
-                              : "text-zinc-400 hover:text-white",
+                              ? "text-background font-semibold dark:text-black"
+                              : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
                           )}
                         >
                           {noiseMode === m.id && (
@@ -4089,7 +4193,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                 stiffness: 450,
                                 damping: 32,
                               }}
-                              className="absolute inset-0 bg-white rounded-lg shadow-xs"
+                              className="absolute inset-0 bg-foreground dark:bg-white rounded-lg shadow-xs"
                             />
                           )}
                           <span className="relative z-10 truncate">
@@ -4100,11 +4204,11 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3 flex items-center justify-between text-xs">
-                        <span className="text-zinc-400 text-xs font-medium shrink-0">
+                      <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                        <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                           Alpha
                         </span>
-                        <div className="flex items-center gap-0.5 bg-black/25 p-0.5 rounded-md border border-white/5">
+                        <div className="flex items-center gap-0.5 bg-muted/80 dark:bg-black/25 p-0.5 rounded-md border border-border dark:border-white/5">
                           {([10, 25, 50, 80] as const).map((a) => (
                             <button
                               key={a}
@@ -4113,8 +4217,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               className={cn(
                                 "relative px-2 py-0.5 rounded text-[11px] font-mono transition-colors cursor-pointer select-none",
                                 noiseAlpha === a
-                                  ? "text-black font-semibold"
-                                  : "text-zinc-400 hover:text-white",
+                                  ? "text-background font-semibold dark:text-black"
+                                  : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
                               )}
                             >
                               {noiseAlpha === a && (
@@ -4125,7 +4229,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                     stiffness: 450,
                                     damping: 32,
                                   }}
-                                  className="absolute inset-0 bg-white rounded shadow-xs"
+                                  className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
                                 />
                               )}
                               <span className="relative z-10">{a}</span>
@@ -4134,11 +4238,11 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         </div>
                       </div>
 
-                      <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3 flex items-center justify-between text-xs">
-                        <span className="text-zinc-400 text-xs font-medium shrink-0">
+                      <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                        <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                           Scale
                         </span>
-                        <div className="flex items-center gap-0.5 bg-black/25 p-0.5 rounded-md border border-white/5">
+                        <div className="flex items-center gap-0.5 bg-muted/80 dark:bg-black/25 p-0.5 rounded-md border border-border dark:border-white/5">
                           {([1, 2, 4] as const).map((s) => (
                             <button
                               key={s}
@@ -4147,8 +4251,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               className={cn(
                                 "relative px-2 py-0.5 rounded text-[11px] font-mono transition-colors cursor-pointer select-none",
                                 noiseScale === s
-                                  ? "text-black font-semibold"
-                                  : "text-zinc-400 hover:text-white",
+                                  ? "text-background font-semibold dark:text-black"
+                                  : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
                               )}
                             >
                               {noiseScale === s && (
@@ -4159,7 +4263,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                     stiffness: 450,
                                     damping: 32,
                                   }}
-                                  className="absolute inset-0 bg-white rounded shadow-xs"
+                                  className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
                                 />
                               )}
                               <span className="relative z-10">{s}x</span>
@@ -4168,11 +4272,11 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         </div>
                       </div>
 
-                      <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3 flex items-center justify-between text-xs">
-                        <span className="text-zinc-400 text-xs font-medium shrink-0">
+                      <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                        <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                           Interval
                         </span>
-                        <div className="flex items-center gap-0.5 bg-black/25 p-0.5 rounded-md border border-white/5">
+                        <div className="flex items-center gap-0.5 bg-muted/80 dark:bg-black/25 p-0.5 rounded-md border border-border dark:border-white/5">
                           {([1, 2, 4] as const).map((iv) => (
                             <button
                               key={iv}
@@ -4181,8 +4285,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               className={cn(
                                 "relative px-2 py-0.5 rounded text-[11px] font-mono transition-colors cursor-pointer select-none",
                                 noiseInterval === iv
-                                  ? "text-black font-semibold"
-                                  : "text-zinc-400 hover:text-white",
+                                  ? "text-background font-semibold dark:text-black"
+                                  : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
                               )}
                             >
                               {noiseInterval === iv && (
@@ -4193,7 +4297,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                     stiffness: 450,
                                     damping: 32,
                                   }}
-                                  className="absolute inset-0 bg-white rounded shadow-xs"
+                                  className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
                                 />
                               )}
                               <span className="relative z-10">{iv}f</span>
@@ -4202,19 +4306,19 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         </div>
                       </div>
 
-                      <div className="h-9 rounded-lg border border-white/5 bg-[#17171b] px-3 flex items-center justify-between text-xs">
-                        <span className="text-zinc-400 text-xs font-medium shrink-0">
+                      <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                        <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                           Effects
                         </span>
-                        <div className="flex items-center gap-1 bg-black/25 p-0.5 rounded-md border border-white/5">
+                        <div className="flex items-center gap-1 bg-muted/80 dark:bg-black/25 p-0.5 rounded-md border border-border dark:border-white/5">
                           <button
                             type="button"
                             onClick={() => setNoiseVignette(!noiseVignette)}
                             className={cn(
                               "relative px-2.5 py-0.5 rounded text-[11px] font-medium transition-colors cursor-pointer select-none",
                               noiseVignette
-                                ? "bg-white text-black font-semibold shadow-xs"
-                                : "text-zinc-400 hover:text-white",
+                                ? "bg-foreground text-background font-semibold dark:bg-white dark:text-black shadow-xs"
+                                : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
                             )}
                           >
                             Vignette
@@ -4225,8 +4329,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             className={cn(
                               "relative px-2.5 py-0.5 rounded text-[11px] font-medium transition-colors cursor-pointer select-none",
                               noiseScanlines
-                                ? "bg-white text-black font-semibold shadow-xs"
-                                : "text-zinc-400 hover:text-white",
+                                ? "bg-foreground text-background font-semibold dark:bg-white dark:text-black shadow-xs"
+                                : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
                             )}
                           >
                             CRT
@@ -4241,25 +4345,25 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               {activeComponent.slug === "ai-input" && (
                 <div
                   key="ai-input-customize-panel"
-                  className="pointer-events-auto rounded-2xl border border-white/10 bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-2xl w-full mx-4 select-none flex flex-col gap-2.5"
+                  className="pointer-events-auto rounded-2xl border border-border dark:border-white/10 bg-card/95 dark:bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-xl dark:shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-2xl w-full mx-4 select-none flex flex-col gap-2.5"
                 >
                   <div className="flex items-center justify-between px-1">
-                    <span className="text-xs font-semibold text-white/90 tracking-tight">
+                    <span className="text-xs font-semibold text-foreground dark:text-white/90 tracking-tight">
                       AI Input Controls
                     </span>
                     <button
                       type="button"
                       onClick={resetAiInputConfig}
-                      className="text-[11px] text-zinc-400 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                      className="text-[11px] text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
                     >
                       <ResetIcon className="w-3.5 h-3.5" />
                       <span>Reset</span>
                     </button>
                   </div>
 
-                  <div className="rounded-xl border border-white/5 bg-[#0b0b0e] p-2 flex flex-col gap-2">
-                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-1.5 pb-1 border-b border-white/5">
-                      <div className="flex items-center gap-1 bg-[#17171b] p-1 rounded-xl border border-white/5 flex-1">
+                  <div className="rounded-xl border border-border dark:border-white/5 bg-muted/40 dark:bg-[#0b0b0e] p-2 flex flex-col gap-2">
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-1.5 pb-1 border-b border-border dark:border-white/5">
+                      <div className="flex items-center gap-1 bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5 flex-1">
                         {(
                           [
                             { id: "default", label: "Default Glass" },
@@ -4274,8 +4378,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             className={cn(
                               "relative flex-1 h-7.5 px-2 rounded-lg text-xs font-medium flex items-center justify-center transition-colors cursor-pointer select-none",
                               aiInputVariant === v.id
-                                ? "text-black font-semibold"
-                                : "text-zinc-400 hover:text-white",
+                                ? "text-background font-semibold dark:text-black"
+                                : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
                             )}
                           >
                             {aiInputVariant === v.id && (
@@ -4286,7 +4390,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                   stiffness: 450,
                                   damping: 32,
                                 }}
-                                className="absolute inset-0 bg-white rounded-lg shadow-xs"
+                                className="absolute inset-0 bg-foreground dark:bg-white rounded-lg shadow-xs"
                               />
                             )}
                             <span className="relative z-10 truncate">
@@ -4296,7 +4400,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         ))}
                       </div>
 
-                      <div className="flex items-center gap-1 bg-[#17171b] p-1 rounded-xl border border-white/5">
+                      <div className="flex items-center gap-1 bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5">
                         {[
                           { label: "Compact", value: 380 },
                           { label: "Default", value: 480 },
@@ -4310,8 +4414,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             className={cn(
                               "relative px-2.5 h-7 rounded-lg text-xs font-medium transition-colors cursor-pointer flex items-center justify-center select-none",
                               aiInputMaxWidth === sz.value
-                                ? "text-black font-semibold"
-                                : "text-zinc-400 hover:text-white",
+                                ? "text-background font-semibold dark:text-black"
+                                : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
                             )}
                           >
                             {aiInputMaxWidth === sz.value && (
@@ -4322,7 +4426,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                   stiffness: 450,
                                   damping: 32,
                                 }}
-                                className="absolute inset-0 bg-white rounded-lg shadow-xs"
+                                className="absolute inset-0 bg-foreground dark:bg-white rounded-lg shadow-xs"
                               />
                             )}
                             <span className="relative z-10">{sz.label}</span>
@@ -4338,8 +4442,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         className={cn(
                           "h-8 px-2.5 rounded-lg border text-xs font-medium flex items-center justify-between transition-colors cursor-pointer",
                           aiInputAllowAttachments
-                            ? "border-white/20 bg-white/10 text-white"
-                            : "border-white/5 bg-[#17171b] text-zinc-500 hover:text-zinc-300",
+                            ? "border-foreground/20 dark:border-white/20 bg-foreground/10 dark:bg-white/10 text-foreground dark:text-white"
+                            : "border-border dark:border-white/5 bg-card dark:bg-[#17171b] text-muted-foreground dark:text-zinc-500 hover:text-foreground dark:hover:text-zinc-300",
                         )}
                       >
                         <span>Attachments</span>
@@ -4354,8 +4458,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         className={cn(
                           "h-8 px-2.5 rounded-lg border text-xs font-medium flex items-center justify-between transition-colors cursor-pointer",
                           aiInputAllowVoice
-                            ? "border-white/20 bg-white/10 text-white"
-                            : "border-white/5 bg-[#17171b] text-zinc-500 hover:text-zinc-300",
+                            ? "border-foreground/20 dark:border-white/20 bg-foreground/10 dark:bg-white/10 text-foreground dark:text-white"
+                            : "border-border dark:border-white/5 bg-card dark:bg-[#17171b] text-muted-foreground dark:text-zinc-500 hover:text-foreground dark:hover:text-zinc-300",
                         )}
                       >
                         <span>Voice</span>
@@ -4370,8 +4474,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         className={cn(
                           "h-8 px-2.5 rounded-lg border text-xs font-medium flex items-center justify-between transition-colors cursor-pointer",
                           aiInputAllowModelSelect
-                            ? "border-white/20 bg-white/10 text-white"
-                            : "border-white/5 bg-[#17171b] text-zinc-500 hover:text-zinc-300",
+                            ? "border-foreground/20 dark:border-white/20 bg-foreground/10 dark:bg-white/10 text-foreground dark:text-white"
+                            : "border-border dark:border-white/5 bg-card dark:bg-[#17171b] text-muted-foreground dark:text-zinc-500 hover:text-foreground dark:hover:text-zinc-300",
                         )}
                       >
                         <span>Models</span>
@@ -4386,8 +4490,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         className={cn(
                           "h-8 px-2.5 rounded-lg border text-xs font-medium flex items-center justify-between transition-colors cursor-pointer",
                           aiInputAllowEffortSelect
-                            ? "border-white/20 bg-white/10 text-white"
-                            : "border-white/5 bg-[#17171b] text-zinc-500 hover:text-zinc-300",
+                            ? "border-foreground/20 dark:border-white/20 bg-foreground/10 dark:bg-white/10 text-foreground dark:text-white"
+                            : "border-border dark:border-white/5 bg-card dark:bg-[#17171b] text-muted-foreground dark:text-zinc-500 hover:text-foreground dark:hover:text-zinc-300",
                         )}
                       >
                         <span>Effort</span>
@@ -4410,9 +4514,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             600,
                           );
                         }}
-                        className="h-7 px-2.5 rounded-lg border border-white/10 bg-[#17171b] hover:bg-white/10 hover:border-white/20 text-xs font-medium text-zinc-300 hover:text-white transition-all flex items-center gap-1.5 cursor-pointer"
+                        className="h-7 px-2.5 rounded-lg border border-border dark:border-white/10 bg-card dark:bg-[#17171b] hover:bg-muted dark:hover:bg-white/10 hover:border-foreground/20 dark:hover:border-white/20 text-xs font-medium text-foreground/80 dark:text-zinc-300 hover:text-foreground dark:hover:text-white transition-all flex items-center gap-1.5 cursor-pointer"
                       >
-                        <PlusIcon className="w-3.5 h-3.5 text-zinc-400" />
+                        <PlusIcon className="w-3.5 h-3.5 text-muted-foreground dark:text-zinc-400" />
                         <span>Attach Mockup</span>
                       </button>
 
@@ -4421,7 +4525,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         onClick={() => {
                           promptInputRef.current?.startVoice();
                         }}
-                        className="h-7 px-2.5 rounded-lg border border-white/10 bg-[#17171b] hover:bg-white/10 hover:border-white/20 text-xs font-medium text-zinc-300 hover:text-white transition-all flex items-center gap-1.5 cursor-pointer"
+                        className="h-7 px-2.5 rounded-lg border border-border dark:border-white/10 bg-card dark:bg-[#17171b] hover:bg-muted dark:hover:bg-white/10 hover:border-foreground/20 dark:hover:border-white/20 text-xs font-medium text-foreground/80 dark:text-zinc-300 hover:text-foreground dark:hover:text-white transition-all flex items-center gap-1.5 cursor-pointer"
                       >
                         <span>Simulate Voice</span>
                       </button>
@@ -4432,15 +4536,15 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           promptInputRef.current?.expand();
                           promptInputRef.current?.focus();
                         }}
-                        className="h-7 px-2.5 rounded-lg border border-white/10 bg-[#17171b] hover:bg-white/10 hover:border-white/20 text-xs font-medium text-zinc-300 hover:text-white transition-all flex items-center gap-1.5 cursor-pointer"
+                        className="h-7 px-2.5 rounded-lg border border-border dark:border-white/10 bg-card dark:bg-[#17171b] hover:bg-muted dark:hover:bg-white/10 hover:border-foreground/20 dark:hover:border-white/20 text-xs font-medium text-foreground/80 dark:text-zinc-300 hover:text-foreground dark:hover:text-white transition-all flex items-center gap-1.5 cursor-pointer"
                       >
                         <span>Expand Composer</span>
                       </button>
                     </div>
 
-                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-1.5 pt-1 border-t border-white/5">
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-1.5 pt-1 border-t border-border dark:border-white/5">
                       <div className="flex items-center gap-1.5 overflow-x-auto py-0.5">
-                        <span className="text-[11px] text-zinc-500 shrink-0 font-medium pl-1">
+                        <span className="text-[11px] text-muted-foreground dark:text-zinc-500 shrink-0 font-medium pl-1">
                           Try prompt:
                         </span>
                         {[
@@ -4452,7 +4556,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             key={promptText}
                             type="button"
                             onClick={() => setAiInputValue(promptText)}
-                            className="h-6 px-2 rounded-md bg-[#17171b] hover:bg-[#222228] border border-white/5 text-[11px] text-zinc-300 hover:text-white transition-colors cursor-pointer truncate max-w-40"
+                            className="h-6 px-2 rounded-md bg-muted/80 dark:bg-[#17171b] hover:bg-muted dark:hover:bg-[#222228] border border-border dark:border-white/5 text-[11px] text-foreground/80 dark:text-zinc-300 hover:text-foreground dark:hover:text-white transition-colors cursor-pointer truncate max-w-40"
                           >
                             {promptText}
                           </button>
@@ -4466,7 +4570,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             setAiInputValue("");
                             promptInputRef.current?.collapse();
                           }}
-                          className="h-6 px-2 rounded-md text-[11px] text-zinc-400 hover:text-white transition-colors cursor-pointer shrink-0"
+                          className="h-6 px-2 rounded-md text-[11px] text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white transition-colors cursor-pointer shrink-0"
                         >
                           Clear
                         </button>
@@ -4504,13 +4608,13 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       setActivePanel("none");
                     }
                   }}
-                  className="absolute inset-x-2 bottom-2 top-10 z-40 rounded-2xl border border-white/10 bg-[#0a0a0c] shadow-[0_-20px_50px_rgba(0,0,0,0.8)] flex flex-col overflow-hidden"
+                  className="absolute inset-x-2 bottom-2 top-10 z-40 rounded-2xl border border-border bg-card dark:bg-[#0a0a0c] shadow-[0_-20px_50px_rgba(0,0,0,0.15)] dark:shadow-[0_-20px_50px_rgba(0,0,0,0.8)] flex flex-col overflow-hidden"
                 >
                   <div className="pt-2.5 pb-1 flex justify-center shrink-0 cursor-grab active:cursor-grabbing">
-                    <div className="w-10 h-1 bg-zinc-700/80 rounded-full" />
+                    <div className="w-10 h-1 bg-muted-foreground/30 rounded-full" />
                   </div>
 
-                  <div className="px-5 pb-3 border-b border-white/8 flex items-center justify-between shrink-0">
+                  <div className="px-5 pb-3 border-b border-border flex items-center justify-between shrink-0">
                     <div className="flex items-center gap-2 overflow-x-auto">
                       {activeComponent.files.map((file, idx) => (
                         <button
@@ -4520,15 +4624,15 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           className={cn(
                             "relative px-3 py-1.5 rounded-lg text-xs font-mono transition-colors cursor-pointer",
                             idx === selectedFileIndex
-                              ? "text-white"
-                              : "text-zinc-500 hover:text-zinc-300",
+                              ? "text-foreground font-medium"
+                              : "text-muted-foreground hover:text-foreground",
                           )}
                         >
                           {idx === selectedFileIndex && (
                             <motion.div
                               layoutId="active-code-tab"
                               transition={microSpring}
-                              className="absolute inset-0 bg-white/10 border border-white/10 rounded-lg"
+                              className="absolute inset-0 bg-muted border border-border rounded-lg"
                             />
                           )}
                           <span className="relative z-10">{file.name}</span>
@@ -4543,7 +4647,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         transition={microSpring}
                         type="button"
                         onClick={handleInstallCopy}
-                        className="border border-white/10 hover:border-white/20 bg-[#18181b] hover:bg-[#222226] text-zinc-300 hover:text-white px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer"
+                        className="border border-border bg-card dark:bg-[#18181b] hover:bg-muted dark:hover:bg-[#222226] text-muted-foreground hover:text-foreground dark:text-zinc-300 dark:hover:text-white px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer"
                       >
                         {installCopied ? "Copied!" : "Install"}
                       </motion.button>
@@ -4554,7 +4658,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         transition={microSpring}
                         type="button"
                         onClick={handleCodeCopy}
-                        className="w-8 h-8 rounded-lg border border-white/10 hover:border-white/20 bg-[#18181b] hover:bg-[#222226] text-zinc-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+                        className="w-8 h-8 rounded-lg border border-border bg-card dark:bg-[#18181b] hover:bg-muted dark:hover:bg-[#222226] text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white flex items-center justify-center transition-colors cursor-pointer"
                         title="Copy code"
                       >
                         {codeCopied ? (
@@ -4569,7 +4673,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         transition={microSpring}
                         type="button"
                         onClick={() => setActivePanel("none")}
-                        className="w-8 h-8 rounded-lg border border-white/10 hover:border-white/20 bg-[#18181b] hover:bg-[#222226] text-zinc-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+                        className="w-8 h-8 rounded-lg border border-border bg-card dark:bg-[#18181b] hover:bg-muted dark:hover:bg-[#222226] text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white flex items-center justify-center transition-colors cursor-pointer"
                         title="Close (Esc)"
                       >
                         <Cross2Icon className="w-4 h-4" />
@@ -4605,7 +4709,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               animate={{ width: 440, opacity: 1 }}
               exit={{ width: 0, opacity: 0 }}
               transition={panelSpring}
-              className="shrink-0 h-full border border-white/8 bg-[#0c0c0e] rounded-3xl overflow-hidden flex flex-col"
+              className="shrink-0 h-full border border-border bg-card dark:bg-[#0c0c0e] rounded-3xl overflow-hidden flex flex-col"
             >
               <div className="w-110 min-w-110 h-full p-6 sm:p-7 overflow-y-auto flex flex-col gap-6 scrollbar-none pb-12">
                 <motion.div
@@ -4616,13 +4720,13 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 >
                   <motion.div
                     variants={fadeVariants}
-                    className="flex items-center justify-between pb-2 border-b border-white/5"
+                    className="flex items-center justify-between pb-2 border-b border-border"
                   >
                     <div className="flex items-center gap-2">
-                      <span className="text-[10px] uppercase tracking-widest text-zinc-400 font-medium">
+                      <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-medium">
                         {activeComponent.slug.replace("-", " ")}
                       </span>
-                      <span className="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-white/5 text-zinc-400 border border-white/8">
+                      <span className="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-muted text-muted-foreground border border-border">
                         {activeComponent.category.replace("-", " ")}
                       </span>
                       <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-orange-500/10 text-orange-400 border border-orange-500/20">
@@ -4634,7 +4738,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       transition={microSpring}
                       type="button"
                       onClick={() => setActivePanel("none")}
-                      className="w-7 h-7 rounded-lg border border-white/10 hover:border-white/20 bg-zinc-900 text-zinc-400 hover:text-white transition-colors cursor-pointer flex items-center justify-center"
+                      className="w-7 h-7 rounded-lg border border-border hover:border-foreground/20 bg-muted/60 dark:bg-zinc-900 text-muted-foreground hover:text-foreground transition-colors cursor-pointer flex items-center justify-center"
                       title="Close (Esc)"
                     >
                       <Cross2Icon className="w-3.5 h-3.5" />
@@ -4642,14 +4746,14 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   </motion.div>
 
                   <motion.div variants={fadeVariants} className="space-y-2">
-                    <h2 className="text-xl sm:text-2xl font-serif text-white tracking-tight leading-snug">
+                    <h2 className="text-xl sm:text-2xl font-serif text-foreground tracking-tight leading-snug">
                       {activeComponent.name}
                     </h2>
-                    <p className="text-xs text-zinc-300 font-light leading-relaxed">
+                    <p className="text-xs text-muted-foreground font-light leading-relaxed">
                       {activeComponent.description}
                     </p>
                     {activeComponent.summary && (
-                      <p className="text-xs text-zinc-400 font-light leading-relaxed pt-1">
+                      <p className="text-xs text-muted-foreground font-light leading-relaxed pt-1">
                         {activeComponent.summary}
                       </p>
                     )}
@@ -4659,16 +4763,16 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     activeComponent.highlights.length > 0 && (
                       <motion.div
                         variants={fadeVariants}
-                        className="space-y-2.5 pt-4 border-t border-white/8"
+                        className="space-y-2.5 pt-4 border-t border-border"
                       >
-                        <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
+                        <div className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
                           Capabilities & Highlights
                         </div>
                         <div className="space-y-1.5">
                           {activeComponent.highlights.map((h, i) => (
                             <div
                               key={i}
-                              className="flex items-start gap-2 text-xs text-zinc-300 font-light leading-relaxed"
+                              className="flex items-start gap-2 text-xs text-foreground font-light leading-relaxed"
                             >
                               <span className="text-orange-500 text-[11px] font-mono shrink-0 select-none">
                                 ›
@@ -4684,22 +4788,22 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     activeComponent.anatomy.length > 0 && (
                       <motion.div
                         variants={fadeVariants}
-                        className="space-y-2.5 pt-4 border-t border-white/8"
+                        className="space-y-2.5 pt-4 border-t border-border"
                       >
-                        <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
+                        <div className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
                           Component Anatomy
                         </div>
-                        <div className="border border-white/8 rounded-xl bg-black/40 p-3 space-y-1 font-mono text-[11px]">
+                        <div className="border border-border rounded-xl bg-muted/40 p-3 space-y-1 font-mono text-[11px]">
                           {activeComponent.anatomy.map((item, idx) => (
                             <div
                               key={idx}
-                              className="flex items-center gap-2 text-zinc-300"
+                              className="flex items-center gap-2 text-foreground"
                             >
-                              <span className="text-zinc-600 text-[10px] w-3 shrink-0 text-right">
+                              <span className="text-muted-foreground text-[10px] w-3 shrink-0 text-right">
                                 {idx + 1}
                               </span>
-                              <span className="text-zinc-500">→</span>
-                              <span className="text-zinc-300 font-mono text-[11px]">
+                              <span className="text-muted-foreground">→</span>
+                              <span className="text-foreground font-mono text-[11px]">
                                 {item}
                               </span>
                             </div>
@@ -4711,39 +4815,39 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   {activeComponent.physics && (
                     <motion.div
                       variants={fadeVariants}
-                      className="space-y-3 pt-4 border-t border-white/8"
+                      className="space-y-3 pt-4 border-t border-border"
                     >
                       <div className="flex items-center justify-between">
-                        <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
+                        <div className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
                           Motion & Interaction Spec
                         </div>
                         <span className="text-[10px] font-mono text-orange-400 bg-orange-500/10 border border-orange-500/20 px-2 py-0.5 rounded">
                           {activeComponent.physics.engine}
                         </span>
                       </div>
-                      <p className="text-xs text-zinc-400 font-light leading-relaxed">
+                      <p className="text-xs text-muted-foreground font-light leading-relaxed">
                         {activeComponent.physics.description}
                       </p>
                       {activeComponent.physics.parameters && (
-                        <div className="border border-white/8 rounded-xl overflow-hidden bg-black/40">
+                        <div className="border border-border rounded-xl overflow-hidden bg-muted/40">
                           <table className="w-full text-left text-xs">
-                            <thead className="bg-zinc-950 border-b border-white/8 text-zinc-500 font-mono text-[10px] uppercase">
+                            <thead className="bg-muted border-b border-border text-muted-foreground font-mono text-[10px] uppercase">
                               <tr>
                                 <th className="p-2.5 font-medium">Parameter</th>
                                 <th className="p-2.5 font-medium">Value</th>
                               </tr>
                             </thead>
-                            <tbody className="divide-y divide-white/6 font-mono text-[11px]">
+                            <tbody className="divide-y divide-border font-mono text-[11px]">
                               {activeComponent.physics.parameters.map(
                                 (param) => (
                                   <tr
                                     key={param.label}
-                                    className="hover:bg-white/5 transition-colors"
+                                    className="hover:bg-muted/50 transition-colors"
                                   >
-                                    <td className="p-2.5 text-zinc-400">
+                                    <td className="p-2.5 text-muted-foreground">
                                       {param.label}
                                     </td>
-                                    <td className="p-2.5 text-zinc-200">
+                                    <td className="p-2.5 text-foreground">
                                       {param.value}
                                     </td>
                                   </tr>
@@ -4760,19 +4864,19 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     activeComponent.props.length > 0 && (
                       <motion.div
                         variants={fadeVariants}
-                        className="space-y-3 pt-4 border-t border-white/8"
+                        className="space-y-3 pt-4 border-t border-border"
                       >
                         <div className="flex items-center justify-between">
-                          <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
+                          <div className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
                             Props Interface
                           </div>
-                          <span className="text-[10px] font-mono text-zinc-500">
+                          <span className="text-[10px] font-mono text-muted-foreground">
                             {activeComponent.props.length} configurable
                           </span>
                         </div>
-                        <div className="border border-white/8 rounded-xl overflow-hidden bg-black/40">
+                        <div className="border border-border rounded-xl overflow-hidden bg-muted/40">
                           <table className="w-full text-left text-xs">
-                            <thead className="bg-zinc-950 border-b border-white/8 text-zinc-500 font-mono text-[10px] uppercase">
+                            <thead className="bg-muted border-b border-border text-muted-foreground font-mono text-[10px] uppercase">
                               <tr>
                                 <th className="p-2.5 font-medium">Prop</th>
                                 <th className="p-2.5 font-medium">Type</th>
@@ -4782,31 +4886,31 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                 </th>
                               </tr>
                             </thead>
-                            <tbody className="divide-y divide-white/6 text-xs">
+                            <tbody className="divide-y divide-border text-xs">
                               {activeComponent.props.map((p) => (
                                 <tr
                                   key={p.name}
-                                  className="hover:bg-white/5 transition-colors align-top"
+                                  className="hover:bg-muted/50 transition-colors align-top"
                                 >
                                   <td className="p-2.5 font-mono">
                                     <div className="flex flex-col items-start gap-1">
-                                      <span className="bg-zinc-900 border border-white/10 px-2 py-0.5 rounded text-orange-400 text-[11px]">
+                                      <span className="bg-muted border border-border px-2 py-0.5 rounded text-orange-500 text-[11px]">
                                         {p.name}
                                       </span>
                                       {p.required && (
-                                        <span className="text-[9px] uppercase tracking-wider text-rose-400 font-medium font-mono">
+                                        <span className="text-[9px] uppercase tracking-wider text-rose-500 font-medium font-mono">
                                           Required
                                         </span>
                                       )}
                                     </div>
                                   </td>
-                                  <td className="p-2.5 text-zinc-400 font-mono text-[11px] break-all">
+                                  <td className="p-2.5 text-muted-foreground font-mono text-[11px] break-all">
                                     {p.type}
                                   </td>
-                                  <td className="p-2.5 text-zinc-500 font-mono text-[11px]">
+                                  <td className="p-2.5 text-muted-foreground font-mono text-[11px]">
                                     {p.defaultValue ?? "—"}
                                   </td>
-                                  <td className="p-2.5 text-zinc-300 font-sans font-light leading-relaxed">
+                                  <td className="p-2.5 text-foreground font-sans font-light leading-relaxed">
                                     {p.description}
                                   </td>
                                 </tr>
@@ -4820,47 +4924,47 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   {activeComponent.accessibility && (
                     <motion.div
                       variants={fadeVariants}
-                      className="space-y-3 pt-4 border-t border-white/8"
+                      className="space-y-3 pt-4 border-t border-border"
                     >
                       <div className="flex items-center justify-between">
-                        <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
+                        <div className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
                           Accessibility & Shortcuts
                         </div>
                         {activeComponent.accessibility.role && (
-                          <span className="text-[10px] font-mono text-zinc-400 bg-white/5 border border-white/8 px-2 py-0.5 rounded">
+                          <span className="text-[10px] font-mono text-muted-foreground bg-muted border border-border px-2 py-0.5 rounded">
                             role=&quot;{activeComponent.accessibility.role}
                             &quot;
                           </span>
                         )}
                       </div>
                       {activeComponent.accessibility.aria && (
-                        <p className="text-xs text-zinc-400 font-light leading-relaxed">
+                        <p className="text-xs text-muted-foreground font-light leading-relaxed">
                           {activeComponent.accessibility.aria}
                         </p>
                       )}
                       {activeComponent.accessibility.keyboard &&
                         activeComponent.accessibility.keyboard.length > 0 && (
-                          <div className="border border-white/8 rounded-xl overflow-hidden bg-black/40">
+                          <div className="border border-border rounded-xl overflow-hidden bg-muted/40">
                             <table className="w-full text-left text-xs">
-                              <thead className="bg-zinc-950 border-b border-white/8 text-zinc-500 font-mono text-[10px] uppercase">
+                              <thead className="bg-muted border-b border-border text-muted-foreground font-mono text-[10px] uppercase">
                                 <tr>
                                   <th className="p-2.5 font-medium">Key</th>
                                   <th className="p-2.5 font-medium">Action</th>
                                 </tr>
                               </thead>
-                              <tbody className="divide-y divide-white/6 text-xs">
+                              <tbody className="divide-y divide-border text-xs">
                                 {activeComponent.accessibility.keyboard.map(
                                   (kb) => (
                                     <tr
                                       key={kb.key}
-                                      className="hover:bg-white/5 transition-colors align-top"
+                                      className="hover:bg-muted/50 transition-colors align-top"
                                     >
                                       <td className="p-2.5 font-mono">
-                                        <kbd className="bg-zinc-900 border border-white/10 px-1.5 py-0.5 rounded text-zinc-200 text-[11px]">
+                                        <kbd className="bg-muted border border-border px-1.5 py-0.5 rounded text-foreground text-[11px]">
                                           {kb.key}
                                         </kbd>
                                       </td>
-                                      <td className="p-2.5 text-zinc-300 font-sans font-light leading-relaxed">
+                                      <td className="p-2.5 text-foreground font-sans font-light leading-relaxed">
                                         {kb.description}
                                       </td>
                                     </tr>
@@ -4871,7 +4975,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           </div>
                         )}
                       {activeComponent.accessibility.reducedMotion && (
-                        <div className="flex items-start gap-2 text-xs text-zinc-400 font-light leading-relaxed bg-zinc-950/60 border border-white/6 rounded-lg p-2.5">
+                        <div className="flex items-start gap-2 text-xs text-muted-foreground font-light leading-relaxed bg-muted border border-border rounded-lg p-2.5">
                           <span className="text-orange-400 text-[11px] font-mono select-none">
                             ✦
                           </span>
@@ -4886,21 +4990,21 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   {activeComponent.guidelines && (
                     <motion.div
                       variants={fadeVariants}
-                      className="space-y-3 pt-4 border-t border-white/8"
+                      className="space-y-3 pt-4 border-t border-border"
                     >
-                      <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
+                      <div className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
                         Integration & Best Practices
                       </div>
                       {activeComponent.guidelines.recommended && (
                         <div className="space-y-1.5">
-                          <div className="text-[10px] font-mono uppercase text-zinc-500">
+                          <div className="text-[10px] font-mono uppercase text-muted-foreground">
                             Recommended Use
                           </div>
                           {activeComponent.guidelines.recommended.map(
                             (rec, i) => (
                               <div
                                 key={i}
-                                className="flex items-start gap-2 text-xs text-zinc-300 font-light leading-relaxed"
+                                className="flex items-start gap-2 text-xs text-foreground font-light leading-relaxed"
                               >
                                 <span className="text-emerald-500 text-[11px] font-mono select-none">
                                   ✓
@@ -4913,14 +5017,14 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       )}
                       {activeComponent.guidelines.bestPractices && (
                         <div className="space-y-1.5 pt-2">
-                          <div className="text-[10px] font-mono uppercase text-zinc-500">
+                          <div className="text-[10px] font-mono uppercase text-muted-foreground">
                             Best Practices
                           </div>
                           {activeComponent.guidelines.bestPractices.map(
                             (bp, i) => (
                               <div
                                 key={i}
-                                className="flex items-start gap-2 text-xs text-zinc-300 font-light leading-relaxed"
+                                className="flex items-start gap-2 text-xs text-foreground font-light leading-relaxed"
                               >
                                 <span className="text-orange-400 text-[11px] font-mono select-none">
                                   ·
@@ -4936,16 +5040,16 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
 
                   <motion.div
                     variants={fadeVariants}
-                    className="space-y-2.5 pt-4 border-t border-white/8"
+                    className="space-y-2.5 pt-4 border-t border-border"
                   >
-                    <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
+                    <div className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
                       Dependencies & Source
                     </div>
                     <div className="flex flex-wrap gap-2">
                       {activeComponent.dependencies.map((dep) => (
                         <span
                           key={dep}
-                          className="inline-flex items-center gap-1.5 border border-white/10 bg-black/60 px-3 py-1 text-xs font-mono text-zinc-300 rounded-lg"
+                          className="inline-flex items-center gap-1.5 border border-border bg-muted px-3 py-1 text-xs font-mono text-foreground rounded-lg"
                         >
                           <span className="text-orange-500/70">~</span>
                           {dep}
@@ -4953,9 +5057,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       ))}
                     </div>
                     {activeComponent.files && activeComponent.files[0] && (
-                      <div className="flex items-center justify-between text-[11px] font-mono text-zinc-500 bg-black/40 border border-white/8 rounded-lg px-3 py-2 mt-2">
+                      <div className="flex items-center justify-between text-[11px] font-mono text-muted-foreground bg-muted/40 border border-border rounded-lg px-3 py-2 mt-2">
                         <span>Source File</span>
-                        <span className="text-zinc-300">
+                        <span className="text-foreground">
                           {activeComponent.files[0].path}
                         </span>
                       </div>

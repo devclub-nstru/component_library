@@ -65,7 +65,7 @@ const VARIANT_CONFIGS: Record<
 > = {
   teal: {
     levels: {
-      0: "bg-white/4 border border-white/4",
+      0: "bg-zinc-200/80 border border-zinc-300/60 dark:bg-white/4 dark:border-white/4",
       1: "bg-[#015451]/35 border border-[#015451]/50",
       2: "bg-[#015451]/65 border border-[#00c9a7]/40",
       3: "bg-[#00a88c] border border-[#00c9a7]/70 shadow-[0_0_8px_rgba(0,201,167,0.35)]",
@@ -78,7 +78,7 @@ const VARIANT_CONFIGS: Record<
   },
   emerald: {
     levels: {
-      0: "bg-white/4 border border-white/4",
+      0: "bg-zinc-200/80 border border-zinc-300/60 dark:bg-white/4 dark:border-white/4",
       1: "bg-[#0e4429] border border-[#006d32]/40",
       2: "bg-[#006d32] border border-[#26a641]/50",
       3: "bg-[#26a641] border border-[#39d353]/60 shadow-[0_0_8px_rgba(38,166,65,0.35)]",
@@ -91,7 +91,7 @@ const VARIANT_CONFIGS: Record<
   },
   github: {
     levels: {
-      0: "bg-white/4 border border-white/4",
+      0: "bg-zinc-200/80 border border-zinc-300/60 dark:bg-white/4 dark:border-white/4",
       1: "bg-[#0e4429] border border-[#006d32]/40",
       2: "bg-[#006d32] border border-[#26a641]/50",
       3: "bg-[#26a641] border border-[#39d353]/60 shadow-[0_0_8px_rgba(38,166,65,0.35)]",
@@ -349,18 +349,18 @@ export function ContributionGraph({
       <div
         ref={containerRef}
         className={cn(
-          "relative w-full max-w-full sm:max-w-3xl rounded-2xl border border-white/10 bg-zinc-950/75 p-4 sm:p-6 backdrop-blur-xl shadow-[0_20px_48px_-10px_rgba(0,0,0,0.7),inset_0_1px_0_0_rgba(255,255,255,0.14)] select-none",
+          "relative w-full max-w-full sm:max-w-3xl rounded-2xl border border-zinc-200 bg-white/90 p-4 sm:p-6 backdrop-blur-xl shadow-[0_20px_48px_-10px_rgba(0,0,0,0.06),inset_0_1px_0_0_rgba(255,255,255,0.8)] dark:border-white/10 dark:bg-zinc-950/75 dark:shadow-[0_20px_48px_-10px_rgba(0,0,0,0.7),inset_0_1px_0_0_rgba(255,255,255,0.14)] select-none",
           className,
         )}
         {...props}
       >
         {children || (
           <>
-            <div className="relative z-10 flex flex-col pb-3 sm:pb-4 border-b border-white/6">
-              <span className="text-xs sm:text-sm font-semibold text-zinc-100 tracking-tight">
+            <div className="relative z-10 flex flex-col pb-3 sm:pb-4 border-b border-zinc-200/80 dark:border-white/6">
+              <span className="text-xs sm:text-sm font-semibold text-zinc-900 dark:text-zinc-100 tracking-tight">
                 {title}
               </span>
-              <span className="text-[11px] sm:text-xs text-zinc-400 font-normal">
+              <span className="text-[11px] sm:text-xs text-zinc-500 dark:text-zinc-400 font-normal">
                 {subtitle ||
                   (username ? `@${username}` : "GitHub Contribution Matrix")}
               </span>
@@ -496,7 +496,7 @@ export function ContributionGraphCalendar({
         style={{ width: `${totalWidth}px` }}
       >
         <div
-          className="relative h-4 mb-2 text-[10px] sm:text-[11px] font-medium text-zinc-400"
+          className="relative h-4 mb-2 text-[10px] sm:text-[11px] font-medium text-zinc-500 dark:text-zinc-400"
           style={{ width: `${totalWidth}px` }}
         >
           {monthLabels.map(({ label, weekIndex }) => (
@@ -610,7 +610,7 @@ export function ContributionGraphFooter({
   return (
     <div
       className={cn(
-        "relative z-10 flex flex-wrap items-center justify-between gap-2 pt-3 sm:pt-3.5 border-t border-white/6 text-[11px] sm:text-xs text-zinc-400",
+        "relative z-10 flex flex-wrap items-center justify-between gap-2 pt-3 sm:pt-3.5 border-t border-zinc-200/80 text-[11px] sm:text-xs text-zinc-500 dark:border-white/6 dark:text-zinc-400",
         className,
       )}
       {...props}
@@ -632,7 +632,10 @@ export function ContributionGraphTotalCount({
   }
 
   return (
-    <div className={cn("font-medium text-zinc-400", className)} {...props}>
+    <div
+      className={cn("font-medium text-zinc-600 dark:text-zinc-400", className)}
+      {...props}
+    >
       {totalContributions.toLocaleString()} contributions in {year}
     </div>
   );
@@ -661,7 +664,7 @@ export function ContributionGraphLegend({
   return (
     <div
       className={cn(
-        "flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs text-zinc-400",
+        "flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs text-zinc-500 dark:text-zinc-400",
         className,
       )}
       {...props}

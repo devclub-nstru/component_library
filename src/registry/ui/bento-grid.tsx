@@ -47,7 +47,7 @@ export const BentoCard = ({
   return (
     <div
       className={cn(
-        "group relative flex flex-col justify-between overflow-hidden rounded-xl border border-zinc-800/80 bg-zinc-950/50 p-6 transition-all duration-300 hover:border-zinc-700 hover:bg-zinc-900/40 hover:shadow-xl",
+        "group relative flex flex-col justify-between overflow-hidden rounded-xl border border-zinc-200/80 bg-white/70 p-6 transition-all duration-300 hover:border-zinc-300 hover:bg-zinc-50/80 hover:shadow-xl dark:border-zinc-800/80 dark:bg-zinc-950/50 dark:hover:border-zinc-700 dark:hover:bg-zinc-900/40",
         colSpanClasses[colSpan],
         className,
       )}
@@ -57,15 +57,15 @@ export const BentoCard = ({
         {header && <div className="overflow-hidden rounded-lg">{header}</div>}
         <div className="flex items-center gap-2">
           {icon && (
-            <div className="text-zinc-400 group-hover:text-blue-400 transition-colors">
+            <div className="text-zinc-500 group-hover:text-blue-500 dark:text-zinc-400 dark:group-hover:text-blue-400 transition-colors">
               {icon}
             </div>
           )}
-          <h3 className="font-semibold text-zinc-100 text-base tracking-tight">
+          <h3 className="font-semibold text-zinc-900 dark:text-zinc-100 text-base tracking-tight">
             {title}
           </h3>
         </div>
-        <p className="text-xs text-zinc-400 font-light leading-relaxed">
+        <p className="text-xs text-zinc-600 dark:text-zinc-400 font-light leading-relaxed">
           {description}
         </p>
       </div>

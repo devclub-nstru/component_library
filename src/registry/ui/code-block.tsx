@@ -99,7 +99,7 @@ export const CodeBlock = ({
         ) {
           if (isImportLine) {
             tokens.push(
-              <span key={key} className="text-[#c084fc]">
+              <span key={key} className="text-[#9333ea] dark:text-[#c084fc]">
                 {token}
               </span>,
             );
@@ -118,7 +118,7 @@ export const CodeBlock = ({
           );
         } else if (token === "style" || token === "className") {
           tokens.push(
-            <span key={key} className="italic text-zinc-400">
+            <span key={key} className="italic text-zinc-500 dark:text-zinc-400">
               {token}
             </span>,
           );
@@ -136,7 +136,7 @@ export const CodeBlock = ({
           );
         } else if (/^[{}()[\];:,.=><&|!+*/?-]+$/.test(token)) {
           tokens.push(
-            <span key={key} className="text-zinc-400">
+            <span key={key} className="text-zinc-500 dark:text-zinc-400">
               {token}
             </span>,
           );
@@ -144,7 +144,7 @@ export const CodeBlock = ({
           tokens.push(<span key={key}>{token}</span>);
         } else {
           tokens.push(
-            <span key={key} className="text-zinc-100">
+            <span key={key} className="text-zinc-900 dark:text-zinc-100">
               {token}
             </span>,
           );
@@ -161,16 +161,18 @@ export const CodeBlock = ({
   return (
     <div className={cn("relative w-full max-w-2xl select-text", className)}>
       {filename && (
-        <div className="mb-2 text-xs font-mono text-zinc-500">{filename}</div>
+        <div className="mb-2 text-xs font-mono text-muted-foreground">
+          {filename}
+        </div>
       )}
       <button
         type="button"
         onClick={handleCopy}
-        className="absolute top-0 right-0 z-10 flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/4 text-zinc-400 backdrop-blur-sm transition-colors hover:border-white/20 hover:bg-white/8 hover:text-white cursor-pointer"
+        className="absolute top-0 right-0 z-10 flex h-8 w-8 items-center justify-center rounded-lg border border-border dark:border-white/10 bg-muted/40 dark:bg-white/4 text-muted-foreground dark:text-zinc-400 backdrop-blur-sm transition-colors hover:border-foreground/20 dark:hover:border-white/20 hover:bg-muted dark:hover:bg-white/8 hover:text-foreground dark:hover:text-white cursor-pointer"
         title={copied ? "Copied" : "Copy code"}
       >
         {copied ? (
-          <CheckIcon className="h-4 w-4 text-emerald-400" />
+          <CheckIcon className="h-4 w-4 text-emerald-500 dark:text-emerald-400" />
         ) : (
           <CopyIcon className="h-4 w-4" />
         )}
@@ -181,7 +183,7 @@ export const CodeBlock = ({
           {lines.map((line, idx) => (
             <div key={idx} className="flex">
               {showLineNumbers && (
-                <span className="w-8 shrink-0 select-none text-right pr-6 font-mono text-zinc-600">
+                <span className="w-8 shrink-0 select-none text-right pr-6 font-mono text-zinc-400 dark:text-zinc-600">
                   {idx + 1}
                 </span>
               )}

@@ -69,8 +69,8 @@ function CounterPreview() {
                 i === active
                   ? "h-4 -my-0.5 bg-orange-500"
                   : i < active
-                    ? "h-2.5 bg-white"
-                    : "h-2.5 bg-[#262626]",
+                    ? "h-2.5 bg-zinc-900 dark:bg-white"
+                    : "h-2.5 bg-zinc-300 dark:bg-[#262626]",
               )}
             />
           );
@@ -134,8 +134,10 @@ export default function ComponentsPage() {
       </div>
     ),
     "spotlight-card": (
-      <SpotlightCard className="w-full max-w-60 p-4 border-white/10 bg-black/80">
-        <div className="text-xs font-medium text-white">Radial Spotlight</div>
+      <SpotlightCard className="w-full max-w-60 p-4 border-zinc-200 bg-white dark:border-white/10 dark:bg-black/80">
+        <div className="text-xs font-medium text-zinc-900 dark:text-white">
+          Radial Spotlight
+        </div>
         <div className="text-[11px] text-zinc-500 mt-1 font-mono">
           GPU Accelerated
         </div>
@@ -143,39 +145,43 @@ export default function ComponentsPage() {
     ),
     "pixel-card": (
       <PixelCard
-        className="w-full max-w-60 aspect-4/5 border-white/10 bg-black/80"
+        className="w-full max-w-60 aspect-4/5 border-zinc-200 bg-white dark:border-white/10 dark:bg-black/80"
         variant="default"
         maxTilt={6}
       />
     ),
     "bento-grid": (
       <div className="w-full max-w-70 grid grid-cols-2 gap-2">
-        <div className="p-3 border border-white/10 bg-zinc-950 text-left">
+        <div className="p-3 border border-zinc-200 bg-zinc-100 text-left dark:border-white/10 dark:bg-zinc-950">
           <span className="text-[10px] font-mono text-zinc-500 block">
             Matrix
           </span>
-          <span className="text-xs text-white font-medium">Telemetry</span>
+          <span className="text-xs text-zinc-900 dark:text-white font-medium">
+            Telemetry
+          </span>
         </div>
-        <div className="p-3 border border-white/10 bg-zinc-950 text-left">
+        <div className="p-3 border border-zinc-200 bg-zinc-100 text-left dark:border-white/10 dark:bg-zinc-950">
           <span className="text-[10px] font-mono text-zinc-500 block">
             Latency
           </span>
-          <span className="text-xs text-white font-medium">12ms</span>
+          <span className="text-xs text-zinc-900 dark:text-white font-medium">
+            12ms
+          </span>
         </div>
       </div>
     ),
     "glowing-badge": (
       <div className="flex flex-col items-center gap-2 font-mono">
-        <div className="border border-white/20 bg-zinc-950 px-3 py-1 text-xs text-zinc-200">
+        <div className="border border-zinc-300 bg-zinc-100 px-3 py-1 text-xs text-zinc-800 dark:border-white/20 dark:bg-zinc-950 dark:text-zinc-200">
           SYSTEM_ACTIVE
         </div>
-        <div className="border border-orange-500/40 bg-zinc-950 px-3 py-1 text-xs text-orange-400">
+        <div className="border border-orange-500/40 bg-orange-50 px-3 py-1 text-xs text-orange-600 dark:border-orange-500/40 dark:bg-zinc-950 dark:text-orange-400">
           PRODUCTION
         </div>
       </div>
     ),
     "hook-sidebar": (
-      <div className="w-48 bg-zinc-950/90 border border-white/10 rounded-xl p-3 pointer-events-none">
+      <div className="w-48 bg-white border border-zinc-200 rounded-xl p-3 pointer-events-none dark:bg-zinc-950/90 dark:border-white/10">
         <HookSidebar
           items={[
             { label: "Overview" },
@@ -256,7 +262,7 @@ export default function ComponentsPage() {
       </div>
     ),
     dither: (
-      <div className="w-full h-44 rounded-lg overflow-hidden border border-white/10 relative pointer-events-none">
+      <div className="w-full h-44 rounded-lg overflow-hidden border border-zinc-200 dark:border-white/10 relative pointer-events-none">
         <Dither
           color1="#FF9FFC"
           color2="#5227FF"

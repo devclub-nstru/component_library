@@ -177,7 +177,7 @@ export function HookSidebar({
           y={hoverY}
           visible={(pointerInside || focusInside) && hoverIndex !== activeIndex}
           dashed={dashed}
-          className="text-zinc-600"
+          className="text-zinc-400 dark:text-zinc-600"
         />
         <Rail
           y={activeY}
@@ -217,8 +217,8 @@ export function HookSidebar({
             className: cn(
               "rounded-lg py-1 pl-5 pr-2 text-left text-xs transition-colors duration-200 motion-reduce:transition-none select-none cursor-pointer",
               isActive
-                ? "text-white font-medium"
-                : "text-zinc-400 hover:text-zinc-200",
+                ? "text-zinc-950 font-semibold dark:text-white dark:font-medium"
+                : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-200",
             ),
           };
 

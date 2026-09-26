@@ -7,7 +7,8 @@
   --foreground: #09090b;
   --border-subtle: rgba(0, 0, 0, 0.08);
   --border-hairline: rgba(0, 0, 0, 0.14);
-  --pattern-line: rgba(0, 0, 0, 0.06);
+  --pattern-line: rgba(0, 0, 0, 0.16);
+  --pattern: rgba(0, 0, 0, 0.12);
   --border: rgba(0, 0, 0, 0.12);
   --muted: #f4f4f5;
   --muted-foreground: #71717a;
@@ -29,6 +30,7 @@
   --border-subtle: rgba(255, 255, 255, 0.08);
   --border-hairline: rgba(255, 255, 255, 0.16);
   --pattern-line: rgba(255, 255, 255, 0.1);
+  --pattern: rgba(255, 255, 255, 0.08);
   --border: rgba(255, 255, 255, 0.12);
   --muted: #18181b;
   --muted-foreground: #a1a1aa;

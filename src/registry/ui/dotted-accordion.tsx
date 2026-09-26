@@ -94,12 +94,12 @@ export const DottedAccordion = forwardRef<HTMLDivElement, DottedAccordionProps>(
         <div
           ref={innerRef}
           className={cn(
-            "relative w-full max-w-xl rounded-none border border-white/10 bg-black",
+            "relative w-full max-w-xl rounded-none border border-zinc-200 bg-white dark:border-white/10 dark:bg-black",
             className,
           )}
           {...props}
         >
-          <div className="flex flex-col gap-0 rounded-none divide-y divide-white/10 relative z-10">
+          <div className="flex flex-col gap-0 rounded-none divide-y divide-zinc-200 dark:divide-white/10 relative z-10">
             {items.map((item, index) => {
               const isOpen = activeIndex === index;
 
@@ -108,7 +108,9 @@ export const DottedAccordion = forwardRef<HTMLDivElement, DottedAccordionProps>(
                   key={index}
                   className={cn(
                     "relative rounded-none transition-colors duration-200",
-                    isOpen ? "bg-[#111116]" : "bg-[#0a0a0c] hover:bg-[#0f0f13]",
+                    isOpen
+                      ? "bg-zinc-50 dark:bg-[#111116]"
+                      : "bg-white hover:bg-zinc-50/70 dark:bg-[#0a0a0c] dark:hover:bg-[#0f0f13]",
                   )}
                 >
                   <AnimatePresence>
@@ -119,7 +121,7 @@ export const DottedAccordion = forwardRef<HTMLDivElement, DottedAccordionProps>(
                           animate={{ opacity: 1 }}
                           exit={{ opacity: 0 }}
                           transition={{ duration: 0.2 }}
-                          className="absolute top-0 -left-12 -right-12 h-0 border-t border-dotted border-white/70 pointer-events-none z-20"
+                          className="absolute top-0 -left-12 -right-12 h-0 border-t border-dotted border-zinc-900/70 dark:border-white/70 pointer-events-none z-20"
                           style={horizontalMaskStyle}
                         />
                         <motion.div
@@ -127,7 +129,7 @@ export const DottedAccordion = forwardRef<HTMLDivElement, DottedAccordionProps>(
                           animate={{ opacity: 1 }}
                           exit={{ opacity: 0 }}
                           transition={{ duration: 0.2 }}
-                          className="absolute bottom-0 -left-12 -right-12 h-0 border-b border-dotted border-white/70 pointer-events-none z-20"
+                          className="absolute bottom-0 -left-12 -right-12 h-0 border-b border-dotted border-zinc-900/70 dark:border-white/70 pointer-events-none z-20"
                           style={horizontalMaskStyle}
                         />
                         <motion.div
@@ -135,7 +137,7 @@ export const DottedAccordion = forwardRef<HTMLDivElement, DottedAccordionProps>(
                           animate={{ opacity: 1 }}
                           exit={{ opacity: 0 }}
                           transition={{ duration: 0.2 }}
-                          className="absolute left-0 -top-12 -bottom-12 w-0 border-l border-dotted border-white/70 pointer-events-none z-20"
+                          className="absolute left-0 -top-12 -bottom-12 w-0 border-l border-dotted border-zinc-900/70 dark:border-white/70 pointer-events-none z-20"
                           style={verticalMaskStyle}
                         />
                         <motion.div
@@ -143,7 +145,7 @@ export const DottedAccordion = forwardRef<HTMLDivElement, DottedAccordionProps>(
                           animate={{ opacity: 1 }}
                           exit={{ opacity: 0 }}
                           transition={{ duration: 0.2 }}
-                          className="absolute right-0 -top-12 -bottom-12 w-0 border-r border-dotted border-white/70 pointer-events-none z-20"
+                          className="absolute right-0 -top-12 -bottom-12 w-0 border-r border-dotted border-zinc-900/70 dark:border-white/70 pointer-events-none z-20"
                           style={verticalMaskStyle}
                         />
                       </>
@@ -154,25 +156,25 @@ export const DottedAccordion = forwardRef<HTMLDivElement, DottedAccordionProps>(
                     type="button"
                     aria-expanded={isOpen}
                     onClick={() => toggleAccordion(index)}
-                    className="group flex w-full cursor-pointer items-center justify-between px-5 py-4 text-left rounded-none transition-colors outline-none focus-visible:ring-1 focus-visible:ring-white/30"
+                    className="group flex w-full cursor-pointer items-center justify-between px-5 py-4 text-left rounded-none transition-colors outline-none focus-visible:ring-1 focus-visible:ring-foreground/30 dark:focus-visible:ring-white/30"
                   >
                     <div className="flex items-center gap-3.5 min-w-0 flex-1">
-                      <span className="font-mono text-xs text-zinc-500 group-hover:text-zinc-400 transition-colors shrink-0 w-5">
+                      <span className="font-mono text-xs text-zinc-400 group-hover:text-zinc-600 dark:text-zinc-500 dark:group-hover:text-zinc-400 transition-colors shrink-0 w-5">
                         {String(index + 1).padStart(2, "0")}
                       </span>
                       <span
                         className={cn(
                           "text-sm font-medium tracking-tight transition-colors duration-200 truncate",
                           isOpen
-                            ? "text-white"
-                            : "text-zinc-300 group-hover:text-white",
+                            ? "text-zinc-950 dark:text-white"
+                            : "text-zinc-700 group-hover:text-zinc-950 dark:text-zinc-300 dark:group-hover:text-white",
                         )}
                       >
                         {item.title}
                       </span>
                     </div>
 
-                    <div className="relative flex items-center justify-center w-5 h-5 text-zinc-500 group-hover:text-zinc-200 transition-colors shrink-0 ml-3">
+                    <div className="relative flex items-center justify-center w-5 h-5 text-zinc-400 group-hover:text-zinc-700 dark:text-zinc-500 dark:group-hover:text-zinc-200 transition-colors shrink-0 ml-3">
                       <motion.span
                         className="absolute h-[1.5px] w-3 bg-current rounded-none"
                         animate={{ rotate: isOpen ? 180 : 0 }}
@@ -237,7 +239,7 @@ export const DottedAccordion = forwardRef<HTMLDivElement, DottedAccordionProps>(
                         className="overflow-hidden rounded-none"
                       >
                         <div
-                          className="cursor-pointer pl-13.5 pr-5 pb-5 pt-0.5 text-sm leading-relaxed text-zinc-400 font-light"
+                          className="cursor-pointer pl-13.5 pr-5 pb-5 pt-0.5 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400 font-light"
                           onClick={() => toggleAccordion(index)}
                         >
                           {item.description}

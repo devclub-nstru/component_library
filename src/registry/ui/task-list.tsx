@@ -82,9 +82,9 @@ const FILLED: Stage[] = ["tick", "strike", "nudge", "settled", "unstrike"];
 const STRUCK: Stage[] = ["strike", "nudge", "settled"];
 
 const CARD =
-  "bg-zinc-900/70 border border-white/8 shadow-[0_2px_8px_rgba(0,0,0,0.25)] hover:border-white/15 hover:bg-zinc-900/90 active:scale-[0.985] text-zinc-100 backdrop-blur-md";
+  "bg-white/80 border border-zinc-200/80 shadow-[0_2px_8px_rgba(0,0,0,0.06)] hover:border-zinc-300 hover:bg-zinc-50 active:scale-[0.985] text-zinc-900 backdrop-blur-md dark:bg-zinc-900/70 dark:border-white/8 dark:shadow-[0_2px_8px_rgba(0,0,0,0.25)] dark:hover:border-white/15 dark:hover:bg-zinc-900/90 dark:text-zinc-100";
 const FOCUS =
-  "outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-black";
+  "outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-white/40 dark:focus-visible:ring-offset-black";
 
 const PARTICLE_ANGLES = [0, 45, 90, 135, 180, 225, 270, 315] as const;
 
@@ -184,7 +184,7 @@ function TaskCheck({
         viewBox="0 0 24 24"
         aria-hidden
         className={cn(
-          "shrink-0 text-zinc-500 transition-colors relative z-10",
+          "shrink-0 text-zinc-400 dark:text-zinc-500 transition-colors relative z-10",
           SIZES[size].check,
         )}
         initial={false}
@@ -252,7 +252,9 @@ function TaskLabel({
         className={cn(
           "font-medium tracking-[-0.01em] transition-all duration-300 block select-none",
           text,
-          struck ? "text-zinc-500 opacity-60" : "text-zinc-100 opacity-100",
+          struck
+            ? "text-zinc-400 opacity-60 dark:text-zinc-500"
+            : "text-zinc-900 opacity-100 dark:text-zinc-100",
         )}
         initial={false}
         animate={{
@@ -354,7 +356,8 @@ export function TaskItem({
         SIZES[size].row,
         CARD,
         FOCUS,
-        done && "bg-zinc-950/40 border-white/4",
+        done &&
+          "bg-zinc-100/60 border-zinc-200/40 dark:bg-zinc-950/40 dark:border-white/4",
         className,
       )}
       {...props}

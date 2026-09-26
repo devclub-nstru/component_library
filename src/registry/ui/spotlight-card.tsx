@@ -7,7 +7,10 @@ export interface SpotlightCardProps extends React.HTMLAttributes<HTMLDivElement>
   spotlightColor?: string;
 }
 
-export const SpotlightCard = React.forwardRef<HTMLDivElement, SpotlightCardProps>(
+export const SpotlightCard = React.forwardRef<
+  HTMLDivElement,
+  SpotlightCardProps
+>(
   (
     {
       className,
@@ -15,7 +18,7 @@ export const SpotlightCard = React.forwardRef<HTMLDivElement, SpotlightCardProps
       spotlightColor = "rgba(59, 130, 246, 0.15)",
       ...props
     },
-    ref
+    ref,
   ) => {
     const divRef = useRef<HTMLDivElement>(null);
     const [position, setPosition] = useState<{ x: number; y: number }>({
@@ -52,8 +55,8 @@ export const SpotlightCard = React.forwardRef<HTMLDivElement, SpotlightCardProps
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         className={cn(
-          "relative overflow-hidden rounded-xl border border-zinc-800 bg-zinc-950/60 p-6 backdrop-blur-md transition-colors duration-200 hover:border-zinc-700",
-          className
+          "relative overflow-hidden rounded-xl border border-zinc-200 bg-white/80 p-6 backdrop-blur-md transition-colors duration-200 hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-950/60 dark:hover:border-zinc-700",
+          className,
         )}
         {...props}
       >
@@ -67,7 +70,7 @@ export const SpotlightCard = React.forwardRef<HTMLDivElement, SpotlightCardProps
         <div className="relative z-10">{children}</div>
       </div>
     );
-  }
+  },
 );
 
 SpotlightCard.displayName = "SpotlightCard";

@@ -4621,11 +4621,13 @@ import { motion, AnimatePresence, type HTMLMotionProps } from "motion/react";
 import { cn } from "@/lib/utils";
 
 export type SparkleButtonSize = "sm" | "default" | "lg";
+export type SparkleButtonVariant = "default" | "outline" | "glass";
 export type BlurAnimateBy = "letters" | "words";
 export type BlurDirection = "top" | "bottom";
 
 export interface SparkleButtonProps
   extends Omit<HTMLMotionProps<"button">, "children"> {
+  variant?: SparkleButtonVariant;
   text?: string;
   activeText?: string;
   loading?: boolean;
@@ -4673,6 +4675,7 @@ export const SparkleButton = React.forwardRef<
   (
     {
       className,
+      variant = "default",
       text = "Generate Magic",
       activeText = "Generating...",
       loading,
@@ -4779,6 +4782,29 @@ export const SparkleButton = React.forwardRef<
       onClick?.(e);
     };
 
+    const getVariantStyles = () => {
+      switch (variant) {
+        case "outline":
+          return cn(
+            "bg-white text-zinc-900 border border-zinc-200 shadow-xs hover:bg-zinc-50 hover:border-zinc-300 hover:shadow-sm focus-visible:ring-zinc-400 focus-visible:ring-offset-background",
+            "dark:bg-zinc-950/80 dark:text-zinc-100 dark:border-white/15 dark:shadow-none dark:hover:bg-zinc-900 dark:hover:border-white/25 dark:focus-visible:ring-white/40 dark:focus-visible:ring-offset-black",
+            "after:opacity-0",
+          );
+        case "glass":
+          return cn(
+            "bg-zinc-100/80 text-zinc-900 border border-zinc-300/80 backdrop-blur-md shadow-[inset_0_1px_1px_rgba(255,255,255,0.9),0_4px_14px_rgba(0,0,0,0.06)] hover:bg-zinc-100 hover:border-zinc-400 focus-visible:ring-zinc-400 focus-visible:ring-offset-background",
+            "dark:bg-white/6 dark:text-white dark:border-white/15 dark:backdrop-blur-md dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),0_4px_16px_rgba(0,0,0,0.5)] dark:hover:bg-white/10 dark:hover:border-white/25 dark:focus-visible:ring-white/40 dark:focus-visible:ring-offset-black",
+            "after:opacity-0",
+          );
+        default:
+          return cn(
+            "bg-zinc-900 text-white border-zinc-800 shadow-[inset_0px_1px_1px_0px_rgba(255,255,255,0.25),0px_4px_14px_-2px_rgba(0,0,0,0.22),0px_1px_2px_0px_rgba(0,0,0,0.12)] hover:bg-black hover:border-zinc-700 hover:shadow-[inset_0px_1px_1.5px_0px_rgba(255,255,255,0.35),0px_8px_20px_-4px_rgba(0,0,0,0.28)] focus-visible:ring-zinc-950/40 focus-visible:ring-offset-background",
+            "dark:bg-[#0d0d0f] dark:text-white dark:border-white/15 dark:shadow-[inset_0px_1px_1px_0px_rgba(255,255,255,0.22),inset_0px_2px_3px_0px_rgba(255,255,255,0.1),inset_0px_-2px_4px_0px_rgba(0,0,0,0.5),0px_4px_16px_-2px_rgba(0,0,0,0.8),0px_1px_2px_0px_rgba(0,0,0,0.4)] dark:hover:border-white/30 dark:hover:shadow-[inset_0px_1px_1.5px_0px_rgba(255,255,255,0.35),inset_0px_2px_4px_0px_rgba(255,255,255,0.15),inset_0px_-2px_4px_0px_rgba(0,0,0,0.5),0px_8px_24px_-4px_rgba(0,0,0,0.9),0px_0px_16px_0px_rgba(255,255,255,0.06)] dark:hover:brightness-105 dark:focus-visible:ring-white/40 dark:focus-visible:ring-offset-black",
+            "after:bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.55),transparent)]",
+          );
+      }
+    };
+
     return (
       <div className="relative inline-flex items-center justify-center p-1 select-none">
         <motion.button
@@ -4788,14 +4814,10 @@ export const SparkleButton = React.forwardRef<
           whileTap={{ scale: 0.98 }}
           className={cn(
             "group relative inline-flex items-center justify-center rounded-full font-medium select-none overflow-hidden cursor-pointer",
-            "bg-[#0d0d0f] text-white border border-white/15",
-            "transition-[border-color,box-shadow,filter] duration-300 ease-out",
-            "shadow-[inset_0px_1px_1px_0px_rgba(255,255,255,0.22),inset_0px_2px_3px_0px_rgba(255,255,255,0.1),inset_0px_-2px_4px_0px_rgba(0,0,0,0.5),0px_4px_16px_-2px_rgba(0,0,0,0.8),0px_1px_2px_0px_rgba(0,0,0,0.4)]",
-            "hover:border-white/30 hover:shadow-[inset_0px_1px_1.5px_0px_rgba(255,255,255,0.35),inset_0px_2px_4px_0px_rgba(255,255,255,0.15),inset_0px_-2px_4px_0px_rgba(0,0,0,0.5),0px_8px_24px_-4px_rgba(0,0,0,0.9),0px_0px_16px_0px_rgba(255,255,255,0.06)] hover:brightness-105",
-            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-black",
+            "transition-[border-color,box-shadow,filter,background-color] duration-300 ease-out",
             "disabled:opacity-50 disabled:pointer-events-none disabled:cursor-not-allowed",
             "after:absolute after:top-0 after:left-[12%] after:right-[12%] after:h-px after:pointer-events-none",
-            "after:bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.55),transparent)]",
+            getVariantStyles(),
             sizeStyles[size],
             className,
           )}
@@ -4847,7 +4869,12 @@ export const SparkleButton = React.forwardRef<
                       }
                     : { duration: 0.25 }
                 }
-                className="shrink-0 fill-[#e8e8e8] transition-colors duration-300 group-hover:fill-white"
+                className={cn(
+                  "shrink-0 transition-colors duration-300",
+                  variant === "outline" || variant === "glass"
+                    ? "fill-zinc-700 group-hover:fill-zinc-950 dark:fill-[#e8e8e8] dark:group-hover:fill-white"
+                    : "fill-[#e8e8e8] group-hover:fill-white",
+                )}
               >
                 <path
                   strokeLinecap="round"
@@ -4882,7 +4909,12 @@ export const SparkleButton = React.forwardRef<
                       ease: [0.16, 1, 0.3, 1] as const,
                     },
                   }}
-                  className="inline-flex items-center justify-center tracking-tight font-medium text-white whitespace-nowrap"
+                  className={cn(
+                    "inline-flex items-center justify-center tracking-tight font-medium whitespace-nowrap",
+                    variant === "outline" || variant === "glass"
+                      ? "text-zinc-900 dark:text-white"
+                      : "text-white",
+                  )}
                 >
                   {segments.map((segment, index) => (
                     <motion.span
@@ -5430,27 +5462,27 @@ export function OtpInput({
     switch (variant) {
       case "glass":
         return cn(
-          "bg-white/4 dark:bg-white/3 backdrop-blur-md border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]",
-          filled && "border-white/25 bg-white/8",
-          isFocused && "border-white/40 shadow-[0_0_20px_rgba(255,255,255,0.15)]"
+          "bg-black/[0.03] dark:bg-white/3 backdrop-blur-md border border-black/10 dark:border-white/10 shadow-[inset_0_1px_1px_rgba(0,0,0,0.05)] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]",
+          filled && "border-black/25 bg-black/[0.06] dark:border-white/25 dark:bg-white/8",
+          isFocused && "border-black/40 shadow-[0_0_20px_rgba(0,0,0,0.1)] dark:border-white/40 dark:shadow-[0_0_20px_rgba(255,255,255,0.15)]"
         );
       case "neon":
         return cn(
-          "bg-zinc-950 border border-zinc-800 shadow-[0_0_12px_rgba(0,0,0,0.5)]",
-          filled && "border-zinc-600 shadow-[0_0_16px_rgba(255,255,255,0.06)]",
-          isFocused && "border-zinc-300 shadow-[0_0_24px_rgba(255,255,255,0.2)]"
+          "bg-zinc-100 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-800 shadow-[0_0_12px_rgba(0,0,0,0.05)] dark:shadow-[0_0_12px_rgba(0,0,0,0.5)]",
+          filled && "border-zinc-500 shadow-[0_0_16px_rgba(0,0,0,0.08)] dark:border-zinc-600 dark:shadow-[0_0_16px_rgba(255,255,255,0.06)]",
+          isFocused && "border-zinc-900 shadow-[0_0_24px_rgba(0,0,0,0.15)] dark:border-zinc-300 dark:shadow-[0_0_24px_rgba(255,255,255,0.2)]"
         );
       case "underlined":
         return cn(
-          "bg-transparent border-b-2 rounded-none! border-zinc-700 shadow-none",
-          filled && "border-zinc-400",
-          isFocused && "border-white"
+          "bg-transparent border-b-2 rounded-none! border-zinc-300 dark:border-zinc-700 shadow-none",
+          filled && "border-zinc-600 dark:border-zinc-400",
+          isFocused && "border-zinc-950 dark:border-white"
         );
       default:
         return cn(
-          "bg-[#F4F4F9] dark:bg-[#161619] border border-black/5 dark:border-white/10 shadow-[0_2px_8px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.08)]",
-          filled && "dark:border-white/20 border-black/15 dark:bg-[#1a1a1e]",
-          isFocused && "dark:border-white/35 border-black/25"
+          "bg-zinc-100/90 dark:bg-[#161619] border border-black/10 dark:border-white/10 shadow-[0_2px_8px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.8)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.08)]",
+          filled && "border-black/25 dark:border-white/20 bg-zinc-200/60 dark:bg-[#1a1a1e]",
+          isFocused && "border-black/40 dark:border-white/35"
         );
     }
   };
@@ -5501,7 +5533,7 @@ export function OtpInput({
                     layout: reduceMotion ? { duration: 0 } : SIZE_SPRING,
                   }}
                   aria-hidden="true"
-                  className="shrink-0 flex items-center justify-center text-zinc-400 dark:text-zinc-600 px-0.5"
+                  className="shrink-0 flex items-center justify-center text-zinc-500 dark:text-zinc-600 px-0.5"
                 >
                   {separator}
                 </motion.div>
@@ -5583,8 +5615,8 @@ export function OtpInput({
                         mass: 0.6,
                       }}
                       className={cn(
-                        "pointer-events-none absolute -inset-0.5 rounded-[inherit] border-2 border-white/60 dark:border-white/50 shadow-[0_0_18px_rgba(255,255,255,0.2)] z-20",
-                        variant === "underlined" && "border-0 border-b-2 rounded-none! shadow-[0_4px_12px_rgba(255,255,255,0.3)] inset-x-0 -bottom-0.5 top-auto h-0.5",
+                        "pointer-events-none absolute -inset-0.5 rounded-[inherit] border-2 border-zinc-950/60 shadow-[0_0_18px_rgba(0,0,0,0.12)] dark:border-white/50 dark:shadow-[0_0_18px_rgba(255,255,255,0.2)] z-20",
+                        variant === "underlined" && "border-0 border-b-2 rounded-none! shadow-[0_4px_12px_rgba(0,0,0,0.15)] dark:shadow-[0_4px_12px_rgba(255,255,255,0.3)] inset-x-0 -bottom-0.5 top-auto h-0.5",
                         status === "error" &&
                           "border-red-500/80 shadow-[0_0_20px_rgba(239,68,68,0.4)]"
                       )}
@@ -5778,7 +5810,7 @@ export function OtpInput({
                     ease: "linear",
                   },
             }}
-            className="pointer-events-none absolute left-0 top-1/2 w-0.5 rounded-full bg-black dark:bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)] z-30"
+            className="pointer-events-none absolute left-0 top-1/2 w-0.5 rounded-full bg-black dark:bg-white shadow-[0_0_8px_rgba(0,0,0,0.25)] dark:shadow-[0_0_8px_rgba(255,255,255,0.8)] z-30"
           />
         )}
       </motion.div>
@@ -11028,7 +11060,7 @@ function Segment({
           width={span}
           viewBox={\`0 0 \${span} \${NECK_H}\`}
           preserveAspectRatio="none"
-          className="pointer-events-none absolute top-0 right-full h-full overflow-visible text-[#18181b]"
+          className="pointer-events-none absolute top-0 right-full h-full overflow-visible"
         >
           <defs>
             <linearGradient id={gradientId} x1="0" x2="1" y1="0" y2="0">
@@ -11072,9 +11104,9 @@ function NavLabel({
     "data-slot": "gooey-nav-item",
     "data-active": isActive,
     className: cn(
-      "relative z-10 flex cursor-pointer items-center justify-center whitespace-nowrap font-medium outline-none transition-all duration-300 ease-out select-none active:scale-95 focus-visible:ring-1 focus-visible:ring-white/30",
+      "relative z-10 flex cursor-pointer items-center justify-center whitespace-nowrap font-medium outline-none transition-all duration-300 ease-out select-none active:scale-95 focus-visible:ring-1 focus-visible:ring-zinc-400 dark:focus-visible:ring-white/30",
       SIZES[size].label,
-      isActive ? "opacity-100" : "text-zinc-400 hover:text-white opacity-80 hover:opacity-100",
+      isActive ? "opacity-100" : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-white opacity-80 hover:opacity-100",
     ),
     style: isActive ? { color: activeLabelColor } : undefined,
     onClick: onSelect,
@@ -11134,7 +11166,35 @@ export function GooeyNav({
   const corner = radius ?? SIZES[size].radius;
   const springConfig = SPRING_TUNING[elasticity];
 
-  const preset = COLOR_PRESETS[color] ?? COLOR_PRESETS.orange;
+  const [isDark, setIsDark] = useState(true);
+
+  useEffect(() => {
+    const checkDark = () => {
+      setIsDark(document.documentElement.classList.contains("dark"));
+    };
+    checkDark();
+    const observer = new MutationObserver(checkDark);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+    return () => observer.disconnect();
+  }, []);
+
+  const monoPreset = isDark
+    ? COLOR_PRESETS.monochrome
+    : {
+        hex: "#18181b",
+        text: "#ffffff",
+        glow: "rgba(24,24,27,0.15)",
+        dot: "bg-zinc-900",
+      };
+
+  const preset =
+    color === "monochrome"
+      ? monoPreset
+      : (COLOR_PRESETS[color] ?? COLOR_PRESETS.orange);
+
   const computedActiveColor = customActiveColor ?? preset.hex;
   const computedLabelColor = customActiveLabelColor ?? preset.text;
 
@@ -11146,11 +11206,12 @@ export function GooeyNav({
 
   const baseSurface =
     variant === "glass"
-      ? "bg-white/6 backdrop-blur-md border border-white/10"
-      : "bg-[#18181b] border border-white/8";
+      ? "bg-zinc-200/50 backdrop-blur-md border border-zinc-300/80 shadow-xs dark:bg-white/6 dark:border-white/10 dark:shadow-none"
+      : "bg-zinc-100 border border-zinc-200/80 shadow-xs dark:bg-[#18181b] dark:border-white/8 dark:shadow-none";
 
+  const inactiveFill = isDark ? "#18181b" : "#f4f4f5";
   const fill = (i: number) =>
-    i === active ? computedActiveColor : "#18181b";
+    i === active ? computedActiveColor : inactiveFill;
 
   const handleKeyDown = (e: KeyboardEvent<HTMLUListElement>) => {
     if (e.key === "ArrowRight") {

@@ -147,7 +147,7 @@ export const AnimatedThemeToggler = ({
 }: AnimatedThemeTogglerProps) => {
   const shape = variant ?? "circle";
   const isControlled = theme !== undefined;
-  const [internalIsDark, setInternalIsDark] = useState(false);
+  const [internalIsDark, setInternalIsDark] = useState(true);
   const isDark = isControlled ? theme === "dark" : internalIsDark;
   const buttonRef = useRef<HTMLButtonElement>(null);
   const isTransitioningRef = useRef(false);
@@ -184,7 +184,17 @@ export const AnimatedThemeToggler = ({
       attributeFilter: ["class"],
     });
 
-    return () => observer.disconnect();
+    const handleStorage = (e: StorageEvent) => {
+      if (e.key === "theme") {
+        updateTheme();
+      }
+    };
+    window.addEventListener("storage", handleStorage);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("storage", handleStorage);
+    };
   }, [isControlled]);
 
   const toggleTheme = useCallback(() => {
@@ -216,14 +226,22 @@ export const AnimatedThemeToggler = ({
     );
 
     const applyTheme = () => {
-      const newTheme = !isDark;
-      document.documentElement.classList.toggle("dark");
-      if (isControlled) {
-        onThemeChange?.(newTheme ? "dark" : "light");
+      const isCurrentlyDark =
+        document.documentElement.classList.contains("dark");
+      const nextIsDark = !isCurrentlyDark;
+      if (nextIsDark) {
+        document.documentElement.classList.add("dark");
+        document.documentElement.style.colorScheme = "dark";
       } else {
-        setInternalIsDark(newTheme);
+        document.documentElement.classList.remove("dark");
+        document.documentElement.style.colorScheme = "light";
+      }
+      if (isControlled) {
+        onThemeChange?.(nextIsDark ? "dark" : "light");
+      } else {
+        setInternalIsDark(nextIsDark);
         try {
-          localStorage.setItem("theme", newTheme ? "dark" : "light");
+          localStorage.setItem("theme", nextIsDark ? "dark" : "light");
         } catch {}
       }
     };
@@ -250,7 +268,13 @@ export const AnimatedThemeToggler = ({
     );
     root.style.setProperty("--magicui-theme-vt-clip-from", clipPath[0]);
 
+    let safetyTimer: ReturnType<typeof setTimeout> | undefined;
+
     const cleanup = () => {
+      if (safetyTimer) {
+        clearTimeout(safetyTimer);
+        safetyTimer = undefined;
+      }
       isTransitioningRef.current = false;
       delete root.dataset.magicuiThemeVt;
       root.style.removeProperty("--magicui-theme-toggle-vt-duration");
@@ -259,12 +283,23 @@ export const AnimatedThemeToggler = ({
     };
 
     isTransitioningRef.current = true;
-    const transition = document.startViewTransition(() => {
-      flushSync(applyTheme);
-    });
+    safetyTimer = setTimeout(cleanup, duration + 250);
+
+    let transition: ViewTransition | undefined;
+    try {
+      transition = document.startViewTransition(() => {
+        flushSync(applyTheme);
+      });
+    } catch {
+      cleanup();
+      applyTheme();
+      return;
+    }
 
     if (typeof transition?.finished?.finally === "function") {
-      transition.finished.finally(cleanup).catch(() => {});
+      transition.finished.finally(cleanup).catch(() => {
+        cleanup();
+      });
     } else {
       cleanup();
     }
@@ -288,15 +323,7 @@ export const AnimatedThemeToggler = ({
         })
         .catch(() => {});
     }
-  }, [
-    shape,
-    fromCenter,
-    duration,
-    isDark,
-    isControlled,
-    onThemeChange,
-    cancelAnim,
-  ]);
+  }, [shape, fromCenter, duration, isControlled, onThemeChange, cancelAnim]);
 
   return (
     <button
@@ -308,9 +335,9 @@ export const AnimatedThemeToggler = ({
       {...props}
     >
       {isDark ? (
-        <Sun className="h-4 w-4 text-white transition-transform duration-300 hover:rotate-45" />
+        <Sun className="h-4 w-4 text-foreground transition-transform duration-300 hover:rotate-45" />
       ) : (
-        <Moon className="h-4 w-4 text-zinc-700 transition-transform duration-300 hover:-rotate-12" />
+        <Moon className="h-4 w-4 text-foreground transition-transform duration-300 hover:-rotate-12" />
       )}
       <span className="sr-only">Toggle theme</span>
     </button>
