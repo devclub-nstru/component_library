@@ -105,7 +105,7 @@ html[data-magicui-theme-vt="active"] *::after {
 }
 
 html {
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 body {

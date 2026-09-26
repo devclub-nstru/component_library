@@ -12,7 +12,7 @@ export default function DocsLayout({
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground transition-colors duration-200">
       <Navbar />
-      <div className="flex-1 max-w-7xl mx-auto w-full flex">
+      <div className="flex-1 max-w-7xl mx-auto w-full flex items-start">
         <DocsSidebar />
         <main className="flex-1 min-w-0 px-4 sm:px-8 lg:px-12 py-10 lg:py-14">
           <div className="max-w-3xl">

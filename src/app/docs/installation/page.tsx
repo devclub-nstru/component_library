@@ -1,12 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import Link from "next/link";
 import { motion, AnimatePresence } from "motion/react";
 import {
   CheckIcon,
   CopyIcon,
-  ChevronDownIcon,
   FileTextIcon,
   CodeIcon,
 } from "@radix-ui/react-icons";
@@ -200,7 +198,7 @@ npx shadcn@latest add https://devclub.co/r/[component].json
                 Steps
               </h2>
               <p className="text-xs text-muted-foreground font-light leading-relaxed">
-                Copy a component's source straight into your project.
+                Copy a component&apos;s source straight into your project.
               </p>
             </div>
 
@@ -281,10 +279,10 @@ export default function Page() {
 
             <section className="space-y-2 pt-4 border-t border-border/60">
               <h3 className="text-base sm:text-lg font-sans font-semibold tracking-tight text-foreground">
-                That's all!
+                That&apos;s all!
               </h3>
               <p className="text-xs text-muted-foreground font-light leading-relaxed">
-                From here on, it's all about how you integrate the component into
+                From here on, it&apos;s all about how you integrate the component into
                 your project. The code is yours to play around with — modify
                 styling, functionality, anything goes!
               </p>
@@ -364,7 +362,7 @@ export default function Page() {
 
             <section className="space-y-2 pt-4 border-t border-border/60">
               <h3 className="text-base sm:text-lg font-sans font-semibold tracking-tight text-foreground">
-                That's all!
+                That&apos;s all!
               </h3>
               <p className="text-xs text-muted-foreground font-light leading-relaxed">
                 The component is now in your codebase with zero runtime wrapper
