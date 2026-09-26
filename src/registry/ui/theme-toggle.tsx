@@ -14,46 +14,15 @@ export type TransitionVariant =
   | "rectangle"
   | "star";
 
-export type CandyGemstoneVariant =
-  | "amber"
-  | "azure"
-  | "violet"
-  | "emerald"
-  | "ruby"
-  | "obsidian"
-  | "pearl"
-  | "auto";
-
-export interface AnimatedThemeTogglerProps extends React.ComponentPropsWithoutRef<"button"> {
+export interface ThemeToggleProps
+  extends React.ComponentPropsWithoutRef<"button"> {
   duration?: number;
   variant?: TransitionVariant;
   fromCenter?: boolean;
+  candy?: boolean;
   theme?: "light" | "dark";
   onThemeChange?: (theme: "light" | "dark") => void;
-  candy?: boolean;
-  candyVariant?: CandyGemstoneVariant;
-  candyColor?: string;
 }
-
-const candyVariantStyles: Record<
-  Exclude<CandyGemstoneVariant, "auto">,
-  string
-> = {
-  amber:
-    "bg-[radial-gradient(120%_80%_at_50%_70%,#f59e0b_0%,#b45309_100%)] text-white shadow-[0px_4px_20px_-4px_rgba(245,158,11,0.55),inset_0px_1px_3px_0px_rgba(255,255,255,0.45),inset_0px_-2px_4px_0px_rgba(0,0,0,0.15)] hover:shadow-[0px_6px_24px_-2px_rgba(245,158,11,0.7),inset_0px_1px_3px_0px_rgba(255,255,255,0.55)]",
-  azure:
-    "bg-[radial-gradient(120%_80%_at_50%_70%,#0ea5e9_0%,#0369a1_100%)] text-white shadow-[0px_4px_20px_-4px_rgba(14,165,233,0.5),inset_0px_1px_3px_0px_rgba(255,255,255,0.45),inset_0px_-2px_4px_0px_rgba(0,0,0,0.15)] hover:shadow-[0px_6px_24px_-2px_rgba(14,165,233,0.65),inset_0px_1px_3px_0px_rgba(255,255,255,0.55)]",
-  violet:
-    "bg-[radial-gradient(120%_80%_at_50%_70%,#8b5cf6_0%,#581c87_100%)] text-white shadow-[0px_4px_20px_-4px_rgba(139,92,246,0.5),inset_0px_1px_3px_0px_rgba(255,255,255,0.45),inset_0px_-2px_4px_0px_rgba(0,0,0,0.15)] hover:shadow-[0px_6px_24px_-2px_rgba(139,92,246,0.65),inset_0px_1px_3px_0px_rgba(255,255,255,0.55)]",
-  emerald:
-    "bg-[radial-gradient(120%_80%_at_50%_70%,#006a66_0%,#003835_100%)] text-white shadow-[0px_4px_20px_-4px_rgba(0,106,102,0.5),inset_0px_1px_3px_0px_rgba(255,255,255,0.45),inset_0px_-2px_4px_0px_rgba(0,0,0,0.15)] hover:shadow-[0px_6px_24px_-2px_rgba(0,106,102,0.65),inset_0px_1px_3px_0px_rgba(255,255,255,0.55)]",
-  ruby:
-    "bg-[radial-gradient(120%_80%_at_50%_70%,#e11d48_0%,#9f1239_100%)] text-white shadow-[0px_4px_20px_-4px_rgba(225,29,72,0.5),inset_0px_1px_3px_0px_rgba(255,255,255,0.45),inset_0px_-2px_4px_0px_rgba(0,0,0,0.15)] hover:shadow-[0px_6px_24px_-2px_rgba(225,29,72,0.65),inset_0px_1px_3px_0px_rgba(255,255,255,0.55)]",
-  obsidian:
-    "bg-[radial-gradient(120%_80%_at_50%_70%,#3f3f46_0%,#18181b_100%)] text-zinc-100 border border-white/10 shadow-[0px_4px_20px_-6px_rgba(0,0,0,0.4),inset_0px_1px_3px_0px_rgba(255,255,255,0.25),inset_0px_-2px_4px_0px_rgba(0,0,0,0.2)] hover:shadow-[0px_6px_24px_-4px_rgba(0,0,0,0.5),inset_0px_1px_3px_0px_rgba(255,255,255,0.35)]",
-  pearl:
-    "bg-[radial-gradient(120%_80%_at_50%_70%,#ffffff_0%,#e4e4e7_100%)] text-zinc-950 shadow-[0px_4px_20px_-6px_rgba(255,255,255,0.35),inset_0px_1px_3px_0px_rgba(255,255,255,0.9),inset_0px_-2px_4px_0px_rgba(0,0,0,0.08)] hover:shadow-[0px_6px_24px_-4px_rgba(255,255,255,0.45),inset_0px_1px_3px_0px_rgba(255,255,255,1)]",
-};
 
 function polygonCollapsed(point: string, vertexCount: number): string {
   const pairs = Array.from({ length: vertexCount }, () => point).join(", ");
@@ -92,18 +61,33 @@ function getThemeTransitionClipPaths(
       ].join(", ");
       return [polygonCollapsed(point(cx, cy), 4), `polygon(${end})`];
     }
-    case "triangle": {
-      const scale = maxRadius * 2.2;
-      const dx = (Math.sqrt(3) / 2) * scale;
-      const verts = [
-        point(cx, cy - scale),
-        point(cx + dx, cy + 0.5 * scale),
-        point(cx - dx, cy + 0.5 * scale),
+    case "rectangle": {
+      const w = Math.max(cx, viewportWidth - cx) * 1.05;
+      const h = Math.max(cy, viewportHeight - cy) * 1.05;
+      const end = [
+        point(cx - w, cy - h),
+        point(cx + w, cy - h),
+        point(cx + w, cy + h),
+        point(cx - w, cy + h),
       ].join(", ");
-      return [polygonCollapsed(point(cx, cy), 3), `polygon(${verts})`];
+      return [polygonCollapsed(point(cx, cy), 4), `polygon(${end})`];
+    }
+    case "triangle": {
+      const R = maxRadius * 1.5;
+      const start = [
+        point(cx, cy),
+        point(cx, cy),
+        point(cx, cy),
+      ].join(", ");
+      const end = [
+        point(cx, cy - R),
+        point(cx + R * Math.cos(Math.PI / 6), cy + R * Math.sin(Math.PI / 6)),
+        point(cx - R * Math.cos(Math.PI / 6), cy + R * Math.sin(Math.PI / 6)),
+      ].join(", ");
+      return [`polygon(${start})`, `polygon(${end})`];
     }
     case "diamond": {
-      const R = maxRadius * Math.SQRT2;
+      const R = maxRadius * 1.1;
       const end = [
         point(cx, cy - R),
         point(cx + R, cy),
@@ -113,42 +97,25 @@ function getThemeTransitionClipPaths(
       return [polygonCollapsed(point(cx, cy), 4), `polygon(${end})`];
     }
     case "hexagon": {
-      const R = maxRadius * Math.SQRT2;
+      const R = maxRadius * 1.1;
       const verts: string[] = [];
       for (let i = 0; i < 6; i++) {
-        const a = -Math.PI / 2 + (i * Math.PI) / 3;
+        const a = (i * Math.PI) / 3 - Math.PI / 6;
         verts.push(point(cx + R * Math.cos(a), cy + R * Math.sin(a)));
       }
-      return [
-        polygonCollapsed(point(cx, cy), 6),
-        `polygon(${verts.join(", ")})`,
-      ];
-    }
-    case "rectangle": {
-      const halfW = Math.max(cx, viewportWidth - cx);
-      const halfH = Math.max(cy, viewportHeight - cy);
-      const end = [
-        point(cx - halfW, cy - halfH),
-        point(cx + halfW, cy - halfH),
-        point(cx + halfW, cy + halfH),
-        point(cx - halfW, cy + halfH),
-      ].join(", ");
-      return [polygonCollapsed(point(cx, cy), 4), `polygon(${end})`];
+      return [polygonCollapsed(point(cx, cy), 6), `polygon(${verts.join(", ")})`];
     }
     case "star": {
-      const R = maxRadius * Math.SQRT2 * 1.03;
+      const R = maxRadius * 1.25;
       const innerRatio = 0.42;
       const starPolygon = (radius: number) => {
         const verts: string[] = [];
         for (let i = 0; i < 5; i++) {
-          const outerA = -Math.PI / 2 + (i * 2 * Math.PI) / 5;
-          verts.push(
-            point(
-              cx + radius * Math.cos(outerA),
-              cy + radius * Math.sin(outerA),
-            ),
-          );
+          const outerA = (i * 2 * Math.PI) / 5 - Math.PI / 2;
           const innerA = outerA + Math.PI / 5;
+          verts.push(
+            point(cx + radius * Math.cos(outerA), cy + radius * Math.sin(outerA)),
+          );
           verts.push(
             point(
               cx + radius * innerRatio * Math.cos(innerA),
@@ -169,19 +136,16 @@ function getThemeTransitionClipPaths(
   }
 }
 
-export const AnimatedThemeToggler = ({
+export const ThemeToggle = ({
   className,
   duration = 450,
   variant,
   fromCenter = false,
+  candy = false,
   theme,
   onThemeChange,
-  candy = false,
-  candyVariant = "auto",
-  candyColor,
-  style,
   ...props
-}: AnimatedThemeTogglerProps) => {
+}: ThemeToggleProps) => {
   const shape = variant ?? "circle";
   const isControlled = theme !== undefined;
   const [internalIsDark, setInternalIsDark] = useState(true);
@@ -246,20 +210,30 @@ export const AnimatedThemeToggler = ({
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
 
-    let x: number;
-    let y: number;
+    let cx: number;
+    let cy: number;
+
     if (fromCenter) {
-      x = viewportWidth / 2;
-      y = viewportHeight / 2;
+      cx = viewportWidth / 2;
+      cy = viewportHeight / 2;
     } else {
-      const { top, left, width, height } = button.getBoundingClientRect();
-      x = left + width / 2;
-      y = top + height / 2;
+      const rect = button.getBoundingClientRect();
+      cx = rect.left + rect.width / 2;
+      cy = rect.top + rect.height / 2;
     }
 
     const maxRadius = Math.hypot(
-      Math.max(x, viewportWidth - x),
-      Math.max(y, viewportHeight - y),
+      Math.max(cx, viewportWidth - cx),
+      Math.max(cy, viewportHeight - cy),
+    );
+
+    const clipPath = getThemeTransitionClipPaths(
+      shape,
+      cx,
+      cy,
+      maxRadius,
+      viewportWidth,
+      viewportHeight,
     );
 
     const applyTheme = () => {
@@ -268,34 +242,33 @@ export const AnimatedThemeToggler = ({
       const nextIsDark = !isCurrentlyDark;
       if (nextIsDark) {
         document.documentElement.classList.add("dark");
-        document.documentElement.style.colorScheme = "dark";
       } else {
         document.documentElement.classList.remove("dark");
-        document.documentElement.style.colorScheme = "light";
       }
       if (isControlled) {
         onThemeChange?.(nextIsDark ? "dark" : "light");
-      } else {
-        setInternalIsDark(nextIsDark);
-        try {
-          localStorage.setItem("theme", nextIsDark ? "dark" : "light");
-        } catch {}
       }
+      try {
+        localStorage.setItem("theme", nextIsDark ? "dark" : "light");
+      } catch {}
+      window.dispatchEvent(
+        new StorageEvent("storage", {
+          key: "theme",
+          newValue: nextIsDark ? "dark" : "light",
+        }),
+      );
     };
 
-    if (typeof document.startViewTransition !== "function") {
+    if (
+      typeof document === "undefined" ||
+      !("startViewTransition" in document) ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
       applyTheme();
       return;
     }
 
-    const clipPath = getThemeTransitionClipPaths(
-      shape,
-      x,
-      y,
-      maxRadius,
-      viewportWidth,
-      viewportHeight,
-    );
+    cancelAnim();
 
     const root = document.documentElement;
     root.dataset.magicuiThemeVt = "active";
@@ -305,13 +278,7 @@ export const AnimatedThemeToggler = ({
     );
     root.style.setProperty("--magicui-theme-vt-clip-from", clipPath[0]);
 
-    let safetyTimer: ReturnType<typeof setTimeout> | undefined;
-
     const cleanup = () => {
-      if (safetyTimer) {
-        clearTimeout(safetyTimer);
-        safetyTimer = undefined;
-      }
       isTransitioningRef.current = false;
       delete root.dataset.magicuiThemeVt;
       root.style.removeProperty("--magicui-theme-toggle-vt-duration");
@@ -320,23 +287,12 @@ export const AnimatedThemeToggler = ({
     };
 
     isTransitioningRef.current = true;
-    safetyTimer = setTimeout(cleanup, duration + 250);
-
-    let transition: ViewTransition | undefined;
-    try {
-      transition = document.startViewTransition(() => {
-        flushSync(applyTheme);
-      });
-    } catch {
-      cleanup();
-      applyTheme();
-      return;
-    }
+    const transition = document.startViewTransition(() => {
+      flushSync(applyTheme);
+    });
 
     if (typeof transition?.finished?.finally === "function") {
-      transition.finished.finally(cleanup).catch(() => {
-        cleanup();
-      });
+      transition.finished.finally(cleanup).catch(() => {});
     } else {
       cleanup();
     }
@@ -362,25 +318,8 @@ export const AnimatedThemeToggler = ({
     }
   }, [shape, fromCenter, duration, isControlled, onThemeChange, cancelAnim]);
 
-  const customCandyStyle: React.CSSProperties =
-    candy && candyColor
-      ? {
-          background: `radial-gradient(120% 80% at 50% 70%, ${candyColor} 0%, color-mix(in srgb, ${candyColor} 50%, black) 100%)`,
-          boxShadow: `0px 4px 20px -4px color-mix(in srgb, ${candyColor} 65%, transparent), inset 0px 1px 3px 0px rgba(255, 255, 255, 0.45), inset 0px -2px 4px 0px rgba(0, 0, 0, 0.15)`,
-          color: "#ffffff",
-          ...style,
-        }
-      : (style ?? {});
-
   const candyClasses = candy
-    ? cn(
-        "relative inline-flex items-center justify-center font-medium select-none overflow-hidden cursor-pointer transition-all duration-200 ease-out active:scale-[0.95] active:brightness-95 hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 border-0",
-        "after:absolute after:top-0 after:left-[15%] after:right-[15%] after:h-px after:bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.65),transparent)] after:pointer-events-none",
-        !candyColor &&
-          (candyVariant === "auto"
-            ? candyVariantStyles.obsidian
-            : candyVariantStyles[candyVariant]),
-      )
+    ? "relative inline-flex items-center justify-center font-medium leading-none tracking-[0.01em] select-none overflow-hidden cursor-pointer transition-all duration-200 ease-out active:scale-[0.98] active:brightness-95 hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 bg-[radial-gradient(120%_80%_at_50%_70%,#3f3f46_0%,#18181b_100%)] text-zinc-100 border border-white/10 shadow-[0px_4px_20px_-6px_rgba(0,0,0,0.4),inset_0px_1px_3px_0px_rgba(255,255,255,0.25),inset_0px_-2px_4px_0px_rgba(0,0,0,0.2)] hover:shadow-[0px_6px_24px_-4px_rgba(0,0,0,0.5),inset_0px_1px_3px_0px_rgba(255,255,255,0.35),inset_0px_-2px_4px_0px_rgba(0,0,0,0.2)] after:absolute after:top-0 after:left-[15%] after:right-[15%] after:h-px after:bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.55),transparent)] after:pointer-events-none"
     : "";
 
   return (
@@ -388,13 +327,12 @@ export const AnimatedThemeToggler = ({
       type="button"
       ref={buttonRef}
       onClick={toggleTheme}
-      style={customCandyStyle}
       className={cn(className, candyClasses)}
       aria-label="Toggle theme"
       {...props}
     >
       {candy && (
-        <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-[inherit] bg-[linear-gradient(180deg,rgba(255,255,255,0.2)_0%,transparent_100%)] pointer-events-none" />
+        <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-[inherit] bg-[linear-gradient(180deg,rgba(255,255,255,0.12)_0%,transparent_100%)] pointer-events-none" />
       )}
       <span className="relative z-10 flex items-center justify-center">
         {isDark ? (
@@ -402,7 +340,7 @@ export const AnimatedThemeToggler = ({
             className={cn(
               "h-4 w-4 transition-transform duration-300 hover:rotate-45",
               candy
-                ? "text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.35)]"
+                ? "text-zinc-100 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]"
                 : "text-foreground",
             )}
           />
@@ -411,7 +349,7 @@ export const AnimatedThemeToggler = ({
             className={cn(
               "h-4 w-4 transition-transform duration-300 hover:-rotate-12",
               candy
-                ? "text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.35)]"
+                ? "text-zinc-100 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]"
                 : "text-foreground",
             )}
           />
@@ -422,5 +360,5 @@ export const AnimatedThemeToggler = ({
   );
 };
 
-export const ThemeToggle = AnimatedThemeToggler;
-export default AnimatedThemeToggler;
+export const AnimatedThemeToggler = ThemeToggle;
+export default ThemeToggle;

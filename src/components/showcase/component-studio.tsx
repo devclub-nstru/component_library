@@ -190,6 +190,11 @@ const ALL_CATEGORIES = [
         slug: "liquid-toggle",
         href: "/components/liquid-toggle",
       },
+      {
+        label: "Theme Toggle",
+        slug: "theme-toggle",
+        href: "/components/theme-toggle",
+      },
     ],
   },
   {
@@ -986,6 +991,27 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     });
   };
 
+  const [themeTogglerConfig, setThemeTogglerConfig] = useState<{
+    variant: "circle" | "square" | "triangle" | "diamond" | "hexagon" | "star";
+    candy: boolean;
+    fromCenter: boolean;
+    duration: number;
+  }>({
+    variant: "circle",
+    candy: true,
+    fromCenter: false,
+    duration: 450,
+  });
+
+  const resetThemeTogglerConfig = () => {
+    setThemeTogglerConfig({
+      variant: "circle",
+      candy: true,
+      fromCenter: false,
+      duration: 450,
+    });
+  };
+
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [activePanel, setActivePanel] = useState<"none" | "info" | "code">(
     "none",
@@ -1011,6 +1037,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     activeComponent.slug !== "mac-slider" &&
     activeComponent.slug !== "pixel-card" &&
     activeComponent.slug !== "orb" &&
+    activeComponent.slug !== "theme-toggle" &&
+    activeComponent.slug !== "animated-theme-toggler" &&
+    activeComponent.slug !== "theme-toggler" &&
     (activeComponent.supportsColor ??
       [
         "dither",
@@ -1293,6 +1322,25 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
             </div>
           </div>
         );
+      case "animated-theme-toggler":
+      case "theme-toggle":
+      case "theme-toggler":
+        return (
+          <div className="flex flex-col items-center justify-center gap-8 select-none max-w-2xl w-full p-4">
+            <div className="flex flex-col items-center gap-4 text-center">
+              <div className="relative flex items-center justify-center p-8 rounded-3xl border border-border dark:border-white/10 bg-card/80 dark:bg-[#121215]/80 backdrop-blur-xl shadow-2xl">
+                <AnimatedThemeToggler
+                  variant={themeTogglerConfig.variant}
+                  duration={themeTogglerConfig.duration}
+                  fromCenter={themeTogglerConfig.fromCenter}
+                  candy={themeTogglerConfig.candy}
+                  className="w-16 h-16 rounded-2xl shadow-xl [&_svg]:size-7 cursor-pointer"
+                />
+              </div>{" "}
+            </div>
+          </div>
+        );
+
       case "animated-button":
         return (
           <div className="w-full max-w-md bg-card dark:bg-[#0c0c0e] border border-border dark:border-white/10 rounded-2xl p-6 shadow-2xl flex flex-col gap-6 select-none">
@@ -2259,7 +2307,10 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               </div>
 
               <GitHubButton className="h-8 px-2.5 rounded-lg text-xs" />
-              <AnimatedThemeToggler className="w-8 h-8 rounded-lg border border-border bg-muted/60 hover:bg-muted dark:bg-[#18181b]/90 dark:hover:bg-[#222226] text-muted-foreground hover:text-foreground dark:text-zinc-300 dark:hover:text-white transition-colors cursor-pointer flex items-center justify-center shrink-0 [&_svg]:size-3.5 shadow-sm" />
+              <AnimatedThemeToggler
+                candy
+                className="w-8 h-8 rounded-lg shrink-0 [&_svg]:size-3.5 shadow-sm"
+              />
 
               <motion.button
                 whileHover={{ scale: 1.03 }}
@@ -2882,7 +2933,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       <span className="text-[11px] text-muted-foreground dark:text-zinc-400">
                         Position
                       </span>
-                      <div className="flex items-center gap-1 bg-muted/80 dark:bg-[#17171b] p-1 rounded-lg border border-border dark:border-white/5">
+                      <div className="flex items-center gap-1 bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5">
                         {(
                           [
                             "bottom-right",
@@ -2890,26 +2941,42 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             "top-right",
                             "top-left",
                           ] as const
-                        ).map((pos) => (
-                          <button
-                            key={pos}
-                            type="button"
-                            onClick={() =>
-                              setToastConfig((prev) => ({
-                                ...prev,
-                                position: pos,
-                              }))
-                            }
-                            className={cn(
-                              "text-[10px] px-2 py-1 rounded transition-colors cursor-pointer capitalize",
-                              toastConfig.position === pos
-                                ? "bg-foreground text-background font-semibold dark:bg-white dark:text-black shadow-xs"
-                                : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
-                            )}
-                          >
-                            {pos.replace("-", " ")}
-                          </button>
-                        ))}
+                        ).map((pos) => {
+                          const isActive = toastConfig.position === pos;
+                          return (
+                            <button
+                              key={pos}
+                              type="button"
+                              onClick={() =>
+                                setToastConfig((prev) => ({
+                                  ...prev,
+                                  position: pos,
+                                }))
+                              }
+                              className={cn(
+                                "relative text-[11px] px-2.5 py-1 rounded-lg transition-colors cursor-pointer capitalize font-medium",
+                                isActive
+                                  ? "text-background font-semibold dark:text-black"
+                                  : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
+                              )}
+                            >
+                              {isActive && (
+                                <motion.div
+                                  layoutId="activeToastPositionIndicator"
+                                  transition={{
+                                    type: "spring",
+                                    stiffness: 450,
+                                    damping: 32,
+                                  }}
+                                  className="absolute inset-0 bg-foreground dark:bg-white rounded-lg shadow-xs"
+                                />
+                              )}
+                              <span className="relative z-10">
+                                {pos.replace("-", " ")}
+                              </span>
+                            </button>
+                          );
+                        })}
                       </div>
                     </div>
 
@@ -2932,12 +2999,18 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             : "bg-muted-foreground/30 dark:bg-zinc-800",
                         )}
                       >
-                        <span
+                        <motion.span
+                          layout
+                          transition={{
+                            type: "spring",
+                            stiffness: 500,
+                            damping: 32,
+                          }}
                           className={cn(
-                            "pointer-events-none inline-block h-4 w-4 transform rounded-full bg-background dark:bg-black shadow-xs ring-0 transition duration-200 ease-in-out",
+                            "pointer-events-none inline-block h-4 w-4 rounded-full shadow-xs ring-0",
                             toastConfig.richColors
-                              ? "translate-x-4"
-                              : "translate-x-0 bg-background dark:bg-zinc-400",
+                              ? "translate-x-4 bg-background dark:bg-black"
+                              : "translate-x-0 bg-white dark:bg-zinc-400",
                           )}
                         />
                       </button>
@@ -2962,12 +3035,176 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             : "bg-muted-foreground/30 dark:bg-zinc-800",
                         )}
                       >
-                        <span
+                        <motion.span
+                          layout
+                          transition={{
+                            type: "spring",
+                            stiffness: 500,
+                            damping: 32,
+                          }}
                           className={cn(
-                            "pointer-events-none inline-block h-4 w-4 transform rounded-full bg-background dark:bg-black shadow-xs ring-0 transition duration-200 ease-in-out",
+                            "pointer-events-none inline-block h-4 w-4 rounded-full shadow-xs ring-0",
                             toastConfig.expand
-                              ? "translate-x-4"
-                              : "translate-x-0 bg-background dark:bg-zinc-400",
+                              ? "translate-x-4 bg-background dark:bg-black"
+                              : "translate-x-0 bg-white dark:bg-zinc-400",
+                          )}
+                        />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {(activeComponent.slug === "animated-theme-toggler" ||
+                activeComponent.slug === "theme-toggle" ||
+                activeComponent.slug === "theme-toggler") && (
+                <div
+                  key="theme-toggler-customize-panel"
+                  className="pointer-events-auto rounded-2xl border border-border dark:border-white/10 bg-card/95 dark:bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-xl dark:shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-xl w-full mx-4 select-none flex flex-col gap-2.5 overflow-hidden"
+                >
+                  <div className="flex items-center justify-between px-1">
+                    <span className="text-xs font-semibold text-foreground dark:text-white/90 tracking-tight">
+                      Theme Toggler Settings
+                    </span>
+                    <button
+                      type="button"
+                      onClick={resetThemeTogglerConfig}
+                      className="text-[11px] text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                    >
+                      <ResetIcon className="w-3.5 h-3.5" />
+                      <span>Reset</span>
+                    </button>
+                  </div>
+
+                  <div className="rounded-xl border border-border dark:border-white/5 bg-muted/40 dark:bg-[#0b0b0e] p-2 flex flex-col gap-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-[11px] text-muted-foreground dark:text-zinc-400">
+                        Transition Shape
+                      </span>
+                      <div className="flex items-center gap-1 bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5 overflow-x-auto scrollbar-none no-scrollbar [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                        {(
+                          [
+                            "circle",
+                            "square",
+                            "triangle",
+                            "diamond",
+                            "hexagon",
+                            "star",
+                          ] as const
+                        ).map((v) => {
+                          const isActive = themeTogglerConfig.variant === v;
+                          return (
+                            <button
+                              key={v}
+                              type="button"
+                              onClick={() =>
+                                setThemeTogglerConfig((prev) => ({
+                                  ...prev,
+                                  variant: v,
+                                }))
+                              }
+                              className={cn(
+                                "relative text-[11px] px-2.5 py-1 rounded-lg transition-colors cursor-pointer capitalize font-medium shrink-0",
+                                isActive
+                                  ? "text-background font-semibold dark:text-black"
+                                  : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
+                              )}
+                            >
+                              {isActive && (
+                                <motion.div
+                                  layoutId="activeThemeTogglerShapeIndicator"
+                                  transition={{
+                                    type: "spring",
+                                    stiffness: 450,
+                                    damping: 32,
+                                  }}
+                                  className="absolute inset-0 bg-foreground dark:bg-white rounded-lg shadow-xs"
+                                />
+                              )}
+                              <span className="relative z-10">{v}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between gap-2 pt-1 border-t border-border dark:border-white/5">
+                      <span className="text-[11px] text-muted-foreground dark:text-zinc-400">
+                        Candy Style
+                      </span>
+                      <div className="flex items-center gap-1 bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5">
+                        {[
+                          { label: "Candy", value: true },
+                          { label: "Minimal", value: false },
+                        ].map((opt) => {
+                          const isActive =
+                            themeTogglerConfig.candy === opt.value;
+                          return (
+                            <button
+                              key={opt.label}
+                              type="button"
+                              onClick={() =>
+                                setThemeTogglerConfig((prev) => ({
+                                  ...prev,
+                                  candy: opt.value,
+                                }))
+                              }
+                              className={cn(
+                                "relative text-[11px] px-2.5 py-1 rounded-lg transition-colors cursor-pointer font-medium",
+                                isActive
+                                  ? "text-background font-semibold dark:text-black"
+                                  : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
+                              )}
+                            >
+                              {isActive && (
+                                <motion.div
+                                  layoutId="activeThemeTogglerStyleIndicator"
+                                  transition={{
+                                    type: "spring",
+                                    stiffness: 450,
+                                    damping: 32,
+                                  }}
+                                  className="absolute inset-0 bg-foreground dark:bg-white rounded-lg shadow-xs"
+                                />
+                              )}
+                              <span className="relative z-10">{opt.label}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between gap-2 pt-1 border-t border-border dark:border-white/5">
+                      <span className="text-[11px] text-muted-foreground dark:text-zinc-400">
+                        Emanate from Center
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setThemeTogglerConfig((prev) => ({
+                            ...prev,
+                            fromCenter: !prev.fromCenter,
+                          }))
+                        }
+                        className={cn(
+                          "relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full p-0.5 items-center transition-colors duration-200 ease-in-out",
+                          themeTogglerConfig.fromCenter
+                            ? "bg-foreground dark:bg-white"
+                            : "bg-muted-foreground/30 dark:bg-zinc-800",
+                        )}
+                      >
+                        <motion.span
+                          layout
+                          transition={{
+                            type: "spring",
+                            stiffness: 500,
+                            damping: 32,
+                          }}
+                          className={cn(
+                            "pointer-events-none inline-block h-4 w-4 rounded-full shadow-xs ring-0",
+                            themeTogglerConfig.fromCenter
+                              ? "translate-x-4 bg-background dark:bg-black"
+                              : "translate-x-0 bg-white dark:bg-zinc-400",
                           )}
                         />
                       </button>
@@ -3182,7 +3419,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               {activeComponent.slug === "orb" && (
                 <div
                   key="orb-customize-panel"
-                  className="pointer-events-auto rounded-2xl border border-border dark:border-white/10 bg-card/95 dark:bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-xl dark:shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-2xl w-full mx-4 select-none flex flex-col gap-2.5"
+                  className="pointer-events-auto rounded-2xl border border-border dark:border-white/10 bg-card/95 dark:bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-xl dark:shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-2xl w-full mx-4 select-none flex flex-col gap-2.5 overflow-hidden"
                 >
                   <div className="flex items-center justify-between px-1">
                     <div className="flex items-center gap-2">
@@ -3207,7 +3444,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   </div>
 
                   <div className="rounded-xl border border-border dark:border-white/5 bg-muted/40 dark:bg-[#0b0b0e] p-2 flex flex-col gap-2">
-                    <div className="flex items-center gap-1 overflow-x-auto no-scrollbar bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5">
+                    <div className="flex items-center gap-1 overflow-x-auto scrollbar-none no-scrollbar [scrollbar-width:none] [&::-webkit-scrollbar]:hidden bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5">
                       {ORB_STATES.map((s) => (
                         <button
                           key={s}
@@ -3236,7 +3473,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       ))}
                     </div>
 
-                    <div className="flex items-center gap-1 overflow-x-auto no-scrollbar bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5">
+                    <div className="flex items-center gap-1 overflow-x-auto scrollbar-none no-scrollbar [scrollbar-width:none] [&::-webkit-scrollbar]:hidden bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5">
                       <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium px-2.5 shrink-0">
                         Color
                       </span>
@@ -4543,7 +4780,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     </div>
 
                     <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-1.5 pt-1 border-t border-border dark:border-white/5">
-                      <div className="flex items-center gap-1.5 overflow-x-auto py-0.5">
+                      <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none no-scrollbar [scrollbar-width:none] [&::-webkit-scrollbar]:hidden py-0.5">
                         <span className="text-[11px] text-muted-foreground dark:text-zinc-500 shrink-0 font-medium pl-1">
                           Try prompt:
                         </span>

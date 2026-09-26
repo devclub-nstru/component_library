@@ -14,13 +14,46 @@ export type TransitionVariant =
   | "rectangle"
   | "star";
 
+export type CandyGemstoneVariant =
+  | "amber"
+  | "azure"
+  | "violet"
+  | "emerald"
+  | "ruby"
+  | "obsidian"
+  | "pearl"
+  | "auto";
+
 export interface AnimatedThemeTogglerProps extends React.ComponentPropsWithoutRef<"button"> {
   duration?: number;
   variant?: TransitionVariant;
   fromCenter?: boolean;
   theme?: "light" | "dark";
   onThemeChange?: (theme: "light" | "dark") => void;
+  candy?: boolean;
+  candyVariant?: CandyGemstoneVariant;
+  candyColor?: string;
 }
+
+const candyVariantStyles: Record<
+  Exclude<CandyGemstoneVariant, "auto">,
+  string
+> = {
+  amber:
+    "bg-[radial-gradient(120%_80%_at_50%_70%,#f59e0b_0%,#b45309_100%)] text-white shadow-[0px_4px_20px_-4px_rgba(245,158,11,0.55),inset_0px_1px_3px_0px_rgba(255,255,255,0.45),inset_0px_-2px_4px_0px_rgba(0,0,0,0.15)] hover:shadow-[0px_6px_24px_-2px_rgba(245,158,11,0.7),inset_0px_1px_3px_0px_rgba(255,255,255,0.55)]",
+  azure:
+    "bg-[radial-gradient(120%_80%_at_50%_70%,#0ea5e9_0%,#0369a1_100%)] text-white shadow-[0px_4px_20px_-4px_rgba(14,165,233,0.5),inset_0px_1px_3px_0px_rgba(255,255,255,0.45),inset_0px_-2px_4px_0px_rgba(0,0,0,0.15)] hover:shadow-[0px_6px_24px_-2px_rgba(14,165,233,0.65),inset_0px_1px_3px_0px_rgba(255,255,255,0.55)]",
+  violet:
+    "bg-[radial-gradient(120%_80%_at_50%_70%,#8b5cf6_0%,#581c87_100%)] text-white shadow-[0px_4px_20px_-4px_rgba(139,92,246,0.5),inset_0px_1px_3px_0px_rgba(255,255,255,0.45),inset_0px_-2px_4px_0px_rgba(0,0,0,0.15)] hover:shadow-[0px_6px_24px_-2px_rgba(139,92,246,0.65),inset_0px_1px_3px_0px_rgba(255,255,255,0.55)]",
+  emerald:
+    "bg-[radial-gradient(120%_80%_at_50%_70%,#006a66_0%,#003835_100%)] text-white shadow-[0px_4px_20px_-4px_rgba(0,106,102,0.5),inset_0px_1px_3px_0px_rgba(255,255,255,0.45),inset_0px_-2px_4px_0px_rgba(0,0,0,0.15)] hover:shadow-[0px_6px_24px_-2px_rgba(0,106,102,0.65),inset_0px_1px_3px_0px_rgba(255,255,255,0.55)]",
+  ruby:
+    "bg-[radial-gradient(120%_80%_at_50%_70%,#e11d48_0%,#9f1239_100%)] text-white shadow-[0px_4px_20px_-4px_rgba(225,29,72,0.5),inset_0px_1px_3px_0px_rgba(255,255,255,0.45),inset_0px_-2px_4px_0px_rgba(0,0,0,0.15)] hover:shadow-[0px_6px_24px_-2px_rgba(225,29,72,0.65),inset_0px_1px_3px_0px_rgba(255,255,255,0.55)]",
+  obsidian:
+    "bg-[radial-gradient(120%_80%_at_50%_70%,#3f3f46_0%,#18181b_100%)] text-zinc-100 border border-white/10 shadow-[0px_4px_20px_-6px_rgba(0,0,0,0.4),inset_0px_1px_3px_0px_rgba(255,255,255,0.25),inset_0px_-2px_4px_0px_rgba(0,0,0,0.2)] hover:shadow-[0px_6px_24px_-4px_rgba(0,0,0,0.5),inset_0px_1px_3px_0px_rgba(255,255,255,0.35)]",
+  pearl:
+    "bg-[radial-gradient(120%_80%_at_50%_70%,#ffffff_0%,#e4e4e7_100%)] text-zinc-950 shadow-[0px_4px_20px_-6px_rgba(255,255,255,0.35),inset_0px_1px_3px_0px_rgba(255,255,255,0.9),inset_0px_-2px_4px_0px_rgba(0,0,0,0.08)] hover:shadow-[0px_6px_24px_-4px_rgba(255,255,255,0.45),inset_0px_1px_3px_0px_rgba(255,255,255,1)]",
+};
 
 function polygonCollapsed(point: string, vertexCount: number): string {
   const pairs = Array.from({ length: vertexCount }, () => point).join(", ");
@@ -143,6 +176,10 @@ export const AnimatedThemeToggler = ({
   fromCenter = false,
   theme,
   onThemeChange,
+  candy = false,
+  candyVariant = "auto",
+  candyColor,
+  style,
   ...props
 }: AnimatedThemeTogglerProps) => {
   const shape = variant ?? "circle";
@@ -306,23 +343,65 @@ export const AnimatedThemeToggler = ({
     }
   }, [shape, fromCenter, duration, isControlled, onThemeChange, cancelAnim]);
 
+  const customCandyStyle: React.CSSProperties =
+    candy && candyColor
+      ? {
+          background: `radial-gradient(120% 80% at 50% 70%, ${candyColor} 0%, color-mix(in srgb, ${candyColor} 50%, black) 100%)`,
+          boxShadow: `0px 4px 20px -4px color-mix(in srgb, ${candyColor} 65%, transparent), inset 0px 1px 3px 0px rgba(255, 255, 255, 0.45), inset 0px -2px 4px 0px rgba(0, 0, 0, 0.15)`,
+          color: "#ffffff",
+          ...style,
+        }
+      : (style ?? {});
+
+  const candyClasses = candy
+    ? cn(
+        "relative inline-flex items-center justify-center font-medium select-none overflow-hidden cursor-pointer transition-all duration-200 ease-out active:scale-[0.95] active:brightness-95 hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 border-0",
+        "after:absolute after:top-0 after:left-[15%] after:right-[15%] after:h-px after:bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.65),transparent)] after:pointer-events-none",
+        !candyColor &&
+          (candyVariant === "auto"
+            ? candyVariantStyles.obsidian
+            : candyVariantStyles[candyVariant]),
+      )
+    : "";
+
   return (
     <button
       type="button"
       ref={buttonRef}
       onClick={toggleTheme}
-      className={cn(className)}
+      style={customCandyStyle}
+      className={cn(className, candyClasses)}
       aria-label="Toggle theme"
       {...props}
     >
-      {isDark ? (
-        <Sun className="h-4 w-4 text-foreground transition-transform duration-300 hover:rotate-45" />
-      ) : (
-        <Moon className="h-4 w-4 text-foreground transition-transform duration-300 hover:-rotate-12" />
+      {candy && (
+        <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-[inherit] bg-[linear-gradient(180deg,rgba(255,255,255,0.2)_0%,transparent_100%)] pointer-events-none" />
       )}
+      <span className="relative z-10 flex items-center justify-center">
+        {isDark ? (
+          <Sun
+            className={cn(
+              "h-4 w-4 transition-transform duration-300 hover:rotate-45",
+              candy
+                ? "text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.35)]"
+                : "text-foreground",
+            )}
+          />
+        ) : (
+          <Moon
+            className={cn(
+              "h-4 w-4 transition-transform duration-300 hover:-rotate-12",
+              candy
+                ? "text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.35)]"
+                : "text-foreground",
+            )}
+          />
+        )}
+      </span>
       <span className="sr-only">Toggle theme</span>
     </button>
   );
 };
 
+export const ThemeToggle = AnimatedThemeToggler;
 export default AnimatedThemeToggler;
