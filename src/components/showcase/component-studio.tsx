@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
 import {
@@ -89,6 +89,29 @@ import { MacSwitch, type MacSwitchColor } from "@/registry/ui/mac-switch";
 import { SpotlightSearch } from "@/registry/ui/spotlight-search";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+
+type InstallTool = "npx" | "pnpm" | "bun" | "shadcn";
+
+const INSTALL_TOOLS: { id: InstallTool; label: string }[] = [
+  { id: "npx", label: "npx" },
+  { id: "pnpm", label: "pnpm" },
+  { id: "bun", label: "bun" },
+  { id: "shadcn", label: "shadcn" },
+];
+
+const getInstallCommand = (slug: string, tool: InstallTool) => {
+  switch (tool) {
+    case "pnpm":
+      return `pnpm dlx @devclubnst/ui add ${slug}`;
+    case "bun":
+      return `bunx @devclubnst/ui add ${slug}`;
+    case "shadcn":
+      return `npx shadcn@latest add https://devclub.co/r/${slug}.json`;
+    case "npx":
+    default:
+      return `npx @devclubnst/ui add ${slug}`;
+  }
+};
 
 interface ComponentStudioProps {
   component: ComponentRegistryItem;
@@ -1017,9 +1040,33 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     "none",
   );
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [installTool, setInstallTool] = useState<InstallTool>(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("devclub_install_tool") as InstallTool | null;
+      if (saved && (saved === "npx" || saved === "pnpm" || saved === "bun" || saved === "shadcn")) {
+        return saved;
+      }
+    }
+    return "npx";
+  });
+  const [installMenuOpen, setInstallMenuOpen] = useState(false);
   const [installCopied, setInstallCopied] = useState(false);
+  const [copiedToolKey, setCopiedToolKey] = useState<string | null>(null);
   const [codeCopied, setCodeCopied] = useState(false);
   const [selectedFileIndex, setSelectedFileIndex] = useState(0);
+  const installMenuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (installMenuRef.current && !installMenuRef.current.contains(e.target as Node)) {
+        setInstallMenuOpen(false);
+      }
+    };
+    if (installMenuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => document.removeEventListener("mousedown", handleClickOutside);
+    }
+  }, [installMenuOpen]);
 
   if (component.slug !== prevPropSlug) {
     setPrevPropSlug(component.slug);
@@ -1101,11 +1148,34 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
   const codeLines = useMemo(() => activeCode.split("\n"), [activeCode]);
   const highlighted = useMemo(() => highlightCode(activeCode), [activeCode]);
 
-  const handleInstallCopy = async () => {
-    const cmd = `npm install ${activeComponent.dependencies.join(" ")}`;
+  const handleInstallCopy = async (overrideTool?: InstallTool) => {
+    const targetTool = overrideTool || installTool;
+    const cmd = getInstallCommand(activeComponent.slug, targetTool);
     await navigator.clipboard.writeText(cmd);
     setInstallCopied(true);
-    setTimeout(() => setInstallCopied(false), 2000);
+    setCopiedToolKey(targetTool);
+    toast.success(`Copied: ${cmd}`);
+    setTimeout(() => {
+      setInstallCopied(false);
+      setCopiedToolKey(null);
+    }, 2000);
+  };
+
+  const handleSelectTool = (tool: InstallTool) => {
+    setInstallTool(tool);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("devclub_install_tool", tool);
+    }
+    handleInstallCopy(tool);
+  };
+
+  const handleCustomCopy = async (key: string, text: string) => {
+    await navigator.clipboard.writeText(text);
+    setCopiedToolKey(key);
+    toast.success(`Copied: ${text}`);
+    setTimeout(() => {
+      setCopiedToolKey(null);
+    }, 2000);
   };
 
   const handleCodeCopy = async () => {
@@ -2312,23 +2382,198 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 className="w-8 h-8 rounded-lg shrink-0 [&_svg]:size-3.5 shadow-sm"
               />
 
-              <motion.button
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.94 }}
-                transition={microSpring}
-                type="button"
-                onClick={handleInstallCopy}
-                className="h-8 px-3 rounded-lg border border-border bg-muted/60 hover:bg-muted dark:bg-[#18181b]/90 dark:hover:bg-[#222226] text-muted-foreground hover:text-foreground dark:text-zinc-300 dark:hover:text-white text-xs transition-colors cursor-pointer flex items-center gap-1.5 shadow-sm"
-              >
-                {installCopied ? (
-                  <>
-                    <CheckIcon className="w-3.5 h-3.5 text-emerald-400" />
-                    <span className="text-emerald-400">Copied</span>
-                  </>
-                ) : (
-                  <span>npm i</span>
-                )}
-              </motion.button>
+              <div className="relative" ref={installMenuRef}>
+                <div className="flex items-center rounded-lg border border-border bg-muted/60 hover:border-foreground/20 dark:bg-[#18181b]/90 dark:hover:bg-[#222226] shadow-sm transition-colors overflow-hidden h-8">
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.94 }}
+                    transition={microSpring}
+                    type="button"
+                    onClick={() => handleInstallCopy()}
+                    className="h-full px-2.5 text-muted-foreground hover:text-foreground dark:text-zinc-300 dark:hover:text-white text-xs transition-colors cursor-pointer flex items-center gap-1.5"
+                    title={`Copy: ${getInstallCommand(activeComponent.slug, installTool)}`}
+                  >
+                    {installCopied ? (
+                      <>
+                        <CheckIcon className="w-3.5 h-3.5 text-emerald-400" />
+                        <span className="text-emerald-400 font-medium">Copied</span>
+                      </>
+                    ) : (
+                      <>
+                        <span className="font-mono text-xs">
+                          {installTool === "npx" ? "npm i" : `${installTool} add`}
+                        </span>
+                      </>
+                    )}
+                  </motion.button>
+                  <div className="w-[1px] h-4 bg-border/80" />
+                  <button
+                    type="button"
+                    onClick={() => setInstallMenuOpen((prev) => !prev)}
+                    className="h-full px-1.5 text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white hover:bg-muted/80 dark:hover:bg-zinc-800 transition-colors cursor-pointer flex items-center justify-center"
+                    title="Customize package manager & command"
+                    aria-label="Customize install command"
+                  >
+                    <ChevronDownIcon
+                      className={cn(
+                        "w-3.5 h-3.5 transition-transform duration-200",
+                        installMenuOpen && "rotate-180",
+                      )}
+                    />
+                  </button>
+                </div>
+
+                <AnimatePresence>
+                  {installMenuOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 6, scale: 0.96 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 6, scale: 0.96 }}
+                      transition={microSpring}
+                      className="absolute right-0 top-10 z-50 w-80 sm:w-96 rounded-xl border border-border bg-popover/95 dark:bg-[#121215]/98 backdrop-blur-md p-3.5 shadow-2xl text-popover-foreground space-y-3"
+                    >
+                      <div className="flex items-center justify-between pb-1 border-b border-border/50">
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs font-semibold text-foreground tracking-tight">
+                            Install Component
+                          </span>
+                          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-muted text-muted-foreground">
+                            {activeComponent.slug}
+                          </span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => setInstallMenuOpen(false)}
+                          className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors cursor-pointer"
+                        >
+                          <Cross2Icon className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+
+                      <div className="grid grid-cols-4 gap-1 p-1 bg-muted/50 dark:bg-zinc-900/80 rounded-lg border border-border/60">
+                        {INSTALL_TOOLS.map((t) => {
+                          const isActive = installTool === t.id;
+                          return (
+                            <button
+                              key={t.id}
+                              type="button"
+                              onClick={() => handleSelectTool(t.id)}
+                              className={cn(
+                                "py-1 text-xs font-mono rounded-md transition-all cursor-pointer text-center",
+                                isActive
+                                  ? "bg-background dark:bg-zinc-800 text-foreground dark:text-white font-medium shadow-xs border border-border/60"
+                                  : "text-muted-foreground hover:text-foreground",
+                              )}
+                            >
+                              {t.label}
+                            </button>
+                          );
+                        })}
+                      </div>
+
+                      <div className="rounded-lg bg-[#09090b] border border-border/70 p-2.5 flex items-center justify-between gap-2 shadow-inner">
+                        <div className="flex items-center gap-2 overflow-x-auto scrollbar-none font-mono text-xs text-zinc-300">
+                          <span className="text-orange-400 select-none font-bold">
+                            $
+                          </span>
+                          <span className="select-all">
+                            {getInstallCommand(activeComponent.slug, installTool)}
+                          </span>
+                        </div>
+                        <motion.button
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.94 }}
+                          transition={microSpring}
+                          type="button"
+                          onClick={() => handleInstallCopy(installTool)}
+                          className="shrink-0 p-1.5 rounded-md hover:bg-white/10 text-zinc-400 hover:text-white transition-colors cursor-pointer"
+                          title="Copy active command"
+                        >
+                          {copiedToolKey === installTool ? (
+                            <CheckIcon className="w-3.5 h-3.5 text-emerald-400" />
+                          ) : (
+                            <CopyIcon className="w-3.5 h-3.5" />
+                          )}
+                        </motion.button>
+                      </div>
+
+                      <div className="space-y-1.5 pt-1">
+                        <div className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
+                          Quick Presets
+                        </div>
+
+                        <div className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/40 transition-colors border border-transparent hover:border-border text-xs">
+                          <div className="flex flex-col min-w-0 pr-2">
+                            <span className="font-medium text-foreground text-[11px]">
+                              Shadcn Registry
+                            </span>
+                            <span className="text-[11px] font-mono text-muted-foreground truncate select-all">
+                              {`npx shadcn@latest add https://devclub.co/r/${activeComponent.slug}.json`}
+                            </span>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              handleCustomCopy(
+                                "shadcn_url",
+                                `npx shadcn@latest add https://devclub.co/r/${activeComponent.slug}.json`,
+                              )
+                            }
+                            className="shrink-0 p-1.5 rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                            title="Copy shadcn command"
+                          >
+                            {copiedToolKey === "shadcn_url" ? (
+                              <CheckIcon className="w-3.5 h-3.5 text-emerald-400" />
+                            ) : (
+                              <CopyIcon className="w-3.5 h-3.5" />
+                            )}
+                          </button>
+                        </div>
+
+                        {activeComponent.dependencies.length > 0 && (
+                          <div className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/40 transition-colors border border-transparent hover:border-border text-xs">
+                            <div className="flex flex-col min-w-0 pr-2">
+                              <span className="font-medium text-foreground text-[11px]">
+                                Peer Dependencies
+                              </span>
+                              <span className="text-[11px] font-mono text-muted-foreground truncate select-all">
+                                {`npm i ${activeComponent.dependencies.join(" ")}`}
+                              </span>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                handleCustomCopy(
+                                  "deps",
+                                  `npm i ${activeComponent.dependencies.join(" ")}`,
+                                )
+                              }
+                              className="shrink-0 p-1.5 rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                              title="Copy peer dependencies"
+                            >
+                              {copiedToolKey === "deps" ? (
+                                <CheckIcon className="w-3.5 h-3.5 text-emerald-400" />
+                              ) : (
+                                <CopyIcon className="w-3.5 h-3.5" />
+                              )}
+                            </button>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="pt-2 border-t border-border/50 flex items-center justify-between text-[10px] font-mono text-muted-foreground">
+                        <span>Package: @devclubnst/ui</span>
+                        <Link
+                          href="/docs/cli"
+                          className="hover:text-foreground transition-colors underline underline-offset-2"
+                        >
+                          CLI docs &rarr;
+                        </Link>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
 
               <motion.button
                 whileHover={{ scale: 1.03 }}
@@ -4883,10 +5128,17 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         whileTap={{ scale: 0.94 }}
                         transition={microSpring}
                         type="button"
-                        onClick={handleInstallCopy}
-                        className="border border-border bg-card dark:bg-[#18181b] hover:bg-muted dark:hover:bg-[#222226] text-muted-foreground hover:text-foreground dark:text-zinc-300 dark:hover:text-white px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer"
+                        onClick={() => handleInstallCopy()}
+                        className="border border-border bg-card dark:bg-[#18181b] hover:bg-muted dark:hover:bg-[#222226] text-muted-foreground hover:text-foreground dark:text-zinc-300 dark:hover:text-white px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer flex items-center gap-1.5"
                       >
-                        {installCopied ? "Copied!" : "Install"}
+                        {installCopied ? (
+                          <>
+                            <CheckIcon className="w-3.5 h-3.5 text-emerald-400" />
+                            <span className="text-emerald-400">Copied!</span>
+                          </>
+                        ) : (
+                          <span>{installTool === "npx" ? "npm i" : `${installTool} add`}</span>
+                        )}
                       </motion.button>
 
                       <motion.button
@@ -4916,6 +5168,34 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         <Cross2Icon className="w-4 h-4" />
                       </motion.button>
                     </div>
+                  </div>
+
+                  <div className="flex items-center justify-between px-6 py-2 bg-[#0c0c0f] border-b border-border/40 text-xs font-mono">
+                    <div className="flex items-center gap-2 text-zinc-400 min-w-0">
+                      <span className="text-orange-400 select-none font-bold">
+                        $
+                      </span>
+                      <span className="text-zinc-200 truncate select-all">
+                        {getInstallCommand(activeComponent.slug, installTool)}
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleInstallCopy()}
+                      className="shrink-0 flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/5 hover:bg-white/10 text-zinc-300 hover:text-white transition-colors cursor-pointer text-[11px]"
+                    >
+                      {installCopied ? (
+                        <>
+                          <CheckIcon className="w-3.5 h-3.5 text-emerald-400" />
+                          <span className="text-emerald-400">Copied</span>
+                        </>
+                      ) : (
+                        <>
+                          <CopyIcon className="w-3.5 h-3.5" />
+                          <span>Copy</span>
+                        </>
+                      )}
+                    </button>
                   </div>
 
                   <div className="flex-1 p-6 overflow-auto font-mono text-xs leading-relaxed bg-[#070709] select-text">
@@ -5301,6 +5581,29 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         </span>
                       </div>
                     )}
+                    <div className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground pt-2">
+                      Install via CLI
+                    </div>
+                    <div className="flex items-center justify-between p-2.5 bg-muted/40 border border-border rounded-lg font-mono text-xs">
+                      <div className="flex items-center gap-1.5 min-w-0 pr-2">
+                        <span className="text-orange-500 select-none font-bold">$</span>
+                        <span className="text-foreground truncate select-all">
+                          {`npx @devclubnst/ui add ${activeComponent.slug}`}
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleInstallCopy("npx")}
+                        className="p-1 hover:bg-muted rounded text-muted-foreground hover:text-foreground cursor-pointer shrink-0"
+                        title="Copy command"
+                      >
+                        {copiedToolKey === "npx" ? (
+                          <CheckIcon className="w-3.5 h-3.5 text-emerald-400" />
+                        ) : (
+                          <CopyIcon className="w-3.5 h-3.5" />
+                        )}
+                      </button>
+                    </div>
                   </motion.div>
                 </motion.div>
               </div>

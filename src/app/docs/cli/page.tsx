@@ -28,7 +28,7 @@ export default function DocsCliPage() {
         <CodeBlock
           filename="Terminal"
           language="bash"
-          code="npx devclub add noise"
+          code="npx @devclubnst/ui add noise"
         />
         <p className="text-xs text-muted-foreground font-light leading-relaxed">
           You can add multiple components simultaneously:
@@ -36,7 +36,7 @@ export default function DocsCliPage() {
         <CodeBlock
           filename="Terminal"
           language="bash"
-          code="npx devclub add dotted-accordion ai-orb proximity-sidebar"
+          code="npx @devclubnst/ui add dotted-accordion ai-orb proximity-sidebar"
         />
       </section>
 

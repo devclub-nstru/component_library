@@ -1,14 +1,22 @@
 {
   "name": "@devclubnst/ui",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "DevClub UI animated component primitives",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
+  "bin": {
+    "devclub": "./bin/cli.mjs",
+    "devclubnst": "./bin/cli.mjs",
+    "ui": "./bin/cli.mjs",
+    "@devclubnst/ui": "./bin/cli.mjs"
+  },
   "files": [
-    "dist",
-    "registry"
+    "registry.json",
+    "public/r",
+    "src/registry",
+    "bin"
   ],
   "scripts": {
     "dev": "next dev",

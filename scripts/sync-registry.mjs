@@ -167,6 +167,12 @@ fs.writeFileSync(
   "utf8"
 );
 
+fs.writeFileSync(
+  path.join(rootDir, "registry.json"),
+  JSON.stringify(registryJson, null, 2) + "\n",
+  "utf8"
+);
+
 if (hasError) {
   process.exit(1);
 }
