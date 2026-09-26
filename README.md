@@ -349,7 +349,7 @@ We welcome community contributions! Please read our [Contributing Guide](CONTRIB
 
 - Setting up your local development environment
 - Authoring new animated or WebGL primitives
-- Registering components in `src/registry/index.ts`
+- Registering components in `src/registry/components/` and `src/registry/index.ts`
 - Submitting pull requests
 
 Please adhere to our [Code of Conduct](CODE_OF_CONDUCT.md) in all community interactions.

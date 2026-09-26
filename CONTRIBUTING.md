@@ -147,13 +147,13 @@ To contribute a new component to DevClub UI:
 1. **Create the Component Source File**:
    Add your TSX file under `src/registry/ui/your-component-slug.tsx`.
 
-2. **Register in Component Registry (`src/registry/index.ts`)**:
-   Add an entry to `COMPONENT_REGISTRY` containing:
+2. **Register in Component Registry (`src/registry/components/your-component-slug.json`)**:
+   Create a JSON file under `src/registry/components/your-component-slug.json` containing:
    - `slug`: Unique identifier string.
    - `name`: Human-readable display title.
    - `description`: Concise summary.
    - `summary`: Detailed architectural overview.
-   - `category`: Category string (`accordion`, `scales`, `buttons`, `cards`, `feedback`, `layout`).
+   - `category`: Category string (`accordion`, `scales`, `buttons`, `cards`, `feedback`, `layout`, `ai-stuff`, `apple-ui`, `inputs`, `display`, `navigation`).
    - `tags`: Array of search tags.
    - `dependencies`: List of npm package dependencies required.
    - `version`: Version string (e.g. `"1.0.0"`).
@@ -163,7 +163,9 @@ To contribute a new component to DevClub UI:
    - `accessibility`: ARIA roles and keyboard interactions.
    - `guidelines`: Best practices and recommended usage.
    - `props`: Exhaustive props specification table.
-   - `files`: File object array including exact string code for the component.
+   - `files`: File object array including exact string code for the component (automatically synchronized via `npm run registry:sync`).
+
+   Then export the component in `src/registry/components/index.ts` and `src/registry/index.ts`.
 
 3. **Verify in Local Server**:
    Ensure your component renders correctly at `http://localhost:3000/components/your-component-slug` and responds to query filters.

@@ -41,7 +41,7 @@ Before submitting this pull request, verify each item:
 - [ ] Zero Cumulative Layout Shift (CLS 0.0) is maintained during animations and state transitions.
 - [ ] The component respects `prefers-reduced-motion` media queries and provides accessible fallback behavior.
 - [ ] Full keyboard navigation (`Tab`, `Shift+Tab`, `Enter`, `Space`, `Escape`) is tested and operational.
-- [ ] If a new component was added, it is properly registered with code snippet and metadata in `src/registry/index.ts`.
+- [ ] If a new component was added, it is properly registered with JSON metadata in `src/registry/components/` and exported in `src/registry/index.ts`.
 - [ ] I have executed `npm run lint` and resolved all lint errors.
 - [ ] I have executed `npm run build` locally and the production build completes successfully.
 - [ ] No uncleaned debug logs or unnecessary comments were left in the codebase.
