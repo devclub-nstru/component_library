@@ -548,6 +548,8 @@ export function ContributionGraphCalendar({
 export function ContributionGraphBlock({
   activity,
   className,
+  dayIndex: _dayIndex,
+  weekIndex: _weekIndex,
   ...props
 }: {
   activity?: Contribution;

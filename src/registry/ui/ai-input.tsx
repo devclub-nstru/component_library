@@ -1283,16 +1283,6 @@ export const PromptInput = React.forwardRef<PromptInputRef, PromptInputProps>(
               disabled && "opacity-60 pointer-events-none",
             )}
           >
-            <style
-              dangerouslySetInnerHTML={{
-                __html: `
-              .prompt-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; background: transparent; }
-              .prompt-scrollbar::-webkit-scrollbar-track { background: transparent; }
-              .prompt-scrollbar::-webkit-scrollbar-thumb { background: transparent; border-radius: 4px; }
-              .prompt-scrollbar:hover::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); }
-            `,
-              }}
-            />
 
             <textarea
               id={inputId}

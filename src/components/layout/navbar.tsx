@@ -26,7 +26,7 @@ export const Navbar = ({ showThemeToggle }: NavbarProps = {}) => {
     showThemeToggle !== undefined ? showThemeToggle : !isHomePage;
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/85 backdrop-blur-xl transition-colors duration-200">
+    <header className="sticky top-0 z-100 w-full border-b border-border bg-background/85 backdrop-blur-xl transition-colors duration-200">
       <div className="max-w-7xl mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-6 lg:gap-8">
           <Link

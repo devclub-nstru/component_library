@@ -15,6 +15,10 @@ const eslintConfig = defineConfig([
     rules: {
       "@next/next/no-html-link-for-pages": "off",
       "@next/next/no-img-element": "off",
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
+      ],
     },
   },
 ]);

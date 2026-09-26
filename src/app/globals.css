@@ -104,11 +104,14 @@ html[data-magicui-theme-vt="active"] *::after {
   clip-path: var(--magicui-theme-vt-clip-from, circle(0px at 50% 50%));
 }
 
+html {
+  overflow-x: hidden;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-poppins), sans-serif;
-  overflow-x: hidden;
 }
 
 ::selection {
@@ -133,6 +136,25 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--foreground);
+}
+
+.prompt-scrollbar::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+  background: transparent;
+}
+
+.prompt-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.prompt-scrollbar::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 4px;
+}
+
+.prompt-scrollbar:hover::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .scrollbar-none::-webkit-scrollbar,

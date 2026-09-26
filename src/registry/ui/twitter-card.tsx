@@ -288,6 +288,8 @@ export const TwitterCard = ({
     return count.toLocaleString("en-US");
   };
 
+  const ProfileLink = staticCard ? "span" : "a";
+
   const cardContent = (
     <div className="flex flex-col text-left">
       <div className="relative -mx-4 -mt-4 h-24 overflow-hidden rounded-t-2xl bg-neutral-100 dark:bg-neutral-900">
@@ -317,15 +319,19 @@ export const TwitterCard = ({
           )}
         </div>
 
-        <a
-          href={profileUrl}
-          target="_blank"
-          rel="noopener noreferrer"
+        <ProfileLink
+          {...(!staticCard
+            ? {
+                href: profileUrl,
+                target: "_blank",
+                rel: "noopener noreferrer",
+              }
+            : {})}
           className="mt-2 text-neutral-400 transition-colors hover:text-neutral-900 dark:text-neutral-500 dark:hover:text-neutral-200"
           aria-label={`View @${username} on X`}
         >
           <XIcon className="h-5 w-5" />
-        </a>
+        </ProfileLink>
       </div>
 
       <div className="flex flex-col">
@@ -337,14 +343,18 @@ export const TwitterCard = ({
             <VerifiedBadge className="h-4 w-4 text-sky-500 dark:text-sky-400" />
           )}
         </div>
-        <a
-          href={profileUrl}
-          target="_blank"
-          rel="noopener noreferrer"
+        <ProfileLink
+          {...(!staticCard
+            ? {
+                href: profileUrl,
+                target: "_blank",
+                rel: "noopener noreferrer",
+              }
+            : {})}
           className="text-sm text-neutral-500 transition-colors hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-200"
         >
           @{username}
-        </a>
+        </ProfileLink>
       </div>
 
       <p className="mt-2.5 text-sm leading-relaxed text-neutral-800 dark:text-neutral-200">
@@ -362,14 +372,18 @@ export const TwitterCard = ({
         {profile.website && (
           <div className="flex items-center gap-1.5">
             <LinkIcon className="h-3.5 w-3.5" />
-            <a
-              href={profile.website.url}
-              target="_blank"
-              rel="noopener noreferrer"
+            <ProfileLink
+              {...(!staticCard
+                ? {
+                    href: profile.website.url,
+                    target: "_blank",
+                    rel: "noopener noreferrer",
+                  }
+                : {})}
               className="text-sky-600 hover:underline dark:text-sky-400"
             >
               {profile.website.display_url}
-            </a>
+            </ProfileLink>
           </div>
         )}
 
