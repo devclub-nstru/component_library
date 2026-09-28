@@ -3,8 +3,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { GitHubLogoIcon, TwitterLogoIcon } from "@radix-ui/react-icons";
 import { SITE_CONFIG } from "@/lib/constants";
+import { useIsDark } from "@/lib/use-is-dark";
 
 export const Footer = () => {
+  const isDark = useIsDark();
   return (
     <footer className="border-t border-border bg-background py-12 text-muted-foreground font-sans transition-colors duration-200">
       <div className="h-2 w-full mb-10 bg-[repeating-linear-gradient(90deg,currentColor_0px,currentColor_1px,transparent_1px,transparent_8px)] text-border-subtle border-b border-border" />
@@ -14,7 +16,7 @@ export const Footer = () => {
           <div className="space-y-3 md:col-span-2">
             <div className="flex items-center gap-2.5">
               <Image
-                src="/logo-he.png"
+                src={isDark ? "/logo-he.png" : "/logo-he-bl.png"}
                 alt="DevClub"
                 width={180}
                 height={60}

@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 import { GitHubButton } from "@/components/ui/github-button";
 import { CandyButton } from "@/registry/ui/candy-button";
 import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
+import { useIsDark } from "@/lib/use-is-dark";
 
 export interface NavbarProps {
   showThemeToggle?: boolean;
@@ -22,6 +23,7 @@ export interface NavbarProps {
 export const Navbar = ({ showThemeToggle }: NavbarProps = {}) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
+  const isDark = useIsDark();
   const isHomePage = pathname === "/";
   const shouldShowThemeToggle =
     showThemeToggle !== undefined ? showThemeToggle : !isHomePage;
@@ -36,7 +38,7 @@ export const Navbar = ({ showThemeToggle }: NavbarProps = {}) => {
             aria-label="DevClub Home"
           >
             <Image
-              src="/logo-he.png"
+              src={isDark ? "/logo-he.png" : "/logo-he-bl.png"}
               alt="DevClub"
               width={180}
               height={60}
