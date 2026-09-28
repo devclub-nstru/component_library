@@ -71,14 +71,15 @@ function getThemeTransitionClipPaths(
   const toX = (x: number) => `${(x / viewportWidth) * 100}%`;
   const toY = (y: number) => `${(y / viewportHeight) * 100}%`;
   const point = (x: number, y: number) => `${toX(x)} ${toY(y)}`;
-  const toRadius = (r: number) =>
-    `${(r / (Math.hypot(viewportWidth, viewportHeight) / Math.SQRT2)) * 100}%`;
+  const cxPx = Math.round(cx);
+  const cyPx = Math.round(cy);
+  const rPx = Math.ceil(maxRadius * 1.12);
 
   switch (variant) {
     case "circle":
       return [
-        `circle(0% at ${point(cx, cy)})`,
-        `circle(${toRadius(maxRadius)} at ${point(cx, cy)})`,
+        `circle(0px at ${cxPx}px ${cyPx}px)`,
+        `circle(${rPx}px at ${cxPx}px ${cyPx}px)`,
       ];
     case "square": {
       const halfW = Math.max(cx, viewportWidth - cx);
@@ -163,8 +164,8 @@ function getThemeTransitionClipPaths(
     }
     default:
       return [
-        `circle(0% at ${point(cx, cy)})`,
-        `circle(${toRadius(maxRadius)} at ${point(cx, cy)})`,
+        `circle(0px at ${cxPx}px ${cyPx}px)`,
+        `circle(${rPx}px at ${cxPx}px ${cyPx}px)`,
       ];
   }
 }
@@ -226,11 +227,18 @@ export const AnimatedThemeToggler = ({
         updateTheme();
       }
     };
+
+    const handleThemeChange = () => {
+      updateTheme();
+    };
+
     window.addEventListener("storage", handleStorage);
+    window.addEventListener("theme-change", handleThemeChange);
 
     return () => {
       observer.disconnect();
       window.removeEventListener("storage", handleStorage);
+      window.removeEventListener("theme-change", handleThemeChange);
     };
   }, [isControlled]);
 
@@ -277,14 +285,54 @@ export const AnimatedThemeToggler = ({
         onThemeChange?.(nextIsDark ? "dark" : "light");
       } else {
         setInternalIsDark(nextIsDark);
-        try {
-          localStorage.setItem("theme", nextIsDark ? "dark" : "light");
-        } catch {}
       }
+      try {
+        localStorage.setItem("theme", nextIsDark ? "dark" : "light");
+      } catch {}
+      window.dispatchEvent(
+        new StorageEvent("storage", {
+          key: "theme",
+          newValue: nextIsDark ? "dark" : "light",
+        }),
+      );
+      window.dispatchEvent(
+        new CustomEvent("theme-change", {
+          detail: { theme: nextIsDark ? "dark" : "light" },
+        }),
+      );
     };
 
-    if (typeof document.startViewTransition !== "function") {
+    if (
+      typeof document === "undefined" ||
+      !("startViewTransition" in document) ||
+      typeof document.startViewTransition !== "function" ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
       applyTheme();
+      return;
+    }
+
+    const canAnimatePseudo = (() => {
+      try {
+        const test = document.documentElement.animate(
+          { opacity: [1, 1] },
+          { duration: 1, pseudoElement: "::view-transition-new(root)" },
+        );
+        test.cancel();
+        return true;
+      } catch {
+        return false;
+      }
+    })();
+
+    if (!canAnimatePseudo) {
+      try {
+        document.startViewTransition(() => {
+          flushSync(applyTheme);
+        });
+      } catch {
+        applyTheme();
+      }
       return;
     }
 

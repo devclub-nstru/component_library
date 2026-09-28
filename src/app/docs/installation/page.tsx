@@ -29,15 +29,15 @@ function SnippetBlock({
   };
 
   return (
-    <div className="relative group w-full rounded-2xl bg-[#09090b] dark:bg-[#070709] border border-border/80 dark:border-white/10 p-4 font-mono text-xs text-zinc-300 shadow-sm overflow-hidden">
+    <div className="relative group w-full rounded-2xl bg-card/90 dark:bg-[#070709] border border-border/80 dark:border-white/10 p-4 font-mono text-xs text-foreground dark:text-zinc-300 shadow-sm overflow-hidden transition-colors">
       <button
         type="button"
         onClick={handleCopy}
-        className="absolute top-3 right-3 p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-colors cursor-pointer"
+        className="absolute top-3 right-3 p-1.5 rounded-lg bg-muted/60 hover:bg-muted dark:bg-white/5 dark:hover:bg-white/10 text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white transition-colors cursor-pointer"
         title="Copy code"
       >
         {copied ? (
-          <CheckIcon className="w-4 h-4 text-emerald-400" />
+          <CheckIcon className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
         ) : (
           <CopyIcon className="w-4 h-4" />
         )}
@@ -47,11 +47,11 @@ function SnippetBlock({
         {lines.map((line, idx) => (
           <div key={idx} className="flex">
             {showLines && (
-              <span className="w-6 shrink-0 select-none text-right pr-4 text-zinc-600 font-mono text-[11px]">
+              <span className="w-6 shrink-0 select-none text-right pr-4 text-muted-foreground/60 dark:text-zinc-600 font-mono text-[11px]">
                 {idx + 1}
               </span>
             )}
-            <span className="flex-1 whitespace-pre font-mono text-zinc-200">
+            <span className="flex-1 whitespace-pre font-mono text-foreground dark:text-zinc-200">
               {line}
             </span>
           </div>
@@ -135,7 +135,7 @@ npx shadcn@latest add https://devclub.co/r/[component].json
             className={cn(
               "relative flex items-center gap-2 px-5 py-2 rounded-xl text-xs font-sans font-medium transition-colors cursor-pointer select-none",
               method === "manual"
-                ? "text-foreground dark:text-white"
+                ? "text-foreground"
                 : "text-muted-foreground hover:text-foreground",
             )}
           >
@@ -161,7 +161,7 @@ npx shadcn@latest add https://devclub.co/r/[component].json
             className={cn(
               "relative flex items-center gap-2 px-5 py-2 rounded-xl text-xs font-sans font-medium transition-colors cursor-pointer select-none",
               method === "cli"
-                ? "text-foreground dark:text-white"
+                ? "text-foreground"
                 : "text-muted-foreground hover:text-foreground",
             )}
           >
