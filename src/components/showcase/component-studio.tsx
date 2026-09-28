@@ -27,7 +27,6 @@ import {
 } from "@radix-ui/react-icons";
 import { ComponentRegistryItem } from "@/types/component";
 import { getComponentBySlug } from "@/registry";
-import { useIsDark } from "@/lib/use-is-dark";
 import { SparkleButton } from "@/registry/ui/sparkle-button";
 import { CandyButton } from "@/registry/ui/candy-button";
 import { AnimatedButton } from "@/registry/ui/animated-button";
@@ -1049,7 +1048,6 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
   };
 
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const isDark = useIsDark();
   const [activePanel, setActivePanel] = useState<"none" | "info" | "code">(
     "none",
   );
@@ -2221,7 +2219,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               title="DevClub Home"
             >
               <Image
-                src={isDark ? "/logo-he.png" : "/logo-he-bl.png"}
+                src="/logo-he.png"
                 alt="DevClub"
                 width={120}
                 height={50}
