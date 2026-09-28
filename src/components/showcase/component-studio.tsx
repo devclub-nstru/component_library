@@ -5282,12 +5282,12 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
             <motion.aside
               key="info-panel"
               initial={{ width: 0, opacity: 0 }}
-              animate={{ width: 440, opacity: 1 }}
+              animate={{ width: 490, opacity: 1 }}
               exit={{ width: 0, opacity: 0 }}
               transition={panelSpring}
               className="shrink-0 h-full border border-border bg-card dark:bg-[#0c0c0e] rounded-3xl overflow-hidden flex flex-col"
             >
-              <div className="w-110 min-w-110 h-full p-6 sm:p-7 overflow-y-auto flex flex-col gap-6 scrollbar-none pb-12">
+              <div className="w-[490px] min-w-[490px] h-full p-6 sm:p-7 overflow-y-auto flex flex-col gap-6 scrollbar-none pb-12">
                 <motion.div
                   initial="hidden"
                   animate="visible"
@@ -5443,50 +5443,79 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         className="space-y-3 pt-4 border-t border-border"
                       >
                         <div className="flex items-center justify-between">
-                          <div className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
-                            Props Interface
+                          <div className="flex items-center gap-2">
+                            <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
+                              Props Interface
+                            </span>
+                            <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-orange-500/10 text-orange-500 border border-orange-500/20 font-medium">
+                              {activeComponent.props.length}
+                            </span>
                           </div>
-                          <span className="text-[10px] font-mono text-muted-foreground">
-                            {activeComponent.props.length} configurable
+                          <span className="text-[10px] font-mono text-muted-foreground/60">
+                            TypeScript
                           </span>
                         </div>
-                        <div className="border border-border rounded-xl overflow-hidden bg-muted/40">
-                          <table className="w-full text-left text-xs">
-                            <thead className="bg-muted border-b border-border text-muted-foreground font-mono text-[10px] uppercase">
+                        <div className="border border-border/80 dark:border-white/10 rounded-xl overflow-x-auto bg-card/60 dark:bg-zinc-950/60 shadow-xs">
+                          <table className="w-full text-left text-xs min-w-[560px] border-collapse">
+                            <thead className="bg-muted/70 dark:bg-white/[0.03] border-b border-border/80 dark:border-white/10 text-muted-foreground font-mono text-[10px] uppercase tracking-wider">
                               <tr>
-                                <th className="p-2.5 font-medium">Prop</th>
-                                <th className="p-2.5 font-medium">Type</th>
-                                <th className="p-2.5 font-medium">Default</th>
-                                <th className="p-2.5 font-medium">
+                                <th className="py-2.5 px-3 font-medium w-[22%] min-w-[110px]">
+                                  Prop
+                                </th>
+                                <th className="py-2.5 px-3 font-medium w-[26%] min-w-[140px]">
+                                  Type
+                                </th>
+                                <th className="py-2.5 px-3 font-medium w-[22%] min-w-[120px]">
+                                  Default
+                                </th>
+                                <th className="py-2.5 px-3 font-medium w-[30%] min-w-[190px]">
                                   Description
                                 </th>
                               </tr>
                             </thead>
-                            <tbody className="divide-y divide-border text-xs">
+                            <tbody className="divide-y divide-border/60 dark:divide-white/5 text-xs">
                               {activeComponent.props.map((p) => (
                                 <tr
                                   key={p.name}
-                                  className="hover:bg-muted/50 transition-colors align-top"
+                                  className="hover:bg-muted/40 dark:hover:bg-white/[0.02] transition-colors align-top"
                                 >
-                                  <td className="p-2.5 font-mono">
+                                  <td className="py-3 px-3 font-mono">
                                     <div className="flex flex-col items-start gap-1">
-                                      <span className="bg-muted border border-border px-2 py-0.5 rounded text-orange-500 text-[11px]">
+                                      <code className="bg-orange-500/10 dark:bg-orange-500/15 border border-orange-500/25 px-1.5 py-0.5 rounded text-orange-600 dark:text-orange-400 text-[11px] font-medium font-mono whitespace-nowrap">
                                         {p.name}
-                                      </span>
-                                      {p.required && (
-                                        <span className="text-[9px] uppercase tracking-wider text-rose-500 font-medium font-mono">
+                                      </code>
+                                      {p.required ? (
+                                        <span className="text-[9px] uppercase tracking-wider text-rose-500 dark:text-rose-400 font-medium font-mono bg-rose-500/10 px-1 py-0.2 rounded">
                                           Required
+                                        </span>
+                                      ) : (
+                                        <span className="text-[9px] uppercase tracking-wider text-muted-foreground/50 font-mono">
+                                          Optional
                                         </span>
                                       )}
                                     </div>
                                   </td>
-                                  <td className="p-2.5 text-muted-foreground font-mono text-[11px] break-all">
-                                    {p.type}
+                                  <td className="py-3 px-3 align-top whitespace-normal">
+                                    <code className="text-[11px] font-mono text-sky-600 dark:text-sky-400 bg-sky-500/10 dark:bg-sky-500/15 border border-sky-500/20 px-1.5 py-0.5 rounded inline-block break-words max-w-[200px] leading-relaxed">
+                                      {p.type}
+                                    </code>
                                   </td>
-                                  <td className="p-2.5 text-muted-foreground font-mono text-[11px]">
-                                    {p.defaultValue ?? "—"}
+                                  <td className="py-3 px-3 align-top font-mono text-[11px]">
+                                    {p.defaultValue &&
+                                    p.defaultValue !== "undefined" ? (
+                                      <code
+                                        className="text-muted-foreground dark:text-zinc-400 bg-muted/80 dark:bg-white/5 border border-border/80 dark:border-white/10 px-1.5 py-0.5 rounded inline-block max-w-[130px] truncate align-middle"
+                                        title={p.defaultValue}
+                                      >
+                                        {p.defaultValue}
+                                      </code>
+                                    ) : (
+                                      <span className="text-muted-foreground/40 font-mono text-[11px] select-none">
+                                        —
+                                      </span>
+                                    )}
                                   </td>
-                                  <td className="p-2.5 text-foreground font-sans font-light leading-relaxed">
+                                  <td className="py-3 px-3 text-foreground/85 dark:text-zinc-300 font-sans font-light leading-relaxed text-xs align-top">
                                     {p.description}
                                   </td>
                                 </tr>
