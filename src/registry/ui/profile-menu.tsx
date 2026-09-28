@@ -156,6 +156,42 @@ export function ProfileMenu({
     }, 2000);
   }, []);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const syncTheme = () => {
+      const stored = localStorage.getItem("theme");
+      if (stored === "light" || stored === "dark" || stored === "system") {
+        setInternalTheme(stored);
+      } else {
+        setInternalTheme(
+          document.documentElement.classList.contains("dark")
+            ? "dark"
+            : "light",
+        );
+      }
+    };
+
+    const observer = new MutationObserver(() => {
+      if (!localStorage.getItem("theme")) {
+        syncTheme();
+      }
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+
+    window.addEventListener("storage", syncTheme);
+    window.addEventListener("theme-change", syncTheme);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("storage", syncTheme);
+      window.removeEventListener("theme-change", syncTheme);
+    };
+  }, []);
+
   const handleThemeSelect = useCallback(
     (nextTheme: ThemeValue) => {
       setInternalTheme(nextTheme);
@@ -163,11 +199,13 @@ export function ProfileMenu({
       if (typeof document !== "undefined") {
         if (nextTheme === "dark") {
           document.documentElement.classList.add("dark");
+          document.documentElement.style.colorScheme = "dark";
           try {
             localStorage.setItem("theme", "dark");
           } catch {}
         } else if (nextTheme === "light") {
           document.documentElement.classList.remove("dark");
+          document.documentElement.style.colorScheme = "light";
           try {
             localStorage.setItem("theme", "light");
           } catch {}
@@ -176,11 +214,24 @@ export function ProfileMenu({
             "(prefers-color-scheme: dark)",
           ).matches;
           document.documentElement.classList.toggle("dark", isDark);
+          document.documentElement.style.colorScheme = isDark
+            ? "dark"
+            : "light";
           try {
             localStorage.setItem("theme", "system");
           } catch {}
         }
-        window.dispatchEvent(new Event("storage"));
+        window.dispatchEvent(
+          new StorageEvent("storage", {
+            key: "theme",
+            newValue: nextTheme,
+          }),
+        );
+        window.dispatchEvent(
+          new CustomEvent("theme-change", {
+            detail: { theme: nextTheme },
+          }),
+        );
       }
     },
     [onThemeChange],
