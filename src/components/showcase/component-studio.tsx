@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo, useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { AnimatePresence, motion } from "motion/react";
 import {
   ArrowRightIcon,
@@ -2214,12 +2215,16 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
           {sidebarOpen ? (
             <Link
               href="/"
-              className="flex items-center gap-2 group text-foreground hover:opacity-85 transition-opacity"
+              className="flex items-center group hover:opacity-80 transition-opacity"
               title="DevClub Home"
             >
-              <span className="font-sans font-semibold text-sm tracking-tight text-foreground">
-                devclub
-              </span>
+              <Image
+                src="/logo-he.png"
+                alt="DevClub"
+                width={120}
+                height={50}
+                className="h-12 w-auto object-contain"
+              />
             </Link>
           ) : (
             <div></div>

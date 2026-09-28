@@ -96,7 +96,7 @@ npx shadcn@latest add https://devclub.co/r/[component].json
     <article className="space-y-12 max-w-2xl font-sans">
       <div className="space-y-3">
         <div className="flex items-center justify-between gap-4">
-          <h1 className="text-3xl sm:text-4xl font-sans font-bold tracking-tight text-foreground">
+          <h1 className="text-3xl sm:text-4xl font-serif font-normal tracking-tight text-foreground">
             Installation
           </h1>
           <button
@@ -208,7 +208,8 @@ npx shadcn@latest add https://devclub.co/r/[component].json
               </h3>
               <p className="text-xs text-muted-foreground font-light leading-relaxed">
                 Browse the library, open a component you like, and switch to its{" "}
-                <strong className="text-foreground font-medium">Code</strong> tab.
+                <strong className="text-foreground font-medium">Code</strong>{" "}
+                tab.
               </p>
             </section>
 
@@ -218,9 +219,9 @@ npx shadcn@latest add https://devclub.co/r/[component].json
               </h3>
               <p className="text-xs text-muted-foreground font-light leading-relaxed">
                 Choose your language and styling below. Every{" "}
-                <strong className="text-foreground font-medium">Code</strong> tab
-                across the site updates to match, and your choice is remembered on
-                this device.
+                <strong className="text-foreground font-medium">Code</strong>{" "}
+                tab across the site updates to match, and your choice is
+                remembered on this device.
               </p>
 
               <div className="flex flex-wrap items-center gap-2">
@@ -242,7 +243,8 @@ npx shadcn@latest add https://devclub.co/r/[component].json
                 3. Copy the code
               </h3>
               <p className="text-xs text-muted-foreground font-light leading-relaxed">
-                The <strong className="text-foreground font-medium">Code</strong>{" "}
+                The{" "}
+                <strong className="text-foreground font-medium">Code</strong>{" "}
                 tab now shows the full source for your selected stack — copy it
                 into a new file in your project.
               </p>
@@ -254,8 +256,8 @@ npx shadcn@latest add https://devclub.co/r/[component].json
               </h3>
               <p className="text-xs text-muted-foreground font-light leading-relaxed">
                 If a component relies on external libraries, its{" "}
-                <strong className="text-foreground font-medium">Code</strong> tab
-                lists them. Install what it needs:
+                <strong className="text-foreground font-medium">Code</strong>{" "}
+                tab lists them. Install what it needs:
               </p>
 
               <SnippetBlock code="npm install clsx tailwind-merge gsap @gsap/react motion" />
@@ -282,9 +284,9 @@ export default function Page() {
                 That&apos;s all!
               </h3>
               <p className="text-xs text-muted-foreground font-light leading-relaxed">
-                From here on, it&apos;s all about how you integrate the component into
-                your project. The code is yours to play around with — modify
-                styling, functionality, anything goes!
+                From here on, it&apos;s all about how you integrate the
+                component into your project. The code is yours to play around
+                with — modify styling, functionality, anything goes!
               </p>
             </section>
           </motion.div>
@@ -302,7 +304,8 @@ export default function Page() {
                 Steps
               </h2>
               <p className="text-xs text-muted-foreground font-light leading-relaxed">
-                Pull components directly into your project using terminal commands.
+                Pull components directly into your project using terminal
+                commands.
               </p>
             </div>
 
@@ -311,8 +314,9 @@ export default function Page() {
                 1. DevClub UI CLI Runner
               </h3>
               <p className="text-xs text-muted-foreground font-light leading-relaxed">
-                Use the official <code className="text-foreground">@devclubnst/ui</code>{" "}
-                runner to download components straight into your workspace:
+                Use the official{" "}
+                <code className="text-foreground">@devclubnst/ui</code> runner
+                to download components straight into your workspace:
               </p>
 
               <SnippetBlock code="npx @devclubnst/ui add noise" />
@@ -336,8 +340,9 @@ export default function Page() {
                 2. Install via shadcn CLI
               </h3>
               <p className="text-xs text-muted-foreground font-light leading-relaxed">
-                Every DevClub UI component complies with the open shadcn registry
-                schema. You can add components with the standard shadcn CLI:
+                Every DevClub UI component complies with the open shadcn
+                registry schema. You can add components with the standard shadcn
+                CLI:
               </p>
 
               <SnippetBlock code="npx shadcn@latest add https://devclub.co/r/noise.json" />
@@ -355,8 +360,8 @@ export default function Page() {
               </h3>
               <p className="text-xs text-muted-foreground font-light leading-relaxed">
                 Components are automatically written to your{" "}
-                <code className="text-foreground">@/components/ui/</code> directory.
-                Peer dependencies are installed automatically.
+                <code className="text-foreground">@/components/ui/</code>{" "}
+                directory. Peer dependencies are installed automatically.
               </p>
             </section>
 

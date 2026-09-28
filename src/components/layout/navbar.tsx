@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   HamburgerMenuIcon,
@@ -28,15 +29,20 @@ export const Navbar = ({ showThemeToggle }: NavbarProps = {}) => {
   return (
     <header className="sticky top-0 z-100 w-full border-b border-border bg-background/85 backdrop-blur-xl transition-colors duration-200">
       <div className="max-w-7xl mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center gap-6 lg:gap-8">
+        <div className="flex items-center">
           <Link
             href="/"
             className="group flex items-center shrink-0 focus-visible:outline-none"
             aria-label="DevClub Home"
           >
-            <span className="font-sans font-semibold text-lg tracking-tight text-foreground transition-colors group-hover:opacity-80">
-              devclub
-            </span>
+            <Image
+              src="/logo-he.png"
+              alt="DevClub"
+              width={180}
+              height={60}
+              className="h-12 w-auto object-contain transition-opacity group-hover:opacity-80"
+              priority
+            />
           </Link>
 
           <nav className="hidden md:flex items-center gap-1">

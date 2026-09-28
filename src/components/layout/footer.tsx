@@ -1,32 +1,25 @@
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { GitHubLogoIcon, TwitterLogoIcon } from "@radix-ui/react-icons";
 import { SITE_CONFIG } from "@/lib/constants";
 
 export const Footer = () => {
   return (
-    <footer className="border-t border-border bg-background py-12 text-muted-foreground font-mono transition-colors duration-200">
+    <footer className="border-t border-border bg-background py-12 text-muted-foreground font-sans transition-colors duration-200">
       <div className="h-2 w-full mb-10 bg-[repeating-linear-gradient(90deg,currentColor_0px,currentColor_1px,transparent_1px,transparent_8px)] text-border-subtle border-b border-border" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-10">
           <div className="space-y-3 md:col-span-2">
             <div className="flex items-center gap-2.5">
-              <div className="w-5 h-5 border border-foreground flex items-center justify-center p-0.5">
-                <svg
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  className="w-full h-full stroke-foreground"
-                  strokeWidth="1.2"
-                >
-                  <rect x="1" y="1" width="14" height="14" />
-                  <line x1="1" y1="1" x2="15" y2="15" />
-                  <line x1="15" y1="1" x2="1" y2="15" />
-                </svg>
-              </div>
-              <span className="font-sans font-medium text-base tracking-tight text-foreground">
-                devclub
-              </span>
+              <Image
+                src="/logo-he.png"
+                alt="DevClub"
+                width={180}
+                height={60}
+                className="h-12 w-auto object-contain"
+              />
             </div>
             <p className="text-xs text-muted-foreground max-w-sm leading-relaxed font-sans">
               {SITE_CONFIG.description}
