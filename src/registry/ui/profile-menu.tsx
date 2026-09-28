@@ -474,7 +474,13 @@ export function ProfileMenu({
               alt="Profile"
               className="size-9 rounded-full object-cover ring-1 ring-border/70 dark:ring-white/15 shadow-xs"
             />
-          )}{" "}
+          )}
+          {online && (
+            <span className="absolute bottom-0 right-0 flex size-2.5 items-center justify-center">
+              <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex size-2 rounded-full bg-emerald-500 ring-2 ring-background dark:ring-zinc-950" />
+            </span>
+          )}
         </div>
 
         <div className="flex flex-1 min-w-0 flex-col justify-center">

@@ -321,6 +321,16 @@ const ALL_CATEGORIES = [
       },
     ],
   },
+  {
+    label: "PROFILE & MENUS",
+    items: [
+      {
+        label: "Profile Menu",
+        slug: "profile-menu",
+        href: "/components/profile-menu",
+      },
+    ],
+  },
 ];
 
 const CATEGORIES = ALL_CATEGORIES.map((cat) => ({
