@@ -18,7 +18,7 @@ export default function Home() {
       className="dark min-h-screen flex flex-col bg-[#050505] text-[#f4f4f5]"
       style={{ colorScheme: "dark" }}
     >
-      <Navbar showThemeToggle={false} />
+      <Navbar showThemeToggle={false} forceLight />
       <main className="flex-1 flex flex-col">
         <HeroSection />
       </main>

@@ -18,9 +18,10 @@ import { useIsDark } from "@/lib/use-is-dark";
 
 export interface NavbarProps {
   showThemeToggle?: boolean;
+  forceLight?: boolean;
 }
 
-export const Navbar = ({ showThemeToggle }: NavbarProps = {}) => {
+export const Navbar = ({ showThemeToggle, forceLight }: NavbarProps = {}) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
   const isDark = useIsDark();
@@ -29,7 +30,14 @@ export const Navbar = ({ showThemeToggle }: NavbarProps = {}) => {
     showThemeToggle !== undefined ? showThemeToggle : !isHomePage;
 
   return (
-    <header className="sticky top-0 z-100 w-full border-b border-border bg-background/85 backdrop-blur-xl transition-colors duration-200">
+    <header
+      className={cn(
+        "sticky top-0 z-100 w-full border-b transition-colors duration-200",
+        forceLight
+          ? "border-zinc-200 bg-white/95 backdrop-blur-xl"
+          : "border-border bg-background/85 backdrop-blur-xl",
+      )}
+    >
       <div className="max-w-7xl mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex items-center">
           <Link
@@ -59,9 +67,13 @@ export const Navbar = ({ showThemeToggle }: NavbarProps = {}) => {
                   href={item.href}
                   className={cn(
                     "px-3.5 py-1.5 rounded-full text-xs font-sans font-medium transition-all duration-150",
-                    isActive
-                      ? "text-foreground bg-foreground/10 font-semibold"
-                      : "text-muted-foreground hover:text-foreground hover:bg-foreground/5",
+                    forceLight
+                      ? isActive
+                        ? "text-zinc-900 bg-zinc-900/10 font-semibold"
+                        : "text-zinc-500 hover:text-zinc-900 hover:bg-zinc-900/5"
+                      : isActive
+                        ? "text-foreground bg-foreground/10 font-semibold"
+                        : "text-muted-foreground hover:text-foreground hover:bg-foreground/5",
                   )}
                 >
                   {item.label}
@@ -75,7 +87,14 @@ export const Navbar = ({ showThemeToggle }: NavbarProps = {}) => {
           <GitHubButton />
 
           {shouldShowThemeToggle && (
-            <AnimatedThemeToggler className="relative flex items-center justify-center w-9 h-9 rounded-full border border-border bg-foreground/5 hover:bg-foreground/10 text-foreground transition-all duration-200 cursor-pointer shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20 shrink-0" />
+            <AnimatedThemeToggler
+              className={cn(
+                "relative flex items-center justify-center w-9 h-9 rounded-full border transition-all duration-200 cursor-pointer shadow-sm focus-visible:outline-none focus-visible:ring-2 shrink-0",
+                forceLight
+                  ? "border-zinc-200 bg-zinc-100 hover:bg-zinc-200 text-zinc-700 focus-visible:ring-zinc-300"
+                  : "border-border bg-foreground/5 hover:bg-foreground/10 text-foreground focus-visible:ring-foreground/20",
+              )}
+            />
           )}
 
           <CandyButton
@@ -93,7 +112,12 @@ export const Navbar = ({ showThemeToggle }: NavbarProps = {}) => {
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
-            className="md:hidden w-9 h-9 rounded-full border border-border bg-foreground/5 hover:bg-foreground/10 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors cursor-pointer shrink-0"
+            className={cn(
+              "md:hidden w-9 h-9 rounded-full border flex items-center justify-center transition-colors cursor-pointer shrink-0",
+              forceLight
+                ? "border-zinc-200 bg-zinc-100 hover:bg-zinc-200 text-zinc-600 hover:text-zinc-900"
+                : "border-border bg-foreground/5 hover:bg-foreground/10 text-muted-foreground hover:text-foreground",
+            )}
           >
             {mobileMenuOpen ? (
               <Cross2Icon className="h-4 w-4" />
@@ -105,7 +129,14 @@ export const Navbar = ({ showThemeToggle }: NavbarProps = {}) => {
       </div>
 
       {mobileMenuOpen && (
-        <div className="md:hidden border-b border-border bg-background/95 px-4 py-4 space-y-3 backdrop-blur-xl">
+        <div
+          className={cn(
+            "md:hidden border-b px-4 py-4 space-y-3 backdrop-blur-xl",
+            forceLight
+              ? "border-zinc-200 bg-white/95"
+              : "border-border bg-background/95",
+          )}
+        >
           <div className="space-y-1">
             {NAV_ITEMS.map((item) => {
               const isActive =
@@ -119,9 +150,13 @@ export const Navbar = ({ showThemeToggle }: NavbarProps = {}) => {
                   onClick={() => setMobileMenuOpen(false)}
                   className={cn(
                     "block px-3 py-2 rounded-lg text-sm font-medium transition-colors",
-                    isActive
-                      ? "text-foreground bg-foreground/10 font-semibold"
-                      : "text-muted-foreground hover:text-foreground hover:bg-foreground/5",
+                    forceLight
+                      ? isActive
+                        ? "text-zinc-900 bg-zinc-900/10 font-semibold"
+                        : "text-zinc-500 hover:text-zinc-900 hover:bg-zinc-900/5"
+                      : isActive
+                        ? "text-foreground bg-foreground/10 font-semibold"
+                        : "text-muted-foreground hover:text-foreground hover:bg-foreground/5",
                   )}
                 >
                   {item.label}
@@ -130,7 +165,7 @@ export const Navbar = ({ showThemeToggle }: NavbarProps = {}) => {
             })}
           </div>
 
-          <div className="pt-3 border-t border-border flex items-center gap-2">
+          <div className="pt-3 border-t border-zinc-200 flex items-center gap-2">
             <CandyButton
               as={Link}
               href="/components"
