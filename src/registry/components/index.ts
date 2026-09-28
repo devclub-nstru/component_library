@@ -22,6 +22,7 @@ import noise from "./noise.json";
 import orb from "./orb.json";
 import otpInput from "./otp-input.json";
 import pixelCard from "./pixel-card.json";
+import profileMenu from "./profile-menu.json";
 import proximitySidebar from "./proximity-sidebar.json";
 import scales from "./scales.json";
 import searchInput from "./search-input.json";
@@ -58,6 +59,7 @@ export {
   orb,
   otpInput,
   pixelCard,
+  profileMenu,
   proximitySidebar,
   scales,
   searchInput,
@@ -95,6 +97,7 @@ export const componentsList: ComponentRegistryItem[] = [
   orb as ComponentRegistryItem,
   otpInput as ComponentRegistryItem,
   pixelCard as ComponentRegistryItem,
+  profileMenu as ComponentRegistryItem,
   proximitySidebar as ComponentRegistryItem,
   scales as ComponentRegistryItem,
   searchInput as ComponentRegistryItem,

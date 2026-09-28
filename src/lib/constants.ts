@@ -25,6 +25,7 @@ export const CATEGORIES = [
   { id: "layout", label: "Layout & Grids" },
   { id: "ai-stuff", label: "AI Stuff" },
   { id: "apple-ui", label: "Apple UI" },
+  { id: "menus", label: "Profile & Menus" },
 ];
 
 export interface DocsNavItem {

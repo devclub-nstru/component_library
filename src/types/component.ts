@@ -9,7 +9,9 @@ export type ComponentCategory =
   | "inputs"
   | "accordion"
   | "ai-stuff"
-  | "apple-ui";
+  | "apple-ui"
+  | "menus"
+  | "profile";
 
 export interface ComponentProp {
   name: string;

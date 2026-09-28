@@ -51,6 +51,7 @@ const componentTitles = {
   "theme-toggle": "Theme Toggle",
   toast: "Toast",
   "twitter-card": "Twitter Card",
+  "profile-menu": "Profile Command Menu",
 };
 
 const getTarget = (filePath, fileName) => {

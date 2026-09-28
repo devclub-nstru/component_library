@@ -412,6 +412,23 @@
       ]
     },
     {
+      "name": "profile-menu",
+      "type": "registry:ui",
+      "title": "Profile Command Menu",
+      "description": "Tactile profile pill command menu with cycling status ticker, keyboard navigation, theme switcher, and smooth gliding highlight.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/profile-menu.tsx",
+          "type": "registry:ui",
+          "target": "@ui/profile-menu.tsx"
+        }
+      ]
+    },
+    {
       "name": "proximity-sidebar",
       "type": "registry:ui",
       "title": "Proximity Sidebar",
