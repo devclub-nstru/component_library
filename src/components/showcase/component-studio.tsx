@@ -1053,8 +1053,16 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [installTool, setInstallTool] = useState<InstallTool>(() => {
     if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("devclub_install_tool") as InstallTool | null;
-      if (saved && (saved === "npx" || saved === "pnpm" || saved === "bun" || saved === "shadcn")) {
+      const saved = localStorage.getItem(
+        "devclub_install_tool",
+      ) as InstallTool | null;
+      if (
+        saved &&
+        (saved === "npx" ||
+          saved === "pnpm" ||
+          saved === "bun" ||
+          saved === "shadcn")
+      ) {
         return saved;
       }
     }
@@ -1069,13 +1077,17 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (installMenuRef.current && !installMenuRef.current.contains(e.target as Node)) {
+      if (
+        installMenuRef.current &&
+        !installMenuRef.current.contains(e.target as Node)
+      ) {
         setInstallMenuOpen(false);
       }
     };
     if (installMenuOpen) {
       document.addEventListener("mousedown", handleClickOutside);
-      return () => document.removeEventListener("mousedown", handleClickOutside);
+      return () =>
+        document.removeEventListener("mousedown", handleClickOutside);
     }
   }, [installMenuOpen]);
 
@@ -1433,22 +1445,6 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
       case "animated-button":
         return (
           <div className="w-full max-w-md bg-card dark:bg-[#0c0c0e] border border-border dark:border-white/10 rounded-2xl p-6 shadow-2xl flex flex-col gap-6 select-none">
-            <div className="flex items-center justify-between pb-3 border-b border-border dark:border-white/8">
-              <div>
-                <h3 className="text-sm font-medium text-foreground dark:text-white">
-                  Interactive Action Stack
-                </h3>
-                <p className="text-[11px] text-muted-foreground dark:text-zinc-400 font-light mt-0.5">
-                  High-stiffness spring feedback & damping
-                </p>
-              </div>
-              <span
-                className="text-[10px] font-mono uppercase font-medium transition-colors duration-200"
-                style={{ color }}
-              >
-                Spring
-              </span>
-            </div>
             <div className="flex flex-col gap-3">
               <AnimatedButton
                 variant="primary"
@@ -1473,12 +1469,6 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               >
                 <span>Shimmer Glow</span>
               </AnimatedButton>
-            </div>
-            <div className="flex items-center justify-between pt-3 border-t border-border dark:border-white/8 text-[11px] font-mono text-muted-foreground dark:text-zinc-500">
-              <span>Stiffness: 420, Damping: 34</span>
-              <span className="text-muted-foreground dark:text-zinc-400">
-                GPU Accelerated
-              </span>
             </div>
           </div>
         );
@@ -2415,17 +2405,21 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     {installCopied ? (
                       <>
                         <CheckIcon className="w-3.5 h-3.5 text-emerald-400" />
-                        <span className="text-emerald-400 font-medium">Copied</span>
+                        <span className="text-emerald-400 font-medium">
+                          Copied
+                        </span>
                       </>
                     ) : (
                       <>
                         <span className="font-mono text-xs">
-                          {installTool === "npx" ? "npm i" : `${installTool} add`}
+                          {installTool === "npx"
+                            ? "npm i"
+                            : `${installTool} add`}
                         </span>
                       </>
                     )}
                   </motion.button>
-                  <div className="w-[1px] h-4 bg-border/80" />
+                  <div className="w-px h-4 bg-border/80" />
                   <button
                     type="button"
                     onClick={() => setInstallMenuOpen((prev) => !prev)}
@@ -2508,7 +2502,10 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             $
                           </span>
                           <span className="select-all">
-                            {getInstallCommand(activeComponent.slug, installTool)}
+                            {getInstallCommand(
+                              activeComponent.slug,
+                              installTool,
+                            )}
                           </span>
                         </div>
                         <motion.button
@@ -5196,7 +5193,11 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             <span className="text-emerald-400">Copied!</span>
                           </>
                         ) : (
-                          <span>{installTool === "npx" ? "npm i" : `${installTool} add`}</span>
+                          <span>
+                            {installTool === "npx"
+                              ? "npm i"
+                              : `${installTool} add`}
+                          </span>
                         )}
                       </motion.button>
 
@@ -5287,7 +5288,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               transition={panelSpring}
               className="shrink-0 h-full border border-border bg-card dark:bg-[#0c0c0e] rounded-3xl overflow-hidden flex flex-col"
             >
-              <div className="w-[490px] min-w-[490px] h-full p-6 sm:p-7 overflow-y-auto flex flex-col gap-6 scrollbar-none pb-12">
+              <div className="w-122.5 min-w-122.5 h-full p-6 sm:p-7 overflow-y-auto flex flex-col gap-6 scrollbar-none pb-12">
                 <motion.div
                   initial="hidden"
                   animate="visible"
@@ -5456,19 +5457,19 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           </span>
                         </div>
                         <div className="border border-border/80 dark:border-white/10 rounded-xl overflow-x-auto bg-card/60 dark:bg-zinc-950/60 shadow-xs">
-                          <table className="w-full text-left text-xs min-w-[560px] border-collapse">
-                            <thead className="bg-muted/70 dark:bg-white/[0.03] border-b border-border/80 dark:border-white/10 text-muted-foreground font-mono text-[10px] uppercase tracking-wider">
+                          <table className="w-full text-left text-xs min-w-140 border-collapse">
+                            <thead className="bg-muted/70 dark:bg-white/3 border-b border-border/80 dark:border-white/10 text-muted-foreground font-mono text-[10px] uppercase tracking-wider">
                               <tr>
-                                <th className="py-2.5 px-3 font-medium w-[22%] min-w-[110px]">
+                                <th className="py-2.5 px-3 font-medium w-[22%] min-w-27.5">
                                   Prop
                                 </th>
-                                <th className="py-2.5 px-3 font-medium w-[26%] min-w-[140px]">
+                                <th className="py-2.5 px-3 font-medium w-[26%] min-w-35">
                                   Type
                                 </th>
-                                <th className="py-2.5 px-3 font-medium w-[22%] min-w-[120px]">
+                                <th className="py-2.5 px-3 font-medium w-[22%] min-w-30">
                                   Default
                                 </th>
-                                <th className="py-2.5 px-3 font-medium w-[30%] min-w-[190px]">
+                                <th className="py-2.5 px-3 font-medium w-[30%] min-w-47.5">
                                   Description
                                 </th>
                               </tr>
@@ -5477,7 +5478,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               {activeComponent.props.map((p) => (
                                 <tr
                                   key={p.name}
-                                  className="hover:bg-muted/40 dark:hover:bg-white/[0.02] transition-colors align-top"
+                                  className="hover:bg-muted/40 dark:hover:bg-white/2 transition-colors align-top"
                                 >
                                   <td className="py-3 px-3 font-mono">
                                     <div className="flex flex-col items-start gap-1">
@@ -5496,7 +5497,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                     </div>
                                   </td>
                                   <td className="py-3 px-3 align-top whitespace-normal">
-                                    <code className="text-[11px] font-mono text-sky-600 dark:text-sky-400 bg-sky-500/10 dark:bg-sky-500/15 border border-sky-500/20 px-1.5 py-0.5 rounded inline-block break-words max-w-[200px] leading-relaxed">
+                                    <code className="text-[11px] font-mono text-sky-600 dark:text-sky-400 bg-sky-500/10 dark:bg-sky-500/15 border border-sky-500/20 px-1.5 py-0.5 rounded inline-block wrap-break-word max-w-50 leading-relaxed">
                                       {p.type}
                                     </code>
                                   </td>
@@ -5504,7 +5505,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                     {p.defaultValue &&
                                     p.defaultValue !== "undefined" ? (
                                       <code
-                                        className="text-muted-foreground dark:text-zinc-400 bg-muted/80 dark:bg-white/5 border border-border/80 dark:border-white/10 px-1.5 py-0.5 rounded inline-block max-w-[130px] truncate align-middle"
+                                        className="text-muted-foreground dark:text-zinc-400 bg-muted/80 dark:bg-white/5 border border-border/80 dark:border-white/10 px-1.5 py-0.5 rounded inline-block max-w-32.5 truncate align-middle"
                                         title={p.defaultValue}
                                       >
                                         {p.defaultValue}
@@ -5674,7 +5675,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     </div>
                     <div className="flex items-center justify-between p-2.5 bg-muted/40 border border-border rounded-lg font-mono text-xs">
                       <div className="flex items-center gap-1.5 min-w-0 pr-2">
-                        <span className="text-orange-500 select-none font-bold">$</span>
+                        <span className="text-orange-500 select-none font-bold">
+                          $
+                        </span>
                         <span className="text-foreground truncate select-all">
                           {`npx @devclubnst/ui add ${activeComponent.slug}`}
                         </span>
