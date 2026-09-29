@@ -94,7 +94,8 @@ export function Editor({
       if (document.queryCommandState("bold")) active.push("Bold");
       if (document.queryCommandState("italic")) active.push("Italic");
       if (document.queryCommandState("underline")) active.push("Underline");
-      if (document.queryCommandState("strikeThrough")) active.push("Strikethrough");
+      if (document.queryCommandState("strikeThrough"))
+        active.push("Strikethrough");
     }
     setActiveFormats(active);
   }, []);
@@ -104,7 +105,11 @@ export function Editor({
     if (selection && !selection.isCollapsed) {
       const range = selection.getRangeAt(0);
       savedRange.current = range.cloneRange();
-      if (typeof CSS !== "undefined" && "highlights" in CSS && typeof Highlight !== "undefined") {
+      if (
+        typeof CSS !== "undefined" &&
+        "highlights" in CSS &&
+        typeof Highlight !== "undefined"
+      ) {
         try {
           CSS.highlights.set("editor-ask", new Highlight(range.cloneRange()));
         } catch {}
@@ -280,7 +285,10 @@ export function Editor({
   }, [exitAskMode, updateActiveFormats]);
 
   return (
-    <div ref={wrap} className={cn("relative selection:bg-primary/20", className)}>
+    <div
+      ref={wrap}
+      className={cn("relative selection:bg-primary/20", className)}
+    >
       <style>{`
         ::highlight(editor-ask) {
           background-color: rgba(99, 102, 241, 0.28);
@@ -297,7 +305,7 @@ export function Editor({
         role="textbox"
         aria-multiline="true"
         aria-label={title ?? "Document"}
-        className="min-h-[150px] rounded-2xl border border-border/60 bg-card p-6 outline-none transition-colors focus-visible:border-primary/50 shadow-xs"
+        className="min-h-37.5 rounded-2xl border border-border/60 bg-card p-6 outline-none transition-colors focus-visible:border-primary/50 shadow-xs"
       >
         {title ? (
           <h3 className="font-serif text-2xl font-semibold tracking-tight text-foreground">
@@ -305,7 +313,12 @@ export function Editor({
           </h3>
         ) : null}
 
-        <p className={cn("text-sm leading-relaxed text-muted-foreground", title && "mt-4")}>
+        <p
+          className={cn(
+            "text-sm leading-relaxed text-muted-foreground",
+            title && "mt-4",
+          )}
+        >
           {children}
         </p>
       </div>
@@ -416,7 +429,10 @@ function SelectionToolbar({
 
   useEffect(() => {
     if (!answering || shown >= words.length) return;
-    const timer = window.setTimeout(() => setShown((count) => count + 1), ANSWER_WORD_MS);
+    const timer = window.setTimeout(
+      () => setShown((count) => count + 1),
+      ANSWER_WORD_MS,
+    );
     return () => window.clearTimeout(timer);
   }, [answering, shown, words.length]);
 
@@ -463,11 +479,11 @@ function SelectionToolbar({
         }
       }}
       className={cn(
-        "group relative flex w-[370px] sm:w-[410px] flex-col overflow-hidden rounded-2xl",
+        "group relative flex w-92.5 sm:w-102.5 flex-col overflow-hidden rounded-2xl",
         "border border-border/80 bg-card/95 dark:bg-[#121215]/95 backdrop-blur-2xl",
         "text-muted-foreground shadow-[0_16px_44px_-8px_rgba(0,0,0,0.22),0_4px_16px_-4px_rgba(0,0,0,0.12)]",
         "dark:shadow-[0_24px_56px_-10px_rgba(0,0,0,0.85),0_0_0_1px_rgba(255,255,255,0.08)]",
-        "transition-colors"
+        "transition-colors",
       )}
     >
       <div
@@ -475,7 +491,7 @@ function SelectionToolbar({
         style={{ left: `calc(50% + ${arrowOffset}px)` }}
         className={cn(
           "pointer-events-none absolute -translate-x-1/2",
-          placeBottom ? "-top-1" : "-bottom-1"
+          placeBottom ? "-top-1" : "-bottom-1",
         )}
       >
         <div
@@ -483,7 +499,7 @@ function SelectionToolbar({
             "size-2.5 rotate-45 bg-card dark:bg-[#121215]",
             placeBottom
               ? "border-l border-t border-border/80"
-              : "border-r border-b border-border/80"
+              : "border-r border-b border-border/80",
           )}
         />
       </div>
@@ -506,13 +522,16 @@ function SelectionToolbar({
                 type="button"
                 onClick={() => {
                   onAsk();
-                  setTimeout(() => input.current?.focus({ preventScroll: true }), 40);
+                  setTimeout(
+                    () => input.current?.focus({ preventScroll: true }),
+                    40,
+                  );
                 }}
                 className={cn(
                   "flex h-8 items-center gap-2 rounded-xl pl-2 pr-3.5 text-xs font-semibold text-foreground",
-                  "bg-gradient-to-r from-violet-500/10 via-cyan-500/10 to-transparent",
+                  "bg-linear-to-r from-violet-500/10 via-cyan-500/10 to-transparent",
                   "border border-border/60 hover:border-violet-500/40 hover:from-violet-500/15 hover:to-cyan-500/15",
-                  "transition-all cursor-pointer shadow-2xs"
+                  "transition-all cursor-pointer shadow-2xs",
                 )}
               >
                 <EditorOrb stirring={false} />
@@ -537,10 +556,13 @@ function SelectionToolbar({
                         "relative flex size-7.5 items-center justify-center rounded-lg transition-colors cursor-pointer",
                         isActive
                           ? "bg-foreground text-background dark:bg-white dark:text-black font-semibold shadow-xs"
-                          : "text-muted-foreground hover:bg-muted/80 hover:text-foreground active:bg-muted"
+                          : "text-muted-foreground hover:bg-muted/80 hover:text-foreground active:bg-muted",
                       )}
                     >
-                      <Icon className="size-3.5" strokeWidth={isActive ? 2.6 : 2} />
+                      <Icon
+                        className="size-3.5"
+                        strokeWidth={isActive ? 2.6 : 2}
+                      />
                     </motion.button>
                   );
                 })}
@@ -759,7 +781,9 @@ function SelectionToolbar({
                         {copied ? (
                           <>
                             <IconCheck className="size-3 text-emerald-500" />
-                            <span className="text-emerald-500 font-medium">Copied</span>
+                            <span className="text-emerald-500 font-medium">
+                              Copied
+                            </span>
                           </>
                         ) : (
                           <>
