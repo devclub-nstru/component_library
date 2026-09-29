@@ -5614,49 +5614,6 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   </div>
                 </div>
               )}
-
-              {activeComponent.slug === "editor" && (
-                <div
-                  key="editor-customize-panel"
-                  className="pointer-events-auto rounded-2xl border border-border dark:border-white/10 bg-card/95 dark:bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-xl max-w-xl w-full mx-4 select-none flex flex-col gap-2.5"
-                >
-                  <div className="flex items-center justify-between px-1">
-                    <span className="text-xs font-semibold text-foreground">
-                      Selection Editor Studio
-                    </span>
-                    <span className="text-[11px] font-mono text-muted-foreground">
-                      Highlight document text to interact
-                    </span>
-                  </div>
-
-                  <div className="flex flex-wrap items-center gap-2 pt-1 border-t border-border dark:border-white/5">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setEditorDemoContent(
-                          "DevClub UI components are engineered with mathematical spring physics, subpixel alignment, and hardware-accelerated GPU animations. Try selecting any portion of this paragraph to trigger the contextual floating toolbar: you can toggle formatting like bold, italic, and code, or click 'Ask AI' to stream a real-time AI response with staged reasoning."
-                        );
-                      }}
-                      className="h-7 px-2.5 rounded-lg border border-border bg-card hover:bg-muted text-xs font-medium text-foreground transition-all flex items-center gap-1.5 cursor-pointer"
-                    >
-                      <ResetIcon className="w-3 h-3 text-muted-foreground" />
-                      <span>Reset Content</span>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setEditorDemoAnswer(
-                          "The CSS Highlight API allows developers to style arbitrary text ranges without modifying DOM tree nodes. Combined with Framer Motion spring physics, this achieves 60fps responsive floating controls."
-                        );
-                      }}
-                      className="h-7 px-2.5 rounded-lg border border-border bg-card hover:bg-muted text-xs font-medium text-foreground transition-all flex items-center gap-1.5 cursor-pointer"
-                    >
-                      <span>Custom AI Answer</span>
-                    </button>
-                  </div>
-                </div>
-              )}
             </div>
           </div>
 
