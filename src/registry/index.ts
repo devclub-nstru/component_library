@@ -10,6 +10,7 @@ import {
   codeBlock,
   dither,
   dottedAccordion,
+  fileUpload,
   fileTree,
   githubActivity,
   glowingBadge,
@@ -25,6 +26,7 @@ import {
   pixelCard,
   profileMenu,
   proximitySidebar,
+  revealSheet,
   scales,
   searchInput,
   smoothAccordion,
@@ -38,8 +40,10 @@ import {
 } from "./components";
 
 export const COMPONENT_REGISTRY: Record<string, ComponentRegistryItem> = {
+  "file-upload": fileUpload as ComponentRegistryItem,
   scales: scales as ComponentRegistryItem,
   "animated-button": animatedButton as ComponentRegistryItem,
+  "reveal-sheet": revealSheet as ComponentRegistryItem,
   "spotlight-card": spotlightCard as ComponentRegistryItem,
   dither: dither as ComponentRegistryItem,
   "ai-orb": aiOrb as ComponentRegistryItem,

@@ -198,6 +198,32 @@
       ]
     },
     {
+      "name": "file-upload",
+      "type": "registry:ui",
+      "title": "File Upload",
+      "description": "Accessible drag-and-drop file uploader with an animated folder and per-file progress states.",
+      "dependencies": [
+        "@gsap/react",
+        "gsap",
+        "@radix-ui/react-slot",
+        "class-variance-authority",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/button.tsx",
+          "type": "registry:ui",
+          "target": "@ui/button.tsx"
+        },
+        {
+          "path": "src/registry/ui/file-upload.tsx",
+          "type": "registry:ui",
+          "target": "@ui/file-upload.tsx"
+        }
+      ]
+    },
+    {
       "name": "github-activity",
       "type": "registry:ui",
       "title": "GitHub Activity",
@@ -443,6 +469,27 @@
           "path": "src/registry/ui/proximity-sidebar.tsx",
           "type": "registry:ui",
           "target": "@ui/proximity-sidebar.tsx"
+        }
+      ]
+    },
+    {
+      "name": "reveal-sheet",
+      "type": "registry:ui",
+      "title": "Reveal Sheet",
+      "description": "Directional accessible sheet with a circular reveal, adjustable bounce, and optional edge shine.",
+      "dependencies": [
+        "@radix-ui/react-dialog",
+        "@gsap/react",
+        "gsap",
+        "lucide-react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/reveal-sheet.tsx",
+          "type": "registry:ui",
+          "target": "@ui/reveal-sheet.tsx"
         }
       ]
     },

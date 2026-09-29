@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { ComponentCard } from "@/components/showcase/component-card";
@@ -24,6 +24,7 @@ import { AiOrb } from "@/registry/ui/ai-orb";
 import { TwitterCard } from "@/registry/ui/twitter-card";
 import { ToasterDemo } from "@/registry/ui/toast";
 import { TaskList } from "@/registry/ui/task-list";
+import { FileUpload } from "@/registry/ui/file-upload";
 import { SearchComposer } from "@/registry/ui/search-input";
 import { MorphSearch } from "@/registry/ui/morph-search";
 import { Orb } from "@/registry/ui/orb";
@@ -34,6 +35,7 @@ import { MacSlider } from "@/registry/ui/mac-slider";
 import { MacSwitch } from "@/registry/ui/mac-switch";
 import { SpotlightSearch } from "@/registry/ui/spotlight-search";
 import { ProfileMenu } from "@/registry/ui/profile-menu";
+import { RevealSheet } from "@/registry/ui/reveal-sheet";
 import { cn } from "@/lib/utils";
 
 function CounterPreview() {
@@ -83,6 +85,7 @@ function CounterPreview() {
 
 export default function ComponentsPage() {
   const allComponents = useMemo(() => getAllComponents(), []);
+  const [revealSheetOpen, setRevealSheetOpen] = useState(false);
 
   const previewRenderers: Record<string, React.ReactNode> = {
     scales: (
@@ -104,6 +107,34 @@ export default function ComponentsPage() {
           staticCard={true}
           enableCardTilt={false}
         />
+      </div>
+    ),
+    "reveal-sheet": (
+      <div className="flex flex-col items-center justify-center gap-3 select-none">
+        <button
+          type="button"
+          onClick={() => setRevealSheetOpen(true)}
+          className="rounded-full bg-foreground px-4 py-2 text-xs font-medium text-background transition-opacity hover:opacity-85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/40"
+        >
+          Open Reveal Sheet
+        </button>
+        <RevealSheet
+          open={revealSheetOpen}
+          onOpenChange={setRevealSheetOpen}
+          side="right"
+          title="Release checklist"
+          description="Track the final details before this component ships."
+        >
+          <TaskList
+            className="max-w-none"
+            defaultTasks={[
+              { id: "review", label: "Review the circular reveal", done: true },
+              { id: "directions", label: "Test every opening direction" },
+              { id: "accessibility", label: "Check keyboard and reduced motion" },
+              { id: "publish", label: "Publish the component" },
+            ]}
+          />
+        </RevealSheet>
       </div>
     ),
     "otp-input": (
@@ -290,6 +321,11 @@ export default function ComponentsPage() {
             { id: "p2", label: "Micro-particle bursts", done: true },
           ]}
         />
+      </div>
+    ),
+    "file-upload": (
+      <div className="pointer-events-none w-full max-w-80 origin-center scale-75 select-none">
+        <FileUpload uploadFile={async (_file, onProgress) => onProgress(100)} />
       </div>
     ),
     "search-input": (
