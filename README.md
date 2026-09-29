@@ -358,7 +358,7 @@ Please adhere to our [Code of Conduct](CODE_OF_CONDUCT.md) in all community inte
 
 ## Security Policy
 
-If you discover a security vulnerability or component prop injection risk, please review our [Security Policy](SECURITY.md) and report it via `security@devclub.co` or GitHub Private Security Advisories.
+If you discover a security vulnerability or component prop injection risk, please review our [Security Policy](SECURITY.md) and report it via `softwaredevg.club@rishihood.edu.in` or GitHub Private Security Advisories.
 
 ---
 
