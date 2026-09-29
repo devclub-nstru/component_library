@@ -132,7 +132,7 @@ export const TERMS_ITEMS: TermItem[] = [
     id: 14,
     title: "14. Security Vulnerabilities",
     paragraphs: [
-      "If you discover a security vulnerability affecting the Library, please report it through the Provider's designated security contact: security@devclub.co.",
+      "If you discover a security vulnerability affecting the Library, please report it through the Provider's designated security contact: softwaredevg.club@rishihood.edu.in.",
       "Security reports should include a description of the vulnerability, affected versions, reproduction steps, proof of concept where appropriate, potential impact, and suggested mitigation if known.",
       "You should avoid publicly disclosing sensitive vulnerability details before the Provider has had a reasonable opportunity to investigate and address the issue.",
     ],
@@ -761,7 +761,7 @@ export const TERMS_ITEMS: TermItem[] = [
     id: 99,
     title: "99. Responsible Disclosure",
     paragraphs: [
-      "Security researchers are encouraged to report vulnerabilities privately to security@devclub.co before public disclosure.",
+      "Security researchers are encouraged to report vulnerabilities privately to softwaredevg.club@rishihood.edu.in before public disclosure.",
     ],
   },
   {
@@ -999,7 +999,7 @@ export const TERMS_ITEMS: TermItem[] = [
     id: 133,
     title: "133. Contact Information",
     paragraphs: [
-      "For general support: support@devclub.co. For legal notices: legal@devclub.co. For security disclosures: security@devclub.co. For privacy: privacy@devclub.co.",
+      "For general support: support@devclub.co. For legal notices: legal@devclub.co. For security disclosures: softwaredevg.club@rishihood.edu.in. For privacy: privacy@devclub.co.",
     ],
   },
   {
@@ -1041,7 +1041,7 @@ export const TERMS_ITEMS: TermItem[] = [
     id: 139,
     title: "139. Recommended Security Contact",
     paragraphs: [
-      "For responsible security disclosures: security@devclub.co. Follow responsible disclosure timelines before making findings public.",
+      "For responsible security disclosures: softwaredevg.club@rishihood.edu.in. Follow responsible disclosure timelines before making findings public.",
     ],
   },
   {

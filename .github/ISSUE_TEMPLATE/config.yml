@@ -5,7 +5,7 @@ contact_links:
     about: Ask questions, share ideas, and connect with other developers using DevClub UI.
   - name: Security Vulnerability Report
     url: https://github.com/devclub-nstru/component_library/security/advisories/new
-    about: Report security issues privately through GitHub Advisories or security@devclub.co.
+    about: Report security issues privately through GitHub Advisories or softwaredevg.club@rishihood.edu.in.
   - name: DevClub UI Showcase
     url: https://devclubcompo.vercel.app
     about: Browse live interactive previews, prop controls, and code snippets.

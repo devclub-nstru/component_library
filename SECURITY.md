@@ -22,7 +22,7 @@ We take the security of **DevClub UI** seriously. If you discover a security vul
 Instead, report vulnerabilities through one of the following official channels:
 
 1. **GitHub Private Security Advisory**: Submit a report directly via our repository's [Security Advisories](https://github.com/devclub-nstru/component_library/security/advisories/new) tab.
-2. **Security Email**: Send an encrypted or plain text email to `security@devclub.co`.
+2. **Security Email**: Send an encrypted or plain text email to `softwaredevg.club@rishihood.edu.in`.
 
 ### What to Include in Your Report
 

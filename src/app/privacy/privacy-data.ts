@@ -493,7 +493,7 @@ export const PRIVACY_ITEMS: PrivacyItem[] = [
     id: 67,
     title: "67. Security Contact",
     paragraphs: [
-      "Report security vulnerabilities privately to security@devclub.co before coordinated disclosure.",
+      "Report security vulnerabilities privately to softwaredevg.club@rishihood.edu.in before coordinated disclosure.",
     ],
   },
   {
