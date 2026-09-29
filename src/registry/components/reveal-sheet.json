@@ -1,0 +1,213 @@
+{
+  "slug": "reveal-sheet",
+  "name": "Reveal Sheet",
+  "description": "Directional accessible sheet with a circular reveal, adjustable bounce, and optional edge shine.",
+  "summary": "A reusable Radix Dialog sheet that can open from any edge of the viewport. An inward-facing semicircle grows from the midpoint of that edge to reveal the panel, then its free edge pushes outward and springs back.",
+  "category": "layout",
+  "tags": [
+    "sheet",
+    "drawer",
+    "dialog",
+    "reveal",
+    "clip-path",
+    "gsap",
+    "responsive",
+    "accessible"
+  ],
+  "dependencies": [
+    "@radix-ui/react-dialog",
+    "@gsap/react",
+    "gsap",
+    "lucide-react",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "version": "1.0.0",
+  "createdDate": "2026-09-28",
+  "updatedDate": "2026-09-29",
+  "interactive": true,
+  "supportsColor": false,
+  "highlights": [
+    "Top, right, bottom, and left sheet directions through one side prop",
+    "Adjustable entrance and bounce speed through one speed multiplier",
+    "Optional grid and independently configurable animated edge shine",
+    "Edge-origin semicircular reveal with an elastic free-edge overshoot, powered by GSAP",
+    "Radix Dialog semantics, Escape handling, focus management, and portal rendering",
+    "Reduced-motion fallback and keyboard-visible close control",
+    "Children-first API for composing existing DevClub UI components"
+  ],
+  "anatomy": [
+    "Radix Dialog Overlay (dimmed, lightly blurred page backdrop)",
+    "Radix Dialog Content (directional fixed sheet with circular reveal)",
+    "Header (title, optional description, rotating close button)",
+    "Scrollable content region (consumer-provided component composition)"
+  ],
+  "physics": {
+    "engine": "GSAP clip-path reveal and elastic edge",
+    "description": "The sheet fills from an inward-facing semicircle centered on its viewport edge. As the fill reaches the far corners, the panel extends slightly past its free edge, then springs back to its resting size.",
+    "parameters": [
+      {
+        "label": "Reveal origin",
+        "value": "Midpoint of the selected viewport edge"
+      },
+      {
+        "label": "Reveal duration",
+        "value": "720ms at 1× speed"
+      },
+      {
+        "label": "Speed multiplier",
+        "value": "1× by default; scales the complete reveal and bounce timeline"
+      },
+      {
+        "label": "Reveal easing",
+        "value": "power3.inOut reveal followed by a four-step damped overshoot"
+      },
+      {
+        "label": "Edge overshoot",
+        "value": "3.2% along the sheet opening axis at bounce=1; adjustable from 0 to 2×"
+      },
+      {
+        "label": "Reduced motion",
+        "value": "Clip-path reveal and moving border highlight disabled; static highlight remains"
+      }
+    ]
+  },
+  "accessibility": {
+    "role": "dialog",
+    "aria": "Radix Dialog provides labelled content, modal semantics, focus management, Escape handling, and portal isolation.",
+    "reducedMotion": "The circular reveal and moving border highlight are skipped when prefers-reduced-motion is enabled.",
+    "keyboard": [
+      {
+        "key": "Tab / Shift + Tab",
+        "description": "Focus remains managed inside the open sheet."
+      },
+      {
+        "key": "Escape",
+        "description": "Closes the sheet."
+      },
+      {
+        "key": "Enter / Space",
+        "description": "Activates the focused close button."
+      }
+    ]
+  },
+  "guidelines": {
+    "recommended": [
+      "Component showcases, settings panels, editor inspectors, and contextual detail views",
+      "Using side=right for desktop inspector layouts and side=bottom for mobile-first actions",
+      "Composing existing DevClub UI primitives through children"
+    ],
+    "bestPractices": [
+      "Keep the sheet content focused on one task or collection",
+      "Provide a concise title and description for screen-reader users",
+      "Do not place another modal inside the sheet unless the interaction truly requires protected focus"
+    ]
+  },
+  "props": [
+    {
+      "name": "open",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "description": "Controls whether the sheet is visible.",
+      "required": true
+    },
+    {
+      "name": "onOpenChange",
+      "type": "(open: boolean) => void",
+      "defaultValue": "undefined",
+      "description": "Called when the sheet opens or closes.",
+      "required": true
+    },
+    {
+      "name": "side",
+      "type": "\"top\" | \"right\" | \"bottom\" | \"left\"",
+      "defaultValue": "\"right\"",
+      "description": "The viewport edge from which the sheet appears."
+    },
+    {
+      "name": "speed",
+      "type": "number",
+      "defaultValue": "1",
+      "description": "Playback multiplier for the complete opening animation; values above 1 are faster."
+    },
+    {
+      "name": "bounce",
+      "type": "number",
+      "defaultValue": "1",
+      "description": "Elastic overshoot strength from 0 (none) to 2 (pronounced)."
+    },
+    {
+      "name": "showGrid",
+      "type": "boolean",
+      "defaultValue": "true",
+      "description": "Whether to show the subtle grid texture inside the sheet."
+    },
+    {
+      "name": "showShine",
+      "type": "boolean",
+      "defaultValue": "true",
+      "description": "Whether to show the animated highlight tracing the sheet border."
+    },
+    {
+      "name": "shineDirection",
+      "type": "\"clockwise\" | \"counterclockwise\"",
+      "defaultValue": "\"clockwise\"",
+      "description": "Direction of travel for the border highlight."
+    },
+    {
+      "name": "shineSpeed",
+      "type": "number",
+      "defaultValue": "1",
+      "description": "Playback multiplier for the border highlight."
+    },
+    {
+      "name": "shineIntensity",
+      "type": "number",
+      "defaultValue": "0.55",
+      "description": "Border highlight opacity from 0 to 1."
+    },
+    {
+      "name": "title",
+      "type": "string",
+      "defaultValue": "\"Explore the collection\"",
+      "description": "Accessible sheet title displayed in the header."
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "defaultValue": "undefined",
+      "description": "Optional supporting text below the title."
+    },
+    {
+      "name": "children",
+      "type": "React.ReactNode",
+      "defaultValue": "undefined",
+      "description": "Sheet content, including existing DevClub UI components.",
+      "required": true
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "description": "Adds classes to the sheet panel."
+    },
+    {
+      "name": "showClose",
+      "type": "boolean",
+      "defaultValue": "true",
+      "description": "Whether to render the animated close button."
+    }
+  ],
+  "files": [
+    {
+      "name": "reveal-sheet.tsx",
+      "path": "registry/ui/reveal-sheet.tsx",
+      "code": "\"use client\";\n\nimport * as React from \"react\";\nimport * as Dialog from \"@radix-ui/react-dialog\";\nimport { useGSAP } from \"@gsap/react\";\nimport gsap from \"gsap\";\nimport { X } from \"lucide-react\";\nimport { cn } from \"@/lib/utils\";\n\ngsap.registerPlugin(useGSAP);\n\nexport type RevealSheetSide = \"top\" | \"right\" | \"bottom\" | \"left\";\n\nexport interface RevealSheetProps {\n  open: boolean;\n  onOpenChange: (open: boolean) => void;\n  side?: RevealSheetSide;\n  speed?: number;\n  bounce?: number;\n  showGrid?: boolean;\n  showShine?: boolean;\n  shineDirection?: \"clockwise\" | \"counterclockwise\";\n  shineSpeed?: number;\n  shineIntensity?: number;\n  title?: string;\n  description?: string;\n  children: React.ReactNode;\n  className?: string;\n  showClose?: boolean;\n}\n\nconst sideClasses: Record<RevealSheetSide, string> = {\n  top: \"inset-x-0 top-0 max-h-[85vh] rounded-b-3xl border-b\",\n  right: \"inset-y-0 right-0 w-full max-w-xl rounded-l-3xl border-l\",\n  bottom: \"inset-x-0 bottom-0 max-h-[85vh] rounded-t-3xl border-t\",\n  left: \"inset-y-0 left-0 w-full max-w-xl rounded-r-3xl border-r\",\n};\n\nconst transformOrigins: Record<RevealSheetSide, string> = {\n  top: \"center top\",\n  right: \"right center\",\n  bottom: \"center bottom\",\n  left: \"left center\",\n};\n\nconst revealOrigins: Record<RevealSheetSide, string> = {\n  top: \"50% 0%\",\n  right: \"100% 50%\",\n  bottom: \"50% 100%\",\n  left: \"0% 50%\",\n};\n\nconst closeButton =\n  \"group inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-transparent text-muted-foreground transition-colors duration-200 hover:text-red-500 dark:hover:text-red-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500/50\";\n\nconst RevealSheetPanel = ({\n  open,\n  onExitComplete,\n  overlayRef,\n  side = \"right\",\n  speed = 1,\n  bounce = 1,\n  showGrid = true,\n  showShine = true,\n  shineDirection = \"clockwise\",\n  shineSpeed = 1,\n  shineIntensity = 0.55,\n  title = \"Explore the collection\",\n  description,\n  children,\n  className,\n  showClose = true,\n}: Omit<RevealSheetProps, \"onOpenChange\"> & {\n  onExitComplete: () => void;\n  overlayRef: React.RefObject<HTMLDivElement | null>;\n}) => {\n  const contentRef = React.useRef<HTMLDivElement>(null);\n  const shineRef = React.useRef<HTMLDivElement>(null);\n  const timelineRef = React.useRef<gsap.core.Timeline | null>(null);\n  const bounceAmount = Number.isFinite(bounce)\n    ? Math.min(2, Math.max(0, bounce))\n    : 1;\n\n  useGSAP(\n    () => {\n      const media = gsap.matchMedia();\n\n      media.add(\"(prefers-reduced-motion: no-preference)\", () => {\n        const panel = contentRef.current;\n        const overlay = overlayRef.current;\n        if (!panel || !overlay) return;\n\n        const horizontal = side === \"left\" || side === \"right\";\n        const stretchAxis = horizontal ? \"scaleX\" : \"scaleY\";\n        const radius = horizontal\n          ? Math.hypot(panel.offsetWidth, panel.offsetHeight / 2) + 2\n          : Math.hypot(panel.offsetWidth / 2, panel.offsetHeight) + 2;\n        const origin = revealOrigins[side];\n\n        gsap.set(panel, {\n          clipPath: `circle(0px at ${origin})`,\n          transformOrigin: transformOrigins[side],\n          willChange: \"clip-path, transform\",\n        });\n\n        const timeline = gsap.timeline({\n          paused: true,\n          onComplete: () =>\n            gsap.set(panel, {\n              clearProps: \"clipPath,transform,transformOrigin,willChange\",\n            }),\n          onReverseComplete: onExitComplete,\n        })\n          .fromTo(\n            overlay,\n            { opacity: 0 },\n            { opacity: 1, duration: 0.35, ease: \"power2.out\" },\n            0,\n          )\n          .to(panel, {\n            clipPath: `circle(${radius}px at ${origin})`,\n            duration: 0.72,\n            ease: \"power3.inOut\",\n          }, 0)\n          .to(panel, {\n            [stretchAxis]: 1 + 0.032 * bounceAmount,\n            duration: 0.18,\n            ease: \"power3.out\",\n          }, \"-=0.18\")\n          .to(panel, {\n            [stretchAxis]: 1 - 0.008 * bounceAmount,\n            duration: 0.16,\n            ease: \"power2.inOut\",\n          })\n          .to(panel, {\n            [stretchAxis]: 1 + 0.006 * bounceAmount,\n            duration: 0.14,\n            ease: \"power2.out\",\n          })\n          .to(panel, {\n            [stretchAxis]: 1,\n            duration: 0.16,\n            ease: \"power2.out\",\n          })\n          .timeScale(Number.isFinite(speed) ? Math.max(0.1, speed) : 1);\n\n        timelineRef.current = timeline;\n        if (open) timeline.play();\n      }, contentRef);\n\n      return () => {\n        media.revert();\n        timelineRef.current = null;\n      };\n    },\n    { scope: contentRef },\n  );\n\n  useGSAP(\n    () => {\n      const shine = shineRef.current;\n      if (!shine || !showShine) return;\n      const media = gsap.matchMedia();\n      media.add(\"(prefers-reduced-motion: no-preference)\", () => {\n        gsap.fromTo(\n          shine,\n          { \"--shine-angle\": \"0deg\" },\n          {\n            \"--shine-angle\": shineDirection === \"clockwise\" ? \"360deg\" : \"-360deg\",\n            duration:\n              7 /\n              (Number.isFinite(shineSpeed)\n                ? Math.max(0.1, shineSpeed)\n                : 1),\n            ease: \"none\",\n            repeat: -1,\n          },\n        );\n      });\n      return () => media.revert();\n    },\n    {\n      scope: contentRef,\n      dependencies: [showShine, shineDirection, shineSpeed],\n      revertOnUpdate: true,\n    },\n  );\n\n  React.useEffect(() => {\n    const timeline = timelineRef.current;\n    if (open) {\n      timeline?.play();\n    } else if (timeline) {\n      gsap.set(contentRef.current, { willChange: \"clip-path, transform\" });\n      timeline.reverse();\n    } else {\n      onExitComplete();\n    }\n  }, [open, onExitComplete]);\n\n  return (\n    <Dialog.Content\n      ref={contentRef}\n      className={cn(\n        \"fixed z-50 flex flex-col overflow-hidden border-border/80 bg-[linear-gradient(155deg,#fff_0%,#f5f5f7_100%)] text-foreground shadow-[0_24px_80px_-28px_rgba(0,0,0,0.75)] outline-none dark:bg-[linear-gradient(155deg,#1c1c20_0%,#101013_100%)]\",\n        sideClasses[side],\n        className,\n      )}\n    >\n      {showGrid && (\n        <div className=\"pointer-events-none absolute inset-0 opacity-25 [background-image:linear-gradient(to_right,var(--line)_1px,transparent_1px),linear-gradient(to_bottom,var(--line)_1px,transparent_1px)] [background-size:32px_32px] [mask-image:linear-gradient(to_bottom,black,transparent_55%)]\" />\n      )}\n      <div className=\"relative flex min-h-0 flex-1 flex-col\">\n        <header className=\"flex items-start justify-between gap-6 border-b border-border/70 px-6 py-5 sm:px-8\">\n          <div className=\"min-w-0 space-y-1\">\n            <Dialog.Title className=\"font-serif text-2xl tracking-tight text-foreground sm:text-3xl\">\n              {title}\n            </Dialog.Title>\n            {description && (\n              <Dialog.Description className=\"max-w-md text-sm leading-6 text-muted-foreground\">\n                {description}\n              </Dialog.Description>\n            )}\n          </div>\n          {showClose && (\n            <Dialog.Close asChild>\n              <button\n                type=\"button\"\n                className={closeButton}\n                aria-label=\"Close sheet\"\n              >\n                <X className=\"size-4 motion-safe:transition-transform motion-safe:duration-300 motion-safe:ease-out motion-safe:group-hover:rotate-90 motion-safe:group-hover:scale-125\" />\n              </button>\n            </Dialog.Close>\n          )}\n        </header>\n        <div className=\"relative min-h-0 flex-1 overflow-y-auto px-6 py-6 sm:px-8\">\n          {children}\n        </div>\n      </div>\n      {showShine && (\n        <div\n          ref={shineRef}\n          aria-hidden=\"true\"\n          className=\"pointer-events-none absolute inset-0 rounded-[inherit] p-[2px] [background:conic-gradient(from_var(--shine-angle,0deg),transparent_0deg,transparent_298deg,rgba(255,255,255,0.15)_321deg,rgba(255,255,255,0.95)_338deg,rgba(255,255,255,0.15)_351deg,transparent_360deg)]\"\n          style={{\n            opacity: Number.isFinite(shineIntensity)\n              ? Math.min(1, Math.max(0, shineIntensity))\n              : 0.55,\n            mask: \"linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)\",\n            maskComposite: \"exclude\",\n            WebkitMaskComposite: \"xor\",\n          }}\n        />\n      )}\n    </Dialog.Content>\n  );\n};\n\nexport const RevealSheet = ({\n  open,\n  onOpenChange,\n  ...panelProps\n}: RevealSheetProps) => {\n  const [present, setPresent] = React.useState(open);\n  const overlayRef = React.useRef<HTMLDivElement>(null);\n  const onExitComplete = React.useCallback(() => setPresent(false), []);\n\n  if (open && !present) setPresent(true);\n\n  return (\n    <Dialog.Root open={present} onOpenChange={onOpenChange}>\n      <Dialog.Portal>\n        <Dialog.Overlay\n          ref={overlayRef}\n          className=\"fixed inset-0 z-40 bg-black/45 backdrop-blur-[2px]\"\n        />\n        <RevealSheetPanel\n          {...panelProps}\n          open={open}\n          onExitComplete={onExitComplete}\n          overlayRef={overlayRef}\n        />\n      </Dialog.Portal>\n    </Dialog.Root>\n  );\n};\n\nRevealSheet.displayName = \"RevealSheet\";\n\nexport default RevealSheet;\n",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport * as Dialog from \"@radix-ui/react-dialog\";\nimport { useGSAP } from \"@gsap/react\";\nimport gsap from \"gsap\";\nimport { X } from \"lucide-react\";\nimport { cn } from \"@/lib/utils\";\n\ngsap.registerPlugin(useGSAP);\n\nexport type RevealSheetSide = \"top\" | \"right\" | \"bottom\" | \"left\";\n\nexport interface RevealSheetProps {\n  open: boolean;\n  onOpenChange: (open: boolean) => void;\n  side?: RevealSheetSide;\n  speed?: number;\n  bounce?: number;\n  showGrid?: boolean;\n  showShine?: boolean;\n  shineDirection?: \"clockwise\" | \"counterclockwise\";\n  shineSpeed?: number;\n  shineIntensity?: number;\n  title?: string;\n  description?: string;\n  children: React.ReactNode;\n  className?: string;\n  showClose?: boolean;\n}\n\nconst sideClasses: Record<RevealSheetSide, string> = {\n  top: \"inset-x-0 top-0 max-h-[85vh] rounded-b-3xl border-b\",\n  right: \"inset-y-0 right-0 w-full max-w-xl rounded-l-3xl border-l\",\n  bottom: \"inset-x-0 bottom-0 max-h-[85vh] rounded-t-3xl border-t\",\n  left: \"inset-y-0 left-0 w-full max-w-xl rounded-r-3xl border-r\",\n};\n\nconst transformOrigins: Record<RevealSheetSide, string> = {\n  top: \"center top\",\n  right: \"right center\",\n  bottom: \"center bottom\",\n  left: \"left center\",\n};\n\nconst revealOrigins: Record<RevealSheetSide, string> = {\n  top: \"50% 0%\",\n  right: \"100% 50%\",\n  bottom: \"50% 100%\",\n  left: \"0% 50%\",\n};\n\nconst closeButton =\n  \"group inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-transparent text-muted-foreground transition-colors duration-200 hover:text-red-500 dark:hover:text-red-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500/50\";\n\nconst RevealSheetPanel = ({\n  open,\n  onExitComplete,\n  overlayRef,\n  side = \"right\",\n  speed = 1,\n  bounce = 1,\n  showGrid = true,\n  showShine = true,\n  shineDirection = \"clockwise\",\n  shineSpeed = 1,\n  shineIntensity = 0.55,\n  title = \"Explore the collection\",\n  description,\n  children,\n  className,\n  showClose = true,\n}: Omit<RevealSheetProps, \"onOpenChange\"> & {\n  onExitComplete: () => void;\n  overlayRef: React.RefObject<HTMLDivElement | null>;\n}) => {\n  const contentRef = React.useRef<HTMLDivElement>(null);\n  const shineRef = React.useRef<HTMLDivElement>(null);\n  const timelineRef = React.useRef<gsap.core.Timeline | null>(null);\n  const bounceAmount = Number.isFinite(bounce)\n    ? Math.min(2, Math.max(0, bounce))\n    : 1;\n\n  useGSAP(\n    () => {\n      const media = gsap.matchMedia();\n\n      media.add(\"(prefers-reduced-motion: no-preference)\", () => {\n        const panel = contentRef.current;\n        const overlay = overlayRef.current;\n        if (!panel || !overlay) return;\n\n        const horizontal = side === \"left\" || side === \"right\";\n        const stretchAxis = horizontal ? \"scaleX\" : \"scaleY\";\n        const radius = horizontal\n          ? Math.hypot(panel.offsetWidth, panel.offsetHeight / 2) + 2\n          : Math.hypot(panel.offsetWidth / 2, panel.offsetHeight) + 2;\n        const origin = revealOrigins[side];\n\n        gsap.set(panel, {\n          clipPath: `circle(0px at ${origin})`,\n          transformOrigin: transformOrigins[side],\n          willChange: \"clip-path, transform\",\n        });\n\n        const timeline = gsap.timeline({\n          paused: true,\n          onComplete: () =>\n            gsap.set(panel, {\n              clearProps: \"clipPath,transform,transformOrigin,willChange\",\n            }),\n          onReverseComplete: onExitComplete,\n        })\n          .fromTo(\n            overlay,\n            { opacity: 0 },\n            { opacity: 1, duration: 0.35, ease: \"power2.out\" },\n            0,\n          )\n          .to(panel, {\n            clipPath: `circle(${radius}px at ${origin})`,\n            duration: 0.72,\n            ease: \"power3.inOut\",\n          }, 0)\n          .to(panel, {\n            [stretchAxis]: 1 + 0.032 * bounceAmount,\n            duration: 0.18,\n            ease: \"power3.out\",\n          }, \"-=0.18\")\n          .to(panel, {\n            [stretchAxis]: 1 - 0.008 * bounceAmount,\n            duration: 0.16,\n            ease: \"power2.inOut\",\n          })\n          .to(panel, {\n            [stretchAxis]: 1 + 0.006 * bounceAmount,\n            duration: 0.14,\n            ease: \"power2.out\",\n          })\n          .to(panel, {\n            [stretchAxis]: 1,\n            duration: 0.16,\n            ease: \"power2.out\",\n          })\n          .timeScale(Number.isFinite(speed) ? Math.max(0.1, speed) : 1);\n\n        timelineRef.current = timeline;\n        if (open) timeline.play();\n      }, contentRef);\n\n      return () => {\n        media.revert();\n        timelineRef.current = null;\n      };\n    },\n    { scope: contentRef },\n  );\n\n  useGSAP(\n    () => {\n      const shine = shineRef.current;\n      if (!shine || !showShine) return;\n      const media = gsap.matchMedia();\n      media.add(\"(prefers-reduced-motion: no-preference)\", () => {\n        gsap.fromTo(\n          shine,\n          { \"--shine-angle\": \"0deg\" },\n          {\n            \"--shine-angle\": shineDirection === \"clockwise\" ? \"360deg\" : \"-360deg\",\n            duration:\n              7 /\n              (Number.isFinite(shineSpeed)\n                ? Math.max(0.1, shineSpeed)\n                : 1),\n            ease: \"none\",\n            repeat: -1,\n          },\n        );\n      });\n      return () => media.revert();\n    },\n    {\n      scope: contentRef,\n      dependencies: [showShine, shineDirection, shineSpeed],\n      revertOnUpdate: true,\n    },\n  );\n\n  React.useEffect(() => {\n    const timeline = timelineRef.current;\n    if (open) {\n      timeline?.play();\n    } else if (timeline) {\n      gsap.set(contentRef.current, { willChange: \"clip-path, transform\" });\n      timeline.reverse();\n    } else {\n      onExitComplete();\n    }\n  }, [open, onExitComplete]);\n\n  return (\n    <Dialog.Content\n      ref={contentRef}\n      className={cn(\n        \"fixed z-50 flex flex-col overflow-hidden border-border/80 bg-[linear-gradient(155deg,#fff_0%,#f5f5f7_100%)] text-foreground shadow-[0_24px_80px_-28px_rgba(0,0,0,0.75)] outline-none dark:bg-[linear-gradient(155deg,#1c1c20_0%,#101013_100%)]\",\n        sideClasses[side],\n        className,\n      )}\n    >\n      {showGrid && (\n        <div className=\"pointer-events-none absolute inset-0 opacity-25 [background-image:linear-gradient(to_right,var(--line)_1px,transparent_1px),linear-gradient(to_bottom,var(--line)_1px,transparent_1px)] [background-size:32px_32px] [mask-image:linear-gradient(to_bottom,black,transparent_55%)]\" />\n      )}\n      <div className=\"relative flex min-h-0 flex-1 flex-col\">\n        <header className=\"flex items-start justify-between gap-6 border-b border-border/70 px-6 py-5 sm:px-8\">\n          <div className=\"min-w-0 space-y-1\">\n            <Dialog.Title className=\"font-serif text-2xl tracking-tight text-foreground sm:text-3xl\">\n              {title}\n            </Dialog.Title>\n            {description && (\n              <Dialog.Description className=\"max-w-md text-sm leading-6 text-muted-foreground\">\n                {description}\n              </Dialog.Description>\n            )}\n          </div>\n          {showClose && (\n            <Dialog.Close asChild>\n              <button\n                type=\"button\"\n                className={closeButton}\n                aria-label=\"Close sheet\"\n              >\n                <X className=\"size-4 motion-safe:transition-transform motion-safe:duration-300 motion-safe:ease-out motion-safe:group-hover:rotate-90 motion-safe:group-hover:scale-125\" />\n              </button>\n            </Dialog.Close>\n          )}\n        </header>\n        <div className=\"relative min-h-0 flex-1 overflow-y-auto px-6 py-6 sm:px-8\">\n          {children}\n        </div>\n      </div>\n      {showShine && (\n        <div\n          ref={shineRef}\n          aria-hidden=\"true\"\n          className=\"pointer-events-none absolute inset-0 rounded-[inherit] p-[2px] [background:conic-gradient(from_var(--shine-angle,0deg),transparent_0deg,transparent_298deg,rgba(255,255,255,0.15)_321deg,rgba(255,255,255,0.95)_338deg,rgba(255,255,255,0.15)_351deg,transparent_360deg)]\"\n          style={{\n            opacity: Number.isFinite(shineIntensity)\n              ? Math.min(1, Math.max(0, shineIntensity))\n              : 0.55,\n            mask: \"linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)\",\n            maskComposite: \"exclude\",\n            WebkitMaskComposite: \"xor\",\n          }}\n        />\n      )}\n    </Dialog.Content>\n  );\n};\n\nexport const RevealSheet = ({\n  open,\n  onOpenChange,\n  ...panelProps\n}: RevealSheetProps) => {\n  const [present, setPresent] = React.useState(open);\n  const overlayRef = React.useRef<HTMLDivElement>(null);\n  const onExitComplete = React.useCallback(() => setPresent(false), []);\n\n  if (open && !present) setPresent(true);\n\n  return (\n    <Dialog.Root open={present} onOpenChange={onOpenChange}>\n      <Dialog.Portal>\n        <Dialog.Overlay\n          ref={overlayRef}\n          className=\"fixed inset-0 z-40 bg-black/45 backdrop-blur-[2px]\"\n        />\n        <RevealSheetPanel\n          {...panelProps}\n          open={open}\n          onExitComplete={onExitComplete}\n          overlayRef={overlayRef}\n        />\n      </Dialog.Portal>\n    </Dialog.Root>\n  );\n};\n\nRevealSheet.displayName = \"RevealSheet\";\n\nexport default RevealSheet;\n",
+      "type": "registry:ui",
+      "target": "@ui/reveal-sheet.tsx"
+    }
+  ],
+  "type": "registry:ui",
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "title": "Reveal Sheet"
+}
