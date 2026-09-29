@@ -4,6 +4,7 @@ import React, { useMemo, useState } from "react";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { ComponentCard } from "@/components/showcase/component-card";
+import { ComponentSearch } from "./component-search";
 import { getAllComponents } from "@/registry";
 import { HorizontalScale, Lines } from "@/registry/ui/scales";
 import { SparkleButton } from "@/registry/ui/sparkle-button";
@@ -131,7 +132,10 @@ export default function ComponentsPage() {
             defaultTasks={[
               { id: "review", label: "Review the circular reveal", done: true },
               { id: "directions", label: "Test every opening direction" },
-              { id: "accessibility", label: "Check keyboard and reduced motion" },
+              {
+                id: "accessibility",
+                label: "Check keyboard and reduced motion",
+              },
               { id: "publish", label: "Publish the component" },
             ]}
           />
@@ -412,12 +416,12 @@ export default function ComponentsPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground transition-colors duration-200">
-      <Navbar />
+      <Navbar searchAction={<ComponentSearch />} />
 
       <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
         <div className="flex flex-col items-center text-center mb-16 sm:mb-20">
           <h1 className="font-serif text-3xl sm:text-5xl font-normal tracking-tight text-foreground max-w-3xl leading-tight">
-            20+ rare and unique components
+            30+ rare and unique components
           </h1>
           <p className="text-muted-foreground text-sm sm:text-base max-w-2xl mt-4 font-light leading-relaxed">
             Every component is a single file you own, not a dependency you

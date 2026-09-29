@@ -19,9 +19,10 @@ import { useIsDark } from "@/lib/use-is-dark";
 export interface NavbarProps {
   showThemeToggle?: boolean;
   forceLight?: boolean;
+  searchAction?: React.ReactNode;
 }
 
-export const Navbar = ({ showThemeToggle, forceLight }: NavbarProps = {}) => {
+export const Navbar = ({ showThemeToggle, forceLight, searchAction }: NavbarProps = {}) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
   const isDark = useIsDark();
@@ -84,6 +85,7 @@ export const Navbar = ({ showThemeToggle, forceLight }: NavbarProps = {}) => {
         </div>
 
         <div className="flex items-center gap-2.5 sm:gap-3">
+          {searchAction}
           <GitHubButton />
 
           {shouldShowThemeToggle && (
