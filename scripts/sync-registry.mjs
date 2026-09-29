@@ -184,7 +184,7 @@ for (const file of files) {
 const registryJson = {
   $schema: "https://ui.shadcn.com/schema/registry.json",
   name: "devclubnst",
-  homepage: "https://devclub.co",
+  homepage: "https://ui.devclubxnst.online",
   items: registryItems,
 };
 

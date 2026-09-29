@@ -199,7 +199,7 @@ export const PRIVACY_ITEMS: PrivacyItem[] = [
     id: 25,
     title: "25. Data Deletion",
     paragraphs: [
-      "You may request the deletion of personal communications or correspondence by contacting privacy@devclub.co. Certain transient security logs and publicly committed git history cannot be erased immediately due to immutability.",
+      "You may request the deletion of personal communications or correspondence by contacting softwaredevg.club@rishihood.edu.in. Certain transient security logs and publicly committed git history cannot be erased immediately due to immutability.",
     ],
   },
   {
@@ -220,7 +220,7 @@ export const PRIVACY_ITEMS: PrivacyItem[] = [
     id: 28,
     title: "28. Rights Under Indian Privacy Law",
     paragraphs: [
-      "Where applicable, we adhere to the Digital Personal Data Protection Act, 2023 (DPDP) and provide grievance redressal for data principals via grievance@devclub.co.",
+      "Where applicable, we adhere to the Digital Personal Data Protection Act, 2023 (DPDP) and provide grievance redressal for data principals via softwaredevg.club@rishihood.edu.in.",
     ],
   },
   {
@@ -248,7 +248,7 @@ export const PRIVACY_ITEMS: PrivacyItem[] = [
     id: 32,
     title: "32. Exercising Your Rights",
     paragraphs: [
-      "To submit a privacy inquiry or exercise your legal rights, email privacy@devclub.co with the subject line \"Privacy Rights Request\". We verify requests to protect against unauthorized disclosures.",
+      "To submit a privacy inquiry or exercise your legal rights, email softwaredevg.club@rishihood.edu.in with the subject line \"Privacy Rights Request\". We verify requests to protect against unauthorized disclosures.",
     ],
   },
   {
@@ -262,7 +262,7 @@ export const PRIVACY_ITEMS: PrivacyItem[] = [
     id: 34,
     title: "34. Appeals",
     paragraphs: [
-      "If we decline to take action on a privacy request, you may appeal the decision by writing to privacy@devclub.co explaining the grounds for appeal.",
+      "If we decline to take action on a privacy request, you may appeal the decision by writing to softwaredevg.club@rishihood.edu.in explaining the grounds for appeal.",
     ],
   },
   {
@@ -479,14 +479,14 @@ export const PRIVACY_ITEMS: PrivacyItem[] = [
     id: 65,
     title: "65. Contact Us",
     paragraphs: [
-      "For privacy questions or rights requests, contact DevClub at privacy@devclub.co or via our website at https://devclub.co.",
+      "For privacy questions or rights requests, contact DevClub at softwaredevg.club@rishihood.edu.in or via our website at https://ui.devclubxnst.online.",
     ],
   },
   {
     id: 66,
     title: "66. Grievance Redressal",
     paragraphs: [
-      "For privacy grievances or complaints under applicable legislation, contact our designated Grievance Officer at grievance@devclub.co.",
+      "For privacy grievances or complaints under applicable legislation, contact our designated Grievance Officer at softwaredevg.club@rishihood.edu.in.",
     ],
   },
   {
@@ -500,14 +500,14 @@ export const PRIVACY_ITEMS: PrivacyItem[] = [
     id: 68,
     title: "68. Data Protection Officer",
     paragraphs: [
-      "For inquiries regarding data protection oversight, direct communications to our privacy team at privacy@devclub.co.",
+      "For inquiries regarding data protection oversight, direct communications to our privacy team at softwaredevg.club@rishihood.edu.in.",
     ],
   },
   {
     id: 69,
     title: "69. Controller Information",
     paragraphs: [
-      "DevClub acts as the data controller for personal information processed directly through the devclub.co website and public documentation channels.",
+      "DevClub acts as the data controller for personal information processed directly through the devclubxnst.online website and public documentation channels.",
     ],
   },
   {
@@ -591,7 +591,7 @@ export const PRIVACY_ITEMS: PrivacyItem[] = [
     id: 81,
     title: "81. Enterprise Security Requirements",
     paragraphs: [
-      "Enterprise clients requiring specialized security reviews, custom audit logs, or dedicated compliance documentation should contact enterprise@devclub.co.",
+      "Enterprise clients requiring specialized security reviews, custom audit logs, or dedicated compliance documentation should contact softwaredevg.club@rishihood.edu.in.",
     ],
   },
   {
@@ -605,7 +605,7 @@ export const PRIVACY_ITEMS: PrivacyItem[] = [
     id: 83,
     title: "83. Data Export",
     paragraphs: [
-      "Users may request copies of any personal correspondence retained by our support team by submitting a verified request to privacy@devclub.co.",
+      "Users may request copies of any personal correspondence retained by our support team by submitting a verified request to softwaredevg.club@rishihood.edu.in.",
     ],
   },
   {

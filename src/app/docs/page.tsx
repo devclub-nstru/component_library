@@ -95,7 +95,7 @@ export default function DocsIntroductionPage() {
                 Shadcn CLI:
               </span>
               <p className="text-xs text-muted-foreground font-light leading-relaxed">
-                Add directly via registry URL with <code className="text-foreground">npx shadcn@latest add https://devclub.co/r/[name].json</code>.
+                Add directly via registry URL with <code className="text-foreground">npx shadcn@latest add https://ui.devclubxnst.online/r/[name].json</code>.
               </p>
             </div>
           </div>

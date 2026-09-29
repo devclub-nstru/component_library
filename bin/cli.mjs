@@ -27,7 +27,7 @@ const getTargetDirectory = (cwd) => {
           return candidateRoot;
         }
       }
-    } catch {}
+    } catch { }
   }
 
   if (fs.existsSync(path.join(cwd, "src", "components", "ui"))) {
@@ -62,7 +62,7 @@ Usage:
   npx @devclubnst/ui --help            Show this help message
 
 Shadcn CLI usage:
-  npx shadcn@latest add https://devclub.co/r/<component>.json
+  npx shadcn@latest add https://ui.devclubxnst.online/r/<component>.json
   npx shadcn@latest add devclub-nstru/component_library/<component>
 `);
   process.exit(0);
@@ -126,10 +126,10 @@ if (command === "add") {
         pkgManager === "pnpm"
           ? `pnpm add ${deps}`
           : pkgManager === "yarn"
-          ? `yarn add ${deps}`
-          : pkgManager === "bun"
-          ? `bun add ${deps}`
-          : `npm install ${deps}`;
+            ? `yarn add ${deps}`
+            : pkgManager === "bun"
+              ? `bun add ${deps}`
+              : `npm install ${deps}`;
       execSync(installCmd, { stdio: "inherit", cwd });
     } catch {
       console.warn(`Warning: Could not automatically install dependencies. Please run manually: npm install ${deps}`);

@@ -69,7 +69,7 @@ export default function DocsInstallationPage() {
     const md = `# DevClub UI Installation
 
 ## Manual Installation
-1. Pick a component from https://devclub.co/components
+1. Pick a component from https://ui.devclubxnst.online/components
 2. Copy component source into your \`src/components/ui/\` folder
 3. Install core dependencies:
 \`\`\`bash
@@ -83,7 +83,7 @@ npx @devclubnst/ui add [component]
 
 ## Shadcn Compatibility
 \`\`\`bash
-npx shadcn@latest add https://devclub.co/r/[component].json
+npx shadcn@latest add https://ui.devclubxnst.online/r/[component].json
 \`\`\`
 `;
     await navigator.clipboard.writeText(md);
@@ -345,7 +345,7 @@ export default function Page() {
                 CLI:
               </p>
 
-              <SnippetBlock code="npx shadcn@latest add https://devclub.co/r/noise.json" />
+              <SnippetBlock code="npx shadcn@latest add https://ui.devclubxnst.online/r/noise.json" />
 
               <p className="text-xs text-muted-foreground font-light leading-relaxed">
                 Or using the direct unpkg registry link:

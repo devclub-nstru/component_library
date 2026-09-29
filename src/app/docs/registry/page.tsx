@@ -73,7 +73,7 @@ export default function DocsRegistryPage() {
               <span className="text-xs text-muted-foreground">Shadcn Registry Index</span>
             </div>
             <p className="text-xs text-muted-foreground font-light leading-relaxed">
-              Open shadcn-compatible schema catalog. Individual components can be installed directly via <code className="text-foreground">npx shadcn@latest add https://devclub.co/r/[name].json</code>.
+              Open shadcn-compatible schema catalog. Individual components can be installed directly via <code className="text-foreground">npx shadcn@latest add https://ui.devclubxnst.online/r/[name].json</code>.
             </p>
           </div>
 

@@ -523,14 +523,14 @@ export const TERMS_ITEMS: TermItem[] = [
     id: 65,
     title: "65. Reporting Abuse",
     paragraphs: [
-      "Abuse reports may be sent to abuse@devclub.co with sufficient information to investigate the alleged abuse. The Provider may take appropriate action where permitted by law.",
+      "Abuse reports may be sent to softwaredevg.club@rishihood.edu.in with sufficient information to investigate the alleged abuse. The Provider may take appropriate action where permitted by law.",
     ],
   },
   {
     id: 66,
     title: "66. Copyright Complaints",
     paragraphs: [
-      "Copyright or intellectual property complaints should be submitted to legal@devclub.co, including identification of the claimant, protected work, infringing material location, contact info, and rights statement.",
+      "Copyright or intellectual property complaints should be submitted to softwaredevg.club@rishihood.edu.in, including identification of the claimant, protected work, infringing material location, contact info, and rights statement.",
     ],
   },
   {
@@ -621,7 +621,7 @@ export const TERMS_ITEMS: TermItem[] = [
     id: 79,
     title: "79. Notices",
     paragraphs: [
-      "Legal notices should be sent via email to legal@devclub.co. Notices to users may be delivered through electronic postings or repository announcements.",
+      "Legal notices should be sent via email to softwaredevg.club@rishihood.edu.in. Notices to users may be delivered through electronic postings or repository announcements.",
     ],
   },
   {
@@ -684,7 +684,7 @@ export const TERMS_ITEMS: TermItem[] = [
     id: 88,
     title: "88. Accessibility of Documentation",
     paragraphs: [
-      "The Provider attempts to make documentation accessible. If you identify an accessibility barrier, please notify accessibility@devclub.co.",
+      "The Provider attempts to make documentation accessible. If you identify an accessibility barrier, please notify softwaredevg.club@rishihood.edu.in.",
     ],
   },
   {
@@ -719,7 +719,7 @@ export const TERMS_ITEMS: TermItem[] = [
     id: 93,
     title: "93. Enterprise Use",
     paragraphs: [
-      "Enterprise users requiring custom SLAs, vendor security reviews, data processing agreements, or tailored licensing should contact enterprise@devclub.co.",
+      "Enterprise users requiring custom SLAs, vendor security reviews, data processing agreements, or tailored licensing should contact softwaredevg.club@rishihood.edu.in.",
     ],
   },
   {
@@ -999,7 +999,7 @@ export const TERMS_ITEMS: TermItem[] = [
     id: 133,
     title: "133. Contact Information",
     paragraphs: [
-      "For general support: support@devclub.co. For legal notices: legal@devclub.co. For security disclosures: softwaredevg.club@rishihood.edu.in. For privacy: privacy@devclub.co.",
+      "For general support: softwaredevg.club@rishihood.edu.in. For legal notices: softwaredevg.club@rishihood.edu.in. For security disclosures: softwaredevg.club@rishihood.edu.in. For privacy: softwaredevg.club@rishihood.edu.in.",
     ],
   },
   {
@@ -1048,7 +1048,7 @@ export const TERMS_ITEMS: TermItem[] = [
     id: 140,
     title: "140. Recommended Legal Contact",
     paragraphs: [
-      "Legal inquiries should be directed to DevClub via legal@devclub.co.",
+      "Legal inquiries should be directed to DevClub via softwaredevg.club@rishihood.edu.in.",
     ],
   },
   {

@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        DevClub UI welcomes proposals for new high-performance, animated UI primitives and GPU shaders. Please check the current [Component Registry](https://devclub.co/components) before proposing.
+        DevClub UI welcomes proposals for new high-performance, animated UI primitives and GPU shaders. Please check the current [Component Registry](https://ui.devclubxnst.online/components) before proposing.
 
   - type: input
     id: component_name

@@ -12,7 +12,7 @@
 [![WebGL](<https://img.shields.io/badge/WebGL-2.0_(OGL)-990000?logo=webgl>)](https://github.com/oamap/ogl)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-[Explore Components](https://devclub.co/components) • [Documentation](https://devclub.co/docs) • [API Specification](#rest-api-reference) • [Contributing](CONTRIBUTING.md)
+[Explore Components](https://ui.devclubxnst.online/components) • [Documentation](https://ui.devclubxnst.online/docs) • [API Specification](#rest-api-reference) • [Contributing](CONTRIBUTING.md)
 
 </div>
 

@@ -91,7 +91,7 @@ const STYLES = `
 }
 `;
 
-const subscribePlatform = () => () => {};
+const subscribePlatform = () => () => { };
 const getPlatformSnapshot = () =>
   typeof navigator !== "undefined" &&
   /Mac|iPhone|iPad|iPod/.test(navigator.platform);
@@ -202,13 +202,13 @@ export function ProfileMenu({
           document.documentElement.style.colorScheme = "dark";
           try {
             localStorage.setItem("theme", "dark");
-          } catch {}
+          } catch { }
         } else if (nextTheme === "light") {
           document.documentElement.classList.remove("dark");
           document.documentElement.style.colorScheme = "light";
           try {
             localStorage.setItem("theme", "light");
-          } catch {}
+          } catch { }
         } else {
           const isDark = window.matchMedia(
             "(prefers-color-scheme: dark)",
@@ -219,7 +219,7 @@ export function ProfileMenu({
             : "light";
           try {
             localStorage.setItem("theme", "system");
-          } catch {}
+          } catch { }
         }
         window.dispatchEvent(
           new StorageEvent("storage", {
@@ -644,7 +644,7 @@ export function ProfileMenu({
                               ? "text-foreground font-medium ring-1 ring-border/80 dark:ring-white/20 bg-foreground/5 dark:bg-white/5"
                               : "text-muted-foreground hover:text-foreground",
                             item.danger &&
-                              "text-rose-500 dark:text-rose-400 hover:text-rose-600",
+                            "text-rose-500 dark:text-rose-400 hover:text-rose-600",
                           )}
                         >
                           <div
