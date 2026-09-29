@@ -27,6 +27,7 @@ const componentTitles = {
   "code-block": "Code Block",
   dither: "Dither",
   "dotted-accordion": "Dotted Accordion",
+  "file-upload": "File Upload",
   "file-tree": "File Tree",
   "github-activity": "GitHub Activity",
   "glowing-badge": "Glowing Badge",

@@ -9,6 +9,7 @@ import candyButton from "./candy-button.json";
 import codeBlock from "./code-block.json";
 import dither from "./dither.json";
 import dottedAccordion from "./dotted-accordion.json";
+import fileUpload from "./file-upload.json";
 import fileTree from "./file-tree.json";
 import githubActivity from "./github-activity.json";
 import glowingBadge from "./glowing-badge.json";
@@ -24,6 +25,7 @@ import otpInput from "./otp-input.json";
 import pixelCard from "./pixel-card.json";
 import profileMenu from "./profile-menu.json";
 import proximitySidebar from "./proximity-sidebar.json";
+import revealSheet from "./reveal-sheet.json";
 import scales from "./scales.json";
 import searchInput from "./search-input.json";
 import smoothAccordion from "./smooth-accordion.json";
@@ -46,6 +48,7 @@ export {
   codeBlock,
   dither,
   dottedAccordion,
+  fileUpload,
   fileTree,
   githubActivity,
   glowingBadge,
@@ -61,6 +64,7 @@ export {
   pixelCard,
   profileMenu,
   proximitySidebar,
+  revealSheet,
   scales,
   searchInput,
   smoothAccordion,
@@ -84,6 +88,7 @@ export const componentsList: ComponentRegistryItem[] = [
   codeBlock as ComponentRegistryItem,
   dither as ComponentRegistryItem,
   dottedAccordion as ComponentRegistryItem,
+  fileUpload as ComponentRegistryItem,
   fileTree as ComponentRegistryItem,
   githubActivity as ComponentRegistryItem,
   glowingBadge as ComponentRegistryItem,
@@ -99,6 +104,7 @@ export const componentsList: ComponentRegistryItem[] = [
   pixelCard as ComponentRegistryItem,
   profileMenu as ComponentRegistryItem,
   proximitySidebar as ComponentRegistryItem,
+  revealSheet as ComponentRegistryItem,
   scales as ComponentRegistryItem,
   searchInput as ComponentRegistryItem,
   smoothAccordion as ComponentRegistryItem,

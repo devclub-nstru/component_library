@@ -59,6 +59,7 @@ import { AiOrb } from "@/registry/ui/ai-orb";
 import { TwitterCard } from "@/registry/ui/twitter-card";
 import { Toaster, toast } from "@/registry/ui/toast";
 import { TaskList } from "@/registry/ui/task-list";
+import { FileUpload, type FileUploadLayout } from "@/registry/ui/file-upload";
 import { FileTree, type TreeNode } from "@/registry/ui/file-tree";
 import { GitHubButton } from "@/components/ui/github-button";
 import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
@@ -90,6 +91,7 @@ import {
 import { MacSwitch, type MacSwitchColor } from "@/registry/ui/mac-switch";
 import { SpotlightSearch } from "@/registry/ui/spotlight-search";
 import { ProfileMenu } from "@/registry/ui/profile-menu";
+import { RevealSheet, type RevealSheetSide } from "@/registry/ui/reveal-sheet";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -212,6 +214,11 @@ const ALL_CATEGORIES = [
         href: "/components/task-list",
       },
       {
+        label: "File Upload",
+        slug: "file-upload",
+        href: "/components/file-upload",
+      },
+      {
         label: "Liquid Toggle",
         slug: "liquid-toggle",
         href: "/components/liquid-toggle",
@@ -330,6 +337,11 @@ const ALL_CATEGORIES = [
         label: "Profile Menu",
         slug: "profile-menu",
         href: "/components/profile-menu",
+      },
+      {
+        label: "Reveal Sheet",
+        slug: "reveal-sheet",
+        href: "/components/reveal-sheet",
       },
     ],
   },
@@ -804,8 +816,21 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     "desktop",
   );
   const [activeColor, setActiveColor] = useState<string>(PALETTE[3].hex);
+  const [fileUploadLayout, setFileUploadLayout] =
+    useState<FileUploadLayout>("full");
   const [hookDemoIndex, setHookDemoIndex] = useState(0);
   const [counterDemoValue, setCounterDemoValue] = useState(122337);
+  const [revealSheetOpen, setRevealSheetOpen] = useState(false);
+  const [revealSheetConfig, setRevealSheetConfig] = useState<{
+    side: RevealSheetSide;
+    speed: number;
+    bounce: number;
+    showGrid: boolean;
+    showShine: boolean;
+    shineDirection: "clockwise" | "counterclockwise";
+    shineSpeed: number;
+    shineIntensity: number;
+  }>({ side: "right", speed: 1, bounce: 1, showGrid: true, showShine: true, shineDirection: "clockwise", shineSpeed: 1, shineIntensity: 0.55 });
   const [sparkleConfig, setSparkleConfig] = useState({
     variant: "default" as "default" | "outline" | "glass",
     size: "lg" as "sm" | "default" | "lg",
@@ -1212,6 +1237,51 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
 
   const renderComponentPreview = (slug: string, color: string) => {
     switch (slug) {
+      case "file-upload":
+        return (
+          <div className="flex w-full max-w-xl flex-col items-center justify-center gap-3 p-4">
+            <div
+              draggable
+              title="Drag this sample into the uploader"
+              onDragStart={(event) => {
+                event.dataTransfer.effectAllowed = "copy";
+                event.dataTransfer.items.add(
+                  new File(
+                    [new Uint8Array(640_000)],
+                    "product-shot.png",
+                    { type: "image/png" },
+                  ),
+                );
+              }}
+              className="flex cursor-grab items-center gap-2 rounded-lg border border-border bg-background px-3 py-2 text-xs text-muted-foreground shadow-sm active:cursor-grabbing"
+            >
+              <span className="size-2 rounded-sm bg-foreground/70" />
+              <span className="font-medium text-foreground">product-shot.png</span>
+              <span>625 KB · drag to test</span>
+            </div>
+            <FileUpload
+              accept="image/*,.pdf"
+              layout={fileUploadLayout}
+              accent={color}
+              uploadFile={async (_file, onProgress, signal) => {
+                for (let progress = 8; progress <= 100; progress += 8) {
+                  await new Promise<void>((resolve, reject) => {
+                    const timer = window.setTimeout(resolve, 90);
+                    signal.addEventListener(
+                      "abort",
+                      () => {
+                        window.clearTimeout(timer);
+                        reject(new DOMException("Aborted", "AbortError"));
+                      },
+                      { once: true },
+                    );
+                  });
+                  onProgress(progress);
+                }
+              }}
+            />
+          </div>
+        );
       case "task-list":
         return (
           <div className="flex flex-col items-center justify-center w-full max-w-md mx-auto p-4 select-none">
@@ -1342,6 +1412,38 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
             <div className="w-full flex justify-center">
               <ProfileMenu />
             </div>
+          </div>
+        );
+      case "reveal-sheet":
+        return (
+          <div className="flex min-h-96 items-center justify-center p-8">
+            <Button onClick={() => setRevealSheetOpen(true)}>
+              Open Reveal Sheet
+            </Button>
+            <RevealSheet
+              open={revealSheetOpen}
+              onOpenChange={setRevealSheetOpen}
+              side={revealSheetConfig.side}
+              speed={revealSheetConfig.speed}
+              bounce={revealSheetConfig.bounce}
+              showGrid={revealSheetConfig.showGrid}
+              showShine={revealSheetConfig.showShine}
+              shineDirection={revealSheetConfig.shineDirection}
+              shineSpeed={revealSheetConfig.shineSpeed}
+              shineIntensity={revealSheetConfig.shineIntensity}
+              title="Release checklist"
+              description="Track the final details before this component ships."
+            >
+              <TaskList
+                className="max-w-none"
+                defaultTasks={[
+                  { id: "review", label: "Review the circular reveal", done: true },
+                  { id: "directions", label: "Test every opening direction" },
+                  { id: "accessibility", label: "Check keyboard and reduced motion" },
+                  { id: "publish", label: "Publish the component" },
+                ]}
+              />
+            </RevealSheet>
           </div>
         );
       case "spotlight-search":
@@ -2760,7 +2862,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
             </motion.div>
 
             <div className="absolute bottom-6 inset-x-0 flex justify-center pointer-events-none z-30">
-              {supportsColor && (
+              {supportsColor && activeComponent.slug !== "file-upload" && (
                 <div
                   key="floating-color-palette"
                   className="pointer-events-auto rounded-full border border-border bg-card/95 dark:bg-[#121215]/95 backdrop-blur-2xl p-1.5 shadow-[0_16px_40px_rgba(0,0,0,0.1),0_0_0_1px_rgba(0,0,0,0.06)] dark:shadow-[0_16px_40px_rgba(0,0,0,0.85),0_0_0_1px_rgba(255,255,255,0.06)] flex items-center gap-1.5 select-none"
@@ -2801,6 +2903,199 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       </motion.button>
                     );
                   })}
+                </div>
+              )}
+
+              {activeComponent.slug === "file-upload" && (
+                <div className="pointer-events-auto mx-4 flex items-center gap-3 rounded-2xl border border-border bg-card/95 p-2 shadow-xl backdrop-blur-2xl dark:border-white/10 dark:bg-[#121215]/95">
+                  <span className="pl-1 text-xs font-semibold text-foreground">
+                    Upload settings
+                  </span>
+                  <div
+                    role="group"
+                    aria-label="Upload component size"
+                    className="flex items-center gap-0.5 rounded-xl border border-border bg-muted/60 p-1 dark:border-white/5 dark:bg-black/25"
+                  >
+                    {(["full", "compact"] as const).map((layout) => (
+                      <button
+                        key={layout}
+                        type="button"
+                        aria-pressed={fileUploadLayout === layout}
+                        onClick={() => setFileUploadLayout(layout)}
+                        className={cn(
+                          "relative rounded-lg px-3 py-1.5 text-xs capitalize transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/40",
+                          fileUploadLayout === layout
+                            ? "bg-foreground font-medium text-background"
+                            : "text-muted-foreground hover:text-foreground",
+                        )}
+                      >
+                        {layout}
+                      </button>
+                    ))}
+                  </div>
+                  <div className="h-7 w-px bg-border dark:bg-white/10" />
+                  <div className="flex items-center gap-1" aria-label="Upload accent color">
+                    {PALETTE.map((paletteColor) => {
+                      const selected = activeColor === paletteColor.hex;
+                      return (
+                        <motion.button
+                          key={paletteColor.id}
+                          type="button"
+                          onClick={() => setActiveColor(paletteColor.hex)}
+                          title={paletteColor.label}
+                          aria-label={paletteColor.label}
+                          aria-pressed={selected}
+                          whileHover={{ scale: 1.08 }}
+                          whileTap={{ scale: 0.92 }}
+                          transition={microSpring}
+                          className="relative flex size-8 shrink-0 items-center justify-center rounded-full outline-none focus-visible:ring-2 focus-visible:ring-foreground/40"
+                        >
+                          {selected && (
+                            <motion.span
+                              layoutId="activeFileUploadColorRing"
+                              className="pointer-events-none absolute inset-0 rounded-full border-2 border-foreground dark:border-white"
+                              transition={{ type: "spring", stiffness: 480, damping: 32 }}
+                            />
+                          )}
+                          <span
+                            className="size-5.5 rounded-full shadow-xs"
+                            style={{ backgroundColor: paletteColor.hex }}
+                          />
+                        </motion.button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {activeComponent.slug === "reveal-sheet" && (
+                <div className="pointer-events-auto mx-4 flex max-h-[40vh] w-full max-w-6xl flex-col gap-3 overflow-y-auto rounded-2xl border border-border bg-card/95 p-4 shadow-xl backdrop-blur-2xl md:max-h-[50vh] lg:max-h-none dark:border-white/10 dark:bg-[#121215]/95">
+                  <div className="flex shrink-0 items-center justify-between gap-3">
+                    <span className="text-xs font-semibold text-foreground">Sheet settings</span>
+                    <div className="flex items-center gap-3">
+                      <button
+                        type="button"
+                        onClick={() => setRevealSheetConfig({ side: "right", speed: 1, bounce: 1, showGrid: true, showShine: true, shineDirection: "clockwise", shineSpeed: 1, shineIntensity: 0.55 })}
+                        className="flex items-center gap-1.5 text-[11px] text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/40"
+                      >
+                        <ResetIcon className="size-3.5" />
+                        Reset
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setRevealSheetOpen(true)}
+                        className="rounded-lg bg-foreground px-3 py-1.5 text-xs font-medium text-background transition-opacity hover:opacity-85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/40"
+                      >
+                        Replay sheet
+                      </button>
+                    </div>
+                  </div>
+                  <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-[1.25fr_1fr_1fr]">
+                    <div className="min-w-0 space-y-3">
+                      <div className="space-y-1.5">
+                        <span className="text-[11px] text-muted-foreground">Direction</span>
+                        <div role="group" aria-label="Sheet direction" className="grid grid-cols-4 gap-1 rounded-xl border border-border bg-muted/40 p-1 dark:border-white/5 dark:bg-black/25">
+                          {(["top", "right", "bottom", "left"] as const).map((side) => (
+                            <button
+                              key={side}
+                              type="button"
+                              aria-pressed={revealSheetConfig.side === side}
+                              onClick={() => setRevealSheetConfig((prev) => ({ ...prev, side }))}
+                              className={cn(
+                                "rounded-lg px-2 py-1.5 text-xs capitalize transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/40",
+                                revealSheetConfig.side === side ? "bg-foreground font-medium text-background" : "text-muted-foreground hover:bg-card hover:text-foreground",
+                              )}
+                            >
+                              {side}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="min-w-0 space-y-1">
+                          <div className="flex items-center justify-between gap-2 text-[11px]">
+                            <label htmlFor="reveal-sheet-speed" className="text-muted-foreground">Speed</label>
+                            <span className="font-medium tabular-nums text-foreground">{revealSheetConfig.speed.toFixed(1)}×</span>
+                          </div>
+                          <input id="reveal-sheet-speed" type="range" min="0.5" max="2" step="0.1" value={revealSheetConfig.speed} onChange={(event) => setRevealSheetConfig((prev) => ({ ...prev, speed: Number(event.target.value) }))} className="w-full cursor-pointer accent-foreground" />
+                        </div>
+                        <div className="min-w-0 space-y-1">
+                          <div className="flex items-center justify-between gap-2 text-[11px]">
+                            <label htmlFor="reveal-sheet-bounce" className="text-muted-foreground">Bounce strength</label>
+                            <span className="font-medium tabular-nums text-foreground">{revealSheetConfig.bounce.toFixed(1)}×</span>
+                          </div>
+                          <input id="reveal-sheet-bounce" type="range" min="0" max="2" step="0.1" value={revealSheetConfig.bounce} onChange={(event) => setRevealSheetConfig((prev) => ({ ...prev, bounce: Number(event.target.value) }))} className="w-full cursor-pointer accent-foreground" />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="min-w-0 space-y-3 border-t border-border/70 pt-3 md:border-l md:border-t-0 md:pl-4 md:pt-0 dark:border-white/10">
+                      <div className="flex items-center justify-between gap-3 text-xs">
+                        <label htmlFor="reveal-sheet-grid" className="text-muted-foreground">Grid background</label>
+                        <input id="reveal-sheet-grid" type="checkbox" checked={revealSheetConfig.showGrid} onChange={(event) => setRevealSheetConfig((prev) => ({ ...prev, showGrid: event.target.checked }))} className="size-4 cursor-pointer accent-foreground" />
+                      </div>
+                      <div className="flex items-center justify-between gap-3 text-xs">
+                        <label htmlFor="reveal-sheet-shine" className="text-muted-foreground">Edge shine</label>
+                        <input id="reveal-sheet-shine" type="checkbox" checked={revealSheetConfig.showShine} onChange={(event) => setRevealSheetConfig((prev) => ({ ...prev, showShine: event.target.checked }))} className="size-4 cursor-pointer accent-foreground" />
+                      </div>
+                      {revealSheetConfig.showShine && (
+                        <div className="space-y-1">
+                          <span className="text-[11px] text-muted-foreground">Shine direction</span>
+                          <div role="group" aria-label="Shine direction" className="flex w-fit max-w-full rounded-lg border border-border bg-muted/40 p-0.5 dark:border-white/5 dark:bg-black/25">
+                            {(["clockwise", "counterclockwise"] as const).map((direction) => (
+                              <button
+                                key={direction}
+                                type="button"
+                                aria-pressed={revealSheetConfig.shineDirection === direction}
+                                onClick={() => setRevealSheetConfig((prev) => ({ ...prev, shineDirection: direction }))}
+                                className={cn(
+                                  "rounded-md px-2 py-1 text-[11px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/40",
+                                  revealSheetConfig.shineDirection === direction ? "bg-foreground text-background" : "text-muted-foreground hover:text-foreground",
+                                )}
+                              >
+                                {direction === "clockwise" ? "Clockwise" : "Counterclockwise"}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    {revealSheetConfig.showShine && (
+                      <div className="min-w-0 space-y-3 border-t border-border/70 pt-3 md:col-span-2 lg:col-span-1 lg:border-l lg:border-t-0 lg:pl-4 lg:pt-0 dark:border-white/10">
+                      <div className="space-y-1">
+                        <div className="flex items-center justify-between text-[11px]">
+                          <label htmlFor="reveal-sheet-shine-speed" className="text-muted-foreground">Shine speed</label>
+                          <span className="font-medium tabular-nums text-foreground">{revealSheetConfig.shineSpeed.toFixed(1)}×</span>
+                        </div>
+                        <input
+                          id="reveal-sheet-shine-speed"
+                          type="range"
+                          min="0.5"
+                          max="2"
+                          step="0.1"
+                          value={revealSheetConfig.shineSpeed}
+                          onChange={(event) => setRevealSheetConfig((prev) => ({ ...prev, shineSpeed: Number(event.target.value) }))}
+                          className="w-full cursor-pointer accent-foreground"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <div className="flex items-center justify-between text-[11px]">
+                          <label htmlFor="reveal-sheet-shine-intensity" className="text-muted-foreground">Shine intensity</label>
+                          <span className="font-medium tabular-nums text-foreground">{Math.round(revealSheetConfig.shineIntensity * 100)}%</span>
+                        </div>
+                        <input
+                          id="reveal-sheet-shine-intensity"
+                          type="range"
+                          min="0"
+                          max="1"
+                          step="0.05"
+                          value={revealSheetConfig.shineIntensity}
+                          onChange={(event) => setRevealSheetConfig((prev) => ({ ...prev, shineIntensity: Number(event.target.value) }))}
+                          className="w-full cursor-pointer accent-foreground"
+                        />
+                      </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
 
