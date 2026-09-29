@@ -27,6 +27,7 @@ const componentTitles = {
   "code-block": "Code Block",
   dither: "Dither",
   "dotted-accordion": "Dotted Accordion",
+  editor: "Selection AI Editor",
   "file-upload": "File Upload",
   "file-tree": "File Tree",
   "github-activity": "GitHub Activity",

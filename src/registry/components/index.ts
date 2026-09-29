@@ -9,6 +9,7 @@ import candyButton from "./candy-button.json";
 import codeBlock from "./code-block.json";
 import dither from "./dither.json";
 import dottedAccordion from "./dotted-accordion.json";
+import editor from "./editor.json";
 import fileUpload from "./file-upload.json";
 import fileTree from "./file-tree.json";
 import githubActivity from "./github-activity.json";
@@ -48,6 +49,7 @@ export {
   codeBlock,
   dither,
   dottedAccordion,
+  editor,
   fileUpload,
   fileTree,
   githubActivity,
@@ -88,6 +90,7 @@ export const componentsList: ComponentRegistryItem[] = [
   codeBlock as ComponentRegistryItem,
   dither as ComponentRegistryItem,
   dottedAccordion as ComponentRegistryItem,
+  editor as ComponentRegistryItem,
   fileUpload as ComponentRegistryItem,
   fileTree as ComponentRegistryItem,
   githubActivity as ComponentRegistryItem,

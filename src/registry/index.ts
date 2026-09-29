@@ -10,6 +10,7 @@ import {
   codeBlock,
   dither,
   dottedAccordion,
+  editor,
   fileUpload,
   fileTree,
   githubActivity,
@@ -41,6 +42,7 @@ import {
 
 export const COMPONENT_REGISTRY: Record<string, ComponentRegistryItem> = {
   "file-upload": fileUpload as ComponentRegistryItem,
+  editor: editor as ComponentRegistryItem,
   scales: scales as ComponentRegistryItem,
   "animated-button": animatedButton as ComponentRegistryItem,
   "reveal-sheet": revealSheet as ComponentRegistryItem,

@@ -36,6 +36,7 @@ import { MacSwitch } from "@/registry/ui/mac-switch";
 import { SpotlightSearch } from "@/registry/ui/spotlight-search";
 import { ProfileMenu } from "@/registry/ui/profile-menu";
 import { RevealSheet } from "@/registry/ui/reveal-sheet";
+import { Editor } from "@/registry/ui/editor";
 import { cn } from "@/lib/utils";
 
 function CounterPreview() {
@@ -392,6 +393,16 @@ export default function ComponentsPage() {
     "profile-menu": (
       <div className="w-full flex items-center justify-center p-2 pointer-events-none scale-75 origin-center">
         <ProfileMenu />
+      </div>
+    ),
+    editor: (
+      <div className="w-full flex items-center justify-center p-2 scale-75 origin-center">
+        <Editor
+          title="AI Selection"
+          answer="DevClub UI provides accessible, physics-driven components for React and Next.js applications."
+        >
+          Select any text here to format or ask questions.
+        </Editor>
       </div>
     ),
   };

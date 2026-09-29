@@ -179,6 +179,25 @@
       ]
     },
     {
+      "name": "editor",
+      "type": "registry:ui",
+      "title": "Selection AI Editor",
+      "description": "Contextual floating AI toolbar and formatting bar that anchors seamlessly to text selections with multi-stage LLM reasoning, streaming, and inline editing.",
+      "dependencies": [
+        "motion",
+        "lucide-react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/editor.tsx",
+          "type": "registry:ui",
+          "target": "@ui/editor.tsx"
+        }
+      ]
+    },
+    {
       "name": "file-tree",
       "type": "registry:ui",
       "title": "File Tree",

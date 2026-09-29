@@ -92,6 +92,7 @@ import { MacSwitch, type MacSwitchColor } from "@/registry/ui/mac-switch";
 import { SpotlightSearch } from "@/registry/ui/spotlight-search";
 import { ProfileMenu } from "@/registry/ui/profile-menu";
 import { RevealSheet, type RevealSheetSide } from "@/registry/ui/reveal-sheet";
+import { Editor } from "@/registry/ui/editor";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -257,6 +258,11 @@ const ALL_CATEGORIES = [
         label: "AI Input",
         slug: "ai-input",
         href: "/components/ai-input",
+      },
+      {
+        label: "Selection AI Editor",
+        slug: "editor",
+        href: "/components/editor",
       },
     ],
   },
@@ -820,6 +826,12 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     useState<FileUploadLayout>("full");
   const [hookDemoIndex, setHookDemoIndex] = useState(0);
   const [counterDemoValue, setCounterDemoValue] = useState(122337);
+  const [editorDemoContent, setEditorDemoContent] = useState(
+    "DevClub UI components are engineered with mathematical spring physics, subpixel alignment, and hardware-accelerated GPU animations. Try selecting any portion of this paragraph to trigger the contextual floating toolbar: you can toggle formatting like bold, italic, and code, or click 'Ask AI' to stream a real-time AI response with staged reasoning.",
+  );
+  const [editorDemoAnswer, setEditorDemoAnswer] = useState(
+    "DevClub UI Selection AI Editor integrates seamless text formatting, an interactive thinking orb, multi-stage context retrieval, and word-by-word streaming.",
+  );
   const [revealSheetOpen, setRevealSheetOpen] = useState(false);
   const [revealSheetConfig, setRevealSheetConfig] = useState<{
     side: RevealSheetSide;
@@ -830,7 +842,16 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     shineDirection: "clockwise" | "counterclockwise";
     shineSpeed: number;
     shineIntensity: number;
-  }>({ side: "right", speed: 1, bounce: 1, showGrid: true, showShine: true, shineDirection: "clockwise", shineSpeed: 1, shineIntensity: 0.55 });
+  }>({
+    side: "right",
+    speed: 1,
+    bounce: 1,
+    showGrid: true,
+    showShine: true,
+    shineDirection: "clockwise",
+    shineSpeed: 1,
+    shineIntensity: 0.55,
+  });
   const [sparkleConfig, setSparkleConfig] = useState({
     variant: "default" as "default" | "outline" | "glass",
     size: "lg" as "sm" | "default" | "lg",
@@ -1246,17 +1267,17 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               onDragStart={(event) => {
                 event.dataTransfer.effectAllowed = "copy";
                 event.dataTransfer.items.add(
-                  new File(
-                    [new Uint8Array(640_000)],
-                    "product-shot.png",
-                    { type: "image/png" },
-                  ),
+                  new File([new Uint8Array(640_000)], "product-shot.png", {
+                    type: "image/png",
+                  }),
                 );
               }}
               className="flex cursor-grab items-center gap-2 rounded-lg border border-border bg-background px-3 py-2 text-xs text-muted-foreground shadow-sm active:cursor-grabbing"
             >
               <span className="size-2 rounded-sm bg-foreground/70" />
-              <span className="font-medium text-foreground">product-shot.png</span>
+              <span className="font-medium text-foreground">
+                product-shot.png
+              </span>
               <span>625 KB · drag to test</span>
             </div>
             <FileUpload
@@ -1437,13 +1458,30 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               <TaskList
                 className="max-w-none"
                 defaultTasks={[
-                  { id: "review", label: "Review the circular reveal", done: true },
+                  {
+                    id: "review",
+                    label: "Review the circular reveal",
+                    done: true,
+                  },
                   { id: "directions", label: "Test every opening direction" },
-                  { id: "accessibility", label: "Check keyboard and reduced motion" },
+                  {
+                    id: "accessibility",
+                    label: "Check keyboard and reduced motion",
+                  },
                   { id: "publish", label: "Publish the component" },
                 ]}
               />
             </RevealSheet>
+          </div>
+        );
+      case "editor":
+        return (
+          <div className="flex w-full max-w-2xl flex-col items-center justify-center p-6">
+            <div className="w-full">
+              <Editor title="Interactive Document" answer={editorDemoAnswer}>
+                {editorDemoContent}
+              </Editor>
+            </div>
           </div>
         );
       case "spotlight-search":
@@ -2934,7 +2972,10 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     ))}
                   </div>
                   <div className="h-7 w-px bg-border dark:bg-white/10" />
-                  <div className="flex items-center gap-1" aria-label="Upload accent color">
+                  <div
+                    className="flex items-center gap-1"
+                    aria-label="Upload accent color"
+                  >
                     {PALETTE.map((paletteColor) => {
                       const selected = activeColor === paletteColor.hex;
                       return (
@@ -2954,7 +2995,11 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             <motion.span
                               layoutId="activeFileUploadColorRing"
                               className="pointer-events-none absolute inset-0 rounded-full border-2 border-foreground dark:border-white"
-                              transition={{ type: "spring", stiffness: 480, damping: 32 }}
+                              transition={{
+                                type: "spring",
+                                stiffness: 480,
+                                damping: 32,
+                              }}
                             />
                           )}
                           <span
@@ -2971,11 +3016,24 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               {activeComponent.slug === "reveal-sheet" && (
                 <div className="pointer-events-auto mx-4 flex max-h-[40vh] w-full max-w-6xl flex-col gap-3 overflow-y-auto rounded-2xl border border-border bg-card/95 p-4 shadow-xl backdrop-blur-2xl md:max-h-[50vh] lg:max-h-none dark:border-white/10 dark:bg-[#121215]/95">
                   <div className="flex shrink-0 items-center justify-between gap-3">
-                    <span className="text-xs font-semibold text-foreground">Sheet settings</span>
+                    <span className="text-xs font-semibold text-foreground">
+                      Sheet settings
+                    </span>
                     <div className="flex items-center gap-3">
                       <button
                         type="button"
-                        onClick={() => setRevealSheetConfig({ side: "right", speed: 1, bounce: 1, showGrid: true, showShine: true, shineDirection: "clockwise", shineSpeed: 1, shineIntensity: 0.55 })}
+                        onClick={() =>
+                          setRevealSheetConfig({
+                            side: "right",
+                            speed: 1,
+                            bounce: 1,
+                            showGrid: true,
+                            showShine: true,
+                            shineDirection: "clockwise",
+                            shineSpeed: 1,
+                            shineIntensity: 0.55,
+                          })
+                        }
                         className="flex items-center gap-1.5 text-[11px] text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/40"
                       >
                         <ResetIcon className="size-3.5" />
@@ -2993,106 +3051,243 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-[1.25fr_1fr_1fr]">
                     <div className="min-w-0 space-y-3">
                       <div className="space-y-1.5">
-                        <span className="text-[11px] text-muted-foreground">Direction</span>
-                        <div role="group" aria-label="Sheet direction" className="grid grid-cols-4 gap-1 rounded-xl border border-border bg-muted/40 p-1 dark:border-white/5 dark:bg-black/25">
-                          {(["top", "right", "bottom", "left"] as const).map((side) => (
-                            <button
-                              key={side}
-                              type="button"
-                              aria-pressed={revealSheetConfig.side === side}
-                              onClick={() => setRevealSheetConfig((prev) => ({ ...prev, side }))}
-                              className={cn(
-                                "rounded-lg px-2 py-1.5 text-xs capitalize transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/40",
-                                revealSheetConfig.side === side ? "bg-foreground font-medium text-background" : "text-muted-foreground hover:bg-card hover:text-foreground",
-                              )}
-                            >
-                              {side}
-                            </button>
-                          ))}
+                        <span className="text-[11px] text-muted-foreground">
+                          Direction
+                        </span>
+                        <div
+                          role="group"
+                          aria-label="Sheet direction"
+                          className="grid grid-cols-4 gap-1 rounded-xl border border-border bg-muted/40 p-1 dark:border-white/5 dark:bg-black/25"
+                        >
+                          {(["top", "right", "bottom", "left"] as const).map(
+                            (side) => (
+                              <button
+                                key={side}
+                                type="button"
+                                aria-pressed={revealSheetConfig.side === side}
+                                onClick={() =>
+                                  setRevealSheetConfig((prev) => ({
+                                    ...prev,
+                                    side,
+                                  }))
+                                }
+                                className={cn(
+                                  "rounded-lg px-2 py-1.5 text-xs capitalize transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/40",
+                                  revealSheetConfig.side === side
+                                    ? "bg-foreground font-medium text-background"
+                                    : "text-muted-foreground hover:bg-card hover:text-foreground",
+                                )}
+                              >
+                                {side}
+                              </button>
+                            ),
+                          )}
                         </div>
                       </div>
                       <div className="grid grid-cols-2 gap-3">
                         <div className="min-w-0 space-y-1">
                           <div className="flex items-center justify-between gap-2 text-[11px]">
-                            <label htmlFor="reveal-sheet-speed" className="text-muted-foreground">Speed</label>
-                            <span className="font-medium tabular-nums text-foreground">{revealSheetConfig.speed.toFixed(1)}×</span>
+                            <label
+                              htmlFor="reveal-sheet-speed"
+                              className="text-muted-foreground"
+                            >
+                              Speed
+                            </label>
+                            <span className="font-medium tabular-nums text-foreground">
+                              {revealSheetConfig.speed.toFixed(1)}×
+                            </span>
                           </div>
-                          <input id="reveal-sheet-speed" type="range" min="0.5" max="2" step="0.1" value={revealSheetConfig.speed} onChange={(event) => setRevealSheetConfig((prev) => ({ ...prev, speed: Number(event.target.value) }))} className="w-full cursor-pointer accent-foreground" />
+                          <input
+                            id="reveal-sheet-speed"
+                            type="range"
+                            min="0.5"
+                            max="2"
+                            step="0.1"
+                            value={revealSheetConfig.speed}
+                            onChange={(event) =>
+                              setRevealSheetConfig((prev) => ({
+                                ...prev,
+                                speed: Number(event.target.value),
+                              }))
+                            }
+                            className="w-full cursor-pointer accent-foreground"
+                          />
                         </div>
                         <div className="min-w-0 space-y-1">
                           <div className="flex items-center justify-between gap-2 text-[11px]">
-                            <label htmlFor="reveal-sheet-bounce" className="text-muted-foreground">Bounce strength</label>
-                            <span className="font-medium tabular-nums text-foreground">{revealSheetConfig.bounce.toFixed(1)}×</span>
+                            <label
+                              htmlFor="reveal-sheet-bounce"
+                              className="text-muted-foreground"
+                            >
+                              Bounce strength
+                            </label>
+                            <span className="font-medium tabular-nums text-foreground">
+                              {revealSheetConfig.bounce.toFixed(1)}×
+                            </span>
                           </div>
-                          <input id="reveal-sheet-bounce" type="range" min="0" max="2" step="0.1" value={revealSheetConfig.bounce} onChange={(event) => setRevealSheetConfig((prev) => ({ ...prev, bounce: Number(event.target.value) }))} className="w-full cursor-pointer accent-foreground" />
+                          <input
+                            id="reveal-sheet-bounce"
+                            type="range"
+                            min="0"
+                            max="2"
+                            step="0.1"
+                            value={revealSheetConfig.bounce}
+                            onChange={(event) =>
+                              setRevealSheetConfig((prev) => ({
+                                ...prev,
+                                bounce: Number(event.target.value),
+                              }))
+                            }
+                            className="w-full cursor-pointer accent-foreground"
+                          />
                         </div>
                       </div>
                     </div>
                     <div className="min-w-0 space-y-3 border-t border-border/70 pt-3 md:border-l md:border-t-0 md:pl-4 md:pt-0 dark:border-white/10">
                       <div className="flex items-center justify-between gap-3 text-xs">
-                        <label htmlFor="reveal-sheet-grid" className="text-muted-foreground">Grid background</label>
-                        <input id="reveal-sheet-grid" type="checkbox" checked={revealSheetConfig.showGrid} onChange={(event) => setRevealSheetConfig((prev) => ({ ...prev, showGrid: event.target.checked }))} className="size-4 cursor-pointer accent-foreground" />
+                        <label
+                          htmlFor="reveal-sheet-grid"
+                          className="text-muted-foreground"
+                        >
+                          Grid background
+                        </label>
+                        <input
+                          id="reveal-sheet-grid"
+                          type="checkbox"
+                          checked={revealSheetConfig.showGrid}
+                          onChange={(event) =>
+                            setRevealSheetConfig((prev) => ({
+                              ...prev,
+                              showGrid: event.target.checked,
+                            }))
+                          }
+                          className="size-4 cursor-pointer accent-foreground"
+                        />
                       </div>
                       <div className="flex items-center justify-between gap-3 text-xs">
-                        <label htmlFor="reveal-sheet-shine" className="text-muted-foreground">Edge shine</label>
-                        <input id="reveal-sheet-shine" type="checkbox" checked={revealSheetConfig.showShine} onChange={(event) => setRevealSheetConfig((prev) => ({ ...prev, showShine: event.target.checked }))} className="size-4 cursor-pointer accent-foreground" />
+                        <label
+                          htmlFor="reveal-sheet-shine"
+                          className="text-muted-foreground"
+                        >
+                          Edge shine
+                        </label>
+                        <input
+                          id="reveal-sheet-shine"
+                          type="checkbox"
+                          checked={revealSheetConfig.showShine}
+                          onChange={(event) =>
+                            setRevealSheetConfig((prev) => ({
+                              ...prev,
+                              showShine: event.target.checked,
+                            }))
+                          }
+                          className="size-4 cursor-pointer accent-foreground"
+                        />
                       </div>
                       {revealSheetConfig.showShine && (
                         <div className="space-y-1">
-                          <span className="text-[11px] text-muted-foreground">Shine direction</span>
-                          <div role="group" aria-label="Shine direction" className="flex w-fit max-w-full rounded-lg border border-border bg-muted/40 p-0.5 dark:border-white/5 dark:bg-black/25">
-                            {(["clockwise", "counterclockwise"] as const).map((direction) => (
-                              <button
-                                key={direction}
-                                type="button"
-                                aria-pressed={revealSheetConfig.shineDirection === direction}
-                                onClick={() => setRevealSheetConfig((prev) => ({ ...prev, shineDirection: direction }))}
-                                className={cn(
-                                  "rounded-md px-2 py-1 text-[11px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/40",
-                                  revealSheetConfig.shineDirection === direction ? "bg-foreground text-background" : "text-muted-foreground hover:text-foreground",
-                                )}
-                              >
-                                {direction === "clockwise" ? "Clockwise" : "Counterclockwise"}
-                              </button>
-                            ))}
+                          <span className="text-[11px] text-muted-foreground">
+                            Shine direction
+                          </span>
+                          <div
+                            role="group"
+                            aria-label="Shine direction"
+                            className="flex w-fit max-w-full rounded-lg border border-border bg-muted/40 p-0.5 dark:border-white/5 dark:bg-black/25"
+                          >
+                            {(["clockwise", "counterclockwise"] as const).map(
+                              (direction) => (
+                                <button
+                                  key={direction}
+                                  type="button"
+                                  aria-pressed={
+                                    revealSheetConfig.shineDirection ===
+                                    direction
+                                  }
+                                  onClick={() =>
+                                    setRevealSheetConfig((prev) => ({
+                                      ...prev,
+                                      shineDirection: direction,
+                                    }))
+                                  }
+                                  className={cn(
+                                    "rounded-md px-2 py-1 text-[11px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/40",
+                                    revealSheetConfig.shineDirection ===
+                                      direction
+                                      ? "bg-foreground text-background"
+                                      : "text-muted-foreground hover:text-foreground",
+                                  )}
+                                >
+                                  {direction === "clockwise"
+                                    ? "Clockwise"
+                                    : "Counterclockwise"}
+                                </button>
+                              ),
+                            )}
                           </div>
                         </div>
                       )}
                     </div>
                     {revealSheetConfig.showShine && (
                       <div className="min-w-0 space-y-3 border-t border-border/70 pt-3 md:col-span-2 lg:col-span-1 lg:border-l lg:border-t-0 lg:pl-4 lg:pt-0 dark:border-white/10">
-                      <div className="space-y-1">
-                        <div className="flex items-center justify-between text-[11px]">
-                          <label htmlFor="reveal-sheet-shine-speed" className="text-muted-foreground">Shine speed</label>
-                          <span className="font-medium tabular-nums text-foreground">{revealSheetConfig.shineSpeed.toFixed(1)}×</span>
+                        <div className="space-y-1">
+                          <div className="flex items-center justify-between text-[11px]">
+                            <label
+                              htmlFor="reveal-sheet-shine-speed"
+                              className="text-muted-foreground"
+                            >
+                              Shine speed
+                            </label>
+                            <span className="font-medium tabular-nums text-foreground">
+                              {revealSheetConfig.shineSpeed.toFixed(1)}×
+                            </span>
+                          </div>
+                          <input
+                            id="reveal-sheet-shine-speed"
+                            type="range"
+                            min="0.5"
+                            max="2"
+                            step="0.1"
+                            value={revealSheetConfig.shineSpeed}
+                            onChange={(event) =>
+                              setRevealSheetConfig((prev) => ({
+                                ...prev,
+                                shineSpeed: Number(event.target.value),
+                              }))
+                            }
+                            className="w-full cursor-pointer accent-foreground"
+                          />
                         </div>
-                        <input
-                          id="reveal-sheet-shine-speed"
-                          type="range"
-                          min="0.5"
-                          max="2"
-                          step="0.1"
-                          value={revealSheetConfig.shineSpeed}
-                          onChange={(event) => setRevealSheetConfig((prev) => ({ ...prev, shineSpeed: Number(event.target.value) }))}
-                          className="w-full cursor-pointer accent-foreground"
-                        />
-                      </div>
-                      <div className="space-y-1">
-                        <div className="flex items-center justify-between text-[11px]">
-                          <label htmlFor="reveal-sheet-shine-intensity" className="text-muted-foreground">Shine intensity</label>
-                          <span className="font-medium tabular-nums text-foreground">{Math.round(revealSheetConfig.shineIntensity * 100)}%</span>
+                        <div className="space-y-1">
+                          <div className="flex items-center justify-between text-[11px]">
+                            <label
+                              htmlFor="reveal-sheet-shine-intensity"
+                              className="text-muted-foreground"
+                            >
+                              Shine intensity
+                            </label>
+                            <span className="font-medium tabular-nums text-foreground">
+                              {Math.round(
+                                revealSheetConfig.shineIntensity * 100,
+                              )}
+                              %
+                            </span>
+                          </div>
+                          <input
+                            id="reveal-sheet-shine-intensity"
+                            type="range"
+                            min="0"
+                            max="1"
+                            step="0.05"
+                            value={revealSheetConfig.shineIntensity}
+                            onChange={(event) =>
+                              setRevealSheetConfig((prev) => ({
+                                ...prev,
+                                shineIntensity: Number(event.target.value),
+                              }))
+                            }
+                            className="w-full cursor-pointer accent-foreground"
+                          />
                         </div>
-                        <input
-                          id="reveal-sheet-shine-intensity"
-                          type="range"
-                          min="0"
-                          max="1"
-                          step="0.05"
-                          value={revealSheetConfig.shineIntensity}
-                          onChange={(event) => setRevealSheetConfig((prev) => ({ ...prev, shineIntensity: Number(event.target.value) }))}
-                          className="w-full cursor-pointer accent-foreground"
-                        />
-                      </div>
                       </div>
                     )}
                   </div>
@@ -5416,6 +5611,49 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         </button>
                       )}
                     </div>
+                  </div>
+                </div>
+              )}
+
+              {activeComponent.slug === "editor" && (
+                <div
+                  key="editor-customize-panel"
+                  className="pointer-events-auto rounded-2xl border border-border dark:border-white/10 bg-card/95 dark:bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-xl max-w-xl w-full mx-4 select-none flex flex-col gap-2.5"
+                >
+                  <div className="flex items-center justify-between px-1">
+                    <span className="text-xs font-semibold text-foreground">
+                      Selection Editor Studio
+                    </span>
+                    <span className="text-[11px] font-mono text-muted-foreground">
+                      Highlight document text to interact
+                    </span>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-2 pt-1 border-t border-border dark:border-white/5">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setEditorDemoContent(
+                          "DevClub UI components are engineered with mathematical spring physics, subpixel alignment, and hardware-accelerated GPU animations. Try selecting any portion of this paragraph to trigger the contextual floating toolbar: you can toggle formatting like bold, italic, and code, or click 'Ask AI' to stream a real-time AI response with staged reasoning."
+                        );
+                      }}
+                      className="h-7 px-2.5 rounded-lg border border-border bg-card hover:bg-muted text-xs font-medium text-foreground transition-all flex items-center gap-1.5 cursor-pointer"
+                    >
+                      <ResetIcon className="w-3 h-3 text-muted-foreground" />
+                      <span>Reset Content</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setEditorDemoAnswer(
+                          "The CSS Highlight API allows developers to style arbitrary text ranges without modifying DOM tree nodes. Combined with Framer Motion spring physics, this achieves 60fps responsive floating controls."
+                        );
+                      }}
+                      className="h-7 px-2.5 rounded-lg border border-border bg-card hover:bg-muted text-xs font-medium text-foreground transition-all flex items-center gap-1.5 cursor-pointer"
+                    >
+                      <span>Custom AI Answer</span>
+                    </button>
                   </div>
                 </div>
               )}
