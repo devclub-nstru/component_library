@@ -38,6 +38,8 @@ import { SpotlightSearch } from "@/registry/ui/spotlight-search";
 import { ProfileMenu } from "@/registry/ui/profile-menu";
 import { RevealSheet } from "@/registry/ui/reveal-sheet";
 import { Editor } from "@/registry/ui/editor";
+import { ConfirmMorph } from "@/registry/ui/confirm-morph";
+import { Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 function CounterPreview() {
@@ -407,6 +409,16 @@ export default function ComponentsPage() {
         >
           Select any text here to format or ask questions.
         </Editor>
+      </div>
+    ),
+    "confirm-morph": (
+      <div className="flex items-center justify-center p-3 select-none pointer-events-none scale-90 origin-center">
+        <ConfirmMorph
+          label="Delete"
+          icon={<Trash2 size={16} strokeWidth={1.75} />}
+          prompt="Delete 3 files?"
+          tone="danger"
+        />
       </div>
     ),
   };

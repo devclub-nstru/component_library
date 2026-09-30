@@ -93,6 +93,7 @@ import { SpotlightSearch } from "@/registry/ui/spotlight-search";
 import { ProfileMenu } from "@/registry/ui/profile-menu";
 import { RevealSheet, type RevealSheetSide } from "@/registry/ui/reveal-sheet";
 import { Editor } from "@/registry/ui/editor";
+import { DeleteSelectionShowcase } from "@/registry/ui/delete-selection";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -228,6 +229,11 @@ const ALL_CATEGORIES = [
         label: "Theme Toggle",
         slug: "theme-toggle",
         href: "/components/theme-toggle",
+      },
+      {
+        label: "Confirm Morph",
+        slug: "confirm-morph",
+        href: "/components/confirm-morph",
       },
     ],
   },
@@ -1301,6 +1307,13 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 }
               }}
             />
+          </div>
+        );
+      case "confirm-morph":
+      case "morph-selection":
+        return (
+          <div className="flex w-full items-center justify-center p-4">
+            <DeleteSelectionShowcase />
           </div>
         );
       case "task-list":

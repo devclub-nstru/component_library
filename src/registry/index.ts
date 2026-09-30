@@ -8,6 +8,7 @@ import {
   bentoGrid,
   candyButton,
   codeBlock,
+  confirmMorph,
   dither,
   dottedAccordion,
   editor,
@@ -79,6 +80,7 @@ export const COMPONENT_REGISTRY: Record<string, ComponentRegistryItem> = {
   "spotlight-search": spotlightSearch as ComponentRegistryItem,
   "pixel-card": pixelCard as ComponentRegistryItem,
   "theme-toggle": themeToggle as ComponentRegistryItem,
+  "confirm-morph": confirmMorph as ComponentRegistryItem,
 };
 
 export const getAllComponents = (
@@ -95,6 +97,9 @@ export const getComponentBySlug = (
 ): ComponentRegistryItem | undefined => {
   const item =
     COMPONENT_REGISTRY[slug] ||
+    (slug === "morph-selection"
+      ? COMPONENT_REGISTRY["confirm-morph"]
+      : undefined) ||
     (slug === "animated-theme-toggler" || slug === "theme-toggler"
       ? COMPONENT_REGISTRY["theme-toggle"]
       : undefined);

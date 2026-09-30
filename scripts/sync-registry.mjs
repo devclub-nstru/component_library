@@ -25,6 +25,7 @@ const componentTitles = {
   "bento-grid": "Bento Grid",
   "candy-button": "Candy Button",
   "code-block": "Code Block",
+  "confirm-morph": "Confirm Morph",
   dither: "Dither",
   "dotted-accordion": "Dotted Accordion",
   editor: "Selection AI Editor",

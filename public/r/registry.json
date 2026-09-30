@@ -145,6 +145,30 @@
       ]
     },
     {
+      "name": "confirm-morph",
+      "type": "registry:ui",
+      "title": "Confirm Morph",
+      "description": "Adaptive inline confirmation button that morphs into question, spinner, success with undo, and error with retry.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge",
+        "motion",
+        "lucide-react"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/confirm-morph.tsx",
+          "type": "registry:ui",
+          "target": "@ui/confirm-morph.tsx"
+        },
+        {
+          "path": "src/registry/ui/delete-selection.tsx",
+          "type": "registry:ui",
+          "target": "@ui/delete-selection.tsx"
+        }
+      ]
+    },
+    {
       "name": "dither",
       "type": "registry:ui",
       "title": "Dither",

@@ -7,6 +7,7 @@ import animatedCounter from "./animated-counter.json";
 import bentoGrid from "./bento-grid.json";
 import candyButton from "./candy-button.json";
 import codeBlock from "./code-block.json";
+import confirmMorph from "./confirm-morph.json";
 import dither from "./dither.json";
 import dottedAccordion from "./dotted-accordion.json";
 import editor from "./editor.json";
@@ -47,6 +48,7 @@ export {
   bentoGrid,
   candyButton,
   codeBlock,
+  confirmMorph,
   dither,
   dottedAccordion,
   editor,
@@ -88,6 +90,7 @@ export const componentsList: ComponentRegistryItem[] = [
   bentoGrid as ComponentRegistryItem,
   candyButton as ComponentRegistryItem,
   codeBlock as ComponentRegistryItem,
+  confirmMorph as ComponentRegistryItem,
   dither as ComponentRegistryItem,
   dottedAccordion as ComponentRegistryItem,
   editor as ComponentRegistryItem,
