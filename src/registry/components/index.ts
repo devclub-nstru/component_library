@@ -20,6 +20,7 @@ import hookSidebar from "./hook-sidebar.json";
 import liquidToggle from "./liquid-toggle.json";
 import macSlider from "./mac-slider.json";
 import macSwitch from "./mac-switch.json";
+import slider from "./slider.json";
 import morphSearch from "./morph-search.json";
 import noise from "./noise.json";
 import orb from "./orb.json";
@@ -71,6 +72,7 @@ export {
   revealSheet,
   scales,
   searchInput,
+  slider,
   smoothAccordion,
   sparkleButton,
   spotlightCard,
@@ -113,6 +115,7 @@ export const componentsList: ComponentRegistryItem[] = [
   revealSheet as ComponentRegistryItem,
   scales as ComponentRegistryItem,
   searchInput as ComponentRegistryItem,
+  slider as ComponentRegistryItem,
   smoothAccordion as ComponentRegistryItem,
   sparkleButton as ComponentRegistryItem,
   spotlightCard as ComponentRegistryItem,

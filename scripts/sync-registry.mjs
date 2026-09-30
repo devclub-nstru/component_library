@@ -38,6 +38,7 @@ const componentTitles = {
   "liquid-toggle": "Liquid Toggle",
   "mac-slider": "Mac Slider",
   "mac-switch": "Mac Switch",
+  slider: "Slider",
   "morph-search": "Morph Search",
   noise: "Noise",
   orb: "Thinking Orb",

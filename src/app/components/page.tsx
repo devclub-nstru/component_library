@@ -33,6 +33,7 @@ import { LiquidToggle } from "@/registry/ui/liquid-toggle";
 import { GooeyNav } from "@/registry/ui/gooey-nav";
 import { PromptInput } from "@/registry/ui/ai-input";
 import { MacSlider } from "@/registry/ui/mac-slider";
+import { Slider } from "@/registry/ui/slider";
 import { MacSwitch } from "@/registry/ui/mac-switch";
 import { SpotlightSearch } from "@/registry/ui/spotlight-search";
 import { ProfileMenu } from "@/registry/ui/profile-menu";
@@ -369,6 +370,20 @@ export default function ComponentsPage() {
     "mac-slider": (
       <div className="w-full flex items-center justify-center p-2 pointer-events-none scale-75 origin-center">
         <MacSlider defaultValue={45} />
+      </div>
+    ),
+    slider: (
+      <div className="w-full max-w-70 flex items-center justify-center p-2 pointer-events-none scale-90 origin-center">
+        <Slider
+          label="Volume"
+          defaultValue={60}
+          format={(val) => `${val}%`}
+          marks={[
+            { value: 0, label: "0%" },
+            { value: 50, label: "50%" },
+            { value: 100, label: "100%" },
+          ]}
+        />
       </div>
     ),
     "mac-switch": (

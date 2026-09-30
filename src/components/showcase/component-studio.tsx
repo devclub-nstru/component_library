@@ -88,6 +88,8 @@ import {
   type MacSliderSize,
   type MacSliderMaterial,
 } from "@/registry/ui/mac-slider";
+import { Slider } from "@/registry/ui/slider";
+import { Volume2, VolumeX } from "lucide-react";
 import { MacSwitch, type MacSwitchColor } from "@/registry/ui/mac-switch";
 import { SpotlightSearch } from "@/registry/ui/spotlight-search";
 import { ProfileMenu } from "@/registry/ui/profile-menu";
@@ -234,6 +236,11 @@ const ALL_CATEGORIES = [
         label: "Confirm Morph",
         slug: "confirm-morph",
         href: "/components/confirm-morph",
+      },
+      {
+        label: "Slider",
+        slug: "slider",
+        href: "/components/slider",
       },
     ],
   },
@@ -947,6 +954,24 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     setMacSliderBlurLevel(0);
   };
 
+  const [sliderIdeation, setSliderIdeation] = useState<
+    "both" | "budget" | "volume"
+  >("both");
+  const [sliderBudget, setSliderBudget] = useState<[number, number]>([
+    4500, 8000,
+  ]);
+  const [sliderVolume, setSliderVolume] = useState<number>(60);
+  const [sliderDisabled, setSliderDisabled] = useState(false);
+  const [sliderMinSteps, setSliderMinSteps] = useState(1);
+
+  const resetSliderConfig = () => {
+    setSliderIdeation("both");
+    setSliderBudget([4500, 8000]);
+    setSliderVolume(60);
+    setSliderDisabled(false);
+    setSliderMinSteps(1);
+  };
+
   const [macSwitchColor, setMacSwitchColor] = useState<MacSwitchColor>("green");
 
   const [gooeyNavIndex, setGooeyNavIndex] = useState(0);
@@ -1160,6 +1185,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     activeComponent.slug !== "gooey-nav" &&
     activeComponent.slug !== "ai-input" &&
     activeComponent.slug !== "mac-slider" &&
+    activeComponent.slug !== "slider" &&
     activeComponent.slug !== "pixel-card" &&
     activeComponent.slug !== "orb" &&
     activeComponent.slug !== "theme-toggle" &&
@@ -1432,6 +1458,66 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               refractionLevel={macSliderRefractionLevel}
               blurLevel={macSliderBlurLevel}
             />
+          </div>
+        );
+      case "slider":
+        return (
+          <div className="flex flex-col items-center justify-center w-full h-full min-h-96 select-none p-4 sm:p-8">
+            <div className="w-full max-w-xl flex flex-col gap-10 p-6 sm:p-10 rounded-2xl bg-zinc-950/40 dark:bg-black/40 border border-zinc-800/80 dark:border-white/10 backdrop-blur-xl shadow-2xl transition-all">
+              {(sliderIdeation === "both" || sliderIdeation === "budget") && (
+                <div className="w-full">
+                  <Slider
+                    label="Budget"
+                    value={sliderBudget}
+                    onValueChange={setSliderBudget}
+                    min={0}
+                    max={15000}
+                    step={100}
+                    minStepsBetweenThumbs={sliderMinSteps}
+                    format={(val) => `₹${val.toLocaleString("en-US")}`}
+                    disabled={sliderDisabled}
+                  />
+                </div>
+              )}
+
+              {(sliderIdeation === "both" || sliderIdeation === "volume") && (
+                <div className="w-full">
+                  <Slider
+                    label="Volume"
+                    value={sliderVolume}
+                    onValueChange={setSliderVolume}
+                    min={0}
+                    max={100}
+                    step={1}
+                    format={(val) => `${val}%`}
+                    disabled={sliderDisabled}
+                    start={
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setSliderVolume((v) => (v === 0 ? 60 : 0))
+                        }
+                        className="w-9 h-9 rounded-full bg-zinc-900 border border-white/10 flex items-center justify-center text-zinc-300 hover:text-white transition-colors cursor-pointer"
+                        aria-label="Toggle mute"
+                      >
+                        {sliderVolume === 0 ? (
+                          <VolumeX className="w-4 h-4" />
+                        ) : (
+                          <Volume2 className="w-4 h-4" />
+                        )}
+                      </button>
+                    }
+                    marks={[
+                      { value: 0, label: "0%" },
+                      { value: 25, label: "25%" },
+                      { value: 50, label: "50%" },
+                      { value: 75, label: "75%" },
+                      { value: 100, label: "100%" },
+                    ]}
+                  />
+                </div>
+              )}
+            </div>
           </div>
         );
       case "mac-switch":
@@ -4755,6 +4841,105 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           {macSliderBlurLevel.toFixed(1)}px
                         </span>
                       </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeComponent.slug === "slider" && (
+                <div
+                  key="slider-customize-panel"
+                  className="pointer-events-auto rounded-2xl border border-border dark:border-white/10 bg-card/95 dark:bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-xl dark:shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-2xl w-full mx-4 select-none flex flex-col gap-2.5"
+                >
+                  <div className="flex items-center justify-between px-1">
+                    <span className="text-xs font-semibold text-foreground dark:text-white/90 tracking-tight">
+                      Slider Controls & Ideations
+                    </span>
+                    <button
+                      type="button"
+                      onClick={resetSliderConfig}
+                      className="text-[11px] text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                    >
+                      <ResetIcon className="w-3.5 h-3.5" />
+                      <span>Reset</span>
+                    </button>
+                  </div>
+
+                  <div className="rounded-xl border border-border dark:border-white/5 bg-muted/40 dark:bg-[#0b0b0e] p-2 flex flex-col gap-2">
+                    <div className="flex items-center gap-1 bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5 w-full">
+                      {(
+                        [
+                          { id: "both", label: "Both Ideations" },
+                          { id: "budget", label: "Budget Range" },
+                          { id: "volume", label: "Volume Control" },
+                        ] as const
+                      ).map((tab) => (
+                        <button
+                          key={tab.id}
+                          type="button"
+                          onClick={() => setSliderIdeation(tab.id)}
+                          className={cn(
+                            "relative flex-1 h-7.5 px-2 rounded-lg text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer select-none",
+                            sliderIdeation === tab.id
+                              ? "text-background font-semibold dark:text-black"
+                              : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
+                          )}
+                        >
+                          {sliderIdeation === tab.id && (
+                            <motion.div
+                              layoutId="activeSliderIdeationIndicator"
+                              transition={{
+                                type: "spring",
+                                stiffness: 450,
+                                damping: 32,
+                              }}
+                              className="absolute inset-0 bg-foreground dark:bg-white rounded-lg shadow-xs"
+                            />
+                          )}
+                          <span className="relative z-10 truncate">
+                            {tab.label}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+
+                    <div className="flex flex-wrap items-center justify-between gap-2 px-1 pt-1 text-xs">
+                      <div className="flex items-center gap-2">
+                        <span className="text-muted-foreground dark:text-zinc-400">
+                          Status:
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => setSliderDisabled(!sliderDisabled)}
+                          className={cn(
+                            "px-2.5 py-1 rounded-lg text-xs font-medium transition-colors cursor-pointer border",
+                            sliderDisabled
+                              ? "bg-rose-500/10 text-rose-500 border-rose-500/20"
+                              : "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
+                          )}
+                        >
+                          {sliderDisabled ? "Disabled" : "Active"}
+                        </button>
+                      </div>
+
+                      {sliderIdeation !== "volume" && (
+                        <div className="flex items-center gap-1.5 text-muted-foreground dark:text-zinc-400">
+                          <span>Range:</span>
+                          <span className="font-medium text-foreground dark:text-zinc-200 tabular-nums">
+                            ${sliderBudget[0].toLocaleString()} – $
+                            {sliderBudget[1].toLocaleString()}
+                          </span>
+                        </div>
+                      )}
+
+                      {sliderIdeation !== "budget" && (
+                        <div className="flex items-center gap-1.5 text-muted-foreground dark:text-zinc-400">
+                          <span>Volume:</span>
+                          <span className="font-medium text-foreground dark:text-zinc-200 tabular-nums">
+                            {sliderVolume}%
+                          </span>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

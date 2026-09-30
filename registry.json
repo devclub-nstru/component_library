@@ -578,6 +578,24 @@
       ]
     },
     {
+      "name": "slider",
+      "type": "registry:ui",
+      "title": "Slider",
+      "description": "Precision spring-physics slider and range component with rubber-band resistance, release inertia, odometer rolling numbers, and floating tooltips.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge",
+        "motion"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/slider.tsx",
+          "type": "registry:ui",
+          "target": "@ui/slider.tsx"
+        }
+      ]
+    },
+    {
       "name": "smooth-accordion",
       "type": "registry:ui",
       "title": "Smooth Accordion",
