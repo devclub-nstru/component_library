@@ -40,6 +40,7 @@ import {
   themeToggle,
   toast,
   twitterCard,
+  dateRangePicker,
 } from "./components";
 
 export const COMPONENT_REGISTRY: Record<string, ComponentRegistryItem> = {
@@ -83,6 +84,7 @@ export const COMPONENT_REGISTRY: Record<string, ComponentRegistryItem> = {
   "pixel-card": pixelCard as ComponentRegistryItem,
   "theme-toggle": themeToggle as ComponentRegistryItem,
   "confirm-morph": confirmMorph as ComponentRegistryItem,
+  "date-range-picker": dateRangePicker as ComponentRegistryItem,
 };
 
 export const getAllComponents = (

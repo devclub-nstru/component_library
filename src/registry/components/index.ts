@@ -39,6 +39,7 @@ import taskList from "./task-list.json";
 import themeToggle from "./theme-toggle.json";
 import toast from "./toast.json";
 import twitterCard from "./twitter-card.json";
+import dateRangePicker from "./date-range-picker.json";
 
 export {
   accordion,
@@ -81,6 +82,7 @@ export {
   themeToggle,
   toast,
   twitterCard,
+  dateRangePicker,
 };
 
 export const componentsList: ComponentRegistryItem[] = [
@@ -124,4 +126,5 @@ export const componentsList: ComponentRegistryItem[] = [
   themeToggle as ComponentRegistryItem,
   toast as ComponentRegistryItem,
   twitterCard as ComponentRegistryItem,
+  dateRangePicker as ComponentRegistryItem,
 ];

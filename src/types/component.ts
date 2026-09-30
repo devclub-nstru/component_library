@@ -7,11 +7,15 @@ export type ComponentCategory =
   | "scales"
   | "display"
   | "inputs"
+  | "sliders"
+  | "toggles"
+  | "date-and-time"
   | "accordion"
   | "ai-stuff"
   | "apple-ui"
   | "menus"
-  | "profile";
+  | "profile"
+  | "buttons-and-inputs";
 
 export interface ComponentProp {
   name: string;

@@ -56,6 +56,7 @@ const componentTitles = {
   toast: "Toast",
   "twitter-card": "Twitter Card",
   "profile-menu": "Profile Command Menu",
+  "date-range-picker": "Date Range Picker",
 };
 
 const getTarget = (filePath, fileName) => {

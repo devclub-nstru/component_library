@@ -169,6 +169,25 @@
       ]
     },
     {
+      "name": "date-range-picker",
+      "type": "registry:ui",
+      "title": "Date Range Picker",
+      "description": "Smooth physics-driven date range picker calendar featuring dual-month navigation, quick presets rail, gliding thumb springs, and rolling label animations.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge",
+        "motion",
+        "lucide-react"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/date-range-picker.tsx",
+          "type": "registry:ui",
+          "target": "@ui/date-range-picker.tsx"
+        }
+      ]
+    },
+    {
       "name": "dither",
       "type": "registry:ui",
       "title": "Dither",

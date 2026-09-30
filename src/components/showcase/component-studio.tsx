@@ -93,6 +93,7 @@ import { Volume2, VolumeX } from "lucide-react";
 import { MacSwitch, type MacSwitchColor } from "@/registry/ui/mac-switch";
 import { SpotlightSearch } from "@/registry/ui/spotlight-search";
 import { ProfileMenu } from "@/registry/ui/profile-menu";
+import { DateRangePicker } from "@/registry/ui/date-range-picker";
 import { RevealSheet, type RevealSheetSide } from "@/registry/ui/reveal-sheet";
 import { Editor } from "@/registry/ui/editor";
 import { DeleteSelectionShowcase } from "@/registry/ui/delete-selection";
@@ -190,17 +191,12 @@ const ALL_CATEGORIES = [
     ],
   },
   {
-    label: "INPUTS",
+    label: "BUTTONS",
     items: [
       {
-        label: "OTP Input",
-        slug: "otp-input",
-        href: "/components/otp-input",
-      },
-      {
-        label: "Sparkle Button",
-        slug: "sparkle-button",
-        href: "/components/sparkle-button",
+        label: "Animated Button",
+        slug: "animated-button",
+        href: "/components/animated-button",
       },
       {
         label: "Candy Button",
@@ -208,19 +204,54 @@ const ALL_CATEGORIES = [
         href: "/components/candy-button",
       },
       {
-        label: "Animated Button",
-        slug: "animated-button",
-        href: "/components/animated-button",
+        label: "Sparkle Button",
+        slug: "sparkle-button",
+        href: "/components/sparkle-button",
+      },
+      {
+        label: "Confirm Morph",
+        slug: "confirm-morph",
+        href: "/components/confirm-morph",
+      },
+    ],
+  },
+  {
+    label: "INPUTS & FORMS",
+    items: [
+      {
+        label: "OTP Input",
+        slug: "otp-input",
+        href: "/components/otp-input",
+      },
+      {
+        label: "File Upload",
+        slug: "file-upload",
+        href: "/components/file-upload",
       },
       {
         label: "Task List",
         slug: "task-list",
         href: "/components/task-list",
       },
+    ],
+  },
+  {
+    label: "DATE & TIME",
+    items: [
       {
-        label: "File Upload",
-        slug: "file-upload",
-        href: "/components/file-upload",
+        label: "Date Range Picker",
+        slug: "date-range-picker",
+        href: "/components/date-range-picker",
+      },
+    ],
+  },
+  {
+    label: "SLIDERS & TOGGLES",
+    items: [
+      {
+        label: "Slider",
+        slug: "slider",
+        href: "/components/slider",
       },
       {
         label: "Liquid Toggle",
@@ -231,16 +262,6 @@ const ALL_CATEGORIES = [
         label: "Theme Toggle",
         slug: "theme-toggle",
         href: "/components/theme-toggle",
-      },
-      {
-        label: "Confirm Morph",
-        slug: "confirm-morph",
-        href: "/components/confirm-morph",
-      },
-      {
-        label: "Slider",
-        slug: "slider",
-        href: "/components/slider",
       },
     ],
   },
@@ -1532,6 +1553,28 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
             <div className="w-full flex justify-center">
               <ProfileMenu />
             </div>
+          </div>
+        );
+      case "date-range-picker":
+        return (
+          <div className="flex flex-col items-center justify-center w-full h-full min-h-96 select-none p-4 sm:p-8">
+            <DateRangePicker
+              onApply={(range) => {
+                const fmt = new Intl.DateTimeFormat("en-US", {
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                });
+                toast.success("Date range applied", {
+                  description: fmt.formatRange(range.start, range.end),
+                });
+              }}
+              onCancel={() => {
+                toast.info("Date range reset", {
+                  description: "Selection reverted to previous dates",
+                });
+              }}
+            />
           </div>
         );
       case "reveal-sheet":
