@@ -13,6 +13,7 @@ import {
   dottedAccordion,
   editor,
   fileUpload,
+  fileDropzone,
   fileTree,
   githubActivity,
   glowingBadge,
@@ -45,6 +46,7 @@ import {
 
 export const COMPONENT_REGISTRY: Record<string, ComponentRegistryItem> = {
   "file-upload": fileUpload as ComponentRegistryItem,
+  "file-dropzone": fileDropzone as ComponentRegistryItem,
   editor: editor as ComponentRegistryItem,
   scales: scales as ComponentRegistryItem,
   "animated-button": animatedButton as ComponentRegistryItem,

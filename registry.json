@@ -241,6 +241,25 @@
       ]
     },
     {
+      "name": "file-dropzone",
+      "type": "registry:ui",
+      "title": "File Dropzone",
+      "description": "Interactive drag-and-drop file dropzone with magnetic cursor glow, fanned sheets choreography, and animated file lifecycle rows.",
+      "dependencies": [
+        "motion",
+        "lucide-react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/file-dropzone.tsx",
+          "type": "registry:ui",
+          "target": "@ui/file-dropzone.tsx"
+        }
+      ]
+    },
+    {
       "name": "file-tree",
       "type": "registry:ui",
       "title": "File Tree",

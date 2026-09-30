@@ -12,6 +12,7 @@ import dither from "./dither.json";
 import dottedAccordion from "./dotted-accordion.json";
 import editor from "./editor.json";
 import fileUpload from "./file-upload.json";
+import fileDropzone from "./file-dropzone.json";
 import fileTree from "./file-tree.json";
 import githubActivity from "./github-activity.json";
 import glowingBadge from "./glowing-badge.json";
@@ -55,6 +56,7 @@ export {
   dottedAccordion,
   editor,
   fileUpload,
+  fileDropzone,
   fileTree,
   githubActivity,
   glowingBadge,
@@ -99,6 +101,7 @@ export const componentsList: ComponentRegistryItem[] = [
   dottedAccordion as ComponentRegistryItem,
   editor as ComponentRegistryItem,
   fileUpload as ComponentRegistryItem,
+  fileDropzone as ComponentRegistryItem,
   fileTree as ComponentRegistryItem,
   githubActivity as ComponentRegistryItem,
   glowingBadge as ComponentRegistryItem,

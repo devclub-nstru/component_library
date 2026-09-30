@@ -60,6 +60,7 @@ import { TwitterCard } from "@/registry/ui/twitter-card";
 import { Toaster, toast } from "@/registry/ui/toast";
 import { TaskList } from "@/registry/ui/task-list";
 import { FileUpload, type FileUploadLayout } from "@/registry/ui/file-upload";
+import { FileDropzone } from "@/registry/ui/file-dropzone";
 import { FileTree, type TreeNode } from "@/registry/ui/file-tree";
 import { GitHubButton } from "@/components/ui/github-button";
 import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
@@ -227,6 +228,11 @@ const ALL_CATEGORIES = [
         label: "File Upload",
         slug: "file-upload",
         href: "/components/file-upload",
+      },
+      {
+        label: "File Dropzone",
+        slug: "file-dropzone",
+        href: "/components/file-dropzone",
       },
       {
         label: "Task List",
@@ -858,6 +864,10 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
   const [activeColor, setActiveColor] = useState<string>(PALETTE[3].hex);
   const [fileUploadLayout, setFileUploadLayout] =
     useState<FileUploadLayout>("full");
+  const [fileDropzonePlacement, setFileDropzonePlacement] = useState<
+    "below" | "inside"
+  >("below");
+  const [fileDropzoneKey, setFileDropzoneKey] = useState(0);
   const [hookDemoIndex, setHookDemoIndex] = useState(0);
   const [counterDemoValue, setCounterDemoValue] = useState(122337);
   const [editorDemoContent, setEditorDemoContent] = useState(
@@ -1341,6 +1351,59 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 for (let progress = 8; progress <= 100; progress += 8) {
                   await new Promise<void>((resolve, reject) => {
                     const timer = window.setTimeout(resolve, 90);
+                    signal.addEventListener(
+                      "abort",
+                      () => {
+                        window.clearTimeout(timer);
+                        reject(new DOMException("Aborted", "AbortError"));
+                      },
+                      { once: true },
+                    );
+                  });
+                  onProgress(progress);
+                }
+              }}
+            />
+          </div>
+        );
+      case "file-dropzone":
+        return (
+          <div className="flex w-full max-w-xl flex-col items-center justify-center gap-3 p-4">
+            <FileDropzone
+              key={fileDropzoneKey}
+              label="Add launch assets"
+              description="Drop, paste, or choose files from your device"
+              note="PDF, images, or video up to 10 MB."
+              listPlacement={fileDropzonePlacement}
+              maxSize={10 * 1024 * 1024}
+              defaultItems={[
+                {
+                  id: "sample-1",
+                  name: "Peace.jpg",
+                  size: 1.8 * 1024 * 1024,
+                  status: "uploaded",
+                  preview:
+                    "https://i.pinimg.com/736x/44/cd/e9/44cde9e31e0bf09320e28d0d7cefdf52.jpg",
+                },
+                {
+                  id: "sample-2",
+                  name: "Love.pdf",
+                  size: 2.4 * 1024 * 1024,
+                  status: "uploaded",
+                },
+                {
+                  id: "sample-3",
+                  name: "Expectation.mp4",
+                  size: 8.6 * 1024 * 1024,
+                  status: "failed",
+                  error: "Connection lost",
+                  retryable: true,
+                },
+              ]}
+              onUpload={async (_item, { onProgress, signal }) => {
+                for (let progress = 10; progress <= 100; progress += 10) {
+                  await new Promise<void>((resolve, reject) => {
+                    const timer = window.setTimeout(resolve, 80);
                     signal.addEventListener(
                       "abort",
                       () => {
@@ -3152,6 +3215,45 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       );
                     })}
                   </div>
+                </div>
+              )}
+
+              {activeComponent.slug === "file-dropzone" && (
+                <div className="pointer-events-auto mx-4 flex items-center gap-3 rounded-2xl border border-border bg-card/95 p-2 shadow-xl backdrop-blur-2xl dark:border-white/10 dark:bg-[#121215]/95">
+                  <span className="pl-1 text-xs font-semibold text-foreground">
+                    Placement
+                  </span>
+                  <div
+                    role="group"
+                    aria-label="Dropzone list placement"
+                    className="flex items-center gap-0.5 rounded-xl border border-border bg-muted/60 p-1 dark:border-white/5 dark:bg-black/25"
+                  >
+                    {(["below", "inside"] as const).map((placement) => (
+                      <button
+                        key={placement}
+                        type="button"
+                        aria-pressed={fileDropzonePlacement === placement}
+                        onClick={() => setFileDropzonePlacement(placement)}
+                        className={cn(
+                          "relative rounded-lg px-3 py-1.5 text-xs capitalize transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/40",
+                          fileDropzonePlacement === placement
+                            ? "bg-foreground font-medium text-background"
+                            : "text-muted-foreground hover:text-foreground",
+                        )}
+                      >
+                        {placement}
+                      </button>
+                    ))}
+                  </div>
+                  <div className="h-7 w-px bg-border dark:bg-white/10" />
+                  <button
+                    type="button"
+                    onClick={() => setFileDropzoneKey((k) => k + 1)}
+                    className="flex items-center gap-1.5 rounded-xl border border-border bg-muted/60 px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground dark:border-white/5 dark:bg-black/25"
+                  >
+                    <ResetIcon className="size-3.5" />
+                    <span>Reset</span>
+                  </button>
                 </div>
               )}
 

@@ -30,6 +30,7 @@ const componentTitles = {
   "dotted-accordion": "Dotted Accordion",
   editor: "Selection AI Editor",
   "file-upload": "File Upload",
+  "file-dropzone": "File Dropzone",
   "file-tree": "File Tree",
   "github-activity": "GitHub Activity",
   "glowing-badge": "Glowing Badge",
