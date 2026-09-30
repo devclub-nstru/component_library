@@ -4,6 +4,7 @@ import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { SITE_CONFIG } from "@/lib/constants";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -109,6 +110,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-background text-foreground font-sans transition-colors duration-200">
         {children}
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
