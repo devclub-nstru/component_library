@@ -1048,12 +1048,12 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
 
   const [toastConfig, setToastConfig] = useState<{
     position:
-    | "top-left"
-    | "top-right"
-    | "bottom-left"
-    | "bottom-right"
-    | "top-center"
-    | "bottom-center";
+      | "top-left"
+      | "top-right"
+      | "bottom-left"
+      | "bottom-right"
+      | "top-center"
+      | "bottom-center";
     richColors: boolean;
     expand: boolean;
     duration: number;
@@ -1627,7 +1627,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               ).reduce((acc, c) => acc + c.items.length, 0);
               const activeIdx =
                 hookDemoIndex >= baseIndex &&
-                  hookDemoIndex < baseIndex + cat.items.length
+                hookDemoIndex < baseIndex + cat.items.length
                   ? hookDemoIndex - baseIndex
                   : -1;
 
@@ -1770,7 +1770,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     description: "Sunday, December 03, 2023 at 9:00 AM",
                     action: {
                       label: "Undo",
-                      onClick: () => { },
+                      onClick: () => {},
                     },
                   })
                 }
@@ -2198,10 +2198,11 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   ) : (
                     <span
                       key={index}
-                      className={`w-0.5 rounded-full shrink-0 transition-[height,background-color] duration-200 motion-reduce:transition-none ${index < marker
+                      className={`w-0.5 rounded-full shrink-0 transition-[height,background-color] duration-200 motion-reduce:transition-none ${
+                        index < marker
                           ? "h-5 bg-zinc-800 dark:bg-[#EBEBF5]"
                           : "h-3.5 bg-zinc-300 dark:bg-[#3C3C43]"
-                        }`}
+                      }`}
                     />
                   ),
                 )}
@@ -2869,7 +2870,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               className={cn(
                 "relative flex flex-col items-center justify-center overflow-hidden transition-colors",
                 viewport !== "desktop" &&
-                "border border-border bg-background dark:bg-[#09090b] shadow-[0_25px_60px_rgba(0,0,0,0.08)] dark:shadow-[0_25px_60px_rgba(0,0,0,0.9)] my-auto max-h-[90vh]",
+                  "border border-border bg-background dark:bg-[#09090b] shadow-[0_25px_60px_rgba(0,0,0,0.08)] dark:shadow-[0_25px_60px_rgba(0,0,0,0.9)] my-auto max-h-[90vh]",
               )}
             >
               {viewport === "mobile" && (
@@ -3855,160 +3856,160 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               {(activeComponent.slug === "animated-theme-toggler" ||
                 activeComponent.slug === "theme-toggle" ||
                 activeComponent.slug === "theme-toggler") && (
-                  <div
-                    key="theme-toggler-customize-panel"
-                    className="pointer-events-auto rounded-2xl border border-border dark:border-white/10 bg-card/95 dark:bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-xl dark:shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-xl w-full mx-4 select-none flex flex-col gap-2.5 overflow-hidden"
-                  >
-                    <div className="flex items-center justify-between px-1">
-                      <span className="text-xs font-semibold text-foreground dark:text-white/90 tracking-tight">
-                        Theme Toggler Settings
+                <div
+                  key="theme-toggler-customize-panel"
+                  className="pointer-events-auto rounded-2xl border border-border dark:border-white/10 bg-card/95 dark:bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-xl dark:shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-xl w-full mx-4 select-none flex flex-col gap-2.5 overflow-hidden"
+                >
+                  <div className="flex items-center justify-between px-1">
+                    <span className="text-xs font-semibold text-foreground dark:text-white/90 tracking-tight">
+                      Theme Toggler Settings
+                    </span>
+                    <button
+                      type="button"
+                      onClick={resetThemeTogglerConfig}
+                      className="text-[11px] text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                    >
+                      <ResetIcon className="w-3.5 h-3.5" />
+                      <span>Reset</span>
+                    </button>
+                  </div>
+
+                  <div className="rounded-xl border border-border dark:border-white/5 bg-muted/40 dark:bg-[#0b0b0e] p-2 flex flex-col gap-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-[11px] text-muted-foreground dark:text-zinc-400">
+                        Transition Shape
+                      </span>
+                      <div className="flex items-center gap-1 bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5 overflow-x-auto scrollbar-none no-scrollbar [&::-webkit-scrollbar]:hidden">
+                        {(
+                          [
+                            "circle",
+                            "square",
+                            "triangle",
+                            "diamond",
+                            "hexagon",
+                            "star",
+                          ] as const
+                        ).map((v) => {
+                          const isActive = themeTogglerConfig.variant === v;
+                          return (
+                            <button
+                              key={v}
+                              type="button"
+                              onClick={() =>
+                                setThemeTogglerConfig((prev) => ({
+                                  ...prev,
+                                  variant: v,
+                                }))
+                              }
+                              className={cn(
+                                "relative text-[11px] px-2.5 py-1 rounded-lg transition-colors cursor-pointer capitalize font-medium shrink-0",
+                                isActive
+                                  ? "text-background font-semibold dark:text-black"
+                                  : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
+                              )}
+                            >
+                              {isActive && (
+                                <motion.div
+                                  layoutId="activeThemeTogglerShapeIndicator"
+                                  transition={{
+                                    type: "spring",
+                                    stiffness: 450,
+                                    damping: 32,
+                                  }}
+                                  className="absolute inset-0 bg-foreground dark:bg-white rounded-lg shadow-xs"
+                                />
+                              )}
+                              <span className="relative z-10">{v}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between gap-2 pt-1 border-t border-border dark:border-white/5">
+                      <span className="text-[11px] text-muted-foreground dark:text-zinc-400">
+                        Candy Style
+                      </span>
+                      <div className="flex items-center gap-1 bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5">
+                        {[
+                          { label: "Candy", value: true },
+                          { label: "Minimal", value: false },
+                        ].map((opt) => {
+                          const isActive =
+                            themeTogglerConfig.candy === opt.value;
+                          return (
+                            <button
+                              key={opt.label}
+                              type="button"
+                              onClick={() =>
+                                setThemeTogglerConfig((prev) => ({
+                                  ...prev,
+                                  candy: opt.value,
+                                }))
+                              }
+                              className={cn(
+                                "relative text-[11px] px-2.5 py-1 rounded-lg transition-colors cursor-pointer font-medium",
+                                isActive
+                                  ? "text-background font-semibold dark:text-black"
+                                  : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
+                              )}
+                            >
+                              {isActive && (
+                                <motion.div
+                                  layoutId="activeThemeTogglerStyleIndicator"
+                                  transition={{
+                                    type: "spring",
+                                    stiffness: 450,
+                                    damping: 32,
+                                  }}
+                                  className="absolute inset-0 bg-foreground dark:bg-white rounded-lg shadow-xs"
+                                />
+                              )}
+                              <span className="relative z-10">{opt.label}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between gap-2 pt-1 border-t border-border dark:border-white/5">
+                      <span className="text-[11px] text-muted-foreground dark:text-zinc-400">
+                        Emanate from Center
                       </span>
                       <button
                         type="button"
-                        onClick={resetThemeTogglerConfig}
-                        className="text-[11px] text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                        onClick={() =>
+                          setThemeTogglerConfig((prev) => ({
+                            ...prev,
+                            fromCenter: !prev.fromCenter,
+                          }))
+                        }
+                        className={cn(
+                          "relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full p-0.5 items-center transition-colors duration-200 ease-in-out",
+                          themeTogglerConfig.fromCenter
+                            ? "bg-foreground dark:bg-white"
+                            : "bg-muted-foreground/30 dark:bg-zinc-800",
+                        )}
                       >
-                        <ResetIcon className="w-3.5 h-3.5" />
-                        <span>Reset</span>
+                        <motion.span
+                          layout
+                          transition={{
+                            type: "spring",
+                            stiffness: 500,
+                            damping: 32,
+                          }}
+                          className={cn(
+                            "pointer-events-none inline-block h-4 w-4 rounded-full shadow-xs ring-0",
+                            themeTogglerConfig.fromCenter
+                              ? "translate-x-4 bg-background dark:bg-black"
+                              : "translate-x-0 bg-white dark:bg-zinc-400",
+                          )}
+                        />
                       </button>
                     </div>
-
-                    <div className="rounded-xl border border-border dark:border-white/5 bg-muted/40 dark:bg-[#0b0b0e] p-2 flex flex-col gap-2.5">
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="text-[11px] text-muted-foreground dark:text-zinc-400">
-                          Transition Shape
-                        </span>
-                        <div className="flex items-center gap-1 bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5 overflow-x-auto scrollbar-none no-scrollbar [&::-webkit-scrollbar]:hidden">
-                          {(
-                            [
-                              "circle",
-                              "square",
-                              "triangle",
-                              "diamond",
-                              "hexagon",
-                              "star",
-                            ] as const
-                          ).map((v) => {
-                            const isActive = themeTogglerConfig.variant === v;
-                            return (
-                              <button
-                                key={v}
-                                type="button"
-                                onClick={() =>
-                                  setThemeTogglerConfig((prev) => ({
-                                    ...prev,
-                                    variant: v,
-                                  }))
-                                }
-                                className={cn(
-                                  "relative text-[11px] px-2.5 py-1 rounded-lg transition-colors cursor-pointer capitalize font-medium shrink-0",
-                                  isActive
-                                    ? "text-background font-semibold dark:text-black"
-                                    : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
-                                )}
-                              >
-                                {isActive && (
-                                  <motion.div
-                                    layoutId="activeThemeTogglerShapeIndicator"
-                                    transition={{
-                                      type: "spring",
-                                      stiffness: 450,
-                                      damping: 32,
-                                    }}
-                                    className="absolute inset-0 bg-foreground dark:bg-white rounded-lg shadow-xs"
-                                  />
-                                )}
-                                <span className="relative z-10">{v}</span>
-                              </button>
-                            );
-                          })}
-                        </div>
-                      </div>
-
-                      <div className="flex items-center justify-between gap-2 pt-1 border-t border-border dark:border-white/5">
-                        <span className="text-[11px] text-muted-foreground dark:text-zinc-400">
-                          Candy Style
-                        </span>
-                        <div className="flex items-center gap-1 bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5">
-                          {[
-                            { label: "Candy", value: true },
-                            { label: "Minimal", value: false },
-                          ].map((opt) => {
-                            const isActive =
-                              themeTogglerConfig.candy === opt.value;
-                            return (
-                              <button
-                                key={opt.label}
-                                type="button"
-                                onClick={() =>
-                                  setThemeTogglerConfig((prev) => ({
-                                    ...prev,
-                                    candy: opt.value,
-                                  }))
-                                }
-                                className={cn(
-                                  "relative text-[11px] px-2.5 py-1 rounded-lg transition-colors cursor-pointer font-medium",
-                                  isActive
-                                    ? "text-background font-semibold dark:text-black"
-                                    : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
-                                )}
-                              >
-                                {isActive && (
-                                  <motion.div
-                                    layoutId="activeThemeTogglerStyleIndicator"
-                                    transition={{
-                                      type: "spring",
-                                      stiffness: 450,
-                                      damping: 32,
-                                    }}
-                                    className="absolute inset-0 bg-foreground dark:bg-white rounded-lg shadow-xs"
-                                  />
-                                )}
-                                <span className="relative z-10">{opt.label}</span>
-                              </button>
-                            );
-                          })}
-                        </div>
-                      </div>
-
-                      <div className="flex items-center justify-between gap-2 pt-1 border-t border-border dark:border-white/5">
-                        <span className="text-[11px] text-muted-foreground dark:text-zinc-400">
-                          Emanate from Center
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() =>
-                            setThemeTogglerConfig((prev) => ({
-                              ...prev,
-                              fromCenter: !prev.fromCenter,
-                            }))
-                          }
-                          className={cn(
-                            "relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full p-0.5 items-center transition-colors duration-200 ease-in-out",
-                            themeTogglerConfig.fromCenter
-                              ? "bg-foreground dark:bg-white"
-                              : "bg-muted-foreground/30 dark:bg-zinc-800",
-                          )}
-                        >
-                          <motion.span
-                            layout
-                            transition={{
-                              type: "spring",
-                              stiffness: 500,
-                              damping: 32,
-                            }}
-                            className={cn(
-                              "pointer-events-none inline-block h-4 w-4 rounded-full shadow-xs ring-0",
-                              themeTogglerConfig.fromCenter
-                                ? "translate-x-4 bg-background dark:bg-black"
-                                : "translate-x-0 bg-white dark:bg-zinc-400",
-                            )}
-                          />
-                        </button>
-                      </div>
-                    </div>
                   </div>
-                )}
+                </div>
+              )}
 
               {activeComponent.slug === "otp-input" && (
                 <div
@@ -4305,7 +4306,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                 className={cn(
                                   "relative z-10 w-2 h-2 rounded-full shrink-0",
                                   c.value === undefined &&
-                                  "border border-zinc-400 dark:border-zinc-500",
+                                    "border border-zinc-400 dark:border-zinc-500",
                                 )}
                                 style={{ backgroundColor: c.hex }}
                               />
@@ -5999,7 +6000,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                   </td>
                                   <td className="py-3 px-3 align-top font-mono text-[11px]">
                                     {p.defaultValue &&
-                                      p.defaultValue !== "undefined" ? (
+                                    p.defaultValue !== "undefined" ? (
                                       <code
                                         className="text-muted-foreground dark:text-zinc-400 bg-muted/80 dark:bg-white/5 border border-border/80 dark:border-white/10 px-1.5 py-0.5 rounded inline-block max-w-32.5 truncate align-middle"
                                         title={p.defaultValue}
