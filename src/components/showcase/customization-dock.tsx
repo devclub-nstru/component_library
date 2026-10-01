@@ -1,6 +1,13 @@
 "use client";
 
-import { Children, useId, useRef, useState, type ReactNode } from "react";
+import {
+  Children,
+  isValidElement,
+  useId,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { Cross2Icon, MixerHorizontalIcon } from "@radix-ui/react-icons";
@@ -12,6 +19,15 @@ gsap.registerPlugin(useGSAP);
 
 export function CustomizationDock({ children }: { children: ReactNode }) {
   const controls = Children.toArray(children);
+  const paletteOnly =
+    controls.length === 1 &&
+    isValidElement<{ "data-customization-palette"?: number }>(controls[0]) &&
+    Boolean(controls[0].props["data-customization-palette"]);
+  const paletteCount =
+    paletteOnly &&
+    isValidElement<{ "data-customization-palette"?: number }>(controls[0])
+      ? (controls[0].props["data-customization-palette"] ?? 0)
+      : 0;
   const [open, setOpen] = useState(false);
   const openRef = useRef(false);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -170,7 +186,10 @@ export function CustomizationDock({ children }: { children: ReactNode }) {
     <div
       ref={rootRef}
       data-state={open ? "open" : "closed"}
-      className="pointer-events-none absolute bottom-4 right-4 z-30 flex max-h-[calc(100%-2rem)] w-[min(640px,calc(100%-2rem))] flex-col max-sm:fixed max-sm:max-h-[60dvh]"
+      className="pointer-events-none absolute bottom-4 right-4 z-30 flex max-h-[calc(100%-2rem)] flex-col max-sm:fixed max-sm:max-h-[60dvh]"
+      style={{
+        width: `min(${paletteOnly ? paletteCount * 44 + 40 : 640}px, calc(100% - 2rem))`,
+      }}
       onKeyDown={(event) => {
         if (
           event.key === "Escape" &&
@@ -186,18 +205,18 @@ export function CustomizationDock({ children }: { children: ReactNode }) {
       <div
         ref={surfaceRef}
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 overflow-hidden rounded-3xl border border-violet-300/60 bg-[#f8f6ff] shadow-[inset_0_0_22px_rgba(139,92,246,0.2),inset_0_1px_1px_rgba(255,255,255,0.8)] dark:border-violet-300/30 dark:bg-[#141124] dark:shadow-[inset_0_0_28px_rgba(139,92,246,0.3),inset_0_1px_1px_rgba(255,255,255,0.3)]"
+        className="pointer-events-none absolute inset-0 overflow-hidden rounded-3xl border border-orange-300/60 bg-[#fff8f2] shadow-[inset_0_0_22px_rgba(249,115,22,0.08),inset_0_1px_1px_rgba(255,255,255,0.8)] dark:border-orange-400/20 dark:bg-[#101010] dark:shadow-[inset_0_0_28px_rgba(249,115,22,0.12),inset_0_1px_1px_rgba(255,255,255,0.12)]"
         style={{ clipPath: "inset(100% 0 0 100% round 28px)" }}
       >
         <span
           data-dock-light
-          className="absolute -bottom-20 -left-16 h-56 w-96 rounded-full bg-[radial-gradient(ellipse,rgba(139,92,246,0.3),transparent_70%)] dark:bg-[radial-gradient(ellipse,rgba(139,92,246,0.45),transparent_70%)]"
+          className="absolute -bottom-20 -left-16 h-56 w-96 rounded-full bg-[radial-gradient(ellipse,rgba(249,115,22,0.12),transparent_70%)] dark:bg-[radial-gradient(ellipse,rgba(249,115,22,0.2),transparent_70%)]"
         />
         <span
           data-dock-light
-          className="absolute -right-20 -top-24 h-64 w-96 rounded-full bg-[radial-gradient(ellipse,rgba(99,102,241,0.25),transparent_70%)] dark:bg-[radial-gradient(ellipse,rgba(79,70,229,0.4),transparent_70%)]"
+          className="absolute -right-20 -top-24 h-64 w-96 rounded-full bg-[radial-gradient(ellipse,rgba(234,88,12,0.1),transparent_70%)] dark:bg-[radial-gradient(ellipse,rgba(234,88,12,0.16),transparent_70%)]"
         />
-        <span className="absolute inset-x-6 top-0 h-px bg-linear-to-r from-transparent via-violet-200 to-transparent" />
+        <span className="absolute inset-x-6 top-0 h-px bg-linear-to-r from-transparent via-orange-200 to-transparent" />
       </div>
 
       <div
@@ -215,7 +234,7 @@ export function CustomizationDock({ children }: { children: ReactNode }) {
       >
         <div className="flex shrink-0 items-center justify-between gap-3 px-5 pb-2 pt-4">
           <div className="flex items-center gap-2 text-xs font-medium text-foreground">
-            <MixerHorizontalIcon className="size-3.5 text-violet-500 dark:text-violet-300" />
+            <MixerHorizontalIcon className="size-3.5 text-orange-500 dark:text-orange-300" />
             Customization
           </div>
           <button
@@ -223,12 +242,12 @@ export function CustomizationDock({ children }: { children: ReactNode }) {
             type="button"
             aria-label="Hide customization"
             onClick={() => toggle(false)}
-            className="flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-full border border-violet-400/20 bg-violet-400/10 text-muted-foreground hover:bg-violet-400/20 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
+            className="flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-full border border-orange-400/20 bg-orange-400/10 text-muted-foreground hover:bg-orange-400/20 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400"
           >
             <Cross2Icon className="size-3.5" />
           </button>
         </div>
-        <div className="min-h-0 overflow-y-auto overscroll-contain px-2 pb-2 scrollbar-thin [&>div]:mx-0! [&>div]:w-full! [&>div]:max-w-none! [&>div]:flex-wrap [&>div]:rounded-2xl! [&>div]:border-0! [&>div]:bg-transparent! [&>div]:shadow-none! [&>div]:backdrop-blur-none!">
+        <div className="flex min-h-0 flex-col gap-2 overflow-y-auto overscroll-contain px-2 pb-2 scrollbar-thin [&>div]:mx-0! [&>div]:w-full! [&>div]:max-w-none! [&>div]:rounded-2xl! [&>div]:border-0! [&>div]:bg-transparent! [&>div]:shadow-none! [&>div]:backdrop-blur-none!">
           {controls}
         </div>
       </div>
@@ -236,7 +255,7 @@ export function CustomizationDock({ children }: { children: ReactNode }) {
       <CandyButton
         ref={triggerRef}
         type="button"
-        variant="violet"
+        color="#f97316"
         size="icon"
         aria-label="Show customization"
         aria-controls={panelId}
@@ -245,7 +264,7 @@ export function CustomizationDock({ children }: { children: ReactNode }) {
         tabIndex={open ? -1 : 0}
         title="Customize component"
         onClick={() => toggle(true)}
-        className="pointer-events-auto absolute bottom-0 right-0 size-14! rounded-full! transition-none! active:scale-100 focus-visible:ring-violet-300 focus-visible:ring-offset-background [&_svg]:size-5"
+        className="pointer-events-auto absolute bottom-0 right-0 size-14! rounded-full! transition-none! active:scale-100 focus-visible:ring-orange-300 focus-visible:ring-offset-background [&_svg]:size-5"
       >
         <MixerHorizontalIcon />
       </CandyButton>

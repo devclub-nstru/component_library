@@ -112,6 +112,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { CustomizationDock } from "./customization-dock";
+import { SegmentedControl, SegmentedControlGroup } from "./segmented-control";
+import { ColorSwatches, CustomizationRange } from "./customization-controls";
 
 type InstallTool = "npx" | "pnpm" | "bun" | "shadcn";
 
@@ -3252,56 +3254,33 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               {supportsColor && activeComponent.slug !== "file-upload" && (
                 <div
                   key="floating-color-palette"
-                  className="pointer-events-auto rounded-full border border-border bg-card/95 dark:bg-[#121215]/95 backdrop-blur-2xl p-1.5 shadow-[0_16px_40px_rgba(0,0,0,0.1),0_0_0_1px_rgba(0,0,0,0.06)] dark:shadow-[0_16px_40px_rgba(0,0,0,0.85),0_0_0_1px_rgba(255,255,255,0.06)] flex items-center gap-1.5 select-none"
+                  data-customization-palette={PALETTE.length}
+                  className="flex min-w-0 flex-col gap-3 p-3 font-sans sm:p-4"
                 >
-                  {PALETTE.map((p) => {
-                    const isSelected = activeColor === p.hex;
-                    return (
-                      <motion.button
-                        key={p.id}
-                        type="button"
-                        onClick={() => setActiveColor(p.hex)}
-                        title={p.label}
-                        whileHover={{ scale: 1.08 }}
-                        whileTap={{ scale: 0.92 }}
-                        transition={microSpring}
-                        className="relative w-8 h-8 rounded-full flex items-center justify-center cursor-pointer outline-none shrink-0"
-                      >
-                        {isSelected && (
-                          <motion.span
-                            layoutId="activeColorRing"
-                            className="absolute inset-0 rounded-full border-2 border-foreground dark:border-white shadow-[0_0_12px_rgba(0,0,0,0.2)] dark:shadow-[0_0_12px_rgba(255,255,255,0.4)] pointer-events-none"
-                            transition={{
-                              type: "spring",
-                              stiffness: 480,
-                              damping: 32,
-                            }}
-                          />
-                        )}
-                        <span
-                          style={{ backgroundColor: p.hex }}
-                          className={cn(
-                            "w-5.5 h-5.5 rounded-full shadow-xs transition-all duration-200",
-                            isSelected
-                              ? "opacity-100 scale-100"
-                              : "opacity-65 hover:opacity-90 scale-95 hover:scale-100",
-                          )}
-                        />
-                      </motion.button>
-                    );
-                  })}
+                  <span className="text-xs font-medium text-muted-foreground">
+                    Accent color
+                  </span>
+                  <ColorSwatches
+                    options={PALETTE.map((color) => ({
+                      value: color.hex,
+                      label: color.label,
+                      color: color.hex,
+                    }))}
+                    value={activeColor}
+                    onChange={setActiveColor}
+                  />
                 </div>
               )}
 
               {activeComponent.slug === "file-upload" && (
-                <div className="pointer-events-auto mx-4 flex items-center gap-3 rounded-2xl border border-border bg-card/95 p-2 shadow-xl backdrop-blur-2xl dark:border-white/10 dark:bg-[#121215]/95">
-                  <span className="pl-1 text-xs font-semibold text-foreground">
+                <div className="pointer-events-auto flex w-full min-w-0 flex-col gap-5 p-3 font-sans sm:p-4">
+                  <span className="pl-1 text-sm font-semibold text-foreground">
                     Upload settings
                   </span>
-                  <div
+                  <SegmentedControlGroup
                     role="group"
                     aria-label="Upload component size"
-                    className="flex items-center gap-0.5 rounded-xl border border-border bg-muted/60 p-1 dark:border-white/5 dark:bg-black/25"
+                    className="w-full min-w-0"
                   >
                     {(["full", "compact"] as const).map((layout) => (
                       <button
@@ -3310,67 +3289,43 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         aria-pressed={fileUploadLayout === layout}
                         onClick={() => setFileUploadLayout(layout)}
                         className={cn(
-                          "relative rounded-lg px-3 py-1.5 text-xs capitalize transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/40",
+                          "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 capitalize",
                           fileUploadLayout === layout
-                            ? "bg-foreground font-medium text-background"
-                            : "text-muted-foreground hover:text-foreground",
+                            ? "text-zinc-950"
+                            : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                         )}
                       >
                         {layout}
                       </button>
                     ))}
-                  </div>
-                  <div className="h-7 w-px bg-border dark:bg-white/10" />
-                  <div
-                    className="flex items-center gap-1"
-                    aria-label="Upload accent color"
-                  >
-                    {PALETTE.map((paletteColor) => {
-                      const selected = activeColor === paletteColor.hex;
-                      return (
-                        <motion.button
-                          key={paletteColor.id}
-                          type="button"
-                          onClick={() => setActiveColor(paletteColor.hex)}
-                          title={paletteColor.label}
-                          aria-label={paletteColor.label}
-                          aria-pressed={selected}
-                          whileHover={{ scale: 1.08 }}
-                          whileTap={{ scale: 0.92 }}
-                          transition={microSpring}
-                          className="relative flex size-8 shrink-0 items-center justify-center rounded-full outline-none focus-visible:ring-2 focus-visible:ring-foreground/40"
-                        >
-                          {selected && (
-                            <motion.span
-                              layoutId="activeFileUploadColorRing"
-                              className="pointer-events-none absolute inset-0 rounded-full border-2 border-foreground dark:border-white"
-                              transition={{
-                                type: "spring",
-                                stiffness: 480,
-                                damping: 32,
-                              }}
-                            />
-                          )}
-                          <span
-                            className="size-5.5 rounded-full shadow-xs"
-                            style={{ backgroundColor: paletteColor.hex }}
-                          />
-                        </motion.button>
-                      );
-                    })}
-                  </div>
+                  </SegmentedControlGroup>
+
+                  <fieldset className="min-w-0">
+                    <legend className="mb-2.5 text-xs font-medium text-muted-foreground">
+                      Accent color
+                    </legend>
+                    <ColorSwatches
+                      options={PALETTE.map((color) => ({
+                        value: color.hex,
+                        label: color.label,
+                        color: color.hex,
+                      }))}
+                      value={activeColor}
+                      onChange={setActiveColor}
+                    />
+                  </fieldset>
                 </div>
               )}
 
               {activeComponent.slug === "file-dropzone" && (
-                <div className="pointer-events-auto mx-4 flex items-center gap-3 rounded-2xl border border-border bg-card/95 p-2 shadow-xl backdrop-blur-2xl dark:border-white/10 dark:bg-[#121215]/95">
-                  <span className="pl-1 text-xs font-semibold text-foreground">
+                <div className="pointer-events-auto flex w-full min-w-0 flex-col gap-5 p-3 font-sans sm:p-4">
+                  <span className="pl-1 text-sm font-semibold text-foreground">
                     Placement
                   </span>
-                  <div
+                  <SegmentedControlGroup
                     role="group"
                     aria-label="Dropzone list placement"
-                    className="flex items-center gap-0.5 rounded-xl border border-border bg-muted/60 p-1 dark:border-white/5 dark:bg-black/25"
+                    className="w-full min-w-0"
                   >
                     {(["below", "inside"] as const).map((placement) => (
                       <button
@@ -3379,21 +3334,21 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         aria-pressed={fileDropzonePlacement === placement}
                         onClick={() => setFileDropzonePlacement(placement)}
                         className={cn(
-                          "relative rounded-lg px-3 py-1.5 text-xs capitalize transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/40",
+                          "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 capitalize",
                           fileDropzonePlacement === placement
-                            ? "bg-foreground font-medium text-background"
-                            : "text-muted-foreground hover:text-foreground",
+                            ? "text-zinc-950"
+                            : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                         )}
                       >
                         {placement}
                       </button>
                     ))}
-                  </div>
-                  <div className="h-7 w-px bg-border dark:bg-white/10" />
+                  </SegmentedControlGroup>
+
                   <button
                     type="button"
                     onClick={() => setFileDropzoneKey((k) => k + 1)}
-                    className="flex items-center gap-1.5 rounded-xl border border-border bg-muted/60 px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground dark:border-white/5 dark:bg-black/25"
+                    className="flex min-h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-orange-400/20 bg-white/60 px-3 text-xs font-medium text-orange-900 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10"
                   >
                     <ResetIcon className="size-3.5" />
                     <span>Reset</span>
@@ -3402,9 +3357,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               )}
 
               {activeComponent.slug === "reveal-sheet" && (
-                <div className="pointer-events-auto mx-4 flex max-h-[40vh] w-full max-w-6xl flex-col gap-3 overflow-y-auto rounded-2xl border border-border bg-card/95 p-4 shadow-xl backdrop-blur-2xl md:max-h-[50vh] lg:max-h-none dark:border-white/10 dark:bg-[#121215]/95">
+                <div className="pointer-events-auto flex w-full min-w-0 flex-col gap-5 p-3 font-sans sm:p-4">
                   <div className="flex shrink-0 items-center justify-between gap-3">
-                    <span className="text-xs font-semibold text-foreground">
+                    <span className="text-sm font-semibold text-foreground">
                       Sheet settings
                     </span>
                     <div className="flex items-center gap-3">
@@ -3422,7 +3377,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             shineIntensity: 0.55,
                           })
                         }
-                        className="flex items-center gap-1.5 text-[11px] text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/40"
+                        className="flex min-h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-orange-400/20 bg-white/60 px-3 text-xs font-medium text-orange-900 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10"
                       >
                         <ResetIcon className="size-3.5" />
                         Reset
@@ -3430,47 +3385,45 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       <button
                         type="button"
                         onClick={() => setRevealSheetOpen(true)}
-                        className="rounded-lg bg-foreground px-3 py-1.5 text-xs font-medium text-background transition-opacity hover:opacity-85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/40"
+                        className="rounded-xl bg-orange-500 px-3 py-1.5 text-xs font-medium text-zinc-950 transition-opacity hover:opacity-85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/40"
                       >
                         Replay sheet
                       </button>
                     </div>
                   </div>
-                  <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-[1.25fr_1fr_1fr]">
+                  <div className="grid gap-4 sm:grid-cols-2">
                     <div className="min-w-0 space-y-3">
-                      <div className="space-y-1.5">
+                      <div className="flex min-w-0 flex-col gap-2.5">
                         <span className="text-[11px] text-muted-foreground">
                           Direction
                         </span>
-                        <div
+                        <SegmentedControlGroup
                           role="group"
                           aria-label="Sheet direction"
-                          className="grid grid-cols-4 gap-1 rounded-xl border border-border bg-muted/40 p-1 dark:border-white/5 dark:bg-black/25"
+                          className="w-full min-w-0"
                         >
-                          {(["top", "right", "bottom", "left"] as const).map(
-                            (side) => (
-                              <button
-                                key={side}
-                                type="button"
-                                aria-pressed={revealSheetConfig.side === side}
-                                onClick={() =>
-                                  setRevealSheetConfig((prev) => ({
-                                    ...prev,
-                                    side,
-                                  }))
-                                }
-                                className={cn(
-                                  "rounded-lg px-2 py-1.5 text-xs capitalize transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/40",
-                                  revealSheetConfig.side === side
-                                    ? "bg-foreground font-medium text-background"
-                                    : "text-muted-foreground hover:bg-card hover:text-foreground",
-                                )}
-                              >
-                                {side}
-                              </button>
-                            ),
-                          )}
-                        </div>
+                          {(["top", "right", "bottom", "left"] as const).map((side) => (
+                            <button
+                              key={side}
+                              type="button"
+                              aria-pressed={revealSheetConfig.side === side}
+                              onClick={() =>
+                                setRevealSheetConfig((prev) => ({
+                                  ...prev,
+                                  side,
+                                }))
+                              }
+                              className={cn(
+                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 capitalize",
+                                revealSheetConfig.side === side
+                                  ? "text-zinc-950"
+                                  : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
+                              )}
+                            >
+                              {side}
+                            </button>
+                          ))}
+                        </SegmentedControlGroup>
                       </div>
                       <div className="grid grid-cols-2 gap-3">
                         <div className="min-w-0 space-y-1">
@@ -3485,7 +3438,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               {revealSheetConfig.speed.toFixed(1)}×
                             </span>
                           </div>
-                          <input
+                          <CustomizationRange
                             id="reveal-sheet-speed"
                             type="range"
                             min="0.5"
@@ -3498,7 +3451,6 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                 speed: Number(event.target.value),
                               }))
                             }
-                            className="w-full cursor-pointer accent-foreground"
                           />
                         </div>
                         <div className="min-w-0 space-y-1">
@@ -3513,7 +3465,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               {revealSheetConfig.bounce.toFixed(1)}×
                             </span>
                           </div>
-                          <input
+                          <CustomizationRange
                             id="reveal-sheet-bounce"
                             type="range"
                             min="0"
@@ -3526,12 +3478,11 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                 bounce: Number(event.target.value),
                               }))
                             }
-                            className="w-full cursor-pointer accent-foreground"
                           />
                         </div>
                       </div>
                     </div>
-                    <div className="min-w-0 space-y-3 border-t border-border/70 pt-3 md:border-l md:border-t-0 md:pl-4 md:pt-0 dark:border-white/10">
+                    <div className="min-w-0 space-y-3 border-t border-orange-400/15 pt-3 sm:border-l sm:border-t-0 sm:pl-4 sm:pt-0 dark:border-orange-400/15">
                       <div className="flex items-center justify-between gap-3 text-xs">
                         <label
                           htmlFor="reveal-sheet-grid"
@@ -3549,7 +3500,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               showGrid: event.target.checked,
                             }))
                           }
-                          className="size-4 cursor-pointer accent-foreground"
+                          className="size-4 cursor-pointer accent-orange-500"
                         />
                       </div>
                       <div className="flex items-center justify-between gap-3 text-xs">
@@ -3569,18 +3520,18 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               showShine: event.target.checked,
                             }))
                           }
-                          className="size-4 cursor-pointer accent-foreground"
+                          className="size-4 cursor-pointer accent-orange-500"
                         />
                       </div>
                       {revealSheetConfig.showShine && (
-                        <div className="space-y-1">
+                        <div className="flex min-w-0 flex-col gap-2.5">
                           <span className="text-[11px] text-muted-foreground">
                             Shine direction
                           </span>
-                          <div
+                          <SegmentedControlGroup
                             role="group"
                             aria-label="Shine direction"
-                            className="flex w-fit max-w-full rounded-lg border border-border bg-muted/40 p-0.5 dark:border-white/5 dark:bg-black/25"
+                            className="w-full min-w-0"
                           >
                             {(["clockwise", "counterclockwise"] as const).map(
                               (direction) => (
@@ -3588,8 +3539,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                   key={direction}
                                   type="button"
                                   aria-pressed={
-                                    revealSheetConfig.shineDirection ===
-                                    direction
+                                    revealSheetConfig.shineDirection === direction
                                   }
                                   onClick={() =>
                                     setRevealSheetConfig((prev) => ({
@@ -3598,11 +3548,10 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                     }))
                                   }
                                   className={cn(
-                                    "rounded-md px-2 py-1 text-[11px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/40",
-                                    revealSheetConfig.shineDirection ===
-                                      direction
-                                      ? "bg-foreground text-background"
-                                      : "text-muted-foreground hover:text-foreground",
+                                    "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
+                                    revealSheetConfig.shineDirection === direction
+                                      ? "text-zinc-950"
+                                      : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                                   )}
                                 >
                                   {direction === "clockwise"
@@ -3611,12 +3560,12 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                 </button>
                               ),
                             )}
-                          </div>
+                          </SegmentedControlGroup>
                         </div>
                       )}
                     </div>
                     {revealSheetConfig.showShine && (
-                      <div className="min-w-0 space-y-3 border-t border-border/70 pt-3 md:col-span-2 lg:col-span-1 lg:border-l lg:border-t-0 lg:pl-4 lg:pt-0 dark:border-white/10">
+                      <div className="min-w-0 space-y-3 border-t border-orange-400/15 pt-3 sm:col-span-2 dark:border-orange-400/15">
                         <div className="space-y-1">
                           <div className="flex items-center justify-between text-[11px]">
                             <label
@@ -3629,7 +3578,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               {revealSheetConfig.shineSpeed.toFixed(1)}×
                             </span>
                           </div>
-                          <input
+                          <CustomizationRange
                             id="reveal-sheet-shine-speed"
                             type="range"
                             min="0.5"
@@ -3642,7 +3591,6 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                 shineSpeed: Number(event.target.value),
                               }))
                             }
-                            className="w-full cursor-pointer accent-foreground"
                           />
                         </div>
                         <div className="space-y-1">
@@ -3654,13 +3602,10 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               Shine intensity
                             </label>
                             <span className="font-medium tabular-nums text-foreground">
-                              {Math.round(
-                                revealSheetConfig.shineIntensity * 100,
-                              )}
-                              %
+                              {Math.round(revealSheetConfig.shineIntensity * 100)}%
                             </span>
                           </div>
-                          <input
+                          <CustomizationRange
                             id="reveal-sheet-shine-intensity"
                             type="range"
                             min="0"
@@ -3673,7 +3618,6 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                 shineIntensity: Number(event.target.value),
                               }))
                             }
-                            className="w-full cursor-pointer accent-foreground"
                           />
                         </div>
                       </div>
@@ -3685,74 +3629,63 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               {activeComponent.slug === "sparkle-button" && (
                 <div
                   key="sparkle-customize-panel"
-                  className="pointer-events-auto rounded-2xl border border-border dark:border-white/10 bg-card/95 dark:bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-[0_16px_40px_rgba(0,0,0,0.08)] dark:shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-xl w-full mx-4 select-none flex flex-col gap-2.5"
+                  className="pointer-events-auto flex w-full min-w-0 flex-col gap-5 p-3 font-sans sm:p-4"
                 >
                   <div className="flex items-center justify-between px-1">
-                    <span className="text-xs font-semibold text-foreground dark:text-white/90 tracking-tight">
+                    <span className="text-sm font-semibold text-foreground dark:text-white/90 tracking-tight">
                       Customize
                     </span>
                     <button
                       type="button"
                       onClick={resetSparkleConfig}
-                      className="text-[11px] text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                      className="flex min-h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-orange-400/20 bg-white/60 px-3 text-xs font-medium text-orange-900 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10"
                     >
                       <ResetIcon className="w-3.5 h-3.5" />
                       <span>Reset</span>
                     </button>
                   </div>
 
-                  <div className="rounded-xl border border-border dark:border-white/5 bg-muted/40 dark:bg-[#0b0b0e] p-1.5 flex flex-col gap-1.5">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 pb-1.5 border-b border-border dark:border-white/5">
-                      <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                  <div className="flex min-w-0 flex-col gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pb-1.5 border-b border-orange-400/15 dark:border-orange-400/15">
+                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-orange-400/15 bg-white/60 p-3 dark:bg-white/5">
                         <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium">
                           Variant
                         </span>
-                        <div className="flex items-center gap-0.5 bg-muted/80 dark:bg-black/25 p-0.5 rounded-md border border-border dark:border-white/5">
-                          {(["default", "outline", "glass"] as const).map(
-                            (v) => (
-                              <button
-                                key={v}
-                                type="button"
-                                onClick={() =>
-                                  setSparkleConfig((prev) => ({
-                                    ...prev,
-                                    variant: v,
-                                  }))
-                                }
-                                className={cn(
-                                  "relative px-2 py-0.5 rounded text-[11px] capitalize transition-colors cursor-pointer",
-                                  sparkleConfig.variant === v
-                                    ? "text-background font-semibold dark:text-black"
-                                    : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
-                                )}
-                              >
-                                {sparkleConfig.variant === v && (
-                                  <motion.div
-                                    layoutId="activeSparkleVariantIndicator"
-                                    transition={{
-                                      type: "spring",
-                                      stiffness: 450,
-                                      damping: 32,
-                                    }}
-                                    className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
-                                  />
-                                )}
-                                <span className="relative z-10">{v}</span>
-                              </button>
-                            ),
-                          )}
-                        </div>
+                        <SegmentedControlGroup className="w-full min-w-0">
+                          {(["default", "outline", "glass"] as const).map((v) => (
+                            <button
+                              key={v}
+                              type="button"
+                              aria-pressed={sparkleConfig.variant === v}
+                              onClick={() =>
+                                setSparkleConfig((prev) => ({
+                                  ...prev,
+                                  variant: v,
+                                }))
+                              }
+                              className={cn(
+                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 capitalize",
+                                sparkleConfig.variant === v
+                                  ? "text-zinc-950"
+                                  : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
+                              )}
+                            >
+                              <span className="relative z-10">{v}</span>
+                            </button>
+                          ))}
+                        </SegmentedControlGroup>
                       </div>
 
-                      <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-orange-400/15 bg-white/60 p-3 dark:bg-white/5">
                         <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium">
                           Size
                         </span>
-                        <div className="flex items-center gap-0.5 bg-muted/80 dark:bg-black/25 p-0.5 rounded-md border border-border dark:border-white/5">
+                        <SegmentedControlGroup className="w-full min-w-0">
                           {(["sm", "default", "lg"] as const).map((sz) => (
                             <button
                               key={sz}
                               type="button"
+                              aria-pressed={sparkleConfig.size === sz}
                               onClick={() =>
                                 setSparkleConfig((prev) => ({
                                   ...prev,
@@ -3760,52 +3693,36 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                 }))
                               }
                               className={cn(
-                                "relative px-2 py-0.5 rounded text-[11px] uppercase transition-colors cursor-pointer",
+                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 uppercase",
                                 sparkleConfig.size === sz
-                                  ? "text-background font-semibold dark:text-black"
-                                  : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
+                                  ? "text-zinc-950"
+                                  : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                               )}
                             >
-                              {sparkleConfig.size === sz && (
-                                <motion.div
-                                  layoutId="activeSparkleSizeIndicator"
-                                  transition={{
-                                    type: "spring",
-                                    stiffness: 450,
-                                    damping: 32,
-                                  }}
-                                  className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
-                                />
-                              )}
                               <span className="relative z-10">
                                 {sz === "default" ? "MD" : sz}
                               </span>
                             </button>
                           ))}
-                        </div>
+                        </SegmentedControlGroup>
                       </div>
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-1.5">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                       <button
                         type="button"
                         onClick={() =>
                           setSparkleConfig((prev) => ({
                             ...prev,
-                            animateBy:
-                              prev.animateBy === "letters"
-                                ? "words"
-                                : "letters",
+                            animateBy: prev.animateBy === "letters" ? "words" : "letters",
                           }))
                         }
-                        className="rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] hover:bg-muted dark:hover:bg-[#1f1f25] px-3 py-2 flex items-center justify-between text-xs transition-colors cursor-pointer"
+                        className="rounded-xl border border-orange-400/15 dark:border-orange-400/15 bg-white/60 dark:bg-white/5 hover:bg-muted dark:hover:bg-[#1f1f25] px-3 py-2 flex items-center justify-between text-xs transition-colors cursor-pointer"
                       >
                         <span className="text-muted-foreground dark:text-zinc-400">
                           Animate By
                         </span>
-                        <span className="text-foreground dark:text-zinc-100 font-medium flex items-center gap-1.5">
-                          {sparkleConfig.animateBy === "letters"
-                            ? "Letters"
-                            : "Words"}
+                        <span className="text-foreground dark:text-zinc-100 font-medium flex items-center gap-3">
+                          {sparkleConfig.animateBy === "letters" ? "Letters" : "Words"}
                           <ChevronDownIcon className="w-3.5 h-3.5 text-muted-foreground dark:text-zinc-400" />
                         </span>
                       </button>
@@ -3815,28 +3732,28 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         onClick={() =>
                           setSparkleConfig((prev) => ({
                             ...prev,
-                            direction:
-                              prev.direction === "top" ? "bottom" : "top",
+                            direction: prev.direction === "top" ? "bottom" : "top",
                           }))
                         }
-                        className="rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] hover:bg-muted dark:hover:bg-[#1f1f25] px-3 py-2 flex items-center justify-between text-xs transition-colors cursor-pointer"
+                        className="rounded-xl border border-orange-400/15 dark:border-orange-400/15 bg-white/60 dark:bg-white/5 hover:bg-muted dark:hover:bg-[#1f1f25] px-3 py-2 flex items-center justify-between text-xs transition-colors cursor-pointer"
                       >
                         <span className="text-muted-foreground dark:text-zinc-400">
                           Direction
                         </span>
-                        <span className="text-foreground dark:text-zinc-100 font-medium flex items-center gap-1.5">
+                        <span className="text-foreground dark:text-zinc-100 font-medium flex items-center gap-3">
                           {sparkleConfig.direction === "top" ? "Top" : "Bottom"}
                           <ChevronDownIcon className="w-3.5 h-3.5 text-muted-foreground dark:text-zinc-400" />
                         </span>
                       </button>
 
-                      <div className="rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 py-2 flex items-center justify-between gap-2.5 text-xs">
+                      <div className="grid min-w-0 grid-cols-[1fr_auto] items-center gap-x-3 gap-y-2 rounded-xl border border-orange-400/15 bg-white/60 p-3 text-xs dark:bg-white/5">
                         <span className="text-muted-foreground dark:text-zinc-400 shrink-0">
                           Delay
                         </span>
-                        <div className="h-3.5 w-px bg-border dark:bg-white/10 shrink-0" />
-                        <input
+
+                        <CustomizationRange
                           type="range"
+                          aria-label="Delay"
                           min="10"
                           max="200"
                           step="5"
@@ -3847,22 +3764,23 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               delay: Number(e.target.value),
                             }))
                           }
-                          className="w-full accent-foreground dark:accent-white h-1 bg-foreground/15 dark:bg-white/10 rounded cursor-pointer"
+                          className="col-span-2 row-start-2"
                         />
-                        <span className="text-foreground dark:text-zinc-100 font-medium shrink-0 min-w-10.5 text-right">
+                        <span className="col-start-2 row-start-1 rounded-md bg-orange-500/10 px-2 py-1 text-xs font-semibold tabular-nums text-orange-700 dark:text-orange-200">
                           {sparkleConfig.delay}ms
                         </span>
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-1.5">
-                      <div className="rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 py-2 flex items-center justify-between gap-2.5 text-xs">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      <div className="grid min-w-0 grid-cols-[1fr_auto] items-center gap-x-3 gap-y-2 rounded-xl border border-orange-400/15 bg-white/60 p-3 text-xs dark:bg-white/5">
                         <span className="text-muted-foreground dark:text-zinc-400 shrink-0">
                           Reveal
                         </span>
-                        <div className="h-3.5 w-px bg-border dark:bg-white/10 shrink-0" />
-                        <input
+
+                        <CustomizationRange
                           type="range"
+                          aria-label="Reveal"
                           min="0.15"
                           max="0.60"
                           step="0.05"
@@ -3873,20 +3791,21 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               stepDuration: Number(e.target.value),
                             }))
                           }
-                          className="w-full accent-foreground dark:accent-white h-1 bg-foreground/15 dark:bg-white/10 rounded cursor-pointer"
+                          className="col-span-2 row-start-2"
                         />
-                        <span className="text-foreground dark:text-zinc-100 font-medium shrink-0 min-w-10.5 text-right">
+                        <span className="col-start-2 row-start-1 rounded-md bg-orange-500/10 px-2 py-1 text-xs font-semibold tabular-nums text-orange-700 dark:text-orange-200">
                           {(sparkleConfig.stepDuration * 1000).toFixed(0)}ms
                         </span>
                       </div>
 
-                      <div className="rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 py-2 flex items-center justify-between gap-2.5 text-xs">
+                      <div className="grid min-w-0 grid-cols-[1fr_auto] items-center gap-x-3 gap-y-2 rounded-xl border border-orange-400/15 bg-white/60 p-3 text-xs dark:bg-white/5">
                         <span className="text-muted-foreground dark:text-zinc-400 shrink-0">
                           Dissolve
                         </span>
-                        <div className="h-3.5 w-px bg-border dark:bg-white/10 shrink-0" />
-                        <input
+
+                        <CustomizationRange
                           type="range"
+                          aria-label="Dissolve"
                           min="0.10"
                           max="0.40"
                           step="0.02"
@@ -3897,21 +3816,22 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               dissolveDuration: Number(e.target.value),
                             }))
                           }
-                          className="w-full accent-foreground dark:accent-white h-1 bg-foreground/15 dark:bg-white/10 rounded cursor-pointer"
+                          className="col-span-2 row-start-2"
                         />
-                        <span className="text-foreground dark:text-zinc-100 font-medium shrink-0 min-w-10.5 text-right">
+                        <span className="col-start-2 row-start-1 rounded-md bg-orange-500/10 px-2 py-1 text-xs font-semibold tabular-nums text-orange-700 dark:text-orange-200">
                           {(sparkleConfig.dissolveDuration * 1000).toFixed(0)}
                           ms
                         </span>
                       </div>
 
-                      <div className="rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 py-2 flex items-center justify-between gap-2.5 text-xs">
+                      <div className="grid min-w-0 grid-cols-[1fr_auto] items-center gap-x-3 gap-y-2 rounded-xl border border-orange-400/15 bg-white/60 p-3 text-xs dark:bg-white/5">
                         <span className="text-muted-foreground dark:text-zinc-400 shrink-0">
                           Stiffness
                         </span>
-                        <div className="h-3.5 w-px bg-border dark:bg-white/10 shrink-0" />
-                        <input
+
+                        <CustomizationRange
                           type="range"
+                          aria-label="Stiffness"
                           min="150"
                           max="500"
                           step="10"
@@ -3922,9 +3842,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               springStiffness: Number(e.target.value),
                             }))
                           }
-                          className="w-full accent-foreground dark:accent-white h-1 bg-foreground/15 dark:bg-white/10 rounded cursor-pointer"
+                          className="col-span-2 row-start-2"
                         />
-                        <span className="text-foreground dark:text-zinc-100 font-medium shrink-0 min-w-10.5 text-right">
+                        <span className="col-start-2 row-start-1 rounded-md bg-orange-500/10 px-2 py-1 text-xs font-semibold tabular-nums text-orange-700 dark:text-orange-200">
                           {sparkleConfig.springStiffness}
                         </span>
                       </div>
@@ -3936,27 +3856,28 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               {activeComponent.slug === "twitter-card" && (
                 <div
                   key="twitter-customize-panel"
-                  className="pointer-events-auto rounded-2xl border border-border dark:border-white/10 bg-card/95 dark:bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-xl dark:shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-xl w-full mx-4 select-none flex flex-col gap-2.5"
+                  className="pointer-events-auto flex w-full min-w-0 flex-col gap-5 p-3 font-sans sm:p-4"
                 >
                   <div className="flex items-center justify-between px-1">
-                    <span className="text-xs font-semibold text-foreground dark:text-white/90 tracking-tight">
+                    <span className="text-sm font-semibold text-foreground dark:text-white/90 tracking-tight">
                       Customize
                     </span>
                     <button
                       type="button"
                       onClick={resetTwitterCardConfig}
-                      className="text-[11px] text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                      className="flex min-h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-orange-400/20 bg-white/60 px-3 text-xs font-medium text-orange-900 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10"
                     >
                       <ResetIcon className="w-3.5 h-3.5" />
                       <span>Reset</span>
                     </button>
                   </div>
 
-                  <div className="rounded-xl border border-border dark:border-white/5 bg-muted/40 dark:bg-[#0b0b0e] p-1.5 flex flex-col gap-1.5">
-                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-1.5 pb-1.5 border-b border-border dark:border-white/5">
-                      <div className="flex items-center gap-0.5 bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5">
+                  <div className="flex min-w-0 flex-col gap-4">
+                    <div className="flex min-w-0 flex-col gap-2.5">
+                      <SegmentedControlGroup className="w-full min-w-0">
                         <button
                           type="button"
+                          aria-pressed={!twitterCardConfig.staticCard}
                           onClick={() =>
                             setTwitterCardConfig((prev) => ({
                               ...prev,
@@ -3964,27 +3885,17 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             }))
                           }
                           className={cn(
-                            "relative h-7 px-3 rounded-lg text-xs transition-colors cursor-pointer flex items-center justify-center",
+                            "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
                             !twitterCardConfig.staticCard
-                              ? "text-background font-semibold dark:text-black"
-                              : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
+                              ? "text-zinc-950"
+                              : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                           )}
                         >
-                          {!twitterCardConfig.staticCard && (
-                            <motion.div
-                              layoutId="activeTwitterModeIndicator"
-                              transition={{
-                                type: "spring",
-                                stiffness: 450,
-                                damping: 32,
-                              }}
-                              className="absolute inset-0 bg-foreground dark:bg-white rounded-lg shadow-xs"
-                            />
-                          )}
                           <span className="relative z-10">Trigger Popover</span>
                         </button>
                         <button
                           type="button"
+                          aria-pressed={twitterCardConfig.staticCard}
                           onClick={() =>
                             setTwitterCardConfig((prev) => ({
                               ...prev,
@@ -3992,54 +3903,42 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             }))
                           }
                           className={cn(
-                            "relative h-7 px-3 rounded-lg text-xs transition-colors cursor-pointer flex items-center justify-center",
+                            "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
                             twitterCardConfig.staticCard
-                              ? "text-background font-semibold dark:text-black"
-                              : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
+                              ? "text-zinc-950"
+                              : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                           )}
                         >
-                          {twitterCardConfig.staticCard && (
-                            <motion.div
-                              layoutId="activeTwitterModeIndicator"
-                              transition={{
-                                type: "spring",
-                                stiffness: 450,
-                                damping: 32,
-                              }}
-                              className="absolute inset-0 bg-foreground dark:bg-white rounded-lg shadow-xs"
-                            />
-                          )}
                           <span className="relative z-10">Static Card</span>
                         </button>
-                      </div>
+                      </SegmentedControlGroup>
 
-                      <div className="flex items-center gap-1 bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5">
-                        {["hey_krishnna", "karpathy", "shadcn"].map(
-                          (handle) => (
-                            <button
-                              key={handle}
-                              type="button"
-                              onClick={() =>
-                                setTwitterCardConfig((prev) => ({
-                                  ...prev,
-                                  username: handle,
-                                }))
-                              }
-                              className={cn(
-                                "h-7 px-2.5 rounded-lg text-xs transition-colors cursor-pointer",
-                                twitterCardConfig.username === handle
-                                  ? "bg-foreground/10 dark:bg-white/10 text-foreground dark:text-white font-medium"
-                                  : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
-                              )}
-                            >
-                              @{handle}
-                            </button>
-                          ),
-                        )}
-                      </div>
+                      <SegmentedControlGroup className="w-full min-w-0">
+                        {["hey_krishnna", "karpathy", "shadcn"].map((handle) => (
+                          <button
+                            key={handle}
+                            type="button"
+                            aria-pressed={twitterCardConfig.username === handle}
+                            onClick={() =>
+                              setTwitterCardConfig((prev) => ({
+                                ...prev,
+                                username: handle,
+                              }))
+                            }
+                            className={cn(
+                              "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
+                              twitterCardConfig.username === handle
+                                ? "text-zinc-950"
+                                : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
+                            )}
+                          >
+                            @{handle}
+                          </button>
+                        ))}
+                      </SegmentedControlGroup>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 pt-1">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                       <button
                         type="button"
                         onClick={() =>
@@ -4048,7 +3947,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             enableCardTilt: !prev.enableCardTilt,
                           }))
                         }
-                        className="rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] hover:bg-muted dark:hover:bg-[#1f1f25] px-3 py-2 flex items-center justify-between text-xs transition-colors cursor-pointer"
+                        className="rounded-xl border border-orange-400/15 dark:border-orange-400/15 bg-white/60 dark:bg-white/5 hover:bg-muted dark:hover:bg-[#1f1f25] px-3 py-2 flex items-center justify-between text-xs transition-colors cursor-pointer"
                       >
                         <span className="text-muted-foreground dark:text-zinc-400">
                           Card 3D Tilt
@@ -4061,19 +3960,18 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               : "text-muted-foreground dark:text-zinc-500",
                           )}
                         >
-                          {twitterCardConfig.enableCardTilt
-                            ? "Enabled"
-                            : "Disabled"}
+                          {twitterCardConfig.enableCardTilt ? "Enabled" : "Disabled"}
                         </span>
                       </button>
 
-                      <div className="rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 py-2 flex items-center justify-between gap-2.5 text-xs">
+                      <div className="grid min-w-0 grid-cols-[1fr_auto] items-center gap-x-3 gap-y-2 rounded-xl border border-orange-400/15 bg-white/60 p-3 text-xs dark:bg-white/5">
                         <span className="text-muted-foreground dark:text-zinc-400 shrink-0">
                           Tilt Angle
                         </span>
-                        <div className="h-3.5 w-px bg-border dark:bg-white/10 shrink-0" />
-                        <input
+
+                        <CustomizationRange
                           type="range"
+                          aria-label="Tilt Angle"
                           min="2"
                           max="18"
                           step="1"
@@ -4084,9 +3982,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               cardTiltMaxRotate: Number(e.target.value),
                             }))
                           }
-                          className="w-full accent-foreground dark:accent-white h-1 bg-foreground/15 dark:bg-white/10 rounded cursor-pointer"
+                          className="col-span-2 row-start-2"
                         />
-                        <span className="text-foreground dark:text-zinc-100 font-medium shrink-0 min-w-8 text-right">
+                        <span className="col-start-2 row-start-1 rounded-md bg-orange-500/10 px-2 py-1 text-xs font-semibold tabular-nums text-orange-700 dark:text-orange-200">
                           {twitterCardConfig.cardTiltMaxRotate}°
                         </span>
                       </div>
@@ -4098,28 +3996,28 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               {activeComponent.slug === "toast" && (
                 <div
                   key="toast-customize-panel"
-                  className="pointer-events-auto rounded-2xl border border-border dark:border-white/10 bg-card/95 dark:bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-xl dark:shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-xl w-full mx-4 select-none flex flex-col gap-2.5"
+                  className="pointer-events-auto flex w-full min-w-0 flex-col gap-5 p-3 font-sans sm:p-4"
                 >
                   <div className="flex items-center justify-between px-1">
-                    <span className="text-xs font-semibold text-foreground dark:text-white/90 tracking-tight">
+                    <span className="text-sm font-semibold text-foreground dark:text-white/90 tracking-tight">
                       Toast Settings
                     </span>
                     <button
                       type="button"
                       onClick={resetToastConfig}
-                      className="text-[11px] text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                      className="flex min-h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-orange-400/20 bg-white/60 px-3 text-xs font-medium text-orange-900 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10"
                     >
                       <ResetIcon className="w-3.5 h-3.5" />
                       <span>Reset</span>
                     </button>
                   </div>
 
-                  <div className="rounded-xl border border-border dark:border-white/5 bg-muted/40 dark:bg-[#0b0b0e] p-2 flex flex-col gap-2.5">
-                    <div className="flex items-center justify-between gap-2">
+                  <div className="flex min-w-0 flex-col gap-4">
+                    <div className="flex min-w-0 flex-col gap-2.5">
                       <span className="text-[11px] text-muted-foreground dark:text-zinc-400">
                         Position
                       </span>
-                      <div className="flex items-center gap-1 bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5">
+                      <SegmentedControlGroup className="w-full min-w-0">
                         {(
                           [
                             "bottom-right",
@@ -4133,6 +4031,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             <button
                               key={pos}
                               type="button"
+                              aria-pressed={isActive}
                               onClick={() =>
                                 setToastConfig((prev) => ({
                                   ...prev,
@@ -4140,33 +4039,22 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                 }))
                               }
                               className={cn(
-                                "relative text-[11px] px-2.5 py-1 rounded-lg transition-colors cursor-pointer capitalize font-medium",
+                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 capitalize",
                                 isActive
-                                  ? "text-background font-semibold dark:text-black"
-                                  : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
+                                  ? "text-zinc-950"
+                                  : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                               )}
                             >
-                              {isActive && (
-                                <motion.div
-                                  layoutId="activeToastPositionIndicator"
-                                  transition={{
-                                    type: "spring",
-                                    stiffness: 450,
-                                    damping: 32,
-                                  }}
-                                  className="absolute inset-0 bg-foreground dark:bg-white rounded-lg shadow-xs"
-                                />
-                              )}
                               <span className="relative z-10">
                                 {pos.replace("-", " ")}
                               </span>
                             </button>
                           );
                         })}
-                      </div>
+                      </SegmentedControlGroup>
                     </div>
 
-                    <div className="flex items-center justify-between gap-2 pt-1 border-t border-border dark:border-white/5">
+                    <div className="flex items-center justify-between gap-2 pt-1 border-t border-orange-400/15 dark:border-orange-400/15">
                       <span className="text-[11px] text-muted-foreground dark:text-zinc-400">
                         Rich Colors
                       </span>
@@ -4181,7 +4069,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         className={cn(
                           "relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full p-0.5 items-center transition-colors duration-200 ease-in-out",
                           toastConfig.richColors
-                            ? "bg-foreground dark:bg-white"
+                            ? "bg-orange-500"
                             : "bg-muted-foreground/30 dark:bg-zinc-800",
                         )}
                       >
@@ -4202,7 +4090,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       </button>
                     </div>
 
-                    <div className="flex items-center justify-between gap-2 pt-1 border-t border-border dark:border-white/5">
+                    <div className="flex items-center justify-between gap-2 pt-1 border-t border-orange-400/15 dark:border-orange-400/15">
                       <span className="text-[11px] text-muted-foreground dark:text-zinc-400">
                         Expand on Hover
                       </span>
@@ -4217,7 +4105,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         className={cn(
                           "relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full p-0.5 items-center transition-colors duration-200 ease-in-out",
                           toastConfig.expand
-                            ? "bg-foreground dark:bg-white"
+                            ? "bg-orange-500"
                             : "bg-muted-foreground/30 dark:bg-zinc-800",
                         )}
                       >
@@ -4246,28 +4134,28 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 activeComponent.slug === "theme-toggler") && (
                 <div
                   key="theme-toggler-customize-panel"
-                  className="pointer-events-auto rounded-2xl border border-border dark:border-white/10 bg-card/95 dark:bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-xl dark:shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-xl w-full mx-4 select-none flex flex-col gap-2.5 overflow-hidden"
+                  className="pointer-events-auto flex w-full min-w-0 flex-col gap-5 p-3 font-sans sm:p-4"
                 >
                   <div className="flex items-center justify-between px-1">
-                    <span className="text-xs font-semibold text-foreground dark:text-white/90 tracking-tight">
+                    <span className="text-sm font-semibold text-foreground dark:text-white/90 tracking-tight">
                       Theme Toggler Settings
                     </span>
                     <button
                       type="button"
                       onClick={resetThemeTogglerConfig}
-                      className="text-[11px] text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                      className="flex min-h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-orange-400/20 bg-white/60 px-3 text-xs font-medium text-orange-900 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10"
                     >
                       <ResetIcon className="w-3.5 h-3.5" />
                       <span>Reset</span>
                     </button>
                   </div>
 
-                  <div className="rounded-xl border border-border dark:border-white/5 bg-muted/40 dark:bg-[#0b0b0e] p-2 flex flex-col gap-2.5">
-                    <div className="flex items-center justify-between gap-2">
+                  <div className="flex min-w-0 flex-col gap-4">
+                    <div className="flex min-w-0 flex-col gap-2.5">
                       <span className="text-[11px] text-muted-foreground dark:text-zinc-400">
                         Transition Shape
                       </span>
-                      <div className="flex items-center gap-1 bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5 overflow-x-auto scrollbar-none no-scrollbar [&::-webkit-scrollbar]:hidden">
+                      <SegmentedControlGroup className="w-full min-w-0">
                         {(
                           [
                             "circle",
@@ -4283,6 +4171,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             <button
                               key={v}
                               type="button"
+                              aria-pressed={isActive}
                               onClick={() =>
                                 setThemeTogglerConfig((prev) => ({
                                   ...prev,
@@ -4290,45 +4179,34 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                 }))
                               }
                               className={cn(
-                                "relative text-[11px] px-2.5 py-1 rounded-lg transition-colors cursor-pointer capitalize font-medium shrink-0",
+                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 capitalize",
                                 isActive
-                                  ? "text-background font-semibold dark:text-black"
-                                  : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
+                                  ? "text-zinc-950"
+                                  : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                               )}
                             >
-                              {isActive && (
-                                <motion.div
-                                  layoutId="activeThemeTogglerShapeIndicator"
-                                  transition={{
-                                    type: "spring",
-                                    stiffness: 450,
-                                    damping: 32,
-                                  }}
-                                  className="absolute inset-0 bg-foreground dark:bg-white rounded-lg shadow-xs"
-                                />
-                              )}
                               <span className="relative z-10">{v}</span>
                             </button>
                           );
                         })}
-                      </div>
+                      </SegmentedControlGroup>
                     </div>
 
-                    <div className="flex items-center justify-between gap-2 pt-1 border-t border-border dark:border-white/5">
+                    <div className="flex min-w-0 flex-col gap-2.5">
                       <span className="text-[11px] text-muted-foreground dark:text-zinc-400">
                         Candy Style
                       </span>
-                      <div className="flex items-center gap-1 bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5">
+                      <SegmentedControlGroup className="w-full min-w-0">
                         {[
                           { label: "Candy", value: true },
                           { label: "Minimal", value: false },
                         ].map((opt) => {
-                          const isActive =
-                            themeTogglerConfig.candy === opt.value;
+                          const isActive = themeTogglerConfig.candy === opt.value;
                           return (
                             <button
                               key={opt.label}
                               type="button"
+                              aria-pressed={isActive}
                               onClick={() =>
                                 setThemeTogglerConfig((prev) => ({
                                   ...prev,
@@ -4336,31 +4214,20 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                 }))
                               }
                               className={cn(
-                                "relative text-[11px] px-2.5 py-1 rounded-lg transition-colors cursor-pointer font-medium",
+                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
                                 isActive
-                                  ? "text-background font-semibold dark:text-black"
-                                  : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
+                                  ? "text-zinc-950"
+                                  : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                               )}
                             >
-                              {isActive && (
-                                <motion.div
-                                  layoutId="activeThemeTogglerStyleIndicator"
-                                  transition={{
-                                    type: "spring",
-                                    stiffness: 450,
-                                    damping: 32,
-                                  }}
-                                  className="absolute inset-0 bg-foreground dark:bg-white rounded-lg shadow-xs"
-                                />
-                              )}
                               <span className="relative z-10">{opt.label}</span>
                             </button>
                           );
                         })}
-                      </div>
+                      </SegmentedControlGroup>
                     </div>
 
-                    <div className="flex items-center justify-between gap-2 pt-1 border-t border-border dark:border-white/5">
+                    <div className="flex items-center justify-between gap-2 pt-1 border-t border-orange-400/15 dark:border-orange-400/15">
                       <span className="text-[11px] text-muted-foreground dark:text-zinc-400">
                         Emanate from Center
                       </span>
@@ -4375,7 +4242,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         className={cn(
                           "relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full p-0.5 items-center transition-colors duration-200 ease-in-out",
                           themeTogglerConfig.fromCenter
-                            ? "bg-foreground dark:bg-white"
+                            ? "bg-orange-500"
                             : "bg-muted-foreground/30 dark:bg-zinc-800",
                         )}
                       >
@@ -4402,63 +4269,51 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               {activeComponent.slug === "otp-input" && (
                 <div
                   key="otp-customize-panel"
-                  className="pointer-events-auto rounded-2xl border border-border dark:border-white/10 bg-card/95 dark:bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-xl dark:shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-xl w-full mx-4 select-none flex flex-col gap-2.5"
+                  className="pointer-events-auto flex w-full min-w-0 flex-col gap-5 p-3 font-sans sm:p-4"
                 >
                   <div className="flex items-center justify-between px-1">
-                    <span className="text-xs font-semibold text-foreground dark:text-white/90 tracking-tight">
+                    <span className="text-sm font-semibold text-foreground dark:text-white/90 tracking-tight">
                       Customize
                     </span>
                     <button
                       type="button"
                       onClick={resetOtpConfig}
-                      className="text-[11px] text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                      className="flex min-h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-orange-400/20 bg-white/60 px-3 text-xs font-medium text-orange-900 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10"
                     >
                       <ResetIcon className="w-3.5 h-3.5" />
                       <span>Reset</span>
                     </button>
                   </div>
 
-                  <div className="rounded-xl border border-border dark:border-white/5 bg-muted/40 dark:bg-[#0b0b0e] p-1.5 flex flex-col gap-1.5">
-                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-1.5 pb-1.5 border-b border-border dark:border-white/5">
-                      <div className="flex items-center gap-0.5 bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5">
-                        {(["idle", "success", "error", "loading"] as const).map(
-                          (s) => (
-                            <button
-                              key={s}
-                              type="button"
-                              onClick={() => setOtpStatus(s)}
-                              className={cn(
-                                "relative h-7 px-2.5 rounded-lg text-xs capitalize transition-colors cursor-pointer flex items-center justify-center",
-                                otpStatus === s
-                                  ? "text-background font-semibold dark:text-black"
-                                  : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
-                              )}
-                            >
-                              {otpStatus === s && (
-                                <motion.div
-                                  layoutId="activeOtpStatusIndicator"
-                                  transition={{
-                                    type: "spring",
-                                    stiffness: 450,
-                                    damping: 32,
-                                  }}
-                                  className="absolute inset-0 bg-foreground dark:bg-white rounded-lg shadow-xs"
-                                />
-                              )}
-                              <span className="relative z-10">{s}</span>
-                            </button>
-                          ),
-                        )}
-                      </div>
+                  <div className="flex min-w-0 flex-col gap-4">
+                    <div className="flex min-w-0 flex-col gap-2.5">
+                      <SegmentedControlGroup className="w-full min-w-0">
+                        {(["idle", "success", "error", "loading"] as const).map((s) => (
+                          <button
+                            key={s}
+                            type="button"
+                            aria-pressed={otpStatus === s}
+                            onClick={() => setOtpStatus(s)}
+                            className={cn(
+                              "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 capitalize",
+                              otpStatus === s
+                                ? "text-zinc-950"
+                                : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
+                            )}
+                          >
+                            <span className="relative z-10">{s}</span>
+                          </button>
+                        ))}
+                      </SegmentedControlGroup>
 
-                      <div className="flex items-center gap-1 bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5">
+                      <div className="flex items-center gap-1 bg-muted/80 dark:bg-white/5 p-1 rounded-xl border border-orange-400/15 dark:border-orange-400/15">
                         <button
                           type="button"
                           onClick={() => {
                             setOtpValue("729481");
                             setOtpStatus("success");
                           }}
-                          className="h-7 px-2.5 rounded-lg text-xs text-foreground/80 dark:text-zinc-300 hover:text-foreground dark:hover:text-white hover:bg-muted dark:hover:bg-white/5 transition-colors cursor-pointer flex items-center justify-center"
+                          className="h-7 px-2.5 rounded-xl text-xs text-foreground/80 dark:text-zinc-300 hover:text-foreground dark:hover:text-white hover:bg-muted dark:hover:bg-white/5 transition-colors cursor-pointer flex items-center justify-center"
                         >
                           Auto-fill
                         </button>
@@ -4468,7 +4323,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             setOtpValue("999999");
                             setOtpStatus("error");
                           }}
-                          className="h-7 px-2.5 rounded-lg text-xs font-mono text-foreground/80 dark:text-zinc-300 hover:text-foreground dark:hover:text-white hover:bg-muted dark:hover:bg-white/5 transition-colors cursor-pointer flex items-center justify-center"
+                          className="h-7 px-2.5 rounded-xl text-xs font-sans text-foreground/80 dark:text-zinc-300 hover:text-foreground dark:hover:text-white hover:bg-muted dark:hover:bg-white/5 transition-colors cursor-pointer flex items-center justify-center"
                         >
                           Error
                         </button>
@@ -4478,99 +4333,79 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             setOtpValue("");
                             setOtpStatus("idle");
                           }}
-                          className="h-7 px-2.5 rounded-lg text-xs font-mono text-foreground/80 dark:text-zinc-300 hover:text-foreground dark:hover:text-white hover:bg-muted dark:hover:bg-white/5 transition-colors cursor-pointer flex items-center justify-center"
+                          className="h-7 px-2.5 rounded-xl text-xs font-sans text-foreground/80 dark:text-zinc-300 hover:text-foreground dark:hover:text-white hover:bg-muted dark:hover:bg-white/5 transition-colors cursor-pointer flex items-center justify-center"
                         >
                           Clear
                         </button>
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
-                      <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-orange-400/15 bg-white/60 p-3 dark:bg-white/5">
                         <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium">
                           Size
                         </span>
-                        <div className="flex items-center gap-0.5 bg-muted/80 dark:bg-black/25 p-0.5 rounded-md border border-border dark:border-white/5">
+                        <SegmentedControlGroup className="w-full min-w-0">
                           {(["sm", "md", "lg", "xl"] as const).map((sz) => (
                             <button
                               key={sz}
                               type="button"
+                              aria-pressed={otpSize === sz}
                               onClick={() => setOtpSize(sz)}
                               className={cn(
-                                "relative px-2 py-0.5 rounded text-[11px] uppercase transition-colors cursor-pointer",
+                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 uppercase",
                                 otpSize === sz
-                                  ? "text-background font-semibold dark:text-black"
-                                  : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
+                                  ? "text-zinc-950"
+                                  : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                               )}
                             >
-                              {otpSize === sz && (
-                                <motion.div
-                                  layoutId="activeOtpSizeIndicator"
-                                  transition={{
-                                    type: "spring",
-                                    stiffness: 450,
-                                    damping: 32,
-                                  }}
-                                  className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
-                                />
-                              )}
                               <span className="relative z-10">{sz}</span>
                             </button>
                           ))}
-                        </div>
+                        </SegmentedControlGroup>
                       </div>
 
-                      <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-orange-400/15 bg-white/60 p-3 dark:bg-white/5">
                         <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium">
                           Variant
                         </span>
-                        <div className="flex items-center gap-0.5 bg-muted/80 dark:bg-black/25 p-0.5 rounded-md border border-border dark:border-white/5">
-                          {(
-                            ["default", "glass", "neon", "underlined"] as const
-                          ).map((v) => (
-                            <button
-                              key={v}
-                              type="button"
-                              onClick={() => setOtpVariant(v)}
-                              className={cn(
-                                "relative px-1.5 py-0.5 rounded text-[10px] capitalize transition-colors cursor-pointer",
-                                otpVariant === v
-                                  ? "text-background font-semibold dark:text-black"
-                                  : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
-                              )}
-                            >
-                              {otpVariant === v && (
-                                <motion.div
-                                  layoutId="activeOtpVariantIndicator"
-                                  transition={{
-                                    type: "spring",
-                                    stiffness: 450,
-                                    damping: 32,
-                                  }}
-                                  className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
-                                />
-                              )}
-                              <span className="relative z-10">
-                                {v === "underlined" ? "Underline" : v}
-                              </span>
-                            </button>
-                          ))}
-                        </div>
+                        <SegmentedControlGroup className="w-full min-w-0">
+                          {(["default", "glass", "neon", "underlined"] as const).map(
+                            (v) => (
+                              <button
+                                key={v}
+                                type="button"
+                                aria-pressed={otpVariant === v}
+                                onClick={() => setOtpVariant(v)}
+                                className={cn(
+                                  "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 capitalize",
+                                  otpVariant === v
+                                    ? "text-zinc-950"
+                                    : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
+                                )}
+                              >
+                                <span className="relative z-10">
+                                  {v === "underlined" ? "Underline" : v}
+                                </span>
+                              </button>
+                            ),
+                          )}
+                        </SegmentedControlGroup>
                       </div>
 
                       <button
                         type="button"
                         onClick={() => setOtpMask((m) => !m)}
-                        className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] hover:bg-muted dark:hover:bg-[#1f1f25] px-3 flex items-center justify-between text-xs transition-colors cursor-pointer"
+                        className="min-h-12 rounded-xl border border-orange-400/15 dark:border-orange-400/15 bg-white/60 dark:bg-white/5 hover:bg-muted dark:hover:bg-[#1f1f25] px-3 flex items-center justify-between text-xs transition-colors cursor-pointer"
                       >
                         <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium">
                           Mask (•)
                         </span>
                         <span
                           className={cn(
-                            "px-2 py-0.5 rounded text-[11px] font-mono uppercase transition-colors",
+                            "px-2 py-0.5 rounded text-[11px] font-sans uppercase transition-colors",
                             otpMask
-                              ? "bg-foreground text-background font-semibold dark:bg-white dark:text-black"
+                              ? "bg-orange-500 text-zinc-950 font-semibold"
                               : "bg-muted text-muted-foreground dark:bg-white/5 dark:text-zinc-400",
                           )}
                         >
@@ -4581,16 +4416,16 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       <button
                         type="button"
                         onClick={() => setOtpGrouped((g) => !g)}
-                        className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] hover:bg-muted dark:hover:bg-[#1f1f25] px-3 flex items-center justify-between text-xs transition-colors cursor-pointer"
+                        className="min-h-12 rounded-xl border border-orange-400/15 dark:border-orange-400/15 bg-white/60 dark:bg-white/5 hover:bg-muted dark:hover:bg-[#1f1f25] px-3 flex items-center justify-between text-xs transition-colors cursor-pointer"
                       >
                         <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium">
                           3-3 Split
                         </span>
                         <span
                           className={cn(
-                            "px-2 py-0.5 rounded text-[11px] font-mono uppercase transition-colors",
+                            "px-2 py-0.5 rounded text-[11px] font-sans uppercase transition-colors",
                             otpGrouped
-                              ? "bg-foreground text-background font-semibold dark:bg-white dark:text-black"
+                              ? "bg-orange-500 text-zinc-950 font-semibold"
                               : "bg-muted text-muted-foreground dark:bg-white/5 dark:text-zinc-400",
                           )}
                         >
@@ -4605,91 +4440,71 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               {activeComponent.slug === "orb" && (
                 <div
                   key="orb-customize-panel"
-                  className="pointer-events-auto rounded-2xl border border-border dark:border-white/10 bg-card/95 dark:bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-xl dark:shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-2xl w-full mx-4 select-none flex flex-col gap-2.5 overflow-hidden"
+                  className="pointer-events-auto flex w-full min-w-0 flex-col gap-5 p-3 font-sans sm:p-4"
                 >
                   <div className="flex items-center justify-between px-1">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-semibold text-foreground dark:text-white/90 tracking-tight">
+                      <span className="text-sm font-semibold text-foreground dark:text-white/90 tracking-tight">
                         Orb Controls
                       </span>
                       {orbStudioColor && (
-                        <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-muted text-muted-foreground dark:bg-white/10 dark:text-zinc-300">
-                          {ORB_COLORS.find((c) => c.value === orbStudioColor)
-                            ?.label || "Custom"}
+                        <span className="text-[10px] uppercase font-sans px-1.5 py-0.5 rounded bg-muted text-muted-foreground dark:bg-white/10 dark:text-zinc-300">
+                          {ORB_COLORS.find((c) => c.value === orbStudioColor)?.label ||
+                            "Custom"}
                         </span>
                       )}
                     </div>
                     <button
                       type="button"
                       onClick={resetOrbConfig}
-                      className="text-[11px] text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                      className="flex min-h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-orange-400/20 bg-white/60 px-3 text-xs font-medium text-orange-900 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10"
                     >
                       <ResetIcon className="w-3.5 h-3.5" />
                       <span>Reset</span>
                     </button>
                   </div>
 
-                  <div className="rounded-xl border border-border dark:border-white/5 bg-muted/40 dark:bg-[#0b0b0e] p-2 flex flex-col gap-2">
-                    <div className="flex items-center gap-1 overflow-x-auto scrollbar-none no-scrollbar [&::-webkit-scrollbar]:hidden bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5">
+                  <div className="flex min-w-0 flex-col gap-4">
+                    <SegmentedControlGroup className="w-full min-w-0">
                       {ORB_STATES.map((s) => (
                         <button
                           key={s}
                           type="button"
+                          aria-pressed={orbStudioState === s}
                           onClick={() => setOrbStudioState(s)}
                           className={cn(
-                            "relative h-7 px-2.5 rounded-lg text-xs capitalize transition-colors cursor-pointer flex items-center justify-center shrink-0",
+                            "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 capitalize",
                             orbStudioState === s
-                              ? "text-background font-semibold dark:text-black"
-                              : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
+                              ? "text-zinc-950"
+                              : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                           )}
                         >
-                          {orbStudioState === s && (
-                            <motion.div
-                              layoutId="activeOrbStateIndicator"
-                              transition={{
-                                type: "spring",
-                                stiffness: 450,
-                                damping: 32,
-                              }}
-                              className="absolute inset-0 bg-foreground dark:bg-white rounded-lg shadow-xs"
-                            />
-                          )}
                           <span className="relative z-10">{s}</span>
                         </button>
                       ))}
-                    </div>
+                    </SegmentedControlGroup>
 
-                    <div className="flex items-center gap-1 overflow-x-auto scrollbar-none no-scrollbar [&::-webkit-scrollbar]:hidden bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5">
+                    <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-orange-400/15 bg-white/60 p-3 dark:bg-white/5">
                       <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium px-2.5 shrink-0">
                         Color
                       </span>
-                      <div className="h-3.5 w-px bg-border dark:bg-white/10 shrink-0 mr-1" />
-                      <div className="flex items-center gap-1 shrink-0">
+
+                      <SegmentedControlGroup className="w-full min-w-0">
                         {ORB_COLORS.map((c) => {
                           const isSelected = orbStudioColor === c.value;
                           return (
                             <button
                               key={c.label}
                               type="button"
+                              aria-pressed={isSelected}
                               onClick={() => setOrbStudioColor(c.value)}
                               className={cn(
-                                "relative h-7 px-2.5 rounded-lg text-xs transition-colors cursor-pointer flex items-center gap-1.5 shrink-0",
+                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
                                 isSelected
-                                  ? "text-background font-semibold dark:text-black"
-                                  : "text-muted-foreground hover:text-foreground hover:bg-muted dark:text-zinc-400 dark:hover:text-white dark:hover:bg-white/5",
+                                  ? "text-zinc-950"
+                                  : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                               )}
                             >
-                              {isSelected && (
-                                <motion.div
-                                  layoutId="activeOrbColorIndicator"
-                                  transition={{
-                                    type: "spring",
-                                    stiffness: 450,
-                                    damping: 32,
-                                  }}
-                                  className="absolute inset-0 bg-foreground dark:bg-white rounded-lg shadow-xs"
-                                />
-                              )}
                               <span
                                 className={cn(
                                   "relative z-10 w-2 h-2 rounded-full shrink-0",
@@ -4702,15 +4517,15 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             </button>
                           );
                         })}
-                      </div>
+                      </SegmentedControlGroup>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 flex items-center justify-between text-xs min-w-0 overflow-hidden">
+                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-orange-400/15 bg-white/60 p-3 dark:bg-white/5">
                         <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                           Size
                         </span>
-                        <div className="flex items-center gap-0.5 bg-muted/80 dark:bg-black/25 p-0.5 rounded-md border border-border dark:border-white/5 shrink-0">
+                        <SegmentedControlGroup className="w-full min-w-0">
                           {[
                             { label: "S", value: 64 },
                             { label: "M", value: 96 },
@@ -4720,129 +4535,89 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             <button
                               key={sz.label}
                               type="button"
+                              aria-pressed={orbStudioSize === sz.value}
                               onClick={() => setOrbStudioSize(sz.value)}
                               className={cn(
-                                "relative px-2 py-0.5 rounded text-[11px] font-mono transition-colors cursor-pointer shrink-0",
+                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
                                 orbStudioSize === sz.value
-                                  ? "text-background font-semibold dark:text-black"
-                                  : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
+                                  ? "text-zinc-950"
+                                  : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                               )}
                             >
-                              {orbStudioSize === sz.value && (
-                                <motion.div
-                                  layoutId="activeOrbSizeIndicator"
-                                  transition={{
-                                    type: "spring",
-                                    stiffness: 450,
-                                    damping: 32,
-                                  }}
-                                  className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
-                                />
-                              )}
                               <span className="relative z-10">{sz.label}</span>
                             </button>
                           ))}
-                        </div>
+                        </SegmentedControlGroup>
                       </div>
 
-                      <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 flex items-center justify-between text-xs min-w-0 overflow-hidden">
+                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-orange-400/15 bg-white/60 p-3 dark:bg-white/5">
                         <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                           Speed
                         </span>
-                        <div className="flex items-center gap-0.5 bg-muted/80 dark:bg-black/25 p-0.5 rounded-md border border-border dark:border-white/5 shrink-0">
+                        <SegmentedControlGroup className="w-full min-w-0">
                           {[0.5, 1, 1.5, 2].map((sp) => (
                             <button
                               key={sp}
                               type="button"
+                              aria-pressed={orbStudioSpeed === sp}
                               onClick={() => setOrbStudioSpeed(sp)}
                               className={cn(
-                                "relative px-2 py-0.5 rounded text-[11px] font-mono transition-colors cursor-pointer shrink-0",
+                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
                                 orbStudioSpeed === sp
-                                  ? "text-background font-semibold dark:text-black"
-                                  : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
+                                  ? "text-zinc-950"
+                                  : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                               )}
                             >
-                              {orbStudioSpeed === sp && (
-                                <motion.div
-                                  layoutId="activeOrbSpeedIndicator"
-                                  transition={{
-                                    type: "spring",
-                                    stiffness: 450,
-                                    damping: 32,
-                                  }}
-                                  className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
-                                />
-                              )}
                               <span className="relative z-10">{sp}x</span>
                             </button>
                           ))}
-                        </div>
+                        </SegmentedControlGroup>
                       </div>
                     </div>
 
-                    <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 flex items-center justify-between text-xs min-w-0 overflow-hidden">
+                    <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-orange-400/15 bg-white/60 p-3 dark:bg-white/5">
                       <div className="flex items-center gap-2 shrink-0">
                         <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium">
                           Motion
                         </span>
-                        <span className="text-[11px] text-muted-foreground dark:text-zinc-500 font-mono hidden sm:inline">
+                        <span className="text-[11px] text-muted-foreground dark:text-zinc-500 font-sans ">
                           {orbStudioPaused ? "Paused" : "Active"}
                         </span>
                       </div>
-                      <div className="flex items-center gap-0.5 bg-muted/80 dark:bg-black/25 p-0.5 rounded-md border border-border dark:border-white/5 shrink-0">
+                      <SegmentedControlGroup className="w-full min-w-0">
                         <button
                           type="button"
+                          aria-pressed={!orbStudioPaused}
                           onClick={() => setOrbStudioPaused(false)}
                           className={cn(
-                            "relative px-2.5 py-0.5 rounded text-[11px] font-medium transition-colors cursor-pointer shrink-0",
+                            "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
                             !orbStudioPaused
-                              ? "text-background font-semibold dark:text-black"
-                              : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
+                              ? "text-zinc-950"
+                              : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                           )}
                         >
-                          {!orbStudioPaused && (
-                            <motion.div
-                              layoutId="activeOrbMotionIndicator"
-                              transition={{
-                                type: "spring",
-                                stiffness: 450,
-                                damping: 32,
-                              }}
-                              className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
-                            />
-                          )}
-                          <span className="relative z-10 flex items-center gap-1.5">
+                          <span className="relative z-10 flex items-center gap-3">
                             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                             Playing
                           </span>
                         </button>
                         <button
                           type="button"
+                          aria-pressed={orbStudioPaused}
                           onClick={() => setOrbStudioPaused(true)}
                           className={cn(
-                            "relative px-2.5 py-0.5 rounded text-[11px] font-medium transition-colors cursor-pointer shrink-0",
+                            "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
                             orbStudioPaused
-                              ? "text-background font-semibold dark:text-black"
-                              : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
+                              ? "text-zinc-950"
+                              : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                           )}
                         >
-                          {orbStudioPaused && (
-                            <motion.div
-                              layoutId="activeOrbMotionIndicator"
-                              transition={{
-                                type: "spring",
-                                stiffness: 450,
-                                damping: 32,
-                              }}
-                              className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
-                            />
-                          )}
-                          <span className="relative z-10 flex items-center gap-1.5">
+                          <span className="relative z-10 flex items-center gap-3">
                             <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground dark:bg-zinc-400" />
                             Paused
                           </span>
                         </button>
-                      </div>
+                      </SegmentedControlGroup>
                     </div>
                   </div>
                 </div>
@@ -4851,24 +4626,24 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               {activeComponent.slug === "mac-slider" && (
                 <div
                   key="mac-slider-customize-panel"
-                  className="pointer-events-auto rounded-2xl border border-border dark:border-white/10 bg-card/95 dark:bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-xl dark:shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-2xl w-full mx-4 select-none flex flex-col gap-2.5"
+                  className="pointer-events-auto flex w-full min-w-0 flex-col gap-5 p-3 font-sans sm:p-4"
                 >
                   <div className="flex items-center justify-between px-1">
-                    <span className="text-xs font-semibold text-foreground dark:text-white/90 tracking-tight">
+                    <span className="text-sm font-semibold text-foreground dark:text-white/90 tracking-tight">
                       Mac Slider Controls
                     </span>
                     <button
                       type="button"
                       onClick={resetMacSliderConfig}
-                      className="text-[11px] text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                      className="flex min-h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-orange-400/20 bg-white/60 px-3 text-xs font-medium text-orange-900 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10"
                     >
                       <ResetIcon className="w-3.5 h-3.5" />
                       <span>Reset</span>
                     </button>
                   </div>
 
-                  <div className="rounded-xl border border-border dark:border-white/5 bg-muted/40 dark:bg-[#0b0b0e] p-2 flex flex-col gap-2">
-                    <div className="flex items-center gap-1 bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5 w-full">
+                  <div className="flex min-w-0 flex-col gap-4">
+                    <SegmentedControlGroup className="w-full min-w-0">
                       {(
                         [
                           { id: "blue", label: "Blue", dot: "bg-blue-500" },
@@ -4895,78 +4670,56 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         <button
                           key={c.id}
                           type="button"
+                          aria-pressed={macSliderColor === c.id}
                           onClick={() => setMacSliderColor(c.id)}
                           className={cn(
-                            "relative flex-1 h-7.5 px-2 rounded-lg text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer select-none",
+                            "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
                             macSliderColor === c.id
-                              ? "text-background font-semibold dark:text-black"
-                              : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
+                              ? "text-zinc-950"
+                              : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                           )}
                         >
-                          {macSliderColor === c.id && (
-                            <motion.div
-                              layoutId="activeMacSliderColorIndicator"
-                              transition={{
-                                type: "spring",
-                                stiffness: 450,
-                                damping: 32,
-                              }}
-                              className="absolute inset-0 bg-foreground dark:bg-white rounded-lg shadow-xs"
-                            />
-                          )}
                           <span
                             className={cn(
                               "relative z-10 w-2 h-2 rounded-full shrink-0 shadow-xs",
                               c.dot,
                             )}
                           />
-                          <span className="relative z-10 truncate hidden sm:inline">
-                            {c.label}
-                          </span>
+                          <span className="relative z-10 ">{c.label}</span>
                         </button>
                       ))}
-                    </div>
+                    </SegmentedControlGroup>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-orange-400/15 bg-white/60 p-3 dark:bg-white/5">
                         <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                           Size
                         </span>
-                        <div className="flex items-center gap-0.5 bg-muted/80 dark:bg-black/30 p-0.5 rounded-md border border-border dark:border-white/5">
+                        <SegmentedControlGroup className="w-full min-w-0">
                           {(["sm", "md", "lg"] as const).map((sz) => (
                             <button
                               key={sz}
                               type="button"
+                              aria-pressed={macSliderSize === sz}
                               onClick={() => setMacSliderSize(sz)}
                               className={cn(
-                                "relative px-2.5 py-0.5 rounded text-[11px] font-mono uppercase transition-colors cursor-pointer",
+                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 uppercase",
                                 macSliderSize === sz
-                                  ? "text-background font-semibold dark:text-black"
-                                  : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
+                                  ? "text-zinc-950"
+                                  : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                               )}
                             >
-                              {macSliderSize === sz && (
-                                <motion.div
-                                  layoutId="activeMacSliderSizeIndicator"
-                                  transition={{
-                                    type: "spring",
-                                    stiffness: 450,
-                                    damping: 32,
-                                  }}
-                                  className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
-                                />
-                              )}
                               <span className="relative z-10">{sz}</span>
                             </button>
                           ))}
-                        </div>
+                        </SegmentedControlGroup>
                       </div>
 
-                      <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-orange-400/15 bg-white/60 p-3 dark:bg-white/5">
                         <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                           Lens State
                         </span>
-                        <div className="flex items-center gap-0.5 bg-muted/80 dark:bg-black/30 p-0.5 rounded-md border border-border dark:border-white/5">
+                        <SegmentedControlGroup className="w-full min-w-0">
                           {[
                             { label: "Rest", value: false },
                             { label: "Expanded", value: true },
@@ -4974,37 +4727,27 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             <button
                               key={st.label}
                               type="button"
+                              aria-pressed={macSliderForceActive === st.value}
                               onClick={() => setMacSliderForceActive(st.value)}
                               className={cn(
-                                "relative px-2.5 py-0.5 rounded text-[11px] font-mono transition-colors cursor-pointer",
+                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
                                 macSliderForceActive === st.value
-                                  ? "text-background font-semibold dark:text-black"
-                                  : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
+                                  ? "text-zinc-950"
+                                  : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                               )}
                             >
-                              {macSliderForceActive === st.value && (
-                                <motion.div
-                                  layoutId="activeMacSliderForceActiveIndicator"
-                                  transition={{
-                                    type: "spring",
-                                    stiffness: 450,
-                                    damping: 32,
-                                  }}
-                                  className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
-                                />
-                              )}
                               <span className="relative z-10">{st.label}</span>
                             </button>
                           ))}
-                        </div>
+                        </SegmentedControlGroup>
                       </div>
                     </div>
 
-                    <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                    <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-orange-400/15 bg-white/60 p-3 dark:bg-white/5">
                       <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                         Glass Material
                       </span>
-                      <div className="flex items-center gap-0.5 bg-muted/80 dark:bg-black/30 p-0.5 rounded-md border border-border dark:border-white/5">
+                      <SegmentedControlGroup className="w-full min-w-0">
                         {(
                           [
                             { id: "liquid", label: "Liquid" },
@@ -5015,108 +4758,96 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           <button
                             key={m.id}
                             type="button"
+                            aria-pressed={macSliderMaterial === m.id}
                             onClick={() => setMacSliderMaterial(m.id)}
                             className={cn(
-                              "relative px-3.5 py-0.5 rounded text-[11px] font-mono transition-colors cursor-pointer",
+                              "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
                               macSliderMaterial === m.id
-                                ? "text-background font-semibold dark:text-black"
-                                : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
+                                ? "text-zinc-950"
+                                : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                             )}
                           >
-                            {macSliderMaterial === m.id && (
-                              <motion.div
-                                layoutId="activeMacSliderMaterialIndicator"
-                                transition={{
-                                  type: "spring",
-                                  stiffness: 450,
-                                  damping: 32,
-                                }}
-                                className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
-                              />
-                            )}
                             <span className="relative z-10">{m.label}</span>
                           </button>
                         ))}
-                      </div>
+                      </SegmentedControlGroup>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 border-t border-border dark:border-white/5">
-                      <div className="rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 py-2 flex items-center justify-between gap-2.5 text-xs">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 border-t border-orange-400/15 dark:border-orange-400/15">
+                      <div className="grid min-w-0 grid-cols-[1fr_auto] items-center gap-x-3 gap-y-2 rounded-xl border border-orange-400/15 bg-white/60 p-3 text-xs dark:bg-white/5">
                         <span className="w-18 shrink-0 text-muted-foreground dark:text-zinc-400 text-[11px] font-medium">
                           Specular
                         </span>
-                        <div className="h-3.5 w-px bg-border dark:bg-white/10 shrink-0" />
-                        <input
+
+                        <CustomizationRange
                           type="range"
+                          aria-label="Specular"
                           min="0"
                           max="1"
                           step="0.01"
                           value={macSliderSpecularOpacity}
                           onChange={(e) =>
-                            setMacSliderSpecularOpacity(
-                              parseFloat(e.target.value),
-                            )
+                            setMacSliderSpecularOpacity(parseFloat(e.target.value))
                           }
-                          className="w-full accent-foreground dark:accent-white h-1 bg-foreground/15 dark:bg-white/10 rounded cursor-pointer"
+                          className="col-span-2 row-start-2"
                         />
-                        <span className="w-12 text-right font-mono text-[11px] text-foreground dark:text-zinc-100 tabular-nums shrink-0 font-medium">
+                        <span className="col-start-2 row-start-1 rounded-md bg-orange-500/10 px-2 py-1 text-xs font-semibold tabular-nums text-orange-700 dark:text-orange-200">
                           {macSliderSpecularOpacity.toFixed(2)}
                         </span>
                       </div>
 
-                      <div className="rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 py-2 flex items-center justify-between gap-2.5 text-xs">
+                      <div className="grid min-w-0 grid-cols-[1fr_auto] items-center gap-x-3 gap-y-2 rounded-xl border border-orange-400/15 bg-white/60 p-3 text-xs dark:bg-white/5">
                         <span className="w-18 shrink-0 text-muted-foreground dark:text-zinc-400 text-[11px] font-medium">
                           Saturation
                         </span>
-                        <div className="h-3.5 w-px bg-border dark:bg-white/10 shrink-0" />
-                        <input
+
+                        <CustomizationRange
                           type="range"
+                          aria-label="Saturation"
                           min="0"
                           max="50"
                           step="1"
                           value={macSliderSpecularSaturation}
                           onChange={(e) =>
-                            setMacSliderSpecularSaturation(
-                              parseFloat(e.target.value),
-                            )
+                            setMacSliderSpecularSaturation(parseFloat(e.target.value))
                           }
-                          className="w-full accent-foreground dark:accent-white h-1 bg-foreground/15 dark:bg-white/10 rounded cursor-pointer"
+                          className="col-span-2 row-start-2"
                         />
-                        <span className="w-12 text-right font-mono text-[11px] text-foreground dark:text-zinc-100 tabular-nums shrink-0 font-medium">
+                        <span className="col-start-2 row-start-1 rounded-md bg-orange-500/10 px-2 py-1 text-xs font-semibold tabular-nums text-orange-700 dark:text-orange-200">
                           {macSliderSpecularSaturation}
                         </span>
                       </div>
 
-                      <div className="rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 py-2 flex items-center justify-between gap-2.5 text-xs">
+                      <div className="grid min-w-0 grid-cols-[1fr_auto] items-center gap-x-3 gap-y-2 rounded-xl border border-orange-400/15 bg-white/60 p-3 text-xs dark:bg-white/5">
                         <span className="w-18 shrink-0 text-muted-foreground dark:text-zinc-400 text-[11px] font-medium">
                           Refraction
                         </span>
-                        <div className="h-3.5 w-px bg-border dark:bg-white/10 shrink-0" />
-                        <input
+
+                        <CustomizationRange
                           type="range"
+                          aria-label="Refraction"
                           min="0"
                           max="1"
                           step="0.01"
                           value={macSliderRefractionLevel}
                           onChange={(e) =>
-                            setMacSliderRefractionLevel(
-                              parseFloat(e.target.value),
-                            )
+                            setMacSliderRefractionLevel(parseFloat(e.target.value))
                           }
-                          className="w-full accent-foreground dark:accent-white h-1 bg-foreground/15 dark:bg-white/10 rounded cursor-pointer"
+                          className="col-span-2 row-start-2"
                         />
-                        <span className="w-12 text-right font-mono text-[11px] text-foreground dark:text-zinc-100 tabular-nums shrink-0 font-medium">
+                        <span className="col-start-2 row-start-1 rounded-md bg-orange-500/10 px-2 py-1 text-xs font-semibold tabular-nums text-orange-700 dark:text-orange-200">
                           {macSliderRefractionLevel.toFixed(2)}
                         </span>
                       </div>
 
-                      <div className="rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 py-2 flex items-center justify-between gap-2.5 text-xs">
+                      <div className="grid min-w-0 grid-cols-[1fr_auto] items-center gap-x-3 gap-y-2 rounded-xl border border-orange-400/15 bg-white/60 p-3 text-xs dark:bg-white/5">
                         <span className="w-18 shrink-0 text-muted-foreground dark:text-zinc-400 text-[11px] font-medium">
                           Blur
                         </span>
-                        <div className="h-3.5 w-px bg-border dark:bg-white/10 shrink-0" />
-                        <input
+
+                        <CustomizationRange
                           type="range"
+                          aria-label="Blur"
                           min="0"
                           max="40"
                           step="0.5"
@@ -5124,9 +4855,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           onChange={(e) =>
                             setMacSliderBlurLevel(parseFloat(e.target.value))
                           }
-                          className="w-full accent-foreground dark:accent-white h-1 bg-foreground/15 dark:bg-white/10 rounded cursor-pointer"
+                          className="col-span-2 row-start-2"
                         />
-                        <span className="w-12 text-right font-mono text-[11px] text-foreground dark:text-zinc-100 tabular-nums shrink-0 font-medium">
+                        <span className="col-start-2 row-start-1 rounded-md bg-orange-500/10 px-2 py-1 text-xs font-semibold tabular-nums text-orange-700 dark:text-orange-200">
                           {macSliderBlurLevel.toFixed(1)}px
                         </span>
                       </div>
@@ -5138,24 +4869,24 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               {activeComponent.slug === "slider" && (
                 <div
                   key="slider-customize-panel"
-                  className="pointer-events-auto rounded-2xl border border-border dark:border-white/10 bg-card/95 dark:bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-xl dark:shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-2xl w-full mx-4 select-none flex flex-col gap-2.5"
+                  className="pointer-events-auto flex w-full min-w-0 flex-col gap-5 p-3 font-sans sm:p-4"
                 >
                   <div className="flex items-center justify-between px-1">
-                    <span className="text-xs font-semibold text-foreground dark:text-white/90 tracking-tight">
+                    <span className="text-sm font-semibold text-foreground dark:text-white/90 tracking-tight">
                       Slider Controls & Ideations
                     </span>
                     <button
                       type="button"
                       onClick={resetSliderConfig}
-                      className="text-[11px] text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                      className="flex min-h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-orange-400/20 bg-white/60 px-3 text-xs font-medium text-orange-900 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10"
                     >
                       <ResetIcon className="w-3.5 h-3.5" />
                       <span>Reset</span>
                     </button>
                   </div>
 
-                  <div className="rounded-xl border border-border dark:border-white/5 bg-muted/40 dark:bg-[#0b0b0e] p-2 flex flex-col gap-2">
-                    <div className="flex items-center gap-1 bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5 w-full">
+                  <div className="flex min-w-0 flex-col gap-4">
+                    <SegmentedControlGroup className="w-full min-w-0">
                       {(
                         [
                           { id: "both", label: "Both Ideations" },
@@ -5166,31 +4897,19 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         <button
                           key={tab.id}
                           type="button"
+                          aria-pressed={sliderIdeation === tab.id}
                           onClick={() => setSliderIdeation(tab.id)}
                           className={cn(
-                            "relative flex-1 h-7.5 px-2 rounded-lg text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer select-none",
+                            "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
                             sliderIdeation === tab.id
-                              ? "text-background font-semibold dark:text-black"
-                              : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
+                              ? "text-zinc-950"
+                              : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                           )}
                         >
-                          {sliderIdeation === tab.id && (
-                            <motion.div
-                              layoutId="activeSliderIdeationIndicator"
-                              transition={{
-                                type: "spring",
-                                stiffness: 450,
-                                damping: 32,
-                              }}
-                              className="absolute inset-0 bg-foreground dark:bg-white rounded-lg shadow-xs"
-                            />
-                          )}
-                          <span className="relative z-10 truncate">
-                            {tab.label}
-                          </span>
+                          <span className="relative z-10">{tab.label}</span>
                         </button>
                       ))}
-                    </div>
+                    </SegmentedControlGroup>
 
                     <div className="flex flex-wrap items-center justify-between gap-2 px-1 pt-1 text-xs">
                       <div className="flex items-center gap-2">
@@ -5212,7 +4931,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       </div>
 
                       {sliderIdeation !== "volume" && (
-                        <div className="flex items-center gap-1.5 text-muted-foreground dark:text-zinc-400">
+                        <div className="flex items-center gap-3 text-muted-foreground dark:text-zinc-400">
                           <span>Range:</span>
                           <span className="font-medium text-foreground dark:text-zinc-200 tabular-nums">
                             ${sliderBudget[0].toLocaleString()} – $
@@ -5222,7 +4941,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       )}
 
                       {sliderIdeation !== "budget" && (
-                        <div className="flex items-center gap-1.5 text-muted-foreground dark:text-zinc-400">
+                        <div className="flex items-center gap-3 text-muted-foreground dark:text-zinc-400">
                           <span>Volume:</span>
                           <span className="font-medium text-foreground dark:text-zinc-200 tabular-nums">
                             {sliderVolume}%
@@ -5237,319 +4956,234 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               {activeComponent.slug === "mac-switch" && (
                 <div
                   key="mac-switch-color-palette"
-                  className="pointer-events-auto rounded-full border border-border dark:border-white/12 bg-card/95 dark:bg-[#121215]/95 backdrop-blur-2xl p-1.5 shadow-xl dark:shadow-[0_16px_40px_rgba(0,0,0,0.85),0_0_0_1px_rgba(255,255,255,0.06)] flex items-center gap-1.5 select-none"
+                  data-customization-palette={7}
+                  className="flex min-w-0 flex-col gap-3 p-3 font-sans sm:p-4"
                 >
-                  {(
-                    [
-                      { id: "green", label: "Green", hex: "#34C759" },
-                      { id: "blue", label: "Blue", hex: "#007AFF" },
-                      { id: "purple", label: "Purple", hex: "#AF52DE" },
-                      { id: "orange", label: "Orange", hex: "#FF9500" },
-                      { id: "pink", label: "Pink", hex: "#FF2D55" },
-                      { id: "amber", label: "Amber", hex: "#FFCC00" },
-                      { id: "monochrome", label: "Graphite", hex: "#8E8E93" },
-                    ] as const
-                  ).map((c) => {
-                    const isSelected = macSwitchColor === c.id;
-                    return (
-                      <motion.button
-                        key={c.id}
-                        type="button"
-                        onClick={() => setMacSwitchColor(c.id)}
-                        title={c.label}
-                        whileHover={{ scale: 1.08 }}
-                        whileTap={{ scale: 0.92 }}
-                        transition={microSpring}
-                        className="relative w-8 h-8 rounded-full flex items-center justify-center cursor-pointer outline-none shrink-0"
-                      >
-                        {isSelected && (
-                          <motion.span
-                            layoutId="activeMacSwitchColorRing"
-                            className="absolute inset-0 rounded-full border-2 border-foreground dark:border-white shadow-[0_0_12px_rgba(0,0,0,0.2)] dark:shadow-[0_0_12px_rgba(255,255,255,0.4)] pointer-events-none"
-                            transition={{
-                              type: "spring",
-                              stiffness: 480,
-                              damping: 32,
-                            }}
-                          />
-                        )}
-                        <span
-                          style={{ backgroundColor: c.hex }}
-                          className={cn(
-                            "w-5.5 h-5.5 rounded-full shadow-xs transition-all duration-200",
-                            isSelected
-                              ? "opacity-100 scale-100"
-                              : "opacity-65 hover:opacity-90 scale-95 hover:scale-100",
-                          )}
-                        />
-                      </motion.button>
-                    );
-                  })}
+                  <span className="text-xs font-medium text-muted-foreground">
+                    Accent color
+                  </span>
+                  <ColorSwatches
+                    options={
+                      [
+                        { value: "green", label: "Green", color: "#34C759" },
+                        { value: "blue", label: "Blue", color: "#007AFF" },
+                        { value: "purple", label: "Purple", color: "#AF52DE" },
+                        { value: "orange", label: "Orange", color: "#FF9500" },
+                        { value: "pink", label: "Pink", color: "#FF2D55" },
+                        { value: "amber", label: "Amber", color: "#FFCC00" },
+                        { value: "monochrome", label: "Graphite", color: "#8E8E93" },
+                      ] as const
+                    }
+                    value={macSwitchColor}
+                    onChange={setMacSwitchColor}
+                  />
                 </div>
               )}
 
               {activeComponent.slug === "liquid-media" && (
                 <div
                   key="liquid-media-customize-panel"
-                  className="pointer-events-auto rounded-2xl border border-border dark:border-white/10 bg-card/95 dark:bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-xl dark:shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-2xl w-full mx-4 select-none flex flex-col gap-2.5"
+                  className="pointer-events-auto flex w-full max-w-2xl flex-col gap-5 p-3 font-sans sm:p-4"
                 >
-                  <div className="flex items-center justify-between px-1">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-semibold text-foreground dark:text-white/90 tracking-tight">
-                        Liquid Distortion Physics
-                      </span>
-                      <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-muted text-muted-foreground dark:bg-white/10 dark:text-zinc-300">
-                        {liquidMediaConfig.preset === "custom"
-                          ? "Custom"
-                          : LIQUID_MEDIA_PRESETS.find(
-                              (p) => p.id === liquidMediaConfig.preset,
-                            )?.label || "Custom"}
-                      </span>
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="min-w-0">
+                      <h3 className="text-sm font-semibold tracking-tight text-zinc-950 dark:text-zinc-50">
+                        Liquid distortion
+                      </h3>
+                      <p className="mt-1 text-xs text-zinc-600 dark:text-zinc-400">
+                        Shape the flow. Make it your own.
+                      </p>
                     </div>
                     <button
                       type="button"
                       onClick={resetLiquidMediaConfig}
-                      className="text-[11px] text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                      className="flex min-h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-orange-400/20 bg-white/60 px-3 text-xs font-medium text-orange-900 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10"
                     >
-                      <ResetIcon className="w-3.5 h-3.5" />
-                      <span>Reset</span>
+                      <ResetIcon className="size-3.5" aria-hidden="true" />
+                      Reset
                     </button>
                   </div>
 
-                  <div className="rounded-xl border border-border dark:border-white/5 bg-muted/40 dark:bg-[#0b0b0e] p-2 flex flex-col gap-2.5">
-                    <div className="flex items-center gap-1 bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5 w-full">
-                      {LIQUID_MEDIA_PRESETS.map((preset) => {
-                        const isActive = liquidMediaConfig.preset === preset.id;
+                  <fieldset className="min-w-0">
+                    <legend className="mb-2.5 text-xs font-medium text-zinc-600 dark:text-zinc-400">
+                      Motion preset
+                    </legend>
+                    <SegmentedControl
+                      options={LIQUID_MEDIA_PRESETS.map((preset) => ({
+                        value: preset.id,
+                        label: preset.label,
+                      }))}
+                      value={liquidMediaConfig.preset}
+                      onChange={(value) => {
+                        const preset = LIQUID_MEDIA_PRESETS.find(
+                          (preset) => preset.id === value,
+                        );
+                        if (preset) applyLiquidMediaPreset(preset);
+                      }}
+                      className="grid-cols-2 sm:grid-cols-4"
+                    />
+                  </fieldset>
+
+                  <fieldset className="min-w-0">
+                    <legend className="mb-2.5 flex w-full items-center justify-between gap-3">
+                      <span className="text-xs font-medium text-zinc-600 dark:text-zinc-400">
+                        Fine tune
+                      </span>
+                      <span className="rounded-full border border-orange-400/20 bg-orange-400/10 px-2 py-0.5 text-[10px] font-medium text-orange-700 dark:text-orange-200">
+                        {liquidMediaConfig.preset === "custom"
+                          ? "Custom"
+                          : LIQUID_MEDIA_PRESETS.find(
+                              (preset) => preset.id === liquidMediaConfig.preset,
+                            )?.label}
+                      </span>
+                    </legend>
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                      {(
+                        [
+                          {
+                            key: "intensity",
+                            label: "Distortion intensity",
+                            min: 0.05,
+                            max: 0.8,
+                            step: 0.01,
+                            format: (value: number) => value.toFixed(2),
+                          },
+                          {
+                            key: "radius",
+                            label: "Ripple radius",
+                            min: 5,
+                            max: 30,
+                            step: 1,
+                            format: (value: number) => String(value),
+                          },
+                          {
+                            key: "expandRate",
+                            label: "Expansion speed",
+                            min: 4,
+                            max: 25,
+                            step: 1,
+                            format: (value: number) => `${value}×`,
+                          },
+                          {
+                            key: "decayRate",
+                            label: "Dissipation decay",
+                            min: 1,
+                            max: 8,
+                            step: 0.2,
+                            format: (value: number) => value.toFixed(1),
+                          },
+                        ] as const
+                      ).map((control) => {
+                        const value = liquidMediaConfig[control.key];
+
                         return (
-                          <button
-                            key={preset.id}
-                            type="button"
-                            onClick={() => applyLiquidMediaPreset(preset)}
-                            className={cn(
-                              "relative flex-1 h-7.5 px-2 rounded-lg text-xs flex items-center justify-center transition-colors cursor-pointer select-none",
-                              isActive
-                                ? "text-background font-semibold dark:text-black"
-                                : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
-                            )}
+                          <label
+                            key={control.key}
+                            className="flex min-w-0 flex-col gap-2 rounded-xl border border-orange-400/15 bg-white/60 px-3.5 pb-2.5 pt-3.5 dark:bg-white/5"
                           >
-                            {isActive && (
-                              <motion.div
-                                layoutId="activeLiquidPresetIndicator"
-                                transition={{
-                                  type: "spring",
-                                  stiffness: 450,
-                                  damping: 32,
-                                }}
-                                className="absolute inset-0 bg-foreground dark:bg-white rounded-lg shadow-xs"
-                              />
-                            )}
-                            <span className="relative z-10 truncate">
-                              {preset.label}
+                            <span className="flex items-center justify-between gap-3">
+                              <span className="text-xs font-medium text-zinc-800 dark:text-zinc-200">
+                                {control.label}
+                              </span>
+                              <span className="min-w-11 rounded-md bg-orange-500/10 px-2 py-1 text-center text-xs font-semibold tabular-nums text-orange-700 dark:text-orange-200">
+                                {control.format(value)}
+                              </span>
                             </span>
-                          </button>
+                            <CustomizationRange
+                              type="range"
+                              aria-label={control.label}
+                              aria-valuetext={control.format(value)}
+                              min={control.min}
+                              max={control.max}
+                              step={control.step}
+                              value={value}
+                              onChange={(event) =>
+                                setLiquidMediaConfig((prev) => ({
+                                  ...prev,
+                                  preset: "custom",
+                                  [control.key]: Number(event.target.value),
+                                }))
+                              }
+                            />
+                          </label>
                         );
                       })}
                     </div>
+                  </fieldset>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      <div className="rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] p-2.5 flex flex-col gap-1.5 text-xs">
-                        <div className="flex items-center justify-between">
-                          <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium">
-                            Distortion Intensity
-                          </span>
-                          <span className="font-mono text-[11px] font-semibold text-foreground dark:text-zinc-200">
-                            {liquidMediaConfig.intensity.toFixed(2)}
-                          </span>
-                        </div>
-                        <input
-                          type="range"
-                          min="0.05"
-                          max="0.80"
-                          step="0.01"
-                          value={liquidMediaConfig.intensity}
-                          onChange={(e) =>
-                            setLiquidMediaConfig((prev) => ({
-                              ...prev,
-                              preset: "custom",
-                              intensity: Number(e.target.value),
-                            }))
-                          }
-                          className="w-full h-1.5 rounded-lg appearance-none cursor-pointer bg-muted dark:bg-white/10 accent-foreground dark:accent-white"
-                        />
-                      </div>
+                  <div className="grid grid-cols-1 gap-4 border-t border-orange-400/15 pt-4 sm:grid-cols-[1.15fr_1fr]">
+                    <fieldset className="min-w-0">
+                      <legend className="mb-2.5 text-xs font-medium text-zinc-600 dark:text-zinc-400">
+                        Source image
+                      </legend>
+                      <SegmentedControl
+                        options={(["portrait", "architecture", "ocean"] as const).map(
+                          (image) => ({
+                            value: image,
+                            label: LIQUID_MEDIA_IMAGES[image].label,
+                          }),
+                        )}
+                        value={liquidMediaConfig.image}
+                        onChange={(image) =>
+                          setLiquidMediaConfig((prev) => ({
+                            ...prev,
+                            image,
+                            caption: LIQUID_MEDIA_IMAGES[image].caption,
+                          }))
+                        }
+                        className="grid-cols-3 gap-1 p-1 [&_button]:text-[11px]"
+                      />
+                    </fieldset>
 
-                      <div className="rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] p-2.5 flex flex-col gap-1.5 text-xs">
-                        <div className="flex items-center justify-between">
-                          <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium">
-                            Ripple Radius
-                          </span>
-                          <span className="font-mono text-[11px] font-semibold text-foreground dark:text-zinc-200">
-                            {liquidMediaConfig.radius}
-                          </span>
-                        </div>
-                        <input
-                          type="range"
-                          min="5"
-                          max="30"
-                          step="1"
-                          value={liquidMediaConfig.radius}
-                          onChange={(e) =>
-                            setLiquidMediaConfig((prev) => ({
-                              ...prev,
-                              preset: "custom",
-                              radius: Number(e.target.value),
-                            }))
-                          }
-                          className="w-full h-1.5 rounded-lg appearance-none cursor-pointer bg-muted dark:bg-white/10 accent-foreground dark:accent-white"
-                        />
-                      </div>
-
-                      <div className="rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] p-2.5 flex flex-col gap-1.5 text-xs">
-                        <div className="flex items-center justify-between">
-                          <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium">
-                            Expansion Speed
-                          </span>
-                          <span className="font-mono text-[11px] font-semibold text-foreground dark:text-zinc-200">
-                            {liquidMediaConfig.expandRate}×
-                          </span>
-                        </div>
-                        <input
-                          type="range"
-                          min="4"
-                          max="25"
-                          step="1"
-                          value={liquidMediaConfig.expandRate}
-                          onChange={(e) =>
-                            setLiquidMediaConfig((prev) => ({
-                              ...prev,
-                              preset: "custom",
-                              expandRate: Number(e.target.value),
-                            }))
-                          }
-                          className="w-full h-1.5 rounded-lg appearance-none cursor-pointer bg-muted dark:bg-white/10 accent-foreground dark:accent-white"
-                        />
-                      </div>
-
-                      <div className="rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] p-2.5 flex flex-col gap-1.5 text-xs">
-                        <div className="flex items-center justify-between">
-                          <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium">
-                            Dissipation Decay
-                          </span>
-                          <span className="font-mono text-[11px] font-semibold text-foreground dark:text-zinc-200">
-                            {liquidMediaConfig.decayRate.toFixed(1)}
-                          </span>
-                        </div>
-                        <input
-                          type="range"
-                          min="1.0"
-                          max="8.0"
-                          step="0.2"
-                          value={liquidMediaConfig.decayRate}
-                          onChange={(e) =>
-                            setLiquidMediaConfig((prev) => ({
-                              ...prev,
-                              preset: "custom",
-                              decayRate: Number(e.target.value),
-                            }))
-                          }
-                          className="w-full h-1.5 rounded-lg appearance-none cursor-pointer bg-muted dark:bg-white/10 accent-foreground dark:accent-white"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 border-t border-border dark:border-white/5">
-                      <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 flex items-center justify-between text-xs">
-                        <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
-                          Image
-                        </span>
-                        <div className="flex items-center gap-0.5 bg-muted/80 dark:bg-black/25 p-0.5 rounded-md border border-border dark:border-white/5">
-                          {(["portrait", "architecture", "ocean"] as const).map(
-                            (imgKey) => {
-                              const isActive =
-                                liquidMediaConfig.image === imgKey;
-                              return (
-                                <button
-                                  key={imgKey}
-                                  type="button"
-                                  onClick={() =>
-                                    setLiquidMediaConfig((prev) => ({
-                                      ...prev,
-                                      image: imgKey,
-                                      caption:
-                                        LIQUID_MEDIA_IMAGES[imgKey].caption,
-                                    }))
-                                  }
+                    <fieldset className="min-w-0">
+                      <legend className="mb-2.5 text-xs font-medium text-zinc-600 dark:text-zinc-400">
+                        Display
+                      </legend>
+                      <div className="grid grid-cols-2 gap-2">
+                        {(
+                          [
+                            { key: "showCaption", label: "Caption" },
+                            { key: "webglEnabled", label: "Liquid effect" },
+                          ] as const
+                        ).map((option) => {
+                          const enabled = liquidMediaConfig[option.key];
+                          return (
+                            <button
+                              key={option.key}
+                              type="button"
+                              role="switch"
+                              aria-checked={enabled}
+                              aria-label={option.label}
+                              onClick={() =>
+                                setLiquidMediaConfig((prev) => ({
+                                  ...prev,
+                                  [option.key]: !prev[option.key],
+                                }))
+                              }
+                              className="flex min-h-12 cursor-pointer items-center justify-between gap-2 rounded-xl border border-orange-400/15 bg-white/60 px-2.5 text-[11px] font-medium text-orange-950/80 hover:bg-white/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 dark:bg-white/5 dark:text-orange-100/85 dark:hover:bg-white/10"
+                            >
+                              {option.label}
+                              <span
+                                aria-hidden="true"
+                                className={cn(
+                                  "flex h-4 w-7 shrink-0 items-center rounded-full p-0.5",
+                                  enabled
+                                    ? "bg-orange-500"
+                                    : "bg-zinc-300 dark:bg-zinc-700",
+                                )}
+                              >
+                                <span
                                   className={cn(
-                                    "relative px-2 py-0.5 rounded text-[11px] capitalize transition-colors cursor-pointer select-none",
-                                    isActive
-                                      ? "text-background font-semibold dark:text-black"
-                                      : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
+                                    "size-3 rounded-full bg-white shadow-sm",
+                                    enabled && "translate-x-3",
                                   )}
-                                >
-                                  {isActive && (
-                                    <motion.div
-                                      layoutId="activeLiquidImageIndicator"
-                                      transition={{
-                                        type: "spring",
-                                        stiffness: 450,
-                                        damping: 32,
-                                      }}
-                                      className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
-                                    />
-                                  )}
-                                  <span className="relative z-10">
-                                    {imgKey}
-                                  </span>
-                                </button>
-                              );
-                            },
-                          )}
-                        </div>
+                                />
+                              </span>
+                            </button>
+                          );
+                        })}
                       </div>
-
-                      <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 flex items-center justify-between text-xs">
-                        <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
-                          Display
-                        </span>
-                        <div className="flex items-center gap-1.5">
-                          <button
-                            type="button"
-                            onClick={() =>
-                              setLiquidMediaConfig((prev) => ({
-                                ...prev,
-                                showCaption: !prev.showCaption,
-                              }))
-                            }
-                            className={cn(
-                              "px-2 py-0.5 rounded text-[11px] font-medium border transition-colors cursor-pointer",
-                              liquidMediaConfig.showCaption
-                                ? "bg-foreground text-background border-foreground dark:bg-white dark:text-black dark:border-white"
-                                : "bg-muted/80 text-muted-foreground border-border dark:border-white/10 dark:text-zinc-400",
-                            )}
-                          >
-                            Caption
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() =>
-                              setLiquidMediaConfig((prev) => ({
-                                ...prev,
-                                webglEnabled: !prev.webglEnabled,
-                              }))
-                            }
-                            className={cn(
-                              "px-2 py-0.5 rounded text-[11px] font-medium border transition-colors cursor-pointer",
-                              liquidMediaConfig.webglEnabled
-                                ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30"
-                                : "bg-muted/80 text-muted-foreground border-border dark:border-white/10 dark:text-zinc-400",
-                            )}
-                          >
-                            WebGL{" "}
-                            {liquidMediaConfig.webglEnabled ? "ON" : "OFF"}
-                          </button>
-                        </div>
-                      </div>
-                    </div>
+                    </fieldset>
                   </div>
                 </div>
               )}
@@ -5557,24 +5191,24 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               {activeComponent.slug === "liquid-toggle" && (
                 <div
                   key="liquid-toggle-customize-panel"
-                  className="pointer-events-auto rounded-2xl border border-border dark:border-white/10 bg-card/95 dark:bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-xl dark:shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-2xl w-full mx-4 select-none flex flex-col gap-2.5"
+                  className="pointer-events-auto flex w-full min-w-0 flex-col gap-5 p-3 font-sans sm:p-4"
                 >
                   <div className="flex items-center justify-between px-1">
-                    <span className="text-xs font-semibold text-foreground dark:text-white/90 tracking-tight">
+                    <span className="text-sm font-semibold text-foreground dark:text-white/90 tracking-tight">
                       Liquid Toggle Controls
                     </span>
                     <button
                       type="button"
                       onClick={resetLiquidConfig}
-                      className="text-[11px] text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                      className="flex min-h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-orange-400/20 bg-white/60 px-3 text-xs font-medium text-orange-900 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10"
                     >
                       <ResetIcon className="w-3.5 h-3.5" />
                       <span>Reset</span>
                     </button>
                   </div>
 
-                  <div className="rounded-xl border border-border dark:border-white/5 bg-muted/40 dark:bg-[#0b0b0e] p-2 flex flex-col gap-2">
-                    <div className="flex items-center gap-1 bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5 w-full">
+                  <div className="flex min-w-0 flex-col gap-4">
+                    <SegmentedControlGroup className="w-full min-w-0">
                       {(
                         [
                           {
@@ -5603,44 +5237,32 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         <button
                           key={c.id}
                           type="button"
+                          aria-pressed={liquidColor === c.id}
                           onClick={() => setLiquidColor(c.id)}
                           className={cn(
-                            "relative flex-1 h-7.5 px-2 rounded-lg text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer select-none",
+                            "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
                             liquidColor === c.id
-                              ? "text-background font-semibold dark:text-black"
-                              : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
+                              ? "text-zinc-950"
+                              : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                           )}
                         >
-                          {liquidColor === c.id && (
-                            <motion.div
-                              layoutId="activeLiquidColorIndicator"
-                              transition={{
-                                type: "spring",
-                                stiffness: 450,
-                                damping: 32,
-                              }}
-                              className="absolute inset-0 bg-foreground dark:bg-white rounded-lg shadow-xs"
-                            />
-                          )}
                           <span
                             className={cn(
                               "relative z-10 w-2 h-2 rounded-full shrink-0 shadow-xs",
                               c.dot,
                             )}
                           />
-                          <span className="relative z-10 truncate">
-                            {c.label}
-                          </span>
+                          <span className="relative z-10">{c.label}</span>
                         </button>
                       ))}
-                    </div>
+                    </SegmentedControlGroup>
 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                      <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-orange-400/15 bg-white/60 p-3 dark:bg-white/5">
                         <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                           State
                         </span>
-                        <div className="flex items-center gap-0.5 bg-muted/80 dark:bg-black/25 p-0.5 rounded-md border border-border dark:border-white/5">
+                        <SegmentedControlGroup className="w-full min-w-0">
                           {[
                             { label: "OFF", value: false },
                             { label: "ON", value: true },
@@ -5648,97 +5270,67 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             <button
                               key={st.label}
                               type="button"
+                              aria-pressed={liquidChecked === st.value}
                               onClick={() => setLiquidChecked(st.value)}
                               className={cn(
-                                "relative px-2.5 py-0.5 rounded text-[11px] font-mono transition-colors cursor-pointer",
+                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
                                 liquidChecked === st.value
-                                  ? "text-background font-semibold dark:text-black"
-                                  : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
+                                  ? "text-zinc-950"
+                                  : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                               )}
                             >
-                              {liquidChecked === st.value && (
-                                <motion.div
-                                  layoutId="activeLiquidStateIndicator"
-                                  transition={{
-                                    type: "spring",
-                                    stiffness: 450,
-                                    damping: 32,
-                                  }}
-                                  className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
-                                />
-                              )}
                               <span className="relative z-10">{st.label}</span>
                             </button>
                           ))}
-                        </div>
+                        </SegmentedControlGroup>
                       </div>
 
-                      <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-orange-400/15 bg-white/60 p-3 dark:bg-white/5">
                         <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                           Size
                         </span>
-                        <div className="flex items-center gap-0.5 bg-muted/80 dark:bg-black/25 p-0.5 rounded-md border border-border dark:border-white/5">
+                        <SegmentedControlGroup className="w-full min-w-0">
                           {(["sm", "md", "lg"] as const).map((sz) => (
                             <button
                               key={sz}
                               type="button"
+                              aria-pressed={liquidSize === sz}
                               onClick={() => setLiquidSize(sz)}
                               className={cn(
-                                "relative px-2 py-0.5 rounded text-[11px] font-mono uppercase transition-colors cursor-pointer",
+                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 uppercase",
                                 liquidSize === sz
-                                  ? "text-background font-semibold dark:text-black"
-                                  : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
+                                  ? "text-zinc-950"
+                                  : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                               )}
                             >
-                              {liquidSize === sz && (
-                                <motion.div
-                                  layoutId="activeLiquidSizeIndicator"
-                                  transition={{
-                                    type: "spring",
-                                    stiffness: 450,
-                                    damping: 32,
-                                  }}
-                                  className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
-                                />
-                              )}
                               <span className="relative z-10">{sz}</span>
                             </button>
                           ))}
-                        </div>
+                        </SegmentedControlGroup>
                       </div>
 
-                      <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-orange-400/15 bg-white/60 p-3 dark:bg-white/5">
                         <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                           Viscosity
                         </span>
-                        <div className="flex items-center gap-0.5 bg-muted/80 dark:bg-black/25 p-0.5 rounded-md border border-border dark:border-white/5">
+                        <SegmentedControlGroup className="w-full min-w-0">
                           {(["fluid", "jelly"] as const).map((v) => (
                             <button
                               key={v}
                               type="button"
+                              aria-pressed={liquidViscosity === v}
                               onClick={() => setLiquidViscosity(v)}
                               className={cn(
-                                "relative px-2.5 py-0.5 rounded text-[11px] capitalize transition-colors cursor-pointer",
+                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 capitalize",
                                 liquidViscosity === v
-                                  ? "text-background font-semibold dark:text-black"
-                                  : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
+                                  ? "text-zinc-950"
+                                  : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                               )}
                             >
-                              {liquidViscosity === v && (
-                                <motion.div
-                                  layoutId="activeLiquidViscosityIndicator"
-                                  transition={{
-                                    type: "spring",
-                                    stiffness: 450,
-                                    damping: 32,
-                                  }}
-                                  className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
-                                />
-                              )}
                               <span className="relative z-10">{v}</span>
                             </button>
                           ))}
-                        </div>
+                        </SegmentedControlGroup>
                       </div>
                     </div>
                   </div>
@@ -5748,24 +5340,24 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               {activeComponent.slug === "gooey-nav" && (
                 <div
                   key="gooey-nav-customize-panel"
-                  className="pointer-events-auto rounded-2xl border border-border dark:border-white/10 bg-card/95 dark:bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-xl dark:shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-2xl w-full mx-4 select-none flex flex-col gap-2.5"
+                  className="pointer-events-auto flex w-full min-w-0 flex-col gap-5 p-3 font-sans sm:p-4"
                 >
                   <div className="flex items-center justify-between px-1">
-                    <span className="text-xs font-semibold text-foreground dark:text-white/90 tracking-tight">
+                    <span className="text-sm font-semibold text-foreground dark:text-white/90 tracking-tight">
                       Gooey Nav Controls
                     </span>
                     <button
                       type="button"
                       onClick={resetGooeyNavConfig}
-                      className="text-[11px] text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                      className="flex min-h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-orange-400/20 bg-white/60 px-3 text-xs font-medium text-orange-900 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10"
                     >
                       <ResetIcon className="w-3.5 h-3.5" />
                       <span>Reset</span>
                     </button>
                   </div>
 
-                  <div className="rounded-xl border border-border dark:border-white/5 bg-muted/40 dark:bg-[#0b0b0e] p-2 flex flex-col gap-2">
-                    <div className="flex items-center gap-1 bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5 w-full">
+                  <div className="flex min-w-0 flex-col gap-4">
+                    <SegmentedControlGroup className="w-full min-w-0">
                       {(
                         [
                           {
@@ -5795,139 +5387,97 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         <button
                           key={c.id}
                           type="button"
+                          aria-pressed={gooeyNavColor === c.id}
                           onClick={() => setGooeyNavColor(c.id)}
                           className={cn(
-                            "relative flex-1 h-7.5 px-2 rounded-lg text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer select-none",
+                            "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
                             gooeyNavColor === c.id
-                              ? "text-background font-semibold dark:text-black"
-                              : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
+                              ? "text-zinc-950"
+                              : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                           )}
                         >
-                          {gooeyNavColor === c.id && (
-                            <motion.div
-                              layoutId="activeGooeyColorIndicator"
-                              transition={{
-                                type: "spring",
-                                stiffness: 450,
-                                damping: 32,
-                              }}
-                              className="absolute inset-0 bg-foreground dark:bg-white rounded-lg shadow-xs"
-                            />
-                          )}
                           <span
                             className={cn(
                               "relative z-10 w-2 h-2 rounded-full shrink-0 shadow-xs",
                               c.dot,
                             )}
                           />
-                          <span className="relative z-10 truncate">
-                            {c.label}
-                          </span>
+                          <span className="relative z-10">{c.label}</span>
                         </button>
                       ))}
-                    </div>
+                    </SegmentedControlGroup>
 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                      <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-orange-400/15 bg-white/60 p-3 dark:bg-white/5">
                         <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                           Size
                         </span>
-                        <div className="flex items-center gap-0.5 bg-muted/80 dark:bg-black/25 p-0.5 rounded-md border border-border dark:border-white/5">
+                        <SegmentedControlGroup className="w-full min-w-0">
                           {(["xs", "sm", "md", "lg"] as const).map((sz) => (
                             <button
                               key={sz}
                               type="button"
+                              aria-pressed={gooeyNavSize === sz}
                               onClick={() => setGooeyNavSize(sz)}
                               className={cn(
-                                "relative px-2 py-0.5 rounded text-[11px] font-mono uppercase transition-colors cursor-pointer",
+                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 uppercase",
                                 gooeyNavSize === sz
-                                  ? "text-background font-semibold dark:text-black"
-                                  : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
+                                  ? "text-zinc-950"
+                                  : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                               )}
                             >
-                              {gooeyNavSize === sz && (
-                                <motion.div
-                                  layoutId="activeGooeySizeIndicator"
-                                  transition={{
-                                    type: "spring",
-                                    stiffness: 450,
-                                    damping: 32,
-                                  }}
-                                  className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
-                                />
-                              )}
                               <span className="relative z-10">{sz}</span>
                             </button>
                           ))}
-                        </div>
+                        </SegmentedControlGroup>
                       </div>
 
-                      <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-orange-400/15 bg-white/60 p-3 dark:bg-white/5">
                         <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                           Variant
                         </span>
-                        <div className="flex items-center gap-0.5 bg-muted/80 dark:bg-black/25 p-0.5 rounded-md border border-border dark:border-white/5">
+                        <SegmentedControlGroup className="w-full min-w-0">
                           {(["solid", "glow", "glass"] as const).map((v) => (
                             <button
                               key={v}
                               type="button"
+                              aria-pressed={gooeyNavVariant === v}
                               onClick={() => setGooeyNavVariant(v)}
                               className={cn(
-                                "relative px-2 py-0.5 rounded text-[11px] capitalize transition-colors cursor-pointer",
+                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 capitalize",
                                 gooeyNavVariant === v
-                                  ? "text-background font-semibold dark:text-black"
-                                  : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
+                                  ? "text-zinc-950"
+                                  : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                               )}
                             >
-                              {gooeyNavVariant === v && (
-                                <motion.div
-                                  layoutId="activeGooeyVariantIndicator"
-                                  transition={{
-                                    type: "spring",
-                                    stiffness: 450,
-                                    damping: 32,
-                                  }}
-                                  className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
-                                />
-                              )}
                               <span className="relative z-10">{v}</span>
                             </button>
                           ))}
-                        </div>
+                        </SegmentedControlGroup>
                       </div>
 
-                      <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-orange-400/15 bg-white/60 p-3 dark:bg-white/5">
                         <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                           Motion
                         </span>
-                        <div className="flex items-center gap-0.5 bg-muted/80 dark:bg-black/25 p-0.5 rounded-md border border-border dark:border-white/5">
+                        <SegmentedControlGroup className="w-full min-w-0">
                           {(["fluid", "elastic"] as const).map((e) => (
                             <button
                               key={e}
                               type="button"
+                              aria-pressed={gooeyNavElasticity === e}
                               onClick={() => setGooeyNavElasticity(e)}
                               className={cn(
-                                "relative px-2.5 py-0.5 rounded text-[11px] capitalize transition-colors cursor-pointer",
+                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 capitalize",
                                 gooeyNavElasticity === e
-                                  ? "text-background font-semibold dark:text-black"
-                                  : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
+                                  ? "text-zinc-950"
+                                  : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                               )}
                             >
-                              {gooeyNavElasticity === e && (
-                                <motion.div
-                                  layoutId="activeGooeyMotionIndicator"
-                                  transition={{
-                                    type: "spring",
-                                    stiffness: 450,
-                                    damping: 32,
-                                  }}
-                                  className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
-                                />
-                              )}
                               <span className="relative z-10">{e}</span>
                             </button>
                           ))}
-                        </div>
+                        </SegmentedControlGroup>
                       </div>
                     </div>
                   </div>
@@ -5937,24 +5487,24 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               {activeComponent.slug === "noise" && (
                 <div
                   key="noise-customize-panel"
-                  className="pointer-events-auto rounded-2xl border border-border dark:border-white/10 bg-card/95 dark:bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-xl dark:shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-2xl w-full mx-4 select-none flex flex-col gap-2.5"
+                  className="pointer-events-auto flex w-full min-w-0 flex-col gap-5 p-3 font-sans sm:p-4"
                 >
                   <div className="flex items-center justify-between px-1">
-                    <span className="text-xs font-semibold text-foreground dark:text-white/90 tracking-tight">
+                    <span className="text-sm font-semibold text-foreground dark:text-white/90 tracking-tight">
                       Noise Background Controls
                     </span>
                     <button
                       type="button"
                       onClick={resetNoiseConfig}
-                      className="text-[11px] text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                      className="flex min-h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-orange-400/20 bg-white/60 px-3 text-xs font-medium text-orange-900 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10"
                     >
                       <ResetIcon className="w-3.5 h-3.5" />
                       <span>Reset</span>
                     </button>
                   </div>
 
-                  <div className="rounded-xl border border-border dark:border-white/5 bg-muted/40 dark:bg-[#0b0b0e] p-2 flex flex-col gap-2">
-                    <div className="flex items-center gap-1 bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5 w-full">
+                  <div className="flex min-w-0 flex-col gap-4">
+                    <SegmentedControlGroup className="w-full min-w-0">
                       {(
                         [
                           { id: "grain", label: "Film Grain" },
@@ -5965,160 +5515,120 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         <button
                           key={m.id}
                           type="button"
+                          aria-pressed={noiseMode === m.id}
                           onClick={() => setNoiseMode(m.id)}
                           className={cn(
-                            "relative flex-1 h-7.5 px-2 rounded-lg text-xs flex items-center justify-center transition-colors cursor-pointer select-none",
+                            "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
                             noiseMode === m.id
-                              ? "text-background font-semibold dark:text-black"
-                              : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
+                              ? "text-zinc-950"
+                              : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                           )}
                         >
-                          {noiseMode === m.id && (
-                            <motion.div
-                              layoutId="activeNoiseModeIndicator"
-                              transition={{
-                                type: "spring",
-                                stiffness: 450,
-                                damping: 32,
-                              }}
-                              className="absolute inset-0 bg-foreground dark:bg-white rounded-lg shadow-xs"
-                            />
-                          )}
-                          <span className="relative z-10 truncate">
-                            {m.label}
-                          </span>
+                          <span className="relative z-10">{m.label}</span>
                         </button>
                       ))}
-                    </div>
+                    </SegmentedControlGroup>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-orange-400/15 bg-white/60 p-3 dark:bg-white/5">
                         <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                           Alpha
                         </span>
-                        <div className="flex items-center gap-0.5 bg-muted/80 dark:bg-black/25 p-0.5 rounded-md border border-border dark:border-white/5">
+                        <SegmentedControlGroup className="w-full min-w-0">
                           {([10, 25, 50, 80] as const).map((a) => (
                             <button
                               key={a}
                               type="button"
+                              aria-pressed={noiseAlpha === a}
                               onClick={() => setNoiseAlpha(a)}
                               className={cn(
-                                "relative px-2 py-0.5 rounded text-[11px] font-mono transition-colors cursor-pointer select-none",
+                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
                                 noiseAlpha === a
-                                  ? "text-background font-semibold dark:text-black"
-                                  : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
+                                  ? "text-zinc-950"
+                                  : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                               )}
                             >
-                              {noiseAlpha === a && (
-                                <motion.div
-                                  layoutId="activeNoiseAlphaIndicator"
-                                  transition={{
-                                    type: "spring",
-                                    stiffness: 450,
-                                    damping: 32,
-                                  }}
-                                  className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
-                                />
-                              )}
                               <span className="relative z-10">{a}</span>
                             </button>
                           ))}
-                        </div>
+                        </SegmentedControlGroup>
                       </div>
 
-                      <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-orange-400/15 bg-white/60 p-3 dark:bg-white/5">
                         <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                           Scale
                         </span>
-                        <div className="flex items-center gap-0.5 bg-muted/80 dark:bg-black/25 p-0.5 rounded-md border border-border dark:border-white/5">
+                        <SegmentedControlGroup className="w-full min-w-0">
                           {([1, 2, 4] as const).map((s) => (
                             <button
                               key={s}
                               type="button"
+                              aria-pressed={noiseScale === s}
                               onClick={() => setNoiseScale(s)}
                               className={cn(
-                                "relative px-2 py-0.5 rounded text-[11px] font-mono transition-colors cursor-pointer select-none",
+                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
                                 noiseScale === s
-                                  ? "text-background font-semibold dark:text-black"
-                                  : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
+                                  ? "text-zinc-950"
+                                  : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                               )}
                             >
-                              {noiseScale === s && (
-                                <motion.div
-                                  layoutId="activeNoiseScaleIndicator"
-                                  transition={{
-                                    type: "spring",
-                                    stiffness: 450,
-                                    damping: 32,
-                                  }}
-                                  className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
-                                />
-                              )}
                               <span className="relative z-10">{s}x</span>
                             </button>
                           ))}
-                        </div>
+                        </SegmentedControlGroup>
                       </div>
 
-                      <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-orange-400/15 bg-white/60 p-3 dark:bg-white/5">
                         <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                           Interval
                         </span>
-                        <div className="flex items-center gap-0.5 bg-muted/80 dark:bg-black/25 p-0.5 rounded-md border border-border dark:border-white/5">
+                        <SegmentedControlGroup className="w-full min-w-0">
                           {([1, 2, 4] as const).map((iv) => (
                             <button
                               key={iv}
                               type="button"
+                              aria-pressed={noiseInterval === iv}
                               onClick={() => setNoiseInterval(iv)}
                               className={cn(
-                                "relative px-2 py-0.5 rounded text-[11px] font-mono transition-colors cursor-pointer select-none",
+                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
                                 noiseInterval === iv
-                                  ? "text-background font-semibold dark:text-black"
-                                  : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
+                                  ? "text-zinc-950"
+                                  : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                               )}
                             >
-                              {noiseInterval === iv && (
-                                <motion.div
-                                  layoutId="activeNoiseIntervalIndicator"
-                                  transition={{
-                                    type: "spring",
-                                    stiffness: 450,
-                                    damping: 32,
-                                  }}
-                                  className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
-                                />
-                              )}
                               <span className="relative z-10">{iv}f</span>
                             </button>
                           ))}
-                        </div>
+                        </SegmentedControlGroup>
                       </div>
 
-                      <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-orange-400/15 bg-white/60 p-3 dark:bg-white/5">
                         <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                           Effects
                         </span>
-                        <div className="flex items-center gap-1 bg-muted/80 dark:bg-black/25 p-0.5 rounded-md border border-border dark:border-white/5">
+                        <div className="grid grid-cols-2 gap-2">
                           <button
                             type="button"
+                            aria-pressed={noiseVignette}
                             onClick={() => setNoiseVignette(!noiseVignette)}
                             className={cn(
-                              "relative px-2.5 py-0.5 rounded text-[11px] font-medium transition-colors cursor-pointer select-none",
+                              "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
                               noiseVignette
-                                ? "bg-foreground text-background font-semibold dark:bg-white dark:text-black shadow-xs"
-                                : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
+                                ? "bg-orange-500 text-zinc-950"
+                                : "border border-orange-400/15 bg-white/60 text-zinc-600 hover:text-zinc-950 dark:bg-white/5 dark:text-zinc-400 dark:hover:text-zinc-50",
                             )}
                           >
                             Vignette
                           </button>
                           <button
                             type="button"
+                            aria-pressed={noiseScanlines}
                             onClick={() => setNoiseScanlines(!noiseScanlines)}
                             className={cn(
-                              "relative px-2.5 py-0.5 rounded text-[11px] font-medium transition-colors cursor-pointer select-none",
+                              "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
                               noiseScanlines
-                                ? "bg-foreground text-background font-semibold dark:bg-white dark:text-black shadow-xs"
-                                : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
+                                ? "bg-orange-500 text-zinc-950"
+                                : "border border-orange-400/15 bg-white/60 text-zinc-600 hover:text-zinc-950 dark:bg-white/5 dark:text-zinc-400 dark:hover:text-zinc-50",
                             )}
                           >
                             CRT
@@ -6133,25 +5643,25 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               {activeComponent.slug === "ai-input" && (
                 <div
                   key="ai-input-customize-panel"
-                  className="pointer-events-auto rounded-2xl border border-border dark:border-white/10 bg-card/95 dark:bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-xl dark:shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-2xl w-full mx-4 select-none flex flex-col gap-2.5"
+                  className="pointer-events-auto flex w-full min-w-0 flex-col gap-5 p-3 font-sans sm:p-4"
                 >
                   <div className="flex items-center justify-between px-1">
-                    <span className="text-xs font-semibold text-foreground dark:text-white/90 tracking-tight">
+                    <span className="text-sm font-semibold text-foreground dark:text-white/90 tracking-tight">
                       AI Input Controls
                     </span>
                     <button
                       type="button"
                       onClick={resetAiInputConfig}
-                      className="text-[11px] text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                      className="flex min-h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-orange-400/20 bg-white/60 px-3 text-xs font-medium text-orange-900 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10"
                     >
                       <ResetIcon className="w-3.5 h-3.5" />
                       <span>Reset</span>
                     </button>
                   </div>
 
-                  <div className="rounded-xl border border-border dark:border-white/5 bg-muted/40 dark:bg-[#0b0b0e] p-2 flex flex-col gap-2">
-                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-1.5 pb-1 border-b border-border dark:border-white/5">
-                      <div className="flex items-center gap-1 bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5 flex-1">
+                  <div className="flex min-w-0 flex-col gap-4">
+                    <div className="flex min-w-0 flex-col gap-2.5">
+                      <SegmentedControlGroup className="w-full min-w-0">
                         {(
                           [
                             { id: "default", label: "Default Glass" },
@@ -6162,33 +5672,21 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           <button
                             key={v.id}
                             type="button"
+                            aria-pressed={aiInputVariant === v.id}
                             onClick={() => setAiInputVariant(v.id)}
                             className={cn(
-                              "relative flex-1 h-7.5 px-2 rounded-lg text-xs font-medium flex items-center justify-center transition-colors cursor-pointer select-none",
+                              "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
                               aiInputVariant === v.id
-                                ? "text-background font-semibold dark:text-black"
-                                : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
+                                ? "text-zinc-950"
+                                : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                             )}
                           >
-                            {aiInputVariant === v.id && (
-                              <motion.div
-                                layoutId="activeAiInputVariantIndicator"
-                                transition={{
-                                  type: "spring",
-                                  stiffness: 450,
-                                  damping: 32,
-                                }}
-                                className="absolute inset-0 bg-foreground dark:bg-white rounded-lg shadow-xs"
-                              />
-                            )}
-                            <span className="relative z-10 truncate">
-                              {v.label}
-                            </span>
+                            <span className="relative z-10">{v.label}</span>
                           </button>
                         ))}
-                      </div>
+                      </SegmentedControlGroup>
 
-                      <div className="flex items-center gap-1 bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5">
+                      <SegmentedControlGroup className="w-full min-w-0">
                         {[
                           { label: "Compact", value: 380 },
                           { label: "Default", value: 480 },
@@ -6198,44 +5696,34 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           <button
                             key={sz.value}
                             type="button"
+                            aria-pressed={aiInputMaxWidth === sz.value}
                             onClick={() => setAiInputMaxWidth(sz.value)}
                             className={cn(
-                              "relative px-2.5 h-7 rounded-lg text-xs font-medium transition-colors cursor-pointer flex items-center justify-center select-none",
+                              "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
                               aiInputMaxWidth === sz.value
-                                ? "text-background font-semibold dark:text-black"
-                                : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
+                                ? "text-zinc-950"
+                                : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                             )}
                           >
-                            {aiInputMaxWidth === sz.value && (
-                              <motion.div
-                                layoutId="activeAiInputWidthIndicator"
-                                transition={{
-                                  type: "spring",
-                                  stiffness: 450,
-                                  damping: 32,
-                                }}
-                                className="absolute inset-0 bg-foreground dark:bg-white rounded-lg shadow-xs"
-                              />
-                            )}
                             <span className="relative z-10">{sz.label}</span>
                           </button>
                         ))}
-                      </div>
+                      </SegmentedControlGroup>
                     </div>
 
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                       <button
                         type="button"
                         onClick={() => setAiInputAllowAttachments((v) => !v)}
                         className={cn(
                           "h-8 px-2.5 rounded-lg border text-xs font-medium flex items-center justify-between transition-colors cursor-pointer",
                           aiInputAllowAttachments
-                            ? "border-foreground/20 dark:border-white/20 bg-foreground/10 dark:bg-white/10 text-foreground dark:text-white"
-                            : "border-border dark:border-white/5 bg-card dark:bg-[#17171b] text-muted-foreground dark:text-zinc-500 hover:text-foreground dark:hover:text-zinc-300",
+                            ? "border-orange-500/30 bg-orange-500/15 text-orange-800 dark:text-orange-200"
+                            : "border-orange-400/15 bg-white/60 text-muted-foreground hover:text-foreground dark:bg-white/5 dark:text-zinc-400 dark:hover:text-zinc-200",
                         )}
                       >
                         <span>Attachments</span>
-                        <span className="text-[10px] font-mono uppercase">
+                        <span className="text-[10px] font-sans uppercase">
                           {aiInputAllowAttachments ? "ON" : "OFF"}
                         </span>
                       </button>
@@ -6246,12 +5734,12 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         className={cn(
                           "h-8 px-2.5 rounded-lg border text-xs font-medium flex items-center justify-between transition-colors cursor-pointer",
                           aiInputAllowVoice
-                            ? "border-foreground/20 dark:border-white/20 bg-foreground/10 dark:bg-white/10 text-foreground dark:text-white"
-                            : "border-border dark:border-white/5 bg-card dark:bg-[#17171b] text-muted-foreground dark:text-zinc-500 hover:text-foreground dark:hover:text-zinc-300",
+                            ? "border-orange-500/30 bg-orange-500/15 text-orange-800 dark:text-orange-200"
+                            : "border-orange-400/15 bg-white/60 text-muted-foreground hover:text-foreground dark:bg-white/5 dark:text-zinc-400 dark:hover:text-zinc-200",
                         )}
                       >
                         <span>Voice</span>
-                        <span className="text-[10px] font-mono uppercase">
+                        <span className="text-[10px] font-sans uppercase">
                           {aiInputAllowVoice ? "ON" : "OFF"}
                         </span>
                       </button>
@@ -6262,12 +5750,12 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         className={cn(
                           "h-8 px-2.5 rounded-lg border text-xs font-medium flex items-center justify-between transition-colors cursor-pointer",
                           aiInputAllowModelSelect
-                            ? "border-foreground/20 dark:border-white/20 bg-foreground/10 dark:bg-white/10 text-foreground dark:text-white"
-                            : "border-border dark:border-white/5 bg-card dark:bg-[#17171b] text-muted-foreground dark:text-zinc-500 hover:text-foreground dark:hover:text-zinc-300",
+                            ? "border-orange-500/30 bg-orange-500/15 text-orange-800 dark:text-orange-200"
+                            : "border-orange-400/15 bg-white/60 text-muted-foreground hover:text-foreground dark:bg-white/5 dark:text-zinc-400 dark:hover:text-zinc-200",
                         )}
                       >
                         <span>Models</span>
-                        <span className="text-[10px] font-mono uppercase">
+                        <span className="text-[10px] font-sans uppercase">
                           {aiInputAllowModelSelect ? "ON" : "OFF"}
                         </span>
                       </button>
@@ -6278,18 +5766,18 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         className={cn(
                           "h-8 px-2.5 rounded-lg border text-xs font-medium flex items-center justify-between transition-colors cursor-pointer",
                           aiInputAllowEffortSelect
-                            ? "border-foreground/20 dark:border-white/20 bg-foreground/10 dark:bg-white/10 text-foreground dark:text-white"
-                            : "border-border dark:border-white/5 bg-card dark:bg-[#17171b] text-muted-foreground dark:text-zinc-500 hover:text-foreground dark:hover:text-zinc-300",
+                            ? "border-orange-500/30 bg-orange-500/15 text-orange-800 dark:text-orange-200"
+                            : "border-orange-400/15 bg-white/60 text-muted-foreground hover:text-foreground dark:bg-white/5 dark:text-zinc-400 dark:hover:text-zinc-200",
                         )}
                       >
                         <span>Effort</span>
-                        <span className="text-[10px] font-mono uppercase">
+                        <span className="text-[10px] font-sans uppercase">
                           {aiInputAllowEffortSelect ? "ON" : "OFF"}
                         </span>
                       </button>
                     </div>
 
-                    <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+                    <div className="flex flex-wrap items-center gap-3 pt-0.5">
                       <button
                         type="button"
                         onClick={() => {
@@ -6302,7 +5790,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             600,
                           );
                         }}
-                        className="h-7 px-2.5 rounded-lg border border-border dark:border-white/10 bg-card dark:bg-[#17171b] hover:bg-muted dark:hover:bg-white/10 hover:border-foreground/20 dark:hover:border-white/20 text-xs font-medium text-foreground/80 dark:text-zinc-300 hover:text-foreground dark:hover:text-white transition-all flex items-center gap-1.5 cursor-pointer"
+                        className="h-7 px-2.5 rounded-xl border border-orange-400/15 dark:border-white/10 bg-white/60 dark:bg-white/5 hover:bg-muted dark:hover:bg-white/10 hover:border-foreground/20 dark:hover:border-white/20 text-xs font-medium text-foreground/80 dark:text-zinc-300 hover:text-foreground dark:hover:text-white transition-all flex items-center gap-3 cursor-pointer"
                       >
                         <PlusIcon className="w-3.5 h-3.5 text-muted-foreground dark:text-zinc-400" />
                         <span>Attach Mockup</span>
@@ -6313,7 +5801,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         onClick={() => {
                           promptInputRef.current?.startVoice();
                         }}
-                        className="h-7 px-2.5 rounded-lg border border-border dark:border-white/10 bg-card dark:bg-[#17171b] hover:bg-muted dark:hover:bg-white/10 hover:border-foreground/20 dark:hover:border-white/20 text-xs font-medium text-foreground/80 dark:text-zinc-300 hover:text-foreground dark:hover:text-white transition-all flex items-center gap-1.5 cursor-pointer"
+                        className="h-7 px-2.5 rounded-xl border border-orange-400/15 dark:border-white/10 bg-white/60 dark:bg-white/5 hover:bg-muted dark:hover:bg-white/10 hover:border-foreground/20 dark:hover:border-white/20 text-xs font-medium text-foreground/80 dark:text-zinc-300 hover:text-foreground dark:hover:text-white transition-all flex items-center gap-3 cursor-pointer"
                       >
                         <span>Simulate Voice</span>
                       </button>
@@ -6324,14 +5812,14 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           promptInputRef.current?.expand();
                           promptInputRef.current?.focus();
                         }}
-                        className="h-7 px-2.5 rounded-lg border border-border dark:border-white/10 bg-card dark:bg-[#17171b] hover:bg-muted dark:hover:bg-white/10 hover:border-foreground/20 dark:hover:border-white/20 text-xs font-medium text-foreground/80 dark:text-zinc-300 hover:text-foreground dark:hover:text-white transition-all flex items-center gap-1.5 cursor-pointer"
+                        className="h-7 px-2.5 rounded-xl border border-orange-400/15 dark:border-white/10 bg-white/60 dark:bg-white/5 hover:bg-muted dark:hover:bg-white/10 hover:border-foreground/20 dark:hover:border-white/20 text-xs font-medium text-foreground/80 dark:text-zinc-300 hover:text-foreground dark:hover:text-white transition-all flex items-center gap-3 cursor-pointer"
                       >
                         <span>Expand Composer</span>
                       </button>
                     </div>
 
-                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-1.5 pt-1 border-t border-border dark:border-white/5">
-                      <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none no-scrollbar [&::-webkit-scrollbar]:hidden py-0.5">
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-1 border-t border-orange-400/15 dark:border-orange-400/15">
+                      <div className="flex flex-wrap items-center gap-2 py-0.5">
                         <span className="text-[11px] text-muted-foreground dark:text-zinc-500 shrink-0 font-medium pl-1">
                           Try prompt:
                         </span>
@@ -6344,7 +5832,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             key={promptText}
                             type="button"
                             onClick={() => setAiInputValue(promptText)}
-                            className="h-6 px-2 rounded-md bg-muted/80 dark:bg-[#17171b] hover:bg-muted dark:hover:bg-[#222228] border border-border dark:border-white/5 text-[11px] text-foreground/80 dark:text-zinc-300 hover:text-foreground dark:hover:text-white transition-colors cursor-pointer truncate max-w-40"
+                            className="min-h-9 rounded-lg border border-orange-400/15 bg-white/60 px-2.5 py-2 text-left text-[11px] text-foreground/80 hover:bg-orange-400/10 dark:bg-white/5 dark:text-zinc-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400"
                           >
                             {promptText}
                           </button>
