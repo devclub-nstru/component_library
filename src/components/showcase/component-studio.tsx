@@ -994,6 +994,10 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     setLiquidViscosity("fluid");
   };
 
+  const [testimonialSpeed, setTestimonialSpeed] = useState(28);
+  const [testimonialAutoPlay, setTestimonialAutoPlay] = useState(true);
+  const [testimonialPauseOnHover, setTestimonialPauseOnHover] = useState(true);
+
   const [liquidMediaConfig, setLiquidMediaConfig] = useState<{
     preset: LiquidMediaPresetId;
     intensity: number;
@@ -3402,27 +3406,29 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           aria-label="Sheet direction"
                           className="w-full min-w-0"
                         >
-                          {(["top", "right", "bottom", "left"] as const).map((side) => (
-                            <button
-                              key={side}
-                              type="button"
-                              aria-pressed={revealSheetConfig.side === side}
-                              onClick={() =>
-                                setRevealSheetConfig((prev) => ({
-                                  ...prev,
-                                  side,
-                                }))
-                              }
-                              className={cn(
-                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 capitalize",
-                                revealSheetConfig.side === side
-                                  ? "text-zinc-950"
-                                  : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
-                              )}
-                            >
-                              {side}
-                            </button>
-                          ))}
+                          {(["top", "right", "bottom", "left"] as const).map(
+                            (side) => (
+                              <button
+                                key={side}
+                                type="button"
+                                aria-pressed={revealSheetConfig.side === side}
+                                onClick={() =>
+                                  setRevealSheetConfig((prev) => ({
+                                    ...prev,
+                                    side,
+                                  }))
+                                }
+                                className={cn(
+                                  "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 capitalize",
+                                  revealSheetConfig.side === side
+                                    ? "text-zinc-950"
+                                    : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
+                                )}
+                              >
+                                {side}
+                              </button>
+                            ),
+                          )}
                         </SegmentedControlGroup>
                       </div>
                       <div className="grid grid-cols-2 gap-3">
@@ -3539,7 +3545,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                   key={direction}
                                   type="button"
                                   aria-pressed={
-                                    revealSheetConfig.shineDirection === direction
+                                    revealSheetConfig.shineDirection ===
+                                    direction
                                   }
                                   onClick={() =>
                                     setRevealSheetConfig((prev) => ({
@@ -3549,7 +3556,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                   }
                                   className={cn(
                                     "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
-                                    revealSheetConfig.shineDirection === direction
+                                    revealSheetConfig.shineDirection ===
+                                      direction
                                       ? "text-zinc-950"
                                       : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                                   )}
@@ -3602,7 +3610,10 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               Shine intensity
                             </label>
                             <span className="font-medium tabular-nums text-foreground">
-                              {Math.round(revealSheetConfig.shineIntensity * 100)}%
+                              {Math.round(
+                                revealSheetConfig.shineIntensity * 100,
+                              )}
+                              %
                             </span>
                           </div>
                           <CustomizationRange
@@ -3652,27 +3663,29 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           Variant
                         </span>
                         <SegmentedControlGroup className="w-full min-w-0">
-                          {(["default", "outline", "glass"] as const).map((v) => (
-                            <button
-                              key={v}
-                              type="button"
-                              aria-pressed={sparkleConfig.variant === v}
-                              onClick={() =>
-                                setSparkleConfig((prev) => ({
-                                  ...prev,
-                                  variant: v,
-                                }))
-                              }
-                              className={cn(
-                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 capitalize",
-                                sparkleConfig.variant === v
-                                  ? "text-zinc-950"
-                                  : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
-                              )}
-                            >
-                              <span className="relative z-10">{v}</span>
-                            </button>
-                          ))}
+                          {(["default", "outline", "glass"] as const).map(
+                            (v) => (
+                              <button
+                                key={v}
+                                type="button"
+                                aria-pressed={sparkleConfig.variant === v}
+                                onClick={() =>
+                                  setSparkleConfig((prev) => ({
+                                    ...prev,
+                                    variant: v,
+                                  }))
+                                }
+                                className={cn(
+                                  "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 capitalize",
+                                  sparkleConfig.variant === v
+                                    ? "text-zinc-950"
+                                    : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
+                                )}
+                              >
+                                <span className="relative z-10">{v}</span>
+                              </button>
+                            ),
+                          )}
                         </SegmentedControlGroup>
                       </div>
 
@@ -3713,7 +3726,10 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         onClick={() =>
                           setSparkleConfig((prev) => ({
                             ...prev,
-                            animateBy: prev.animateBy === "letters" ? "words" : "letters",
+                            animateBy:
+                              prev.animateBy === "letters"
+                                ? "words"
+                                : "letters",
                           }))
                         }
                         className="rounded-xl border border-orange-400/15 dark:border-orange-400/15 bg-white/60 dark:bg-white/5 hover:bg-muted dark:hover:bg-[#1f1f25] px-3 py-2 flex items-center justify-between text-xs transition-colors cursor-pointer"
@@ -3722,7 +3738,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           Animate By
                         </span>
                         <span className="text-foreground dark:text-zinc-100 font-medium flex items-center gap-3">
-                          {sparkleConfig.animateBy === "letters" ? "Letters" : "Words"}
+                          {sparkleConfig.animateBy === "letters"
+                            ? "Letters"
+                            : "Words"}
                           <ChevronDownIcon className="w-3.5 h-3.5 text-muted-foreground dark:text-zinc-400" />
                         </span>
                       </button>
@@ -3732,7 +3750,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         onClick={() =>
                           setSparkleConfig((prev) => ({
                             ...prev,
-                            direction: prev.direction === "top" ? "bottom" : "top",
+                            direction:
+                              prev.direction === "top" ? "bottom" : "top",
                           }))
                         }
                         className="rounded-xl border border-orange-400/15 dark:border-orange-400/15 bg-white/60 dark:bg-white/5 hover:bg-muted dark:hover:bg-[#1f1f25] px-3 py-2 flex items-center justify-between text-xs transition-colors cursor-pointer"
@@ -3914,27 +3933,31 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       </SegmentedControlGroup>
 
                       <SegmentedControlGroup className="w-full min-w-0">
-                        {["hey_krishnna", "karpathy", "shadcn"].map((handle) => (
-                          <button
-                            key={handle}
-                            type="button"
-                            aria-pressed={twitterCardConfig.username === handle}
-                            onClick={() =>
-                              setTwitterCardConfig((prev) => ({
-                                ...prev,
-                                username: handle,
-                              }))
-                            }
-                            className={cn(
-                              "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
-                              twitterCardConfig.username === handle
-                                ? "text-zinc-950"
-                                : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
-                            )}
-                          >
-                            @{handle}
-                          </button>
-                        ))}
+                        {["hey_krishnna", "karpathy", "shadcn"].map(
+                          (handle) => (
+                            <button
+                              key={handle}
+                              type="button"
+                              aria-pressed={
+                                twitterCardConfig.username === handle
+                              }
+                              onClick={() =>
+                                setTwitterCardConfig((prev) => ({
+                                  ...prev,
+                                  username: handle,
+                                }))
+                              }
+                              className={cn(
+                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
+                                twitterCardConfig.username === handle
+                                  ? "text-zinc-950"
+                                  : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
+                              )}
+                            >
+                              @{handle}
+                            </button>
+                          ),
+                        )}
                       </SegmentedControlGroup>
                     </div>
 
@@ -3960,7 +3983,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               : "text-muted-foreground dark:text-zinc-500",
                           )}
                         >
-                          {twitterCardConfig.enableCardTilt ? "Enabled" : "Disabled"}
+                          {twitterCardConfig.enableCardTilt
+                            ? "Enabled"
+                            : "Disabled"}
                         </span>
                       </button>
 
@@ -4201,7 +4226,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           { label: "Candy", value: true },
                           { label: "Minimal", value: false },
                         ].map((opt) => {
-                          const isActive = themeTogglerConfig.candy === opt.value;
+                          const isActive =
+                            themeTogglerConfig.candy === opt.value;
                           return (
                             <button
                               key={opt.label}
@@ -4288,22 +4314,24 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   <div className="flex min-w-0 flex-col gap-4">
                     <div className="flex min-w-0 flex-col gap-2.5">
                       <SegmentedControlGroup className="w-full min-w-0">
-                        {(["idle", "success", "error", "loading"] as const).map((s) => (
-                          <button
-                            key={s}
-                            type="button"
-                            aria-pressed={otpStatus === s}
-                            onClick={() => setOtpStatus(s)}
-                            className={cn(
-                              "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 capitalize",
-                              otpStatus === s
-                                ? "text-zinc-950"
-                                : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
-                            )}
-                          >
-                            <span className="relative z-10">{s}</span>
-                          </button>
-                        ))}
+                        {(["idle", "success", "error", "loading"] as const).map(
+                          (s) => (
+                            <button
+                              key={s}
+                              type="button"
+                              aria-pressed={otpStatus === s}
+                              onClick={() => setOtpStatus(s)}
+                              className={cn(
+                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 capitalize",
+                                otpStatus === s
+                                  ? "text-zinc-950"
+                                  : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
+                              )}
+                            >
+                              <span className="relative z-10">{s}</span>
+                            </button>
+                          ),
+                        )}
                       </SegmentedControlGroup>
 
                       <div className="flex items-center gap-1 bg-muted/80 dark:bg-white/5 p-1 rounded-xl border border-orange-400/15 dark:border-orange-400/15">
@@ -4370,26 +4398,26 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           Variant
                         </span>
                         <SegmentedControlGroup className="w-full min-w-0">
-                          {(["default", "glass", "neon", "underlined"] as const).map(
-                            (v) => (
-                              <button
-                                key={v}
-                                type="button"
-                                aria-pressed={otpVariant === v}
-                                onClick={() => setOtpVariant(v)}
-                                className={cn(
-                                  "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 capitalize",
-                                  otpVariant === v
-                                    ? "text-zinc-950"
-                                    : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
-                                )}
-                              >
-                                <span className="relative z-10">
-                                  {v === "underlined" ? "Underline" : v}
-                                </span>
-                              </button>
-                            ),
-                          )}
+                          {(
+                            ["default", "glass", "neon", "underlined"] as const
+                          ).map((v) => (
+                            <button
+                              key={v}
+                              type="button"
+                              aria-pressed={otpVariant === v}
+                              onClick={() => setOtpVariant(v)}
+                              className={cn(
+                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 capitalize",
+                                otpVariant === v
+                                  ? "text-zinc-950"
+                                  : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
+                              )}
+                            >
+                              <span className="relative z-10">
+                                {v === "underlined" ? "Underline" : v}
+                              </span>
+                            </button>
+                          ))}
                         </SegmentedControlGroup>
                       </div>
 
@@ -4449,8 +4477,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       </span>
                       {orbStudioColor && (
                         <span className="text-[10px] uppercase font-sans px-1.5 py-0.5 rounded bg-muted text-muted-foreground dark:bg-white/10 dark:text-zinc-300">
-                          {ORB_COLORS.find((c) => c.value === orbStudioColor)?.label ||
-                            "Custom"}
+                          {ORB_COLORS.find((c) => c.value === orbStudioColor)
+                            ?.label || "Custom"}
                         </span>
                       )}
                     </div>
@@ -4787,7 +4815,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           step="0.01"
                           value={macSliderSpecularOpacity}
                           onChange={(e) =>
-                            setMacSliderSpecularOpacity(parseFloat(e.target.value))
+                            setMacSliderSpecularOpacity(
+                              parseFloat(e.target.value),
+                            )
                           }
                           className="col-span-2 row-start-2"
                         />
@@ -4809,7 +4839,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           step="1"
                           value={macSliderSpecularSaturation}
                           onChange={(e) =>
-                            setMacSliderSpecularSaturation(parseFloat(e.target.value))
+                            setMacSliderSpecularSaturation(
+                              parseFloat(e.target.value),
+                            )
                           }
                           className="col-span-2 row-start-2"
                         />
@@ -4831,7 +4863,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           step="0.01"
                           value={macSliderRefractionLevel}
                           onChange={(e) =>
-                            setMacSliderRefractionLevel(parseFloat(e.target.value))
+                            setMacSliderRefractionLevel(
+                              parseFloat(e.target.value),
+                            )
                           }
                           className="col-span-2 row-start-2"
                         />
@@ -4971,7 +5005,11 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         { value: "orange", label: "Orange", color: "#FF9500" },
                         { value: "pink", label: "Pink", color: "#FF2D55" },
                         { value: "amber", label: "Amber", color: "#FFCC00" },
-                        { value: "monochrome", label: "Graphite", color: "#8E8E93" },
+                        {
+                          value: "monochrome",
+                          label: "Graphite",
+                          color: "#8E8E93",
+                        },
                       ] as const
                     }
                     value={macSwitchColor}
@@ -5033,7 +5071,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         {liquidMediaConfig.preset === "custom"
                           ? "Custom"
                           : LIQUID_MEDIA_PRESETS.find(
-                              (preset) => preset.id === liquidMediaConfig.preset,
+                              (preset) =>
+                                preset.id === liquidMediaConfig.preset,
                             )?.label}
                       </span>
                     </legend>
@@ -5117,12 +5156,12 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         Source image
                       </legend>
                       <SegmentedControl
-                        options={(["portrait", "architecture", "ocean"] as const).map(
-                          (image) => ({
-                            value: image,
-                            label: LIQUID_MEDIA_IMAGES[image].label,
-                          }),
-                        )}
+                        options={(
+                          ["portrait", "architecture", "ocean"] as const
+                        ).map((image) => ({
+                          value: image,
+                          label: LIQUID_MEDIA_IMAGES[image].label,
+                        }))}
                         value={liquidMediaConfig.image}
                         onChange={(image) =>
                           setLiquidMediaConfig((prev) => ({
