@@ -616,6 +616,26 @@
       ]
     },
     {
+      "name": "segmented-progress",
+      "type": "registry:ui",
+      "title": "Segmented Progress",
+      "description": "Tactile segmented progress bar with real-time hover data inspection, dynamic wave proximity physics, and staggered GSAP fill animation.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge",
+        "gsap",
+        "@gsap/react",
+        "lucide-react"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/segmented-progress.tsx",
+          "type": "registry:ui",
+          "target": "@ui/segmented-progress.tsx"
+        }
+      ]
+    },
+    {
       "name": "slider",
       "type": "registry:ui",
       "title": "Slider",

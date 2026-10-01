@@ -40,6 +40,7 @@ import { ProfileMenu } from "@/registry/ui/profile-menu";
 import { RevealSheet } from "@/registry/ui/reveal-sheet";
 import { Editor } from "@/registry/ui/editor";
 import { ConfirmMorph } from "@/registry/ui/confirm-morph";
+import { SegmentedProgress } from "@/registry/ui/segmented-progress";
 import { Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -434,6 +435,11 @@ export default function ComponentsPage() {
           prompt="Delete 3 files?"
           tone="danger"
         />
+      </div>
+    ),
+    "segmented-progress": (
+      <div className="w-full flex items-center justify-center p-2 scale-[0.82] sm:scale-90 origin-center">
+        <SegmentedProgress className="max-w-xs" />
       </div>
     ),
   };

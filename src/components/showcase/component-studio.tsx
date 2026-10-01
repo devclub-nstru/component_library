@@ -98,6 +98,7 @@ import { DateRangePicker } from "@/registry/ui/date-range-picker";
 import { RevealSheet, type RevealSheetSide } from "@/registry/ui/reveal-sheet";
 import { Editor } from "@/registry/ui/editor";
 import { DeleteSelectionShowcase } from "@/registry/ui/delete-selection";
+import { SegmentedProgress } from "@/registry/ui/segmented-progress";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -163,6 +164,11 @@ const ALL_CATEGORIES = [
         label: "Code Block",
         slug: "code-block",
         href: "/components/code-block",
+      },
+      {
+        label: "Segmented Progress",
+        slug: "segmented-progress",
+        href: "/components/segmented-progress",
       },
     ],
   },
@@ -1542,6 +1548,12 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               refractionLevel={macSliderRefractionLevel}
               blurLevel={macSliderBlurLevel}
             />
+          </div>
+        );
+      case "segmented-progress":
+        return (
+          <div className="flex flex-col items-center justify-center w-full h-full min-h-96 select-none p-4 sm:p-8">
+            <SegmentedProgress />
           </div>
         );
       case "slider":

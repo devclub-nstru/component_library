@@ -41,6 +41,7 @@ import themeToggle from "./theme-toggle.json";
 import toast from "./toast.json";
 import twitterCard from "./twitter-card.json";
 import dateRangePicker from "./date-range-picker.json";
+import segmentedProgress from "./segmented-progress.json";
 
 export {
   accordion,
@@ -85,6 +86,7 @@ export {
   toast,
   twitterCard,
   dateRangePicker,
+  segmentedProgress,
 };
 
 export const componentsList: ComponentRegistryItem[] = [
@@ -130,4 +132,5 @@ export const componentsList: ComponentRegistryItem[] = [
   toast as ComponentRegistryItem,
   twitterCard as ComponentRegistryItem,
   dateRangePicker as ComponentRegistryItem,
+  segmentedProgress as ComponentRegistryItem,
 ];

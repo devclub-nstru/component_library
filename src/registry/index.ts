@@ -42,6 +42,7 @@ import {
   toast,
   twitterCard,
   dateRangePicker,
+  segmentedProgress,
 } from "./components";
 
 export const COMPONENT_REGISTRY: Record<string, ComponentRegistryItem> = {
@@ -87,6 +88,7 @@ export const COMPONENT_REGISTRY: Record<string, ComponentRegistryItem> = {
   "theme-toggle": themeToggle as ComponentRegistryItem,
   "confirm-morph": confirmMorph as ComponentRegistryItem,
   "date-range-picker": dateRangePicker as ComponentRegistryItem,
+  "segmented-progress": segmentedProgress as ComponentRegistryItem,
 };
 
 export const getAllComponents = (

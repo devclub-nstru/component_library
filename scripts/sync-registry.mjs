@@ -58,6 +58,7 @@ const componentTitles = {
   "twitter-card": "Twitter Card",
   "profile-menu": "Profile Command Menu",
   "date-range-picker": "Date Range Picker",
+  "segmented-progress": "Segmented Progress",
 };
 
 const getTarget = (filePath, fileName) => {
