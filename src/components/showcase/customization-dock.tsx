@@ -205,18 +205,18 @@ export function CustomizationDock({ children }: { children: ReactNode }) {
       <div
         ref={surfaceRef}
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 overflow-hidden rounded-3xl border border-orange-300/60 bg-[#fff8f2] shadow-[inset_0_0_22px_rgba(249,115,22,0.08),inset_0_1px_1px_rgba(255,255,255,0.8)] dark:border-orange-400/20 dark:bg-[#101010] dark:shadow-[inset_0_0_28px_rgba(249,115,22,0.12),inset_0_1px_1px_rgba(255,255,255,0.12)]"
+        className="pointer-events-none absolute inset-0 overflow-hidden rounded-3xl border border-border bg-panel shadow-[0_12px_40px_rgba(0,0,0,0.12),inset_0_1px_1px_rgba(255,255,255,0.8)] dark:bg-[#101010] dark:shadow-[0_12px_40px_rgba(0,0,0,0.4),inset_0_1px_1px_rgba(255,255,255,0.08)]"
         style={{ clipPath: "inset(100% 0 0 100% round 28px)" }}
       >
         <span
           data-dock-light
-          className="absolute -bottom-20 -left-16 h-56 w-96 rounded-full bg-[radial-gradient(ellipse,rgba(249,115,22,0.12),transparent_70%)] dark:bg-[radial-gradient(ellipse,rgba(249,115,22,0.2),transparent_70%)]"
+          className="absolute -bottom-20 -left-16 h-56 w-96 rounded-full bg-[radial-gradient(ellipse,rgba(0,0,0,0.04),transparent_70%)] dark:bg-[radial-gradient(ellipse,rgba(255,255,255,0.04),transparent_70%)]"
         />
         <span
           data-dock-light
-          className="absolute -right-20 -top-24 h-64 w-96 rounded-full bg-[radial-gradient(ellipse,rgba(234,88,12,0.1),transparent_70%)] dark:bg-[radial-gradient(ellipse,rgba(234,88,12,0.16),transparent_70%)]"
+          className="absolute -right-20 -top-24 h-64 w-96 rounded-full bg-[radial-gradient(ellipse,rgba(0,0,0,0.03),transparent_70%)] dark:bg-[radial-gradient(ellipse,rgba(255,255,255,0.03),transparent_70%)]"
         />
-        <span className="absolute inset-x-6 top-0 h-px bg-linear-to-r from-transparent via-orange-200 to-transparent" />
+        <span className="absolute inset-x-6 top-0 h-px bg-linear-to-r from-transparent via-foreground/10 to-transparent" />
       </div>
 
       <div
@@ -232,9 +232,9 @@ export function CustomizationDock({ children }: { children: ReactNode }) {
           open && "pointer-events-auto",
         )}
       >
-        <div className="flex shrink-0 items-center justify-between gap-3 px-5 pb-2 pt-4">
+        <div className="flex shrink-0 items-center justify-between gap-3 px-5 pb-2 pt-4 sm:px-6">
           <div className="flex items-center gap-2 text-xs font-medium text-foreground">
-            <MixerHorizontalIcon className="size-3.5 text-orange-500 dark:text-orange-300" />
+            <MixerHorizontalIcon className="size-3.5 text-foreground" />
             Customization
           </div>
           <button
@@ -242,7 +242,7 @@ export function CustomizationDock({ children }: { children: ReactNode }) {
             type="button"
             aria-label="Hide customization"
             onClick={() => toggle(false)}
-            className="flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-full border border-orange-400/20 bg-orange-400/10 text-muted-foreground hover:bg-orange-400/20 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400"
+            className="flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-full border border-border bg-muted text-muted-foreground hover:bg-foreground/10 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50"
           >
             <Cross2Icon className="size-3.5" />
           </button>
@@ -255,7 +255,8 @@ export function CustomizationDock({ children }: { children: ReactNode }) {
       <CandyButton
         ref={triggerRef}
         type="button"
-        color="#f97316"
+        color="#000000"
+        glow={false}
         size="icon"
         aria-label="Show customization"
         aria-controls={panelId}
@@ -264,7 +265,7 @@ export function CustomizationDock({ children }: { children: ReactNode }) {
         tabIndex={open ? -1 : 0}
         title="Customize component"
         onClick={() => toggle(true)}
-        className="pointer-events-auto absolute bottom-0 right-0 size-14! rounded-full! transition-none! active:scale-100 focus-visible:ring-orange-300 focus-visible:ring-offset-background [&_svg]:size-5"
+        className="pointer-events-auto absolute bottom-0 right-0 size-14! rounded-full! transition-none! active:scale-100 border border-white/20 focus-visible:ring-foreground/50 focus-visible:ring-offset-background [&_svg]:size-5"
       >
         <MixerHorizontalIcon />
       </CandyButton>

@@ -125,7 +125,7 @@ export function SegmentedControlGroup({
       ref={rootRef}
       role="group"
       className={cn(
-        "relative isolate grid gap-1.5 rounded-xl border border-orange-400/15 bg-zinc-950/5 p-1.5 dark:bg-black/30",
+        "relative isolate grid gap-1.5 rounded-xl border border-border bg-zinc-950/5 p-1.5 dark:bg-black/30",
         columns === 1 && "grid-cols-1",
         columns === 2 && "grid-cols-2",
         columns === 3 && "grid-cols-3",
@@ -139,7 +139,7 @@ export function SegmentedControlGroup({
         ref={indicatorRef}
         aria-hidden="true"
         className={cn(
-          "pointer-events-none absolute left-0 top-0 rounded-lg bg-orange-500 shadow-[0_2px_12px_rgba(249,115,22,0.2)]",
+          "pointer-events-none absolute left-0 top-0 rounded-lg bg-black shadow-sm ring-1 ring-inset ring-white/20",
           indicatorClassName,
         )}
         style={{ opacity: 0, visibility: "hidden" }}
@@ -164,9 +164,9 @@ export function SegmentedControl<T extends string>({
           aria-pressed={value === option.value}
           onClick={() => onChange(option.value)}
           className={cn(
-            "relative z-10 flex min-h-10 cursor-pointer items-center justify-center rounded-lg px-1 text-xs font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
+            "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center rounded-lg px-1 text-xs font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50",
             value === option.value
-              ? "text-zinc-950"
+              ? "text-white"
               : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
           )}
         >

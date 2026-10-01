@@ -3293,9 +3293,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         aria-pressed={fileUploadLayout === layout}
                         onClick={() => setFileUploadLayout(layout)}
                         className={cn(
-                          "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 capitalize",
+                          "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50 capitalize",
                           fileUploadLayout === layout
-                            ? "text-zinc-950"
+                            ? "text-white"
                             : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                         )}
                       >
@@ -3338,9 +3338,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         aria-pressed={fileDropzonePlacement === placement}
                         onClick={() => setFileDropzonePlacement(placement)}
                         className={cn(
-                          "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 capitalize",
+                          "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50 capitalize",
                           fileDropzonePlacement === placement
-                            ? "text-zinc-950"
+                            ? "text-white"
                             : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                         )}
                       >
@@ -3352,7 +3352,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   <button
                     type="button"
                     onClick={() => setFileDropzoneKey((k) => k + 1)}
-                    className="flex min-h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-orange-400/20 bg-white/60 px-3 text-xs font-medium text-orange-900 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10"
+                    className="flex min-h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-border bg-white/60 px-3 text-xs font-medium text-foreground hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10"
                   >
                     <ResetIcon className="size-3.5" />
                     <span>Reset</span>
@@ -3381,7 +3381,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             shineIntensity: 0.55,
                           })
                         }
-                        className="flex min-h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-orange-400/20 bg-white/60 px-3 text-xs font-medium text-orange-900 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10"
+                        className="flex min-h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-border bg-white/60 px-3 text-xs font-medium text-foreground hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10"
                       >
                         <ResetIcon className="size-3.5" />
                         Reset
@@ -3389,7 +3389,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       <button
                         type="button"
                         onClick={() => setRevealSheetOpen(true)}
-                        className="rounded-xl bg-orange-500 px-3 py-1.5 text-xs font-medium text-zinc-950 transition-opacity hover:opacity-85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/40"
+                        className="rounded-xl bg-black ring-1 ring-inset ring-white/20 px-3 py-1.5 text-xs font-medium text-zinc-950 transition-opacity hover:opacity-85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/40"
                       >
                         Replay sheet
                       </button>
@@ -3419,9 +3419,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                   }))
                                 }
                                 className={cn(
-                                  "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 capitalize",
+                                  "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50 capitalize",
                                   revealSheetConfig.side === side
-                                    ? "text-zinc-950"
+                                    ? "text-white"
                                     : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                                 )}
                               >
@@ -3488,7 +3488,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         </div>
                       </div>
                     </div>
-                    <div className="min-w-0 space-y-3 border-t border-orange-400/15 pt-3 sm:border-l sm:border-t-0 sm:pl-4 sm:pt-0 dark:border-orange-400/15">
+                    <div className="min-w-0 space-y-3 border-t border-border pt-3 sm:border-l sm:border-t-0 sm:pl-4 sm:pt-0 dark:border-border">
                       <div className="flex items-center justify-between gap-3 text-xs">
                         <label
                           htmlFor="reveal-sheet-grid"
@@ -3506,7 +3506,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               showGrid: event.target.checked,
                             }))
                           }
-                          className="size-4 cursor-pointer accent-orange-500"
+                          className="size-4 cursor-pointer accent-black"
                         />
                       </div>
                       <div className="flex items-center justify-between gap-3 text-xs">
@@ -3526,7 +3526,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               showShine: event.target.checked,
                             }))
                           }
-                          className="size-4 cursor-pointer accent-orange-500"
+                          className="size-4 cursor-pointer accent-black"
                         />
                       </div>
                       {revealSheetConfig.showShine && (
@@ -3555,10 +3555,10 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                     }))
                                   }
                                   className={cn(
-                                    "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
+                                    "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50",
                                     revealSheetConfig.shineDirection ===
                                       direction
-                                      ? "text-zinc-950"
+                                      ? "text-white"
                                       : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                                   )}
                                 >
@@ -3573,7 +3573,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       )}
                     </div>
                     {revealSheetConfig.showShine && (
-                      <div className="min-w-0 space-y-3 border-t border-orange-400/15 pt-3 sm:col-span-2 dark:border-orange-400/15">
+                      <div className="min-w-0 space-y-3 border-t border-border pt-3 sm:col-span-2 dark:border-border">
                         <div className="space-y-1">
                           <div className="flex items-center justify-between text-[11px]">
                             <label
@@ -3649,7 +3649,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     <button
                       type="button"
                       onClick={resetSparkleConfig}
-                      className="flex min-h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-orange-400/20 bg-white/60 px-3 text-xs font-medium text-orange-900 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10"
+                      className="flex min-h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-border bg-white/60 px-3 text-xs font-medium text-foreground hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10"
                     >
                       <ResetIcon className="w-3.5 h-3.5" />
                       <span>Reset</span>
@@ -3657,8 +3657,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   </div>
 
                   <div className="flex min-w-0 flex-col gap-4">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pb-1.5 border-b border-orange-400/15 dark:border-orange-400/15">
-                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-orange-400/15 bg-white/60 p-3 dark:bg-white/5">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pb-1.5 border-b border-border dark:border-border">
+                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-border bg-white/60 p-3 dark:bg-white/5">
                         <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium">
                           Variant
                         </span>
@@ -3676,9 +3676,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                   }))
                                 }
                                 className={cn(
-                                  "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 capitalize",
+                                  "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50 capitalize",
                                   sparkleConfig.variant === v
-                                    ? "text-zinc-950"
+                                    ? "text-white"
                                     : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                                 )}
                               >
@@ -3689,7 +3689,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         </SegmentedControlGroup>
                       </div>
 
-                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-orange-400/15 bg-white/60 p-3 dark:bg-white/5">
+                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-border bg-white/60 p-3 dark:bg-white/5">
                         <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium">
                           Size
                         </span>
@@ -3706,9 +3706,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                 }))
                               }
                               className={cn(
-                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 uppercase",
+                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50 uppercase",
                                 sparkleConfig.size === sz
-                                  ? "text-zinc-950"
+                                  ? "text-white"
                                   : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                               )}
                             >
@@ -3732,7 +3732,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                 : "letters",
                           }))
                         }
-                        className="rounded-xl border border-orange-400/15 dark:border-orange-400/15 bg-white/60 dark:bg-white/5 hover:bg-muted dark:hover:bg-[#1f1f25] px-3 py-2 flex items-center justify-between text-xs transition-colors cursor-pointer"
+                        className="rounded-xl border border-border dark:border-border bg-white/60 dark:bg-white/5 hover:bg-muted dark:hover:bg-[#1f1f25] px-3 py-2 flex items-center justify-between text-xs transition-colors cursor-pointer"
                       >
                         <span className="text-muted-foreground dark:text-zinc-400">
                           Animate By
@@ -3754,7 +3754,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               prev.direction === "top" ? "bottom" : "top",
                           }))
                         }
-                        className="rounded-xl border border-orange-400/15 dark:border-orange-400/15 bg-white/60 dark:bg-white/5 hover:bg-muted dark:hover:bg-[#1f1f25] px-3 py-2 flex items-center justify-between text-xs transition-colors cursor-pointer"
+                        className="rounded-xl border border-border dark:border-border bg-white/60 dark:bg-white/5 hover:bg-muted dark:hover:bg-[#1f1f25] px-3 py-2 flex items-center justify-between text-xs transition-colors cursor-pointer"
                       >
                         <span className="text-muted-foreground dark:text-zinc-400">
                           Direction
@@ -3765,7 +3765,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         </span>
                       </button>
 
-                      <div className="grid min-w-0 grid-cols-[1fr_auto] items-center gap-x-3 gap-y-2 rounded-xl border border-orange-400/15 bg-white/60 p-3 text-xs dark:bg-white/5">
+                      <div className="grid min-w-0 grid-cols-[1fr_auto] items-center gap-x-3 gap-y-2 rounded-xl border border-border bg-white/60 p-3 text-xs dark:bg-white/5">
                         <span className="text-muted-foreground dark:text-zinc-400 shrink-0">
                           Delay
                         </span>
@@ -3785,14 +3785,14 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           }
                           className="col-span-2 row-start-2"
                         />
-                        <span className="col-start-2 row-start-1 rounded-md bg-orange-500/10 px-2 py-1 text-xs font-semibold tabular-nums text-orange-700 dark:text-orange-200">
+                        <span className="col-start-2 row-start-1 rounded-md bg-muted px-2 py-1 text-xs font-semibold tabular-nums text-foreground dark:text-zinc-200">
                           {sparkleConfig.delay}ms
                         </span>
                       </div>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                      <div className="grid min-w-0 grid-cols-[1fr_auto] items-center gap-x-3 gap-y-2 rounded-xl border border-orange-400/15 bg-white/60 p-3 text-xs dark:bg-white/5">
+                      <div className="grid min-w-0 grid-cols-[1fr_auto] items-center gap-x-3 gap-y-2 rounded-xl border border-border bg-white/60 p-3 text-xs dark:bg-white/5">
                         <span className="text-muted-foreground dark:text-zinc-400 shrink-0">
                           Reveal
                         </span>
@@ -3812,12 +3812,12 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           }
                           className="col-span-2 row-start-2"
                         />
-                        <span className="col-start-2 row-start-1 rounded-md bg-orange-500/10 px-2 py-1 text-xs font-semibold tabular-nums text-orange-700 dark:text-orange-200">
+                        <span className="col-start-2 row-start-1 rounded-md bg-muted px-2 py-1 text-xs font-semibold tabular-nums text-foreground dark:text-zinc-200">
                           {(sparkleConfig.stepDuration * 1000).toFixed(0)}ms
                         </span>
                       </div>
 
-                      <div className="grid min-w-0 grid-cols-[1fr_auto] items-center gap-x-3 gap-y-2 rounded-xl border border-orange-400/15 bg-white/60 p-3 text-xs dark:bg-white/5">
+                      <div className="grid min-w-0 grid-cols-[1fr_auto] items-center gap-x-3 gap-y-2 rounded-xl border border-border bg-white/60 p-3 text-xs dark:bg-white/5">
                         <span className="text-muted-foreground dark:text-zinc-400 shrink-0">
                           Dissolve
                         </span>
@@ -3837,13 +3837,13 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           }
                           className="col-span-2 row-start-2"
                         />
-                        <span className="col-start-2 row-start-1 rounded-md bg-orange-500/10 px-2 py-1 text-xs font-semibold tabular-nums text-orange-700 dark:text-orange-200">
+                        <span className="col-start-2 row-start-1 rounded-md bg-muted px-2 py-1 text-xs font-semibold tabular-nums text-foreground dark:text-zinc-200">
                           {(sparkleConfig.dissolveDuration * 1000).toFixed(0)}
                           ms
                         </span>
                       </div>
 
-                      <div className="grid min-w-0 grid-cols-[1fr_auto] items-center gap-x-3 gap-y-2 rounded-xl border border-orange-400/15 bg-white/60 p-3 text-xs dark:bg-white/5">
+                      <div className="grid min-w-0 grid-cols-[1fr_auto] items-center gap-x-3 gap-y-2 rounded-xl border border-border bg-white/60 p-3 text-xs dark:bg-white/5">
                         <span className="text-muted-foreground dark:text-zinc-400 shrink-0">
                           Stiffness
                         </span>
@@ -3863,7 +3863,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           }
                           className="col-span-2 row-start-2"
                         />
-                        <span className="col-start-2 row-start-1 rounded-md bg-orange-500/10 px-2 py-1 text-xs font-semibold tabular-nums text-orange-700 dark:text-orange-200">
+                        <span className="col-start-2 row-start-1 rounded-md bg-muted px-2 py-1 text-xs font-semibold tabular-nums text-foreground dark:text-zinc-200">
                           {sparkleConfig.springStiffness}
                         </span>
                       </div>
@@ -3884,7 +3884,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     <button
                       type="button"
                       onClick={resetTwitterCardConfig}
-                      className="flex min-h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-orange-400/20 bg-white/60 px-3 text-xs font-medium text-orange-900 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10"
+                      className="flex min-h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-border bg-white/60 px-3 text-xs font-medium text-foreground hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10"
                     >
                       <ResetIcon className="w-3.5 h-3.5" />
                       <span>Reset</span>
@@ -3904,9 +3904,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             }))
                           }
                           className={cn(
-                            "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
+                            "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50",
                             !twitterCardConfig.staticCard
-                              ? "text-zinc-950"
+                              ? "text-white"
                               : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                           )}
                         >
@@ -3922,9 +3922,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             }))
                           }
                           className={cn(
-                            "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
+                            "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50",
                             twitterCardConfig.staticCard
-                              ? "text-zinc-950"
+                              ? "text-white"
                               : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                           )}
                         >
@@ -3948,9 +3948,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                 }))
                               }
                               className={cn(
-                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
+                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50",
                                 twitterCardConfig.username === handle
-                                  ? "text-zinc-950"
+                                  ? "text-white"
                                   : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                               )}
                             >
@@ -3970,7 +3970,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             enableCardTilt: !prev.enableCardTilt,
                           }))
                         }
-                        className="rounded-xl border border-orange-400/15 dark:border-orange-400/15 bg-white/60 dark:bg-white/5 hover:bg-muted dark:hover:bg-[#1f1f25] px-3 py-2 flex items-center justify-between text-xs transition-colors cursor-pointer"
+                        className="rounded-xl border border-border dark:border-border bg-white/60 dark:bg-white/5 hover:bg-muted dark:hover:bg-[#1f1f25] px-3 py-2 flex items-center justify-between text-xs transition-colors cursor-pointer"
                       >
                         <span className="text-muted-foreground dark:text-zinc-400">
                           Card 3D Tilt
@@ -3989,7 +3989,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         </span>
                       </button>
 
-                      <div className="grid min-w-0 grid-cols-[1fr_auto] items-center gap-x-3 gap-y-2 rounded-xl border border-orange-400/15 bg-white/60 p-3 text-xs dark:bg-white/5">
+                      <div className="grid min-w-0 grid-cols-[1fr_auto] items-center gap-x-3 gap-y-2 rounded-xl border border-border bg-white/60 p-3 text-xs dark:bg-white/5">
                         <span className="text-muted-foreground dark:text-zinc-400 shrink-0">
                           Tilt Angle
                         </span>
@@ -4009,7 +4009,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           }
                           className="col-span-2 row-start-2"
                         />
-                        <span className="col-start-2 row-start-1 rounded-md bg-orange-500/10 px-2 py-1 text-xs font-semibold tabular-nums text-orange-700 dark:text-orange-200">
+                        <span className="col-start-2 row-start-1 rounded-md bg-muted px-2 py-1 text-xs font-semibold tabular-nums text-foreground dark:text-zinc-200">
                           {twitterCardConfig.cardTiltMaxRotate}°
                         </span>
                       </div>
@@ -4030,7 +4030,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     <button
                       type="button"
                       onClick={resetToastConfig}
-                      className="flex min-h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-orange-400/20 bg-white/60 px-3 text-xs font-medium text-orange-900 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10"
+                      className="flex min-h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-border bg-white/60 px-3 text-xs font-medium text-foreground hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10"
                     >
                       <ResetIcon className="w-3.5 h-3.5" />
                       <span>Reset</span>
@@ -4064,9 +4064,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                 }))
                               }
                               className={cn(
-                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 capitalize",
+                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50 capitalize",
                                 isActive
-                                  ? "text-zinc-950"
+                                  ? "text-white"
                                   : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                               )}
                             >
@@ -4079,7 +4079,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       </SegmentedControlGroup>
                     </div>
 
-                    <div className="flex items-center justify-between gap-2 pt-1 border-t border-orange-400/15 dark:border-orange-400/15">
+                    <div className="flex items-center justify-between gap-2 pt-1 border-t border-border dark:border-border">
                       <span className="text-[11px] text-muted-foreground dark:text-zinc-400">
                         Rich Colors
                       </span>
@@ -4094,7 +4094,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         className={cn(
                           "relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full p-0.5 items-center transition-colors duration-200 ease-in-out",
                           toastConfig.richColors
-                            ? "bg-orange-500"
+                            ? "bg-black ring-1 ring-inset ring-white/20"
                             : "bg-muted-foreground/30 dark:bg-zinc-800",
                         )}
                       >
@@ -4115,7 +4115,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       </button>
                     </div>
 
-                    <div className="flex items-center justify-between gap-2 pt-1 border-t border-orange-400/15 dark:border-orange-400/15">
+                    <div className="flex items-center justify-between gap-2 pt-1 border-t border-border dark:border-border">
                       <span className="text-[11px] text-muted-foreground dark:text-zinc-400">
                         Expand on Hover
                       </span>
@@ -4130,7 +4130,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         className={cn(
                           "relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full p-0.5 items-center transition-colors duration-200 ease-in-out",
                           toastConfig.expand
-                            ? "bg-orange-500"
+                            ? "bg-black ring-1 ring-inset ring-white/20"
                             : "bg-muted-foreground/30 dark:bg-zinc-800",
                         )}
                       >
@@ -4168,7 +4168,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     <button
                       type="button"
                       onClick={resetThemeTogglerConfig}
-                      className="flex min-h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-orange-400/20 bg-white/60 px-3 text-xs font-medium text-orange-900 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10"
+                      className="flex min-h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-border bg-white/60 px-3 text-xs font-medium text-foreground hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10"
                     >
                       <ResetIcon className="w-3.5 h-3.5" />
                       <span>Reset</span>
@@ -4204,9 +4204,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                 }))
                               }
                               className={cn(
-                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 capitalize",
+                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50 capitalize",
                                 isActive
-                                  ? "text-zinc-950"
+                                  ? "text-white"
                                   : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                               )}
                             >
@@ -4240,9 +4240,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                 }))
                               }
                               className={cn(
-                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
+                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50",
                                 isActive
-                                  ? "text-zinc-950"
+                                  ? "text-white"
                                   : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                               )}
                             >
@@ -4253,7 +4253,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       </SegmentedControlGroup>
                     </div>
 
-                    <div className="flex items-center justify-between gap-2 pt-1 border-t border-orange-400/15 dark:border-orange-400/15">
+                    <div className="flex items-center justify-between gap-2 pt-1 border-t border-border dark:border-border">
                       <span className="text-[11px] text-muted-foreground dark:text-zinc-400">
                         Emanate from Center
                       </span>
@@ -4268,7 +4268,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         className={cn(
                           "relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full p-0.5 items-center transition-colors duration-200 ease-in-out",
                           themeTogglerConfig.fromCenter
-                            ? "bg-orange-500"
+                            ? "bg-black ring-1 ring-inset ring-white/20"
                             : "bg-muted-foreground/30 dark:bg-zinc-800",
                         )}
                       >
@@ -4304,7 +4304,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     <button
                       type="button"
                       onClick={resetOtpConfig}
-                      className="flex min-h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-orange-400/20 bg-white/60 px-3 text-xs font-medium text-orange-900 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10"
+                      className="flex min-h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-border bg-white/60 px-3 text-xs font-medium text-foreground hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10"
                     >
                       <ResetIcon className="w-3.5 h-3.5" />
                       <span>Reset</span>
@@ -4322,9 +4322,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               aria-pressed={otpStatus === s}
                               onClick={() => setOtpStatus(s)}
                               className={cn(
-                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 capitalize",
+                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50 capitalize",
                                 otpStatus === s
-                                  ? "text-zinc-950"
+                                  ? "text-white"
                                   : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                               )}
                             >
@@ -4334,7 +4334,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         )}
                       </SegmentedControlGroup>
 
-                      <div className="flex items-center gap-1 bg-muted/80 dark:bg-white/5 p-1 rounded-xl border border-orange-400/15 dark:border-orange-400/15">
+                      <div className="flex items-center gap-1 bg-muted/80 dark:bg-white/5 p-1 rounded-xl border border-border dark:border-border">
                         <button
                           type="button"
                           onClick={() => {
@@ -4369,7 +4369,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-orange-400/15 bg-white/60 p-3 dark:bg-white/5">
+                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-border bg-white/60 p-3 dark:bg-white/5">
                         <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium">
                           Size
                         </span>
@@ -4381,9 +4381,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               aria-pressed={otpSize === sz}
                               onClick={() => setOtpSize(sz)}
                               className={cn(
-                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 uppercase",
+                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50 uppercase",
                                 otpSize === sz
-                                  ? "text-zinc-950"
+                                  ? "text-white"
                                   : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                               )}
                             >
@@ -4393,7 +4393,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         </SegmentedControlGroup>
                       </div>
 
-                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-orange-400/15 bg-white/60 p-3 dark:bg-white/5">
+                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-border bg-white/60 p-3 dark:bg-white/5">
                         <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium">
                           Variant
                         </span>
@@ -4407,9 +4407,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               aria-pressed={otpVariant === v}
                               onClick={() => setOtpVariant(v)}
                               className={cn(
-                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 capitalize",
+                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50 capitalize",
                                 otpVariant === v
-                                  ? "text-zinc-950"
+                                  ? "text-white"
                                   : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                               )}
                             >
@@ -4424,7 +4424,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       <button
                         type="button"
                         onClick={() => setOtpMask((m) => !m)}
-                        className="min-h-12 rounded-xl border border-orange-400/15 dark:border-orange-400/15 bg-white/60 dark:bg-white/5 hover:bg-muted dark:hover:bg-[#1f1f25] px-3 flex items-center justify-between text-xs transition-colors cursor-pointer"
+                        className="min-h-12 rounded-xl border border-border dark:border-border bg-white/60 dark:bg-white/5 hover:bg-muted dark:hover:bg-[#1f1f25] px-3 flex items-center justify-between text-xs transition-colors cursor-pointer"
                       >
                         <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium">
                           Mask (•)
@@ -4433,7 +4433,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           className={cn(
                             "px-2 py-0.5 rounded text-[11px] font-sans uppercase transition-colors",
                             otpMask
-                              ? "bg-orange-500 text-zinc-950 font-semibold"
+                              ? "bg-black ring-1 ring-inset ring-white/20 text-zinc-950 font-semibold"
                               : "bg-muted text-muted-foreground dark:bg-white/5 dark:text-zinc-400",
                           )}
                         >
@@ -4444,7 +4444,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       <button
                         type="button"
                         onClick={() => setOtpGrouped((g) => !g)}
-                        className="min-h-12 rounded-xl border border-orange-400/15 dark:border-orange-400/15 bg-white/60 dark:bg-white/5 hover:bg-muted dark:hover:bg-[#1f1f25] px-3 flex items-center justify-between text-xs transition-colors cursor-pointer"
+                        className="min-h-12 rounded-xl border border-border dark:border-border bg-white/60 dark:bg-white/5 hover:bg-muted dark:hover:bg-[#1f1f25] px-3 flex items-center justify-between text-xs transition-colors cursor-pointer"
                       >
                         <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium">
                           3-3 Split
@@ -4453,7 +4453,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           className={cn(
                             "px-2 py-0.5 rounded text-[11px] font-sans uppercase transition-colors",
                             otpGrouped
-                              ? "bg-orange-500 text-zinc-950 font-semibold"
+                              ? "bg-black ring-1 ring-inset ring-white/20 text-zinc-950 font-semibold"
                               : "bg-muted text-muted-foreground dark:bg-white/5 dark:text-zinc-400",
                           )}
                         >
@@ -4485,7 +4485,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     <button
                       type="button"
                       onClick={resetOrbConfig}
-                      className="flex min-h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-orange-400/20 bg-white/60 px-3 text-xs font-medium text-orange-900 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10"
+                      className="flex min-h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-border bg-white/60 px-3 text-xs font-medium text-foreground hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10"
                     >
                       <ResetIcon className="w-3.5 h-3.5" />
                       <span>Reset</span>
@@ -4501,9 +4501,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           aria-pressed={orbStudioState === s}
                           onClick={() => setOrbStudioState(s)}
                           className={cn(
-                            "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 capitalize",
+                            "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50 capitalize",
                             orbStudioState === s
-                              ? "text-zinc-950"
+                              ? "text-white"
                               : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                           )}
                         >
@@ -4512,7 +4512,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       ))}
                     </SegmentedControlGroup>
 
-                    <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-orange-400/15 bg-white/60 p-3 dark:bg-white/5">
+                    <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-border bg-white/60 p-3 dark:bg-white/5">
                       <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium px-2.5 shrink-0">
                         Color
                       </span>
@@ -4527,9 +4527,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               aria-pressed={isSelected}
                               onClick={() => setOrbStudioColor(c.value)}
                               className={cn(
-                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
+                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50",
                                 isSelected
-                                  ? "text-zinc-950"
+                                  ? "text-white"
                                   : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                               )}
                             >
@@ -4549,7 +4549,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-orange-400/15 bg-white/60 p-3 dark:bg-white/5">
+                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-border bg-white/60 p-3 dark:bg-white/5">
                         <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                           Size
                         </span>
@@ -4566,9 +4566,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               aria-pressed={orbStudioSize === sz.value}
                               onClick={() => setOrbStudioSize(sz.value)}
                               className={cn(
-                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
+                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50",
                                 orbStudioSize === sz.value
-                                  ? "text-zinc-950"
+                                  ? "text-white"
                                   : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                               )}
                             >
@@ -4578,7 +4578,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         </SegmentedControlGroup>
                       </div>
 
-                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-orange-400/15 bg-white/60 p-3 dark:bg-white/5">
+                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-border bg-white/60 p-3 dark:bg-white/5">
                         <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                           Speed
                         </span>
@@ -4590,9 +4590,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               aria-pressed={orbStudioSpeed === sp}
                               onClick={() => setOrbStudioSpeed(sp)}
                               className={cn(
-                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
+                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50",
                                 orbStudioSpeed === sp
-                                  ? "text-zinc-950"
+                                  ? "text-white"
                                   : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                               )}
                             >
@@ -4603,7 +4603,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       </div>
                     </div>
 
-                    <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-orange-400/15 bg-white/60 p-3 dark:bg-white/5">
+                    <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-border bg-white/60 p-3 dark:bg-white/5">
                       <div className="flex items-center gap-2 shrink-0">
                         <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium">
                           Motion
@@ -4618,9 +4618,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           aria-pressed={!orbStudioPaused}
                           onClick={() => setOrbStudioPaused(false)}
                           className={cn(
-                            "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
+                            "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50",
                             !orbStudioPaused
-                              ? "text-zinc-950"
+                              ? "text-white"
                               : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                           )}
                         >
@@ -4634,9 +4634,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           aria-pressed={orbStudioPaused}
                           onClick={() => setOrbStudioPaused(true)}
                           className={cn(
-                            "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
+                            "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50",
                             orbStudioPaused
-                              ? "text-zinc-950"
+                              ? "text-white"
                               : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                           )}
                         >
@@ -4663,7 +4663,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     <button
                       type="button"
                       onClick={resetMacSliderConfig}
-                      className="flex min-h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-orange-400/20 bg-white/60 px-3 text-xs font-medium text-orange-900 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10"
+                      className="flex min-h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-border bg-white/60 px-3 text-xs font-medium text-foreground hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10"
                     >
                       <ResetIcon className="w-3.5 h-3.5" />
                       <span>Reset</span>
@@ -4701,9 +4701,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           aria-pressed={macSliderColor === c.id}
                           onClick={() => setMacSliderColor(c.id)}
                           className={cn(
-                            "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
+                            "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50",
                             macSliderColor === c.id
-                              ? "text-zinc-950"
+                              ? "text-white"
                               : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                           )}
                         >
@@ -4719,7 +4719,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     </SegmentedControlGroup>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-orange-400/15 bg-white/60 p-3 dark:bg-white/5">
+                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-border bg-white/60 p-3 dark:bg-white/5">
                         <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                           Size
                         </span>
@@ -4731,9 +4731,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               aria-pressed={macSliderSize === sz}
                               onClick={() => setMacSliderSize(sz)}
                               className={cn(
-                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 uppercase",
+                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50 uppercase",
                                 macSliderSize === sz
-                                  ? "text-zinc-950"
+                                  ? "text-white"
                                   : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                               )}
                             >
@@ -4743,7 +4743,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         </SegmentedControlGroup>
                       </div>
 
-                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-orange-400/15 bg-white/60 p-3 dark:bg-white/5">
+                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-border bg-white/60 p-3 dark:bg-white/5">
                         <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                           Lens State
                         </span>
@@ -4758,9 +4758,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               aria-pressed={macSliderForceActive === st.value}
                               onClick={() => setMacSliderForceActive(st.value)}
                               className={cn(
-                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
+                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50",
                                 macSliderForceActive === st.value
-                                  ? "text-zinc-950"
+                                  ? "text-white"
                                   : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                               )}
                             >
@@ -4771,7 +4771,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       </div>
                     </div>
 
-                    <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-orange-400/15 bg-white/60 p-3 dark:bg-white/5">
+                    <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-border bg-white/60 p-3 dark:bg-white/5">
                       <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                         Glass Material
                       </span>
@@ -4789,9 +4789,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             aria-pressed={macSliderMaterial === m.id}
                             onClick={() => setMacSliderMaterial(m.id)}
                             className={cn(
-                              "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
+                              "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50",
                               macSliderMaterial === m.id
-                                ? "text-zinc-950"
+                                ? "text-white"
                                 : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                             )}
                           >
@@ -4801,8 +4801,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       </SegmentedControlGroup>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 border-t border-orange-400/15 dark:border-orange-400/15">
-                      <div className="grid min-w-0 grid-cols-[1fr_auto] items-center gap-x-3 gap-y-2 rounded-xl border border-orange-400/15 bg-white/60 p-3 text-xs dark:bg-white/5">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 border-t border-border dark:border-border">
+                      <div className="grid min-w-0 grid-cols-[1fr_auto] items-center gap-x-3 gap-y-2 rounded-xl border border-border bg-white/60 p-3 text-xs dark:bg-white/5">
                         <span className="w-18 shrink-0 text-muted-foreground dark:text-zinc-400 text-[11px] font-medium">
                           Specular
                         </span>
@@ -4821,12 +4821,12 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           }
                           className="col-span-2 row-start-2"
                         />
-                        <span className="col-start-2 row-start-1 rounded-md bg-orange-500/10 px-2 py-1 text-xs font-semibold tabular-nums text-orange-700 dark:text-orange-200">
+                        <span className="col-start-2 row-start-1 rounded-md bg-muted px-2 py-1 text-xs font-semibold tabular-nums text-foreground dark:text-zinc-200">
                           {macSliderSpecularOpacity.toFixed(2)}
                         </span>
                       </div>
 
-                      <div className="grid min-w-0 grid-cols-[1fr_auto] items-center gap-x-3 gap-y-2 rounded-xl border border-orange-400/15 bg-white/60 p-3 text-xs dark:bg-white/5">
+                      <div className="grid min-w-0 grid-cols-[1fr_auto] items-center gap-x-3 gap-y-2 rounded-xl border border-border bg-white/60 p-3 text-xs dark:bg-white/5">
                         <span className="w-18 shrink-0 text-muted-foreground dark:text-zinc-400 text-[11px] font-medium">
                           Saturation
                         </span>
@@ -4845,12 +4845,12 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           }
                           className="col-span-2 row-start-2"
                         />
-                        <span className="col-start-2 row-start-1 rounded-md bg-orange-500/10 px-2 py-1 text-xs font-semibold tabular-nums text-orange-700 dark:text-orange-200">
+                        <span className="col-start-2 row-start-1 rounded-md bg-muted px-2 py-1 text-xs font-semibold tabular-nums text-foreground dark:text-zinc-200">
                           {macSliderSpecularSaturation}
                         </span>
                       </div>
 
-                      <div className="grid min-w-0 grid-cols-[1fr_auto] items-center gap-x-3 gap-y-2 rounded-xl border border-orange-400/15 bg-white/60 p-3 text-xs dark:bg-white/5">
+                      <div className="grid min-w-0 grid-cols-[1fr_auto] items-center gap-x-3 gap-y-2 rounded-xl border border-border bg-white/60 p-3 text-xs dark:bg-white/5">
                         <span className="w-18 shrink-0 text-muted-foreground dark:text-zinc-400 text-[11px] font-medium">
                           Refraction
                         </span>
@@ -4869,12 +4869,12 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           }
                           className="col-span-2 row-start-2"
                         />
-                        <span className="col-start-2 row-start-1 rounded-md bg-orange-500/10 px-2 py-1 text-xs font-semibold tabular-nums text-orange-700 dark:text-orange-200">
+                        <span className="col-start-2 row-start-1 rounded-md bg-muted px-2 py-1 text-xs font-semibold tabular-nums text-foreground dark:text-zinc-200">
                           {macSliderRefractionLevel.toFixed(2)}
                         </span>
                       </div>
 
-                      <div className="grid min-w-0 grid-cols-[1fr_auto] items-center gap-x-3 gap-y-2 rounded-xl border border-orange-400/15 bg-white/60 p-3 text-xs dark:bg-white/5">
+                      <div className="grid min-w-0 grid-cols-[1fr_auto] items-center gap-x-3 gap-y-2 rounded-xl border border-border bg-white/60 p-3 text-xs dark:bg-white/5">
                         <span className="w-18 shrink-0 text-muted-foreground dark:text-zinc-400 text-[11px] font-medium">
                           Blur
                         </span>
@@ -4891,7 +4891,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           }
                           className="col-span-2 row-start-2"
                         />
-                        <span className="col-start-2 row-start-1 rounded-md bg-orange-500/10 px-2 py-1 text-xs font-semibold tabular-nums text-orange-700 dark:text-orange-200">
+                        <span className="col-start-2 row-start-1 rounded-md bg-muted px-2 py-1 text-xs font-semibold tabular-nums text-foreground dark:text-zinc-200">
                           {macSliderBlurLevel.toFixed(1)}px
                         </span>
                       </div>
@@ -4912,7 +4912,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     <button
                       type="button"
                       onClick={resetSliderConfig}
-                      className="flex min-h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-orange-400/20 bg-white/60 px-3 text-xs font-medium text-orange-900 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10"
+                      className="flex min-h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-border bg-white/60 px-3 text-xs font-medium text-foreground hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10"
                     >
                       <ResetIcon className="w-3.5 h-3.5" />
                       <span>Reset</span>
@@ -4934,9 +4934,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           aria-pressed={sliderIdeation === tab.id}
                           onClick={() => setSliderIdeation(tab.id)}
                           className={cn(
-                            "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
+                            "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50",
                             sliderIdeation === tab.id
-                              ? "text-zinc-950"
+                              ? "text-white"
                               : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                           )}
                         >
@@ -5035,7 +5035,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     <button
                       type="button"
                       onClick={resetLiquidMediaConfig}
-                      className="flex min-h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-orange-400/20 bg-white/60 px-3 text-xs font-medium text-orange-900 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10"
+                      className="flex min-h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-border bg-white/60 px-3 text-xs font-medium text-foreground hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10"
                     >
                       <ResetIcon className="size-3.5" aria-hidden="true" />
                       Reset
@@ -5067,7 +5067,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       <span className="text-xs font-medium text-zinc-600 dark:text-zinc-400">
                         Fine tune
                       </span>
-                      <span className="rounded-full border border-orange-400/20 bg-orange-400/10 px-2 py-0.5 text-[10px] font-medium text-orange-700 dark:text-orange-200">
+                      <span className="rounded-full border border-border bg-muted px-2 py-0.5 text-[10px] font-medium text-foreground dark:text-zinc-200">
                         {liquidMediaConfig.preset === "custom"
                           ? "Custom"
                           : LIQUID_MEDIA_PRESETS.find(
@@ -5118,13 +5118,13 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         return (
                           <label
                             key={control.key}
-                            className="flex min-w-0 flex-col gap-2 rounded-xl border border-orange-400/15 bg-white/60 px-3.5 pb-2.5 pt-3.5 dark:bg-white/5"
+                            className="flex min-w-0 flex-col gap-2 rounded-xl border border-border bg-white/60 px-3.5 pb-2.5 pt-3.5 dark:bg-white/5"
                           >
                             <span className="flex items-center justify-between gap-3">
                               <span className="text-xs font-medium text-zinc-800 dark:text-zinc-200">
                                 {control.label}
                               </span>
-                              <span className="min-w-11 rounded-md bg-orange-500/10 px-2 py-1 text-center text-xs font-semibold tabular-nums text-orange-700 dark:text-orange-200">
+                              <span className="min-w-11 shrink-0 rounded-md bg-muted px-2 py-1 text-center text-xs font-semibold tabular-nums text-foreground dark:text-zinc-200">
                                 {control.format(value)}
                               </span>
                             </span>
@@ -5150,7 +5150,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     </div>
                   </fieldset>
 
-                  <div className="grid grid-cols-1 gap-4 border-t border-orange-400/15 pt-4 sm:grid-cols-[1.15fr_1fr]">
+                  <div className="grid grid-cols-1 gap-4 border-t border-border pt-4 sm:grid-cols-2">
                     <fieldset className="min-w-0">
                       <legend className="mb-2.5 text-xs font-medium text-zinc-600 dark:text-zinc-400">
                         Source image
@@ -5199,7 +5199,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                   [option.key]: !prev[option.key],
                                 }))
                               }
-                              className="flex min-h-12 cursor-pointer items-center justify-between gap-2 rounded-xl border border-orange-400/15 bg-white/60 px-2.5 text-[11px] font-medium text-orange-950/80 hover:bg-white/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 dark:bg-white/5 dark:text-orange-100/85 dark:hover:bg-white/10"
+                              className="flex min-h-12.5 min-w-0 cursor-pointer items-center justify-between gap-2 rounded-xl border border-border bg-white/60 px-2.5 text-[11px] font-medium text-foreground/80 hover:bg-white/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50 dark:bg-white/5 dark:text-zinc-200 dark:hover:bg-white/10"
                             >
                               {option.label}
                               <span
@@ -5207,7 +5207,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                                 className={cn(
                                   "flex h-4 w-7 shrink-0 items-center rounded-full p-0.5",
                                   enabled
-                                    ? "bg-orange-500"
+                                    ? "bg-black ring-1 ring-inset ring-white/20"
                                     : "bg-zinc-300 dark:bg-zinc-700",
                                 )}
                               >
@@ -5239,7 +5239,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     <button
                       type="button"
                       onClick={resetLiquidConfig}
-                      className="flex min-h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-orange-400/20 bg-white/60 px-3 text-xs font-medium text-orange-900 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10"
+                      className="flex min-h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-border bg-white/60 px-3 text-xs font-medium text-foreground hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10"
                     >
                       <ResetIcon className="w-3.5 h-3.5" />
                       <span>Reset</span>
@@ -5279,9 +5279,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           aria-pressed={liquidColor === c.id}
                           onClick={() => setLiquidColor(c.id)}
                           className={cn(
-                            "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
+                            "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50",
                             liquidColor === c.id
-                              ? "text-zinc-950"
+                              ? "text-white"
                               : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                           )}
                         >
@@ -5297,7 +5297,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     </SegmentedControlGroup>
 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-orange-400/15 bg-white/60 p-3 dark:bg-white/5">
+                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-border bg-white/60 p-3 dark:bg-white/5">
                         <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                           State
                         </span>
@@ -5312,9 +5312,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               aria-pressed={liquidChecked === st.value}
                               onClick={() => setLiquidChecked(st.value)}
                               className={cn(
-                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
+                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50",
                                 liquidChecked === st.value
-                                  ? "text-zinc-950"
+                                  ? "text-white"
                                   : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                               )}
                             >
@@ -5324,7 +5324,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         </SegmentedControlGroup>
                       </div>
 
-                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-orange-400/15 bg-white/60 p-3 dark:bg-white/5">
+                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-border bg-white/60 p-3 dark:bg-white/5">
                         <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                           Size
                         </span>
@@ -5336,9 +5336,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               aria-pressed={liquidSize === sz}
                               onClick={() => setLiquidSize(sz)}
                               className={cn(
-                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 uppercase",
+                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50 uppercase",
                                 liquidSize === sz
-                                  ? "text-zinc-950"
+                                  ? "text-white"
                                   : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                               )}
                             >
@@ -5348,7 +5348,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         </SegmentedControlGroup>
                       </div>
 
-                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-orange-400/15 bg-white/60 p-3 dark:bg-white/5">
+                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-border bg-white/60 p-3 dark:bg-white/5">
                         <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                           Viscosity
                         </span>
@@ -5360,9 +5360,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               aria-pressed={liquidViscosity === v}
                               onClick={() => setLiquidViscosity(v)}
                               className={cn(
-                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 capitalize",
+                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50 capitalize",
                                 liquidViscosity === v
-                                  ? "text-zinc-950"
+                                  ? "text-white"
                                   : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                               )}
                             >
@@ -5388,7 +5388,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     <button
                       type="button"
                       onClick={resetGooeyNavConfig}
-                      className="flex min-h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-orange-400/20 bg-white/60 px-3 text-xs font-medium text-orange-900 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10"
+                      className="flex min-h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-border bg-white/60 px-3 text-xs font-medium text-foreground hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10"
                     >
                       <ResetIcon className="w-3.5 h-3.5" />
                       <span>Reset</span>
@@ -5429,9 +5429,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           aria-pressed={gooeyNavColor === c.id}
                           onClick={() => setGooeyNavColor(c.id)}
                           className={cn(
-                            "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
+                            "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50",
                             gooeyNavColor === c.id
-                              ? "text-zinc-950"
+                              ? "text-white"
                               : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                           )}
                         >
@@ -5447,7 +5447,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     </SegmentedControlGroup>
 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-orange-400/15 bg-white/60 p-3 dark:bg-white/5">
+                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-border bg-white/60 p-3 dark:bg-white/5">
                         <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                           Size
                         </span>
@@ -5459,9 +5459,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               aria-pressed={gooeyNavSize === sz}
                               onClick={() => setGooeyNavSize(sz)}
                               className={cn(
-                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 uppercase",
+                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50 uppercase",
                                 gooeyNavSize === sz
-                                  ? "text-zinc-950"
+                                  ? "text-white"
                                   : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                               )}
                             >
@@ -5471,7 +5471,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         </SegmentedControlGroup>
                       </div>
 
-                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-orange-400/15 bg-white/60 p-3 dark:bg-white/5">
+                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-border bg-white/60 p-3 dark:bg-white/5">
                         <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                           Variant
                         </span>
@@ -5483,9 +5483,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               aria-pressed={gooeyNavVariant === v}
                               onClick={() => setGooeyNavVariant(v)}
                               className={cn(
-                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 capitalize",
+                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50 capitalize",
                                 gooeyNavVariant === v
-                                  ? "text-zinc-950"
+                                  ? "text-white"
                                   : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                               )}
                             >
@@ -5495,7 +5495,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         </SegmentedControlGroup>
                       </div>
 
-                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-orange-400/15 bg-white/60 p-3 dark:bg-white/5">
+                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-border bg-white/60 p-3 dark:bg-white/5">
                         <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                           Motion
                         </span>
@@ -5507,9 +5507,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               aria-pressed={gooeyNavElasticity === e}
                               onClick={() => setGooeyNavElasticity(e)}
                               className={cn(
-                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 capitalize",
+                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50 capitalize",
                                 gooeyNavElasticity === e
-                                  ? "text-zinc-950"
+                                  ? "text-white"
                                   : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                               )}
                             >
@@ -5535,7 +5535,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     <button
                       type="button"
                       onClick={resetNoiseConfig}
-                      className="flex min-h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-orange-400/20 bg-white/60 px-3 text-xs font-medium text-orange-900 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10"
+                      className="flex min-h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-border bg-white/60 px-3 text-xs font-medium text-foreground hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10"
                     >
                       <ResetIcon className="w-3.5 h-3.5" />
                       <span>Reset</span>
@@ -5557,9 +5557,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           aria-pressed={noiseMode === m.id}
                           onClick={() => setNoiseMode(m.id)}
                           className={cn(
-                            "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
+                            "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50",
                             noiseMode === m.id
-                              ? "text-zinc-950"
+                              ? "text-white"
                               : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                           )}
                         >
@@ -5569,7 +5569,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     </SegmentedControlGroup>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-orange-400/15 bg-white/60 p-3 dark:bg-white/5">
+                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-border bg-white/60 p-3 dark:bg-white/5">
                         <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                           Alpha
                         </span>
@@ -5581,9 +5581,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               aria-pressed={noiseAlpha === a}
                               onClick={() => setNoiseAlpha(a)}
                               className={cn(
-                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
+                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50",
                                 noiseAlpha === a
-                                  ? "text-zinc-950"
+                                  ? "text-white"
                                   : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                               )}
                             >
@@ -5593,7 +5593,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         </SegmentedControlGroup>
                       </div>
 
-                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-orange-400/15 bg-white/60 p-3 dark:bg-white/5">
+                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-border bg-white/60 p-3 dark:bg-white/5">
                         <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                           Scale
                         </span>
@@ -5605,9 +5605,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               aria-pressed={noiseScale === s}
                               onClick={() => setNoiseScale(s)}
                               className={cn(
-                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
+                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50",
                                 noiseScale === s
-                                  ? "text-zinc-950"
+                                  ? "text-white"
                                   : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                               )}
                             >
@@ -5617,7 +5617,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         </SegmentedControlGroup>
                       </div>
 
-                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-orange-400/15 bg-white/60 p-3 dark:bg-white/5">
+                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-border bg-white/60 p-3 dark:bg-white/5">
                         <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                           Interval
                         </span>
@@ -5629,9 +5629,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                               aria-pressed={noiseInterval === iv}
                               onClick={() => setNoiseInterval(iv)}
                               className={cn(
-                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
+                                "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50",
                                 noiseInterval === iv
-                                  ? "text-zinc-950"
+                                  ? "text-white"
                                   : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                               )}
                             >
@@ -5641,7 +5641,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         </SegmentedControlGroup>
                       </div>
 
-                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-orange-400/15 bg-white/60 p-3 dark:bg-white/5">
+                      <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-border bg-white/60 p-3 dark:bg-white/5">
                         <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                           Effects
                         </span>
@@ -5651,10 +5651,10 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             aria-pressed={noiseVignette}
                             onClick={() => setNoiseVignette(!noiseVignette)}
                             className={cn(
-                              "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
+                              "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50",
                               noiseVignette
-                                ? "bg-orange-500 text-zinc-950"
-                                : "border border-orange-400/15 bg-white/60 text-zinc-600 hover:text-zinc-950 dark:bg-white/5 dark:text-zinc-400 dark:hover:text-zinc-50",
+                                ? "bg-black text-white ring-1 ring-inset ring-white/20"
+                                : "border border-border bg-white/60 text-zinc-600 hover:text-zinc-950 dark:bg-white/5 dark:text-zinc-400 dark:hover:text-zinc-50",
                             )}
                           >
                             Vignette
@@ -5664,10 +5664,10 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             aria-pressed={noiseScanlines}
                             onClick={() => setNoiseScanlines(!noiseScanlines)}
                             className={cn(
-                              "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
+                              "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50",
                               noiseScanlines
-                                ? "bg-orange-500 text-zinc-950"
-                                : "border border-orange-400/15 bg-white/60 text-zinc-600 hover:text-zinc-950 dark:bg-white/5 dark:text-zinc-400 dark:hover:text-zinc-50",
+                                ? "bg-black text-white ring-1 ring-inset ring-white/20"
+                                : "border border-border bg-white/60 text-zinc-600 hover:text-zinc-950 dark:bg-white/5 dark:text-zinc-400 dark:hover:text-zinc-50",
                             )}
                           >
                             CRT
@@ -5691,7 +5691,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     <button
                       type="button"
                       onClick={resetAiInputConfig}
-                      className="flex min-h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-orange-400/20 bg-white/60 px-3 text-xs font-medium text-orange-900 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10"
+                      className="flex min-h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-border bg-white/60 px-3 text-xs font-medium text-foreground hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10"
                     >
                       <ResetIcon className="w-3.5 h-3.5" />
                       <span>Reset</span>
@@ -5714,9 +5714,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             aria-pressed={aiInputVariant === v.id}
                             onClick={() => setAiInputVariant(v.id)}
                             className={cn(
-                              "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
+                              "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50",
                               aiInputVariant === v.id
-                                ? "text-zinc-950"
+                                ? "text-white"
                                 : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                             )}
                           >
@@ -5738,9 +5738,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             aria-pressed={aiInputMaxWidth === sz.value}
                             onClick={() => setAiInputMaxWidth(sz.value)}
                             className={cn(
-                              "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400",
+                              "relative z-10 flex min-h-10 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50",
                               aiInputMaxWidth === sz.value
-                                ? "text-zinc-950"
+                                ? "text-white"
                                 : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                             )}
                           >
@@ -5757,8 +5757,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         className={cn(
                           "h-8 px-2.5 rounded-lg border text-xs font-medium flex items-center justify-between transition-colors cursor-pointer",
                           aiInputAllowAttachments
-                            ? "border-orange-500/30 bg-orange-500/15 text-orange-800 dark:text-orange-200"
-                            : "border-orange-400/15 bg-white/60 text-muted-foreground hover:text-foreground dark:bg-white/5 dark:text-zinc-400 dark:hover:text-zinc-200",
+                            ? "border-foreground/20 bg-muted text-foreground dark:text-zinc-200"
+                            : "border-border bg-white/60 text-muted-foreground hover:text-foreground dark:bg-white/5 dark:text-zinc-400 dark:hover:text-zinc-200",
                         )}
                       >
                         <span>Attachments</span>
@@ -5773,8 +5773,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         className={cn(
                           "h-8 px-2.5 rounded-lg border text-xs font-medium flex items-center justify-between transition-colors cursor-pointer",
                           aiInputAllowVoice
-                            ? "border-orange-500/30 bg-orange-500/15 text-orange-800 dark:text-orange-200"
-                            : "border-orange-400/15 bg-white/60 text-muted-foreground hover:text-foreground dark:bg-white/5 dark:text-zinc-400 dark:hover:text-zinc-200",
+                            ? "border-foreground/20 bg-muted text-foreground dark:text-zinc-200"
+                            : "border-border bg-white/60 text-muted-foreground hover:text-foreground dark:bg-white/5 dark:text-zinc-400 dark:hover:text-zinc-200",
                         )}
                       >
                         <span>Voice</span>
@@ -5789,8 +5789,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         className={cn(
                           "h-8 px-2.5 rounded-lg border text-xs font-medium flex items-center justify-between transition-colors cursor-pointer",
                           aiInputAllowModelSelect
-                            ? "border-orange-500/30 bg-orange-500/15 text-orange-800 dark:text-orange-200"
-                            : "border-orange-400/15 bg-white/60 text-muted-foreground hover:text-foreground dark:bg-white/5 dark:text-zinc-400 dark:hover:text-zinc-200",
+                            ? "border-foreground/20 bg-muted text-foreground dark:text-zinc-200"
+                            : "border-border bg-white/60 text-muted-foreground hover:text-foreground dark:bg-white/5 dark:text-zinc-400 dark:hover:text-zinc-200",
                         )}
                       >
                         <span>Models</span>
@@ -5805,8 +5805,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         className={cn(
                           "h-8 px-2.5 rounded-lg border text-xs font-medium flex items-center justify-between transition-colors cursor-pointer",
                           aiInputAllowEffortSelect
-                            ? "border-orange-500/30 bg-orange-500/15 text-orange-800 dark:text-orange-200"
-                            : "border-orange-400/15 bg-white/60 text-muted-foreground hover:text-foreground dark:bg-white/5 dark:text-zinc-400 dark:hover:text-zinc-200",
+                            ? "border-foreground/20 bg-muted text-foreground dark:text-zinc-200"
+                            : "border-border bg-white/60 text-muted-foreground hover:text-foreground dark:bg-white/5 dark:text-zinc-400 dark:hover:text-zinc-200",
                         )}
                       >
                         <span>Effort</span>
@@ -5829,7 +5829,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             600,
                           );
                         }}
-                        className="h-7 px-2.5 rounded-xl border border-orange-400/15 dark:border-white/10 bg-white/60 dark:bg-white/5 hover:bg-muted dark:hover:bg-white/10 hover:border-foreground/20 dark:hover:border-white/20 text-xs font-medium text-foreground/80 dark:text-zinc-300 hover:text-foreground dark:hover:text-white transition-all flex items-center gap-3 cursor-pointer"
+                        className="h-7 px-2.5 rounded-xl border border-border dark:border-white/10 bg-white/60 dark:bg-white/5 hover:bg-muted dark:hover:bg-white/10 hover:border-foreground/20 dark:hover:border-white/20 text-xs font-medium text-foreground/80 dark:text-zinc-300 hover:text-foreground dark:hover:text-white transition-all flex items-center gap-3 cursor-pointer"
                       >
                         <PlusIcon className="w-3.5 h-3.5 text-muted-foreground dark:text-zinc-400" />
                         <span>Attach Mockup</span>
@@ -5840,7 +5840,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         onClick={() => {
                           promptInputRef.current?.startVoice();
                         }}
-                        className="h-7 px-2.5 rounded-xl border border-orange-400/15 dark:border-white/10 bg-white/60 dark:bg-white/5 hover:bg-muted dark:hover:bg-white/10 hover:border-foreground/20 dark:hover:border-white/20 text-xs font-medium text-foreground/80 dark:text-zinc-300 hover:text-foreground dark:hover:text-white transition-all flex items-center gap-3 cursor-pointer"
+                        className="h-7 px-2.5 rounded-xl border border-border dark:border-white/10 bg-white/60 dark:bg-white/5 hover:bg-muted dark:hover:bg-white/10 hover:border-foreground/20 dark:hover:border-white/20 text-xs font-medium text-foreground/80 dark:text-zinc-300 hover:text-foreground dark:hover:text-white transition-all flex items-center gap-3 cursor-pointer"
                       >
                         <span>Simulate Voice</span>
                       </button>
@@ -5851,13 +5851,13 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           promptInputRef.current?.expand();
                           promptInputRef.current?.focus();
                         }}
-                        className="h-7 px-2.5 rounded-xl border border-orange-400/15 dark:border-white/10 bg-white/60 dark:bg-white/5 hover:bg-muted dark:hover:bg-white/10 hover:border-foreground/20 dark:hover:border-white/20 text-xs font-medium text-foreground/80 dark:text-zinc-300 hover:text-foreground dark:hover:text-white transition-all flex items-center gap-3 cursor-pointer"
+                        className="h-7 px-2.5 rounded-xl border border-border dark:border-white/10 bg-white/60 dark:bg-white/5 hover:bg-muted dark:hover:bg-white/10 hover:border-foreground/20 dark:hover:border-white/20 text-xs font-medium text-foreground/80 dark:text-zinc-300 hover:text-foreground dark:hover:text-white transition-all flex items-center gap-3 cursor-pointer"
                       >
                         <span>Expand Composer</span>
                       </button>
                     </div>
 
-                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-1 border-t border-orange-400/15 dark:border-orange-400/15">
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-1 border-t border-border dark:border-border">
                       <div className="flex flex-wrap items-center gap-2 py-0.5">
                         <span className="text-[11px] text-muted-foreground dark:text-zinc-500 shrink-0 font-medium pl-1">
                           Try prompt:
@@ -5871,7 +5871,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                             key={promptText}
                             type="button"
                             onClick={() => setAiInputValue(promptText)}
-                            className="min-h-9 rounded-lg border border-orange-400/15 bg-white/60 px-2.5 py-2 text-left text-[11px] text-foreground/80 hover:bg-orange-400/10 dark:bg-white/5 dark:text-zinc-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400"
+                            className="min-h-9 rounded-lg border border-border bg-white/60 px-2.5 py-2 text-left text-[11px] text-foreground/80 hover:bg-muted dark:bg-white/5 dark:text-zinc-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50"
                           >
                             {promptText}
                           </button>
