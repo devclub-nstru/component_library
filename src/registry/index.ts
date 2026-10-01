@@ -16,6 +16,7 @@ import {
   fileUpload,
   fileDropzone,
   fileTree,
+  focusTestimonials,
   githubActivity,
   glowingBadge,
   gooeyNav,
@@ -91,6 +92,7 @@ export const COMPONENT_REGISTRY: Record<string, ComponentRegistryItem> = {
   "confirm-morph": confirmMorph as ComponentRegistryItem,
   "date-range-picker": dateRangePicker as ComponentRegistryItem,
   "segmented-progress": segmentedProgress as ComponentRegistryItem,
+  "focus-testimonials": focusTestimonials as ComponentRegistryItem,
 };
 
 export const getAllComponents = (
@@ -109,6 +111,9 @@ export const getComponentBySlug = (
     COMPONENT_REGISTRY[slug] ||
     (slug === "ascii-text-hover" || slug === "text-hover" || slug === "ascii-button"
       ? COMPONENT_REGISTRY["ascii-hover-button"]
+      : undefined) ||
+    (slug === "testimonials"
+      ? COMPONENT_REGISTRY["focus-testimonials"]
       : undefined) ||
     (slug === "morph-selection"
       ? COMPONENT_REGISTRY["confirm-morph"]

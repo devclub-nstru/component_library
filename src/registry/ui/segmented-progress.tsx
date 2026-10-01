@@ -92,26 +92,41 @@ const COLOR_MAP: Record<SegmentedProgressColor, ColorConfig> = {
   },
 };
 
+const COLOR_ALIAS_MAP: Record<string, SegmentedProgressColor> = {
+  green: "emerald",
+  purple: "violet",
+  red: "rose",
+  orange: "amber",
+};
+
 function resolveColor(color: SegmentedProgressColor | string): ColorConfig {
-  if (color in COLOR_MAP) {
-    return COLOR_MAP[color as SegmentedProgressColor];
+  const normalized = COLOR_ALIAS_MAP[color] || color;
+  if (normalized in COLOR_MAP) {
+    return COLOR_MAP[normalized as SegmentedProgressColor];
   }
   return {
     active: color,
-    glow: `${color}66`,
-    badgeBg: `${color}1f`,
+    glow: `color-mix(in srgb, ${color} 40%, transparent)`,
+    badgeBg: `color-mix(in srgb, ${color} 15%, transparent)`,
     badgeText: color,
-    badgeBorder: `${color}40`,
+    badgeBorder: `color-mix(in srgb, ${color} 28%, transparent)`,
     inactive: "#1e1e22",
   };
 }
 
-export function ProgressPieIcon({ className }: { className?: string }) {
+export function ProgressPieIcon({
+  className,
+  style,
+}: {
+  className?: string;
+  style?: React.CSSProperties;
+}) {
   return (
     <svg
       viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      style={style}
       className={cn("w-5 h-5 text-white", className)}
       aria-hidden="true"
     >
@@ -719,6 +734,7 @@ export interface SegmentedProgressProps {
   title?: string;
   subtitle?: string;
   icon?: React.ReactNode;
+  color?: SegmentedProgressColor | string;
   metrics?: SegmentedProgressMetric[];
   segments?: number;
   footerText?: string;
@@ -747,6 +763,7 @@ export function SegmentedProgress({
   title = "Project Progress",
   subtitle = "Overall completion rate all projects.",
   icon,
+  color = "emerald",
   metrics = DEFAULT_METRICS,
   segments = 32,
   footerText = "Up by 6% compared to last week, great momentum!",
@@ -762,13 +779,16 @@ export function SegmentedProgress({
     {},
   );
 
+  const colorConfig = useMemo(() => resolveColor(color), [color]);
+
   const activeMetrics = useMemo(() => {
     return metrics.map((m) => ({
       ...m,
+      color: m.color || color,
       value:
         valueOverrides[m.id] !== undefined ? valueOverrides[m.id] : m.value,
     }));
-  }, [metrics, valueOverrides]);
+  }, [metrics, valueOverrides, color]);
 
   const handleMetricChange = useCallback(
     (id: string, val: number) => {
@@ -789,7 +809,12 @@ export function SegmentedProgress({
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3.5">
           <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-linear-to-b from-[#2a2a2e] to-[#141416] border border-white/15 shadow-[inset_0_1px_1px_rgba(255,255,255,0.25),0_4px_12px_rgba(0,0,0,0.5)]">
-            {icon || <ProgressPieIcon className="w-5 h-5 text-white" />}
+            {icon || (
+              <ProgressPieIcon
+                className="w-5 h-5 transition-colors duration-200"
+                style={{ color: colorConfig.active }}
+              />
+            )}
           </div>
           <div className="flex flex-col">
             <h3 className="text-[15px] sm:text-base font-semibold text-white tracking-tight leading-snug">
@@ -828,10 +853,15 @@ export function SegmentedProgress({
           role={footerAction || footerHref ? "button" : undefined}
           tabIndex={footerAction || footerHref ? 0 : undefined}
           onClick={footerAction}
+          style={{
+            backgroundColor: colorConfig.badgeBg,
+            borderColor: colorConfig.badgeBorder,
+            color: colorConfig.badgeText,
+          }}
           className={cn(
-            "group relative flex items-center justify-between rounded-xl px-4 py-3 bg-[#0a2014] border border-emerald-500/20 text-emerald-400 transition-colors duration-150",
+            "group relative flex items-center justify-between rounded-xl px-4 py-3 border transition-colors duration-200",
             (footerAction || footerHref) &&
-              "cursor-pointer hover:bg-[#0c2819] hover:border-emerald-500/30",
+              "cursor-pointer hover:brightness-110",
           )}
         >
           {footerHref ? (

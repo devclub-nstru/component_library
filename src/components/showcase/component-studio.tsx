@@ -100,6 +100,7 @@ import { Editor } from "@/registry/ui/editor";
 import { DeleteSelectionShowcase } from "@/registry/ui/delete-selection";
 import { SegmentedProgress } from "@/registry/ui/segmented-progress";
 import { AsciiHoverButton } from "@/registry/ui/ascii-hover-button";
+import { FocusTestimonials } from "@/registry/ui/focus-testimonials";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -385,6 +386,11 @@ const ALL_CATEGORIES = [
         label: "Noise",
         slug: "noise",
         href: "/components/noise",
+      },
+      {
+        label: "Focus Testimonials",
+        slug: "focus-testimonials",
+        href: "/components/focus-testimonials",
       },
     ],
   },
@@ -1559,7 +1565,13 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
       case "segmented-progress":
         return (
           <div className="flex flex-col items-center justify-center w-full h-full min-h-96 select-none p-4 sm:p-8">
-            <SegmentedProgress />
+            <SegmentedProgress color={color} />
+          </div>
+        );
+      case "focus-testimonials":
+        return (
+          <div className="flex w-full items-center justify-center p-4 sm:p-8 select-none">
+            <FocusTestimonials />
           </div>
         );
       case "slider":

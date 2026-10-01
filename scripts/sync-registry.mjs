@@ -33,6 +33,7 @@ const componentTitles = {
   "file-upload": "File Upload",
   "file-dropzone": "File Dropzone",
   "file-tree": "File Tree",
+  "focus-testimonials": "Focus Testimonials",
   "github-activity": "GitHub Activity",
   "glowing-badge": "Glowing Badge",
   "gooey-nav": "Gooey Nav",

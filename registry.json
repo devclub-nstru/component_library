@@ -325,6 +325,25 @@
       ]
     },
     {
+      "name": "focus-testimonials",
+      "type": "registry:ui",
+      "title": "Focus Testimonials",
+      "description": "Fluid paragraph testimonials featuring inline avatars, cursor-tracking spring physics author tooltip, and dynamic selective blur focus on hover.",
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge",
+        "lucide-react"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/focus-testimonials.tsx",
+          "type": "registry:ui",
+          "target": "@ui/focus-testimonials.tsx"
+        }
+      ]
+    },
+    {
       "name": "github-activity",
       "type": "registry:ui",
       "title": "GitHub Activity",

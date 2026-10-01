@@ -15,6 +15,7 @@ import editor from "./editor.json";
 import fileUpload from "./file-upload.json";
 import fileDropzone from "./file-dropzone.json";
 import fileTree from "./file-tree.json";
+import focusTestimonials from "./focus-testimonials.json";
 import githubActivity from "./github-activity.json";
 import glowingBadge from "./glowing-badge.json";
 import gooeyNav from "./gooey-nav.json";
@@ -61,6 +62,7 @@ export {
   fileUpload,
   fileDropzone,
   fileTree,
+  focusTestimonials,
   githubActivity,
   glowingBadge,
   gooeyNav,
@@ -108,6 +110,7 @@ export const componentsList: ComponentRegistryItem[] = [
   fileUpload as ComponentRegistryItem,
   fileDropzone as ComponentRegistryItem,
   fileTree as ComponentRegistryItem,
+  focusTestimonials as ComponentRegistryItem,
   githubActivity as ComponentRegistryItem,
   glowingBadge as ComponentRegistryItem,
   gooeyNav as ComponentRegistryItem,

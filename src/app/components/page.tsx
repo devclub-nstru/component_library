@@ -42,6 +42,7 @@ import { RevealSheet } from "@/registry/ui/reveal-sheet";
 import { Editor } from "@/registry/ui/editor";
 import { ConfirmMorph } from "@/registry/ui/confirm-morph";
 import { SegmentedProgress } from "@/registry/ui/segmented-progress";
+import { FocusTestimonials } from "@/registry/ui/focus-testimonials";
 import { Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -446,6 +447,11 @@ export default function ComponentsPage() {
     "segmented-progress": (
       <div className="w-full flex items-center justify-center p-2 scale-[0.82] sm:scale-90 origin-center">
         <SegmentedProgress className="max-w-xs" />
+      </div>
+    ),
+    "focus-testimonials": (
+      <div className="w-full h-full flex items-center justify-center p-2 scale-[0.62] sm:scale-70 origin-center select-none pointer-events-none">
+        <FocusTestimonials className="p-0" cardClassName="p-0 max-w-sm" />
       </div>
     ),
   };
