@@ -415,6 +415,27 @@
       ]
     },
     {
+      "name": "liquid-media",
+      "type": "registry:ui",
+      "title": "Liquid Media",
+      "description": "Interactive WebGL fluid ripple distortion effect for images and videos with responsive cursor displacement.",
+      "dependencies": [
+        "three",
+        "@types/three",
+        "@react-three/fiber",
+        "@react-three/drei",
+        "@react-three/postprocessing",
+        "motion"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/liquid-media.tsx",
+          "type": "registry:ui",
+          "target": "@ui/liquid-media.tsx"
+        }
+      ]
+    },
+    {
       "name": "liquid-toggle",
       "type": "registry:ui",
       "title": "Liquid Toggle",

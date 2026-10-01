@@ -74,7 +74,6 @@ export const CandyButton = React.forwardRef<
     },
     ref,
   ) => {
-    const Component = (as || (props.href ? "a" : "button")) as React.ElementType;
     const isCustom = Boolean(color);
 
     const customStyle: React.CSSProperties = isCustom
@@ -88,25 +87,16 @@ export const CandyButton = React.forwardRef<
         }
       : (style ?? {});
 
-    const buttonProps =
-      Component === "button"
-        ? { disabled }
-        : { "aria-disabled": disabled, role: "button" };
+    const commonClass = cn(
+      "relative inline-flex items-center justify-center font-medium leading-none tracking-[0.01em] select-none overflow-hidden cursor-pointer transition-all duration-200 ease-out active:scale-[0.98] active:brightness-95 hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-black disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed",
+      "after:absolute after:top-0 after:left-[15%] after:right-[15%] after:h-px after:bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.55),transparent)] after:pointer-events-none",
+      !isCustom && variantStyles[variant],
+      sizeStyles[size],
+      className,
+    );
 
-    return (
-      <Component
-        ref={ref}
-        {...buttonProps}
-        style={customStyle}
-        className={cn(
-          "relative inline-flex items-center justify-center font-medium leading-none tracking-[0.01em] select-none overflow-hidden cursor-pointer transition-all duration-200 ease-out active:scale-[0.98] active:brightness-95 hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-black disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed",
-          "after:absolute after:top-0 after:left-[15%] after:right-[15%] after:h-px after:bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.55),transparent)] after:pointer-events-none",
-          !isCustom && variantStyles[variant],
-          sizeStyles[size],
-          className,
-        )}
-        {...props}
-      >
+    const innerContent = (
+      <>
         {glassSheen && (
           <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-[inherit] bg-[linear-gradient(180deg,rgba(255,255,255,0.12)_0%,transparent_100%)] pointer-events-none" />
         )}
@@ -115,7 +105,37 @@ export const CandyButton = React.forwardRef<
           {children}
           {rightIcon && <span className="shrink-0">{rightIcon}</span>}
         </span>
-      </Component>
+      </>
+    );
+
+    if (as === "a" || props.href) {
+      return (
+        <a
+          ref={ref as React.Ref<HTMLAnchorElement>}
+          href={props.href}
+          target={props.target}
+          rel={props.rel}
+          style={customStyle}
+          className={commonClass}
+          aria-disabled={disabled}
+          role="button"
+          {...(props as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
+        >
+          {innerContent}
+        </a>
+      );
+    }
+
+    return (
+      <button
+        ref={ref as React.Ref<HTMLButtonElement>}
+        disabled={disabled}
+        style={customStyle}
+        className={commonClass}
+        {...props}
+      >
+        {innerContent}
+      </button>
     );
   },
 );

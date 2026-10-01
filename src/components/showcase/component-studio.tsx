@@ -101,8 +101,17 @@ import { DeleteSelectionShowcase } from "@/registry/ui/delete-selection";
 import { SegmentedProgress } from "@/registry/ui/segmented-progress";
 import { AsciiHoverButton } from "@/registry/ui/ascii-hover-button";
 import { FocusTestimonials } from "@/registry/ui/focus-testimonials";
+import {
+  LiquidMediaShowcase,
+  LIQUID_MEDIA_PRESETS,
+  LIQUID_MEDIA_IMAGES,
+  type LiquidMediaPreset,
+  type LiquidMediaPresetId,
+  type LiquidMediaImageId,
+} from "@/registry/ui/liquid-media";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { CustomizationDock } from "./customization-dock";
 
 type InstallTool = "npx" | "pnpm" | "bun" | "shadcn";
 
@@ -391,6 +400,11 @@ const ALL_CATEGORIES = [
         label: "Focus Testimonials",
         slug: "focus-testimonials",
         href: "/components/focus-testimonials",
+      },
+      {
+        label: "Liquid Media",
+        slug: "liquid-media",
+        href: "/components/liquid-media",
       },
     ],
   },
@@ -888,10 +902,10 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
   const [fileDropzoneKey, setFileDropzoneKey] = useState(0);
   const [hookDemoIndex, setHookDemoIndex] = useState(0);
   const [counterDemoValue, setCounterDemoValue] = useState(122337);
-  const [editorDemoContent, setEditorDemoContent] = useState(
+  const [editorDemoContent, _setEditorDemoContent] = useState(
     "DevClub UI components are engineered with mathematical spring physics, subpixel alignment, and hardware-accelerated GPU animations. Try selecting any portion of this paragraph to trigger the contextual floating toolbar: you can toggle formatting like bold, italic, and code, or click 'Ask AI' to stream a real-time AI response with staged reasoning.",
   );
-  const [editorDemoAnswer, setEditorDemoAnswer] = useState(
+  const [editorDemoAnswer, _setEditorDemoAnswer] = useState(
     "DevClub UI Selection AI Editor integrates seamless text formatting, an interactive thinking orb, multi-stage context retrieval, and word-by-word streaming.",
   );
   const [revealSheetOpen, setRevealSheetOpen] = useState(false);
@@ -976,6 +990,53 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     setLiquidSize("md");
     setLiquidColor("monochrome");
     setLiquidViscosity("fluid");
+  };
+
+  const [liquidMediaConfig, setLiquidMediaConfig] = useState<{
+    preset: LiquidMediaPresetId;
+    intensity: number;
+    radius: number;
+    expandRate: number;
+    decayRate: number;
+    image: LiquidMediaImageId;
+    caption: string;
+    showCaption: boolean;
+    webglEnabled: boolean;
+  }>({
+    preset: "glass",
+    intensity: 0.22,
+    radius: 12,
+    expandRate: 11,
+    decayRate: 3.0,
+    image: "portrait",
+    caption: "Hover anywhere!",
+    showCaption: true,
+    webglEnabled: true,
+  });
+
+  const resetLiquidMediaConfig = () => {
+    setLiquidMediaConfig({
+      preset: "glass",
+      intensity: 0.22,
+      radius: 12,
+      expandRate: 11,
+      decayRate: 3.0,
+      image: "portrait",
+      caption: "Hover anywhere!",
+      showCaption: true,
+      webglEnabled: true,
+    });
+  };
+
+  const applyLiquidMediaPreset = (preset: LiquidMediaPreset) => {
+    setLiquidMediaConfig((prev) => ({
+      ...prev,
+      preset: preset.id,
+      intensity: preset.intensity,
+      radius: preset.radius,
+      expandRate: preset.expandRate,
+      decayRate: preset.decayRate,
+    }));
   };
 
   const [macSliderVal, setMacSliderVal] = useState(45);
@@ -1574,6 +1635,25 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
             <FocusTestimonials />
           </div>
         );
+      case "liquid-media": {
+        const activeImg = LIQUID_MEDIA_IMAGES[liquidMediaConfig.image];
+        return (
+          <div className="flex w-full items-center justify-center p-4 sm:p-8 select-none">
+            <LiquidMediaShowcase
+              key={`${liquidMediaConfig.image}-${liquidMediaConfig.webglEnabled}`}
+              src={activeImg.src}
+              caption={
+                liquidMediaConfig.showCaption ? liquidMediaConfig.caption : ""
+              }
+              intensity={liquidMediaConfig.intensity}
+              radius={liquidMediaConfig.radius}
+              expandRate={liquidMediaConfig.expandRate}
+              decayRate={liquidMediaConfig.decayRate}
+              webglEnabled={liquidMediaConfig.webglEnabled}
+            />
+          </div>
+        );
+      }
       case "slider":
         return (
           <div className="flex flex-col items-center justify-center w-full h-full min-h-96 select-none p-4 sm:p-8">
@@ -3168,7 +3248,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               </AnimatePresence>
             </motion.div>
 
-            <div className="absolute bottom-6 inset-x-0 flex justify-center pointer-events-none z-30">
+            <CustomizationDock key={activeComponent.slug}>
               {supportsColor && activeComponent.slug !== "file-upload" && (
                 <div
                   key="floating-color-palette"
@@ -5208,6 +5288,272 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 </div>
               )}
 
+              {activeComponent.slug === "liquid-media" && (
+                <div
+                  key="liquid-media-customize-panel"
+                  className="pointer-events-auto rounded-2xl border border-border dark:border-white/10 bg-card/95 dark:bg-[#121215]/95 backdrop-blur-2xl p-3.5 shadow-xl dark:shadow-[0_16px_40px_rgba(0,0,0,0.85)] max-w-2xl w-full mx-4 select-none flex flex-col gap-2.5"
+                >
+                  <div className="flex items-center justify-between px-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-semibold text-foreground dark:text-white/90 tracking-tight">
+                        Liquid Distortion Physics
+                      </span>
+                      <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-muted text-muted-foreground dark:bg-white/10 dark:text-zinc-300">
+                        {liquidMediaConfig.preset === "custom"
+                          ? "Custom"
+                          : LIQUID_MEDIA_PRESETS.find(
+                              (p) => p.id === liquidMediaConfig.preset,
+                            )?.label || "Custom"}
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={resetLiquidMediaConfig}
+                      className="text-[11px] text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                    >
+                      <ResetIcon className="w-3.5 h-3.5" />
+                      <span>Reset</span>
+                    </button>
+                  </div>
+
+                  <div className="rounded-xl border border-border dark:border-white/5 bg-muted/40 dark:bg-[#0b0b0e] p-2 flex flex-col gap-2.5">
+                    <div className="flex items-center gap-1 bg-muted/80 dark:bg-[#17171b] p-1 rounded-xl border border-border dark:border-white/5 w-full">
+                      {LIQUID_MEDIA_PRESETS.map((preset) => {
+                        const isActive = liquidMediaConfig.preset === preset.id;
+                        return (
+                          <button
+                            key={preset.id}
+                            type="button"
+                            onClick={() => applyLiquidMediaPreset(preset)}
+                            className={cn(
+                              "relative flex-1 h-7.5 px-2 rounded-lg text-xs flex items-center justify-center transition-colors cursor-pointer select-none",
+                              isActive
+                                ? "text-background font-semibold dark:text-black"
+                                : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
+                            )}
+                          >
+                            {isActive && (
+                              <motion.div
+                                layoutId="activeLiquidPresetIndicator"
+                                transition={{
+                                  type: "spring",
+                                  stiffness: 450,
+                                  damping: 32,
+                                }}
+                                className="absolute inset-0 bg-foreground dark:bg-white rounded-lg shadow-xs"
+                              />
+                            )}
+                            <span className="relative z-10 truncate">
+                              {preset.label}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      <div className="rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] p-2.5 flex flex-col gap-1.5 text-xs">
+                        <div className="flex items-center justify-between">
+                          <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium">
+                            Distortion Intensity
+                          </span>
+                          <span className="font-mono text-[11px] font-semibold text-foreground dark:text-zinc-200">
+                            {liquidMediaConfig.intensity.toFixed(2)}
+                          </span>
+                        </div>
+                        <input
+                          type="range"
+                          min="0.05"
+                          max="0.80"
+                          step="0.01"
+                          value={liquidMediaConfig.intensity}
+                          onChange={(e) =>
+                            setLiquidMediaConfig((prev) => ({
+                              ...prev,
+                              preset: "custom",
+                              intensity: Number(e.target.value),
+                            }))
+                          }
+                          className="w-full h-1.5 rounded-lg appearance-none cursor-pointer bg-muted dark:bg-white/10 accent-foreground dark:accent-white"
+                        />
+                      </div>
+
+                      <div className="rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] p-2.5 flex flex-col gap-1.5 text-xs">
+                        <div className="flex items-center justify-between">
+                          <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium">
+                            Ripple Radius
+                          </span>
+                          <span className="font-mono text-[11px] font-semibold text-foreground dark:text-zinc-200">
+                            {liquidMediaConfig.radius}
+                          </span>
+                        </div>
+                        <input
+                          type="range"
+                          min="5"
+                          max="30"
+                          step="1"
+                          value={liquidMediaConfig.radius}
+                          onChange={(e) =>
+                            setLiquidMediaConfig((prev) => ({
+                              ...prev,
+                              preset: "custom",
+                              radius: Number(e.target.value),
+                            }))
+                          }
+                          className="w-full h-1.5 rounded-lg appearance-none cursor-pointer bg-muted dark:bg-white/10 accent-foreground dark:accent-white"
+                        />
+                      </div>
+
+                      <div className="rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] p-2.5 flex flex-col gap-1.5 text-xs">
+                        <div className="flex items-center justify-between">
+                          <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium">
+                            Expansion Speed
+                          </span>
+                          <span className="font-mono text-[11px] font-semibold text-foreground dark:text-zinc-200">
+                            {liquidMediaConfig.expandRate}×
+                          </span>
+                        </div>
+                        <input
+                          type="range"
+                          min="4"
+                          max="25"
+                          step="1"
+                          value={liquidMediaConfig.expandRate}
+                          onChange={(e) =>
+                            setLiquidMediaConfig((prev) => ({
+                              ...prev,
+                              preset: "custom",
+                              expandRate: Number(e.target.value),
+                            }))
+                          }
+                          className="w-full h-1.5 rounded-lg appearance-none cursor-pointer bg-muted dark:bg-white/10 accent-foreground dark:accent-white"
+                        />
+                      </div>
+
+                      <div className="rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] p-2.5 flex flex-col gap-1.5 text-xs">
+                        <div className="flex items-center justify-between">
+                          <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium">
+                            Dissipation Decay
+                          </span>
+                          <span className="font-mono text-[11px] font-semibold text-foreground dark:text-zinc-200">
+                            {liquidMediaConfig.decayRate.toFixed(1)}
+                          </span>
+                        </div>
+                        <input
+                          type="range"
+                          min="1.0"
+                          max="8.0"
+                          step="0.2"
+                          value={liquidMediaConfig.decayRate}
+                          onChange={(e) =>
+                            setLiquidMediaConfig((prev) => ({
+                              ...prev,
+                              preset: "custom",
+                              decayRate: Number(e.target.value),
+                            }))
+                          }
+                          className="w-full h-1.5 rounded-lg appearance-none cursor-pointer bg-muted dark:bg-white/10 accent-foreground dark:accent-white"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 border-t border-border dark:border-white/5">
+                      <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                        <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
+                          Image
+                        </span>
+                        <div className="flex items-center gap-0.5 bg-muted/80 dark:bg-black/25 p-0.5 rounded-md border border-border dark:border-white/5">
+                          {(["portrait", "architecture", "ocean"] as const).map(
+                            (imgKey) => {
+                              const isActive =
+                                liquidMediaConfig.image === imgKey;
+                              return (
+                                <button
+                                  key={imgKey}
+                                  type="button"
+                                  onClick={() =>
+                                    setLiquidMediaConfig((prev) => ({
+                                      ...prev,
+                                      image: imgKey,
+                                      caption:
+                                        LIQUID_MEDIA_IMAGES[imgKey].caption,
+                                    }))
+                                  }
+                                  className={cn(
+                                    "relative px-2 py-0.5 rounded text-[11px] capitalize transition-colors cursor-pointer select-none",
+                                    isActive
+                                      ? "text-background font-semibold dark:text-black"
+                                      : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
+                                  )}
+                                >
+                                  {isActive && (
+                                    <motion.div
+                                      layoutId="activeLiquidImageIndicator"
+                                      transition={{
+                                        type: "spring",
+                                        stiffness: 450,
+                                        damping: 32,
+                                      }}
+                                      className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
+                                    />
+                                  )}
+                                  <span className="relative z-10">
+                                    {imgKey}
+                                  </span>
+                                </button>
+                              );
+                            },
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3 flex items-center justify-between text-xs">
+                        <span className="text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
+                          Display
+                        </span>
+                        <div className="flex items-center gap-1.5">
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setLiquidMediaConfig((prev) => ({
+                                ...prev,
+                                showCaption: !prev.showCaption,
+                              }))
+                            }
+                            className={cn(
+                              "px-2 py-0.5 rounded text-[11px] font-medium border transition-colors cursor-pointer",
+                              liquidMediaConfig.showCaption
+                                ? "bg-foreground text-background border-foreground dark:bg-white dark:text-black dark:border-white"
+                                : "bg-muted/80 text-muted-foreground border-border dark:border-white/10 dark:text-zinc-400",
+                            )}
+                          >
+                            Caption
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setLiquidMediaConfig((prev) => ({
+                                ...prev,
+                                webglEnabled: !prev.webglEnabled,
+                              }))
+                            }
+                            className={cn(
+                              "px-2 py-0.5 rounded text-[11px] font-medium border transition-colors cursor-pointer",
+                              liquidMediaConfig.webglEnabled
+                                ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30"
+                                : "bg-muted/80 text-muted-foreground border-border dark:border-white/10 dark:text-zinc-400",
+                            )}
+                          >
+                            WebGL{" "}
+                            {liquidMediaConfig.webglEnabled ? "ON" : "OFF"}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {activeComponent.slug === "liquid-toggle" && (
                 <div
                   key="liquid-toggle-customize-panel"
@@ -6021,7 +6367,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   </div>
                 </div>
               )}
-            </div>
+            </CustomizationDock>
           </div>
 
           <AnimatePresence>

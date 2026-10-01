@@ -20,6 +20,7 @@ import githubActivity from "./github-activity.json";
 import glowingBadge from "./glowing-badge.json";
 import gooeyNav from "./gooey-nav.json";
 import hookSidebar from "./hook-sidebar.json";
+import liquidMedia from "./liquid-media.json";
 import liquidToggle from "./liquid-toggle.json";
 import macSlider from "./mac-slider.json";
 import macSwitch from "./mac-switch.json";
@@ -67,6 +68,7 @@ export {
   glowingBadge,
   gooeyNav,
   hookSidebar,
+  liquidMedia,
   liquidToggle,
   macSlider,
   macSwitch,
@@ -115,6 +117,7 @@ export const componentsList: ComponentRegistryItem[] = [
   glowingBadge as ComponentRegistryItem,
   gooeyNav as ComponentRegistryItem,
   hookSidebar as ComponentRegistryItem,
+  liquidMedia as ComponentRegistryItem,
   liquidToggle as ComponentRegistryItem,
   macSlider as ComponentRegistryItem,
   macSwitch as ComponentRegistryItem,

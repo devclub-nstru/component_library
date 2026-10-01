@@ -38,6 +38,7 @@ const componentTitles = {
   "glowing-badge": "Glowing Badge",
   "gooey-nav": "Gooey Nav",
   "hook-sidebar": "Hook Sidebar",
+  "liquid-media": "Liquid Media",
   "liquid-toggle": "Liquid Toggle",
   "mac-slider": "Mac Slider",
   "mac-switch": "Mac Switch",

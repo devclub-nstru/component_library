@@ -43,6 +43,7 @@ import { Editor } from "@/registry/ui/editor";
 import { ConfirmMorph } from "@/registry/ui/confirm-morph";
 import { SegmentedProgress } from "@/registry/ui/segmented-progress";
 import { FocusTestimonials } from "@/registry/ui/focus-testimonials";
+import { LiquidMediaShowcase } from "@/registry/ui/liquid-media";
 import { Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -452,6 +453,11 @@ export default function ComponentsPage() {
     "focus-testimonials": (
       <div className="w-full h-full flex items-center justify-center p-2 scale-[0.62] sm:scale-70 origin-center select-none pointer-events-none">
         <FocusTestimonials className="p-0" cardClassName="p-0 max-w-sm" />
+      </div>
+    ),
+    "liquid-media": (
+      <div className="w-full h-full flex items-center justify-center p-2 scale-90 sm:scale-95 origin-center select-none pointer-events-none">
+        <LiquidMediaShowcase className="max-w-xs shadow-none border-0" />
       </div>
     ),
   };

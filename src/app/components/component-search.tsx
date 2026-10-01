@@ -41,8 +41,8 @@ function SearchPanel({
   query,
   onQueryChange,
   recommendations,
-  matchCount,
-  totalCount,
+  matchCount: _matchCount,
+  totalCount: _totalCount,
 }: SearchPanelProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);

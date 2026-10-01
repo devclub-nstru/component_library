@@ -21,6 +21,7 @@ import {
   glowingBadge,
   gooeyNav,
   hookSidebar,
+  liquidMedia,
   liquidToggle,
   macSlider,
   macSwitch,
@@ -93,6 +94,7 @@ export const COMPONENT_REGISTRY: Record<string, ComponentRegistryItem> = {
   "date-range-picker": dateRangePicker as ComponentRegistryItem,
   "segmented-progress": segmentedProgress as ComponentRegistryItem,
   "focus-testimonials": focusTestimonials as ComponentRegistryItem,
+  "liquid-media": liquidMedia as ComponentRegistryItem,
 };
 
 export const getAllComponents = (
@@ -111,6 +113,9 @@ export const getComponentBySlug = (
     COMPONENT_REGISTRY[slug] ||
     (slug === "ascii-text-hover" || slug === "text-hover" || slug === "ascii-button"
       ? COMPONENT_REGISTRY["ascii-hover-button"]
+      : undefined) ||
+    (slug === "liquid-image" || slug === "liquid-video" || slug === "liquid"
+      ? COMPONENT_REGISTRY["liquid-media"]
       : undefined) ||
     (slug === "testimonials"
       ? COMPONENT_REGISTRY["focus-testimonials"]

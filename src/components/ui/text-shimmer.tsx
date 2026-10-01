@@ -21,12 +21,14 @@ export function TextShimmer({
   const reduceMotion = useReducedMotion();
 
   if (reduceMotion) {
+    const Comp = Component as React.ComponentType<{
+      className?: string;
+      children?: React.ReactNode;
+    }>;
     return (
-      <Component
-        className={cn("inline-block text-muted-foreground", className)}
-      >
+      <Comp className={cn("inline-block text-muted-foreground", className)}>
         {children}
-      </Component>
+      </Comp>
     );
   }
 
