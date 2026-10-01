@@ -4,6 +4,7 @@ import {
   aiInput,
   aiOrb,
   animatedButton,
+  asciiHoverButton,
   animatedCounter,
   bentoGrid,
   candyButton,
@@ -51,6 +52,7 @@ export const COMPONENT_REGISTRY: Record<string, ComponentRegistryItem> = {
   editor: editor as ComponentRegistryItem,
   scales: scales as ComponentRegistryItem,
   "animated-button": animatedButton as ComponentRegistryItem,
+  "ascii-hover-button": asciiHoverButton as ComponentRegistryItem,
   "reveal-sheet": revealSheet as ComponentRegistryItem,
   "spotlight-card": spotlightCard as ComponentRegistryItem,
   dither: dither as ComponentRegistryItem,
@@ -105,6 +107,9 @@ export const getComponentBySlug = (
 ): ComponentRegistryItem | undefined => {
   const item =
     COMPONENT_REGISTRY[slug] ||
+    (slug === "ascii-text-hover" || slug === "text-hover" || slug === "ascii-button"
+      ? COMPONENT_REGISTRY["ascii-hover-button"]
+      : undefined) ||
     (slug === "morph-selection"
       ? COMPONENT_REGISTRY["confirm-morph"]
       : undefined) ||

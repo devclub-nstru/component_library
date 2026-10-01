@@ -10,6 +10,7 @@ import { HorizontalScale, Lines } from "@/registry/ui/scales";
 import { SparkleButton } from "@/registry/ui/sparkle-button";
 import { CandyButton } from "@/registry/ui/candy-button";
 import { AnimatedButton } from "@/registry/ui/animated-button";
+import { AsciiHoverButton } from "@/registry/ui/ascii-hover-button";
 import { SpotlightCard } from "@/registry/ui/spotlight-card";
 import { PixelCard } from "@/registry/ui/pixel-card";
 import { HookSidebar } from "@/registry/ui/hook-sidebar";
@@ -172,6 +173,11 @@ export default function ComponentsPage() {
           Primary Action
         </AnimatedButton>
         <AnimatedButton variant="shimmer">Shimmer Effect</AnimatedButton>
+      </div>
+    ),
+    "ascii-hover-button": (
+      <div className="flex flex-col items-center gap-3 select-none">
+        <AsciiHoverButton text="1M" variant="segmented" active size="default" />
       </div>
     ),
     "spotlight-card": (

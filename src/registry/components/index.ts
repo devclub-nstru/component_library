@@ -3,6 +3,7 @@ import accordion from "./accordion.json";
 import aiInput from "./ai-input.json";
 import aiOrb from "./ai-orb.json";
 import animatedButton from "./animated-button.json";
+import asciiHoverButton from "./ascii-hover-button.json";
 import animatedCounter from "./animated-counter.json";
 import bentoGrid from "./bento-grid.json";
 import candyButton from "./candy-button.json";
@@ -48,6 +49,7 @@ export {
   aiInput,
   aiOrb,
   animatedButton,
+  asciiHoverButton,
   animatedCounter,
   bentoGrid,
   candyButton,
@@ -94,6 +96,7 @@ export const componentsList: ComponentRegistryItem[] = [
   aiInput as ComponentRegistryItem,
   aiOrb as ComponentRegistryItem,
   animatedButton as ComponentRegistryItem,
+  asciiHoverButton as ComponentRegistryItem,
   animatedCounter as ComponentRegistryItem,
   bentoGrid as ComponentRegistryItem,
   candyButton as ComponentRegistryItem,

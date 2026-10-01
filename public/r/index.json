@@ -93,6 +93,26 @@
       ]
     },
     {
+      "name": "ascii-hover-button",
+      "type": "registry:ui",
+      "title": "ASCII Hover Button",
+      "description": "Interactive button and segmented pill control featuring smooth color transitions and real-time ASCII cipher character scramble glitch on hover.",
+      "dependencies": [
+        "gsap",
+        "@gsap/react",
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/ascii-hover-button.tsx",
+          "type": "registry:ui",
+          "target": "@ui/ascii-hover-button.tsx"
+        }
+      ]
+    },
+    {
       "name": "bento-grid",
       "type": "registry:ui",
       "title": "Bento Grid",

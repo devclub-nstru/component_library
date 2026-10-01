@@ -99,6 +99,7 @@ import { RevealSheet, type RevealSheetSide } from "@/registry/ui/reveal-sheet";
 import { Editor } from "@/registry/ui/editor";
 import { DeleteSelectionShowcase } from "@/registry/ui/delete-selection";
 import { SegmentedProgress } from "@/registry/ui/segmented-progress";
+import { AsciiHoverButton } from "@/registry/ui/ascii-hover-button";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -214,6 +215,11 @@ const ALL_CATEGORIES = [
         label: "Sparkle Button",
         slug: "sparkle-button",
         href: "/components/sparkle-button",
+      },
+      {
+        label: "ASCII Hover Button",
+        slug: "ascii-hover-button",
+        href: "/components/ascii-hover-button",
       },
       {
         label: "Confirm Morph",
@@ -1393,7 +1399,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 },
                 {
                   id: "sample-2",
-                  name: "Love.pdf",
+                  name: "Hehe.pdf",
                   size: 2.4 * 1024 * 1024,
                   status: "uploaded",
                 },
@@ -1832,6 +1838,40 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
             </div>
           </div>
         );
+
+      case "ascii-hover-button":
+        return (
+          <div className="flex flex-col items-center justify-center select-none max-w-xl w-full p-4 sm:p-8">
+            <div className="flex flex-wrap items-center justify-center gap-4">
+              <AsciiHoverButton
+                text="1M"
+                variant="segmented"
+                active
+                color={color}
+                size="default"
+              />
+              <AsciiHoverButton
+                text="Deploy Project"
+                variant="card"
+                color={color}
+                size="default"
+              />
+              <AsciiHoverButton
+                text="Terminal Access"
+                variant="outline"
+                color={color}
+                size="default"
+              />
+              <AsciiHoverButton
+                text="View Docs"
+                variant="ghost"
+                color={color}
+                size="default"
+              />
+            </div>
+          </div>
+        );
+
       case "github-activity":
         return <GitHubActivity />;
       case "hook-sidebar":

@@ -21,6 +21,7 @@ const componentTitles = {
   "ai-input": "AI Input",
   "ai-orb": "AI Orb",
   "animated-button": "Animated Button",
+  "ascii-hover-button": "ASCII Hover Button",
   "animated-counter": "Animated Counter",
   "bento-grid": "Bento Grid",
   "candy-button": "Candy Button",
