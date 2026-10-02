@@ -23,6 +23,7 @@ import gooeyNav from "./gooey-nav.json";
 import hookSidebar from "./hook-sidebar.json";
 import liquidMedia from "./liquid-media.json";
 import liquidToggle from "./liquid-toggle.json";
+import loader from "./loader.json";
 import macSlider from "./mac-slider.json";
 import macSwitch from "./mac-switch.json";
 import slider from "./slider.json";
@@ -76,6 +77,7 @@ export {
   hookSidebar,
   liquidMedia,
   liquidToggle,
+  loader,
   macSlider,
   macSwitch,
   morphSearch,
@@ -130,6 +132,7 @@ export const componentsList: ComponentRegistryItem[] = [
   hookSidebar as ComponentRegistryItem,
   liquidMedia as ComponentRegistryItem,
   liquidToggle as ComponentRegistryItem,
+  loader as ComponentRegistryItem,
   macSlider as ComponentRegistryItem,
   macSwitch as ComponentRegistryItem,
   morphSearch as ComponentRegistryItem,

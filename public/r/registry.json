@@ -472,6 +472,25 @@
       ]
     },
     {
+      "name": "loader",
+      "type": "registry:ui",
+      "title": "Loader",
+      "description": "A cinematic loader with a traveling numeric counter and a smooth staggered curtain reveal.",
+      "dependencies": [
+        "gsap",
+        "@gsap/react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/loader.tsx",
+          "type": "registry:ui",
+          "target": "@ui/loader.tsx"
+        }
+      ]
+    },
+    {
       "name": "mac-slider",
       "type": "registry:ui",
       "title": "Mac Slider",
