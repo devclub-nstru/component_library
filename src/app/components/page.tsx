@@ -27,6 +27,8 @@ import { AiOrb } from "@/registry/ui/ai-orb";
 import { TwitterCard } from "@/registry/ui/twitter-card";
 import { ToasterDemo } from "@/registry/ui/toast";
 import { TaskList } from "@/registry/ui/task-list";
+import { TaskCard } from "@/registry/ui/task-card";
+import { TASK_CARD_DEMO_TASKS } from "@/components/showcase/task-card-demo";
 import { FileUpload } from "@/registry/ui/file-upload";
 import { SearchComposer } from "@/registry/ui/search-input";
 import { MorphSearch } from "@/registry/ui/morph-search";
@@ -49,6 +51,7 @@ import { FlipClock } from "@/registry/ui/flip-clock";
 import OrbitGalleryDemo from "@/components/showcase/orbit-gallery-demo";
 import { ProjectReveal } from "@/registry/ui/project-reveal";
 import { PROJECT_REVEAL_DEMO_ITEMS } from "@/components/showcase/project-reveal-demo";
+import { LoaderDemo } from "@/components/showcase/loader-demo";
 import { Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -106,6 +109,12 @@ export default function ComponentsPage() {
   const [revealSheetOpen, setRevealSheetOpen] = useState(false);
 
   const previewRenderers: Record<string, React.ReactNode> = {
+    loader: <LoaderDemo compact />,
+    "task-card": (
+      <div className="w-full max-w-76 scale-75">
+        <TaskCard {...TASK_CARD_DEMO_TASKS[0]} hoverLift={0} padding={16} />
+      </div>
+    ),
     "flip-clock": (
       <FlipClock
         date="2026-10-02T21:19:00"

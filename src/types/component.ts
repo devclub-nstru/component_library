@@ -3,6 +3,7 @@ export type ComponentCategory =
   | "buttons"
   | "cards"
   | "feedback"
+  | "loaders"
   | "navigation"
   | "display"
   | "inputs"

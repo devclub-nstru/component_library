@@ -70,6 +70,11 @@ export const COMPONENT_CATEGORIES: {
     description: "Notifications, status and step-by-step progress.",
   },
   {
+    value: "loaders",
+    label: "Loaders",
+    description: "Loading sequences and animated content reveals.",
+  },
+  {
     value: "accordion",
     label: "Accordions",
     description: "Expandable sections with carefully tuned motion.",

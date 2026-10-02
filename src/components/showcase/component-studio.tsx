@@ -101,11 +101,17 @@ import {
   FlipClockControls,
   FLIP_CLOCK_DEFAULT_CONFIG,
 } from "./flip-clock-demo";
+import {
+  TaskCardDemo,
+  TaskCardControls,
+  TASK_CARD_DEFAULT_CONFIG,
+} from "./task-card-demo";
 import OrbitGalleryDemo, {
   ORBIT_GALLERY_DEFAULT_CONFIG,
   OrbitGalleryControls,
 } from "./orbit-gallery-demo";
 import { ProjectReveal } from "@/registry/ui/project-reveal";
+import { LoaderDemo, LoaderControls, LOADER_DEFAULT_CONFIG } from "./loader-demo";
 import {
   PROJECT_REVEAL_DEMO_ITEMS,
   PROJECT_REVEAL_DEFAULT_CONFIG,
@@ -1058,6 +1064,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     "DevClub UI Selection AI Editor integrates seamless text formatting, an interactive thinking orb, multi-stage context retrieval, and word-by-word streaming.",
   );
   const [revealSheetOpen, setRevealSheetOpen] = useState(false);
+  const [taskCardConfig, setTaskCardConfig] = useState(TASK_CARD_DEFAULT_CONFIG);
+  const [selectedTaskCard, setSelectedTaskCard] = useState("interface");
   const [flipClockConfig, setFlipClockConfig] = useState({
     ...FLIP_CLOCK_DEFAULT_CONFIG,
   });
@@ -1067,6 +1075,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
   const [projectRevealConfig, setProjectRevealConfig] = useState({
     ...PROJECT_REVEAL_DEFAULT_CONFIG,
   });
+  const [loaderConfig, setLoaderConfig] = useState({ ...LOADER_DEFAULT_CONFIG });
   const [revealSheetConfig, setRevealSheetConfig] = useState<{
     side: RevealSheetSide;
     speed: number;
@@ -1455,6 +1464,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     activeComponent.slug !== "mac-slider" &&
     activeComponent.slug !== "slider" &&
     activeComponent.slug !== "pixel-card" &&
+    activeComponent.slug !== "task-card" &&
     activeComponent.slug !== "orb" &&
     activeComponent.slug !== "theme-toggle" &&
     activeComponent.slug !== "animated-theme-toggler" &&
@@ -1801,12 +1811,21 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
             <FocusTestimonials />
           </div>
         );
+      case "task-card":
+        return (
+          <TaskCardDemo
+            config={taskCardConfig}
+            selectedId={selectedTaskCard}
+          />
+        );
       case "flip-clock":
         return (
           <FlipClockDemo key={flipClockConfig.mode} config={flipClockConfig} />
         );
       case "orbit-gallery":
         return <OrbitGalleryDemo {...orbitGalleryConfig} />;
+      case "loader":
+        return <LoaderDemo config={loaderConfig} />;
       case "project-reveal":
         return (
           <div className="flex w-full max-w-3xl items-center justify-center px-4 py-12 sm:px-10">
@@ -3372,7 +3391,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               (activeComponent.slug === "dither" ||
                 activeComponent.slug === "noise" ||
                 activeComponent.slug === "orbit-gallery" ||
-                activeComponent.slug === "flip-clock") &&
+                activeComponent.slug === "flip-clock" ||
+                activeComponent.slug === "task-card") &&
                 viewport === "desktop"
                 ? "p-0"
                 : "p-6",
@@ -3423,7 +3443,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     activeComponent.slug === "dither" ||
                       activeComponent.slug === "noise" ||
                       activeComponent.slug === "orbit-gallery" ||
-                      activeComponent.slug === "flip-clock"
+                      activeComponent.slug === "flip-clock" ||
+                      activeComponent.slug === "task-card"
                       ? "p-0"
                       : "p-6",
                   )}
@@ -5261,6 +5282,14 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 </div>
               )}
 
+              {activeComponent.slug === "task-card" && (
+                <TaskCardControls
+                  config={taskCardConfig}
+                  onChange={setTaskCardConfig}
+                  selectedId={selectedTaskCard}
+                  onSelect={setSelectedTaskCard}
+                />
+              )}
               {activeComponent.slug === "flip-clock" && (
                 <FlipClockControls
                   config={flipClockConfig}
@@ -5280,6 +5309,10 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   config={projectRevealConfig}
                   onChange={setProjectRevealConfig}
                 />
+              )}
+
+              {activeComponent.slug === "loader" && (
+                <LoaderControls config={loaderConfig} onChange={setLoaderConfig} />
               )}
 
               {activeComponent.slug === "liquid-media" && (
