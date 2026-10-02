@@ -129,10 +129,22 @@ export function ImageLoader({
           };
 
           gsap.set(cards, { autoAlpha: 0, scale: 1 });
+          const sizeCards = context.add("sizeCards", () => {
+            gsap.set(cards, {
+              width: thumbnailSize,
+              height: () => thumbnailSize() / ratio,
+            });
+          }) as () => void;
+          sizeCards();
           gsap.set(frame, {
             autoAlpha: finishedRef.current ? 1 : 0,
             xPercent: -50,
             yPercent: -50,
+            ...(finishedRef.current && {
+              width: "100%",
+              height: "100%",
+              borderRadius: 0,
+            }),
           });
           gsap.set(content, { autoAlpha: finishedRef.current ? 1 : 0, y: 0 });
 
@@ -185,11 +197,15 @@ export function ImageLoader({
             }
 
             timeline
-              .set(frame, {
-                width: thumbnailSize,
-                height: () => thumbnailSize() / ratio,
-                borderRadius: radius,
-              }, `>+=${first ? hold : delay}`)
+              .set(
+                frame,
+                {
+                  width: thumbnailSize,
+                  height: () => thumbnailSize() / ratio,
+                  borderRadius: radius,
+                },
+                `>+=${first ? hold : delay}`,
+              )
               .to(frame, { autoAlpha: 1, duration: transition })
               .to(cards, { autoAlpha: 0, duration: transition }, "<")
               .addLabel("expand")
@@ -240,7 +256,8 @@ export function ImageLoader({
           void Promise.all(ready)
             .then(() =>
               Promise.allSettled(
-                assets.filter((image) => image.naturalWidth > 0)
+                assets
+                  .filter((image) => image.naturalWidth > 0)
                   .map((image) => image.decode()),
               ),
             )
@@ -253,6 +270,7 @@ export function ImageLoader({
             if (nextWidth === previousWidth && nextHeight === previousHeight) return;
             previousWidth = nextWidth;
             previousHeight = nextHeight;
+            sizeCards();
             const timeline = timelineRef.current;
             if (!timeline || finishedRef.current) return;
             const time = timeline.time();

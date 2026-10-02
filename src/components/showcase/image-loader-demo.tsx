@@ -101,15 +101,78 @@ export function ImageLoaderDemo({
 }
 
 const ranges = [
-  { key: "imageDuration", label: "Image hold", min: 0.05, max: 1.5, step: 0.05, unit: "s" },
-  { key: "transitionDuration", label: "Crossfade duration", min: 0.03, max: 0.6, step: 0.01, unit: "s" },
-  { key: "holdDuration", label: "Last image hold", min: 0, max: 3, step: 0.1, unit: "s" },
-  { key: "revealDuration", label: "Expansion duration", min: 0.2, max: 2.5, step: 0.05, unit: "s" },
-  { key: "initialDelay", label: "Start delay", min: 0, max: 1, step: 0.05, unit: "s" },
-  { key: "thumbnailWidth", label: "Thumbnail width", min: 100, max: 400, step: 10, unit: "px" },
-  { key: "thumbnailAspectRatio", label: "Thumbnail ratio", min: 0.75, max: 2.5, step: 0.05, unit: "" },
-  { key: "borderRadius", label: "Corner radius", min: 0, max: 32, step: 1, unit: "px" },
-  { key: "entranceScale", label: "Entrance scale", min: 0.5, max: 1, step: 0.05, unit: "×" },
+  {
+    key: "imageDuration",
+    label: "Image hold",
+    min: 0.05,
+    max: 1.5,
+    step: 0.01,
+    unit: "s",
+  },
+  {
+    key: "transitionDuration",
+    label: "Crossfade duration",
+    min: 0.03,
+    max: 0.6,
+    step: 0.01,
+    unit: "s",
+  },
+  {
+    key: "holdDuration",
+    label: "Last image hold",
+    min: 0,
+    max: 3,
+    step: 0.1,
+    unit: "s",
+  },
+  {
+    key: "revealDuration",
+    label: "Expansion duration",
+    min: 0.2,
+    max: 2.5,
+    step: 0.05,
+    unit: "s",
+  },
+  {
+    key: "initialDelay",
+    label: "Start delay",
+    min: 0,
+    max: 1,
+    step: 0.05,
+    unit: "s",
+  },
+  {
+    key: "thumbnailWidth",
+    label: "Thumbnail width",
+    min: 100,
+    max: 400,
+    step: 10,
+    unit: "px",
+  },
+  {
+    key: "thumbnailAspectRatio",
+    label: "Thumbnail ratio",
+    min: 0.75,
+    max: 2.5,
+    step: 0.05,
+    unit: "",
+  },
+  {
+    key: "borderRadius",
+    label: "Corner radius",
+    min: 0,
+    max: 32,
+    step: 1,
+    unit: "px",
+  },
+  {
+    key: "entranceScale",
+    label: "Entrance scale",
+    min: 0.5,
+    max: 1,
+    step: 0.05,
+    unit: "×",
+  },
 ] as const;
 
 export function ImageLoaderControls({
@@ -138,7 +201,9 @@ export function ImageLoaderControls({
         </button>
       </div>
       <fieldset>
-        <legend className="mb-2 text-xs text-muted-foreground">Expansion easing</legend>
+        <legend className="mb-2 text-xs text-muted-foreground">
+          Expansion easing
+        </legend>
         <SegmentedControl
           options={[
             { value: "power3.inOut", label: "Smooth" },
@@ -172,7 +237,8 @@ export function ImageLoaderControls({
             <span className="flex items-center justify-between gap-3 text-xs text-muted-foreground">
               {label}
               <span className="font-mono text-foreground">
-                {Number(config[key].toFixed(2))}{unit}
+                {Number(config[key].toFixed(2))}
+                {unit}
               </span>
             </span>
             <CustomizationRange
@@ -192,17 +258,24 @@ export function ImageLoaderControls({
         </summary>
         <div className="mt-4 flex flex-col gap-3">
           {config.images.map((image, index) => (
-            <label key={index} className="flex flex-col gap-2 text-xs text-muted-foreground">
+            <label
+              key={index}
+              className="flex flex-col gap-2 text-xs text-muted-foreground"
+            >
               Image {index + 1} URL
               <input
                 type="url"
                 value={image.src}
-                onChange={(event) => onChange({
-                  ...config,
-                  images: config.images.map((item, itemIndex) =>
-                    itemIndex === index ? { ...item, src: event.target.value } : item,
-                  ),
-                })}
+                onChange={(event) =>
+                  onChange({
+                    ...config,
+                    images: config.images.map((item, itemIndex) =>
+                      itemIndex === index
+                        ? { ...item, src: event.target.value }
+                        : item,
+                    ),
+                  })
+                }
                 className="min-h-9 min-w-0 rounded-lg border border-border bg-background px-3 text-xs text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50"
               />
             </label>
@@ -212,15 +285,19 @@ export function ImageLoaderControls({
             <input
               type="url"
               value={config.finalImage.src}
-              onChange={(event) => onChange({
-                ...config,
-                finalImage: { ...config.finalImage, src: event.target.value },
-              })}
+              onChange={(event) =>
+                onChange({
+                  ...config,
+                  finalImage: { ...config.finalImage, src: event.target.value },
+                })
+              }
               className="min-h-9 min-w-0 rounded-lg border border-border bg-background px-3 text-xs text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50"
             />
           </label>
           <fieldset>
-            <legend className="mb-2 text-xs text-muted-foreground">Final image crop</legend>
+            <legend className="mb-2 text-xs text-muted-foreground">
+              Final image crop
+            </legend>
             <SegmentedControl
               options={[
                 { value: "50% 0%", label: "Top" },
@@ -228,10 +305,12 @@ export function ImageLoaderControls({
                 { value: "50% 100%", label: "Bottom" },
               ]}
               value={config.finalImage.objectPosition ?? "50% 45%"}
-              onChange={(objectPosition) => onChange({
-                ...config,
-                finalImage: { ...config.finalImage, objectPosition },
-              })}
+              onChange={(objectPosition) =>
+                onChange({
+                  ...config,
+                  finalImage: { ...config.finalImage, objectPosition },
+                })
+              }
             />
           </fieldset>
         </div>
