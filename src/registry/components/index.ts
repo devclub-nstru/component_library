@@ -27,6 +27,7 @@ import macSwitch from "./mac-switch.json";
 import slider from "./slider.json";
 import morphSearch from "./morph-search.json";
 import noise from "./noise.json";
+import orbitGallery from "./orbit-gallery.json";
 import orb from "./orb.json";
 import otpInput from "./otp-input.json";
 import pixelCard from "./pixel-card.json";
@@ -76,6 +77,7 @@ export {
   macSwitch,
   morphSearch,
   noise,
+  orbitGallery,
   orb,
   otpInput,
   pixelCard,
@@ -127,6 +129,7 @@ export const componentsList: ComponentRegistryItem[] = [
   macSwitch as ComponentRegistryItem,
   morphSearch as ComponentRegistryItem,
   noise as ComponentRegistryItem,
+  orbitGallery as ComponentRegistryItem,
   orb as ComponentRegistryItem,
   otpInput as ComponentRegistryItem,
   pixelCard as ComponentRegistryItem,

@@ -3,7 +3,7 @@
   "name": "Morph Search",
   "description": "Adaptive morphing search bar with cycling placeholder, spring physics, and intent card morphs.",
   "summary": "An ultra-fluid adaptive search bar inspired by Shapeshift. Features a pill-shaped input with continuous cycling placeholders, spring-driven opening and closing morphs, and interactive contextual card transformations for polls, events, checklists, timers, expense splits, and instant search queries.",
-  "category": "ai-stuff",
+  "category": "search",
   "tags": [
     "search",
     "input",

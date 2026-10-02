@@ -3,7 +3,7 @@
   "name": "Liquid Toggle",
   "description": "Organic liquid goo physics switch with fluid meta-ball fusion and spring dynamics.",
   "summary": "An organic switch component driven by damped harmonic spring physics and SVG filter meta-ball fusion. As the toggle is flicked or dragged across its track, a lagging satellite drop stretches, disconnects, and snaps back with velocity-scaled squash and stretch dynamics, evoking authentic fluid surface tension.",
-  "category": "inputs",
+  "category": "sliders-and-toggles",
   "tags": [
     "switch",
     "toggle",

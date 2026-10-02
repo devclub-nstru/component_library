@@ -6,7 +6,7 @@
   "type": "registry:ui",
   "description": "Interactive WebGL fluid ripple distortion effect for images and videos with responsive cursor displacement.",
   "summary": "An Awwwards-grade interactive WebGL media component that responds to cursor movements with fluid ripples and dynamic displacement. Features offscreen FBO sprite splat simulation, damping physics, smooth object-fit texture mapping, and automatic WebGL provider scoping.",
-  "category": "feedback",
+  "category": "galleries-and-media",
   "tags": [
     "liquid",
     "webgl",

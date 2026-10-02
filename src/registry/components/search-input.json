@@ -3,7 +3,7 @@
   "name": "Search Input",
   "description": "Voice-glow powered typing-reactive search composer with animated thinking orbs.",
   "summary": "An ultra-smooth, responsive search composer component inspired by modern AI search interfaces. Integrates voice-glow dynamic border beam lighting driven by keystroke energy decay physics, coupled with thinking-orbs 2D canvas particle loading indicators that transition smoothly between idle breathing and searching states.",
-  "category": "ai-stuff",
+  "category": "search",
   "tags": [
     "search",
     "input",

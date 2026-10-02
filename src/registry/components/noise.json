@@ -3,7 +3,7 @@
   "name": "Noise Background",
   "description": "High-performance procedural grain noise background with CRT static, film dust, vignette, and scanlines.",
   "summary": "An ultra-optimized hardware-accelerated procedural canvas noise generator engineered for cinematic backgrounds and atmosphere. Features sub-pixel pattern tiling via 32-bit Uint32 buffer rendering, 3 distinct procedural grain algorithms (film grain, analog static, and film dust), edge vignette darkening, CRT scanline rasterization, and automatic viewport/container adaptation with IntersectionObserver and reduced-motion support.",
-  "category": "layout",
+  "category": "backgrounds-and-effects",
   "tags": [
     "noise",
     "grain",

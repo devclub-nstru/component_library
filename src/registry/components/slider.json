@@ -6,7 +6,7 @@
   "type": "registry:ui",
   "description": "Precision spring-physics slider and range component with rubber-band resistance, release inertia, odometer rolling numbers, and floating tooltips.",
   "summary": "An ultra-smooth, physics-driven slider and range component with 1:1 pointer tracking, iOS-style rubber band resistance past limits, release momentum projection onto the step grid, rolling digit odometer wheels with motion blur, catch-up spring seek on track clicks, and tactile kick springs.",
-  "category": "sliders",
+  "category": "sliders-and-toggles",
   "tags": [
     "slider",
     "range",

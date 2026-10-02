@@ -3,7 +3,7 @@
   "name": "Reveal Sheet",
   "description": "Directional accessible sheet with a circular reveal, adjustable bounce, and optional edge shine.",
   "summary": "A reusable Radix Dialog sheet that can open from any edge of the viewport. An inward-facing semicircle grows from the midpoint of that edge to reveal the panel, then its free edge pushes outward and springs back.",
-  "category": "layout",
+  "category": "menus",
   "tags": [
     "sheet",
     "drawer",

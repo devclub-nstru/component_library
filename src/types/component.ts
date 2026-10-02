@@ -4,18 +4,16 @@ export type ComponentCategory =
   | "cards"
   | "feedback"
   | "navigation"
-  | "scales"
   | "display"
   | "inputs"
-  | "sliders"
-  | "toggles"
+  | "sliders-and-toggles"
   | "date-and-time"
   | "accordion"
   | "ai-stuff"
-  | "apple-ui"
-  | "menus"
-  | "profile"
-  | "buttons-and-inputs";
+  | "search"
+  | "galleries-and-media"
+  | "backgrounds-and-effects"
+  | "menus";
 
 export interface ComponentProp {
   name: string;

@@ -3,7 +3,7 @@
   "name": "Spotlight Search",
   "description": "Apple-inspired Spotlight search bar with fluid capsule-to-quad-button expansion, staggered harmonic spring physics, and real-time category filtering.",
   "summary": "An ultra-fluid macOS Spotlight search bar component engineered with harmonic spring physics and dynamic layout morphing. At rest, it presents an iconic 480px glass capsule search bar with pulsing caret and dark frosted aesthetics. Upon hover, keyboard focus, or text input, the search capsule smoothly compresses to 248px while seamlessly breaking into four 48px circular action buttons (Applications, Folders, Workspaces, and Documents) with staggered spring kinematics, zero cumulative layout shift (total width fixed at 480px), full keyboard navigation, active category filters, and an interactive search results tray.",
-  "category": "apple-ui",
+  "category": "search",
   "tags": [
     "spotlight",
     "search",

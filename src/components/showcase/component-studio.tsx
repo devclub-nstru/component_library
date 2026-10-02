@@ -96,6 +96,7 @@ import { SpotlightSearch } from "@/registry/ui/spotlight-search";
 import { ProfileMenu } from "@/registry/ui/profile-menu";
 import { DateRangePicker } from "@/registry/ui/date-range-picker";
 import { RevealSheet, type RevealSheetSide } from "@/registry/ui/reveal-sheet";
+import OrbitGalleryDemo, { ORBIT_GALLERY_DEFAULT_CONFIG, OrbitGalleryControls } from "./orbit-gallery-demo";
 import { ProjectReveal } from "@/registry/ui/project-reveal";
 import {
   PROJECT_REVEAL_DEMO_ITEMS,
@@ -118,6 +119,7 @@ import {
 } from "@/registry/ui/liquid-media";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { getComponentCategories, getCategoryLabel } from "@/lib/registry";
 import { CustomizationDock } from "./customization-dock";
 import { SegmentedControl, SegmentedControlGroup } from "./segmented-control";
 import { ColorSwatches, CustomizationRange } from "./customization-controls";
@@ -150,308 +152,14 @@ interface ComponentStudioProps {
   allComponents?: ComponentRegistryItem[];
 }
 
-const ALL_CATEGORIES = [
-  {
-    label: "DISPLAY",
-    items: [
-      { label: "Scales & Borders", slug: "scales", href: "/components/scales" },
-      {
-        label: "Twitter(X) Card",
-        slug: "twitter-card",
-        href: "/components/twitter-card",
-      },
-      {
-        label: "Spotlight Card",
-        slug: "spotlight-card",
-        href: "/components/spotlight-card",
-      },
-      {
-        label: "Pixel Card",
-        slug: "pixel-card",
-        href: "/components/pixel-card",
-      },
-      {
-        label: "GitHub activity",
-        slug: "github-activity",
-        href: "/components/github-activity",
-      },
-      {
-        label: "Animated Counter",
-        slug: "animated-counter",
-        href: "/components/animated-counter",
-      },
-      {
-        label: "Code Block",
-        slug: "code-block",
-        href: "/components/code-block",
-      },
-      {
-        label: "Segmented Progress",
-        slug: "segmented-progress",
-        href: "/components/segmented-progress",
-      },
-    ],
-  },
-  {
-    label: "NAVIGATION",
-    items: [
-      {
-        label: "Hook Sidebar",
-        slug: "hook-sidebar",
-        href: "/components/hook-sidebar",
-      },
-      {
-        label: "Proximity Sidebar",
-        slug: "proximity-sidebar",
-        href: "/components/proximity-sidebar",
-      },
-      {
-        label: "File Tree",
-        slug: "file-tree",
-        href: "/components/file-tree",
-      },
-      {
-        label: "Gooey Nav",
-        slug: "gooey-nav",
-        href: "/components/gooey-nav",
-      },
-    ],
-  },
-  {
-    label: "BUTTONS",
-    items: [
-      {
-        label: "Animated Button",
-        slug: "animated-button",
-        href: "/components/animated-button",
-      },
-      {
-        label: "Candy Button",
-        slug: "candy-button",
-        href: "/components/candy-button",
-      },
-      {
-        label: "Sparkle Button",
-        slug: "sparkle-button",
-        href: "/components/sparkle-button",
-      },
-      {
-        label: "ASCII Hover Button",
-        slug: "ascii-hover-button",
-        href: "/components/ascii-hover-button",
-      },
-      {
-        label: "Confirm Morph",
-        slug: "confirm-morph",
-        href: "/components/confirm-morph",
-      },
-    ],
-  },
-  {
-    label: "INPUTS & FORMS",
-    items: [
-      {
-        label: "OTP Input",
-        slug: "otp-input",
-        href: "/components/otp-input",
-      },
-      {
-        label: "File Upload",
-        slug: "file-upload",
-        href: "/components/file-upload",
-      },
-      {
-        label: "File Dropzone",
-        slug: "file-dropzone",
-        href: "/components/file-dropzone",
-      },
-      {
-        label: "Task List",
-        slug: "task-list",
-        href: "/components/task-list",
-      },
-    ],
-  },
-  {
-    label: "DATE & TIME",
-    items: [
-      {
-        label: "Date Range Picker",
-        slug: "date-range-picker",
-        href: "/components/date-range-picker",
-      },
-    ],
-  },
-  {
-    label: "SLIDERS & TOGGLES",
-    items: [
-      {
-        label: "Slider",
-        slug: "slider",
-        href: "/components/slider",
-      },
-      {
-        label: "Liquid Toggle",
-        slug: "liquid-toggle",
-        href: "/components/liquid-toggle",
-      },
-      {
-        label: "Theme Toggle",
-        slug: "theme-toggle",
-        href: "/components/theme-toggle",
-      },
-    ],
-  },
-  {
-    label: "AI STUFF",
-    items: [
-      {
-        label: "AI Orb",
-        slug: "ai-orb",
-        href: "/components/ai-orb",
-      },
-      {
-        label: "Thinking Orb",
-        slug: "orb",
-        href: "/components/orb",
-      },
-      {
-        label: "Search Input",
-        slug: "search-input",
-        href: "/components/search-input",
-      },
-      {
-        label: "Morph Search",
-        slug: "morph-search",
-        href: "/components/morph-search",
-      },
-      {
-        label: "AI Input",
-        slug: "ai-input",
-        href: "/components/ai-input",
-      },
-      {
-        label: "Selection AI Editor",
-        slug: "editor",
-        href: "/components/editor",
-      },
-    ],
-  },
-  {
-    label: "ACCORDIONS",
-    items: [
-      {
-        label: "Dotted Accordion",
-        slug: "dotted-accordion",
-        href: "/components/dotted-accordion",
-      },
-      {
-        label: "Blur Reveal Accordion",
-        slug: "accordion",
-        href: "/components/accordion",
-      },
-      {
-        label: "Smooth Accordion",
-        slug: "smooth-accordion",
-        href: "/components/smooth-accordion",
-      },
-    ],
-  },
-  {
-    label: "APPLE UI",
-    items: [
-      {
-        label: "Mac Slider",
-        slug: "mac-slider",
-        href: "/components/mac-slider",
-      },
-      {
-        label: "Mac Switch",
-        slug: "mac-switch",
-        href: "/components/mac-switch",
-      },
-      {
-        label: "Spotlight Search",
-        slug: "spotlight-search",
-        href: "/components/spotlight-search",
-      },
-    ],
-  },
-  {
-    label: "LAYOUT & FEEDBACK",
-    items: [
-      {
-        label: "Stepper",
-        slug: "stepper",
-        href: "/components/stepper",
-      },
-
-      {
-        label: "Bento Grid",
-        slug: "bento-grid",
-        href: "/components/bento-grid",
-      },
-      {
-        label: "Status Badge",
-        slug: "glowing-badge",
-        href: "/components/glowing-badge",
-      },
-      {
-        label: "Toast",
-        slug: "toast",
-        href: "/components/toast",
-      },
-      {
-        label: "Dither",
-        slug: "dither",
-        href: "/components/dither",
-      },
-      {
-        label: "Noise",
-        slug: "noise",
-        href: "/components/noise",
-      },
-      {
-        label: "Focus Testimonials",
-        slug: "focus-testimonials",
-        href: "/components/focus-testimonials",
-      },
-      {
-        label: "Liquid Media",
-        slug: "liquid-media",
-        href: "/components/liquid-media",
-      },
-      {
-        label: "Project Reveal",
-        slug: "project-reveal",
-        href: "/components/project-reveal",
-      },
-    ],
-  },
-  {
-    label: "PROFILE & MENUS",
-    items: [
-      {
-        label: "Profile Menu",
-        slug: "profile-menu",
-        href: "/components/profile-menu",
-      },
-      {
-        label: "Reveal Sheet",
-        slug: "reveal-sheet",
-        href: "/components/reveal-sheet",
-      },
-    ],
-  },
-];
-
-const CATEGORIES = ALL_CATEGORIES.map((cat) => ({
-  ...cat,
-  items: cat.items.filter((item) => {
-    const comp = getComponentBySlug(item.slug);
-    return Boolean(comp && !comp.hidden);
-  }),
-})).filter((cat) => cat.items.length > 0);
+const CATEGORIES = getComponentCategories().map((category) => ({
+  label: category.label.toUpperCase(),
+  items: category.items.map((item) => ({
+    label: item.name,
+    slug: item.slug,
+    href: `/components/${item.slug}`,
+  })),
+}));
 
 const GOOEY_DEMO_ITEMS: GooeyNavItem[] = [
   { label: "Overview", icon: <LayersIcon className="w-3.5 h-3.5" /> },
@@ -1342,6 +1050,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     "DevClub UI Selection AI Editor integrates seamless text formatting, an interactive thinking orb, multi-stage context retrieval, and word-by-word streaming.",
   );
   const [revealSheetOpen, setRevealSheetOpen] = useState(false);
+  const [orbitGalleryConfig, setOrbitGalleryConfig] = useState({ ...ORBIT_GALLERY_DEFAULT_CONFIG });
   const [projectRevealConfig, setProjectRevealConfig] = useState({
     ...PROJECT_REVEAL_DEFAULT_CONFIG,
   });
@@ -2079,6 +1788,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
             <FocusTestimonials />
           </div>
         );
+      case "orbit-gallery":
+        return <OrbitGalleryDemo {...orbitGalleryConfig} />;
       case "project-reveal":
         return (
           <div className="flex w-full max-w-3xl items-center justify-center px-4 py-12 sm:px-10">
@@ -3283,7 +2994,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 href="/components"
                 className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors shrink-0"
               >
-                {activeComponent.category.replace("-", " ")}
+                {getCategoryLabel(activeComponent.category)}
               </Link>
               <span className="text-border shrink-0">/</span>
               <span className="text-xs font-sans font-medium text-foreground tracking-tight truncate">
@@ -3642,7 +3353,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
             className={cn(
               "flex-1 flex items-center justify-center overflow-hidden relative",
               (activeComponent.slug === "dither" ||
-                activeComponent.slug === "noise") &&
+                activeComponent.slug === "noise" ||
+                activeComponent.slug === "orbit-gallery") &&
                 viewport === "desktop"
                 ? "p-0"
                 : "p-6",
@@ -3691,7 +3403,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   className={cn(
                     "w-full h-full flex items-center justify-center overflow-auto",
                     activeComponent.slug === "dither" ||
-                      activeComponent.slug === "noise"
+                      activeComponent.slug === "noise" ||
+                      activeComponent.slug === "orbit-gallery"
                       ? "p-0"
                       : "p-6",
                   )}
@@ -5529,6 +5242,10 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 </div>
               )}
 
+              {activeComponent.slug === "orbit-gallery" && (
+                <OrbitGalleryControls config={orbitGalleryConfig} onChange={setOrbitGalleryConfig} />
+              )}
+
               {activeComponent.slug === "project-reveal" && (
                 <ProjectRevealControls
                   config={projectRevealConfig}
@@ -6599,7 +6316,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         {activeComponent.slug.replace("-", " ")}
                       </span>
                       <span className="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-muted text-muted-foreground border border-border">
-                        {activeComponent.category.replace("-", " ")}
+                        {getCategoryLabel(activeComponent.category)}
                       </span>
                       <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-orange-500/10 text-orange-400 border border-orange-500/20">
                         v{activeComponent.version}

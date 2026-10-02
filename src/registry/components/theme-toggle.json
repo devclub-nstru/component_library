@@ -3,7 +3,7 @@
   "name": "Theme Toggle",
   "description": "View Transitions API powered theme toggle button with tactile obsidian candy styling, geometric clip-path ripples, and seamless mode synchronization.",
   "summary": "A high-performance theme toggle switch engineered for seamless transitions between dark and light modes. Powered by the native View Transitions API with custom SVG polygon and circular clipping paths, delivering 60fps geometric morphs across the viewport. Features an ultra-tactile obsidian candy button with physical specular reflections, upper glass dome sheen, and hardware-accelerated press compression.",
-  "category": "buttons",
+  "category": "sliders-and-toggles",
   "tags": [
     "theme",
     "toggle",

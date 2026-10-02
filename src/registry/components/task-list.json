@@ -3,7 +3,7 @@
   "name": "Task List",
   "description": "Interactive todo task list featuring micro-particle spark bursts, ambient glow halos, smooth SVG ring morphing, and fluid spring layout reordering.",
   "summary": "High-performance interactive task and todo management primitive with multi-stage transition choreography. Integrates radial micro-particle emitters upon completion, dynamic ambient glow pulses, sub-pixel dashed perimeter rings that morph into spring-scaled filled badges, and GPU-accelerated spring layout transitions.",
-  "category": "inputs",
+  "category": "display",
   "tags": [
     "task",
     "todo",

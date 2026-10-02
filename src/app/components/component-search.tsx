@@ -18,7 +18,7 @@ import {
   MagnifyingGlassIcon,
 } from "@radix-ui/react-icons";
 import gsap from "gsap";
-import { fetchComponents } from "@/lib/registry";
+import { fetchComponents, getCategoryLabel } from "@/lib/registry";
 import { getAllComponents } from "@/registry";
 import { CandyButton } from "@/registry/ui/candy-button";
 import type { ComponentRegistryItem } from "@/types/component";
@@ -248,7 +248,7 @@ function SearchPanel({
                             {item.name}
                           </span>
                           <span className="block truncate text-xs text-zinc-500 dark:text-zinc-400">
-                            {item.category.replaceAll("-", " ")}
+                            {getCategoryLabel(item.category)}
                           </span>
                         </span>
                         <ArrowRightIcon

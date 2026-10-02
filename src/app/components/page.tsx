@@ -6,6 +6,7 @@ import { Footer } from "@/components/layout/footer";
 import { ComponentCard } from "@/components/showcase/component-card";
 import { ComponentSearch } from "./component-search";
 import { getAllComponents } from "@/registry";
+import { getComponentCategories } from "@/lib/registry";
 import { HorizontalScale, Lines } from "@/registry/ui/scales";
 import { SparkleButton } from "@/registry/ui/sparkle-button";
 import { CandyButton } from "@/registry/ui/candy-button";
@@ -44,6 +45,7 @@ import { ConfirmMorph } from "@/registry/ui/confirm-morph";
 import { SegmentedProgress } from "@/registry/ui/segmented-progress";
 import { FocusTestimonials } from "@/registry/ui/focus-testimonials";
 import { LiquidMediaShowcase } from "@/registry/ui/liquid-media";
+import OrbitGalleryDemo from "@/components/showcase/orbit-gallery-demo";
 import { ProjectReveal } from "@/registry/ui/project-reveal";
 import { PROJECT_REVEAL_DEMO_ITEMS } from "@/components/showcase/project-reveal-demo";
 import { Trash2 } from "lucide-react";
@@ -96,9 +98,18 @@ function CounterPreview() {
 
 export default function ComponentsPage() {
   const allComponents = useMemo(() => getAllComponents(), []);
+  const categories = useMemo(
+    () => getComponentCategories(allComponents),
+    [allComponents],
+  );
   const [revealSheetOpen, setRevealSheetOpen] = useState(false);
 
   const previewRenderers: Record<string, React.ReactNode> = {
+    "orbit-gallery": (
+      <div className="h-64 w-full overflow-hidden rounded-lg">
+        <OrbitGalleryDemo showControls={false} />
+      </div>
+    ),
     "project-reveal": (
       <ProjectReveal
         items={PROJECT_REVEAL_DEMO_ITEMS}
@@ -471,17 +482,21 @@ export default function ComponentsPage() {
     ),
   };
 
-  const newReleases = allComponents.slice(0, 3);
-  const displayComponents = allComponents.slice(3);
+  const newReleaseSlugs = new Set(
+    [...allComponents]
+      .sort((a, b) => b.createdDate.localeCompare(a.createdDate))
+      .slice(0, 3)
+      .map((item) => item.slug),
+  );
 
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground transition-colors duration-200">
       <Navbar searchAction={<ComponentSearch />} />
 
       <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
-        <div className="flex flex-col items-center text-center mb-16 sm:mb-20">
+        <div className="flex flex-col items-center text-center mb-10 sm:mb-12">
           <h1 className="font-serif text-3xl sm:text-5xl font-normal tracking-tight text-foreground max-w-3xl leading-tight">
-            30+ rare and unique components
+            {allComponents.length} rare and unique components
           </h1>
           <p className="text-muted-foreground text-sm sm:text-base max-w-2xl mt-4 font-light leading-relaxed">
             Every component is a single file you own, not a dependency you
@@ -490,52 +505,40 @@ export default function ComponentsPage() {
           </p>
         </div>
 
-        <div className="space-y-16">
-          <section>
-            <div className="flex items-center gap-2 mb-6">
-              <h2 className="text-sm sm:text-xl font-medium font-serif text-foreground tracking-tight">
-                New releases
-              </h2>
-              <span className="text-xs font-mono font-medium text-orange-500">
-                [{newReleases.length}]
-              </span>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {newReleases.map((item) => (
-                <ComponentCard
-                  key={item.slug}
-                  component={item}
-                  preview={previewRenderers[item.slug]}
-                  badge="NEW"
-                />
-              ))}
-            </div>
-          </section>
-
-          {displayComponents.length > 0 && (
-            <section>
-              <div className="flex items-center gap-2 mb-6">
-                <h2 className="text-sm sm:text-xl font-medium font-serif text-foreground tracking-tight">
-                  Display
-                </h2>
-                <span className="text-xs font-mono font-medium text-orange-500">
-                  [{displayComponents.length}]
-                </span>
+        <div className="space-y-14 sm:space-y-16">
+          {categories.map((category) => (
+            <section
+              key={category.value}
+              aria-labelledby={`category-${category.value}`}
+            >
+              <div className="mb-6 border-b border-border pb-4">
+                <div className="flex items-center gap-3">
+                  <h2
+                    id={`category-${category.value}`}
+                    className="font-serif text-xl font-medium tracking-tight text-foreground sm:text-2xl"
+                  >
+                    {category.label}
+                  </h2>
+                  <span className="rounded-md bg-muted px-2 py-0.5 font-mono text-xs tabular-nums text-muted-foreground">
+                    {category.items.length}
+                  </span>
+                </div>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  {category.description}
+                </p>
               </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {displayComponents.map((item) => (
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {category.items.map((item) => (
                   <ComponentCard
                     key={item.slug}
                     component={item}
                     preview={previewRenderers[item.slug]}
-                    badge="NEW"
+                    badge={newReleaseSlugs.has(item.slug) ? "NEW" : ""}
                   />
                 ))}
               </div>
             </section>
-          )}
+          ))}
         </div>
       </main>
 

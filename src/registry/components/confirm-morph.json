@@ -3,7 +3,7 @@
   "name": "Confirm Morph",
   "description": "Adaptive inline confirmation button that morphs into question, spinner, success with undo, and error with retry.",
   "summary": "Adaptive physics-driven confirmation button that morphs between resting action, inline question, loading spinner, completed success with undo, and error state with retry. Springs smoothly to every face with zero layout jumps.",
-  "category": "inputs",
+  "category": "buttons",
   "tags": [
     "button",
     "confirm",

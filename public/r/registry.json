@@ -542,6 +542,27 @@
       ]
     },
     {
+      "name": "orbit-gallery",
+      "type": "registry:ui",
+      "title": "Orbit Gallery",
+      "description": "A smooth, interactive photo gallery arranged in concentric rings with synchronized scrolling, dragging, hover and image expansion.",
+      "dependencies": [
+        "gsap",
+        "@gsap/react",
+        "@radix-ui/react-dialog",
+        "lucide-react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "src/registry/base/orbit-gallery/orbit-gallery.tsx",
+          "type": "registry:ui",
+          "target": "@ui/orbit-gallery.tsx"
+        }
+      ]
+    },
+    {
       "name": "otp-input",
       "type": "registry:ui",
       "title": "OTP Input",

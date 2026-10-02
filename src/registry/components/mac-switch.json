@@ -3,7 +3,7 @@
   "name": "Mac Switch",
   "description": "Apple-inspired macOS liquid glass switch with refractive lip bezel optics, spring-loaded tactile thumb kinematics, and customizable color themes.",
   "summary": "A native-feeling macOS switch component built with physics-based liquid glass optics and harmonic oscillator springs. Features real-time squircle normal-map displacement with lip bezel curvature, specular edge reflections, dynamic transparency, and fluid track morphing between neutral zinc and vibrant Apple accent colors, coupled with responsive pointer capture dragging, multiple sizes, materials, and keyboard navigation.",
-  "category": "apple-ui",
+  "category": "sliders-and-toggles",
   "tags": [
     "switch",
     "toggle",

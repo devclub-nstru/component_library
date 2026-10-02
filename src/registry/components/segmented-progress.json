@@ -3,7 +3,7 @@
   "name": "Segmented Progress",
   "description": "Tactile segmented progress bar with real-time hover data inspection, dynamic wave proximity physics, and staggered GSAP fill animation.",
   "summary": "A high-fidelity segmented progress bar component crafted with capsule tick metrics, interactive hover data preview, proximity wave physics, and smooth GSAP entrance choreography. Features custom color palettes, interactive value scrubbing, and a dark obsidian card presentation matching modern productivity suites.",
-  "category": "display",
+  "category": "feedback",
   "tags": [
     "progress",
     "segmented",

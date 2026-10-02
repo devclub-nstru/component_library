@@ -6,7 +6,7 @@
   "type": "registry:ui",
   "description": "Fluid paragraph testimonials featuring inline avatars, cursor-tracking spring physics author tooltip, and dynamic selective blur focus on hover.",
   "summary": "An editorial testimonial component that arranges quotes into a continuous flowing paragraph with inline micro-avatars. On hover, the active testimonial blooms with high contrast and full saturation while all other testimonials gracefully blur and fade. An interactive author tooltip glides above the cursor powered by sub-pixel spring physics.",
-  "category": "feedback",
+  "category": "cards",
   "tags": [
     "testimonials",
     "feedback",

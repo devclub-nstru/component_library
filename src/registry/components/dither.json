@@ -3,7 +3,7 @@
   "name": "Dither",
   "description": "Hardware-accelerated procedural WebGL dithered grainient with fluid warping, noise, and animated grain.",
   "summary": "A high-performance WebGL 2.0 procedural dithered gradient shader built on OGL. Generates fluid, organic distortion waves using multi-frequency warping and animated filmic grain with full color customization, rotation, and lighting modes.",
-  "category": "feedback",
+  "category": "backgrounds-and-effects",
   "tags": [
     "dither",
     "grain",

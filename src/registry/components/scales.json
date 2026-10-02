@@ -3,7 +3,7 @@
   "name": "Scales & Borders",
   "description": "Symmetric repeating linear gradient borders and geometric scale dividers.",
   "summary": "Technical boundary elements and geometric scale dividers engineered to replace generic horizontal rules with architectural, sci-fi, and developer console aesthetics. Built entirely with pure CSS repeating linear gradients (315deg angle with 14px pitch and 1px sub-pixel line calibration) and theme-driven CSS custom properties (--pattern-line, --pattern), delivering high-density boundary aesthetics with zero JavaScript runtime overhead.",
-  "category": "scales",
+  "category": "display",
   "tags": [
     "borders",
     "scales",

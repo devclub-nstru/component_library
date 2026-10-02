@@ -21,7 +21,7 @@ export const ComponentCard = ({
     >
       <div className="relative flex h-56 w-full items-center justify-center overflow-hidden bg-muted/40 dark:bg-black/60 p-6 border-b border-border">
         <div className="absolute inset-0 bg-[radial-gradient(currentColor_1px,transparent_1px)] text-foreground/10 bg-size-[16px_16px] pointer-events-none" />
-        <div className="relative z-10 flex w-full items-center justify-center pointer-events-none">
+        <div inert aria-hidden="true" className="relative z-10 flex w-full items-center justify-center pointer-events-none">
           {preview}
         </div>
       </div>

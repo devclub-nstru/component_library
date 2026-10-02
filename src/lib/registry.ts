@@ -1,5 +1,106 @@
 import { getAllComponents, getComponentBySlug } from "@/registry";
-import { ComponentRegistryItem } from "@/types/component";
+import type {
+  ComponentCategory,
+  ComponentRegistryItem,
+} from "@/types/component";
+
+export const COMPONENT_CATEGORIES: {
+  value: ComponentCategory;
+  label: string;
+  description: string;
+}[] = [
+  {
+    value: "buttons",
+    label: "Buttons & actions",
+    description: "Animated buttons and clear action states.",
+  },
+  {
+    value: "inputs",
+    label: "Inputs & forms",
+    description: "Text entry, verification and file uploads.",
+  },
+  {
+    value: "search",
+    label: "Search & commands",
+    description: "Search fields, command menus and quick discovery.",
+  },
+  {
+    value: "navigation",
+    label: "Navigation",
+    description: "Sidebars, menus and file navigation.",
+  },
+  {
+    value: "sliders-and-toggles",
+    label: "Sliders & toggles",
+    description: "Range controls, switches and theme selection.",
+  },
+  {
+    value: "menus",
+    label: "Menus & overlays",
+    description: "Profile menus, sheets and contextual panels.",
+  },
+  {
+    value: "cards",
+    label: "Cards & testimonials",
+    description: "Content cards, social previews and testimonials.",
+  },
+  {
+    value: "galleries-and-media",
+    label: "Galleries & media",
+    description: "Interactive galleries, project reveals and image effects.",
+  },
+  {
+    value: "ai-stuff",
+    label: "AI & editors",
+    description: "AI inputs, visual orbs and editing experiences.",
+  },
+  {
+    value: "display",
+    label: "Data & display",
+    description: "Counters, activity, code and structured information.",
+  },
+  {
+    value: "backgrounds-and-effects",
+    label: "Backgrounds & effects",
+    description: "Generative textures and atmospheric backgrounds.",
+  },
+  {
+    value: "feedback",
+    label: "Feedback & progress",
+    description: "Notifications, status and step-by-step progress.",
+  },
+  {
+    value: "accordion",
+    label: "Accordions",
+    description: "Expandable sections with carefully tuned motion.",
+  },
+  {
+    value: "date-and-time",
+    label: "Date & time",
+    description: "Calendar controls and date selection.",
+  },
+  {
+    value: "layout",
+    label: "Layout",
+    description: "Composable grids and page structure.",
+  },
+];
+
+export function getCategoryLabel(category: string): string {
+  return (
+    COMPONENT_CATEGORIES.find((item) => item.value === category)?.label ??
+    category.replaceAll("-", " ")
+  );
+}
+
+export function getComponentCategories(components = getAllComponents()) {
+  return COMPONENT_CATEGORIES.map((category) => ({
+    ...category,
+    items: components
+      .filter((item) => !item.hidden && item.category === category.value)
+      .sort((a, b) => a.name.localeCompare(b.name)),
+  })).filter((category) => category.items.length > 0);
+}
 
 export interface ComponentFilterOptions {
   category?: string;
@@ -7,11 +108,15 @@ export interface ComponentFilterOptions {
   tag?: string;
 }
 
-export function fetchComponents(options: ComponentFilterOptions = {}): ComponentRegistryItem[] {
+export function fetchComponents(
+  options: ComponentFilterOptions = {},
+): ComponentRegistryItem[] {
   let items = getAllComponents();
 
   if (options.category && options.category !== "all") {
-    items = items.filter((c) => c.category.toLowerCase() === options.category?.toLowerCase());
+    items = items.filter(
+      (c) => c.category.toLowerCase() === options.category?.toLowerCase(),
+    );
   }
 
   if (options.tag) {
@@ -24,19 +129,20 @@ export function fetchComponents(options: ComponentFilterOptions = {}): Component
       (c) =>
         c.name.toLowerCase().includes(q) ||
         c.description.toLowerCase().includes(q) ||
-        c.tags.some((t) => t.toLowerCase().includes(q))
+        getCategoryLabel(c.category).toLowerCase().includes(q) ||
+        c.tags.some((t) => t.toLowerCase().includes(q)),
     );
   }
 
   return items;
 }
 
-export function fetchComponentBySlug(slug: string): ComponentRegistryItem | null {
+export function fetchComponentBySlug(
+  slug: string,
+): ComponentRegistryItem | null {
   return getComponentBySlug(slug) || null;
 }
 
 export function getCategoriesList(): string[] {
-  const categories = new Set<string>();
-  getAllComponents().forEach((c) => categories.add(c.category));
-  return Array.from(categories);
+  return getComponentCategories().map((category) => category.value);
 }
