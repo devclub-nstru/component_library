@@ -434,6 +434,25 @@
       ]
     },
     {
+      "name": "image-loader",
+      "type": "registry:ui",
+      "title": "Image Loader",
+      "description": "A centered image sequence with smooth crossfades and a final image that expands to fill the frame.",
+      "dependencies": [
+        "gsap",
+        "@gsap/react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/image-loader.tsx",
+          "type": "registry:ui",
+          "target": "@ui/image-loader.tsx"
+        }
+      ]
+    },
+    {
       "name": "liquid-media",
       "type": "registry:ui",
       "title": "Liquid Media",
