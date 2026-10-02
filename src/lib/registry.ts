@@ -75,6 +75,11 @@ export const COMPONENT_CATEGORIES: {
     description: "Expandable sections with carefully tuned motion.",
   },
   {
+    value: "clocks-and-timers",
+    label: "Clocks & timers",
+    description: "Live clocks, countdowns and time-based displays.",
+  },
+  {
     value: "date-and-time",
     label: "Date & time",
     description: "Calendar controls and date selection.",

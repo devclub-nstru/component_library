@@ -325,6 +325,25 @@
       ]
     },
     {
+      "name": "flip-clock",
+      "type": "registry:ui",
+      "title": "Flip Clock",
+      "description": "A realistic hinged flip clock and countdown with smooth 3D motion, moving shadows, and configurable time displays.",
+      "dependencies": [
+        "gsap",
+        "@gsap/react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/flip-clock.tsx",
+          "type": "registry:ui",
+          "target": "@ui/flip-clock.tsx"
+        }
+      ]
+    },
+    {
       "name": "focus-testimonials",
       "type": "registry:ui",
       "title": "Focus Testimonials",

@@ -15,6 +15,7 @@ import {
   editor,
   fileUpload,
   fileDropzone,
+  flipClock,
   fileTree,
   focusTestimonials,
   githubActivity,
@@ -52,6 +53,7 @@ import {
 } from "./components";
 
 export const COMPONENT_REGISTRY: Record<string, ComponentRegistryItem> = {
+  "flip-clock": flipClock as ComponentRegistryItem,
   "file-upload": fileUpload as ComponentRegistryItem,
   "file-dropzone": fileDropzone as ComponentRegistryItem,
   editor: editor as ComponentRegistryItem,

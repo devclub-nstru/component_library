@@ -7,6 +7,7 @@ export type ComponentCategory =
   | "display"
   | "inputs"
   | "sliders-and-toggles"
+  | "clocks-and-timers"
   | "date-and-time"
   | "accordion"
   | "ai-stuff"

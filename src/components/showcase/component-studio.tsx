@@ -96,7 +96,15 @@ import { SpotlightSearch } from "@/registry/ui/spotlight-search";
 import { ProfileMenu } from "@/registry/ui/profile-menu";
 import { DateRangePicker } from "@/registry/ui/date-range-picker";
 import { RevealSheet, type RevealSheetSide } from "@/registry/ui/reveal-sheet";
-import OrbitGalleryDemo, { ORBIT_GALLERY_DEFAULT_CONFIG, OrbitGalleryControls } from "./orbit-gallery-demo";
+import {
+  FlipClockDemo,
+  FlipClockControls,
+  FLIP_CLOCK_DEFAULT_CONFIG,
+} from "./flip-clock-demo";
+import OrbitGalleryDemo, {
+  ORBIT_GALLERY_DEFAULT_CONFIG,
+  OrbitGalleryControls,
+} from "./orbit-gallery-demo";
 import { ProjectReveal } from "@/registry/ui/project-reveal";
 import {
   PROJECT_REVEAL_DEMO_ITEMS,
@@ -1050,7 +1058,12 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     "DevClub UI Selection AI Editor integrates seamless text formatting, an interactive thinking orb, multi-stage context retrieval, and word-by-word streaming.",
   );
   const [revealSheetOpen, setRevealSheetOpen] = useState(false);
-  const [orbitGalleryConfig, setOrbitGalleryConfig] = useState({ ...ORBIT_GALLERY_DEFAULT_CONFIG });
+  const [flipClockConfig, setFlipClockConfig] = useState({
+    ...FLIP_CLOCK_DEFAULT_CONFIG,
+  });
+  const [orbitGalleryConfig, setOrbitGalleryConfig] = useState({
+    ...ORBIT_GALLERY_DEFAULT_CONFIG,
+  });
   const [projectRevealConfig, setProjectRevealConfig] = useState({
     ...PROJECT_REVEAL_DEFAULT_CONFIG,
   });
@@ -1787,6 +1800,10 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
           <div className="flex w-full items-center justify-center p-4 sm:p-8 select-none">
             <FocusTestimonials />
           </div>
+        );
+      case "flip-clock":
+        return (
+          <FlipClockDemo key={flipClockConfig.mode} config={flipClockConfig} />
         );
       case "orbit-gallery":
         return <OrbitGalleryDemo {...orbitGalleryConfig} />;
@@ -3354,7 +3371,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               "flex-1 flex items-center justify-center overflow-hidden relative",
               (activeComponent.slug === "dither" ||
                 activeComponent.slug === "noise" ||
-                activeComponent.slug === "orbit-gallery") &&
+                activeComponent.slug === "orbit-gallery" ||
+                activeComponent.slug === "flip-clock") &&
                 viewport === "desktop"
                 ? "p-0"
                 : "p-6",
@@ -3404,7 +3422,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     "w-full h-full flex items-center justify-center overflow-auto",
                     activeComponent.slug === "dither" ||
                       activeComponent.slug === "noise" ||
-                      activeComponent.slug === "orbit-gallery"
+                      activeComponent.slug === "orbit-gallery" ||
+                      activeComponent.slug === "flip-clock"
                       ? "p-0"
                       : "p-6",
                   )}
@@ -5242,8 +5261,18 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 </div>
               )}
 
+              {activeComponent.slug === "flip-clock" && (
+                <FlipClockControls
+                  config={flipClockConfig}
+                  onChange={setFlipClockConfig}
+                />
+              )}
+
               {activeComponent.slug === "orbit-gallery" && (
-                <OrbitGalleryControls config={orbitGalleryConfig} onChange={setOrbitGalleryConfig} />
+                <OrbitGalleryControls
+                  config={orbitGalleryConfig}
+                  onChange={setOrbitGalleryConfig}
+                />
               )}
 
               {activeComponent.slug === "project-reveal" && (

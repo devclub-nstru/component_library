@@ -45,6 +45,7 @@ import { ConfirmMorph } from "@/registry/ui/confirm-morph";
 import { SegmentedProgress } from "@/registry/ui/segmented-progress";
 import { FocusTestimonials } from "@/registry/ui/focus-testimonials";
 import { LiquidMediaShowcase } from "@/registry/ui/liquid-media";
+import { FlipClock } from "@/registry/ui/flip-clock";
 import OrbitGalleryDemo from "@/components/showcase/orbit-gallery-demo";
 import { ProjectReveal } from "@/registry/ui/project-reveal";
 import { PROJECT_REVEAL_DEMO_ITEMS } from "@/components/showcase/project-reveal-demo";
@@ -105,6 +106,14 @@ export default function ComponentsPage() {
   const [revealSheetOpen, setRevealSheetOpen] = useState(false);
 
   const previewRenderers: Record<string, React.ReactNode> = {
+    "flip-clock": (
+      <FlipClock
+        date="2026-10-02T21:19:00"
+        cardSize={120}
+        gap={8}
+        borderRadius={8}
+      />
+    ),
     "orbit-gallery": (
       <div className="h-64 w-full overflow-hidden rounded-lg">
         <OrbitGalleryDemo showControls={false} />
