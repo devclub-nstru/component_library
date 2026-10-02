@@ -43,6 +43,7 @@ import sparkleButton from "./sparkle-button.json";
 import spotlightCard from "./spotlight-card.json";
 import spotlightSearch from "./spotlight-search.json";
 import taskList from "./task-list.json";
+import taskCard from "./task-card.json";
 import themeToggle from "./theme-toggle.json";
 import toast from "./toast.json";
 import twitterCard from "./twitter-card.json";
@@ -95,6 +96,7 @@ export {
   spotlightCard,
   spotlightSearch,
   taskList,
+  taskCard,
   themeToggle,
   toast,
   twitterCard,
@@ -148,6 +150,7 @@ export const componentsList: ComponentRegistryItem[] = [
   spotlightCard as ComponentRegistryItem,
   spotlightSearch as ComponentRegistryItem,
   taskList as ComponentRegistryItem,
+  taskCard as ComponentRegistryItem,
   themeToggle as ComponentRegistryItem,
   toast as ComponentRegistryItem,
   twitterCard as ComponentRegistryItem,

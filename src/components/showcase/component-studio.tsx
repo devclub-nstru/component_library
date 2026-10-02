@@ -101,6 +101,11 @@ import {
   FlipClockControls,
   FLIP_CLOCK_DEFAULT_CONFIG,
 } from "./flip-clock-demo";
+import {
+  TaskCardDemo,
+  TaskCardControls,
+  TASK_CARD_DEFAULT_CONFIG,
+} from "./task-card-demo";
 import OrbitGalleryDemo, {
   ORBIT_GALLERY_DEFAULT_CONFIG,
   OrbitGalleryControls,
@@ -1058,6 +1063,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     "DevClub UI Selection AI Editor integrates seamless text formatting, an interactive thinking orb, multi-stage context retrieval, and word-by-word streaming.",
   );
   const [revealSheetOpen, setRevealSheetOpen] = useState(false);
+  const [taskCardConfig, setTaskCardConfig] = useState(TASK_CARD_DEFAULT_CONFIG);
+  const [selectedTaskCard, setSelectedTaskCard] = useState("interface");
   const [flipClockConfig, setFlipClockConfig] = useState({
     ...FLIP_CLOCK_DEFAULT_CONFIG,
   });
@@ -1455,6 +1462,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     activeComponent.slug !== "mac-slider" &&
     activeComponent.slug !== "slider" &&
     activeComponent.slug !== "pixel-card" &&
+    activeComponent.slug !== "task-card" &&
     activeComponent.slug !== "orb" &&
     activeComponent.slug !== "theme-toggle" &&
     activeComponent.slug !== "animated-theme-toggler" &&
@@ -1800,6 +1808,13 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
           <div className="flex w-full items-center justify-center p-4 sm:p-8 select-none">
             <FocusTestimonials />
           </div>
+        );
+      case "task-card":
+        return (
+          <TaskCardDemo
+            config={taskCardConfig}
+            selectedId={selectedTaskCard}
+          />
         );
       case "flip-clock":
         return (
@@ -3372,7 +3387,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               (activeComponent.slug === "dither" ||
                 activeComponent.slug === "noise" ||
                 activeComponent.slug === "orbit-gallery" ||
-                activeComponent.slug === "flip-clock") &&
+                activeComponent.slug === "flip-clock" ||
+                activeComponent.slug === "task-card") &&
                 viewport === "desktop"
                 ? "p-0"
                 : "p-6",
@@ -3423,7 +3439,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     activeComponent.slug === "dither" ||
                       activeComponent.slug === "noise" ||
                       activeComponent.slug === "orbit-gallery" ||
-                      activeComponent.slug === "flip-clock"
+                      activeComponent.slug === "flip-clock" ||
+                      activeComponent.slug === "task-card"
                       ? "p-0"
                       : "p-6",
                   )}
@@ -5261,6 +5278,14 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 </div>
               )}
 
+              {activeComponent.slug === "task-card" && (
+                <TaskCardControls
+                  config={taskCardConfig}
+                  onChange={setTaskCardConfig}
+                  selectedId={selectedTaskCard}
+                  onSelect={setSelectedTaskCard}
+                />
+              )}
               {activeComponent.slug === "flip-clock" && (
                 <FlipClockControls
                   config={flipClockConfig}

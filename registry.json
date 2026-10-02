@@ -865,6 +865,32 @@
       ]
     },
     {
+      "name": "task-card",
+      "type": "registry:ui",
+      "title": "Task Card",
+      "description": "Layered task cards with colored priority bands, recessed dashed outlines, stacked avatars and soft shadows.",
+      "dependencies": [
+        "gsap",
+        "@gsap/react",
+        "@radix-ui/react-avatar",
+        "lucide-react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/task-card.tsx",
+          "type": "registry:ui",
+          "target": "@ui/task-card.tsx"
+        },
+        {
+          "path": "src/components/ui/avatar.tsx",
+          "type": "registry:ui",
+          "target": "@ui/avatar.tsx"
+        }
+      ]
+    },
+    {
       "name": "task-list",
       "type": "registry:ui",
       "title": "Task List",

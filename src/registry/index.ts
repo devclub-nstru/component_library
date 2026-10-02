@@ -44,6 +44,7 @@ import {
   spotlightCard,
   spotlightSearch,
   taskList,
+  taskCard,
   themeToggle,
   toast,
   twitterCard,
@@ -53,6 +54,7 @@ import {
 } from "./components";
 
 export const COMPONENT_REGISTRY: Record<string, ComponentRegistryItem> = {
+  "task-card": taskCard as ComponentRegistryItem,
   "flip-clock": flipClock as ComponentRegistryItem,
   "file-upload": fileUpload as ComponentRegistryItem,
   "file-dropzone": fileDropzone as ComponentRegistryItem,
