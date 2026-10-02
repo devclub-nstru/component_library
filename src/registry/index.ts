@@ -25,6 +25,7 @@ import {
   liquidMedia,
   liquidToggle,
   loader,
+  imageLoader,
   macSlider,
   macSwitch,
   morphSearch,
@@ -55,6 +56,7 @@ import {
 } from "./components";
 
 export const COMPONENT_REGISTRY: Record<string, ComponentRegistryItem> = {
+  "image-loader": imageLoader as ComponentRegistryItem,
   loader: loader as ComponentRegistryItem,
   "task-card": taskCard as ComponentRegistryItem,
   "flip-clock": flipClock as ComponentRegistryItem,

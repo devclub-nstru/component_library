@@ -113,6 +113,11 @@ import OrbitGalleryDemo, {
 import { ProjectReveal } from "@/registry/ui/project-reveal";
 import { LoaderDemo, LoaderControls, LOADER_DEFAULT_CONFIG } from "./loader-demo";
 import {
+  ImageLoaderDemo,
+  ImageLoaderControls,
+  IMAGE_LOADER_DEFAULT_CONFIG,
+} from "./image-loader-demo";
+import {
   PROJECT_REVEAL_DEMO_ITEMS,
   PROJECT_REVEAL_DEFAULT_CONFIG,
   ProjectRevealControls,
@@ -1076,6 +1081,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     ...PROJECT_REVEAL_DEFAULT_CONFIG,
   });
   const [loaderConfig, setLoaderConfig] = useState({ ...LOADER_DEFAULT_CONFIG });
+  const [imageLoaderConfig, setImageLoaderConfig] = useState({
+    ...IMAGE_LOADER_DEFAULT_CONFIG,
+  });
   const [revealSheetConfig, setRevealSheetConfig] = useState<{
     side: RevealSheetSide;
     speed: number;
@@ -1826,6 +1834,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         return <OrbitGalleryDemo {...orbitGalleryConfig} />;
       case "loader":
         return <LoaderDemo config={loaderConfig} />;
+      case "image-loader":
+        return <ImageLoaderDemo config={imageLoaderConfig} />;
       case "project-reveal":
         return (
           <div className="flex w-full max-w-3xl items-center justify-center px-4 py-12 sm:px-10">
@@ -5313,6 +5323,13 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
 
               {activeComponent.slug === "loader" && (
                 <LoaderControls config={loaderConfig} onChange={setLoaderConfig} />
+              )}
+
+              {activeComponent.slug === "image-loader" && (
+                <ImageLoaderControls
+                  config={imageLoaderConfig}
+                  onChange={setImageLoaderConfig}
+                />
               )}
 
               {activeComponent.slug === "liquid-media" && (
