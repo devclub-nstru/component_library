@@ -45,6 +45,7 @@ import { RevealSheet } from "@/registry/ui/reveal-sheet";
 import { Editor } from "@/registry/ui/editor";
 import { ConfirmMorph } from "@/registry/ui/confirm-morph";
 import { SegmentedProgress } from "@/registry/ui/segmented-progress";
+import { CandlestickChart } from "@/registry/ui/candlestick-chart";
 import { FocusTestimonials } from "@/registry/ui/focus-testimonials";
 import { LiquidMediaShowcase } from "@/registry/ui/liquid-media";
 import { FlipClock } from "@/registry/ui/flip-clock";
@@ -478,6 +479,15 @@ export default function ComponentsPage() {
           icon={<Trash2 size={16} strokeWidth={1.75} />}
           prompt="Delete 3 files?"
           tone="danger"
+        />
+      </div>
+    ),
+    "candlestick-chart": (
+      <div className="flex w-full items-center justify-center">
+        <CandlestickChart
+          title="ACME / USD"
+          description="Daily"
+          className="w-136 max-w-none shrink-0 scale-[0.55] origin-center sm:max-w-none"
         />
       </div>
     ),

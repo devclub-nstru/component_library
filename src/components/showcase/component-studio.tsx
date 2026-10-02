@@ -120,6 +120,7 @@ import { Editor } from "@/registry/ui/editor";
 import { DeleteSelectionShowcase } from "@/registry/ui/delete-selection";
 import { SegmentedProgress } from "@/registry/ui/segmented-progress";
 import { Stepper, type StepperProps } from "@/registry/ui/stepper";
+import { CandlestickChart } from "@/registry/ui/candlestick-chart";
 import { AsciiHoverButton } from "@/registry/ui/ascii-hover-button";
 import { FocusTestimonials } from "@/registry/ui/focus-testimonials";
 import {
@@ -1048,6 +1049,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     useState<NonNullable<StepperProps["orientation"]>>("auto");
   const [stepperDescriptions, setStepperDescriptions] = useState(true);
   const [stepperAnimated, setStepperAnimated] = useState(true);
+  const [candlestickVolume, setCandlestickVolume] = useState(true);
+  const [candlestickAnimated, setCandlestickAnimated] = useState(true);
+  const [candlestickReplay, setCandlestickReplay] = useState(0);
   const [fileUploadLayout, setFileUploadLayout] =
     useState<FileUploadLayout>("full");
   const [fileDropzonePlacement, setFileDropzonePlacement] = useState<
@@ -1796,6 +1800,18 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
             showDescriptions={stepperDescriptions}
             animated={stepperAnimated}
           />
+        );
+      case "candlestick-chart":
+        return (
+          <div className="flex w-full items-center justify-center sm:p-8">
+            <CandlestickChart
+              key={candlestickReplay}
+              title="ACME / USD"
+              description="Daily"
+              showVolume={candlestickVolume}
+              animated={candlestickAnimated}
+            />
+          </div>
         );
       case "segmented-progress":
         return (
@@ -3469,6 +3485,45 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     value={activeColor}
                     onChange={setActiveColor}
                   />
+                </div>
+              )}
+
+              {activeComponent.slug === "candlestick-chart" && (
+                <div className="pointer-events-auto flex w-full min-w-0 flex-col gap-5 p-3 font-sans sm:p-4">
+                  <div className="flex items-center justify-between gap-4">
+                    <span className="text-sm font-semibold text-foreground">
+                      Chart settings
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setCandlestickReplay((count) => count + 1)}
+                      className="rounded-lg px-3 py-2 text-xs text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400"
+                    >
+                      Replay
+                    </button>
+                  </div>
+                  <label className="flex cursor-pointer items-center justify-between gap-4 text-xs text-foreground">
+                    Show volume
+                    <input
+                      type="checkbox"
+                      checked={candlestickVolume}
+                      onChange={(event) =>
+                        setCandlestickVolume(event.target.checked)
+                      }
+                      className="size-4 accent-orange-500"
+                    />
+                  </label>
+                  <label className="flex cursor-pointer items-center justify-between gap-4 text-xs text-foreground">
+                    Animate entrance
+                    <input
+                      type="checkbox"
+                      checked={candlestickAnimated}
+                      onChange={(event) =>
+                        setCandlestickAnimated(event.target.checked)
+                      }
+                      className="size-4 accent-orange-500"
+                    />
+                  </label>
                 </div>
               )}
 

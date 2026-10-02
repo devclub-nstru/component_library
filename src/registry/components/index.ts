@@ -50,6 +50,7 @@ import twitterCard from "./twitter-card.json";
 import dateRangePicker from "./date-range-picker.json";
 import segmentedProgress from "./segmented-progress.json";
 import stepper from "./stepper.json";
+import candlestickChart from "./candlestick-chart.json";
 
 export {
   accordion,
@@ -103,6 +104,7 @@ export {
   dateRangePicker,
   segmentedProgress,
   stepper,
+  candlestickChart,
 };
 
 export const componentsList: ComponentRegistryItem[] = [
@@ -157,4 +159,5 @@ export const componentsList: ComponentRegistryItem[] = [
   dateRangePicker as ComponentRegistryItem,
   segmentedProgress as ComponentRegistryItem,
   stepper as ComponentRegistryItem,
+  candlestickChart as ComponentRegistryItem,
 ];

@@ -130,6 +130,25 @@
       ]
     },
     {
+      "name": "candlestick-chart",
+      "type": "registry:ui",
+      "title": "Candlestick Chart",
+      "description": "Interactive OHLC candlestick chart with time ranges, pinning and drag-to-measure.",
+      "dependencies": [
+        "gsap",
+        "@gsap/react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/candlestick-chart.tsx",
+          "type": "registry:ui",
+          "target": "@ui/candlestick-chart.tsx"
+        }
+      ]
+    },
+    {
       "name": "candy-button",
       "type": "registry:ui",
       "title": "Candy Button",

@@ -51,6 +51,7 @@ import {
   dateRangePicker,
   segmentedProgress,
   stepper,
+  candlestickChart,
 } from "./components";
 
 export const COMPONENT_REGISTRY: Record<string, ComponentRegistryItem> = {
@@ -103,6 +104,7 @@ export const COMPONENT_REGISTRY: Record<string, ComponentRegistryItem> = {
   "date-range-picker": dateRangePicker as ComponentRegistryItem,
   "segmented-progress": segmentedProgress as ComponentRegistryItem,
   stepper: stepper as ComponentRegistryItem,
+  "candlestick-chart": candlestickChart as ComponentRegistryItem,
   "focus-testimonials": focusTestimonials as ComponentRegistryItem,
   "liquid-media": liquidMedia as ComponentRegistryItem,
 };

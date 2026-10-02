@@ -5,6 +5,7 @@ export type ComponentCategory =
   | "feedback"
   | "navigation"
   | "display"
+  | "charts-and-graphs"
   | "inputs"
   | "sliders-and-toggles"
   | "clocks-and-timers"

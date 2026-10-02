@@ -60,6 +60,11 @@ export const COMPONENT_CATEGORIES: {
     description: "Counters, activity, code and structured information.",
   },
   {
+    value: "charts-and-graphs",
+    label: "Charts & graphs",
+    description: "Animated charts for prices, trends and analytics.",
+  },
+  {
     value: "backgrounds-and-effects",
     label: "Backgrounds & effects",
     description: "Generative textures and atmospheric backgrounds.",

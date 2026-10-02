@@ -63,6 +63,7 @@ const componentTitles = {
   "date-range-picker": "Date Range Picker",
   "segmented-progress": "Segmented Progress",
   stepper: "Stepper",
+  "candlestick-chart": "Candlestick Chart",
 };
 
 const getTarget = (filePath, fileName) => {
