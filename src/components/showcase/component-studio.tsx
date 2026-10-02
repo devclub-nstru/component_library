@@ -903,43 +903,402 @@ const STEPPER_DEMO_STEPS = [
   { id: "finish", title: "Finish", description: "Ready to go" },
 ];
 
-function StepperDemo({ orientation, showDescriptions, animated }: Pick<StepperProps, "orientation" | "showDescriptions" | "animated">) {
+function StepperDemo({
+  orientation,
+  showDescriptions,
+  animated,
+}: Pick<StepperProps, "orientation" | "showDescriptions" | "animated">) {
   const [current, setCurrent] = useState(0);
+  const [formData, setFormData] = useState({
+    fullName: "Virat Kohli",
+    email: "virat@devclubxnst.online",
+    workspaceName: "DevClub",
+    workspaceSlug: "devclub",
+    teamSize: 12,
+    environment: "production",
+    notifications: true,
+    autoDeploy: true,
+  });
+
   const prefersReducedMotion = useReducedMotion();
   const reduced = prefersReducedMotion || !animated;
   const finished = current === STEPPER_DEMO_STEPS.length;
-  const titles = ["Create your account", "Name your workspace", "Review your setup", "Ready to launch", "All steps complete"];
-  const descriptions = ["Start with your profile details.", "Give your team a place to work.", "Check your account and workspace before continuing.", "Everything is ready. Complete the setup to finish.", "Your workspace is ready to use."];
+  const titles = [
+    "Create your account",
+    "Name your workspace",
+    "Review your setup",
+    "Ready to launch",
+    "All steps complete",
+  ];
+  const descriptions = [
+    "Start with your profile details.",
+    "Give your team a dedicated place to collaborate.",
+    "Check your account and workspace details before continuing.",
+    "Everything is ready. Complete the setup to finish.",
+    "Your workspace is ready to use.",
+  ];
+
+  const handleInputChange = (
+    field: keyof typeof formData,
+    value: string | number | boolean,
+  ) => {
+    setFormData((prev) => {
+      const next = { ...prev, [field]: value };
+      if (field === "workspaceName" && typeof value === "string") {
+        next.workspaceSlug = value
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/^-|-$/g, "");
+      }
+      return next;
+    });
+  };
+
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [contentHeight, setContentHeight] = useState<number | "auto">("auto");
+
+  useEffect(() => {
+    const el = contentRef.current;
+    if (!el) return;
+
+    const update = () => {
+      if (contentRef.current) {
+        const h = contentRef.current.offsetHeight;
+        if (h > 0) {
+          setContentHeight(h);
+        }
+      }
+    };
+
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [current]);
 
   return (
     <div className="w-full p-4 sm:p-8">
-      <div className="mx-auto w-full max-w-xl space-y-8 rounded-2xl border border-zinc-200 bg-white p-5 sm:p-6 dark:border-white/8 dark:bg-[#141416]">
-        <div className="flex items-center justify-between gap-4">
-          <h3 className="text-sm font-semibold tracking-tight text-zinc-900 dark:text-white">Workspace setup</h3>
-          <span className="rounded-full border border-zinc-200 px-2.5 py-1 text-xs tabular-nums text-zinc-500 dark:border-white/10 dark:text-zinc-400">{finished ? "Complete" : `0${current + 1} / 04`}</span>
+      <div className="mx-auto w-full max-w-xl space-y-6 rounded-2xl border border-zinc-200 bg-white p-5 sm:p-6 dark:border-white/8 dark:bg-[#141416]">
+        <div>
+          <h3 className="text-sm font-semibold tracking-tight text-zinc-900 dark:text-white">
+            Workspace setup
+          </h3>
+          <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
+            Configure your team workspace in a few quick steps
+          </p>
         </div>
-        <Stepper orientation={orientation} showDescriptions={showDescriptions} animated={animated} steps={STEPPER_DEMO_STEPS} currentStep={current} onStepChange={setCurrent} ariaLabel="Workspace setup steps" />
-        <div className="min-h-32">
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.fieldset
-              key={current}
-              initial={{ opacity: 0, y: reduced ? 0 : 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: reduced ? 0 : -6 }}
-              transition={{ duration: reduced ? 0 : 0.18 }}
-              className="min-h-32 min-w-0 rounded-xl border border-zinc-300 bg-zinc-50 px-4 pb-4 dark:border-white/20 dark:bg-white/3"
-            >
-              <legend className="max-w-full px-2">
-                <h4 className="break-words text-sm font-medium text-zinc-900 dark:text-white">{titles[current]}</h4>
-              </legend>
-              <p className="mt-3 text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">{descriptions[current]}</p>
-            </motion.fieldset>
-          </AnimatePresence>
-        </div>
-        <p role="status" className="sr-only">{finished ? "Setup complete" : `Step ${current + 1} of 4: ${STEPPER_DEMO_STEPS[current].title}`}</p>
+        <Stepper
+          orientation={orientation}
+          showDescriptions={showDescriptions}
+          animated={animated}
+          steps={STEPPER_DEMO_STEPS}
+          currentStep={current}
+          onStepChange={setCurrent}
+          ariaLabel="Workspace setup steps"
+        />
+        <motion.div
+          animate={{ height: contentHeight }}
+          transition={
+            reduced
+              ? { duration: 0 }
+              : { type: "spring", stiffness: 320, damping: 30, mass: 0.8 }
+          }
+          className="relative overflow-hidden rounded-xl border border-zinc-200/90 bg-zinc-50/70 dark:border-white/10 dark:bg-white/2"
+        >
+          <div ref={contentRef} className="p-4 sm:p-5">
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={current}
+                initial={{ opacity: 0, y: reduced ? 0 : 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: reduced ? 0 : -6 }}
+                transition={{
+                  opacity: { duration: reduced ? 0 : 0.14 },
+                  y: { duration: reduced ? 0 : 0.14 },
+                }}
+              >
+                <div className="border-b border-zinc-200/70 pb-3 dark:border-white/5">
+                  <h4 className="text-sm font-medium text-zinc-900 dark:text-white">
+                    {titles[current]}
+                  </h4>
+                  <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+                    {descriptions[current]}
+                  </p>
+                </div>
+
+                <div className="mt-4">
+                  {current === 0 && (
+                    <div className="space-y-3.5">
+                      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                        <div className="space-y-1.5">
+                          <label className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
+                            Full Name
+                          </label>
+                          <input
+                            type="text"
+                            value={formData.fullName}
+                            onChange={(e) =>
+                              handleInputChange("fullName", e.target.value)
+                            }
+                            placeholder="e.g. Alex Rivera"
+                            className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-900 placeholder:text-zinc-400 outline-none transition focus:border-zinc-400 focus:ring-2 focus:ring-zinc-900/5 dark:border-white/10 dark:bg-zinc-900/80 dark:text-zinc-100 dark:placeholder:text-zinc-600 dark:focus:border-white/30 dark:focus:ring-white/10"
+                          />
+                        </div>
+                        <div className="space-y-1.5">
+                          <label className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
+                            Work Email
+                          </label>
+                          <input
+                            type="email"
+                            value={formData.email}
+                            onChange={(e) =>
+                              handleInputChange("email", e.target.value)
+                            }
+                            placeholder="alex@acme.dev"
+                            className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-900 placeholder:text-zinc-400 outline-none transition focus:border-zinc-400 focus:ring-2 focus:ring-zinc-900/5 dark:border-white/10 dark:bg-zinc-900/80 dark:text-zinc-100 dark:placeholder:text-zinc-600 dark:focus:border-white/30 dark:focus:ring-white/10"
+                          />
+                        </div>
+                      </div>
+                      <p className="text-[11px] text-zinc-400 dark:text-zinc-500">
+                        We will send workspace invitations and security
+                        notifications to this address.
+                      </p>
+                    </div>
+                  )}
+
+                  {current === 1 && (
+                    <div className="space-y-3.5">
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
+                          Workspace Name
+                        </label>
+                        <input
+                          type="text"
+                          value={formData.workspaceName}
+                          onChange={(e) =>
+                            handleInputChange("workspaceName", e.target.value)
+                          }
+                          placeholder="e.g. Acme Studio"
+                          className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-900 placeholder:text-zinc-400 outline-none transition focus:border-zinc-400 focus:ring-2 focus:ring-zinc-900/5 dark:border-white/10 dark:bg-zinc-900/80 dark:text-zinc-100 dark:placeholder:text-zinc-600 dark:focus:border-white/30 dark:focus:ring-white/10"
+                        />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
+                          Workspace URL
+                        </label>
+                        <div className="flex items-center rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs dark:border-white/10 dark:bg-zinc-900/80">
+                          <span className="select-none text-zinc-400 dark:text-zinc-500">
+                            devclubxnst.online/
+                          </span>
+                          <input
+                            type="text"
+                            value={formData.workspaceSlug}
+                            onChange={(e) =>
+                              handleInputChange("workspaceSlug", e.target.value)
+                            }
+                            placeholder="acme-studio"
+                            className="w-full bg-transparent pl-1 text-zinc-900 outline-none dark:text-zinc-100"
+                          />
+                        </div>
+                      </div>
+                      <div className="pt-2">
+                        <Slider
+                          label="Team Size"
+                          value={formData.teamSize}
+                          onValueChange={(val) =>
+                            handleInputChange(
+                              "teamSize",
+                              typeof val === "number" ? val : val[0],
+                            )
+                          }
+                          min={1}
+                          max={50}
+                          step={1}
+                          showValue={true}
+                          format={(val) => `${val}`}
+                          marks={[
+                            { value: 1, label: "1" },
+                            { value: 10, label: "10" },
+                            { value: 25, label: "25" },
+                            { value: 50, label: "50+" },
+                          ]}
+                          className="w-full"
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {current === 2 && (
+                    <div className="space-y-3.5">
+                      <div className="rounded-lg border border-zinc-200/80 bg-white p-3 text-xs dark:border-white/5 dark:bg-zinc-900/50">
+                        <div className="grid grid-cols-2 gap-2 text-zinc-600 dark:text-zinc-400">
+                          <div>
+                            <span className="block text-[10px] uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                              Account
+                            </span>
+                            <span className="font-medium text-zinc-900 dark:text-zinc-200">
+                              {formData.fullName || "—"}
+                            </span>
+                          </div>
+                          <div>
+                            <span className="block text-[10px] uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                              Email
+                            </span>
+                            <span className="font-medium text-zinc-900 dark:text-zinc-200">
+                              {formData.email || "—"}
+                            </span>
+                          </div>
+                          <div>
+                            <span className="block text-[10px] uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                              Workspace
+                            </span>
+                            <span className="font-medium text-zinc-900 dark:text-zinc-200">
+                              {formData.workspaceName || "—"}
+                            </span>
+                          </div>
+                          <div>
+                            <span className="block text-[10px] uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                              Team Size
+                            </span>
+                            <span className="font-medium text-zinc-900 dark:text-zinc-200">
+                              {formData.teamSize}
+                            </span>
+                          </div>
+                          <div className="col-span-2">
+                            <span className="block text-[10px] uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                              URL
+                            </span>
+                            <span className="font-medium text-zinc-900 dark:text-zinc-200">
+                              devclubxnst.online/{formData.workspaceSlug}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <label className="flex items-center gap-2.5 text-xs text-zinc-600 dark:text-zinc-400 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={formData.notifications}
+                          onChange={(e) =>
+                            handleInputChange("notifications", e.target.checked)
+                          }
+                          className="size-4 rounded border-zinc-300 accent-zinc-900 dark:accent-white"
+                        />
+                        <span>
+                          Send onboarding guides and team invitations to my
+                          email
+                        </span>
+                      </label>
+                    </div>
+                  )}
+
+                  {current === 3 && (
+                    <div className="space-y-3.5">
+                      <div className="space-y-2">
+                        <label className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
+                          Target Environment
+                        </label>
+                        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                          {[
+                            {
+                              id: "production",
+                              title: "Production",
+                              desc: "Live domain with edge caching",
+                            },
+                            {
+                              id: "staging",
+                              title: "Staging / Sandbox",
+                              desc: "Isolated sandbox environment",
+                            },
+                          ].map((env) => (
+                            <button
+                              key={env.id}
+                              type="button"
+                              onClick={() =>
+                                handleInputChange("environment", env.id)
+                              }
+                              className={cn(
+                                "flex flex-col items-start rounded-lg border p-3 text-left transition cursor-pointer",
+                                formData.environment === env.id
+                                  ? "border-zinc-900 bg-zinc-900/5 ring-1 ring-zinc-900/20 dark:border-white/40 dark:bg-white/5 dark:ring-white/20"
+                                  : "border-zinc-200 bg-white hover:border-zinc-300 dark:border-white/10 dark:bg-zinc-900/50 dark:hover:border-white/20",
+                              )}
+                            >
+                              <span className="text-xs font-medium text-zinc-900 dark:text-zinc-100">
+                                {env.title}
+                              </span>
+                              <span className="mt-0.5 text-[11px] text-zinc-500 dark:text-zinc-400">
+                                {env.desc}
+                              </span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                      <label className="flex items-center gap-2.5 text-xs text-zinc-600 dark:text-zinc-400 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={formData.autoDeploy}
+                          onChange={(e) =>
+                            handleInputChange("autoDeploy", e.target.checked)
+                          }
+                          className="size-4 rounded border-zinc-300 accent-zinc-900 dark:accent-white"
+                        />
+                        <span>
+                          Automatically provision database and API secrets on
+                          completion
+                        </span>
+                      </label>
+                    </div>
+                  )}
+
+                  {finished && (
+                    <div className="flex flex-col items-center justify-center py-3 text-center">
+                      <div className="flex size-10 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600 dark:bg-emerald-400/10 dark:text-emerald-400">
+                        <CheckIcon className="size-5" />
+                      </div>
+                      <h5 className="mt-2.5 text-sm font-semibold text-zinc-900 dark:text-white">
+                        Workspace Ready!
+                      </h5>
+                      <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+                        {formData.workspaceName} is set up for{" "}
+                        {formData.fullName} ({formData.teamSize}{" "}
+                        {formData.teamSize === 1 ? "member" : "members"}).
+                      </p>
+                      <div className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-zinc-200 bg-white px-3 py-1 text-[11px] font-medium text-zinc-700 dark:border-white/10 dark:bg-zinc-900 dark:text-zinc-300">
+                        <span>devclubxnst.online/{formData.workspaceSlug}</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </motion.div>
+        <p role="status" className="sr-only">
+          {finished
+            ? "Setup complete"
+            : `Step ${current + 1} of 4: ${STEPPER_DEMO_STEPS[current].title}`}
+        </p>
         <div className="flex items-center justify-between">
-          <CandyButton type="button" variant="obsidian" size="sm" className="motion-reduce:transition-none motion-reduce:active:scale-100" disabled={current === 0} onClick={() => setCurrent((step) => Math.max(0, step - 1))}>Back</CandyButton>
-          <CandyButton type="button" variant="obsidian" size="sm" className="motion-reduce:transition-none motion-reduce:active:scale-100" rightIcon={!finished ? <ArrowRightIcon /> : undefined} onClick={() => setCurrent((step) => finished ? 0 : step + 1)}>{finished ? "Start again" : current === 3 ? "Complete" : "Continue"}</CandyButton>
+          <CandyButton
+            type="button"
+            variant="obsidian"
+            size="sm"
+            className="motion-reduce:transition-none motion-reduce:active:scale-100"
+            disabled={current === 0}
+            onClick={() => setCurrent((step) => Math.max(0, step - 1))}
+          >
+            Back
+          </CandyButton>
+          <CandyButton
+            type="button"
+            variant="obsidian"
+            size="sm"
+            className="motion-reduce:transition-none motion-reduce:active:scale-100"
+            rightIcon={!finished ? <ArrowRightIcon /> : undefined}
+            onClick={() => setCurrent((step) => (finished ? 0 : step + 1))}
+          >
+            {finished ? "Start again" : current === 3 ? "Complete" : "Continue"}
+          </CandyButton>
         </div>
       </div>
     </div>
@@ -953,7 +1312,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     "desktop",
   );
   const [activeColor, setActiveColor] = useState<string>(PALETTE[3].hex);
-  const [stepperOrientation, setStepperOrientation] = useState<NonNullable<StepperProps["orientation"]>>("auto");
+  const [stepperOrientation, setStepperOrientation] =
+    useState<NonNullable<StepperProps["orientation"]>>("auto");
   const [stepperDescriptions, setStepperDescriptions] = useState(true);
   const [stepperAnimated, setStepperAnimated] = useState(true);
   const [fileUploadLayout, setFileUploadLayout] =
@@ -1053,7 +1413,6 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     setLiquidColor("monochrome");
     setLiquidViscosity("fluid");
   };
-
 
   const [liquidMediaConfig, setLiquidMediaConfig] = useState<{
     preset: LiquidMediaPresetId;
@@ -1687,7 +2046,13 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
           </div>
         );
       case "stepper":
-        return <StepperDemo orientation={stepperOrientation} showDescriptions={stepperDescriptions} animated={stepperAnimated} />;
+        return (
+          <StepperDemo
+            orientation={stepperOrientation}
+            showDescriptions={stepperDescriptions}
+            animated={stepperAnimated}
+          />
+        );
       case "segmented-progress":
         return (
           <div className="flex flex-col items-center justify-center w-full h-full min-h-96 select-none p-4 sm:p-8">
@@ -3338,22 +3703,63 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               {activeComponent.slug === "stepper" && (
                 <div className="pointer-events-auto flex w-full min-w-0 flex-col gap-5 p-3 font-sans sm:p-4">
                   <div className="flex items-center justify-between gap-4">
-                    <span className="text-sm font-semibold text-foreground">Stepper settings</span>
-                    <button type="button" onClick={() => { setStepperOrientation("auto"); setStepperDescriptions(true); setStepperAnimated(true); }} className="rounded-lg px-3 py-2 text-xs text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400">Reset</button>
+                    <span className="text-sm font-semibold text-foreground">
+                      Stepper settings
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setStepperOrientation("auto");
+                        setStepperDescriptions(true);
+                        setStepperAnimated(true);
+                      }}
+                      className="rounded-lg px-3 py-2 text-xs text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400"
+                    >
+                      Reset
+                    </button>
                   </div>
-                  <span className="text-xs font-medium text-muted-foreground">Layout</span>
-                  <SegmentedControlGroup aria-label="Stepper layout" className="w-full min-w-0">
-                    {(["auto", "horizontal", "vertical"] as const).map((orientation) => (
-                      <button key={orientation} type="button" aria-pressed={stepperOrientation === orientation} onClick={() => setStepperOrientation(orientation)} className="relative z-10 min-h-10 flex-1 rounded-lg px-2 text-xs capitalize focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400">{orientation}</button>
-                    ))}
+                  <span className="text-xs font-medium text-muted-foreground">
+                    Layout
+                  </span>
+                  <SegmentedControlGroup
+                    aria-label="Stepper layout"
+                    className="w-full min-w-0"
+                  >
+                    {(["auto", "horizontal", "vertical"] as const).map(
+                      (orientation) => (
+                        <button
+                          key={orientation}
+                          type="button"
+                          aria-pressed={stepperOrientation === orientation}
+                          onClick={() => setStepperOrientation(orientation)}
+                          className="relative z-10 min-h-10 flex-1 rounded-lg px-2 text-xs capitalize focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400"
+                        >
+                          {orientation}
+                        </button>
+                      ),
+                    )}
                   </SegmentedControlGroup>
                   <label className="flex cursor-pointer items-center justify-between gap-4 text-xs text-foreground">
                     Show descriptions
-                    <input type="checkbox" checked={stepperDescriptions} onChange={(event) => setStepperDescriptions(event.target.checked)} className="size-4 accent-orange-500" />
+                    <input
+                      type="checkbox"
+                      checked={stepperDescriptions}
+                      onChange={(event) =>
+                        setStepperDescriptions(event.target.checked)
+                      }
+                      className="size-4 accent-orange-500"
+                    />
                   </label>
                   <label className="flex cursor-pointer items-center justify-between gap-4 text-xs text-foreground">
                     Animate transitions
-                    <input type="checkbox" checked={stepperAnimated} onChange={(event) => setStepperAnimated(event.target.checked)} className="size-4 accent-orange-500" />
+                    <input
+                      type="checkbox"
+                      checked={stepperAnimated}
+                      onChange={(event) =>
+                        setStepperAnimated(event.target.checked)
+                      }
+                      className="size-4 accent-orange-500"
+                    />
                   </label>
                 </div>
               )}
