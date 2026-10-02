@@ -596,6 +596,27 @@
       ]
     },
     {
+      "name": "project-reveal",
+      "type": "registry:ui",
+      "title": "Project Reveal",
+      "description": "A compact project list that smoothly expands each row into an image-led detail card with configurable GSAP spring motion.",
+      "dependencies": [
+        "gsap",
+        "@gsap/react",
+        "@radix-ui/react-dialog",
+        "lucide-react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/project-reveal.tsx",
+          "type": "registry:ui",
+          "target": "@ui/project-reveal.tsx"
+        }
+      ]
+    },
+    {
       "name": "proximity-sidebar",
       "type": "registry:ui",
       "title": "Proximity Sidebar",

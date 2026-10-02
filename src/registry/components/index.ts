@@ -31,6 +31,7 @@ import orb from "./orb.json";
 import otpInput from "./otp-input.json";
 import pixelCard from "./pixel-card.json";
 import profileMenu from "./profile-menu.json";
+import projectReveal from "./project-reveal.json";
 import proximitySidebar from "./proximity-sidebar.json";
 import revealSheet from "./reveal-sheet.json";
 import scales from "./scales.json";
@@ -79,6 +80,7 @@ export {
   otpInput,
   pixelCard,
   profileMenu,
+  projectReveal,
   proximitySidebar,
   revealSheet,
   scales,
@@ -129,6 +131,7 @@ export const componentsList: ComponentRegistryItem[] = [
   otpInput as ComponentRegistryItem,
   pixelCard as ComponentRegistryItem,
   profileMenu as ComponentRegistryItem,
+  projectReveal as ComponentRegistryItem,
   proximitySidebar as ComponentRegistryItem,
   revealSheet as ComponentRegistryItem,
   scales as ComponentRegistryItem,

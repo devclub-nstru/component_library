@@ -44,6 +44,8 @@ import { ConfirmMorph } from "@/registry/ui/confirm-morph";
 import { SegmentedProgress } from "@/registry/ui/segmented-progress";
 import { FocusTestimonials } from "@/registry/ui/focus-testimonials";
 import { LiquidMediaShowcase } from "@/registry/ui/liquid-media";
+import { ProjectReveal } from "@/registry/ui/project-reveal";
+import { PROJECT_REVEAL_DEMO_ITEMS } from "@/components/showcase/project-reveal-demo";
 import { Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -97,6 +99,13 @@ export default function ComponentsPage() {
   const [revealSheetOpen, setRevealSheetOpen] = useState(false);
 
   const previewRenderers: Record<string, React.ReactNode> = {
+    "project-reveal": (
+      <ProjectReveal
+        items={PROJECT_REVEAL_DEMO_ITEMS}
+        thumbnailSize={24}
+        rowClassName="gap-2 px-1 [&_[data-project-category]]:w-20"
+      />
+    ),
     scales: (
       <div className="w-full max-w-70 flex flex-col gap-3">
         <HorizontalScale className="w-full h-8" />

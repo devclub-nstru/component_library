@@ -96,6 +96,12 @@ import { SpotlightSearch } from "@/registry/ui/spotlight-search";
 import { ProfileMenu } from "@/registry/ui/profile-menu";
 import { DateRangePicker } from "@/registry/ui/date-range-picker";
 import { RevealSheet, type RevealSheetSide } from "@/registry/ui/reveal-sheet";
+import { ProjectReveal } from "@/registry/ui/project-reveal";
+import {
+  PROJECT_REVEAL_DEMO_ITEMS,
+  PROJECT_REVEAL_DEFAULT_CONFIG,
+  ProjectRevealControls,
+} from "./project-reveal-demo";
 import { Editor } from "@/registry/ui/editor";
 import { DeleteSelectionShowcase } from "@/registry/ui/delete-selection";
 import { SegmentedProgress } from "@/registry/ui/segmented-progress";
@@ -414,6 +420,11 @@ const ALL_CATEGORIES = [
         label: "Liquid Media",
         slug: "liquid-media",
         href: "/components/liquid-media",
+      },
+      {
+        label: "Project Reveal",
+        slug: "project-reveal",
+        href: "/components/project-reveal",
       },
     ],
   },
@@ -1331,6 +1342,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     "DevClub UI Selection AI Editor integrates seamless text formatting, an interactive thinking orb, multi-stage context retrieval, and word-by-word streaming.",
   );
   const [revealSheetOpen, setRevealSheetOpen] = useState(false);
+  const [projectRevealConfig, setProjectRevealConfig] = useState({
+    ...PROJECT_REVEAL_DEFAULT_CONFIG,
+  });
   const [revealSheetConfig, setRevealSheetConfig] = useState<{
     side: RevealSheetSide;
     speed: number;
@@ -2063,6 +2077,15 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         return (
           <div className="flex w-full items-center justify-center p-4 sm:p-8 select-none">
             <FocusTestimonials />
+          </div>
+        );
+      case "project-reveal":
+        return (
+          <div className="flex w-full max-w-3xl items-center justify-center px-4 py-12 sm:px-10">
+            <ProjectReveal
+              items={PROJECT_REVEAL_DEMO_ITEMS}
+              {...projectRevealConfig}
+            />
           </div>
         );
       case "liquid-media": {
@@ -5504,6 +5527,13 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     onChange={setMacSwitchColor}
                   />
                 </div>
+              )}
+
+              {activeComponent.slug === "project-reveal" && (
+                <ProjectRevealControls
+                  config={projectRevealConfig}
+                  onChange={setProjectRevealConfig}
+                />
               )}
 
               {activeComponent.slug === "liquid-media" && (
