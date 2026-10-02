@@ -62,6 +62,7 @@ const componentTitles = {
   "profile-menu": "Profile Command Menu",
   "date-range-picker": "Date Range Picker",
   "segmented-progress": "Segmented Progress",
+  stepper: "Stepper",
 };
 
 const getTarget = (filePath, fileName) => {
