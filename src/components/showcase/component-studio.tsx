@@ -97,6 +97,11 @@ import { ProfileMenu } from "@/registry/ui/profile-menu";
 import { DateRangePicker } from "@/registry/ui/date-range-picker";
 import { RevealSheet, type RevealSheetSide } from "@/registry/ui/reveal-sheet";
 import {
+  MatrixClockDemo,
+  MatrixClockControls,
+  MATRIX_CLOCK_DEFAULT_CONFIG,
+} from "./matrix-clock-demo";
+import {
   FlipClockDemo,
   FlipClockControls,
   FLIP_CLOCK_DEFAULT_CONFIG,
@@ -1076,6 +1081,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
   const [revealSheetOpen, setRevealSheetOpen] = useState(false);
   const [taskCardConfig, setTaskCardConfig] = useState(TASK_CARD_DEFAULT_CONFIG);
   const [selectedTaskCard, setSelectedTaskCard] = useState("interface");
+  const [matrixClockConfig, setMatrixClockConfig] = useState({
+    ...MATRIX_CLOCK_DEFAULT_CONFIG,
+  });
   const [flipClockConfig, setFlipClockConfig] = useState({
     ...FLIP_CLOCK_DEFAULT_CONFIG,
   });
@@ -1834,6 +1842,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
             selectedId={selectedTaskCard}
           />
         );
+      case "matrix-clock":
+        return <MatrixClockDemo config={matrixClockConfig} />;
       case "flip-clock":
         return (
           <FlipClockDemo key={flipClockConfig.mode} config={flipClockConfig} />
@@ -3411,6 +3421,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               (activeComponent.slug === "dither" ||
                 activeComponent.slug === "noise" ||
                 activeComponent.slug === "orbit-gallery" ||
+                activeComponent.slug === "matrix-clock" ||
                 activeComponent.slug === "flip-clock" ||
                 activeComponent.slug === "task-card") &&
                 viewport === "desktop"
@@ -3463,6 +3474,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     activeComponent.slug === "dither" ||
                       activeComponent.slug === "noise" ||
                       activeComponent.slug === "orbit-gallery" ||
+                      activeComponent.slug === "matrix-clock" ||
                       activeComponent.slug === "flip-clock" ||
                       activeComponent.slug === "task-card"
                       ? "p-0"
@@ -5308,6 +5320,12 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   onChange={setTaskCardConfig}
                   selectedId={selectedTaskCard}
                   onSelect={setSelectedTaskCard}
+                />
+              )}
+              {activeComponent.slug === "matrix-clock" && (
+                <MatrixClockControls
+                  config={matrixClockConfig}
+                  onChange={setMatrixClockConfig}
                 />
               )}
               {activeComponent.slug === "flip-clock" && (

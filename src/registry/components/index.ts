@@ -15,6 +15,7 @@ import editor from "./editor.json";
 import fileUpload from "./file-upload.json";
 import fileDropzone from "./file-dropzone.json";
 import flipClock from "./flip-clock.json";
+import matrixClock from "./matrix-clock.json";
 import fileTree from "./file-tree.json";
 import focusTestimonials from "./focus-testimonials.json";
 import githubActivity from "./github-activity.json";
@@ -71,6 +72,7 @@ export {
   fileUpload,
   fileDropzone,
   flipClock,
+  matrixClock,
   fileTree,
   focusTestimonials,
   githubActivity,
@@ -128,6 +130,7 @@ export const componentsList: ComponentRegistryItem[] = [
   fileUpload as ComponentRegistryItem,
   fileDropzone as ComponentRegistryItem,
   flipClock as ComponentRegistryItem,
+  matrixClock as ComponentRegistryItem,
   fileTree as ComponentRegistryItem,
   focusTestimonials as ComponentRegistryItem,
   githubActivity as ComponentRegistryItem,

@@ -48,6 +48,7 @@ import { SegmentedProgress } from "@/registry/ui/segmented-progress";
 import { FocusTestimonials } from "@/registry/ui/focus-testimonials";
 import { LiquidMediaShowcase } from "@/registry/ui/liquid-media";
 import { FlipClock } from "@/registry/ui/flip-clock";
+import { MatrixClockDemo } from "@/components/showcase/matrix-clock-demo";
 import OrbitGalleryDemo from "@/components/showcase/orbit-gallery-demo";
 import { ProjectReveal } from "@/registry/ui/project-reveal";
 import { PROJECT_REVEAL_DEMO_ITEMS } from "@/components/showcase/project-reveal-demo";
@@ -119,6 +120,7 @@ export default function ComponentsPage() {
         <TaskCard {...TASK_CARD_DEMO_TASKS[0]} hoverLift={0} padding={16} />
       </div>
     ),
+    "matrix-clock": <MatrixClockDemo compact />,
     "flip-clock": (
       <FlipClock
         date="2026-10-02T21:19:00"
