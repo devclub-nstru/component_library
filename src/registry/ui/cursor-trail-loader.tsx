@@ -29,6 +29,11 @@ export interface CursorTrailLoaderProps {
   label?: string;
   className?: string;
   onComplete?: () => void;
+  layout?: "trail" | "grid";
+  messages?: readonly string[];
+  gridColumns?: number;
+  gridRows?: number;
+  gridOpacity?: number;
 }
 
 const bounded = (value: number, fallback: number, min: number, max: number) =>
@@ -55,6 +60,11 @@ export function CursorTrailLoader({
   label = "Loading",
   className,
   onComplete,
+  layout = "trail",
+  messages = ["Loading"],
+  gridColumns = 4,
+  gridRows = 4,
+  gridOpacity = 0.08,
 }: CursorTrailLoaderProps) {
   const rootRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -72,6 +82,12 @@ export function CursorTrailLoader({
   const [counter, setCounter] = useState(0);
   const automatic = progress === undefined;
   const sourceKey = JSON.stringify(images);
+  const phrases = messages.filter((message) => message.trim()).slice(0, 12);
+  if (!phrases.length) phrases.push(label);
+  const messageKey = JSON.stringify(phrases);
+  const columns = Math.round(bounded(gridColumns, 4, 2, 8));
+  const rows = Math.round(bounded(gridRows, 4, 2, 8));
+  const grid = layout === "grid";
   const loadingDuration = bounded(duration, 4.2, 0.5, 30);
   const exitDuration = bounded(revealDuration, 0.9, 0.2, 3);
   const size = bounded(imageSize, 160, 60, 360);
@@ -119,14 +135,21 @@ export function CursorTrailLoader({
             "[data-cursor-trail-asset]",
             root,
           );
+          const message = root.querySelector<HTMLElement>(
+            "[data-grid-loader-message]",
+          );
+          let messageIndex = -1;
+          let messageAnimation: gsap.core.Timeline | null = null;
           let active = true;
           let revealing = finishedRef.current;
           let waiting = false;
           let bounds = root.getBoundingClientRect();
           let imageWidth = 0;
+          let imageHeight = 0;
           let index = 0;
           let anchor: { x: number; y: number } | null = null;
           let previous: { x: number; y: number } | null = null;
+          let activeCell: string | null = null;
 
           const finish = () => {
             if (!active || finishedRef.current) return;
@@ -134,10 +157,35 @@ export function CursorTrailLoader({
             setComplete(true);
             callbackRef.current?.();
           };
-          const showProgress = (value: number) => {
+          const showProgress = context.add("showProgress", (value: number) => {
             setCounter(Math.round(value));
             overlay.setAttribute("aria-valuenow", String(Math.round(value)));
-          };
+            if (!grid || !message) return;
+            const next = Math.min(
+              phrases.length - 1,
+              Math.floor(value / 100 * phrases.length),
+            );
+            if (next === messageIndex) return;
+            messageAnimation?.kill();
+            if (messageIndex === -1 || reduced) {
+              message.textContent = phrases[next];
+              gsap.set(message, { autoAlpha: 1, y: 0, yPercent: 0 });
+            } else {
+              messageAnimation = gsap
+                .timeline({
+                  defaults: { ease: "power3.out" },
+                  paused: pausedRef.current,
+                })
+                .to(message, { autoAlpha: 0, yPercent: -30, duration: 0.12 })
+                .call(() => {
+                  message.textContent = phrases[next];
+                })
+                .set(message, { autoAlpha: 0, y: 0, yPercent: 30 })
+                .to(message, { autoAlpha: 1, y: 0, yPercent: 0, duration: 0.24 })
+                .set(message, { autoAlpha: 1, y: 0, yPercent: 0 });
+            }
+            messageIndex = next;
+          }) as (value: number) => void;
 
           gsap.set(overlay, {
             autoAlpha: finishedRef.current ? 0 : 1,
@@ -146,19 +194,29 @@ export function CursorTrailLoader({
           gsap.set(content, {
             y: reduced || finishedRef.current ? 0 : 24,
           });
-          gsap.set(counterElement, { autoAlpha: 1, yPercent: 0 });
+          gsap.set(counterElement, { autoAlpha: 1, y: 0, yPercent: 0 });
           gsap.set(cards, { autoAlpha: 0, xPercent: -50, yPercent: -50 });
+          showProgress(automatic ? 0 : progressRef.current ?? 0);
 
           const measure = context.add("measure", () => {
             bounds = root.getBoundingClientRect();
-            const nextWidth = Math.min(
-              size,
-              bounds.width * 0.38,
-              bounds.height * ratio * 0.55,
-            );
-            if (nextWidth === imageWidth) return;
+            const nextWidth = grid
+              ? bounds.width / columns
+              : Math.min(size, bounds.width * 0.38, bounds.height * ratio * 0.55);
+            const nextHeight = grid ? bounds.height / rows : nextWidth / ratio;
+            if (nextWidth === imageWidth && nextHeight === imageHeight) return;
             imageWidth = nextWidth;
-            gsap.set(cards, { width: imageWidth, height: imageWidth / ratio });
+            imageHeight = nextHeight;
+            gsap.set(cards, { width: imageWidth, height: imageHeight });
+            if (grid) {
+              cards.forEach((card) => {
+                if (!card.hasAttribute("data-grid-column")) return;
+                gsap.set(card, {
+                  x: (Number(card.dataset.gridColumn) + 0.5) * imageWidth,
+                  y: (Number(card.dataset.gridRow) + 0.5) * imageHeight,
+                });
+              });
+            }
           }) as () => void;
           measure();
 
@@ -176,12 +234,17 @@ export function CursorTrailLoader({
               .timeline({ paused: true })
               .fromTo(
                 card,
-                { autoAlpha: 0, scale: 0.65 },
+                { autoAlpha: 0, scale: grid ? 0.96 : 0.65 },
                 { autoAlpha: 1, scale: 1, duration: 0.22, ease: "power3.out" },
               )
               .to(
                 card,
-                { autoAlpha: 0, scale: 0.92, duration: 0.5, ease: "power2.inOut" },
+                {
+                  autoAlpha: 0,
+                  scale: grid ? 1 : 0.92,
+                  duration: 0.5,
+                  ease: "power2.inOut",
+                },
                 0.22 + lifetime,
               );
             return { card, place, xTo, yTo, animation, used: false };
@@ -201,7 +264,20 @@ export function CursorTrailLoader({
             const dx = point.x - (previous?.x ?? point.x);
             const dy = point.y - (previous?.y ?? point.y);
             previous = point;
+            const column = gsap.utils.clamp(
+              0,
+              columns - 1,
+              Math.floor(point.x / imageWidth),
+            );
+            const row = gsap.utils.clamp(
+              0,
+              rows - 1,
+              Math.floor(point.y / imageHeight),
+            );
+            const cell = `${column}-${row}`;
+            if (grid && activeCell === cell) return;
             if (
+              !grid &&
               anchor &&
               Math.hypot(point.x - anchor.x, point.y - anchor.y) < spacing
             ) return;
@@ -228,9 +304,21 @@ export function CursorTrailLoader({
               tilt,
               dx * 0.4 + (index % 3 - 1) * tilt * 0.45,
             );
-            trail.place({ rotation: angle, zIndex: ++index });
-            trail.xTo(x, x - dx * 0.4);
-            trail.yTo(y, y - dy * 0.4);
+            if (grid) {
+              trail.card.dataset.gridColumn = String(column);
+              trail.card.dataset.gridRow = String(row);
+              trail.place({
+                rotation: 0,
+                zIndex: ++index,
+                x: (column + 0.5) * imageWidth,
+                y: (row + 0.5) * imageHeight,
+              });
+              activeCell = cell;
+            } else {
+              trail.place({ rotation: angle, zIndex: ++index });
+              trail.xTo(x, x - dx * 0.4);
+              trail.yTo(y, y - dy * 0.4);
+            }
             trail.used = true;
             trail.animation.restart();
             anchor = point;
@@ -239,11 +327,13 @@ export function CursorTrailLoader({
             bounds = root.getBoundingClientRect();
             anchor = null;
             previous = null;
+            activeCell = null;
             spawn(event);
           };
           const leave = () => {
             anchor = null;
             previous = null;
+            activeCell = null;
           };
 
           if (context.conditions?.hover && !reduced) {
@@ -261,13 +351,31 @@ export function CursorTrailLoader({
             );
           }
           if (automatic && !reduced) {
-            [24, 55, 76, 100].forEach((value, stage) => {
+            if (grid) {
+              phrases.forEach((_, stage) => {
+                timeline.call(
+                  () =>
+                    showProgress(
+                      Math.min(99, Math.ceil(stage / phrases.length * 100)),
+                    ),
+                  [],
+                  loadingDuration * stage / phrases.length,
+                );
+              });
               timeline.call(
-                () => showProgress(value),
+                () => showProgress(100),
                 [],
-                loadingDuration * [0.22, 0.47, 0.7, 0.9][stage],
+                loadingDuration * 0.98,
               );
-            });
+            } else {
+              [24, 55, 76, 100].forEach((value, stage) => {
+                timeline.call(
+                  () => showProgress(value),
+                  [],
+                  loadingDuration * [0.22, 0.47, 0.7, 0.9][stage],
+                );
+              });
+            }
           }
           timeline.addLabel(
             "reveal",
@@ -283,6 +391,7 @@ export function CursorTrailLoader({
             .call(() => {
               revealing = true;
               showProgress(100);
+              messageAnimation?.kill();
               trails.forEach(({ animation, xTo, yTo }) => {
                 animation.pause();
                 xTo.tween.pause();
@@ -337,6 +446,7 @@ export function CursorTrailLoader({
           };
           const pause = (value: boolean) => {
             if (value || !waiting) timeline.paused(value);
+            messageAnimation?.paused(value);
             trails.forEach(({ animation, xTo, yTo, used }) => {
               if (used && (value || !revealing)) {
                 animation.paused(value);
@@ -359,6 +469,7 @@ export function CursorTrailLoader({
 
           return () => {
             active = false;
+            messageAnimation?.kill();
             controlRef.current = null;
             observer.disconnect();
             window.removeEventListener("scroll", measure, true);
@@ -375,6 +486,10 @@ export function CursorTrailLoader({
       scope: rootRef,
       dependencies: [
         sourceKey,
+        messageKey,
+        grid,
+        columns,
+        rows,
         automatic,
         loadingDuration,
         exitDuration,
@@ -399,7 +514,7 @@ export function CursorTrailLoader({
   return (
     <div
       ref={rootRef}
-      data-slot="cursor-trail-loader"
+      data-slot={grid ? "grid-image-loader" : "cursor-trail-loader"}
       aria-busy={!complete}
       className={cn(
         "relative isolate min-h-80 w-full overflow-hidden [container-type:inline-size]",
@@ -410,7 +525,7 @@ export function CursorTrailLoader({
         ref={contentRef}
         inert={!complete}
         aria-hidden={!complete}
-        className="relative min-h-[inherit]"
+        className={cn("relative min-h-[inherit]", grid && "h-full")}
       >
         {children}
       </div>
@@ -428,6 +543,18 @@ export function CursorTrailLoader({
         )}
         style={{ backgroundColor: background, color: foreground }}
       >
+        {grid && (
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0"
+            style={{
+              backgroundImage:
+                "linear-gradient(to right, currentColor 1px, transparent 1px), linear-gradient(to bottom, currentColor 1px, transparent 1px)",
+              backgroundSize: `${100 / columns}% ${100 / rows}%`,
+              opacity: bounded(gridOpacity, 0.08, 0, 0.3),
+            }}
+          />
+        )}
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-10">
           <div className="hidden">
             {images.map((src, index) => (
@@ -454,19 +581,34 @@ export function CursorTrailLoader({
         </div>
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute right-[6%] bottom-[5%] z-30 overflow-hidden"
+          className={cn(
+            "pointer-events-none absolute z-30 overflow-hidden",
+            grid
+              ? "inset-0 flex items-center justify-center px-[6%]"
+              : "right-[6%] bottom-[5%]",
+          )}
         >
           <div
             ref={counterRef}
-            className="text-[clamp(2.75rem,10cqw,7.5rem)] leading-none font-semibold tracking-[-0.07em] tabular-nums"
+            className={
+              grid
+                ? "w-full text-center text-[clamp(1rem,4.5cqw,3.5rem)] leading-[1.15] font-semibold tracking-[-0.035em] uppercase"
+                : "text-[clamp(2.75rem,10cqw,7.5rem)] leading-none font-semibold tracking-[-0.07em] tabular-nums"
+            }
           >
-            <AnimatedCounter
-              value={counter}
-              padStart={2}
-              separator=""
-              duration={0.4}
-              gooey={false}
-            />
+            {grid ? (
+              <span data-grid-loader-message className="block text-balance">
+                {phrases[0]}
+              </span>
+            ) : (
+              <AnimatedCounter
+                value={counter}
+                padStart={2}
+                separator=""
+                duration={0.4}
+                gooey={false}
+              />
+            )}
           </div>
         </div>
       </div>

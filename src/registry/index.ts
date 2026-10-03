@@ -28,6 +28,7 @@ import {
   loader,
   imageLoader,
   cursorTrailLoader,
+  gridImageLoader,
   macSlider,
   macSwitch,
   morphSearch,
@@ -59,6 +60,7 @@ import {
 
 export const COMPONENT_REGISTRY: Record<string, ComponentRegistryItem> = {
   "cursor-trail-loader": cursorTrailLoader as ComponentRegistryItem,
+  "grid-image-loader": gridImageLoader as ComponentRegistryItem,
   "image-loader": imageLoader as ComponentRegistryItem,
   loader: loader as ComponentRegistryItem,
   "task-card": taskCard as ComponentRegistryItem,
