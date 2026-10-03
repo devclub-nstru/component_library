@@ -118,6 +118,11 @@ import {
   IMAGE_LOADER_DEFAULT_CONFIG,
 } from "./image-loader-demo";
 import {
+  CursorTrailLoaderDemo,
+  CursorTrailLoaderControls,
+  CURSOR_TRAIL_LOADER_DEFAULT_CONFIG,
+} from "./cursor-trail-loader-demo";
+import {
   PROJECT_REVEAL_DEMO_ITEMS,
   PROJECT_REVEAL_DEFAULT_CONFIG,
   ProjectRevealControls,
@@ -1084,6 +1089,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
   const [imageLoaderConfig, setImageLoaderConfig] = useState({
     ...IMAGE_LOADER_DEFAULT_CONFIG,
   });
+  const [cursorTrailLoaderConfig, setCursorTrailLoaderConfig] = useState({
+    ...CURSOR_TRAIL_LOADER_DEFAULT_CONFIG,
+  });
   const [revealSheetConfig, setRevealSheetConfig] = useState<{
     side: RevealSheetSide;
     speed: number;
@@ -1836,6 +1844,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         return <LoaderDemo config={loaderConfig} />;
       case "image-loader":
         return <ImageLoaderDemo config={imageLoaderConfig} />;
+      case "cursor-trail-loader":
+        return <CursorTrailLoaderDemo config={cursorTrailLoaderConfig} />;
       case "project-reveal":
         return (
           <div className="flex w-full max-w-3xl items-center justify-center px-4 py-12 sm:px-10">
@@ -5329,6 +5339,13 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 <ImageLoaderControls
                   config={imageLoaderConfig}
                   onChange={setImageLoaderConfig}
+                />
+              )}
+
+              {activeComponent.slug === "cursor-trail-loader" && (
+                <CursorTrailLoaderControls
+                  config={cursorTrailLoaderConfig}
+                  onChange={setCursorTrailLoaderConfig}
                 />
               )}
 

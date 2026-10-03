@@ -26,6 +26,7 @@ import {
   liquidToggle,
   loader,
   imageLoader,
+  cursorTrailLoader,
   macSlider,
   macSwitch,
   morphSearch,
@@ -56,6 +57,7 @@ import {
 } from "./components";
 
 export const COMPONENT_REGISTRY: Record<string, ComponentRegistryItem> = {
+  "cursor-trail-loader": cursorTrailLoader as ComponentRegistryItem,
   "image-loader": imageLoader as ComponentRegistryItem,
   loader: loader as ComponentRegistryItem,
   "task-card": taskCard as ComponentRegistryItem,
