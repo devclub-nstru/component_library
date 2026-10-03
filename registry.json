@@ -189,6 +189,31 @@
       ]
     },
     {
+      "name": "cursor-trail-loader",
+      "type": "registry:ui",
+      "title": "Cursor Trail Loader",
+      "description": "A rolling loading counter with a cursor-driven image trail and a smooth upward content reveal.",
+      "dependencies": [
+        "gsap",
+        "@gsap/react",
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/cursor-trail-loader.tsx",
+          "type": "registry:ui",
+          "target": "@ui/cursor-trail-loader.tsx"
+        },
+        {
+          "path": "src/registry/ui/animated-counter.tsx",
+          "type": "registry:ui",
+          "target": "@ui/animated-counter.tsx"
+        }
+      ]
+    },
+    {
       "name": "date-range-picker",
       "type": "registry:ui",
       "title": "Date Range Picker",
