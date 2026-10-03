@@ -446,6 +446,36 @@
       ]
     },
     {
+      "name": "grid-image-loader",
+      "type": "registry:ui",
+      "title": "Grid Image Loader",
+      "description": "A dark grid loader with smooth cycling phrases, images on cursor hover, and an upward content reveal.",
+      "dependencies": [
+        "gsap",
+        "@gsap/react",
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/grid-image-loader.tsx",
+          "type": "registry:ui",
+          "target": "@ui/grid-image-loader.tsx"
+        },
+        {
+          "path": "src/registry/ui/cursor-trail-loader.tsx",
+          "type": "registry:ui",
+          "target": "@ui/cursor-trail-loader.tsx"
+        },
+        {
+          "path": "src/registry/ui/animated-counter.tsx",
+          "type": "registry:ui",
+          "target": "@ui/animated-counter.tsx"
+        }
+      ]
+    },
+    {
       "name": "hook-sidebar",
       "type": "registry:ui",
       "title": "Hook Sidebar",

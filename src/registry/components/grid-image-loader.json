@@ -1,18 +1,19 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
-  "slug": "cursor-trail-loader",
-  "name": "Cursor Trail Loader",
-  "title": "Cursor Trail Loader",
+  "slug": "grid-image-loader",
+  "name": "Grid Image Loader",
+  "title": "Grid Image Loader",
   "type": "registry:ui",
-  "description": "A rolling loading counter with a cursor-driven image trail and a smooth upward content reveal.",
-  "summary": "Move the cursor while loading to leave a layered trail of images that ease into place, tilt with movement, and fade away. A rolling counter settles at 100 before the loading curtain lifts to reveal the page. Configure image geometry, trail density, timing, colors, progress, and replay.",
+  "description": "A dark grid loader with smooth cycling phrases, images on cursor hover, and an upward content reveal.",
+  "summary": "Move across the grid to reveal photographs inside each hovered cell. Centered phrases change with a scoped GSAP sequence before the loading curtain lifts. Customize phrases, images, grid dimensions, timing, colors and progress. The showcase opens onto the requested Virat Kohli photograph.",
   "category": "loaders",
   "tags": [
     "loader",
-    "cursor",
+    "grid",
     "images",
-    "trail",
+    "cursor",
     "hover",
+    "phrases",
     "gsap"
   ],
   "dependencies": [
@@ -28,64 +29,66 @@
   "interactive": true,
   "supportsColor": false,
   "highlights": [
-    "Cursor-driven image trail with velocity-based tilt",
-    "Reusable bounded image pool with smooth fading",
-    "Existing Animated Counter reused for rolling digits",
-    "Automatic and controlled progress with pause and replay",
-    "Reduced-motion fallback and scoped animation cleanup"
+    "Images align precisely to hovered grid cells",
+    "Smooth centered phrase transitions synchronized to loading",
+    "Bounded reusable image pool with fading cards",
+    "Shared cursor-loader lifecycle, progress, pause and replay",
+    "Upward curtain reveals children after loading",
+    "Reduced-motion fallback and touch-safe loading"
   ],
   "anatomy": [
-    "<CursorTrailLoader> loading container",
-    "Decorative cursor image pool",
-    "Rolling progress counter in the lower-right corner",
-    "Upward loading curtain",
-    "Content revealed after loading"
+    "<GridImageLoader> configured wrapper around the shared cursor-loader engine",
+    "Responsive decorative grid",
+    "Fixed cell image cards with an entrance and fade timeline",
+    "Centered phrase mask and transition",
+    "Loading curtain and inert content layer"
   ],
   "physics": {
-    "engine": "GSAP + existing Animated Counter",
-    "description": "GSAP quickTo reuses pointer-follow tweens. Each image card has a reusable entrance, hold, and fade timeline. Distance-based spawning limits trail density. A scoped master timeline controls progress stages and the curtain reveal; the existing Animated Counter handles rolling digits.",
+    "engine": "GSAP",
+    "description": "Each hover card reuses an entrance, hold and fade timeline. Grid coordinates come from container measurements, and resize observation keeps cards aligned. One master timeline synchronizes loading phases and curtain motion. Phrase timelines, pointer listeners and observers are cleaned up on unmount.",
     "parameters": [
       {
         "label": "Loading",
-        "value": "4.2s"
+        "value": "6s"
       },
       {
-        "label": "Pointer smoothing",
-        "value": "0.2s \u00b7 power3.out"
+        "label": "Grid",
+        "value": "4 \u00d7 4 cells"
       },
       {
-        "label": "Trail spacing",
-        "value": "55px"
+        "label": "Phrase transition",
+        "value": "0.12s out / 0.24s in"
       },
       {
         "label": "Reveal",
-        "value": "0.9s \u00b7 power3.inOut"
+        "value": "0.95s \u00b7 power3.inOut"
       }
     ]
   },
   "accessibility": {
     "role": "progressbar",
-    "aria": "Loading progress is labeled. Trail images are decorative and pointer-transparent. Page content stays inert until loading completes.",
-    "reducedMotion": "Cursor trails and curtain movement are disabled. Automatic loading reveals content immediately; controlled loading waits for progress to reach 100."
+    "aria": "Progress is labeled; grid, phrases and hover images are decorative. Revealed content stays inert and hidden from assistive technology until completion.",
+    "reducedMotion": "Image and phrase animations are disabled. Automatic loading reveals immediately; controlled loading waits for 100%."
   },
   "guidelines": {
     "recommended": [
-      "Portfolio introductions",
-      "Image-led landing pages",
-      "Interactive loading screens"
+      "Image-led landing pages and portfolio introductions",
+      "Brief loading sequences with customizable editorial phrases",
+      "Use real controlled progress for production loading"
     ],
     "bestPractices": [
-      "Connect progress to real loading work when used in production.",
-      "Keep automatic loading short and provide pause or replay for demos.",
-      "Cursor trails require a fine hover pointer; loading and content reveal also work without hover.",
-      "Provide accessible content through children."
+      "Provide descriptive alt text for revealed content through children",
+      "Use landscape hover images for wide cells",
+      "Hover imagery requires a fine pointer; loading still completes on touch devices",
+      "Use replayKey to replay and paused to suspend all motion",
+      "Keep the phase duration long enough for phrases to be read"
     ]
   },
   "props": [
     {
       "name": "images",
       "type": "string[]",
-      "description": "Image URLs for the decorative cursor trail. Loaded images cycle in order; failed images are skipped.",
+      "description": "Hover image URLs. Loaded images cycle as the pointer enters new grid cells; failed images are skipped.",
       "required": true
     },
     {
@@ -102,73 +105,37 @@
       "name": "duration",
       "type": "number",
       "description": "Automatic loading duration in seconds.",
-      "defaultValue": "4.2"
+      "defaultValue": "6"
     },
     {
       "name": "revealDuration",
       "type": "number",
       "description": "Duration of the upward curtain reveal in seconds.",
-      "defaultValue": "0.9"
-    },
-    {
-      "name": "imageSize",
-      "type": "number",
-      "description": "Trail image width in pixels, constrained to the container.",
-      "defaultValue": "160"
-    },
-    {
-      "name": "imageAspectRatio",
-      "type": "number",
-      "description": "Image width divided by height.",
-      "defaultValue": "0.8"
-    },
-    {
-      "name": "trailLength",
-      "type": "number",
-      "description": "Maximum number of image cards in the reusable trail pool.",
-      "defaultValue": "10"
-    },
-    {
-      "name": "trailSpacing",
-      "type": "number",
-      "description": "Cursor travel distance in pixels before the next image appears.",
-      "defaultValue": "55"
+      "defaultValue": "0.95"
     },
     {
       "name": "trailLifetime",
       "type": "number",
       "description": "Image hold before fading, in seconds.",
-      "defaultValue": "0.8"
-    },
-    {
-      "name": "followDuration",
-      "type": "number",
-      "description": "Cursor-follow smoothing duration in seconds.",
-      "defaultValue": "0.2"
-    },
-    {
-      "name": "rotation",
-      "type": "number",
-      "description": "Maximum image tilt in degrees.",
-      "defaultValue": "18"
+      "defaultValue": "0.65"
     },
     {
       "name": "borderRadius",
       "type": "number",
       "description": "Image corner radius in pixels.",
-      "defaultValue": "3"
+      "defaultValue": "0"
     },
     {
       "name": "background",
       "type": "string",
       "description": "Loading curtain background color.",
-      "defaultValue": "\"#f0efe9\""
+      "defaultValue": "\"#191919\""
     },
     {
       "name": "foreground",
       "type": "string",
       "description": "Loading counter color.",
-      "defaultValue": "\"#171717\""
+      "defaultValue": "\"#f0efe9\""
     },
     {
       "name": "paused",
@@ -199,16 +166,10 @@
       "description": "Called once after the content is revealed."
     },
     {
-      "name": "layout",
-      "type": "\"trail\" | \"grid\"",
-      "description": "Use a floating cursor trail or images snapped to a cell grid.",
-      "defaultValue": "\"trail\""
-    },
-    {
       "name": "messages",
       "type": "readonly string[]",
-      "description": "Phrases shown in the grid layout. Empty phrases are skipped; up to 12 are supported.",
-      "defaultValue": "[\"Loading\"]"
+      "description": "Centered loading phrases, shown in sequence as loading progresses. Up to 12 nonempty phrases are supported.",
+      "defaultValue": "GRID_IMAGE_LOADER_MESSAGES"
     },
     {
       "name": "gridColumns",
@@ -226,10 +187,18 @@
       "name": "gridOpacity",
       "type": "number",
       "description": "Grid line opacity, bounded to 0\u20130.3.",
-      "defaultValue": "0.08"
+      "defaultValue": "0.07"
     }
   ],
   "files": [
+    {
+      "name": "grid-image-loader.tsx",
+      "path": "registry/ui/grid-image-loader.tsx",
+      "code": "\"use client\";\n\nimport {\n  CursorTrailLoader,\n  type CursorTrailLoaderProps,\n} from \"./cursor-trail-loader\";\n\nexport const GRID_IMAGE_LOADER_MESSAGES = [\n  \"MOVE FIRST\",\n  \"OWN THE PACE\",\n  \"CHASE DAYLIGHT\",\n  \"MOVE FIRST\",\n  \"READY?\",\n  \"LET'S GO\",\n] as const;\n\nexport type GridImageLoaderProps = Pick<\n  CursorTrailLoaderProps,\n  | \"images\"\n  | \"children\"\n  | \"progress\"\n  | \"duration\"\n  | \"revealDuration\"\n  | \"trailLifetime\"\n  | \"borderRadius\"\n  | \"background\"\n  | \"foreground\"\n  | \"paused\"\n  | \"replayKey\"\n  | \"label\"\n  | \"className\"\n  | \"onComplete\"\n  | \"messages\"\n  | \"gridColumns\"\n  | \"gridRows\"\n  | \"gridOpacity\"\n>;\n\nexport function GridImageLoader({\n  messages = GRID_IMAGE_LOADER_MESSAGES,\n  duration = 6,\n  revealDuration = 0.95,\n  trailLifetime = 0.65,\n  gridColumns = 4,\n  gridRows = 4,\n  gridOpacity = 0.07,\n  borderRadius = 0,\n  background = \"#191919\",\n  foreground = \"#f0efe9\",\n  ...props\n}: GridImageLoaderProps) {\n  return (\n    <CursorTrailLoader\n      {...props}\n      layout=\"grid\"\n      messages={messages}\n      duration={duration}\n      revealDuration={revealDuration}\n      trailLifetime={trailLifetime}\n      gridColumns={gridColumns}\n      gridRows={gridRows}\n      gridOpacity={gridOpacity}\n      borderRadius={borderRadius}\n      background={background}\n      foreground={foreground}\n      trailLength={12}\n      rotation={0}\n    />\n  );\n}\n\nexport default GridImageLoader;\n",
+      "content": "\"use client\";\n\nimport {\n  CursorTrailLoader,\n  type CursorTrailLoaderProps,\n} from \"./cursor-trail-loader\";\n\nexport const GRID_IMAGE_LOADER_MESSAGES = [\n  \"MOVE FIRST\",\n  \"OWN THE PACE\",\n  \"CHASE DAYLIGHT\",\n  \"MOVE FIRST\",\n  \"READY?\",\n  \"LET'S GO\",\n] as const;\n\nexport type GridImageLoaderProps = Pick<\n  CursorTrailLoaderProps,\n  | \"images\"\n  | \"children\"\n  | \"progress\"\n  | \"duration\"\n  | \"revealDuration\"\n  | \"trailLifetime\"\n  | \"borderRadius\"\n  | \"background\"\n  | \"foreground\"\n  | \"paused\"\n  | \"replayKey\"\n  | \"label\"\n  | \"className\"\n  | \"onComplete\"\n  | \"messages\"\n  | \"gridColumns\"\n  | \"gridRows\"\n  | \"gridOpacity\"\n>;\n\nexport function GridImageLoader({\n  messages = GRID_IMAGE_LOADER_MESSAGES,\n  duration = 6,\n  revealDuration = 0.95,\n  trailLifetime = 0.65,\n  gridColumns = 4,\n  gridRows = 4,\n  gridOpacity = 0.07,\n  borderRadius = 0,\n  background = \"#191919\",\n  foreground = \"#f0efe9\",\n  ...props\n}: GridImageLoaderProps) {\n  return (\n    <CursorTrailLoader\n      {...props}\n      layout=\"grid\"\n      messages={messages}\n      duration={duration}\n      revealDuration={revealDuration}\n      trailLifetime={trailLifetime}\n      gridColumns={gridColumns}\n      gridRows={gridRows}\n      gridOpacity={gridOpacity}\n      borderRadius={borderRadius}\n      background={background}\n      foreground={foreground}\n      trailLength={12}\n      rotation={0}\n    />\n  );\n}\n\nexport default GridImageLoader;\n",
+      "type": "registry:ui",
+      "target": "@ui/grid-image-loader.tsx"
+    },
     {
       "name": "cursor-trail-loader.tsx",
       "path": "registry/ui/cursor-trail-loader.tsx",

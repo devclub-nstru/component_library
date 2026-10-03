@@ -27,6 +27,7 @@ import liquidToggle from "./liquid-toggle.json";
 import loader from "./loader.json";
 import imageLoader from "./image-loader.json";
 import cursorTrailLoader from "./cursor-trail-loader.json";
+import gridImageLoader from "./grid-image-loader.json";
 import macSlider from "./mac-slider.json";
 import macSwitch from "./mac-switch.json";
 import slider from "./slider.json";
@@ -84,6 +85,7 @@ export {
   loader,
   imageLoader,
   cursorTrailLoader,
+  gridImageLoader,
   macSlider,
   macSwitch,
   morphSearch,
@@ -142,6 +144,7 @@ export const componentsList: ComponentRegistryItem[] = [
   loader as ComponentRegistryItem,
   imageLoader as ComponentRegistryItem,
   cursorTrailLoader as ComponentRegistryItem,
+  gridImageLoader as ComponentRegistryItem,
   macSlider as ComponentRegistryItem,
   macSwitch as ComponentRegistryItem,
   morphSearch as ComponentRegistryItem,

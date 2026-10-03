@@ -123,6 +123,11 @@ import {
   IMAGE_LOADER_DEFAULT_CONFIG,
 } from "./image-loader-demo";
 import {
+  GridImageLoaderDemo,
+  GridImageLoaderControls,
+  GRID_IMAGE_LOADER_DEFAULT_CONFIG,
+} from "./grid-image-loader-demo";
+import {
   CursorTrailLoaderDemo,
   CursorTrailLoaderControls,
   CURSOR_TRAIL_LOADER_DEFAULT_CONFIG,
@@ -1097,6 +1102,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
   const [imageLoaderConfig, setImageLoaderConfig] = useState({
     ...IMAGE_LOADER_DEFAULT_CONFIG,
   });
+  const [gridImageLoaderConfig, setGridImageLoaderConfig] = useState({
+    ...GRID_IMAGE_LOADER_DEFAULT_CONFIG,
+  });
   const [cursorTrailLoaderConfig, setCursorTrailLoaderConfig] = useState({
     ...CURSOR_TRAIL_LOADER_DEFAULT_CONFIG,
   });
@@ -1854,6 +1862,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         return <LoaderDemo config={loaderConfig} />;
       case "image-loader":
         return <ImageLoaderDemo config={imageLoaderConfig} />;
+      case "grid-image-loader":
+        return <GridImageLoaderDemo config={gridImageLoaderConfig} />;
       case "cursor-trail-loader":
         return <CursorTrailLoaderDemo config={cursorTrailLoaderConfig} />;
       case "project-reveal":
@@ -3421,6 +3431,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               (activeComponent.slug === "dither" ||
                 activeComponent.slug === "noise" ||
                 activeComponent.slug === "orbit-gallery" ||
+                activeComponent.slug === "grid-image-loader" ||
                 activeComponent.slug === "matrix-clock" ||
                 activeComponent.slug === "flip-clock" ||
                 activeComponent.slug === "task-card") &&
@@ -3474,6 +3485,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     activeComponent.slug === "dither" ||
                       activeComponent.slug === "noise" ||
                       activeComponent.slug === "orbit-gallery" ||
+                      activeComponent.slug === "grid-image-loader" ||
                       activeComponent.slug === "matrix-clock" ||
                       activeComponent.slug === "flip-clock" ||
                       activeComponent.slug === "task-card"
@@ -5360,6 +5372,12 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 />
               )}
 
+              {activeComponent.slug === "grid-image-loader" && (
+                <GridImageLoaderControls
+                  config={gridImageLoaderConfig}
+                  onChange={setGridImageLoaderConfig}
+                />
+              )}
               {activeComponent.slug === "cursor-trail-loader" && (
                 <CursorTrailLoaderControls
                   config={cursorTrailLoaderConfig}
