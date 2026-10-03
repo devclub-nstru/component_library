@@ -365,6 +365,11 @@
           "path": "src/registry/ui/flip-clock.tsx",
           "type": "registry:ui",
           "target": "@ui/flip-clock.tsx"
+        },
+        {
+          "path": "src/registry/ui/use-time-source.ts",
+          "type": "registry:ui",
+          "target": "@ui/use-time-source.ts"
         }
       ]
     },
@@ -567,6 +572,30 @@
           "path": "src/registry/ui/mac-switch.tsx",
           "type": "registry:ui",
           "target": "@ui/mac-switch.tsx"
+        }
+      ]
+    },
+    {
+      "name": "matrix-clock",
+      "type": "registry:ui",
+      "title": "Matrix Clock",
+      "description": "A synchronized dot-matrix world clock with a smooth scramble reveal and live India time.",
+      "dependencies": [
+        "gsap",
+        "@gsap/react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/matrix-clock.tsx",
+          "type": "registry:ui",
+          "target": "@ui/matrix-clock.tsx"
+        },
+        {
+          "path": "src/registry/ui/use-time-source.ts",
+          "type": "registry:ui",
+          "target": "@ui/use-time-source.ts"
         }
       ]
     },
