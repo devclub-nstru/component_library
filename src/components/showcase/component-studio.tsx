@@ -137,6 +137,7 @@ import {
   PROJECT_REVEAL_DEFAULT_CONFIG,
   ProjectRevealControls,
 } from "./project-reveal-demo";
+import { CurvedNavbarDemo, CurvedNavbarControls, CURVED_NAVBAR_DEFAULT_CONFIG } from "./curved-navbar-demo";
 import { Editor } from "@/registry/ui/editor";
 import { DeleteSelectionShowcase } from "@/registry/ui/delete-selection";
 import { SegmentedProgress } from "@/registry/ui/segmented-progress";
@@ -1102,6 +1103,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
   const [imageLoaderConfig, setImageLoaderConfig] = useState({
     ...IMAGE_LOADER_DEFAULT_CONFIG,
   });
+  const [curvedNavbarConfig, setCurvedNavbarConfig] = useState({ ...CURVED_NAVBAR_DEFAULT_CONFIG });
   const [gridImageLoaderConfig, setGridImageLoaderConfig] = useState({
     ...GRID_IMAGE_LOADER_DEFAULT_CONFIG,
   });
@@ -1862,6 +1864,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         return <LoaderDemo config={loaderConfig} />;
       case "image-loader":
         return <ImageLoaderDemo config={imageLoaderConfig} />;
+      case "curved-navbar":
+        return <CurvedNavbarDemo config={curvedNavbarConfig} />;
       case "grid-image-loader":
         return <GridImageLoaderDemo config={gridImageLoaderConfig} />;
       case "cursor-trail-loader":
@@ -3431,6 +3435,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               (activeComponent.slug === "dither" ||
                 activeComponent.slug === "noise" ||
                 activeComponent.slug === "orbit-gallery" ||
+                activeComponent.slug === "curved-navbar" ||
                 activeComponent.slug === "grid-image-loader" ||
                 activeComponent.slug === "matrix-clock" ||
                 activeComponent.slug === "flip-clock" ||
@@ -3485,6 +3490,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     activeComponent.slug === "dither" ||
                       activeComponent.slug === "noise" ||
                       activeComponent.slug === "orbit-gallery" ||
+                      activeComponent.slug === "curved-navbar" ||
                       activeComponent.slug === "grid-image-loader" ||
                       activeComponent.slug === "matrix-clock" ||
                       activeComponent.slug === "flip-clock" ||
@@ -5372,6 +5378,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 />
               )}
 
+              {activeComponent.slug === "curved-navbar" && (
+                <CurvedNavbarControls config={curvedNavbarConfig} onChange={setCurvedNavbarConfig} />
+              )}
               {activeComponent.slug === "grid-image-loader" && (
                 <GridImageLoaderControls
                   config={gridImageLoaderConfig}
