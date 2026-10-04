@@ -55,6 +55,7 @@ import { PROJECT_REVEAL_DEMO_ITEMS } from "@/components/showcase/project-reveal-
 import { LoaderDemo } from "@/components/showcase/loader-demo";
 import { ImageLoaderDemo } from "@/components/showcase/image-loader-demo";
 import { CursorTrailLoaderDemo } from "@/components/showcase/cursor-trail-loader-demo";
+import { CurtainNavbarDemo } from "@/components/showcase/curtain-navbar-demo";
 import { FullscreenNavbarDemo } from "@/components/showcase/fullscreen-navbar-demo";
 import { CurvedNavbarDemo } from "@/components/showcase/curved-navbar-demo";
 import { GridImageLoaderDemo } from "@/components/showcase/grid-image-loader-demo";
@@ -121,6 +122,7 @@ export default function ComponentsPage() {
     "grid-image-loader": <GridImageLoaderDemo compact />,
     "curved-navbar": <CurvedNavbarDemo compact />,
     "fullscreen-navbar": <FullscreenNavbarDemo compact />,
+    "curtain-navbar": <CurtainNavbarDemo compact />,
     "task-card": (
       <div className="w-full max-w-76 scale-75">
         <TaskCard {...TASK_CARD_DEMO_TASKS[0]} hoverLift={0} padding={16} />

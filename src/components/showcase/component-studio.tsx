@@ -151,6 +151,11 @@ import {
   CurvedNavbarControls,
   CURVED_NAVBAR_DEFAULT_CONFIG,
 } from "./curved-navbar-demo";
+import {
+  CurtainNavbarDemo,
+  CurtainNavbarControls,
+  CURTAIN_NAVBAR_DEFAULT_CONFIG,
+} from "./curtain-navbar-demo";
 import { Editor } from "@/registry/ui/editor";
 import { DeleteSelectionShowcase } from "@/registry/ui/delete-selection";
 import { SegmentedProgress } from "@/registry/ui/segmented-progress";
@@ -1120,6 +1125,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
   const [imageLoaderConfig, setImageLoaderConfig] = useState({
     ...IMAGE_LOADER_DEFAULT_CONFIG,
   });
+  const [curtainNavbarConfig, setCurtainNavbarConfig] = useState({
+    ...CURTAIN_NAVBAR_DEFAULT_CONFIG,
+  });
   const [fullscreenNavbarConfig, setFullscreenNavbarConfig] = useState({
     ...FULLSCREEN_NAVBAR_DEFAULT_CONFIG,
   });
@@ -1883,6 +1891,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         return <LoaderDemo config={loaderConfig} />;
       case "image-loader":
         return <ImageLoaderDemo config={imageLoaderConfig} />;
+      case "curtain-navbar":
+        return <CurtainNavbarDemo config={curtainNavbarConfig} />;
       case "fullscreen-navbar":
         return <FullscreenNavbarDemo config={fullscreenNavbarConfig} />;
       case "curved-navbar":
@@ -3457,6 +3467,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 activeComponent.slug === "noise" ||
                 activeComponent.slug === "orbit-gallery" ||
                 activeComponent.slug === "fullscreen-navbar" ||
+                activeComponent.slug === "curtain-navbar" ||
                 activeComponent.slug === "curved-navbar" ||
                 activeComponent.slug === "grid-image-loader" ||
                 activeComponent.slug === "matrix-clock" ||
@@ -3513,6 +3524,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       activeComponent.slug === "noise" ||
                       activeComponent.slug === "orbit-gallery" ||
                       activeComponent.slug === "fullscreen-navbar" ||
+                      activeComponent.slug === "curtain-navbar" ||
                       activeComponent.slug === "curved-navbar" ||
                       activeComponent.slug === "grid-image-loader" ||
                       activeComponent.slug === "matrix-clock" ||
@@ -5404,6 +5416,12 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 />
               )}
 
+              {activeComponent.slug === "curtain-navbar" && (
+                <CurtainNavbarControls
+                  config={curtainNavbarConfig}
+                  onChange={setCurtainNavbarConfig}
+                />
+              )}
               {activeComponent.slug === "fullscreen-navbar" && (
                 <FullscreenNavbarControls
                   config={fullscreenNavbarConfig}
