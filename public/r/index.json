@@ -214,6 +214,31 @@
       ]
     },
     {
+      "name": "curtain-navbar",
+      "type": "registry:ui",
+      "title": "Curtain Navbar",
+      "description": "A floating glass header opens into a full-screen color curtain with oversized condensed links and synchronized hover details.",
+      "dependencies": [
+        "gsap",
+        "@gsap/react",
+        "@radix-ui/react-dialog",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/curtain-navbar.tsx",
+          "type": "registry:ui",
+          "target": "@ui/curtain-navbar.tsx"
+        },
+        {
+          "path": "src/registry/ui/ascii-hover-button.tsx",
+          "type": "registry:ui",
+          "target": "@ui/ascii-hover-button.tsx"
+        }
+      ]
+    },
+    {
       "name": "curved-navbar",
       "type": "registry:ui",
       "title": "Curved Navbar",
@@ -409,6 +434,27 @@
           "path": "src/registry/ui/focus-testimonials.tsx",
           "type": "registry:ui",
           "target": "@ui/focus-testimonials.tsx"
+        }
+      ]
+    },
+    {
+      "name": "fullscreen-navbar",
+      "type": "registry:ui",
+      "title": "Fullscreen Navbar",
+      "description": "An editorial fullscreen navbar with numbered navigation, smooth dropdowns, spring-driven link entrances, and a Dev Club spotlight panel.",
+      "dependencies": [
+        "gsap",
+        "@gsap/react",
+        "@radix-ui/react-dialog",
+        "lucide-react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/fullscreen-navbar.tsx",
+          "type": "registry:ui",
+          "target": "@ui/fullscreen-navbar.tsx"
         }
       ]
     },

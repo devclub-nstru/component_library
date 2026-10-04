@@ -29,6 +29,8 @@ import imageLoader from "./image-loader.json";
 import cursorTrailLoader from "./cursor-trail-loader.json";
 import gridImageLoader from "./grid-image-loader.json";
 import curvedNavbar from "./curved-navbar.json";
+import fullscreenNavbar from "./fullscreen-navbar.json";
+import curtainNavbar from "./curtain-navbar.json";
 import macSlider from "./mac-slider.json";
 import macSwitch from "./mac-switch.json";
 import slider from "./slider.json";
@@ -88,6 +90,8 @@ export {
   cursorTrailLoader,
   gridImageLoader,
   curvedNavbar,
+  fullscreenNavbar,
+  curtainNavbar,
   macSlider,
   macSwitch,
   morphSearch,
@@ -148,6 +152,8 @@ export const componentsList: ComponentRegistryItem[] = [
   cursorTrailLoader as ComponentRegistryItem,
   gridImageLoader as ComponentRegistryItem,
   curvedNavbar as ComponentRegistryItem,
+  fullscreenNavbar as ComponentRegistryItem,
+  curtainNavbar as ComponentRegistryItem,
   macSlider as ComponentRegistryItem,
   macSwitch as ComponentRegistryItem,
   morphSearch as ComponentRegistryItem,
