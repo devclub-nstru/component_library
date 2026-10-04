@@ -3,7 +3,12 @@
 import React, { useState, useMemo, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import {
+  AnimatePresence,
+  motion,
+  useReducedMotion,
+  type HTMLMotionProps,
+} from "motion/react";
 import {
   ArrowRightIcon,
   CodeIcon,
@@ -24,6 +29,7 @@ import {
   BarChartIcon,
   GearIcon,
   PlusIcon,
+  HamburgerMenuIcon,
 } from "@radix-ui/react-icons";
 import { ComponentRegistryItem } from "@/types/component";
 import { getComponentBySlug } from "@/registry";
@@ -173,6 +179,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { getComponentCategories, getCategoryLabel } from "@/lib/registry";
+import { MobilePanel } from "@/components/layout/mobile-panel";
+import { useMediaQuery } from "@/lib/use-media-query";
 import { CustomizationDock } from "./customization-dock";
 import { SegmentedControl, SegmentedControlGroup } from "./segmented-control";
 import { ColorSwatches, CustomizationRange } from "./customization-controls";
@@ -203,6 +211,56 @@ const getInstallCommand = (slug: string, tool: InstallTool) => {
 interface ComponentStudioProps {
   component: ComponentRegistryItem;
   allComponents?: ComponentRegistryItem[];
+}
+
+function StudioPanel({
+  open,
+  isMobile,
+  title,
+  onOpenChange,
+  triggerRef,
+  mobileClassName,
+  desktopProps,
+  backdrop = false,
+  children,
+}: {
+  open: boolean;
+  isMobile: boolean;
+  title: string;
+  onOpenChange: (open: boolean) => void;
+  triggerRef: React.RefObject<HTMLButtonElement | null>;
+  mobileClassName?: string;
+  desktopProps: HTMLMotionProps<"div">;
+  backdrop?: boolean;
+  children: React.ReactNode;
+}) {
+  if (isMobile) {
+    return (
+      <MobilePanel open={open} onOpenChange={onOpenChange} title={title} triggerRef={triggerRef} className={mobileClassName}>
+        {children}
+      </MobilePanel>
+    );
+  }
+
+  return (
+    <AnimatePresence>
+      {open && (
+        <React.Fragment key={title}>
+          {backdrop && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              onClick={() => onOpenChange(false)}
+              className="absolute inset-0 bg-black/40 backdrop-blur-[2px] z-30"
+            />
+          )}
+          <motion.div {...desktopProps}>{children}</motion.div>
+        </React.Fragment>
+      )}
+    </AnimatePresence>
+  );
 }
 
 const CATEGORIES = getComponentCategories().map((category) => ({
@@ -1467,6 +1525,12 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
   };
 
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const isMobile = useMediaQuery("(max-width: 1023px)");
+  const mobileSidebarTrigger = useRef<HTMLButtonElement>(null);
+  const codeTrigger = useRef<HTMLButtonElement>(null);
+  const infoTrigger = useRef<HTMLButtonElement>(null);
+  const installTrigger = useRef<HTMLButtonElement>(null);
   const isDark = useIsDark();
   const [activePanel, setActivePanel] = useState<"none" | "info" | "code">(
     "none",
@@ -1505,12 +1569,12 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         setInstallMenuOpen(false);
       }
     };
-    if (installMenuOpen) {
+    if (installMenuOpen && !isMobile) {
       document.addEventListener("mousedown", handleClickOutside);
       return () =>
         document.removeEventListener("mousedown", handleClickOutside);
     }
-  }, [installMenuOpen]);
+  }, [installMenuOpen, isMobile]);
 
   if (component.slug !== prevPropSlug) {
     setPrevPropSlug(component.slug);
@@ -1552,8 +1616,12 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        if (activePanel !== "none") {
+      if (e.key === "Escape" && !e.defaultPrevented) {
+        if (installMenuOpen) {
+          setInstallMenuOpen(false);
+        } else if (mobileSidebarOpen) {
+          setMobileSidebarOpen(false);
+        } else if (activePanel !== "none") {
           setActivePanel("none");
         } else if (isFullscreen) {
           setIsFullscreen(false);
@@ -1562,7 +1630,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [activePanel, isFullscreen]);
+  }, [activePanel, isFullscreen, mobileSidebarOpen, installMenuOpen]);
 
   useEffect(() => {
     const handlePopState = () => {
@@ -1580,6 +1648,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
   }, []);
 
   const handleSelectSlug = (slug: string) => {
+    setMobileSidebarOpen(false);
+    setInstallMenuOpen(false);
     const nextComp = getComponentBySlug(slug);
     if (nextComp && nextComp.slug !== activeComponent.slug) {
       setSelectedSlug(slug);
@@ -2963,8 +3033,53 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     }
   };
 
+  const sidebarNavigation = (
+    <>
+      <Link
+        href="/components"
+        className="flex items-center justify-between text-xs font-medium text-muted-foreground hover:text-orange-500 transition-colors tracking-tight px-1 py-1"
+      >
+        <span>All Components</span>
+        <ChevronRightIcon className="w-3.5 h-3.5 text-muted-foreground" />
+      </Link>
+
+      <div className="space-y-6">
+        {CATEGORIES.map((cat) => {
+          const activeItemIdx = cat.items.findIndex(
+            (item) => item.slug === activeComponent.slug,
+          );
+
+          return (
+            <HookSidebar
+              key={cat.label}
+              label={cat.label}
+              value={activeItemIdx >= 0 ? activeItemIdx : -1}
+              items={cat.items.map((item) => ({
+                label: item.label,
+                href: item.href,
+                onClick: (e: React.MouseEvent<HTMLElement>) => {
+                  if (
+                    !e.metaKey &&
+                    !e.ctrlKey &&
+                    !e.shiftKey &&
+                    e.button === 0
+                  ) {
+                    e.preventDefault();
+                    handleSelectSlug(item.slug);
+                  }
+                },
+              }))}
+              color="#F97316"
+              dashed={true}
+            />
+          );
+        })}
+      </div>
+    </>
+  );
+
   return (
-    <div className="h-screen w-screen bg-background text-foreground flex overflow-hidden select-none">
+    <div className="h-dvh w-full bg-background text-foreground flex overflow-hidden select-none">
       <motion.aside
         initial={false}
         animate={{
@@ -2973,7 +3088,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         }}
         transition={panelSpring}
         className={cn(
-          "shrink-0 bg-background flex flex-col overflow-hidden h-full z-20 border-r border-border",
+          "hidden lg:flex shrink-0 bg-background flex-col overflow-hidden h-full z-20 border-r border-border",
           isFullscreen && "border-r-0",
         )}
       >
@@ -3035,86 +3150,54 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 transition={panelSpring}
                 className="w-65 min-w-65 h-full overflow-y-auto px-4 pb-6 pt-3 space-y-6 scrollbar-none font-sans"
               >
-                <Link
-                  href="/components"
-                  className="flex items-center justify-between text-xs font-medium text-muted-foreground hover:text-orange-500 transition-colors tracking-tight px-1 py-1"
-                >
-                  <span>All Components</span>
-                  <ChevronRightIcon className="w-3.5 h-3.5 text-muted-foreground" />
-                </Link>
-
-                <div className="space-y-6">
-                  {CATEGORIES.map((cat) => {
-                    const activeItemIdx = cat.items.findIndex(
-                      (item) => item.slug === activeComponent.slug,
-                    );
-
-                    return (
-                      <HookSidebar
-                        key={cat.label}
-                        label={cat.label}
-                        value={activeItemIdx >= 0 ? activeItemIdx : -1}
-                        items={cat.items.map((item) => ({
-                          label: item.label,
-                          href: item.href,
-                          onClick: (e: React.MouseEvent<HTMLElement>) => {
-                            if (
-                              !e.metaKey &&
-                              !e.ctrlKey &&
-                              !e.shiftKey &&
-                              e.button === 0
-                            ) {
-                              e.preventDefault();
-                              handleSelectSlug(item.slug);
-                            }
-                          },
-                        }))}
-                        color="#F97316"
-                        dashed={true}
-                      />
-                    );
-                  })}
-                </div>
+                {sidebarNavigation}
               </motion.div>
             )}
           </AnimatePresence>
         </div>
       </motion.aside>
 
+      <MobilePanel open={mobileSidebarOpen && isMobile} onOpenChange={setMobileSidebarOpen} title="Components" triggerRef={mobileSidebarTrigger} className="[&_[data-slot=hook-sidebar-item]]:flex [&_[data-slot=hook-sidebar-item]]:min-h-11 [&_[data-slot=hook-sidebar-item]]:items-center [&>div>a]:min-h-11">
+        <div className="space-y-6">{sidebarNavigation}</div>
+      </MobilePanel>
+
       <motion.div
         animate={{
-          padding: "14px",
+          padding: isMobile ? "8px" : "14px",
           gap: "16px",
         }}
         transition={panelSpring}
-        className="flex-1 flex overflow-hidden h-full relative p-3.5 gap-4"
+        className="min-w-0 flex-1 flex overflow-hidden h-full relative p-2 sm:p-3.5 gap-4"
       >
         <motion.main
           layout
           transition={panelSpring}
           animate={{
-            borderRadius: 24,
-            scale: activePanel === "code" ? 0.985 : 1,
-            opacity: activePanel === "code" ? 0.75 : 1,
+            borderRadius: isMobile ? 16 : 24,
+            scale: activePanel === "code" && !isMobile ? 0.985 : 1,
+            opacity: activePanel === "code" && !isMobile ? 0.75 : 1,
           }}
-          className="relative border border-border bg-card dark:bg-[#0f0f11] flex flex-col overflow-hidden h-full flex-1 rounded-3xl"
+          className="relative min-w-0 border border-border bg-card dark:bg-[#0f0f11] flex flex-col overflow-hidden h-full flex-1 rounded-3xl"
         >
-          <div className="h-14 px-5 border-b border-border flex items-center justify-between z-20 shrink-0 bg-card/80 dark:bg-[#0f0f11]/80 backdrop-blur-md">
-            <div className="flex items-center gap-2.5 min-w-0">
+          <div className="studio-toolbar min-h-14 px-3 py-2 lg:px-5 lg:py-0 border-b border-border flex flex-wrap sm:flex-nowrap items-center justify-between gap-y-2 z-20 shrink-0 bg-card/80 dark:bg-[#0f0f11]/80 backdrop-blur-md">
+            <div className="flex w-full sm:w-auto sm:flex-1 items-center gap-2.5 min-w-0">
+              <button ref={mobileSidebarTrigger} type="button" aria-label="Open components menu" aria-expanded={mobileSidebarOpen} aria-haspopup="dialog" onClick={() => setMobileSidebarOpen(true)} className="flex size-10 shrink-0 items-center justify-center rounded-lg border border-border bg-muted lg:hidden">
+                <HamburgerMenuIcon className="size-4" />
+              </button>
               <Link
                 href="/components"
-                className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors shrink-0"
+                className="hidden lg:block text-[10px] font-mono uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors shrink-0"
               >
                 {getCategoryLabel(activeComponent.category)}
               </Link>
-              <span className="text-border shrink-0">/</span>
+              <span className="hidden lg:block text-border shrink-0">/</span>
               <span className="text-xs font-sans font-medium text-foreground tracking-tight truncate">
                 {activeComponent.name}
               </span>
             </div>
 
-            <div className="flex items-center gap-2">
-              <div className="flex items-center p-0.5 rounded-lg border border-border bg-muted/60 dark:bg-[#18181b]/90 shadow-sm mr-1">
+            <div className="flex w-full sm:w-auto shrink-0 items-center justify-between sm:justify-start gap-1.5 sm:gap-2">
+              <div className="hidden lg:flex items-center p-0.5 rounded-lg border border-border bg-muted/60 dark:bg-[#18181b]/90 shadow-sm mr-1">
                 <button
                   type="button"
                   onClick={() => setViewport("desktop")}
@@ -3156,14 +3239,17 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 </button>
               </div>
 
-              <GitHubButton className="h-8 px-2.5 rounded-lg text-xs" />
+              <GitHubButton className="hidden lg:inline-flex h-8 px-2.5 rounded-lg text-xs" />
               <AnimatedThemeToggler
                 candy
-                className="w-8 h-8 rounded-lg shrink-0 [&_svg]:size-3.5 shadow-sm"
+                className="size-11 lg:size-8 rounded-lg shrink-0 [&_svg]:size-3.5 shadow-sm"
               />
 
               <div className="relative" ref={installMenuRef}>
-                <div className="flex items-center rounded-lg border border-border bg-muted/60 hover:border-foreground/20 dark:bg-[#18181b]/90 dark:hover:bg-[#222226] shadow-sm transition-colors overflow-hidden h-8">
+                <button ref={installTrigger} type="button" aria-label="Install component" aria-expanded={installMenuOpen} aria-haspopup="dialog" onClick={() => setInstallMenuOpen((prev) => !prev)} className="flex size-11 items-center justify-center rounded-lg border border-border bg-muted lg:hidden">
+                  <PlusIcon className="size-4" />
+                </button>
+                <div className="hidden lg:flex items-center rounded-lg border border-border bg-muted/60 hover:border-foreground/20 dark:bg-[#18181b]/90 dark:hover:bg-[#222226] shadow-sm transition-colors overflow-hidden h-8">
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.94 }}
@@ -3193,6 +3279,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   <div className="w-px h-4 bg-border/80" />
                   <button
                     type="button"
+                    aria-expanded={installMenuOpen}
+                    aria-haspopup="dialog"
                     onClick={() => setInstallMenuOpen((prev) => !prev)}
                     className="h-full px-1.5 text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white hover:bg-muted/80 dark:hover:bg-zinc-800 transition-colors cursor-pointer flex items-center justify-center"
                     title="Customize package manager & command"
@@ -3207,15 +3295,21 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   </button>
                 </div>
 
-                <AnimatePresence>
-                  {installMenuOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 6, scale: 0.96 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: 6, scale: 0.96 }}
-                      transition={microSpring}
-                      className="absolute right-0 top-10 z-50 w-80 sm:w-96 rounded-xl border border-border bg-popover/95 dark:bg-[#121215]/98 backdrop-blur-md p-3.5 shadow-2xl text-popover-foreground space-y-3"
-                    >
+                <StudioPanel
+                  open={installMenuOpen}
+                  isMobile={isMobile}
+                  title="Install component"
+                  onOpenChange={setInstallMenuOpen}
+                  triggerRef={installTrigger}
+                  mobileClassName="space-y-3"
+                  desktopProps={{
+                    initial: { opacity: 0, y: 6, scale: 0.96 },
+                    animate: { opacity: 1, y: 0, scale: 1 },
+                    exit: { opacity: 0, y: 6, scale: 0.96 },
+                    transition: microSpring,
+                    className: "absolute right-0 top-10 z-50 w-80 sm:w-96 rounded-xl border border-border bg-popover/95 dark:bg-[#121215]/98 backdrop-blur-md p-3.5 shadow-2xl text-popover-foreground space-y-3",
+                  }}
+                >
                       <div className="flex items-center justify-between pb-1 border-b border-border/50">
                         <div className="flex items-center gap-2">
                           <span className="text-xs font-semibold text-foreground tracking-tight">
@@ -3397,9 +3491,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           CLI docs &rarr;
                         </Link>
                       </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                </StudioPanel>
               </div>
 
               <motion.button
@@ -3411,7 +3503,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 title={
                   isFullscreen ? "Exit Fullscreen (Esc)" : "Enter Fullscreen"
                 }
-                className="w-8 h-8 rounded-lg border border-border bg-muted/60 hover:bg-muted dark:bg-[#18181b]/90 dark:hover:bg-[#222226] text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white flex items-center justify-center transition-colors cursor-pointer shadow-sm"
+                className="size-11 lg:size-8 shrink-0 rounded-lg border border-border bg-muted/60 hover:bg-muted dark:bg-[#18181b]/90 dark:hover:bg-[#222226] text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white flex items-center justify-center transition-colors cursor-pointer shadow-sm"
               >
                 {isFullscreen ? (
                   <ExitFullScreenIcon className="w-3.5 h-3.5" />
@@ -3425,18 +3517,20 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 whileTap={{ scale: 0.94 }}
                 transition={microSpring}
                 type="button"
+                ref={codeTrigger}
+                aria-label="Code"
                 onClick={() =>
                   setActivePanel(activePanel === "code" ? "none" : "code")
                 }
                 className={cn(
-                  "h-8 px-2.5 rounded-lg border flex items-center gap-1.5 text-xs transition-all cursor-pointer shadow-sm",
+                  "size-11 shrink-0 justify-center lg:size-auto lg:h-8 lg:px-2.5 rounded-lg border flex items-center gap-1.5 text-xs transition-colors cursor-pointer shadow-sm",
                   activePanel === "code"
                     ? "border-orange-500/80 text-orange-600 dark:text-orange-400 bg-orange-500/10 dark:bg-orange-500/15 shadow-orange-500/10 shadow-md font-medium"
                     : "border-border bg-muted/60 hover:bg-muted dark:bg-[#18181b]/90 dark:hover:bg-[#222226] text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
                 )}
               >
                 <CodeIcon className="w-3.5 h-3.5" />
-                <span className="text-[11px]">Code</span>
+                <span className="hidden lg:inline text-[11px]">Code</span>
               </motion.button>
 
               <motion.button
@@ -3444,18 +3538,20 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 whileTap={{ scale: 0.94 }}
                 transition={microSpring}
                 type="button"
+                ref={infoTrigger}
+                aria-label="Info"
                 onClick={() =>
                   setActivePanel(activePanel === "info" ? "none" : "info")
                 }
                 className={cn(
-                  "h-8 px-2.5 rounded-lg border flex items-center gap-1.5 text-xs transition-all cursor-pointer shadow-sm",
+                  "size-11 shrink-0 justify-center lg:size-auto lg:h-8 lg:px-2.5 rounded-lg border flex items-center gap-1.5 text-xs transition-colors cursor-pointer shadow-sm",
                   activePanel === "info"
                     ? "border-orange-500/80 text-orange-600 dark:text-orange-400 bg-orange-500/10 dark:bg-orange-500/15 shadow-orange-500/10 shadow-md font-medium"
                     : "border-border bg-muted/60 hover:bg-muted dark:bg-[#18181b]/90 dark:hover:bg-[#222226] text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
                 )}
               >
                 <InfoCircledIcon className="w-3.5 h-3.5" />
-                <span className="text-[11px]">Info</span>
+                <span className="hidden lg:inline text-[11px]">Info</span>
               </motion.button>
             </div>
           </div>
@@ -3475,7 +3571,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 activeComponent.slug === "task-card") &&
                 viewport === "desktop"
                 ? "p-0"
-                : "p-6",
+                : "p-2 sm:p-6",
             )}
           >
             <div className="absolute inset-0 bg-[radial-gradient(currentColor_1px,transparent_1px)] text-foreground/8 bg-size-[20px_20px] pointer-events-none" />
@@ -3500,7 +3596,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   viewport === "mobile" ? 40 : viewport === "tablet" ? 24 : 0,
               }}
               className={cn(
-                "relative flex flex-col items-center justify-center overflow-hidden transition-colors",
+                "relative min-w-0 max-w-full max-h-full flex flex-col items-center justify-center overflow-hidden transition-colors",
                 viewport !== "desktop" &&
                   "border border-border bg-background dark:bg-[#09090b] shadow-[0_25px_60px_rgba(0,0,0,0.08)] dark:shadow-[0_25px_60px_rgba(0,0,0,0.9)] my-auto max-h-[90vh]",
               )}
@@ -3519,7 +3615,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   exit={{ opacity: 0, scale: 0.97, y: -10 }}
                   transition={panelSpring}
                   className={cn(
-                    "w-full h-full flex items-center justify-center overflow-auto",
+                    "studio-preview w-full h-full min-h-0 min-w-0 flex items-center justify-center overflow-auto",
                     activeComponent.slug === "dither" ||
                       activeComponent.slug === "noise" ||
                       activeComponent.slug === "orbit-gallery" ||
@@ -3531,7 +3627,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       activeComponent.slug === "flip-clock" ||
                       activeComponent.slug === "task-card"
                       ? "p-0"
-                      : "p-6",
+                      : "p-2 sm:p-6",
                   )}
                 >
                   {renderComponentPreview(activeComponent.slug, activeColor)}
@@ -6326,40 +6422,34 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
             </CustomizationDock>
           </div>
 
-          <AnimatePresence>
-            {activePanel === "code" && (
-              <>
-                <motion.div
-                  key="code-backdrop"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                  onClick={() => setActivePanel("none")}
-                  className="absolute inset-0 bg-black/40 backdrop-blur-[2px] z-30"
-                />
-                <motion.div
-                  key="code-sheet"
-                  initial={{ y: "100%" }}
-                  animate={{ y: 0 }}
-                  exit={{ y: "100%" }}
-                  transition={sheetSpring}
-                  drag="y"
-                  dragConstraints={{ top: 0, bottom: 0 }}
-                  dragElastic={{ top: 0.05, bottom: 0.4 }}
-                  onDragEnd={(_, info) => {
-                    if (info.offset.y > 100 || info.velocity.y > 400) {
-                      setActivePanel("none");
-                    }
-                  }}
-                  className="absolute inset-x-2 bottom-2 top-10 z-40 rounded-2xl border border-border bg-card dark:bg-[#0a0a0c] shadow-[0_-20px_50px_rgba(0,0,0,0.15)] dark:shadow-[0_-20px_50px_rgba(0,0,0,0.8)] flex flex-col overflow-hidden"
-                >
+          <StudioPanel
+            open={activePanel === "code"}
+            isMobile={isMobile}
+            title="Code"
+            onOpenChange={(open) => { if (!open) setActivePanel("none"); }}
+            triggerRef={codeTrigger}
+            mobileClassName="p-0! overflow-hidden"
+            backdrop
+            desktopProps={{
+              initial: { y: "100%" },
+              animate: { y: 0 },
+              exit: { y: "100%" },
+              transition: sheetSpring,
+              drag: "y",
+              dragConstraints: { top: 0, bottom: 0 },
+              dragElastic: { top: 0.05, bottom: 0.4 },
+              onDragEnd: (_, info) => {
+                if (info.offset.y > 100 || info.velocity.y > 400) setActivePanel("none");
+              },
+              className: "absolute inset-x-2 bottom-2 top-10 z-40 rounded-2xl border border-border bg-card dark:bg-[#0a0a0c] shadow-[0_-20px_50px_rgba(0,0,0,0.15)] dark:shadow-[0_-20px_50px_rgba(0,0,0,0.8)] flex flex-col overflow-hidden",
+            }}
+          >
                   <div className="pt-2.5 pb-1 flex justify-center shrink-0 cursor-grab active:cursor-grabbing">
                     <div className="w-10 h-1 bg-muted-foreground/30 rounded-full" />
                   </div>
 
-                  <div className="px-5 pb-3 border-b border-border flex items-center justify-between shrink-0">
-                    <div className="flex items-center gap-2 overflow-x-auto">
+                  <div className="px-3 sm:px-5 pb-3 border-b border-border flex flex-wrap sm:flex-nowrap items-center justify-between gap-2 shrink-0">
+                    <div className="flex min-w-0 max-w-full items-center gap-2 overflow-x-auto">
                       {activeComponent.files.map((file, idx) => (
                         <button
                           key={file.name}
@@ -6464,37 +6554,40 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     </button>
                   </div>
 
-                  <div className="flex-1 p-6 overflow-auto font-mono text-xs leading-relaxed bg-[#070709] select-text">
+                  <div className="min-h-0 flex-1 p-3 sm:p-6 overflow-auto font-mono text-xs leading-relaxed bg-[#070709] select-text">
                     <div className="space-y-0.5">
                       {codeLines.map((_, i) => (
                         <div key={i} className="flex">
                           <span className="w-8 shrink-0 select-none text-right pr-5 text-zinc-600 font-mono">
                             {i + 1}
                           </span>
-                          <div className="flex-1 overflow-x-auto">
+                          <div className="min-w-0 flex-1">
                             {highlighted[i]}
                           </div>
                         </div>
                       ))}
                     </div>
                   </div>
-                </motion.div>
-              </>
-            )}
-          </AnimatePresence>
+          </StudioPanel>
         </motion.main>
 
-        <AnimatePresence>
-          {activePanel === "info" && (
-            <motion.aside
-              key="info-panel"
-              initial={{ width: 0, opacity: 0 }}
-              animate={{ width: 490, opacity: 1 }}
-              exit={{ width: 0, opacity: 0 }}
-              transition={panelSpring}
-              className="shrink-0 h-full border border-border bg-card dark:bg-[#0c0c0e] rounded-3xl overflow-hidden flex flex-col"
-            >
-              <div className="w-122.5 min-w-122.5 h-full p-6 sm:p-7 overflow-y-auto flex flex-col gap-6 scrollbar-none pb-12">
+        <StudioPanel
+          open={activePanel === "info"}
+          isMobile={isMobile}
+          title="Component info"
+          onOpenChange={(open) => { if (!open) setActivePanel("none"); }}
+          triggerRef={infoTrigger}
+          mobileClassName="p-0!"
+          desktopProps={{
+            initial: { width: 0, opacity: 0 },
+            animate: { width: 490, opacity: 1 },
+            exit: { width: 0, opacity: 0 },
+            transition: panelSpring,
+            role: "complementary",
+            className: "shrink-0 h-full border border-border bg-card dark:bg-[#0c0c0e] rounded-3xl overflow-hidden flex flex-col",
+          }}
+        >
+              <div className="w-full min-w-0 lg:w-122.5 lg:min-w-122.5 h-full p-4 sm:p-7 overflow-y-auto overscroll-contain flex flex-col gap-6 scrollbar-none pb-12">
                 <motion.div
                   initial="hidden"
                   animate="visible"
@@ -6505,7 +6598,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     variants={fadeVariants}
                     className="flex items-center justify-between pb-2 border-b border-border"
                   >
-                    <div className="flex items-center gap-2">
+                    <div className="flex min-w-0 flex-wrap items-center gap-2">
                       <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-medium">
                         {activeComponent.slug.replace("-", " ")}
                       </span>
@@ -6904,9 +6997,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   </motion.div>
                 </motion.div>
               </div>
-            </motion.aside>
-          )}
-        </AnimatePresence>
+        </StudioPanel>
       </motion.div>
     </div>
   );

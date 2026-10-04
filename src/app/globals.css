@@ -219,3 +219,24 @@ body {
     transition: opacity 150ms ease !important;
   }
 }
+
+@media (max-width: 639px) {
+  .docs-content,
+  .legal-content {
+    overflow-wrap: anywhere;
+  }
+
+  .docs-content table {
+    min-width: 32rem;
+  }
+
+  .studio-preview {
+    align-items: safe center;
+    justify-content: safe center;
+  }
+
+  .studio-preview > * {
+    max-width: 100%;
+    flex-shrink: 0;
+  }
+}

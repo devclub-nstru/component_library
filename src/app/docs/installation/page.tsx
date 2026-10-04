@@ -95,7 +95,7 @@ npx shadcn@latest add https://ui.devclubxnst.online/r/[component].json
   return (
     <article className="space-y-12 max-w-2xl font-sans">
       <div className="space-y-3">
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex flex-wrap items-center justify-between gap-3 sm:gap-4">
           <h1 className="text-3xl sm:text-4xl font-serif font-normal tracking-tight text-foreground">
             Installation
           </h1>

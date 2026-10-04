@@ -23,7 +23,7 @@ export default async function ComponentDetailPage({ params }: PageProps) {
   const allComponents = getAllComponents();
 
   return (
-    <div className="h-screen w-screen bg-background text-foreground transition-colors duration-200 overflow-hidden">
+    <div className="h-dvh w-full bg-background text-foreground transition-colors duration-200 overflow-hidden">
       <ComponentStudio component={component} allComponents={allComponents} />
     </div>
   );
