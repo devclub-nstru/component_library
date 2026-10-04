@@ -25,6 +25,11 @@ export const COMPONENT_CATEGORIES: {
     description: "Search fields, command menus and quick discovery.",
   },
   {
+    value: "navbar",
+    label: "Navbar",
+    description: "Responsive navigation bars with smooth expanding panels.",
+  },
+  {
     value: "navigation",
     label: "Navigation",
     description: "Sidebars, menus and file navigation.",

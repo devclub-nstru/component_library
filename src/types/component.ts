@@ -5,6 +5,7 @@ export type ComponentCategory =
   | "feedback"
   | "loaders"
   | "navigation"
+  | "navbar"
   | "display"
   | "inputs"
   | "sliders-and-toggles"

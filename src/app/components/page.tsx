@@ -55,6 +55,7 @@ import { PROJECT_REVEAL_DEMO_ITEMS } from "@/components/showcase/project-reveal-
 import { LoaderDemo } from "@/components/showcase/loader-demo";
 import { ImageLoaderDemo } from "@/components/showcase/image-loader-demo";
 import { CursorTrailLoaderDemo } from "@/components/showcase/cursor-trail-loader-demo";
+import { CurvedNavbarDemo } from "@/components/showcase/curved-navbar-demo";
 import { GridImageLoaderDemo } from "@/components/showcase/grid-image-loader-demo";
 import { Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -117,6 +118,7 @@ export default function ComponentsPage() {
     "image-loader": <ImageLoaderDemo compact />,
     "cursor-trail-loader": <CursorTrailLoaderDemo compact />,
     "grid-image-loader": <GridImageLoaderDemo compact />,
+    "curved-navbar": <CurvedNavbarDemo compact />,
     "task-card": (
       <div className="w-full max-w-76 scale-75">
         <TaskCard {...TASK_CARD_DEMO_TASKS[0]} hoverLift={0} padding={16} />

@@ -214,6 +214,26 @@
       ]
     },
     {
+      "name": "curved-navbar",
+      "type": "registry:ui",
+      "title": "Curved Navbar",
+      "description": "A curved, responsive navbar that smoothly expands into a three-column navigation panel on hover or click.",
+      "dependencies": [
+        "gsap",
+        "@gsap/react",
+        "lucide-react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/curved-navbar.tsx",
+          "type": "registry:ui",
+          "target": "@ui/curved-navbar.tsx"
+        }
+      ]
+    },
+    {
       "name": "date-range-picker",
       "type": "registry:ui",
       "title": "Date Range Picker",
