@@ -14,7 +14,7 @@ export default function PrivacyPage() {
     <div className="min-h-screen flex flex-col bg-[#050505] text-[#f4f4f5]">
       <Navbar />
 
-      <main className="flex-1 max-w-4xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+      <main className="legal-content flex-1 max-w-4xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
         <div className="space-y-2 mb-8 border-b border-white/10 pb-6">
           <h1 className="text-2xl sm:text-4xl font-serif font-normal tracking-tight text-white">
             Privacy Policy

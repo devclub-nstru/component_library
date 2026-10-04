@@ -525,7 +525,7 @@ export default function ComponentsPage() {
     <div className="min-h-screen flex flex-col bg-background text-foreground transition-colors duration-200">
       <Navbar searchAction={<ComponentSearch />} />
 
-      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10 sm:py-20">
         <div className="flex flex-col items-center text-center mb-10 sm:mb-12">
           <h1 className="font-serif text-3xl sm:text-5xl font-normal tracking-tight text-foreground max-w-3xl leading-tight">
             {allComponents.length} rare and unique components

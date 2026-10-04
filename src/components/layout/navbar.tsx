@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -14,6 +14,8 @@ import { cn } from "@/lib/utils";
 import { GitHubButton } from "@/components/ui/github-button";
 import { CandyButton } from "@/registry/ui/candy-button";
 import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
+import { MobilePanel } from "./mobile-panel";
+import { useMediaQuery } from "@/lib/use-media-query";
 import { useIsDark } from "@/lib/use-is-dark";
 
 export interface NavbarProps {
@@ -25,6 +27,8 @@ export interface NavbarProps {
 export const Navbar = ({ showThemeToggle, forceLight, searchAction }: NavbarProps = {}) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
+  const mobileMenuRef = useRef<HTMLButtonElement>(null);
+  const isMobileNav = useMediaQuery("(max-width: 767px)");
   const isDark = useIsDark();
   const isHomePage = pathname === "/";
   const shouldShowThemeToggle =
@@ -51,7 +55,7 @@ export const Navbar = ({ showThemeToggle, forceLight, searchAction }: NavbarProp
               alt="DevClub"
               width={180}
               height={60}
-              className="h-12 w-auto object-contain transition-opacity group-hover:opacity-80"
+              className="h-10 w-auto max-w-[120px] sm:h-12 sm:max-w-none object-contain transition-opacity group-hover:opacity-80"
               priority
             />
           </Link>
@@ -84,7 +88,7 @@ export const Navbar = ({ showThemeToggle, forceLight, searchAction }: NavbarProp
           </nav>
         </div>
 
-        <div className="flex items-center gap-2.5 sm:gap-3">
+        <div className="flex shrink-0 items-center gap-1.5 sm:gap-3">
           {searchAction}
           <GitHubButton />
 
@@ -111,7 +115,10 @@ export const Navbar = ({ showThemeToggle, forceLight, searchAction }: NavbarProp
           </CandyButton>
 
           <button
+            ref={mobileMenuRef}
             type="button"
+            aria-expanded={mobileMenuOpen && isMobileNav}
+            aria-haspopup="dialog"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
             className={cn(
@@ -130,15 +137,7 @@ export const Navbar = ({ showThemeToggle, forceLight, searchAction }: NavbarProp
         </div>
       </div>
 
-      {mobileMenuOpen && (
-        <div
-          className={cn(
-            "md:hidden border-b px-4 py-4 space-y-3 backdrop-blur-xl",
-            forceLight
-              ? "border-zinc-200 bg-white/95"
-              : "border-border bg-background/95",
-          )}
-        >
+      <MobilePanel open={mobileMenuOpen && isMobileNav} onOpenChange={setMobileMenuOpen} title="Navigation" triggerRef={mobileMenuRef} className="space-y-5">
           <div className="space-y-1">
             {NAV_ITEMS.map((item) => {
               const isActive =
@@ -151,7 +150,7 @@ export const Navbar = ({ showThemeToggle, forceLight, searchAction }: NavbarProp
                   href={item.href}
                   onClick={() => setMobileMenuOpen(false)}
                   className={cn(
-                    "block px-3 py-2 rounded-lg text-sm font-medium transition-colors",
+                    "block px-3 py-3 rounded-lg text-sm font-medium transition-colors",
                     forceLight
                       ? isActive
                         ? "text-zinc-900 bg-zinc-900/10 font-semibold"
@@ -167,7 +166,7 @@ export const Navbar = ({ showThemeToggle, forceLight, searchAction }: NavbarProp
             })}
           </div>
 
-          <div className="pt-3 border-t border-zinc-200 flex items-center gap-2">
+          <div className="pt-3 border-t border-border flex items-center gap-2">
             <CandyButton
               as={Link}
               href="/components"
@@ -180,8 +179,7 @@ export const Navbar = ({ showThemeToggle, forceLight, searchAction }: NavbarProp
               <span>Explore Components</span>
             </CandyButton>
           </div>
-        </div>
-      )}
+      </MobilePanel>
     </header>
   );
 };

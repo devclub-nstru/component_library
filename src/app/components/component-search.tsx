@@ -202,14 +202,14 @@ function SearchPanel({
             placeholder="Search components..."
             autoComplete="off"
             spellCheck={false}
-            className="min-w-0 flex-1 bg-transparent text-sm text-zinc-900 outline-none placeholder:text-zinc-400 dark:text-white dark:placeholder:text-zinc-500 sm:text-base"
+            className="min-w-0 flex-1 bg-transparent text-base text-zinc-900 outline-none placeholder:text-zinc-400 dark:text-white dark:placeholder:text-zinc-500 sm:text-base"
           />
           <span className="hidden rounded-md border border-zinc-200 px-1.5 py-0.5 font-mono text-[10px] text-zinc-400 dark:border-white/10 sm:block">
             ESC
           </span>
         </form>
 
-        <div className="min-h-0 max-h-[min(56vh,420px)] overflow-y-auto px-5 pb-5 pt-5 sm:px-6 sm:pb-6">
+        <div className="min-h-0 max-h-[min(56dvh,420px)] overflow-y-auto px-5 pb-5 pt-5 sm:px-6 sm:pb-6">
           <div ref={resultsRef}>
             {recommendations.length > 0 ? (
               <div

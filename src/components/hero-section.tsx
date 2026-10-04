@@ -17,7 +17,7 @@ const LANDMARK_POINTS = [
 
 export default function HeroSection() {
   return (
-    <section className="relative flex-1 min-h-[calc(100vh-4rem)] w-full bg-background text-foreground flex flex-col justify-between overflow-hidden select-none transition-colors duration-200">
+    <section className="relative flex-1 min-h-[calc(100svh-4rem)] w-full bg-background text-foreground flex flex-col justify-between overflow-hidden select-none transition-colors duration-200">
       <div className="absolute inset-0 w-full h-full pointer-events-none select-none z-0">
         <Image
           src="/COMP-HE.png"
