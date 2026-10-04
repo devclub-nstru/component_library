@@ -30,6 +30,7 @@ import {
   cursorTrailLoader,
   gridImageLoader,
   curvedNavbar,
+  fullscreenNavbar,
   macSlider,
   macSwitch,
   morphSearch,
@@ -61,6 +62,7 @@ import {
 
 export const COMPONENT_REGISTRY: Record<string, ComponentRegistryItem> = {
   "curved-navbar": curvedNavbar as ComponentRegistryItem,
+  "fullscreen-navbar": fullscreenNavbar as ComponentRegistryItem,
   "cursor-trail-loader": cursorTrailLoader as ComponentRegistryItem,
   "grid-image-loader": gridImageLoader as ComponentRegistryItem,
   "image-loader": imageLoader as ComponentRegistryItem,

@@ -116,7 +116,11 @@ import OrbitGalleryDemo, {
   OrbitGalleryControls,
 } from "./orbit-gallery-demo";
 import { ProjectReveal } from "@/registry/ui/project-reveal";
-import { LoaderDemo, LoaderControls, LOADER_DEFAULT_CONFIG } from "./loader-demo";
+import {
+  LoaderDemo,
+  LoaderControls,
+  LOADER_DEFAULT_CONFIG,
+} from "./loader-demo";
 import {
   ImageLoaderDemo,
   ImageLoaderControls,
@@ -137,7 +141,16 @@ import {
   PROJECT_REVEAL_DEFAULT_CONFIG,
   ProjectRevealControls,
 } from "./project-reveal-demo";
-import { CurvedNavbarDemo, CurvedNavbarControls, CURVED_NAVBAR_DEFAULT_CONFIG } from "./curved-navbar-demo";
+import {
+  FullscreenNavbarDemo,
+  FullscreenNavbarControls,
+  FULLSCREEN_NAVBAR_DEFAULT_CONFIG,
+} from "./fullscreen-navbar-demo";
+import {
+  CurvedNavbarDemo,
+  CurvedNavbarControls,
+  CURVED_NAVBAR_DEFAULT_CONFIG,
+} from "./curved-navbar-demo";
 import { Editor } from "@/registry/ui/editor";
 import { DeleteSelectionShowcase } from "@/registry/ui/delete-selection";
 import { SegmentedProgress } from "@/registry/ui/segmented-progress";
@@ -1085,7 +1098,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     "DevClub UI Selection AI Editor integrates seamless text formatting, an interactive thinking orb, multi-stage context retrieval, and word-by-word streaming.",
   );
   const [revealSheetOpen, setRevealSheetOpen] = useState(false);
-  const [taskCardConfig, setTaskCardConfig] = useState(TASK_CARD_DEFAULT_CONFIG);
+  const [taskCardConfig, setTaskCardConfig] = useState(
+    TASK_CARD_DEFAULT_CONFIG,
+  );
   const [selectedTaskCard, setSelectedTaskCard] = useState("interface");
   const [matrixClockConfig, setMatrixClockConfig] = useState({
     ...MATRIX_CLOCK_DEFAULT_CONFIG,
@@ -1099,11 +1114,18 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
   const [projectRevealConfig, setProjectRevealConfig] = useState({
     ...PROJECT_REVEAL_DEFAULT_CONFIG,
   });
-  const [loaderConfig, setLoaderConfig] = useState({ ...LOADER_DEFAULT_CONFIG });
+  const [loaderConfig, setLoaderConfig] = useState({
+    ...LOADER_DEFAULT_CONFIG,
+  });
   const [imageLoaderConfig, setImageLoaderConfig] = useState({
     ...IMAGE_LOADER_DEFAULT_CONFIG,
   });
-  const [curvedNavbarConfig, setCurvedNavbarConfig] = useState({ ...CURVED_NAVBAR_DEFAULT_CONFIG });
+  const [fullscreenNavbarConfig, setFullscreenNavbarConfig] = useState({
+    ...FULLSCREEN_NAVBAR_DEFAULT_CONFIG,
+  });
+  const [curvedNavbarConfig, setCurvedNavbarConfig] = useState({
+    ...CURVED_NAVBAR_DEFAULT_CONFIG,
+  });
   const [gridImageLoaderConfig, setGridImageLoaderConfig] = useState({
     ...GRID_IMAGE_LOADER_DEFAULT_CONFIG,
   });
@@ -1847,10 +1869,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         );
       case "task-card":
         return (
-          <TaskCardDemo
-            config={taskCardConfig}
-            selectedId={selectedTaskCard}
-          />
+          <TaskCardDemo config={taskCardConfig} selectedId={selectedTaskCard} />
         );
       case "matrix-clock":
         return <MatrixClockDemo config={matrixClockConfig} />;
@@ -1864,6 +1883,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         return <LoaderDemo config={loaderConfig} />;
       case "image-loader":
         return <ImageLoaderDemo config={imageLoaderConfig} />;
+      case "fullscreen-navbar":
+        return <FullscreenNavbarDemo config={fullscreenNavbarConfig} />;
       case "curved-navbar":
         return <CurvedNavbarDemo config={curvedNavbarConfig} />;
       case "grid-image-loader":
@@ -3435,6 +3456,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               (activeComponent.slug === "dither" ||
                 activeComponent.slug === "noise" ||
                 activeComponent.slug === "orbit-gallery" ||
+                activeComponent.slug === "fullscreen-navbar" ||
                 activeComponent.slug === "curved-navbar" ||
                 activeComponent.slug === "grid-image-loader" ||
                 activeComponent.slug === "matrix-clock" ||
@@ -3490,6 +3512,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     activeComponent.slug === "dither" ||
                       activeComponent.slug === "noise" ||
                       activeComponent.slug === "orbit-gallery" ||
+                      activeComponent.slug === "fullscreen-navbar" ||
                       activeComponent.slug === "curved-navbar" ||
                       activeComponent.slug === "grid-image-loader" ||
                       activeComponent.slug === "matrix-clock" ||
@@ -5368,7 +5391,10 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               )}
 
               {activeComponent.slug === "loader" && (
-                <LoaderControls config={loaderConfig} onChange={setLoaderConfig} />
+                <LoaderControls
+                  config={loaderConfig}
+                  onChange={setLoaderConfig}
+                />
               )}
 
               {activeComponent.slug === "image-loader" && (
@@ -5378,8 +5404,17 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 />
               )}
 
+              {activeComponent.slug === "fullscreen-navbar" && (
+                <FullscreenNavbarControls
+                  config={fullscreenNavbarConfig}
+                  onChange={setFullscreenNavbarConfig}
+                />
+              )}
               {activeComponent.slug === "curved-navbar" && (
-                <CurvedNavbarControls config={curvedNavbarConfig} onChange={setCurvedNavbarConfig} />
+                <CurvedNavbarControls
+                  config={curvedNavbarConfig}
+                  onChange={setCurvedNavbarConfig}
+                />
               )}
               {activeComponent.slug === "grid-image-loader" && (
                 <GridImageLoaderControls

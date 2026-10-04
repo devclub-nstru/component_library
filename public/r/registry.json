@@ -413,6 +413,27 @@
       ]
     },
     {
+      "name": "fullscreen-navbar",
+      "type": "registry:ui",
+      "title": "Fullscreen Navbar",
+      "description": "An editorial fullscreen navbar with numbered navigation, smooth dropdowns, spring-driven link entrances, and a Dev Club spotlight panel.",
+      "dependencies": [
+        "gsap",
+        "@gsap/react",
+        "@radix-ui/react-dialog",
+        "lucide-react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/fullscreen-navbar.tsx",
+          "type": "registry:ui",
+          "target": "@ui/fullscreen-navbar.tsx"
+        }
+      ]
+    },
+    {
       "name": "github-activity",
       "type": "registry:ui",
       "title": "GitHub Activity",
