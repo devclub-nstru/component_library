@@ -72,6 +72,11 @@ import { GitHubButton } from "@/components/ui/github-button";
 import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
 import { SearchComposer } from "@/registry/ui/search-input";
 import { MorphSearch } from "@/registry/ui/morph-search";
+import {
+  MORPH_INVITE_DEFAULT_CONFIG,
+  MorphInviteDemo,
+  MorphInviteControls,
+} from "./morph-invite-demo";
 import { Orb, ORB_STATES, ORB_COLORS } from "@/registry/ui/orb";
 import type { OrbState } from "thinking-orbs";
 import {
@@ -236,7 +241,13 @@ function StudioPanel({
 }) {
   if (isMobile) {
     return (
-      <MobilePanel open={open} onOpenChange={onOpenChange} title={title} triggerRef={triggerRef} className={mobileClassName}>
+      <MobilePanel
+        open={open}
+        onOpenChange={onOpenChange}
+        title={title}
+        triggerRef={triggerRef}
+        className={mobileClassName}
+      >
         {children}
       </MobilePanel>
     );
@@ -1161,6 +1172,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     "DevClub UI Selection AI Editor integrates seamless text formatting, an interactive thinking orb, multi-stage context retrieval, and word-by-word streaming.",
   );
   const [revealSheetOpen, setRevealSheetOpen] = useState(false);
+  const [morphInviteConfig, setMorphInviteConfig] = useState({
+    ...MORPH_INVITE_DEFAULT_CONFIG,
+  });
   const [taskCardConfig, setTaskCardConfig] = useState(
     TASK_CARD_DEFAULT_CONFIG,
   );
@@ -1807,6 +1821,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
             <DeleteSelectionShowcase />
           </div>
         );
+      case "morph-invite":
+        return <MorphInviteDemo config={morphInviteConfig} />;
       case "task-list":
         return (
           <div className="flex flex-col items-center justify-center w-full max-w-md mx-auto p-4 select-none">
@@ -3157,7 +3173,13 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         </div>
       </motion.aside>
 
-      <MobilePanel open={mobileSidebarOpen && isMobile} onOpenChange={setMobileSidebarOpen} title="Components" triggerRef={mobileSidebarTrigger} className="[&_[data-slot=hook-sidebar-item]]:flex [&_[data-slot=hook-sidebar-item]]:min-h-11 [&_[data-slot=hook-sidebar-item]]:items-center [&>div>a]:min-h-11">
+      <MobilePanel
+        open={mobileSidebarOpen && isMobile}
+        onOpenChange={setMobileSidebarOpen}
+        title="Components"
+        triggerRef={mobileSidebarTrigger}
+        className="**:data-[slot=hook-sidebar-item]:flex **:data-[slot=hook-sidebar-item]:min-h-11 **:data-[slot=hook-sidebar-item]:items-center [&>div>a]:min-h-11"
+      >
         <div className="space-y-6">{sidebarNavigation}</div>
       </MobilePanel>
 
@@ -3181,7 +3203,15 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         >
           <div className="studio-toolbar min-h-14 px-3 py-2 lg:px-5 lg:py-0 border-b border-border flex flex-wrap sm:flex-nowrap items-center justify-between gap-y-2 z-20 shrink-0 bg-card/80 dark:bg-[#0f0f11]/80 backdrop-blur-md">
             <div className="flex w-full sm:w-auto sm:flex-1 items-center gap-2.5 min-w-0">
-              <button ref={mobileSidebarTrigger} type="button" aria-label="Open components menu" aria-expanded={mobileSidebarOpen} aria-haspopup="dialog" onClick={() => setMobileSidebarOpen(true)} className="flex size-10 shrink-0 items-center justify-center rounded-lg border border-border bg-muted lg:hidden">
+              <button
+                ref={mobileSidebarTrigger}
+                type="button"
+                aria-label="Open components menu"
+                aria-expanded={mobileSidebarOpen}
+                aria-haspopup="dialog"
+                onClick={() => setMobileSidebarOpen(true)}
+                className="flex size-10 shrink-0 items-center justify-center rounded-lg border border-border bg-muted lg:hidden"
+              >
                 <HamburgerMenuIcon className="size-4" />
               </button>
               <Link
@@ -3246,7 +3276,15 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               />
 
               <div className="relative" ref={installMenuRef}>
-                <button ref={installTrigger} type="button" aria-label="Install component" aria-expanded={installMenuOpen} aria-haspopup="dialog" onClick={() => setInstallMenuOpen((prev) => !prev)} className="flex size-11 items-center justify-center rounded-lg border border-border bg-muted lg:hidden">
+                <button
+                  ref={installTrigger}
+                  type="button"
+                  aria-label="Install component"
+                  aria-expanded={installMenuOpen}
+                  aria-haspopup="dialog"
+                  onClick={() => setInstallMenuOpen((prev) => !prev)}
+                  className="flex size-11 items-center justify-center rounded-lg border border-border bg-muted lg:hidden"
+                >
                   <PlusIcon className="size-4" />
                 </button>
                 <div className="hidden lg:flex items-center rounded-lg border border-border bg-muted/60 hover:border-foreground/20 dark:bg-[#18181b]/90 dark:hover:bg-[#222226] shadow-sm transition-colors overflow-hidden h-8">
@@ -3307,190 +3345,188 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     animate: { opacity: 1, y: 0, scale: 1 },
                     exit: { opacity: 0, y: 6, scale: 0.96 },
                     transition: microSpring,
-                    className: "absolute right-0 top-10 z-50 w-80 sm:w-96 rounded-xl border border-border bg-popover/95 dark:bg-[#121215]/98 backdrop-blur-md p-3.5 shadow-2xl text-popover-foreground space-y-3",
+                    className:
+                      "absolute right-0 top-10 z-50 w-80 sm:w-96 rounded-xl border border-border bg-popover/95 dark:bg-[#121215]/98 backdrop-blur-md p-3.5 shadow-2xl text-popover-foreground space-y-3",
                   }}
                 >
-                      <div className="flex items-center justify-between pb-1 border-b border-border/50">
-                        <div className="flex items-center gap-2">
-                          <span className="text-xs font-semibold text-foreground tracking-tight">
-                            Install Component
+                  <div className="flex items-center justify-between pb-1 border-b border-border/50">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-semibold text-foreground tracking-tight">
+                        Install Component
+                      </span>
+                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-muted text-muted-foreground">
+                        {activeComponent.slug}
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setInstallMenuOpen(false)}
+                      className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors cursor-pointer"
+                    >
+                      <Cross2Icon className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+
+                  <div className="relative grid grid-cols-4 gap-1 p-1 bg-muted/50 dark:bg-zinc-900/80 rounded-lg border border-border/60">
+                    {INSTALL_TOOLS.map((t) => {
+                      const isActive = installTool === t.id;
+                      return (
+                        <button
+                          key={t.id}
+                          type="button"
+                          onClick={() => handleSelectTool(t.id)}
+                          className={cn(
+                            "relative py-1 text-xs font-mono rounded-md transition-colors cursor-pointer text-center select-none",
+                            isActive
+                              ? "text-foreground dark:text-white font-medium"
+                              : "text-muted-foreground hover:text-foreground",
+                          )}
+                        >
+                          {isActive && (
+                            <motion.div
+                              layoutId="active-install-tool-pill"
+                              transition={{
+                                type: "spring",
+                                stiffness: 480,
+                                damping: 32,
+                                mass: 0.8,
+                              }}
+                              className="absolute inset-0 bg-background dark:bg-[#27272a] rounded-md shadow-xs border border-border/60 z-0"
+                            />
+                          )}
+                          <span className="relative z-10">{t.label}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  <div className="rounded-lg bg-[#09090b] border border-border/70 p-2.5 flex items-center justify-between gap-2 shadow-inner">
+                    <div className="flex items-center gap-2 overflow-x-auto scrollbar-none font-mono text-xs text-zinc-300">
+                      <span className="text-orange-400 select-none font-bold">
+                        $
+                      </span>
+                      <span className="select-all">
+                        {getInstallCommand(activeComponent.slug, installTool)}
+                      </span>
+                    </div>
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.94 }}
+                      transition={microSpring}
+                      type="button"
+                      onClick={() => handleInstallCopy(installTool)}
+                      className="shrink-0 p-1.5 rounded-md hover:bg-white/10 text-zinc-400 hover:text-white transition-colors cursor-pointer"
+                      title="Copy active command"
+                    >
+                      {copiedToolKey === installTool ? (
+                        <CheckIcon className="w-3.5 h-3.5 text-emerald-400" />
+                      ) : (
+                        <CopyIcon className="w-3.5 h-3.5" />
+                      )}
+                    </motion.button>
+                  </div>
+
+                  <div className="space-y-1.5 pt-1">
+                    <div className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
+                      Quick Presets
+                    </div>
+
+                    <div className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/40 transition-colors border border-transparent hover:border-border text-xs">
+                      <div className="flex flex-col min-w-0 pr-2">
+                        <span className="font-medium text-foreground text-[11px]">
+                          Shadcn Registry
+                        </span>
+                        <span className="text-[11px] font-mono text-muted-foreground truncate select-all">
+                          {`npx shadcn@latest add https://ui.devclubxnst.online/r/${activeComponent.slug}.json`}
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          handleCustomCopy(
+                            "shadcn_url",
+                            `npx shadcn@latest add https://ui.devclubxnst.online/r/${activeComponent.slug}.json`,
+                          )
+                        }
+                        className="shrink-0 p-1.5 rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                        title="Copy shadcn command"
+                      >
+                        {copiedToolKey === "shadcn_url" ? (
+                          <CheckIcon className="w-3.5 h-3.5 text-emerald-400" />
+                        ) : (
+                          <CopyIcon className="w-3.5 h-3.5" />
+                        )}
+                      </button>
+                    </div>
+
+                    <div className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/40 transition-colors border border-transparent hover:border-border text-xs">
+                      <div className="flex flex-col min-w-0 pr-2">
+                        <span className="font-medium text-foreground text-[11px]">
+                          Shadcn (unpkg direct)
+                        </span>
+                        <span className="text-[11px] font-mono text-muted-foreground truncate select-all">
+                          {`npx shadcn@latest add https://unpkg.com/@devclubnst/ui@latest/public/r/${activeComponent.slug}.json`}
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          handleCustomCopy(
+                            "shadcn_unpkg",
+                            `npx shadcn@latest add https://unpkg.com/@devclubnst/ui@latest/public/r/${activeComponent.slug}.json`,
+                          )
+                        }
+                        className="shrink-0 p-1.5 rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                        title="Copy unpkg shadcn command"
+                      >
+                        {copiedToolKey === "shadcn_unpkg" ? (
+                          <CheckIcon className="w-3.5 h-3.5 text-emerald-400" />
+                        ) : (
+                          <CopyIcon className="w-3.5 h-3.5" />
+                        )}
+                      </button>
+                    </div>
+
+                    {activeComponent.dependencies.length > 0 && (
+                      <div className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/40 transition-colors border border-transparent hover:border-border text-xs">
+                        <div className="flex flex-col min-w-0 pr-2">
+                          <span className="font-medium text-foreground text-[11px]">
+                            Peer Dependencies
                           </span>
-                          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-muted text-muted-foreground">
-                            {activeComponent.slug}
+                          <span className="text-[11px] font-mono text-muted-foreground truncate select-all">
+                            {`npm i ${activeComponent.dependencies.join(" ")}`}
                           </span>
                         </div>
                         <button
                           type="button"
-                          onClick={() => setInstallMenuOpen(false)}
-                          className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors cursor-pointer"
+                          onClick={() =>
+                            handleCustomCopy(
+                              "deps",
+                              `npm i ${activeComponent.dependencies.join(" ")}`,
+                            )
+                          }
+                          className="shrink-0 p-1.5 rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                          title="Copy peer dependencies"
                         >
-                          <Cross2Icon className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
-
-                      <div className="relative grid grid-cols-4 gap-1 p-1 bg-muted/50 dark:bg-zinc-900/80 rounded-lg border border-border/60">
-                        {INSTALL_TOOLS.map((t) => {
-                          const isActive = installTool === t.id;
-                          return (
-                            <button
-                              key={t.id}
-                              type="button"
-                              onClick={() => handleSelectTool(t.id)}
-                              className={cn(
-                                "relative py-1 text-xs font-mono rounded-md transition-colors cursor-pointer text-center select-none",
-                                isActive
-                                  ? "text-foreground dark:text-white font-medium"
-                                  : "text-muted-foreground hover:text-foreground",
-                              )}
-                            >
-                              {isActive && (
-                                <motion.div
-                                  layoutId="active-install-tool-pill"
-                                  transition={{
-                                    type: "spring",
-                                    stiffness: 480,
-                                    damping: 32,
-                                    mass: 0.8,
-                                  }}
-                                  className="absolute inset-0 bg-background dark:bg-[#27272a] rounded-md shadow-xs border border-border/60 z-0"
-                                />
-                              )}
-                              <span className="relative z-10">{t.label}</span>
-                            </button>
-                          );
-                        })}
-                      </div>
-
-                      <div className="rounded-lg bg-[#09090b] border border-border/70 p-2.5 flex items-center justify-between gap-2 shadow-inner">
-                        <div className="flex items-center gap-2 overflow-x-auto scrollbar-none font-mono text-xs text-zinc-300">
-                          <span className="text-orange-400 select-none font-bold">
-                            $
-                          </span>
-                          <span className="select-all">
-                            {getInstallCommand(
-                              activeComponent.slug,
-                              installTool,
-                            )}
-                          </span>
-                        </div>
-                        <motion.button
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.94 }}
-                          transition={microSpring}
-                          type="button"
-                          onClick={() => handleInstallCopy(installTool)}
-                          className="shrink-0 p-1.5 rounded-md hover:bg-white/10 text-zinc-400 hover:text-white transition-colors cursor-pointer"
-                          title="Copy active command"
-                        >
-                          {copiedToolKey === installTool ? (
+                          {copiedToolKey === "deps" ? (
                             <CheckIcon className="w-3.5 h-3.5 text-emerald-400" />
                           ) : (
                             <CopyIcon className="w-3.5 h-3.5" />
                           )}
-                        </motion.button>
+                        </button>
                       </div>
+                    )}
+                  </div>
 
-                      <div className="space-y-1.5 pt-1">
-                        <div className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
-                          Quick Presets
-                        </div>
-
-                        <div className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/40 transition-colors border border-transparent hover:border-border text-xs">
-                          <div className="flex flex-col min-w-0 pr-2">
-                            <span className="font-medium text-foreground text-[11px]">
-                              Shadcn Registry
-                            </span>
-                            <span className="text-[11px] font-mono text-muted-foreground truncate select-all">
-                              {`npx shadcn@latest add https://ui.devclubxnst.online/r/${activeComponent.slug}.json`}
-                            </span>
-                          </div>
-                          <button
-                            type="button"
-                            onClick={() =>
-                              handleCustomCopy(
-                                "shadcn_url",
-                                `npx shadcn@latest add https://ui.devclubxnst.online/r/${activeComponent.slug}.json`,
-                              )
-                            }
-                            className="shrink-0 p-1.5 rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
-                            title="Copy shadcn command"
-                          >
-                            {copiedToolKey === "shadcn_url" ? (
-                              <CheckIcon className="w-3.5 h-3.5 text-emerald-400" />
-                            ) : (
-                              <CopyIcon className="w-3.5 h-3.5" />
-                            )}
-                          </button>
-                        </div>
-
-                        <div className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/40 transition-colors border border-transparent hover:border-border text-xs">
-                          <div className="flex flex-col min-w-0 pr-2">
-                            <span className="font-medium text-foreground text-[11px]">
-                              Shadcn (unpkg direct)
-                            </span>
-                            <span className="text-[11px] font-mono text-muted-foreground truncate select-all">
-                              {`npx shadcn@latest add https://unpkg.com/@devclubnst/ui@latest/public/r/${activeComponent.slug}.json`}
-                            </span>
-                          </div>
-                          <button
-                            type="button"
-                            onClick={() =>
-                              handleCustomCopy(
-                                "shadcn_unpkg",
-                                `npx shadcn@latest add https://unpkg.com/@devclubnst/ui@latest/public/r/${activeComponent.slug}.json`,
-                              )
-                            }
-                            className="shrink-0 p-1.5 rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
-                            title="Copy unpkg shadcn command"
-                          >
-                            {copiedToolKey === "shadcn_unpkg" ? (
-                              <CheckIcon className="w-3.5 h-3.5 text-emerald-400" />
-                            ) : (
-                              <CopyIcon className="w-3.5 h-3.5" />
-                            )}
-                          </button>
-                        </div>
-
-                        {activeComponent.dependencies.length > 0 && (
-                          <div className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/40 transition-colors border border-transparent hover:border-border text-xs">
-                            <div className="flex flex-col min-w-0 pr-2">
-                              <span className="font-medium text-foreground text-[11px]">
-                                Peer Dependencies
-                              </span>
-                              <span className="text-[11px] font-mono text-muted-foreground truncate select-all">
-                                {`npm i ${activeComponent.dependencies.join(" ")}`}
-                              </span>
-                            </div>
-                            <button
-                              type="button"
-                              onClick={() =>
-                                handleCustomCopy(
-                                  "deps",
-                                  `npm i ${activeComponent.dependencies.join(" ")}`,
-                                )
-                              }
-                              className="shrink-0 p-1.5 rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
-                              title="Copy peer dependencies"
-                            >
-                              {copiedToolKey === "deps" ? (
-                                <CheckIcon className="w-3.5 h-3.5 text-emerald-400" />
-                              ) : (
-                                <CopyIcon className="w-3.5 h-3.5" />
-                              )}
-                            </button>
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="pt-2 border-t border-border/50 flex items-center justify-between text-[10px] font-mono text-muted-foreground">
-                        <span>Package: @devclubnst/ui</span>
-                        <Link
-                          href="/docs/cli"
-                          className="hover:text-foreground transition-colors underline underline-offset-2"
-                        >
-                          CLI docs &rarr;
-                        </Link>
-                      </div>
+                  <div className="pt-2 border-t border-border/50 flex items-center justify-between text-[10px] font-mono text-muted-foreground">
+                    <span>Package: @devclubnst/ui</span>
+                    <Link
+                      href="/docs/cli"
+                      className="hover:text-foreground transition-colors underline underline-offset-2"
+                    >
+                      CLI docs &rarr;
+                    </Link>
+                  </div>
                 </StudioPanel>
               </div>
 
@@ -5498,6 +5534,13 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 />
               )}
 
+              {activeComponent.slug === "morph-invite" && (
+                <MorphInviteControls
+                  config={morphInviteConfig}
+                  onChange={setMorphInviteConfig}
+                />
+              )}
+
               {activeComponent.slug === "loader" && (
                 <LoaderControls
                   config={loaderConfig}
@@ -6426,7 +6469,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
             open={activePanel === "code"}
             isMobile={isMobile}
             title="Code"
-            onOpenChange={(open) => { if (!open) setActivePanel("none"); }}
+            onOpenChange={(open) => {
+              if (!open) setActivePanel("none");
+            }}
             triggerRef={codeTrigger}
             mobileClassName="p-0! overflow-hidden"
             backdrop
@@ -6439,135 +6484,131 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               dragConstraints: { top: 0, bottom: 0 },
               dragElastic: { top: 0.05, bottom: 0.4 },
               onDragEnd: (_, info) => {
-                if (info.offset.y > 100 || info.velocity.y > 400) setActivePanel("none");
+                if (info.offset.y > 100 || info.velocity.y > 400)
+                  setActivePanel("none");
               },
-              className: "absolute inset-x-2 bottom-2 top-10 z-40 rounded-2xl border border-border bg-card dark:bg-[#0a0a0c] shadow-[0_-20px_50px_rgba(0,0,0,0.15)] dark:shadow-[0_-20px_50px_rgba(0,0,0,0.8)] flex flex-col overflow-hidden",
+              className:
+                "absolute inset-x-2 bottom-2 top-10 z-40 rounded-2xl border border-border bg-card dark:bg-[#0a0a0c] shadow-[0_-20px_50px_rgba(0,0,0,0.15)] dark:shadow-[0_-20px_50px_rgba(0,0,0,0.8)] flex flex-col overflow-hidden",
             }}
           >
-                  <div className="pt-2.5 pb-1 flex justify-center shrink-0 cursor-grab active:cursor-grabbing">
-                    <div className="w-10 h-1 bg-muted-foreground/30 rounded-full" />
-                  </div>
+            <div className="pt-2.5 pb-1 flex justify-center shrink-0 cursor-grab active:cursor-grabbing">
+              <div className="w-10 h-1 bg-muted-foreground/30 rounded-full" />
+            </div>
 
-                  <div className="px-3 sm:px-5 pb-3 border-b border-border flex flex-wrap sm:flex-nowrap items-center justify-between gap-2 shrink-0">
-                    <div className="flex min-w-0 max-w-full items-center gap-2 overflow-x-auto">
-                      {activeComponent.files.map((file, idx) => (
-                        <button
-                          key={file.name}
-                          type="button"
-                          onClick={() => setSelectedFileIndex(idx)}
-                          className={cn(
-                            "relative px-3 py-1.5 rounded-lg text-xs font-mono transition-colors cursor-pointer",
-                            idx === selectedFileIndex
-                              ? "text-foreground font-medium"
-                              : "text-muted-foreground hover:text-foreground",
-                          )}
-                        >
-                          {idx === selectedFileIndex && (
-                            <motion.div
-                              layoutId="active-code-tab"
-                              transition={microSpring}
-                              className="absolute inset-0 bg-muted border border-border rounded-lg"
-                            />
-                          )}
-                          <span className="relative z-10">{file.name}</span>
-                        </button>
-                      ))}
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                      <motion.button
-                        whileHover={{ scale: 1.04 }}
-                        whileTap={{ scale: 0.94 }}
+            <div className="px-3 sm:px-5 pb-3 border-b border-border flex flex-wrap sm:flex-nowrap items-center justify-between gap-2 shrink-0">
+              <div className="flex min-w-0 max-w-full items-center gap-2 overflow-x-auto">
+                {activeComponent.files.map((file, idx) => (
+                  <button
+                    key={file.name}
+                    type="button"
+                    onClick={() => setSelectedFileIndex(idx)}
+                    className={cn(
+                      "relative px-3 py-1.5 rounded-lg text-xs font-mono transition-colors cursor-pointer",
+                      idx === selectedFileIndex
+                        ? "text-foreground font-medium"
+                        : "text-muted-foreground hover:text-foreground",
+                    )}
+                  >
+                    {idx === selectedFileIndex && (
+                      <motion.div
+                        layoutId="active-code-tab"
                         transition={microSpring}
-                        type="button"
-                        onClick={() => handleInstallCopy()}
-                        className="border border-border bg-card dark:bg-[#18181b] hover:bg-muted dark:hover:bg-[#222226] text-muted-foreground hover:text-foreground dark:text-zinc-300 dark:hover:text-white px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer flex items-center gap-1.5"
-                      >
-                        {installCopied ? (
-                          <>
-                            <CheckIcon className="w-3.5 h-3.5 text-emerald-400" />
-                            <span className="text-emerald-400">Copied!</span>
-                          </>
-                        ) : (
-                          <span>
-                            {installTool === "npx"
-                              ? "npm i"
-                              : `${installTool} add`}
-                          </span>
-                        )}
-                      </motion.button>
+                        className="absolute inset-0 bg-muted border border-border rounded-lg"
+                      />
+                    )}
+                    <span className="relative z-10">{file.name}</span>
+                  </button>
+                ))}
+              </div>
 
-                      <motion.button
-                        whileHover={{ scale: 1.04 }}
-                        whileTap={{ scale: 0.94 }}
-                        transition={microSpring}
-                        type="button"
-                        onClick={handleCodeCopy}
-                        className="w-8 h-8 rounded-lg border border-border bg-card dark:bg-[#18181b] hover:bg-muted dark:hover:bg-[#222226] text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white flex items-center justify-center transition-colors cursor-pointer"
-                        title="Copy code"
-                      >
-                        {codeCopied ? (
-                          <CheckIcon className="w-4 h-4 text-emerald-400" />
-                        ) : (
-                          <CopyIcon className="w-4 h-4" />
-                        )}
-                      </motion.button>
+              <div className="flex items-center gap-2">
+                <motion.button
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.94 }}
+                  transition={microSpring}
+                  type="button"
+                  onClick={() => handleInstallCopy()}
+                  className="border border-border bg-card dark:bg-[#18181b] hover:bg-muted dark:hover:bg-[#222226] text-muted-foreground hover:text-foreground dark:text-zinc-300 dark:hover:text-white px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer flex items-center gap-1.5"
+                >
+                  {installCopied ? (
+                    <>
+                      <CheckIcon className="w-3.5 h-3.5 text-emerald-400" />
+                      <span className="text-emerald-400">Copied!</span>
+                    </>
+                  ) : (
+                    <span>
+                      {installTool === "npx" ? "npm i" : `${installTool} add`}
+                    </span>
+                  )}
+                </motion.button>
 
-                      <motion.button
-                        whileTap={{ scale: 0.94 }}
-                        transition={microSpring}
-                        type="button"
-                        onClick={() => setActivePanel("none")}
-                        className="w-8 h-8 rounded-lg border border-border bg-card dark:bg-[#18181b] hover:bg-muted dark:hover:bg-[#222226] text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white flex items-center justify-center transition-colors cursor-pointer"
-                        title="Close (Esc)"
-                      >
-                        <Cross2Icon className="w-4 h-4" />
-                      </motion.button>
-                    </div>
+                <motion.button
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.94 }}
+                  transition={microSpring}
+                  type="button"
+                  onClick={handleCodeCopy}
+                  className="w-8 h-8 rounded-lg border border-border bg-card dark:bg-[#18181b] hover:bg-muted dark:hover:bg-[#222226] text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+                  title="Copy code"
+                >
+                  {codeCopied ? (
+                    <CheckIcon className="w-4 h-4 text-emerald-400" />
+                  ) : (
+                    <CopyIcon className="w-4 h-4" />
+                  )}
+                </motion.button>
+
+                <motion.button
+                  whileTap={{ scale: 0.94 }}
+                  transition={microSpring}
+                  type="button"
+                  onClick={() => setActivePanel("none")}
+                  className="w-8 h-8 rounded-lg border border-border bg-card dark:bg-[#18181b] hover:bg-muted dark:hover:bg-[#222226] text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+                  title="Close (Esc)"
+                >
+                  <Cross2Icon className="w-4 h-4" />
+                </motion.button>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between px-6 py-2 bg-[#0c0c0f] border-b border-border/40 text-xs font-mono">
+              <div className="flex items-center gap-2 text-zinc-400 min-w-0">
+                <span className="text-orange-400 select-none font-bold">$</span>
+                <span className="text-zinc-200 truncate select-all">
+                  {getInstallCommand(activeComponent.slug, installTool)}
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => handleInstallCopy()}
+                className="shrink-0 flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/5 hover:bg-white/10 text-zinc-300 hover:text-white transition-colors cursor-pointer text-[11px]"
+              >
+                {installCopied ? (
+                  <>
+                    <CheckIcon className="w-3.5 h-3.5 text-emerald-400" />
+                    <span className="text-emerald-400">Copied</span>
+                  </>
+                ) : (
+                  <>
+                    <CopyIcon className="w-3.5 h-3.5" />
+                    <span>Copy</span>
+                  </>
+                )}
+              </button>
+            </div>
+
+            <div className="min-h-0 flex-1 p-3 sm:p-6 overflow-auto font-mono text-xs leading-relaxed bg-[#070709] select-text">
+              <div className="space-y-0.5">
+                {codeLines.map((_, i) => (
+                  <div key={i} className="flex">
+                    <span className="w-8 shrink-0 select-none text-right pr-5 text-zinc-600 font-mono">
+                      {i + 1}
+                    </span>
+                    <div className="min-w-0 flex-1">{highlighted[i]}</div>
                   </div>
-
-                  <div className="flex items-center justify-between px-6 py-2 bg-[#0c0c0f] border-b border-border/40 text-xs font-mono">
-                    <div className="flex items-center gap-2 text-zinc-400 min-w-0">
-                      <span className="text-orange-400 select-none font-bold">
-                        $
-                      </span>
-                      <span className="text-zinc-200 truncate select-all">
-                        {getInstallCommand(activeComponent.slug, installTool)}
-                      </span>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => handleInstallCopy()}
-                      className="shrink-0 flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/5 hover:bg-white/10 text-zinc-300 hover:text-white transition-colors cursor-pointer text-[11px]"
-                    >
-                      {installCopied ? (
-                        <>
-                          <CheckIcon className="w-3.5 h-3.5 text-emerald-400" />
-                          <span className="text-emerald-400">Copied</span>
-                        </>
-                      ) : (
-                        <>
-                          <CopyIcon className="w-3.5 h-3.5" />
-                          <span>Copy</span>
-                        </>
-                      )}
-                    </button>
-                  </div>
-
-                  <div className="min-h-0 flex-1 p-3 sm:p-6 overflow-auto font-mono text-xs leading-relaxed bg-[#070709] select-text">
-                    <div className="space-y-0.5">
-                      {codeLines.map((_, i) => (
-                        <div key={i} className="flex">
-                          <span className="w-8 shrink-0 select-none text-right pr-5 text-zinc-600 font-mono">
-                            {i + 1}
-                          </span>
-                          <div className="min-w-0 flex-1">
-                            {highlighted[i]}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                ))}
+              </div>
+            </div>
           </StudioPanel>
         </motion.main>
 
@@ -6575,7 +6616,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
           open={activePanel === "info"}
           isMobile={isMobile}
           title="Component info"
-          onOpenChange={(open) => { if (!open) setActivePanel("none"); }}
+          onOpenChange={(open) => {
+            if (!open) setActivePanel("none");
+          }}
           triggerRef={infoTrigger}
           mobileClassName="p-0!"
           desktopProps={{
@@ -6584,419 +6627,411 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
             exit: { width: 0, opacity: 0 },
             transition: panelSpring,
             role: "complementary",
-            className: "shrink-0 h-full border border-border bg-card dark:bg-[#0c0c0e] rounded-3xl overflow-hidden flex flex-col",
+            className:
+              "shrink-0 h-full border border-border bg-card dark:bg-[#0c0c0e] rounded-3xl overflow-hidden flex flex-col",
           }}
         >
-              <div className="w-full min-w-0 lg:w-122.5 lg:min-w-122.5 h-full p-4 sm:p-7 overflow-y-auto overscroll-contain flex flex-col gap-6 scrollbar-none pb-12">
-                <motion.div
-                  initial="hidden"
-                  animate="visible"
-                  transition={{ staggerChildren: 0.05 }}
-                  className="space-y-6"
+          <div className="w-full min-w-0 lg:w-122.5 lg:min-w-122.5 h-full p-4 sm:p-7 overflow-y-auto overscroll-contain flex flex-col gap-6 scrollbar-none pb-12">
+            <motion.div
+              initial="hidden"
+              animate="visible"
+              transition={{ staggerChildren: 0.05 }}
+              className="space-y-6"
+            >
+              <motion.div
+                variants={fadeVariants}
+                className="flex items-center justify-between pb-2 border-b border-border"
+              >
+                <div className="flex min-w-0 flex-wrap items-center gap-2">
+                  <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-medium">
+                    {activeComponent.slug.replace("-", " ")}
+                  </span>
+                  <span className="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-muted text-muted-foreground border border-border">
+                    {getCategoryLabel(activeComponent.category)}
+                  </span>
+                  <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-orange-500/10 text-orange-400 border border-orange-500/20">
+                    v{activeComponent.version}
+                  </span>
+                </div>
+                <motion.button
+                  whileTap={{ scale: 0.9 }}
+                  transition={microSpring}
+                  type="button"
+                  onClick={() => setActivePanel("none")}
+                  className="w-7 h-7 rounded-lg border border-border hover:border-foreground/20 bg-muted/60 dark:bg-zinc-900 text-muted-foreground hover:text-foreground transition-colors cursor-pointer flex items-center justify-center"
+                  title="Close (Esc)"
                 >
-                  <motion.div
-                    variants={fadeVariants}
-                    className="flex items-center justify-between pb-2 border-b border-border"
-                  >
-                    <div className="flex min-w-0 flex-wrap items-center gap-2">
-                      <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-medium">
-                        {activeComponent.slug.replace("-", " ")}
-                      </span>
-                      <span className="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-muted text-muted-foreground border border-border">
-                        {getCategoryLabel(activeComponent.category)}
-                      </span>
-                      <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-orange-500/10 text-orange-400 border border-orange-500/20">
-                        v{activeComponent.version}
-                      </span>
-                    </div>
-                    <motion.button
-                      whileTap={{ scale: 0.9 }}
-                      transition={microSpring}
-                      type="button"
-                      onClick={() => setActivePanel("none")}
-                      className="w-7 h-7 rounded-lg border border-border hover:border-foreground/20 bg-muted/60 dark:bg-zinc-900 text-muted-foreground hover:text-foreground transition-colors cursor-pointer flex items-center justify-center"
-                      title="Close (Esc)"
-                    >
-                      <Cross2Icon className="w-3.5 h-3.5" />
-                    </motion.button>
-                  </motion.div>
+                  <Cross2Icon className="w-3.5 h-3.5" />
+                </motion.button>
+              </motion.div>
 
-                  <motion.div variants={fadeVariants} className="space-y-2">
-                    <h2 className="text-xl sm:text-2xl font-serif text-foreground tracking-tight leading-snug">
-                      {activeComponent.name}
-                    </h2>
-                    <p className="text-xs text-muted-foreground font-light leading-relaxed">
-                      {activeComponent.description}
-                    </p>
-                    {activeComponent.summary && (
-                      <p className="text-xs text-muted-foreground font-light leading-relaxed pt-1">
-                        {activeComponent.summary}
-                      </p>
-                    )}
-                  </motion.div>
+              <motion.div variants={fadeVariants} className="space-y-2">
+                <h2 className="text-xl sm:text-2xl font-serif text-foreground tracking-tight leading-snug">
+                  {activeComponent.name}
+                </h2>
+                <p className="text-xs text-muted-foreground font-light leading-relaxed">
+                  {activeComponent.description}
+                </p>
+                {activeComponent.summary && (
+                  <p className="text-xs text-muted-foreground font-light leading-relaxed pt-1">
+                    {activeComponent.summary}
+                  </p>
+                )}
+              </motion.div>
 
-                  {activeComponent.highlights &&
-                    activeComponent.highlights.length > 0 && (
-                      <motion.div
-                        variants={fadeVariants}
-                        className="space-y-2.5 pt-4 border-t border-border"
-                      >
-                        <div className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
-                          Capabilities & Highlights
-                        </div>
-                        <div className="space-y-1.5">
-                          {activeComponent.highlights.map((h, i) => (
-                            <div
-                              key={i}
-                              className="flex items-start gap-2 text-xs text-foreground font-light leading-relaxed"
-                            >
-                              <span className="text-orange-500 text-[11px] font-mono shrink-0 select-none">
-                                ›
-                              </span>
-                              <span>{h}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </motion.div>
-                    )}
-
-                  {activeComponent.anatomy &&
-                    activeComponent.anatomy.length > 0 && (
-                      <motion.div
-                        variants={fadeVariants}
-                        className="space-y-2.5 pt-4 border-t border-border"
-                      >
-                        <div className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
-                          Component Anatomy
-                        </div>
-                        <div className="border border-border rounded-xl bg-muted/40 p-3 space-y-1 font-mono text-[11px]">
-                          {activeComponent.anatomy.map((item, idx) => (
-                            <div
-                              key={idx}
-                              className="flex items-center gap-2 text-foreground"
-                            >
-                              <span className="text-muted-foreground text-[10px] w-3 shrink-0 text-right">
-                                {idx + 1}
-                              </span>
-                              <span className="text-muted-foreground">→</span>
-                              <span className="text-foreground font-mono text-[11px]">
-                                {item}
-                              </span>
-                            </div>
-                          ))}
-                        </div>
-                      </motion.div>
-                    )}
-
-                  {activeComponent.physics && (
-                    <motion.div
-                      variants={fadeVariants}
-                      className="space-y-3 pt-4 border-t border-border"
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
-                          Motion & Interaction Spec
-                        </div>
-                        <span className="text-[10px] font-mono text-orange-400 bg-orange-500/10 border border-orange-500/20 px-2 py-0.5 rounded">
-                          {activeComponent.physics.engine}
-                        </span>
-                      </div>
-                      <p className="text-xs text-muted-foreground font-light leading-relaxed">
-                        {activeComponent.physics.description}
-                      </p>
-                      {activeComponent.physics.parameters && (
-                        <div className="border border-border rounded-xl overflow-hidden bg-muted/40">
-                          <table className="w-full text-left text-xs">
-                            <thead className="bg-muted border-b border-border text-muted-foreground font-mono text-[10px] uppercase">
-                              <tr>
-                                <th className="p-2.5 font-medium">Parameter</th>
-                                <th className="p-2.5 font-medium">Value</th>
-                              </tr>
-                            </thead>
-                            <tbody className="divide-y divide-border font-mono text-[11px]">
-                              {activeComponent.physics.parameters.map(
-                                (param) => (
-                                  <tr
-                                    key={param.label}
-                                    className="hover:bg-muted/50 transition-colors"
-                                  >
-                                    <td className="p-2.5 text-muted-foreground">
-                                      {param.label}
-                                    </td>
-                                    <td className="p-2.5 text-foreground">
-                                      {param.value}
-                                    </td>
-                                  </tr>
-                                ),
-                              )}
-                            </tbody>
-                          </table>
-                        </div>
-                      )}
-                    </motion.div>
-                  )}
-
-                  {activeComponent.props &&
-                    activeComponent.props.length > 0 && (
-                      <motion.div
-                        variants={fadeVariants}
-                        className="space-y-3 pt-4 border-t border-border"
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
-                              Props Interface
-                            </span>
-                            <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-orange-500/10 text-orange-500 border border-orange-500/20 font-medium">
-                              {activeComponent.props.length}
-                            </span>
-                          </div>
-                          <span className="text-[10px] font-mono text-muted-foreground/60">
-                            TypeScript
-                          </span>
-                        </div>
-                        <div className="border border-border/80 dark:border-white/10 rounded-xl overflow-x-auto bg-card/60 dark:bg-zinc-950/60 shadow-xs">
-                          <table className="w-full text-left text-xs min-w-140 border-collapse">
-                            <thead className="bg-muted/70 dark:bg-white/3 border-b border-border/80 dark:border-white/10 text-muted-foreground font-mono text-[10px] uppercase tracking-wider">
-                              <tr>
-                                <th className="py-2.5 px-3 font-medium w-[22%] min-w-27.5">
-                                  Prop
-                                </th>
-                                <th className="py-2.5 px-3 font-medium w-[26%] min-w-35">
-                                  Type
-                                </th>
-                                <th className="py-2.5 px-3 font-medium w-[22%] min-w-30">
-                                  Default
-                                </th>
-                                <th className="py-2.5 px-3 font-medium w-[30%] min-w-47.5">
-                                  Description
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody className="divide-y divide-border/60 dark:divide-white/5 text-xs">
-                              {activeComponent.props.map((p) => (
-                                <tr
-                                  key={p.name}
-                                  className="hover:bg-muted/40 dark:hover:bg-white/2 transition-colors align-top"
-                                >
-                                  <td className="py-3 px-3 font-mono">
-                                    <div className="flex flex-col items-start gap-1">
-                                      <code className="bg-orange-500/10 dark:bg-orange-500/15 border border-orange-500/25 px-1.5 py-0.5 rounded text-orange-600 dark:text-orange-400 text-[11px] font-medium font-mono whitespace-nowrap">
-                                        {p.name}
-                                      </code>
-                                      {p.required ? (
-                                        <span className="text-[9px] uppercase tracking-wider text-rose-500 dark:text-rose-400 font-medium font-mono bg-rose-500/10 px-1 py-0.2 rounded">
-                                          Required
-                                        </span>
-                                      ) : (
-                                        <span className="text-[9px] uppercase tracking-wider text-muted-foreground/50 font-mono">
-                                          Optional
-                                        </span>
-                                      )}
-                                    </div>
-                                  </td>
-                                  <td className="py-3 px-3 align-top whitespace-normal">
-                                    <code className="text-[11px] font-mono text-sky-600 dark:text-sky-400 bg-sky-500/10 dark:bg-sky-500/15 border border-sky-500/20 px-1.5 py-0.5 rounded inline-block wrap-break-word max-w-50 leading-relaxed">
-                                      {p.type}
-                                    </code>
-                                  </td>
-                                  <td className="py-3 px-3 align-top font-mono text-[11px]">
-                                    {p.defaultValue &&
-                                    p.defaultValue !== "undefined" ? (
-                                      <code
-                                        className="text-muted-foreground dark:text-zinc-400 bg-muted/80 dark:bg-white/5 border border-border/80 dark:border-white/10 px-1.5 py-0.5 rounded inline-block max-w-32.5 truncate align-middle"
-                                        title={p.defaultValue}
-                                      >
-                                        {p.defaultValue}
-                                      </code>
-                                    ) : (
-                                      <span className="text-muted-foreground/40 font-mono text-[11px] select-none">
-                                        —
-                                      </span>
-                                    )}
-                                  </td>
-                                  <td className="py-3 px-3 text-foreground/85 dark:text-zinc-300 font-sans font-light leading-relaxed text-xs align-top">
-                                    {p.description}
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-                      </motion.div>
-                    )}
-
-                  {activeComponent.accessibility && (
-                    <motion.div
-                      variants={fadeVariants}
-                      className="space-y-3 pt-4 border-t border-border"
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
-                          Accessibility & Shortcuts
-                        </div>
-                        {activeComponent.accessibility.role && (
-                          <span className="text-[10px] font-mono text-muted-foreground bg-muted border border-border px-2 py-0.5 rounded">
-                            role=&quot;{activeComponent.accessibility.role}
-                            &quot;
-                          </span>
-                        )}
-                      </div>
-                      {activeComponent.accessibility.aria && (
-                        <p className="text-xs text-muted-foreground font-light leading-relaxed">
-                          {activeComponent.accessibility.aria}
-                        </p>
-                      )}
-                      {activeComponent.accessibility.keyboard &&
-                        activeComponent.accessibility.keyboard.length > 0 && (
-                          <div className="border border-border rounded-xl overflow-hidden bg-muted/40">
-                            <table className="w-full text-left text-xs">
-                              <thead className="bg-muted border-b border-border text-muted-foreground font-mono text-[10px] uppercase">
-                                <tr>
-                                  <th className="p-2.5 font-medium">Key</th>
-                                  <th className="p-2.5 font-medium">Action</th>
-                                </tr>
-                              </thead>
-                              <tbody className="divide-y divide-border text-xs">
-                                {activeComponent.accessibility.keyboard.map(
-                                  (kb) => (
-                                    <tr
-                                      key={kb.key}
-                                      className="hover:bg-muted/50 transition-colors align-top"
-                                    >
-                                      <td className="p-2.5 font-mono">
-                                        <kbd className="bg-muted border border-border px-1.5 py-0.5 rounded text-foreground text-[11px]">
-                                          {kb.key}
-                                        </kbd>
-                                      </td>
-                                      <td className="p-2.5 text-foreground font-sans font-light leading-relaxed">
-                                        {kb.description}
-                                      </td>
-                                    </tr>
-                                  ),
-                                )}
-                              </tbody>
-                            </table>
-                          </div>
-                        )}
-                      {activeComponent.accessibility.reducedMotion && (
-                        <div className="flex items-start gap-2 text-xs text-muted-foreground font-light leading-relaxed bg-muted border border-border rounded-lg p-2.5">
-                          <span className="text-orange-400 text-[11px] font-mono select-none">
-                            ✦
-                          </span>
-                          <span>
-                            {activeComponent.accessibility.reducedMotion}
-                          </span>
-                        </div>
-                      )}
-                    </motion.div>
-                  )}
-
-                  {activeComponent.guidelines && (
-                    <motion.div
-                      variants={fadeVariants}
-                      className="space-y-3 pt-4 border-t border-border"
-                    >
-                      <div className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
-                        Integration & Best Practices
-                      </div>
-                      {activeComponent.guidelines.recommended && (
-                        <div className="space-y-1.5">
-                          <div className="text-[10px] font-mono uppercase text-muted-foreground">
-                            Recommended Use
-                          </div>
-                          {activeComponent.guidelines.recommended.map(
-                            (rec, i) => (
-                              <div
-                                key={i}
-                                className="flex items-start gap-2 text-xs text-foreground font-light leading-relaxed"
-                              >
-                                <span className="text-emerald-500 text-[11px] font-mono select-none">
-                                  ✓
-                                </span>
-                                <span>{rec}</span>
-                              </div>
-                            ),
-                          )}
-                        </div>
-                      )}
-                      {activeComponent.guidelines.bestPractices && (
-                        <div className="space-y-1.5 pt-2">
-                          <div className="text-[10px] font-mono uppercase text-muted-foreground">
-                            Best Practices
-                          </div>
-                          {activeComponent.guidelines.bestPractices.map(
-                            (bp, i) => (
-                              <div
-                                key={i}
-                                className="flex items-start gap-2 text-xs text-foreground font-light leading-relaxed"
-                              >
-                                <span className="text-orange-400 text-[11px] font-mono select-none">
-                                  ·
-                                </span>
-                                <span>{bp}</span>
-                              </div>
-                            ),
-                          )}
-                        </div>
-                      )}
-                    </motion.div>
-                  )}
-
+              {activeComponent.highlights &&
+                activeComponent.highlights.length > 0 && (
                   <motion.div
                     variants={fadeVariants}
                     className="space-y-2.5 pt-4 border-t border-border"
                   >
                     <div className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
-                      Dependencies & Source
+                      Capabilities & Highlights
                     </div>
-                    <div className="flex flex-wrap gap-2">
-                      {activeComponent.dependencies.map((dep) => (
-                        <span
-                          key={dep}
-                          className="inline-flex items-center gap-1.5 border border-border bg-muted px-3 py-1 text-xs font-mono text-foreground rounded-lg"
+                    <div className="space-y-1.5">
+                      {activeComponent.highlights.map((h, i) => (
+                        <div
+                          key={i}
+                          className="flex items-start gap-2 text-xs text-foreground font-light leading-relaxed"
                         >
-                          <span className="text-orange-500/70">~</span>
-                          {dep}
-                        </span>
+                          <span className="text-orange-500 text-[11px] font-mono shrink-0 select-none">
+                            ›
+                          </span>
+                          <span>{h}</span>
+                        </div>
                       ))}
                     </div>
-                    {activeComponent.files && activeComponent.files[0] && (
-                      <div className="flex items-center justify-between text-[11px] font-mono text-muted-foreground bg-muted/40 border border-border rounded-lg px-3 py-2 mt-2">
-                        <span>Source File</span>
-                        <span className="text-foreground">
-                          {activeComponent.files[0].path}
-                        </span>
-                      </div>
-                    )}
-                    <div className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground pt-2">
-                      Install via CLI
+                  </motion.div>
+                )}
+
+              {activeComponent.anatomy &&
+                activeComponent.anatomy.length > 0 && (
+                  <motion.div
+                    variants={fadeVariants}
+                    className="space-y-2.5 pt-4 border-t border-border"
+                  >
+                    <div className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
+                      Component Anatomy
                     </div>
-                    <div className="flex items-center justify-between p-2.5 bg-muted/40 border border-border rounded-lg font-mono text-xs">
-                      <div className="flex items-center gap-1.5 min-w-0 pr-2">
-                        <span className="text-orange-500 select-none font-bold">
-                          $
-                        </span>
-                        <span className="text-foreground truncate select-all">
-                          {`npx @devclubnst/ui add ${activeComponent.slug}`}
-                        </span>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => handleInstallCopy("npx")}
-                        className="p-1 hover:bg-muted rounded text-muted-foreground hover:text-foreground cursor-pointer shrink-0"
-                        title="Copy command"
-                      >
-                        {copiedToolKey === "npx" ? (
-                          <CheckIcon className="w-3.5 h-3.5 text-emerald-400" />
-                        ) : (
-                          <CopyIcon className="w-3.5 h-3.5" />
-                        )}
-                      </button>
+                    <div className="border border-border rounded-xl bg-muted/40 p-3 space-y-1 font-mono text-[11px]">
+                      {activeComponent.anatomy.map((item, idx) => (
+                        <div
+                          key={idx}
+                          className="flex items-center gap-2 text-foreground"
+                        >
+                          <span className="text-muted-foreground text-[10px] w-3 shrink-0 text-right">
+                            {idx + 1}
+                          </span>
+                          <span className="text-muted-foreground">→</span>
+                          <span className="text-foreground font-mono text-[11px]">
+                            {item}
+                          </span>
+                        </div>
+                      ))}
                     </div>
                   </motion.div>
+                )}
+
+              {activeComponent.physics && (
+                <motion.div
+                  variants={fadeVariants}
+                  className="space-y-3 pt-4 border-t border-border"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
+                      Motion & Interaction Spec
+                    </div>
+                    <span className="text-[10px] font-mono text-orange-400 bg-orange-500/10 border border-orange-500/20 px-2 py-0.5 rounded">
+                      {activeComponent.physics.engine}
+                    </span>
+                  </div>
+                  <p className="text-xs text-muted-foreground font-light leading-relaxed">
+                    {activeComponent.physics.description}
+                  </p>
+                  {activeComponent.physics.parameters && (
+                    <div className="border border-border rounded-xl overflow-hidden bg-muted/40">
+                      <table className="w-full text-left text-xs">
+                        <thead className="bg-muted border-b border-border text-muted-foreground font-mono text-[10px] uppercase">
+                          <tr>
+                            <th className="p-2.5 font-medium">Parameter</th>
+                            <th className="p-2.5 font-medium">Value</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-border font-mono text-[11px]">
+                          {activeComponent.physics.parameters.map((param) => (
+                            <tr
+                              key={param.label}
+                              className="hover:bg-muted/50 transition-colors"
+                            >
+                              <td className="p-2.5 text-muted-foreground">
+                                {param.label}
+                              </td>
+                              <td className="p-2.5 text-foreground">
+                                {param.value}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
                 </motion.div>
-              </div>
+              )}
+
+              {activeComponent.props && activeComponent.props.length > 0 && (
+                <motion.div
+                  variants={fadeVariants}
+                  className="space-y-3 pt-4 border-t border-border"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
+                        Props Interface
+                      </span>
+                      <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-orange-500/10 text-orange-500 border border-orange-500/20 font-medium">
+                        {activeComponent.props.length}
+                      </span>
+                    </div>
+                    <span className="text-[10px] font-mono text-muted-foreground/60">
+                      TypeScript
+                    </span>
+                  </div>
+                  <div className="border border-border/80 dark:border-white/10 rounded-xl overflow-x-auto bg-card/60 dark:bg-zinc-950/60 shadow-xs">
+                    <table className="w-full text-left text-xs min-w-140 border-collapse">
+                      <thead className="bg-muted/70 dark:bg-white/3 border-b border-border/80 dark:border-white/10 text-muted-foreground font-mono text-[10px] uppercase tracking-wider">
+                        <tr>
+                          <th className="py-2.5 px-3 font-medium w-[22%] min-w-27.5">
+                            Prop
+                          </th>
+                          <th className="py-2.5 px-3 font-medium w-[26%] min-w-35">
+                            Type
+                          </th>
+                          <th className="py-2.5 px-3 font-medium w-[22%] min-w-30">
+                            Default
+                          </th>
+                          <th className="py-2.5 px-3 font-medium w-[30%] min-w-47.5">
+                            Description
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-border/60 dark:divide-white/5 text-xs">
+                        {activeComponent.props.map((p) => (
+                          <tr
+                            key={p.name}
+                            className="hover:bg-muted/40 dark:hover:bg-white/2 transition-colors align-top"
+                          >
+                            <td className="py-3 px-3 font-mono">
+                              <div className="flex flex-col items-start gap-1">
+                                <code className="bg-orange-500/10 dark:bg-orange-500/15 border border-orange-500/25 px-1.5 py-0.5 rounded text-orange-600 dark:text-orange-400 text-[11px] font-medium font-mono whitespace-nowrap">
+                                  {p.name}
+                                </code>
+                                {p.required ? (
+                                  <span className="text-[9px] uppercase tracking-wider text-rose-500 dark:text-rose-400 font-medium font-mono bg-rose-500/10 px-1 py-0.2 rounded">
+                                    Required
+                                  </span>
+                                ) : (
+                                  <span className="text-[9px] uppercase tracking-wider text-muted-foreground/50 font-mono">
+                                    Optional
+                                  </span>
+                                )}
+                              </div>
+                            </td>
+                            <td className="py-3 px-3 align-top whitespace-normal">
+                              <code className="text-[11px] font-mono text-sky-600 dark:text-sky-400 bg-sky-500/10 dark:bg-sky-500/15 border border-sky-500/20 px-1.5 py-0.5 rounded inline-block wrap-break-word max-w-50 leading-relaxed">
+                                {p.type}
+                              </code>
+                            </td>
+                            <td className="py-3 px-3 align-top font-mono text-[11px]">
+                              {p.defaultValue &&
+                              p.defaultValue !== "undefined" ? (
+                                <code
+                                  className="text-muted-foreground dark:text-zinc-400 bg-muted/80 dark:bg-white/5 border border-border/80 dark:border-white/10 px-1.5 py-0.5 rounded inline-block max-w-32.5 truncate align-middle"
+                                  title={p.defaultValue}
+                                >
+                                  {p.defaultValue}
+                                </code>
+                              ) : (
+                                <span className="text-muted-foreground/40 font-mono text-[11px] select-none">
+                                  —
+                                </span>
+                              )}
+                            </td>
+                            <td className="py-3 px-3 text-foreground/85 dark:text-zinc-300 font-sans font-light leading-relaxed text-xs align-top">
+                              {p.description}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </motion.div>
+              )}
+
+              {activeComponent.accessibility && (
+                <motion.div
+                  variants={fadeVariants}
+                  className="space-y-3 pt-4 border-t border-border"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
+                      Accessibility & Shortcuts
+                    </div>
+                    {activeComponent.accessibility.role && (
+                      <span className="text-[10px] font-mono text-muted-foreground bg-muted border border-border px-2 py-0.5 rounded">
+                        role=&quot;{activeComponent.accessibility.role}
+                        &quot;
+                      </span>
+                    )}
+                  </div>
+                  {activeComponent.accessibility.aria && (
+                    <p className="text-xs text-muted-foreground font-light leading-relaxed">
+                      {activeComponent.accessibility.aria}
+                    </p>
+                  )}
+                  {activeComponent.accessibility.keyboard &&
+                    activeComponent.accessibility.keyboard.length > 0 && (
+                      <div className="border border-border rounded-xl overflow-hidden bg-muted/40">
+                        <table className="w-full text-left text-xs">
+                          <thead className="bg-muted border-b border-border text-muted-foreground font-mono text-[10px] uppercase">
+                            <tr>
+                              <th className="p-2.5 font-medium">Key</th>
+                              <th className="p-2.5 font-medium">Action</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-border text-xs">
+                            {activeComponent.accessibility.keyboard.map(
+                              (kb) => (
+                                <tr
+                                  key={kb.key}
+                                  className="hover:bg-muted/50 transition-colors align-top"
+                                >
+                                  <td className="p-2.5 font-mono">
+                                    <kbd className="bg-muted border border-border px-1.5 py-0.5 rounded text-foreground text-[11px]">
+                                      {kb.key}
+                                    </kbd>
+                                  </td>
+                                  <td className="p-2.5 text-foreground font-sans font-light leading-relaxed">
+                                    {kb.description}
+                                  </td>
+                                </tr>
+                              ),
+                            )}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                  {activeComponent.accessibility.reducedMotion && (
+                    <div className="flex items-start gap-2 text-xs text-muted-foreground font-light leading-relaxed bg-muted border border-border rounded-lg p-2.5">
+                      <span className="text-orange-400 text-[11px] font-mono select-none">
+                        ✦
+                      </span>
+                      <span>{activeComponent.accessibility.reducedMotion}</span>
+                    </div>
+                  )}
+                </motion.div>
+              )}
+
+              {activeComponent.guidelines && (
+                <motion.div
+                  variants={fadeVariants}
+                  className="space-y-3 pt-4 border-t border-border"
+                >
+                  <div className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
+                    Integration & Best Practices
+                  </div>
+                  {activeComponent.guidelines.recommended && (
+                    <div className="space-y-1.5">
+                      <div className="text-[10px] font-mono uppercase text-muted-foreground">
+                        Recommended Use
+                      </div>
+                      {activeComponent.guidelines.recommended.map((rec, i) => (
+                        <div
+                          key={i}
+                          className="flex items-start gap-2 text-xs text-foreground font-light leading-relaxed"
+                        >
+                          <span className="text-emerald-500 text-[11px] font-mono select-none">
+                            ✓
+                          </span>
+                          <span>{rec}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  {activeComponent.guidelines.bestPractices && (
+                    <div className="space-y-1.5 pt-2">
+                      <div className="text-[10px] font-mono uppercase text-muted-foreground">
+                        Best Practices
+                      </div>
+                      {activeComponent.guidelines.bestPractices.map((bp, i) => (
+                        <div
+                          key={i}
+                          className="flex items-start gap-2 text-xs text-foreground font-light leading-relaxed"
+                        >
+                          <span className="text-orange-400 text-[11px] font-mono select-none">
+                            ·
+                          </span>
+                          <span>{bp}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </motion.div>
+              )}
+
+              <motion.div
+                variants={fadeVariants}
+                className="space-y-2.5 pt-4 border-t border-border"
+              >
+                <div className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
+                  Dependencies & Source
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {activeComponent.dependencies.map((dep) => (
+                    <span
+                      key={dep}
+                      className="inline-flex items-center gap-1.5 border border-border bg-muted px-3 py-1 text-xs font-mono text-foreground rounded-lg"
+                    >
+                      <span className="text-orange-500/70">~</span>
+                      {dep}
+                    </span>
+                  ))}
+                </div>
+                {activeComponent.files && activeComponent.files[0] && (
+                  <div className="flex items-center justify-between text-[11px] font-mono text-muted-foreground bg-muted/40 border border-border rounded-lg px-3 py-2 mt-2">
+                    <span>Source File</span>
+                    <span className="text-foreground">
+                      {activeComponent.files[0].path}
+                    </span>
+                  </div>
+                )}
+                <div className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground pt-2">
+                  Install via CLI
+                </div>
+                <div className="flex items-center justify-between p-2.5 bg-muted/40 border border-border rounded-lg font-mono text-xs">
+                  <div className="flex items-center gap-1.5 min-w-0 pr-2">
+                    <span className="text-orange-500 select-none font-bold">
+                      $
+                    </span>
+                    <span className="text-foreground truncate select-all">
+                      {`npx @devclubnst/ui add ${activeComponent.slug}`}
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleInstallCopy("npx")}
+                    className="p-1 hover:bg-muted rounded text-muted-foreground hover:text-foreground cursor-pointer shrink-0"
+                    title="Copy command"
+                  >
+                    {copiedToolKey === "npx" ? (
+                      <CheckIcon className="w-3.5 h-3.5 text-emerald-400" />
+                    ) : (
+                      <CopyIcon className="w-3.5 h-3.5" />
+                    )}
+                  </button>
+                </div>
+              </motion.div>
+            </motion.div>
+          </div>
         </StudioPanel>
       </motion.div>
     </div>

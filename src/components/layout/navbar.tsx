@@ -24,7 +24,11 @@ export interface NavbarProps {
   searchAction?: React.ReactNode;
 }
 
-export const Navbar = ({ showThemeToggle, forceLight, searchAction }: NavbarProps = {}) => {
+export const Navbar = ({
+  showThemeToggle,
+  forceLight,
+  searchAction,
+}: NavbarProps = {}) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
   const mobileMenuRef = useRef<HTMLButtonElement>(null);
@@ -55,7 +59,7 @@ export const Navbar = ({ showThemeToggle, forceLight, searchAction }: NavbarProp
               alt="DevClub"
               width={180}
               height={60}
-              className="h-10 w-auto max-w-[120px] sm:h-12 sm:max-w-none object-contain transition-opacity group-hover:opacity-80"
+              className="h-10 w-auto max-w-30 sm:h-12 sm:max-w-none object-contain transition-opacity group-hover:opacity-80"
               priority
             />
           </Link>
@@ -137,48 +141,54 @@ export const Navbar = ({ showThemeToggle, forceLight, searchAction }: NavbarProp
         </div>
       </div>
 
-      <MobilePanel open={mobileMenuOpen && isMobileNav} onOpenChange={setMobileMenuOpen} title="Navigation" triggerRef={mobileMenuRef} className="space-y-5">
-          <div className="space-y-1">
-            {NAV_ITEMS.map((item) => {
-              const isActive =
-                pathname === item.href ||
-                (item.href !== "/" && pathname.startsWith(item.href));
+      <MobilePanel
+        open={mobileMenuOpen && isMobileNav}
+        onOpenChange={setMobileMenuOpen}
+        title="Navigation"
+        triggerRef={mobileMenuRef}
+        className="space-y-5"
+      >
+        <div className="space-y-1">
+          {NAV_ITEMS.map((item) => {
+            const isActive =
+              pathname === item.href ||
+              (item.href !== "/" && pathname.startsWith(item.href));
 
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={cn(
-                    "block px-3 py-3 rounded-lg text-sm font-medium transition-colors",
-                    forceLight
-                      ? isActive
-                        ? "text-zinc-900 bg-zinc-900/10 font-semibold"
-                        : "text-zinc-500 hover:text-zinc-900 hover:bg-zinc-900/5"
-                      : isActive
-                        ? "text-foreground bg-foreground/10 font-semibold"
-                        : "text-muted-foreground hover:text-foreground hover:bg-foreground/5",
-                  )}
-                >
-                  {item.label}
-                </Link>
-              );
-            })}
-          </div>
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setMobileMenuOpen(false)}
+                className={cn(
+                  "block px-3 py-3 rounded-lg text-sm font-medium transition-colors",
+                  forceLight
+                    ? isActive
+                      ? "text-zinc-900 bg-zinc-900/10 font-semibold"
+                      : "text-zinc-500 hover:text-zinc-900 hover:bg-zinc-900/5"
+                    : isActive
+                      ? "text-foreground bg-foreground/10 font-semibold"
+                      : "text-muted-foreground hover:text-foreground hover:bg-foreground/5",
+                )}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
+        </div>
 
-          <div className="pt-3 border-t border-border flex items-center gap-2">
-            <CandyButton
-              as={Link}
-              href="/components"
-              onClick={() => setMobileMenuOpen(false)}
-              variant="pearl"
-              size="default"
-              className="w-full rounded-full font-semibold text-sm"
-              rightIcon={<ChevronRightIcon className="w-4 h-4" />}
-            >
-              <span>Explore Components</span>
-            </CandyButton>
-          </div>
+        <div className="pt-3 border-t border-border flex items-center gap-2">
+          <CandyButton
+            as={Link}
+            href="/components"
+            onClick={() => setMobileMenuOpen(false)}
+            variant="pearl"
+            size="default"
+            className="w-full rounded-full font-semibold text-sm"
+            rightIcon={<ChevronRightIcon className="w-4 h-4" />}
+          >
+            <span>Explore Components</span>
+          </CandyButton>
+        </div>
       </MobilePanel>
     </header>
   );

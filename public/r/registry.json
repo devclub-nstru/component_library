@@ -696,6 +696,27 @@
       ]
     },
     {
+      "name": "morph-invite",
+      "type": "registry:ui",
+      "title": "Morph Invite",
+      "description": "An avatar invite pill that expands into an email field with coordinated GSAP spring motion.",
+      "dependencies": [
+        "gsap",
+        "@gsap/react",
+        "motion",
+        "lucide-react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/morph-invite.tsx",
+          "type": "registry:ui",
+          "target": "@ui/morph-invite.tsx"
+        }
+      ]
+    },
+    {
       "name": "morph-search",
       "type": "registry:ui",
       "title": "Morph Search",
