@@ -35,6 +35,7 @@ import macSlider from "./mac-slider.json";
 import macSwitch from "./mac-switch.json";
 import slider from "./slider.json";
 import morphSearch from "./morph-search.json";
+import morphInvite from "./morph-invite.json";
 import noise from "./noise.json";
 import orbitGallery from "./orbit-gallery.json";
 import orb from "./orb.json";
@@ -95,6 +96,7 @@ export {
   macSlider,
   macSwitch,
   morphSearch,
+  morphInvite,
   noise,
   orbitGallery,
   orb,
@@ -157,6 +159,7 @@ export const componentsList: ComponentRegistryItem[] = [
   macSlider as ComponentRegistryItem,
   macSwitch as ComponentRegistryItem,
   morphSearch as ComponentRegistryItem,
+  morphInvite as ComponentRegistryItem,
   noise as ComponentRegistryItem,
   orbitGallery as ComponentRegistryItem,
   orb as ComponentRegistryItem,
