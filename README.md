@@ -360,7 +360,6 @@ Please adhere to our [Code of Conduct](CODE_OF_CONDUCT.md) in all community inte
 
 If you discover a security vulnerability or component prop injection risk, please review our [Security Policy](SECURITY.md) and report it via `softwaredevg.club@rishihood.edu.in` or GitHub Private Security Advisories.
 
----
 
 ## License & Copyright
 
