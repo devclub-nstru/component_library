@@ -922,6 +922,26 @@
       ]
     },
     {
+      "name": "scrolling-cards",
+      "type": "registry:ui",
+      "title": "Scrolling Cards",
+      "description": "Full-bleed image cards that stack with synchronized, spring-driven scrolling motion.",
+      "dependencies": [
+        "gsap",
+        "@gsap/react",
+        "lucide-react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/scrolling-cards.tsx",
+          "type": "registry:ui",
+          "target": "@ui/scrolling-cards.tsx"
+        }
+      ]
+    },
+    {
       "name": "search-input",
       "type": "registry:ui",
       "title": "Search Input",

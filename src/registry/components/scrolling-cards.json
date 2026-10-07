@@ -1,0 +1,186 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "slug": "scrolling-cards",
+  "name": "Scrolling Cards",
+  "title": "Scrolling Cards",
+  "type": "registry:ui",
+  "description": "Full-bleed image cards that stack with synchronized, spring-driven scrolling motion.",
+  "summary": "A contained image collection with colored glass borders and a shared GSAP timeline. Tune spring stiffness, friction, spacing, scale, and dimensions in Component Studio.",
+  "category": "cards",
+  "tags": [
+    "scroll",
+    "stack",
+    "sticky",
+    "glass",
+    "images",
+    "gsap",
+    "scrolltrigger"
+  ],
+  "dependencies": [
+    "gsap",
+    "@gsap/react",
+    "lucide-react",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "version": "1.0.0",
+  "createdDate": "2026-10-07",
+  "updatedDate": "2026-10-07",
+  "interactive": true,
+  "supportsColor": false,
+  "highlights": [
+    "Full-bleed Virat Kohli photography with consistent image crops",
+    "A shared timeline keeps card entry and stack scaling synchronized",
+    "Spring stiffness and friction control the actual motion response",
+    "Contained scrolling that works inside Component Studio",
+    "Responsive card sizing with centered stack offsets",
+    "Scoped animation cleanup and a static reduced-motion layout"
+  ],
+  "anatomy": [
+    "<ScrollingCards> keyboard-focusable scroll region",
+    "<header> optional collection introduction",
+    "<ol> sticky stage containing the ordered image cards",
+    "<article> colored glass border and full-bleed image"
+  ],
+  "physics": {
+    "engine": "GSAP + ScrollTrigger + damped spring",
+    "description": "ScrollTrigger sets a target progress for one GSAP timeline. A damped spring, integrated on the GSAP ticker, drives card movement and scaling together. The ticker stops when the stack settles and is removed on cleanup.",
+    "parameters": [
+      {
+        "label": "Stiffness",
+        "value": "260"
+      },
+      {
+        "label": "Friction",
+        "value": "32"
+      },
+      {
+        "label": "Stack spacing",
+        "value": "24px"
+      },
+      {
+        "label": "Scale step",
+        "value": "0.05"
+      }
+    ]
+  },
+  "accessibility": {
+    "role": "region with an ordered list of articles",
+    "keyboard": [
+      {
+        "key": "Tab",
+        "description": "Focus the scrolling collection."
+      },
+      {
+        "key": "Arrow keys / Page Up / Page Down",
+        "description": "Scroll through the card collection."
+      },
+      {
+        "key": "Home / End",
+        "description": "Move to the beginning or end of the collection."
+      }
+    ],
+    "aria": "Named scroll region, ordered card list, optional collection heading, and descriptive image alt text.",
+    "reducedMotion": "Removes sticky stacking and scale animations, presenting every card in normal document flow."
+  },
+  "guidelines": {
+    "recommended": [
+      "Image collections and visual stories",
+      "Portfolio and editorial card stacks"
+    ],
+    "bestPractices": [
+      "Provide a unique id and descriptive alt text for each image.",
+      "Give the component an explicit height when overriding the default 600px frame.",
+      "Use imagePosition to keep the subject visible when images are cropped.",
+      "Increase friction to reduce spring bounce and stiffness for a faster response."
+    ]
+  },
+  "props": [
+    {
+      "name": "items",
+      "type": "readonly ScrollingCardItem[]",
+      "required": true,
+      "description": "Images with id, image, imageAlt, and optional imagePosition and border color."
+    },
+    {
+      "name": "title",
+      "type": "string",
+      "defaultValue": "\"A story worth scrolling.\"",
+      "description": "Introduction heading."
+    },
+    {
+      "name": "subtitle",
+      "type": "string",
+      "description": "Supporting introduction copy."
+    },
+    {
+      "name": "eyebrow",
+      "type": "string",
+      "defaultValue": "\"THE COLLECTION\"",
+      "description": "Collection label above the heading."
+    },
+    {
+      "name": "stackGap",
+      "type": "number",
+      "defaultValue": "24",
+      "description": "Vertical gap in pixels between stacked card tops, clamped to 0–40 and fitted to the viewport."
+    },
+    {
+      "name": "scaleStep",
+      "type": "number",
+      "defaultValue": "0.05",
+      "description": "Scale reduction per following card, clamped to 0–0.1 with a minimum final scale of 0.65."
+    },
+    {
+      "name": "stiffness",
+      "type": "number",
+      "defaultValue": "260",
+      "description": "Spring stiffness, clamped to 80–500. Higher values follow scroll changes more quickly."
+    },
+    {
+      "name": "friction",
+      "type": "number",
+      "defaultValue": "32",
+      "description": "Spring damping, clamped to 12–60. Higher values reduce bounce and add resistance."
+    },
+    {
+      "name": "cardHeight",
+      "type": "number",
+      "defaultValue": "420",
+      "description": "Preferred card height in pixels, clamped to 240–600 and fitted to the available viewport."
+    },
+    {
+      "name": "borderRadius",
+      "type": "number",
+      "defaultValue": "24",
+      "description": "Card corner radius in pixels, clamped to 0–40."
+    },
+    {
+      "name": "showIntro",
+      "type": "boolean",
+      "defaultValue": "true",
+      "description": "Show the collection introduction and scroll cue."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "description": "Additional classes for the scroll frame."
+    },
+    {
+      "name": "ariaLabel",
+      "type": "string",
+      "defaultValue": "\"Scrolling card collection\"",
+      "description": "Accessible name of the keyboard-focusable scroll region."
+    }
+  ],
+  "files": [
+    {
+      "name": "scrolling-cards.tsx",
+      "path": "registry/ui/scrolling-cards.tsx",
+      "code": "\"use client\";\n\nimport { useId, useRef, type CSSProperties } from \"react\";\nimport { useGSAP } from \"@gsap/react\";\nimport gsap from \"gsap\";\nimport { ScrollTrigger } from \"gsap/ScrollTrigger\";\nimport { ArrowDown } from \"lucide-react\";\nimport { cn } from \"@/lib/utils\";\n\ngsap.registerPlugin(useGSAP, ScrollTrigger);\n\nexport interface ScrollingCardItem {\n  id: string;\n  image: string;\n  imageAlt: string;\n  imagePosition?: string;\n  color?: string;\n}\n\nexport interface ScrollingCardsProps {\n  items: readonly ScrollingCardItem[];\n  title?: string;\n  subtitle?: string;\n  eyebrow?: string;\n  stackGap?: number;\n  scaleStep?: number;\n  stiffness?: number;\n  friction?: number;\n  cardHeight?: number;\n  borderRadius?: number;\n  showIntro?: boolean;\n  className?: string;\n  ariaLabel?: string;\n}\n\nconst bounded = (value: number, min: number, max: number, fallback: number) =>\n  Number.isFinite(value) ? Math.min(max, Math.max(min, value)) : fallback;\n\nexport function ScrollingCards({\n  items,\n  title = \"A story worth scrolling.\",\n  subtitle = \"Scroll down. Let every card become part of the story.\",\n  eyebrow = \"THE COLLECTION\",\n  stackGap = 24,\n  scaleStep = 0.05,\n  stiffness = 260,\n  friction = 32,\n  cardHeight = 420,\n  borderRadius = 24,\n  showIntro = true,\n  className,\n  ariaLabel = \"Scrolling card collection\",\n}: ScrollingCardsProps) {\n  const rootRef = useRef<HTMLDivElement>(null);\n  const collectionRef = useRef<HTMLDivElement>(null);\n  const headingId = useId();\n  const gap = bounded(stackGap, 0, 40, 24);\n  const scale = bounded(scaleStep, 0, 0.1, 0.05);\n  const tension = bounded(stiffness, 80, 500, 260);\n  const damping = bounded(friction, 12, 60, 32);\n  const height = bounded(cardHeight, 240, 600, 420);\n  const radius = bounded(borderRadius, 0, 40, 24);\n\n  useGSAP(\n    () => {\n      const root = rootRef.current;\n      const collection = collectionRef.current;\n      if (!root || !collection || items.length === 0) return;\n\n      const cards = gsap.utils.toArray<HTMLElement>(\n        \"[data-scrolling-card]\",\n        root,\n      );\n      const stages = gsap.utils.toArray<HTMLElement>(\n        \"[data-scrolling-stage]\",\n        root,\n      );\n      const media = gsap.matchMedia();\n\n      media.add(\n        {\n          reduce: \"(prefers-reduced-motion: reduce)\",\n          animate: \"(prefers-reduced-motion: no-preference)\",\n        },\n        (context) => {\n          const reduced = Boolean(context.conditions?.reduce);\n          root.dataset.reducedMotion = String(reduced);\n          let viewportHeight = 0;\n          let viewportWidth = 0;\n          let fittedGap = 0;\n\n          const measure = () => {\n            viewportHeight = root.clientHeight;\n            viewportWidth = root.clientWidth;\n            const available = Math.max(0, viewportHeight - 64);\n            fittedGap = Math.min(gap, available / Math.max(1, items.length + 3));\n            const fittedHeight = Math.min(\n              height,\n              Math.max(0, available - (items.length - 1) * fittedGap),\n            );\n            root.style.setProperty(\"--sc-viewport\", `${viewportHeight}px`);\n            root.style.setProperty(\"--sc-height\", `${fittedHeight}px`);\n            root.style.setProperty(\n              \"--sc-top\",\n              `${Math.max(24, (viewportHeight - fittedHeight - (items.length - 1) * fittedGap) / 2)}px`,\n            );\n          };\n\n          measure();\n          let timeline: gsap.core.Timeline | undefined;\n          let trigger: ScrollTrigger | undefined;\n          let position = 0;\n          let target = 0;\n          let velocity = 0;\n          let ticking = false;\n\n          const stop = () => {\n            gsap.ticker.remove(tick);\n            ticking = false;\n          };\n\n          const tick = (_time: number, deltaTime: number) => {\n            const elapsed = Math.min(deltaTime / 1000, 0.064);\n            const steps = Math.max(1, Math.ceil(elapsed / (1 / 120)));\n            const step = elapsed / steps;\n            for (let index = 0; index < steps; index++) {\n              velocity +=\n                (tension * (target - position) - damping * velocity) * step;\n              position += velocity * step;\n            }\n            timeline?.progress(gsap.utils.clamp(0, 1, position));\n            if (\n              Math.abs(target - position) < 0.00005 &&\n              Math.abs(velocity) < 0.0005\n            ) {\n              position = target;\n              velocity = 0;\n              timeline?.progress(target);\n              stop();\n            }\n          };\n\n          if (!reduced && items.length > 1) {\n            gsap.set(stages, { y: (index) => (index === 0 ? 0 : viewportHeight) });\n            gsap.set(cards, { scale: 1, transformOrigin: \"center top\" });\n            const stageSetters = stages.map((stage) =>\n              gsap.quickSetter(stage, \"y\", \"px\"),\n            );\n            const scaleSetters = cards.map((card) =>\n              gsap.quickSetter(card, \"scale\"),\n            );\n            const stackTimeline = gsap.timeline({\n              paused: true,\n              defaults: { duration: 1, ease: \"none\" },\n            });\n            timeline = stackTimeline;\n\n            stages.slice(1).forEach((stage, index) => {\n              const cardIndex = index + 1;\n              stackTimeline.fromTo(\n                stage,\n                { y: () => viewportHeight },\n                { y: () => cardIndex * fittedGap, immediateRender: false },\n                index,\n              );\n              cards.slice(0, cardIndex).forEach((card, previousIndex) => {\n                stackTimeline.to(\n                  card,\n                  { scale: Math.max(0.65, 1 - (cardIndex - previousIndex) * scale) },\n                  index,\n                );\n              });\n            });\n\n            const refresh = (self: ScrollTrigger) => {\n              stop();\n              position = target = self.progress;\n              velocity = 0;\n              stageSetters.forEach((setY, index) =>\n                setY(index === 0 ? 0 : viewportHeight),\n              );\n              scaleSetters.forEach((setScale) => setScale(1));\n              timeline?.invalidate().progress(position);\n            };\n\n            trigger = ScrollTrigger.create({\n              scroller: root,\n              trigger: collection,\n              start: () => collection.offsetTop,\n              end: () => collection.offsetTop + (items.length - 1) * viewportHeight,\n              onUpdate: (self) => {\n                target = self.progress;\n                if (!ticking) {\n                  ticking = true;\n                  gsap.ticker.add(tick);\n                }\n              },\n              onRefresh: (self) => refresh(self),\n            });\n          }\n\n          const observer = new ResizeObserver(() => {\n            if (\n              root.clientHeight === viewportHeight &&\n              root.clientWidth === viewportWidth\n            )\n              return;\n            measure();\n            trigger?.refresh();\n          });\n          observer.observe(root);\n\n          return () => {\n            observer.disconnect();\n            stop();\n            delete root.dataset.reducedMotion;\n            [\"--sc-viewport\", \"--sc-height\", \"--sc-top\"].forEach((property) =>\n              root.style.removeProperty(property),\n            );\n          };\n        },\n        root,\n      );\n\n      return () => media.revert();\n    },\n    {\n      scope: rootRef,\n      dependencies: [items, gap, scale, tension, damping, height, showIntro],\n      revertOnUpdate: true,\n    },\n  );\n\n  return (\n    <div\n      ref={rootRef}\n      role=\"region\"\n      aria-label={ariaLabel}\n      tabIndex={0}\n      className={cn(\n        \"scrolling-cards @container/sc relative isolate h-[600px] w-full overflow-x-hidden overflow-y-auto overscroll-contain bg-[#090909] font-sans text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white/60\",\n        className,\n      )}\n      style={{ \"--sc-radius\": `${radius}px` } as CSSProperties}\n    >\n      <style>{`\n        .scrolling-cards {\n          --sc-viewport: 600px;\n          --sc-height: 420px;\n          --sc-top: 66px;\n          scrollbar-color: #505050 #090909;\n          scrollbar-width: thin;\n        }\n        .scrolling-cards [data-scrolling-list] {\n          position: sticky;\n          top: 0;\n          height: var(--sc-viewport);\n          overflow: clip;\n        }\n        .scrolling-cards [data-scrolling-stage] {\n          position: absolute;\n          inset: 0;\n          padding-top: var(--sc-top);\n        }\n        .scrolling-cards [data-scrolling-card] {\n          height: var(--sc-height);\n          border-radius: var(--sc-radius);\n          transform-origin: center top;\n        }\n        .scrolling-cards [data-scrolling-stage]:not(:first-child) {\n          transform: translateY(var(--sc-viewport));\n        }\n        .scrolling-cards[data-reduced-motion=\"true\"] [data-scrolling-collection] {\n          height: auto !important;\n        }\n        .scrolling-cards[data-reduced-motion=\"true\"] [data-scrolling-list] {\n          position: relative;\n          height: auto;\n          overflow: visible;\n        }\n        .scrolling-cards[data-reduced-motion=\"true\"] [data-scrolling-stage] {\n          position: relative;\n          padding: 16px 0;\n          transform: none;\n        }\n        @media (prefers-reduced-motion: reduce) {\n          .scrolling-cards [data-scrolling-collection] { height: auto !important; }\n          .scrolling-cards [data-scrolling-list] { position: relative; height: auto; overflow: visible; }\n          .scrolling-cards [data-scrolling-stage] { position: relative; padding: 16px 0; transform: none; }\n        }\n      `}</style>\n      {showIntro && (\n        <header\n          className=\"flex flex-col items-center justify-center gap-5 px-6 text-center\"\n          style={{ height: \"calc(var(--sc-viewport) * 0.6)\" }}\n        >\n          <p className=\"font-mono text-[10px] tracking-[0.28em] text-white/50\">\n            {eyebrow}\n          </p>\n          <h2\n            id={headingId}\n            className=\"max-w-xl text-[clamp(28px,5cqi,58px)] font-medium leading-[1.08] tracking-[-0.055em] text-balance\"\n          >\n            {title}\n          </h2>\n          <p className=\"max-w-sm text-xs leading-relaxed text-white/55 @lg/sc:text-sm\">\n            {subtitle}\n          </p>\n          <span className=\"flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-white/70\">\n            Scroll to explore\n            <ArrowDown className=\"size-3.5\" aria-hidden=\"true\" />\n          </span>\n        </header>\n      )}\n      <div\n        ref={collectionRef}\n        data-scrolling-collection\n        className=\"relative\"\n        style={{ height: `calc(var(--sc-viewport) * ${items.length})` }}\n      >\n        <ol\n          data-scrolling-list\n          aria-labelledby={showIntro ? headingId : undefined}\n          aria-label={showIntro ? undefined : \"Cards\"}\n          className=\"m-0 list-none p-0\"\n        >\n          {items.map((item, index) => (\n            <li\n              key={item.id}\n              data-scrolling-stage\n              style={{ zIndex: index + 1 }}\n            >\n              <article\n                data-scrolling-card\n                aria-label={item.imageAlt}\n                className=\"relative mx-auto w-[calc(100%-32px)] max-w-4xl overflow-hidden p-0.5 shadow-[0_20px_80px_#0009] @lg/sc:w-[84%]\"\n                style={{\n                  background: `conic-gradient(from 210deg, #ffffff38, ${item.color ?? \"#638aff\"}, #ffffff28, ${item.color ?? \"#638aff\"}, #ffffff38)`,\n                }}\n              >\n                <div\n                  className=\"relative h-full w-full overflow-hidden bg-zinc-900\"\n                  style={{ borderRadius: Math.max(0, radius - 2) }}\n                >\n                  <img\n                    src={item.image}\n                    alt={item.imageAlt}\n                    loading={index === 0 ? \"eager\" : \"lazy\"}\n                    decoding=\"async\"\n                    draggable={false}\n                    className=\"absolute inset-0 h-full w-full object-cover\"\n                    style={{ objectPosition: item.imagePosition ?? \"center\" }}\n                  />\n                  <div\n                    aria-hidden=\"true\"\n                    className=\"pointer-events-none absolute inset-0 rounded-[inherit] ring-1 ring-inset ring-white/20\"\n                  />\n                </div>\n              </article>\n            </li>\n          ))}\n        </ol>\n      </div>\n    </div>\n  );\n}\n\nexport default ScrollingCards;\n",
+      "content": "\"use client\";\n\nimport { useId, useRef, type CSSProperties } from \"react\";\nimport { useGSAP } from \"@gsap/react\";\nimport gsap from \"gsap\";\nimport { ScrollTrigger } from \"gsap/ScrollTrigger\";\nimport { ArrowDown } from \"lucide-react\";\nimport { cn } from \"@/lib/utils\";\n\ngsap.registerPlugin(useGSAP, ScrollTrigger);\n\nexport interface ScrollingCardItem {\n  id: string;\n  image: string;\n  imageAlt: string;\n  imagePosition?: string;\n  color?: string;\n}\n\nexport interface ScrollingCardsProps {\n  items: readonly ScrollingCardItem[];\n  title?: string;\n  subtitle?: string;\n  eyebrow?: string;\n  stackGap?: number;\n  scaleStep?: number;\n  stiffness?: number;\n  friction?: number;\n  cardHeight?: number;\n  borderRadius?: number;\n  showIntro?: boolean;\n  className?: string;\n  ariaLabel?: string;\n}\n\nconst bounded = (value: number, min: number, max: number, fallback: number) =>\n  Number.isFinite(value) ? Math.min(max, Math.max(min, value)) : fallback;\n\nexport function ScrollingCards({\n  items,\n  title = \"A story worth scrolling.\",\n  subtitle = \"Scroll down. Let every card become part of the story.\",\n  eyebrow = \"THE COLLECTION\",\n  stackGap = 24,\n  scaleStep = 0.05,\n  stiffness = 260,\n  friction = 32,\n  cardHeight = 420,\n  borderRadius = 24,\n  showIntro = true,\n  className,\n  ariaLabel = \"Scrolling card collection\",\n}: ScrollingCardsProps) {\n  const rootRef = useRef<HTMLDivElement>(null);\n  const collectionRef = useRef<HTMLDivElement>(null);\n  const headingId = useId();\n  const gap = bounded(stackGap, 0, 40, 24);\n  const scale = bounded(scaleStep, 0, 0.1, 0.05);\n  const tension = bounded(stiffness, 80, 500, 260);\n  const damping = bounded(friction, 12, 60, 32);\n  const height = bounded(cardHeight, 240, 600, 420);\n  const radius = bounded(borderRadius, 0, 40, 24);\n\n  useGSAP(\n    () => {\n      const root = rootRef.current;\n      const collection = collectionRef.current;\n      if (!root || !collection || items.length === 0) return;\n\n      const cards = gsap.utils.toArray<HTMLElement>(\n        \"[data-scrolling-card]\",\n        root,\n      );\n      const stages = gsap.utils.toArray<HTMLElement>(\n        \"[data-scrolling-stage]\",\n        root,\n      );\n      const media = gsap.matchMedia();\n\n      media.add(\n        {\n          reduce: \"(prefers-reduced-motion: reduce)\",\n          animate: \"(prefers-reduced-motion: no-preference)\",\n        },\n        (context) => {\n          const reduced = Boolean(context.conditions?.reduce);\n          root.dataset.reducedMotion = String(reduced);\n          let viewportHeight = 0;\n          let viewportWidth = 0;\n          let fittedGap = 0;\n\n          const measure = () => {\n            viewportHeight = root.clientHeight;\n            viewportWidth = root.clientWidth;\n            const available = Math.max(0, viewportHeight - 64);\n            fittedGap = Math.min(gap, available / Math.max(1, items.length + 3));\n            const fittedHeight = Math.min(\n              height,\n              Math.max(0, available - (items.length - 1) * fittedGap),\n            );\n            root.style.setProperty(\"--sc-viewport\", `${viewportHeight}px`);\n            root.style.setProperty(\"--sc-height\", `${fittedHeight}px`);\n            root.style.setProperty(\n              \"--sc-top\",\n              `${Math.max(24, (viewportHeight - fittedHeight - (items.length - 1) * fittedGap) / 2)}px`,\n            );\n          };\n\n          measure();\n          let timeline: gsap.core.Timeline | undefined;\n          let trigger: ScrollTrigger | undefined;\n          let position = 0;\n          let target = 0;\n          let velocity = 0;\n          let ticking = false;\n\n          const stop = () => {\n            gsap.ticker.remove(tick);\n            ticking = false;\n          };\n\n          const tick = (_time: number, deltaTime: number) => {\n            const elapsed = Math.min(deltaTime / 1000, 0.064);\n            const steps = Math.max(1, Math.ceil(elapsed / (1 / 120)));\n            const step = elapsed / steps;\n            for (let index = 0; index < steps; index++) {\n              velocity +=\n                (tension * (target - position) - damping * velocity) * step;\n              position += velocity * step;\n            }\n            timeline?.progress(gsap.utils.clamp(0, 1, position));\n            if (\n              Math.abs(target - position) < 0.00005 &&\n              Math.abs(velocity) < 0.0005\n            ) {\n              position = target;\n              velocity = 0;\n              timeline?.progress(target);\n              stop();\n            }\n          };\n\n          if (!reduced && items.length > 1) {\n            gsap.set(stages, { y: (index) => (index === 0 ? 0 : viewportHeight) });\n            gsap.set(cards, { scale: 1, transformOrigin: \"center top\" });\n            const stageSetters = stages.map((stage) =>\n              gsap.quickSetter(stage, \"y\", \"px\"),\n            );\n            const scaleSetters = cards.map((card) =>\n              gsap.quickSetter(card, \"scale\"),\n            );\n            const stackTimeline = gsap.timeline({\n              paused: true,\n              defaults: { duration: 1, ease: \"none\" },\n            });\n            timeline = stackTimeline;\n\n            stages.slice(1).forEach((stage, index) => {\n              const cardIndex = index + 1;\n              stackTimeline.fromTo(\n                stage,\n                { y: () => viewportHeight },\n                { y: () => cardIndex * fittedGap, immediateRender: false },\n                index,\n              );\n              cards.slice(0, cardIndex).forEach((card, previousIndex) => {\n                stackTimeline.to(\n                  card,\n                  { scale: Math.max(0.65, 1 - (cardIndex - previousIndex) * scale) },\n                  index,\n                );\n              });\n            });\n\n            const refresh = (self: ScrollTrigger) => {\n              stop();\n              position = target = self.progress;\n              velocity = 0;\n              stageSetters.forEach((setY, index) =>\n                setY(index === 0 ? 0 : viewportHeight),\n              );\n              scaleSetters.forEach((setScale) => setScale(1));\n              timeline?.invalidate().progress(position);\n            };\n\n            trigger = ScrollTrigger.create({\n              scroller: root,\n              trigger: collection,\n              start: () => collection.offsetTop,\n              end: () => collection.offsetTop + (items.length - 1) * viewportHeight,\n              onUpdate: (self) => {\n                target = self.progress;\n                if (!ticking) {\n                  ticking = true;\n                  gsap.ticker.add(tick);\n                }\n              },\n              onRefresh: (self) => refresh(self),\n            });\n          }\n\n          const observer = new ResizeObserver(() => {\n            if (\n              root.clientHeight === viewportHeight &&\n              root.clientWidth === viewportWidth\n            )\n              return;\n            measure();\n            trigger?.refresh();\n          });\n          observer.observe(root);\n\n          return () => {\n            observer.disconnect();\n            stop();\n            delete root.dataset.reducedMotion;\n            [\"--sc-viewport\", \"--sc-height\", \"--sc-top\"].forEach((property) =>\n              root.style.removeProperty(property),\n            );\n          };\n        },\n        root,\n      );\n\n      return () => media.revert();\n    },\n    {\n      scope: rootRef,\n      dependencies: [items, gap, scale, tension, damping, height, showIntro],\n      revertOnUpdate: true,\n    },\n  );\n\n  return (\n    <div\n      ref={rootRef}\n      role=\"region\"\n      aria-label={ariaLabel}\n      tabIndex={0}\n      className={cn(\n        \"scrolling-cards @container/sc relative isolate h-[600px] w-full overflow-x-hidden overflow-y-auto overscroll-contain bg-[#090909] font-sans text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white/60\",\n        className,\n      )}\n      style={{ \"--sc-radius\": `${radius}px` } as CSSProperties}\n    >\n      <style>{`\n        .scrolling-cards {\n          --sc-viewport: 600px;\n          --sc-height: 420px;\n          --sc-top: 66px;\n          scrollbar-color: #505050 #090909;\n          scrollbar-width: thin;\n        }\n        .scrolling-cards [data-scrolling-list] {\n          position: sticky;\n          top: 0;\n          height: var(--sc-viewport);\n          overflow: clip;\n        }\n        .scrolling-cards [data-scrolling-stage] {\n          position: absolute;\n          inset: 0;\n          padding-top: var(--sc-top);\n        }\n        .scrolling-cards [data-scrolling-card] {\n          height: var(--sc-height);\n          border-radius: var(--sc-radius);\n          transform-origin: center top;\n        }\n        .scrolling-cards [data-scrolling-stage]:not(:first-child) {\n          transform: translateY(var(--sc-viewport));\n        }\n        .scrolling-cards[data-reduced-motion=\"true\"] [data-scrolling-collection] {\n          height: auto !important;\n        }\n        .scrolling-cards[data-reduced-motion=\"true\"] [data-scrolling-list] {\n          position: relative;\n          height: auto;\n          overflow: visible;\n        }\n        .scrolling-cards[data-reduced-motion=\"true\"] [data-scrolling-stage] {\n          position: relative;\n          padding: 16px 0;\n          transform: none;\n        }\n        @media (prefers-reduced-motion: reduce) {\n          .scrolling-cards [data-scrolling-collection] { height: auto !important; }\n          .scrolling-cards [data-scrolling-list] { position: relative; height: auto; overflow: visible; }\n          .scrolling-cards [data-scrolling-stage] { position: relative; padding: 16px 0; transform: none; }\n        }\n      `}</style>\n      {showIntro && (\n        <header\n          className=\"flex flex-col items-center justify-center gap-5 px-6 text-center\"\n          style={{ height: \"calc(var(--sc-viewport) * 0.6)\" }}\n        >\n          <p className=\"font-mono text-[10px] tracking-[0.28em] text-white/50\">\n            {eyebrow}\n          </p>\n          <h2\n            id={headingId}\n            className=\"max-w-xl text-[clamp(28px,5cqi,58px)] font-medium leading-[1.08] tracking-[-0.055em] text-balance\"\n          >\n            {title}\n          </h2>\n          <p className=\"max-w-sm text-xs leading-relaxed text-white/55 @lg/sc:text-sm\">\n            {subtitle}\n          </p>\n          <span className=\"flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-white/70\">\n            Scroll to explore\n            <ArrowDown className=\"size-3.5\" aria-hidden=\"true\" />\n          </span>\n        </header>\n      )}\n      <div\n        ref={collectionRef}\n        data-scrolling-collection\n        className=\"relative\"\n        style={{ height: `calc(var(--sc-viewport) * ${items.length})` }}\n      >\n        <ol\n          data-scrolling-list\n          aria-labelledby={showIntro ? headingId : undefined}\n          aria-label={showIntro ? undefined : \"Cards\"}\n          className=\"m-0 list-none p-0\"\n        >\n          {items.map((item, index) => (\n            <li\n              key={item.id}\n              data-scrolling-stage\n              style={{ zIndex: index + 1 }}\n            >\n              <article\n                data-scrolling-card\n                aria-label={item.imageAlt}\n                className=\"relative mx-auto w-[calc(100%-32px)] max-w-4xl overflow-hidden p-0.5 shadow-[0_20px_80px_#0009] @lg/sc:w-[84%]\"\n                style={{\n                  background: `conic-gradient(from 210deg, #ffffff38, ${item.color ?? \"#638aff\"}, #ffffff28, ${item.color ?? \"#638aff\"}, #ffffff38)`,\n                }}\n              >\n                <div\n                  className=\"relative h-full w-full overflow-hidden bg-zinc-900\"\n                  style={{ borderRadius: Math.max(0, radius - 2) }}\n                >\n                  <img\n                    src={item.image}\n                    alt={item.imageAlt}\n                    loading={index === 0 ? \"eager\" : \"lazy\"}\n                    decoding=\"async\"\n                    draggable={false}\n                    className=\"absolute inset-0 h-full w-full object-cover\"\n                    style={{ objectPosition: item.imagePosition ?? \"center\" }}\n                  />\n                  <div\n                    aria-hidden=\"true\"\n                    className=\"pointer-events-none absolute inset-0 rounded-[inherit] ring-1 ring-inset ring-white/20\"\n                  />\n                </div>\n              </article>\n            </li>\n          ))}\n        </ol>\n      </div>\n    </div>\n  );\n}\n\nexport default ScrollingCards;\n",
+      "type": "registry:ui",
+      "target": "@ui/scrolling-cards.tsx"
+    }
+  ]
+}
