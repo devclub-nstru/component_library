@@ -2,7 +2,7 @@
   "slug": "orb",
   "name": "Thinking Orb",
   "description": "Interactive 2D dotted thought-orb indicator with 9 animated AI states and tactile click cycling.",
-  "summary": "A purpose-tuned animated indicator component engineered for AI agent UIs, copilot status indicators, and creative loaders. Powered by thinking-orbs, it renders nine distinct orbital particle states (breathing, searching, working, solving, listening, connecting, weaving, composing, shaping) onto a lightweight 2D canvas with full click-to-cycle interactivity, responsive sizes, and sleek presentation variants.",
+  "summary": "An animated indicator for AI agent UIs, copilot status indicators and loaders. Powered by thinking-orbs, it renders nine orbital particle states (breathing, searching, working, solving, listening, connecting, weaving, composing, shaping) on a 2D canvas, with click-to-cycle interactivity and two size presets.",
   "category": "ai-stuff",
   "tags": [
     "orb",
@@ -27,15 +27,13 @@
   "highlights": [
     "Nine hand-tuned agent animation states: breathing, searching, working, solving, listening, connecting, weaving, composing, shaping",
     "Interactive click-to-cycle state transition with tactile hover and active scaling",
-    "Three distinct presentation variants: minimal (pure orb), card (framed telemetry card), and pill (compact status chip)",
+    "Two size presets (64 and 20) with an optional display size override",
     "High-efficiency 2D HTML5 canvas rendering without WebGL or heavy shader pipeline overhead",
     "Hydration-safe dynamic loader with automatic offscreen pause and reduced motion support"
   ],
   "anatomy": [
-    "<button> (Accessible interactive trigger with tactile scale and focus rings)",
-    "<span> (Soft ambient blur wash reflecting state and elevation)",
-    "<canvas> (2D particle simulation rendering mathematical orbital paths)",
-    "<span> (Optional monospace uppercase status chip displaying active state)"
+    "<button> (Interactive trigger with tactile scale and focus ring; an aria-hidden span when not interactive)",
+    "<canvas> (2D particle simulation rendering the orbital paths)"
   ],
   "physics": {
     "engine": "2D Canvas Particle Kinematics",
@@ -65,7 +63,7 @@
   },
   "accessibility": {
     "role": "button",
-    "aria": "Carries live aria-label communicating current state and click action. Automatically freezes animation when prefers-reduced-motion is active.",
+    "aria": "The button carries an aria-label with the current state and the click action (\"Orb state is breathing. Click to cycle state.\"). With interactive={false} and no onClick it renders an aria-hidden span instead.",
     "reducedMotion": "Renders a static representative frame with zero loop computation."
   },
   "guidelines": {
@@ -75,9 +73,9 @@
       "Interactive state selectors and futuristic feedback elements"
     ],
     "bestPractices": [
-      "Use variant='minimal' for inline avatars or nested button search triggers",
-      "Use variant='pill' for persistent status bars and header telemetry",
-      "Use variant='card' for interactive feature showcases and agent controls"
+      "Use size={20} for inline indicators and size={64} for avatars",
+      "Set interactive={false} for a non-interactive, aria-hidden indicator",
+      "Control the state with state and onStateChange"
     ]
   },
   "props": [
@@ -112,6 +110,11 @@
       "description": "Whether clicking cycles through orb states with tactile feedback."
     },
     {
+      "name": "className",
+      "type": "string",
+      "description": "Additional CSS classes for the orb element."
+    },
+    {
       "name": "paused",
       "type": "boolean",
       "defaultValue": "false",
@@ -124,6 +127,12 @@
       "description": "Animation speed multiplier."
     },
     {
+      "name": "theme",
+      "type": "\"dark\" | \"light\" | \"auto\"",
+      "defaultValue": "\"dark\"",
+      "description": "Ink treatment for dark or light backgrounds. \"auto\" follows the color scheme."
+    },
+    {
       "name": "color",
       "type": "string",
       "defaultValue": "undefined",
@@ -134,8 +143,14 @@
       "type": "(e, nextState) => void",
       "defaultValue": "undefined",
       "description": "Callback fired on click with event and next state."
+    },
+    {
+      "name": "onStateChange",
+      "type": "(state: OrbState) => void",
+      "description": "Called with the next state when an interactive click changes it."
     }
   ],
+  "usage": "import { Orb } from \"@/components/ui/orb\";\n\nexport function OrbDemo() {\n  return <Orb state=\"searching\" size={64} interactive={false} />;\n}",
   "files": [
     {
       "name": "orb.tsx",

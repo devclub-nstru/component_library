@@ -31,17 +31,17 @@
     "iOS-style rubber-band resistance beyond boundaries and between dual range thumbs",
     "Deceleration velocity projection on pointer release with smooth snap-to-grid settlement",
     "Rolling number odometer with spring-driven digit columns, direction awareness, and motion blur",
-    "Floating bubble readout anchored to thumbs revealing on drag, focus, and hover linger",
+    "Floating value bubble shown while dragging, on keyboard focus, and for 700ms after release",
     "Catch-up spring physics on track press that glides the thumb smoothly to finger without jumps",
     "Boundary kick bounce animation on keyboard limit hit",
     "Full dual-thumb range support with minimum step distance enforcement",
-    "Interactive ticks and clickable mark labels with auto edge alignment",
+    "Tick dots and mouse-clickable mark labels with edge alignment",
     "Pure Tailwind CSS styling without external CSS module dependencies"
   ],
   "anatomy": [
     "<div className=\"relative flex flex-col gap-2 w-full\"> (Root container)",
     "<div className=\"flex items-center justify-between\"> (Header with label and RollingNumber readout)",
-    "<div className=\"relative flex items-center flex-1 h-9\"> (Pointer-capture interactive track area)",
+    "<div className=\"relative flex items-center w-full h-9 py-2 touch-none cursor-pointer\"> (Pointer-capture interactive track area)",
     "<div className=\"relative w-full h-1.5 rounded-full bg-zinc-800\"> (Background track with tick dots)",
     "<motion.div className=\"absolute inset-0 bg-zinc-400\"> (Active progress fill clipped to thumb bounds)",
     "<Thumb> (White circular thumb pill with spring-driven scale, shadow, and floating bubble tooltip)"
@@ -71,7 +71,7 @@
   "accessibility": {
     "role": "slider",
     "aria": "ARIA slider semantics with aria-valuenow, aria-valuemin, aria-valuemax, aria-valuetext, and focus-visible indicators.",
-    "reducedMotion": "Gracefully bypasses springs and blur transitions when reduced motion is preferred.",
+    "reducedMotion": "With prefers-reduced-motion, thumb springs, rubber-banding, edge kicks and digit rolls are skipped. The bubble fades in over 150ms with no blur.",
     "keyboard": [
       {
         "key": "ArrowLeft / ArrowDown",
@@ -96,7 +96,8 @@
       "name": "label",
       "type": "string",
       "defaultValue": "undefined",
-      "description": "Accessible and visible label for the slider."
+      "description": "Accessible and visible label for the slider.",
+      "required": true
     },
     {
       "name": "value",
@@ -109,6 +110,16 @@
       "type": "number | [number, number]",
       "defaultValue": "undefined",
       "description": "Initial uncontrolled value."
+    },
+    {
+      "name": "onValueChange",
+      "type": "(value: T) => void",
+      "description": "Called on every value change while dragging or using the keyboard."
+    },
+    {
+      "name": "onValueCommit",
+      "type": "(value: T) => void",
+      "description": "Called when the user finishes a change (pointer release or key press)."
     },
     {
       "name": "min",
@@ -129,16 +140,39 @@
       "description": "Snap step increment."
     },
     {
+      "name": "largeStep",
+      "type": "number",
+      "defaultValue": "about 10% of the range",
+      "description": "Step used by Page Up and Page Down."
+    },
+    {
       "name": "marks",
       "type": "(number | SliderMark)[]",
       "defaultValue": "undefined",
       "description": "Ticks and interactive labels along the track."
     },
     {
+      "name": "minStepsBetweenThumbs",
+      "type": "number",
+      "defaultValue": "0",
+      "description": "Minimum distance in steps between the two thumbs of a range slider."
+    },
+    {
       "name": "format",
       "type": "(value: number) => string",
       "defaultValue": "undefined",
       "description": "Custom number formatting function for readout and bubbles."
+    },
+    {
+      "name": "showValue",
+      "type": "boolean",
+      "defaultValue": "true",
+      "description": "Shows the formatted value readout."
+    },
+    {
+      "name": "thumbLabels",
+      "type": "[string, string]",
+      "description": "Accessible names for the two thumbs of a range slider. Defaults to \"<label>, minimum\" and \"<label>, maximum\"."
     },
     {
       "name": "start",
@@ -157,8 +191,24 @@
       "type": "ReactNode",
       "defaultValue": "undefined",
       "description": "Helper or subtitle text placed below the track."
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "Form field name. Renders hidden inputs so the value is submitted with a form."
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "description": "Disables interaction and dims the slider."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "description": "Additional CSS classes for the root element."
     }
   ],
+  "usage": "\"use client\";\n\nimport { useState } from \"react\";\nimport { Slider } from \"@/components/ui/slider\";\n\nexport function SliderDemo() {\n  const [volume, setVolume] = useState(40);\n\n  return <Slider label=\"Volume\" value={volume} onValueChange={setVolume} />;\n}",
   "files": [
     {
       "name": "slider.tsx",

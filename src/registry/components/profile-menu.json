@@ -29,16 +29,16 @@
     "Dynamic cycling status ticker with fluid blur-slide vertical transitions",
     "GPU-accelerated flying highlight that travels between list items and theme grid",
     "Zero-shift CSS grid row expansion for butter-smooth opening and closing",
-    "Full keyboard navigation with ArrowUp/Down, J/K, Enter, Escape, and ⌘K / Ctrl+K",
+    "Keyboard navigation with arrow keys, J/K, Enter, Escape, and Cmd+K (macOS) or Ctrl+K",
     "Integrated 3-column theme switcher with active indicator rings"
   ],
   "anatomy": [
-    "<div> (Pill container with backdrop-blur, rounded geometry, and spring transitions)",
+    "<div> (Pill container with backdrop-blur, rounded geometry, and CSS transitions)",
     "<img> (Profile avatar with online presence pulse indicator)",
     "<div> (Rotating status ticker with keyframe blur-slide transition)",
     "<kbd> (Platform-aware shortcut badge for ⌘K or Ctrl+K)",
     "<div> (Smooth sliding highlight backdrop with cubic-bezier geometry tracking)",
-    "<button> (Interactive section items with icons, shortcuts, and external link badges)"
+    "<button> (Section items with icons, display-only shortcut labels, and external link badges)"
   ],
   "physics": {
     "engine": "Fluid Cubic-Bezier & Coordinate Highlight Interpolator",
@@ -46,36 +46,37 @@
     "parameters": [
       {
         "label": "Transition Timing",
-        "value": "400ms cubic-bezier(0.16, 1, 0.3, 1)"
+        "value": "300ms cubic-bezier(0.16, 1, 0.3, 1)"
       },
       {
         "label": "Highlight Travel",
-        "value": "300ms ease"
+        "value": "250ms cubic-bezier(0.16, 1, 0.3, 1)"
       }
     ]
   },
   "accessibility": {
     "role": "menu",
+    "aria": "The profile pill has aria-haspopup=\"menu\" and aria-expanded. The list is a role=\"menu\" labelled by the pill, sections are labelled role=\"group\" elements, and items are menuitem or menuitemradio (with aria-checked) entries.",
     "keyboard": [
       {
-        "key": "⌘K / Ctrl+K",
-        "description": "Toggle menu open/closed"
+        "key": "Cmd+K (macOS) / Ctrl+K",
+        "description": "Toggle the menu. The letter is set by shortcutKey."
       },
       {
-        "key": "ArrowUp / k",
-        "description": "Navigate to previous item"
+        "key": "Enter / Space",
+        "description": "Toggle the menu when the profile pill is focused."
       },
       {
-        "key": "ArrowDown / j",
-        "description": "Navigate to next item"
+        "key": "Arrow keys / J / K",
+        "description": "Move between items."
       },
       {
         "key": "Enter",
-        "description": "Select active item"
+        "description": "Activate the highlighted item."
       },
       {
         "key": "Escape",
-        "description": "Close menu"
+        "description": "Close the menu."
       }
     ]
   },
@@ -87,27 +88,37 @@
       "description": "User name or primary label displayed inside the pill."
     },
     {
+      "name": "subtitle",
+      "type": "ReactNode",
+      "description": "Declared on ProfileMenuProps but not rendered by the current implementation."
+    },
+    {
       "name": "avatarSrc",
       "type": "string",
       "defaultValue": "\"https://i.pinimg.com/736x/c9/3d/c8/c93dc8fdae8629e56c85e7b2a10ffd7b.jpg\"",
       "description": "Image URL for the avatar."
     },
     {
+      "name": "avatar",
+      "type": "ReactNode",
+      "description": "Custom avatar element. Replaces the image from avatarSrc."
+    },
+    {
       "name": "status",
-      "type": "ReactNode[]",
-      "defaultValue": "DEFAULT_STATUS",
-      "description": "Array of status items to cycle through."
+      "type": "(string | { text: string; icon?: ReactNode })[]",
+      "defaultValue": "built-in status list",
+      "description": "Status messages that rotate under the title while the menu is open."
     },
     {
       "name": "statusInterval",
       "type": "number",
-      "defaultValue": "3500",
-      "description": "Interval in milliseconds between status transitions."
+      "defaultValue": "3600",
+      "description": "Interval in milliseconds between status messages."
     },
     {
       "name": "sections",
       "type": "ProfileMenuSection[]",
-      "defaultValue": "DEFAULT_SECTIONS",
+      "defaultValue": "built-in sections",
       "description": "Custom action sections and item definitions."
     },
     {
@@ -135,12 +146,19 @@
       "description": "Whether to display the emerald pulsing presence badge."
     },
     {
+      "name": "id",
+      "type": "string",
+      "defaultValue": "\"profile-command-menu\"",
+      "description": "id of the root element, also used for outside-click detection. Must be unique per instance."
+    },
+    {
       "name": "className",
       "type": "string",
       "defaultValue": "undefined",
       "description": "Additional CSS class names."
     }
   ],
+  "usage": "import { ProfileMenu } from \"@/components/ui/profile-menu\";\n\nexport function ProfileMenuDemo() {\n  return <ProfileMenu title=\"Ada Lovelace\" avatarSrc=\"/avatars/ada.jpg\" />;\n}",
   "files": [
     {
       "name": "profile-menu.tsx",

@@ -30,8 +30,8 @@
   "supportsColor": false,
   "highlights": [
     "Natural inline paragraph flow blending quotes and avatars into a seamless typography experience",
-    "Dynamic selective depth-of-field blur (2.5px) and opacity reduction on non-hovered testimonials",
-    "Floating cursor-tracking author card driven by critically-damped spring physics",
+    "Selective blur (1.5px on text, 0.6px on avatars) and 25% opacity on non-hovered testimonials",
+    "Floating cursor-tracking author card driven by an overdamped spring (stiffness 340, damping 28, mass 0.4)",
     "Smooth expandable reveal with animated chevron toggle for additional social proof",
     "Fully synchronized for both dark and light mode color spaces",
     "High-performance cubic-bezier transitions on hover enter and exit"
@@ -60,18 +60,17 @@
       },
       {
         "label": "Blur Falloff",
-        "value": "2.5px gaussian blur"
+        "value": "1.5px text / 0.6px avatar"
       },
       {
         "label": "Transition Curve",
-        "value": "cubic-bezier(0.16, 1, 0.3, 1)"
+        "value": "Hover: 300ms ease-out. Tooltip entrance: 200ms cubic-bezier(0.16, 1, 0.3, 1)"
       }
     ]
   },
   "accessibility": {
-    "role": "region / feed",
-    "aria": "Quotes are semantic and accessible to screen readers in natural reading order without broken inline markup.",
-    "reducedMotion": "Gracefully maintains high contrast without disruptive blur shifts when prefers-reduced-motion is active.",
+    "aria": "Quotes are inline spans in reading order. Each avatar's alt text is the author name. Role and company appear only in the mouse hover tooltip. The show-more button exposes its expanded state.",
+    "reducedMotion": "With prefers-reduced-motion, hovering does not blur the other testimonials, so every quote stays at full contrast.",
     "keyboard": [
       {
         "key": "Tab",
@@ -121,6 +120,7 @@
       "description": "Optional CSS classes for inner content wrapper."
     }
   ],
+  "usage": "import { FocusTestimonials } from \"@/components/ui/focus-testimonials\";\n\nconst testimonials = [\n  {\n    id: 1,\n    author: \"Ada Lovelace\",\n    role: \"Engineer\",\n    company: \"Analytical Engines\",\n    avatar: \"/avatars/ada.jpg\",\n    quote: \"The components dropped straight into our app.\",\n  },\n];\n\nexport function FocusTestimonialsDemo() {\n  return <FocusTestimonials initialItems={testimonials} additionalItems={[]} />;\n}",
   "files": [
     {
       "name": "focus-testimonials.tsx",

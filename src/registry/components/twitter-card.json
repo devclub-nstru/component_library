@@ -27,11 +27,11 @@
   "supportsColor": false,
   "highlights": [
     "Real-time profile data fetching from FXTwitter API with automatic avatar upscaling and AbortController synchronization",
-    "Harmonic spring physics (stiffness 300, damping 24) with independent link and card 3D tilt axes",
+    "Link tilt spring (stiffness 320, damping 24) and card tilt spring (stiffness 300, damping 24, mass 0.6)",
     "Zero-jitter popover positioning using decoupled geometric centering and motion matrix rotation",
     "Seamless hover hit-bridge avoiding cursor gaps between trigger and floating profile popover",
     "Dual rendering modes: interactive link trigger with popover or standalone static 3D tilt card",
-    "Comprehensive accessibility support with prefers-reduced-motion fallbacks and keyboard focus boundaries"
+    "Tilt is disabled under prefers-reduced-motion; the popover opens on mouse hover"
   ],
   "anatomy": [
     "<div> (Inline root container with label prefix and perspective viewport)",
@@ -54,7 +54,7 @@
       },
       {
         "label": "Mass Factor",
-        "value": "0.6"
+        "value": "0.6 (card only)"
       },
       {
         "label": "Max Card Tilt",
@@ -71,17 +71,16 @@
     ]
   },
   "accessibility": {
-    "role": "region",
     "aria": "Descriptive aria-label attributes for external profile links and verification badges.",
-    "reducedMotion": "Bypasses 3D spring tilt and instant opacity transitions when prefers-reduced-motion is active.",
+    "reducedMotion": "With prefers-reduced-motion, link and card tilt are disabled. The popover reveal animation is unchanged.",
     "keyboard": [
       {
         "key": "Tab",
-        "description": "Focus onto profile link anchor trigger."
+        "description": "Focus the profile link (interactive mode). Hidden popover links are also in the tab order."
       },
       {
-        "key": "Enter / Space",
-        "description": "Open external profile URL in a new browser tab."
+        "key": "Enter",
+        "description": "Open the profile in a new tab."
       }
     ]
   },
@@ -207,6 +206,7 @@
       "description": "Additional CSS classes to style the label description text."
     }
   ],
+  "usage": "import { TwitterCard } from \"@/components/ui/twitter-card\";\n\nexport function TwitterCardDemo() {\n  return <TwitterCard username=\"vercel\" name=\"Vercel\" />;\n}",
   "files": [
     {
       "name": "twitter-card.tsx",

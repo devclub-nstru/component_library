@@ -30,7 +30,7 @@
     "Physics-tuned blur dissolving entrance transitioning from 12px blur to crisp clarity",
     "Silky smooth vanishing exit animation dissolving into 14px blur and fading away",
     "Native Sonner stacking architecture supporting interactive action and undo callbacks",
-    "High-density glassmorphic styling with backdrop-blur-md and subtle border hairlines",
+    "backdrop-filter: blur(16px) with border hairlines",
     "First-class async promise handling with animated spinners and automatic state resolution"
   ],
   "anatomy": [
@@ -40,7 +40,7 @@
   ],
   "physics": {
     "engine": "GPU CSS Hardware-Accelerated Blur & Cubic Bezier",
-    "description": "Sub-pixel calibrated cubic-bezier(0.16, 1, 0.3, 1) transition curves synchronizing opacity, scale, and backdrop blur filters with zero layout reflows.",
+    "description": "Transitions transform, opacity and the filter blur of each toast.",
     "parameters": [
       {
         "label": "Entry Duration",
@@ -60,7 +60,7 @@
       },
       {
         "label": "Easing Curve",
-        "value": "cubic-bezier(0.16, 1, 0.3, 1)"
+        "value": "cubic-bezier(0.16, 1, 0.3, 1) on entry; ease on exit opacity and blur"
       },
       {
         "label": "Backdrop Filter",
@@ -69,9 +69,22 @@
     ]
   },
   "accessibility": {
-    "role": "status / alert",
-    "aria": "Uses ARIA live regions managed by Sonner for automatic screen-reader announcements of transient system alerts.",
-    "reducedMotion": "Automatically suppresses blur filters and switches to instantaneous 150ms opacity fades when prefers-reduced-motion is detected."
+    "aria": "Sonner renders a section with aria-live=\"polite\", so toasts are announced to screen readers.",
+    "reducedMotion": "With prefers-reduced-motion, the blur filter is removed and transitions are limited to a 150ms opacity fade.",
+    "keyboard": [
+      {
+        "key": "Alt + T",
+        "description": "Expand and focus the notifications region."
+      },
+      {
+        "key": "Escape",
+        "description": "Collapse the toast stack when focus is inside it."
+      },
+      {
+        "key": "Tab",
+        "description": "Move between toast action and close buttons."
+      }
+    ]
   },
   "guidelines": {
     "recommended": [
@@ -82,7 +95,8 @@
     "bestPractices": [
       "Render <Toaster /> once at the root level of your layout or modal boundary",
       "Keep toast descriptions concise (under 80 characters) for rapid scanning",
-      "Provide clear undo action handlers for destructive operations"
+      "Provide clear undo action handlers for destructive operations",
+      "The blur entry and exit transitions come from [data-sonner-toast] rules in the DevClub UI global CSS; copy them into your globals.css to match the demo"
     ]
   },
   "props": [
@@ -117,6 +131,7 @@
       "description": "Time in milliseconds before automatically dissolving and vanishing."
     }
   ],
+  "usage": "\"use client\";\n\nimport { Toaster, toast } from \"@/components/ui/toast\";\n\nexport function ToastDemo() {\n  return (\n    <>\n      <Toaster position=\"bottom-right\" />\n      <button type=\"button\" onClick={() => toast.success(\"Changes saved\")}>\n        Save\n      </button>\n    </>\n  );\n}",
   "files": [
     {
       "name": "sonner.tsx",

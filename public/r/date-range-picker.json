@@ -3,7 +3,7 @@
   "name": "date-range-picker",
   "type": "registry:ui",
   "title": "Date Range Picker",
-  "description": "Smooth physics-driven date range picker calendar featuring dual-month navigation, quick presets rail, gliding thumb springs, and rolling label animations.",
+  "description": "Date range picker calendar with dual-month navigation, a quick presets rail, range capsules and rolling label animations.",
   "dependencies": [
     "clsx",
     "tailwind-merge",

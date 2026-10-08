@@ -1,8 +1,8 @@
 {
   "slug": "animated-counter",
   "name": "Animated Counter",
-  "description": "High-precision rolling drum counter with spring physics, acoustic feedback, and reactive typography.",
-  "summary": "Tactile mechanical drum counter featuring bidirectional rolling reels, Web Audio acoustic tick synthesis, responsive text sizing, and seamless international numeral grouping. Built with Framer Motion spring dynamics, multi-band cylindrical wrapping geometry, and zero layout shift.",
+  "description": "Rolling drum counter with spring physics, number grouping and prefix/suffix slots.",
+  "summary": "A mechanical drum counter with bidirectional rolling reels, an optional gooey SVG filter, and Western or Indian numeral grouping. Built with Motion springs and a gradient-masked digit drum, with fixed-width digits so the layout does not jitter.",
   "category": "display",
   "tags": [
     "counter",
@@ -27,18 +27,17 @@
   "interactive": true,
   "supportsColor": true,
   "highlights": [
-    "Multi-band continuous drum stack preventing wrapping glitches during bidirectional increments and decrements",
-    "Synthesized acoustic mechanical tick using native Web Audio API with directional frequency modulation",
-    "Fully reactive font sizing supporting presets (xs to 5xl) and custom Tailwind classes with smooth layout transitions",
-    "Tabular figure calibration with invisible width sizers to completely prevent horizontal jitter and layout shifts",
-    "Flexible internationalization supporting both Western (three-digit) and Indian (two-digit) numbering groupings",
-    "Accessible screen-reader live announcements paired with automatic prefers-reduced-motion fallback"
+    "Three stacked 0-9 cycles so digits roll in both directions without wrapping glitches",
+    "Font size follows className or the inherited font-size",
+    "Tabular digit alignment to prevent horizontal jitter",
+    "Western (three-digit) and Indian (two-digit) number grouping",
+    "Visually hidden text readout for screen readers (not a live region) and a reduced-motion fallback"
   ],
   "anatomy": [
-    "<AnimatedCounter> (Root layout container with tabular alignment and smooth sizing transitions)",
-    "<Digit> (Rolling vertical reel wrapped in multi-stop drum curve gradient mask)",
-    "<Mark> (Formatted separation mark smoothly animated into optical flow)",
-    "<Fixed> (Prefix and suffix elements optically locked to counter baseline)"
+    "<AnimatedCounter> (Root layout container with tabular alignment)",
+    "<DigitColumn> (Rolling vertical reel wrapped in a gradient drum mask)",
+    "<motion.span> (Separator mark animated into place)",
+    "<motion.span> (Prefix and suffix elements aligned to the counter baseline)"
   ],
   "physics": {
     "engine": "Motion Spring Dynamics",
@@ -50,11 +49,11 @@
       },
       {
         "label": "Spring Bounce",
-        "value": "0.18 damping"
+        "value": "bounce: 0.16"
       },
       {
         "label": "Reel Geometry",
-        "value": "11-face continuous drum (0-9 + wrap 0)"
+        "value": "30-face drum (0-9 repeated three times)"
       },
       {
         "label": "Drum Mask",
@@ -67,7 +66,6 @@
     ]
   },
   "accessibility": {
-    "role": "status",
     "aria": "aria-hidden on decorative animated reels with visually hidden semantic text readout for screen readers.",
     "reducedMotion": "Bypasses wheel animations and immediately settles on target numerals."
   },
@@ -139,12 +137,19 @@
       "description": "Affixed element or unit after numerals (e.g. %, ms, /mo)."
     },
     {
+      "name": "gooey",
+      "type": "boolean",
+      "defaultValue": "true",
+      "description": "Applies an SVG goo filter to the rolling digits. Skipped when reduced motion is preferred."
+    },
+    {
       "name": "className",
       "type": "string",
       "defaultValue": "undefined",
       "description": "Additional CSS classes for styling and typography."
     }
   ],
+  "usage": "\"use client\";\n\nimport { useState } from \"react\";\nimport { AnimatedCounter } from \"@/components/ui/animated-counter\";\n\nexport function AnimatedCounterDemo() {\n  const [value, setValue] = useState(1250);\n\n  return (\n    <button type=\"button\" onClick={() => setValue((v) => v + 125)}>\n      <AnimatedCounter value={value} prefix=\"$\" className=\"text-4xl\" />\n    </button>\n  );\n}",
   "files": [
     {
       "name": "animated-counter.tsx",

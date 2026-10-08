@@ -30,7 +30,7 @@
     "Centered thumbnail cycling with a configurable final hold",
     "A separate final image expands smoothly to the full canvas",
     "Waits for image assets and skips failed thumbnails",
-    "Pause, resume, replay, and live customization controls",
+    "Pause and resume through the paused prop, and replay through replayKey",
     "Responsive sizing, scoped animation cleanup, and reduced-motion support"
   ],
   "anatomy": [
@@ -196,6 +196,7 @@
       "description": "Reports failed assets. Failed thumbnails are skipped and a final-image error is shown after revealing."
     }
   ],
+  "usage": "import { ImageLoader } from \"@/components/ui/image-loader\";\n\nconst images = [\n  { src: \"/images/frame-1.jpg\", alt: \"\" },\n  { src: \"/images/frame-2.jpg\", alt: \"\" },\n];\n\nexport function ImageLoaderDemo() {\n  return (\n    <ImageLoader\n      images={images}\n      finalImage={{ src: \"/images/hero.jpg\", alt: \"Studio workspace\" }}\n      className=\"h-[480px]\"\n    />\n  );\n}",
   "files": [
     {
       "name": "image-loader.tsx",

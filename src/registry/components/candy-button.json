@@ -25,16 +25,16 @@
   "interactive": true,
   "supportsColor": true,
   "highlights": [
-    "Physical convex radial gradient placing the specular bloom at 50% 75% for authentic lozenge curvature",
+    "Convex radial gradient placing the specular bloom at 50% 70%",
     "Sub-pixel specular glass reflection line (h-px with linear gradient falloff) across the upper rim",
     "Multi-layered composite lighting: outer ambient caustics, inset top bevel highlight, and underside depth rim",
     "Dynamic arbitrary color engine supporting any hex, rgb, or hsl value through native CSS color-mix()",
-    "Seven pre-tuned gemstone palettes including dradix-signature deep emerald, ruby, amber, and violet",
+    "Seven preset palettes: emerald, ruby, amber, violet, azure, obsidian and pearl",
     "Four precision size variants (sm, default, lg, icon) with automatic accessory icon scaling",
     "Smooth hardware-accelerated tactile compression (scale-[0.98]) and hover luminescence"
   ],
   "anatomy": [
-    "<button> (Focus-visible interactive shell with radial gradient and multi-stop composite shadow)",
+    "<button> (Interactive shell with radial gradient and multi-stop composite shadow; renders <a> when as=\"a\" or href is set)",
     "<span> (Specular Reflection Line anchored to the top 15%-85% perimeter)",
     "<span> (Translucent glass sheen dome layer providing convex highlight)",
     "<span> (Centered content shell housing leftIcon, label, and rightIcon)"
@@ -45,7 +45,7 @@
     "parameters": [
       {
         "label": "Gradient Geometry",
-        "value": "radial-gradient(95% 60% at 50% 75%)"
+        "value": "radial-gradient(120% 80% at 50% 70%)"
       },
       {
         "label": "Reflection Line",
@@ -53,11 +53,11 @@
       },
       {
         "label": "Top Inset Bevel",
-        "value": "inset 0px 1px 4px 0px rgba(255,255,255,0.45)"
+        "value": "inset 0px 1px 4px 0px rgba(255,255,255,0.4) (0.45 for custom color)"
       },
       {
         "label": "Bottom Inset Depth",
-        "value": "inset 0px -2px 4px 0px rgba(0,0,0,0.3)"
+        "value": "inset 0px -2px 4px 0px rgba(0,0,0,0.15) (0.2 obsidian, 0.08 pearl)"
       },
       {
         "label": "Outer Ambient Glow",
@@ -76,15 +76,15 @@
   "accessibility": {
     "role": "button",
     "aria": "Inherits standard HTML button attributes including aria-label, aria-disabled, and aria-expanded.",
-    "reducedMotion": "Suppresses active scale transform and brightness transitions when prefers-reduced-motion is active.",
+    "reducedMotion": "No reduced-motion handling. The press scale and brightness transitions always run.",
     "keyboard": [
       {
         "key": "Tab",
-        "description": "Navigate and focus button with high-contrast dual ring."
+        "description": "Focus the button."
       },
       {
         "key": "Enter / Space",
-        "description": "Trigger action with tactile press feedback."
+        "description": "Activate the button. When rendered as a link, only Enter activates it."
       }
     ]
   },
@@ -101,6 +101,26 @@
     ]
   },
   "props": [
+    {
+      "name": "as",
+      "type": "React.ElementType",
+      "description": "Pass \"a\" to render an anchor instead of a button."
+    },
+    {
+      "name": "href",
+      "type": "string",
+      "description": "Link URL. When set, the button renders as an anchor."
+    },
+    {
+      "name": "target",
+      "type": "string",
+      "description": "Anchor target, used when rendering as a link."
+    },
+    {
+      "name": "rel",
+      "type": "string",
+      "description": "Anchor rel attribute, used when rendering as a link."
+    },
     {
       "name": "variant",
       "type": "\"emerald\" | \"ruby\" | \"amber\" | \"violet\" | \"azure\" | \"obsidian\" | \"pearl\"",
@@ -150,6 +170,7 @@
       "description": "Additional CSS classes to override dimensions, margins, or positioning."
     }
   ],
+  "usage": "import { CandyButton } from \"@/components/ui/candy-button\";\n\nexport function CandyButtonDemo() {\n  return <CandyButton variant=\"emerald\">Deploy project</CandyButton>;\n}",
   "files": [
     {
       "name": "candy-button.tsx",

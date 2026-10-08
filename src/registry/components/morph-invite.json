@@ -31,7 +31,7 @@
   "interactive": true,
   "supportsColor": false,
   "highlights": [
-    "Coordinated pill expansion and avatar compression without scaling text",
+    "Coordinated pill width expansion and avatar stack compression (tighter overlap and 0.9 scale)",
     "Adjustable stiffness, damping, mass, playback speed, and expanded width",
     "Async invite callback with pending, success, and retryable failure states",
     "New avatar entrance following a successful callback",
@@ -166,5 +166,6 @@
       "type": "registry:ui",
       "target": "@ui/morph-invite.tsx"
     }
-  ]
+  ],
+  "usage": "\"use client\";\n\nimport { MorphInvite } from \"@/components/ui/morph-invite\";\n\nexport function MorphInviteDemo() {\n  return (\n    <MorphInvite\n      onInvite={async (email, signal) => {\n        await fetch(\"/api/invites\", {\n          method: \"POST\",\n          body: JSON.stringify({ email }),\n          signal,\n        });\n      }}\n    />\n  );\n}"
 }

@@ -2,7 +2,7 @@
   "slug": "file-tree",
   "name": "File Tree",
   "description": "Smooth, interactive file tree component with guide lines, nested folder expansion, selection, and keyboard navigation.",
-  "summary": "A clean, high-performance file tree component designed for developer tools, file explorers, IDE sidebars, and hierarchical directory structures. Built with framer-motion layout transitions, pixel-aligned guide lines, smooth chevron rotation, single and multi-selection support, and full keyboard accessibility.",
+  "summary": "A file tree component for developer tools, file explorers, IDE sidebars and hierarchical directory structures. Built with Motion height transitions, pixel-aligned guide lines, chevron rotation, single and multi-selection, and keyboard expand, collapse and select on each node.",
   "category": "navigation",
   "tags": [
     "file-tree",
@@ -26,18 +26,18 @@
   "interactive": true,
   "supportsColor": false,
   "highlights": [
-    "Smooth height expansion and spring-calibrated chevron rotation",
+    "Smooth height expansion and 150ms chevron rotation",
     "Pixel-aligned vertical guide lines for deep tree hierarchies",
     "Clean borderless design optimized for dark and light theme sidebars",
     "Controlled and uncontrolled node expansion and selection states",
-    "Full keyboard accessibility with arrow key folder navigation and Space/Enter selection"
+    "Keyboard support: ArrowRight and ArrowLeft expand and collapse, Enter and Space select or toggle"
   ],
   "anatomy": [
     "<TreeView> (Root container managing tree state, keyboard handlers, and layout)",
     "<TreeNode> (Hierarchical node item rendering chevrons, icons, labels, and children)"
   ],
   "physics": {
-    "engine": "Framer Motion Layout & Height Transitions",
+    "engine": "Motion Height Transitions",
     "description": "Height expansion curves [0.16, 1, 0.3, 1] with 150ms chevron rotation.",
     "parameters": [
       {
@@ -64,16 +64,16 @@
     "reducedMotion": "Instantaneous node expansion without motion delay when prefers-reduced-motion is active.",
     "keyboard": [
       {
-        "key": "ArrowRight",
-        "description": "Expand focused folder node."
+        "key": "Tab / Shift+Tab",
+        "description": "Move focus into and out of the tree."
       },
       {
-        "key": "ArrowLeft",
-        "description": "Collapse focused folder node."
+        "key": "Arrow keys",
+        "description": "Move between nodes; ArrowRight expands and ArrowLeft collapses the focused folder."
       },
       {
         "key": "Enter / Space",
-        "description": "Select focused node or toggle folder state."
+        "description": "Select the focused node (and toggle its folder when expandOnFolderClick is true). Hold Ctrl/Cmd with multiSelect to add or remove it from the selection."
       }
     ]
   },
@@ -95,6 +95,37 @@
       "type": "TreeNode[]",
       "required": true,
       "description": "Array of tree nodes representing files, folders, and nested children."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "description": "Additional CSS classes for the tree container."
+    },
+    {
+      "name": "onNodeClick",
+      "type": "(node: TreeNode) => void",
+      "description": "Called when a node is clicked or activated with the keyboard."
+    },
+    {
+      "name": "onNodeExpand",
+      "type": "(nodeId: string, expanded: boolean) => void",
+      "description": "Called when a folder is expanded or collapsed."
+    },
+    {
+      "name": "defaultExpandedIds",
+      "type": "string[]",
+      "defaultValue": "[]",
+      "description": "Folder ids expanded on mount when uncontrolled."
+    },
+    {
+      "name": "expandedIds",
+      "type": "string[]",
+      "description": "Controlled list of expanded folder ids."
+    },
+    {
+      "name": "onExpandedIdsChange",
+      "type": "(expandedIds: string[]) => void",
+      "description": "Called with the new list of expanded folder ids."
     },
     {
       "name": "showLines",
@@ -121,6 +152,22 @@
       "description": "Allow selecting multiple nodes with Ctrl/Cmd key."
     },
     {
+      "name": "selectedIds",
+      "type": "string[]",
+      "description": "Controlled list of selected node ids."
+    },
+    {
+      "name": "defaultSelectedIds",
+      "type": "string[]",
+      "defaultValue": "[]",
+      "description": "Node ids selected on mount when uncontrolled."
+    },
+    {
+      "name": "onSelectionChange",
+      "type": "(selectedIds: string[]) => void",
+      "description": "Called with the new list of selected node ids."
+    },
+    {
       "name": "indent",
       "type": "number",
       "defaultValue": "16",
@@ -131,8 +178,15 @@
       "type": "boolean",
       "defaultValue": "true",
       "description": "Enable smooth motion animation during folder expansion."
+    },
+    {
+      "name": "expandOnFolderClick",
+      "type": "boolean",
+      "defaultValue": "true",
+      "description": "Toggles a folder when its row is clicked, not only its chevron."
     }
   ],
+  "usage": "\"use client\";\n\nimport { FileTree, type TreeNode } from \"@/components/ui/file-tree\";\n\nconst data: TreeNode[] = [\n  {\n    id: \"src\",\n    label: \"src\",\n    children: [\n      { id: \"app\", label: \"app.tsx\" },\n      { id: \"utils\", label: \"utils.ts\" },\n    ],\n  },\n  { id: \"readme\", label: \"README.md\" },\n];\n\nexport function FileTreeDemo() {\n  return (\n    <FileTree\n      data={data}\n      defaultExpandedIds={[\"src\"]}\n      onNodeClick={(node) => console.log(node.id)}\n    />\n  );\n}",
   "files": [
     {
       "name": "file-tree.tsx",

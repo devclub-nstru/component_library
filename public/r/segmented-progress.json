@@ -3,7 +3,7 @@
   "name": "segmented-progress",
   "type": "registry:ui",
   "title": "Segmented Progress",
-  "description": "Tactile segmented progress bar with real-time hover data inspection, dynamic wave proximity physics, and staggered GSAP fill animation.",
+  "description": "Metric card with segmented progress bars, hover value preview, a proximity wave and staggered GSAP fill.",
   "dependencies": [
     "clsx",
     "tailwind-merge",

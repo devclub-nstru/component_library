@@ -3,7 +3,7 @@
   "name": "file-dropzone",
   "type": "registry:ui",
   "title": "File Dropzone",
-  "description": "Interactive drag-and-drop file dropzone with magnetic cursor glow, fanned sheets choreography, and animated file lifecycle rows.",
+  "description": "Drag-and-drop file dropzone with a fanned sheets illustration, drag state styling and animated file lifecycle rows.",
   "dependencies": [
     "motion",
     "lucide-react",

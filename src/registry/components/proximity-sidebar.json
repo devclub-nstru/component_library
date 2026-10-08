@@ -42,11 +42,11 @@
     "parameters": [
       {
         "label": "Proximity Radius",
-        "value": "48px default (configurable)"
+        "value": "32px default (configurable)"
       },
       {
         "label": "Max Dash Width",
-        "value": "110px default (configurable)"
+        "value": "90px default (configurable)"
       },
       {
         "label": "Spring Stiffness",
@@ -73,15 +73,15 @@
     "keyboard": [
       {
         "key": "Tab / Shift+Tab",
-        "description": "Focus into and navigate through individual section dashes."
+        "description": "Focus into and move through the section dashes."
       },
       {
         "key": "ArrowUp / ArrowDown",
-        "description": "Cycle through sections sequentially and scroll to the selected section."
+        "description": "Move to the previous or next section and scroll to it."
       },
       {
         "key": "Enter / Space",
-        "description": "Activate selected section and trigger smooth scroll to target heading."
+        "description": "Activate the focused section and smooth-scroll to its heading."
       }
     ]
   },
@@ -102,7 +102,6 @@
       "name": "sections",
       "type": "ProximitySection[]",
       "required": true,
-      "defaultValue": "[]",
       "description": "Array of sections with id, label, and optional kind ('title' | 'subtitle' | 'section' | 'body') or level (1-6)."
     },
     {
@@ -120,13 +119,13 @@
     {
       "name": "radius",
       "type": "number",
-      "defaultValue": "48",
+      "defaultValue": "32",
       "description": "Proximity influence radius in pixels around the pointer position."
     },
     {
       "name": "maxDashWidth",
       "type": "number",
-      "defaultValue": "110",
+      "defaultValue": "90",
       "description": "Maximum horizontal width of the dash in pixels at peak proximity."
     },
     {
@@ -160,6 +159,7 @@
       "description": "Additional CSS classes applied to the outer <nav> element."
     }
   ],
+  "usage": "import { ProximitySidebar } from \"@/components/ui/proximity-sidebar\";\n\nconst sections = [\n  { id: \"intro\", label: \"Introduction\" },\n  { id: \"install\", label: \"Installation\" },\n  { id: \"usage\", label: \"Usage\" },\n];\n\nexport function ProximitySidebarDemo() {\n  return <ProximitySidebar sections={sections} />;\n}",
   "files": [
     {
       "name": "proximity-sidebar.tsx",

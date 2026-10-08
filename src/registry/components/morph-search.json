@@ -28,49 +28,59 @@
     "Smooth layout morphing from closed pill to expanded command card with spring physics",
     "Dynamic cycling placeholder with smooth vertical crossfade and blur transition",
     "Contextual intent morphs: interactive polls, event schedules, task checklists, timers, and bill splits",
-    "Full keyboard accessibility with '/' and 'Cmd+K' triggers, Escape closing, and Enter submission",
-    "Strict typography-first design with zero icons, zero emojis, and zero side borders"
+    "Keyboard shortcuts: '/' and Cmd/Ctrl+K open the search, Enter submits, Escape clears or closes",
+    "Typography-first design with no icons or emojis"
   ],
   "anatomy": [
     "<MorphSearch> (Main interactive container with spring layout morph)",
     "<input> (Search and prompt text input)",
-    "<CyclingPlaceholder> (Animated crossfading prompt suggestions)",
-    "<PollCard> (Interactive voting options with live percentage bars)",
-    "<EventCard> (Schedule preview with time and attendee tags)",
-    "<ChecklistCard> (Interactive tasks with completion toggles)",
-    "<TimerCard> (Focus countdown with active controls)",
-    "<SplitCard> (Bill split breakdown per person)"
+    "Cycling placeholder (Animated crossfading prompt suggestions)",
+    "Poll card section (Voting options with percentage bars)",
+    "Event card section (Schedule preview with time and attendee tags)",
+    "Checklist card section (Tasks with completion toggles)",
+    "Timer card section (Focus countdown with controls)",
+    "Split card section (Bill split breakdown per person)"
   ],
   "physics": {
     "engine": "Motion Spring Solver",
-    "description": "Custom spring transition on container layout with 420 stiffness and 32 damping for immediate tactile response without overshoot.",
+    "description": "Spring transition on the container layout (stiffness 440, damping 38, mass 0.8), close to critically damped, so it settles without visible overshoot.",
     "parameters": [
       {
         "label": "Stiffness",
-        "value": "420"
+        "value": "440"
       },
       {
         "label": "Damping",
-        "value": "32"
+        "value": "38"
       },
       {
         "label": "Mass",
-        "value": "0.85"
+        "value": "0.8"
       },
       {
-        "label": "Closed Radius",
-        "value": "28px"
-      },
-      {
-        "label": "Opened Radius",
-        "value": "24px"
+        "label": "Corner Radius",
+        "value": "28px (constant)"
       }
     ]
   },
   "accessibility": {
-    "role": "search",
-    "aria": "Carries semantic input attributes, labelled search action buttons, and keyboard shortcuts.",
-    "reducedMotion": "Automatically suppresses cycling animations and replaces spring layouts with soft opacity fades."
+    "role": "textbox",
+    "aria": "The input has aria-label \"Search or enter prompt\" and the Clear button is labelled. The open and close shortcut buttons have no accessible label.",
+    "reducedMotion": "With prefers-reduced-motion, placeholder cycling stops and the spring layout animation becomes a 0.14s tween; placeholder and panel entrances drop the blur and slide offsets.",
+    "keyboard": [
+      {
+        "key": "/ or Cmd/Ctrl + K",
+        "description": "Open and focus the search (ignored while typing in another field)."
+      },
+      {
+        "key": "Enter",
+        "description": "Submit and save the current entry."
+      },
+      {
+        "key": "Escape",
+        "description": "Clear the input; if it is already empty, close the search."
+      }
+    ]
   },
   "guidelines": {
     "recommended": [
@@ -80,7 +90,7 @@
     ],
     "bestPractices": [
       "Provide an onSubmit callback to handle confirmed user prompts",
-      "Keep placeholder examples relevant to your application's domain",
+      "Pass placeholder to replace the built-in cycling examples with your own text",
       "Use subtle backdrop-blur panels for elevated contrast"
     ]
   },
@@ -134,6 +144,7 @@
       "description": "Whether the input should auto-focus on initial mount."
     }
   ],
+  "usage": "\"use client\";\n\nimport { MorphSearch } from \"@/components/ui/morph-search\";\n\nexport function MorphSearchDemo() {\n  return <MorphSearch onSubmit={(value) => console.log(value)} />;\n}",
   "files": [
     {
       "name": "morph-search.tsx",

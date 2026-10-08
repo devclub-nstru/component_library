@@ -2,7 +2,7 @@
   "slug": "ai-orb",
   "name": "AI Orb",
   "description": "Luminescent AI generation sphere with native WebGL Bayer 8x8 dithered plasma and animated letter wave typography.",
-  "summary": "An ultra-fluid generative AI orb component combining volumetric chromatic sphere glows, rotating multi-depth inset shadows, and an embedded native WebGL 8x8 Bayer matrix dithered plasma wave core. Features real-time cursor proximity warping and fluid displacement, customizable color themes, and staggered animated letter wave typography for generation states, loaders, and agentic assistant interfaces.",
+  "summary": "A generative AI orb that combines chromatic sphere glows, rotating inset shadows and a WebGL plasma core with an ordered-dither overlay. Features pointer-driven warping, six color variants, and a staggered letter-wave label for generation states, loaders and assistant interfaces.",
   "category": "ai-stuff",
   "tags": [
     "ai",
@@ -30,19 +30,20 @@
     "Interactive pointer displacement warping fluid noise with smooth spherical vignette falloff",
     "Volumetric 3D chromatic inset box shadows with continuous harmonic counter-rotations",
     "Sinusoidal staggered letter wave typography with customizable labels ('Generating', 'Thinking', etc.)",
-    "Quantized color stepping and configurable pixelation density with light/dark adaptive presets"
+    "Quantized color stepping (colorNum), pixelSize control, and six color variants (chromatic, neon, cyberpunk, emerald, amber, monochrome)"
   ],
   "anatomy": [
-    "<div> (Outer Halo Container: relative circular wrapper with ambient radial glow dispersion)",
-    "<canvas> (Native WebGL Canvas: hardware-accelerated 8x8 Bayer dithered fbm plasma)",
-    "<motion.div> (Primary Chromatic Shell: clockwise rotating volumetric inset shadow layer)",
-    "<motion.div> (Secondary Rim Ring: counter-clockwise rotating specular highlight border)",
+    "<div> (Outer Halo Container: relative circular wrapper with ambient radial glow)",
+    "<canvas> (WebGL Canvas: plasma noise shader with Bayer 8x8 dithering)",
+    "<Dither> (Animated dither gradient layered over the core)",
+    "<motion.div> (Primary Chromatic Shell: clockwise rotating inset shadow layer)",
+    "<motion.div> (Secondary Rim Ring: counter-clockwise rotating highlight border)",
     "<div> (Specular Highlight: radial gradient reflection on upper hemisphere)",
-    "<motion.span[]> (Letter Wave: staggered animated typography spanning generation states)"
+    "<motion.span[]> (Letter Wave: staggered animated label text)"
   ],
   "physics": {
     "engine": "Bayer 8x8 Dither Shader + Harmonic CSS Box-Shadow Rotation",
-    "description": "GPU-accelerated fbm simplex noise passed through an 8x8 Bayer ordered dithering kernel, overlaid with counter-rotating volumetric chromatic inset shadows.",
+    "description": "Perlin fbm noise passed through an 8x8 Bayer ordered dithering kernel, overlaid with counter-rotating chromatic inset shadows. Rotation and wave durations are divided by the speed prop.",
     "parameters": [
       {
         "label": "Dither Matrix",
@@ -54,22 +55,21 @@
       },
       {
         "label": "Primary Rotation Speed",
-        "value": "3.5s linear infinite"
+        "value": "3.5s / speed, linear infinite (4.375s at the default speed 0.8)"
       },
       {
         "label": "Secondary Rotation Speed",
-        "value": "7.0s counter-linear infinite"
+        "value": "7s / speed, reverse linear infinite (8.75s at default speed)"
       },
       {
         "label": "Letter Wave Frequency",
-        "value": "2.2s ease-in-out with 100ms stagger"
+        "value": "2.2s / speed, ease-in-out with 100ms stagger (2.75s at default speed)"
       }
     ]
   },
   "accessibility": {
-    "role": "status",
-    "aria": "aria-live='polite' on generation text container, and role='status' for screen reader recognition of ongoing generation operations.",
-    "reducedMotion": "Collapses rotation and letter wave animations to subtle static glows when prefers-reduced-motion is active."
+    "aria": "No ARIA attributes are set. The letter-wave label is plain visible text; wrap the orb in an element with role=\"status\" if generation updates should be announced.",
+    "reducedMotion": "With prefers-reduced-motion, the ring rotation and the letter wave stop and the label renders as static text."
   },
   "guidelines": {
     "recommended": [
@@ -151,6 +151,7 @@
       "description": "Additional CSS classes applied to the root container."
     }
   ],
+  "usage": "import { AiOrb } from \"@/components/ui/ai-orb\";\n\nexport function AiOrbDemo() {\n  return <AiOrb text=\"Thinking\" variant=\"chromatic\" size={190} />;\n}",
   "files": [
     {
       "name": "ai-orb.tsx",

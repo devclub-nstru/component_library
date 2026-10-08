@@ -2,7 +2,7 @@
   "slug": "pixel-card",
   "name": "Pixel Card",
   "description": "Interactive card with synchronized harmonic pixel matrix, cursor proximity excitation, and 3D perspective tilt.",
-  "summary": "An interactive card primitive combining a GPU-accelerated sub-pixel Retina 2D canvas matrix with synchronized harmonic wave propagation, pointer proximity excitation, dynamic radial spotlight lighting, and fluid GSAP quickTo 3D perspective tilt.",
+  "summary": "An interactive card primitive combining a devicePixelRatio-scaled 2D canvas pixel matrix with wave propagation, pointer proximity excitation, a radial spotlight and GSAP quickTo tilt.",
   "category": "cards",
   "tags": [
     "card",
@@ -30,18 +30,18 @@
   "highlights": [
     "Hardware-accelerated sub-pixel 2D canvas with automatic devicePixelRatio Retina scaling",
     "Harmonic wavefront propagation synchronizing pixel emergence directly with cursor coordinates",
-    "Dynamic cursor proximity excitation boosting shimmer frequency and amplitude within a 160px aura",
+    "Cursor proximity excitation boosting shimmer within 120 to 130px depending on the pattern",
     "Buttery GSAP quickTo 3D perspective rotation (rotationX, rotationY, scale) with zero-cost unmount cleanup",
-    "6 curated visual variants (default, blue, yellow, pink, purple, emerald) with themeable token variables",
+    "6 variants (default, blue, yellow, pink, purple, emerald), overridable via colors, gap, speed and spotlightColor",
     "Zero idle CPU/GPU consumption via automatic ticker sleeping when unhovered"
   ],
   "anatomy": [
-    "<div> (3D perspective container with transform-style: preserve-3d and isolate boundary)",
+    "<div> (Container with transform-style: preserve-3d and isolate; add perspective on a parent for depth)",
     "<div> (Radial Spotlight: dynamic cursor-tracking light glow)",
-    "<div> (Luminous Border Sheen: masked gradient highlight tracking pointer angle)",
+    "<div> (Luminous Border Sheen: masked gradient highlight tracking pointer position)",
     "<div> (Holographic Glare: diagonal reflection wash)",
     "<canvas> (Sub-pixel calibrated 2D canvas rendering animated matrix pixels)",
-    "<div> (Content Layer: elevated z-10 container with translateZ(26px) for 3D parallax depth)"
+    "<div> (Content Layer: elevated z-10 container with translateZ(18px))"
   ],
   "physics": {
     "engine": "GSAP Ticker & Harmonic Canvas Wavefront",
@@ -53,19 +53,19 @@
       },
       {
         "label": "Tilt Damping",
-        "value": "gsap.quickTo (duration 0.35s, power2.out)"
+        "value": "gsap.quickTo (duration 0.45s, power2.out)"
       },
       {
         "label": "Max 3D Tilt",
-        "value": "12deg Cartesian rotation"
+        "value": "6deg default (maxTilt)"
       },
       {
         "label": "Wavefront Velocity",
-        "value": "380px/s radial expansion"
+        "value": "320px/s radial expansion"
       },
       {
         "label": "Proximity Halo",
-        "value": "160px excitation radius"
+        "value": "120 to 130px depending on pattern"
       },
       {
         "label": "Retina Calibration",
@@ -79,16 +79,12 @@
   },
   "accessibility": {
     "role": "region",
-    "aria": "Supports standard accessibility container attributes; canvas is pointer-events-none and presentation only.",
-    "reducedMotion": "Suppresses 3D perspective tilt and renders static/subtle pixel transitions when prefers-reduced-motion is active.",
+    "aria": "The card is focusable unless noFocus is set, in which case it is a plain container out of the tab order. It takes role=\"region\" only when you pass aria-label or aria-labelledby, so give it a name to expose it as a landmark. The pixel canvas is decorative and pointer-events-none.",
+    "reducedMotion": "With prefers-reduced-motion, the tilt and the expanding wavefront are disabled so pixels appear at once; the pixel shimmer still animates while hovered or focused.",
     "keyboard": [
       {
-        "key": "Tab",
-        "description": "Navigates focus to the card container with high-contrast ring outline and center-originated wave ignition."
-      },
-      {
-        "key": "Enter / Space",
-        "description": "Triggers card onClick callback if interactive handler is assigned."
+        "key": "Tab / Shift+Tab",
+        "description": "Focus the card and start the wave from its center. Skipped when noFocus is set (the pink variant sets it by default)."
       }
     ]
   },
@@ -112,16 +108,28 @@
       "description": "Visual color and lighting theme preset for pixels, spotlight, and border glow."
     },
     {
+      "name": "pattern",
+      "type": "\"wave\" | \"matrix\" | \"scan\" | \"cross\"",
+      "defaultValue": "\"wave\"",
+      "description": "Shape of the pixel animation that runs while the card is hovered or focused."
+    },
+    {
+      "name": "noise",
+      "type": "number",
+      "defaultValue": "0",
+      "description": "Random variation applied to pixel size and opacity. 0 disables it."
+    },
+    {
       "name": "gap",
       "type": "number",
-      "defaultValue": "6",
-      "description": "Pixel grid spacing pitch in CSS pixels."
+      "defaultValue": "variant preset",
+      "description": "Pixel grid spacing in CSS pixels. Defaults to the variant preset (6 or 7)."
     },
     {
       "name": "speed",
       "type": "number",
-      "defaultValue": "35",
-      "description": "Animation speed multiplier governing harmonic wave and shimmer frequencies."
+      "defaultValue": "variant preset",
+      "description": "Animation speed. Defaults to the variant preset (20 to 30)."
     },
     {
       "name": "colors",
@@ -138,7 +146,7 @@
     {
       "name": "maxTilt",
       "type": "number",
-      "defaultValue": "12",
+      "defaultValue": "6",
       "description": "Maximum tilt angle in degrees along X and Y axes."
     },
     {
@@ -162,8 +170,8 @@
     {
       "name": "noFocus",
       "type": "boolean",
-      "defaultValue": "false",
-      "description": "Disables keyboard focusability and focus outline."
+      "defaultValue": "variant preset",
+      "description": "Removes the card from the tab order and skips the focus animation. Defaults to the variant preset (true only for pink)."
     },
     {
       "name": "className",
@@ -178,6 +186,7 @@
       "description": "Interactive card content, headlines, telemetry, or badges elevated in 3D parallax space."
     }
   ],
+  "usage": "import { PixelCard } from \"@/components/ui/pixel-card\";\n\nexport function PixelCardDemo() {\n  return (\n    <PixelCard variant=\"blue\" className=\"h-72 w-64\" aria-label=\"Pixel card\">\n      <h3 className=\"text-lg font-semibold\">Pixel Card</h3>\n    </PixelCard>\n  );\n}",
   "files": [
     {
       "name": "pixel-card.tsx",

@@ -2,7 +2,7 @@
   "slug": "animated-button",
   "name": "Animated Button",
   "description": "Multi-variant interactive button with shimmering effects and micro-interactions.",
-  "summary": "A high-impact call-to-action button supporting four distinct visual styles (primary, secondary, outline, and shimmer). Engineered with fluid cubic-bezier micro-interactions, hardware-accelerated transform scaling on active press (scale-[0.96]), an automated looping CSS keyframe linear gradient shimmer sweep, and dynamic icon translation with group-hover mechanics.",
+  "summary": "A call-to-action button with four visual styles (primary, secondary, outline and shimmer). Uses a cubic-bezier timing curve, scale-[0.96] compression on press, a shimmer overlay layer, and an arrow icon that shifts on hover.",
   "category": "buttons",
   "tags": [
     "button",
@@ -24,14 +24,14 @@
   "supportsColor": true,
   "highlights": [
     "Four production-ready visual variants tuned for dark-mode interfaces",
-    "Infinite 2-second linear-gradient shimmer light sweep with zero CPU overhead",
+    "Shimmer overlay layer for the shimmer variant (requires a shimmer keyframe in your global CSS to animate)",
     "Tactile cubic-bezier timing curve (cubic-bezier(0.16, 1, 0.3, 1)) for snappy feedback",
     "Forwarded ref support with full HTML button attribute inheritance",
     "Automatic hover translation on accessory directional icons with group-hover"
   ],
   "anatomy": [
-    "<button> (Focus-visible enabled interactive container with overflow containment)",
-    "<span> (Shimmer Layer with infinite linear gradient keyframe animation)",
+    "<button> (Interactive container with overflow containment)",
+    "<span> (Shimmer overlay layer, animate-[shimmer_2s_infinite])",
     "<span> (Content Shell housing label and optional icon)",
     "<ArrowRightIcon> (Directional icon with hover translate-x animation)"
   ],
@@ -48,8 +48,8 @@
         "value": "scale-[0.96] (4% scale down)"
       },
       {
-        "label": "Shimmer Speed",
-        "value": "2000ms infinite linear sweep"
+        "label": "Shimmer",
+        "value": "animate-[shimmer_2s_infinite] (needs a shimmer keyframe in global CSS)"
       },
       {
         "label": "Transition Duration",
@@ -68,11 +68,11 @@
   "accessibility": {
     "role": "button",
     "aria": "Inherits native HTMLButtonElement attributes including aria-disabled, aria-label, and aria-pressed.",
-    "reducedMotion": "Disables active scaling and shimmer translation when prefers-reduced-motion is active.",
+    "reducedMotion": "No reduced-motion handling. The press scale and hover icon shift always run.",
     "keyboard": [
       {
         "key": "Tab",
-        "description": "Focus button with visible high-contrast ring outline."
+        "description": "Focus the button (browser default focus outline)."
       },
       {
         "key": "Enter / Space",
@@ -93,18 +93,6 @@
     ]
   },
   "props": [
-    {
-      "name": "pattern",
-      "type": "\"wave\" | \"matrix\" | \"scan\" | \"cross\"",
-      "defaultValue": "\"wave\"",
-      "description": "Geometric animation pattern style: concentric harmonic wave, vertical matrix stream, radar scanner beam, or targeting crosshair."
-    },
-    {
-      "name": "noise",
-      "type": "number",
-      "defaultValue": "0",
-      "description": "Procedural noise texture intensity (0 to 1) introducing organic film static or cybernetic glitch grain."
-    },
     {
       "name": "variant",
       "type": "\"primary\" | \"secondary\" | \"outline\" | \"shimmer\"",
@@ -149,6 +137,7 @@
       "description": "Click event handler callback invoked on button press."
     }
   ],
+  "usage": "import { AnimatedButton } from \"@/components/ui/animated-button\";\n\nexport function AnimatedButtonDemo() {\n  return (\n    <AnimatedButton variant=\"primary\" showArrow>\n      Get started\n    </AnimatedButton>\n  );\n}",
   "files": [
     {
       "name": "animated-button.tsx",

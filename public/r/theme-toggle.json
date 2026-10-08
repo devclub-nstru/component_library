@@ -3,7 +3,7 @@
   "name": "theme-toggle",
   "type": "registry:ui",
   "title": "Theme Toggle",
-  "description": "View Transitions API powered theme toggle button with tactile obsidian candy styling, geometric clip-path ripples, and seamless mode synchronization.",
+  "description": "View Transitions API theme toggle with geometric clip-path ripples, optional obsidian candy styling, and mode synchronization.",
   "dependencies": [
     "lucide-react",
     "clsx",

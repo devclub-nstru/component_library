@@ -2,7 +2,7 @@
   "slug": "dotted-accordion",
   "name": "Dotted Accordion",
   "description": "Rectangular architectural accordion with contiguous flush items and continuous dotted crosshair guidelines exceeding bounds with smooth gradient masks.",
-  "summary": "A precision-engineered technical accordion designed with strict zero-radius rectangular geometry, zero gap between items, and projecting boundary guidelines. On selection, the active item's horizontal and vertical boundaries transform into continuous dotted grid lines that extend beyond both axes and fade smoothly into transparency using linear gradient CSS masks. Includes letter-by-letter blur text reveals and synchronized spring transitions.",
+  "summary": "A technical accordion with zero-radius rectangular geometry, no gap between items, and projecting boundary guidelines. On selection, the active item's boundaries turn into dotted grid lines that extend past both axes and fade out through linear-gradient CSS masks. Content opens with a bezier height tween.",
   "category": "accordion",
   "tags": [
     "accordion",
@@ -30,37 +30,33 @@
     "Continuous dotted boundary guidelines that project outward on both horizontal and vertical axes",
     "Bilateral gradient mask effect fading extended guidelines smoothly to transparent",
     "Active item selection illuminates bounding crosshairs with animated opacity transitions",
-    "Synchronized drawer height animation with character-by-character blooming blur text reveal",
+    "Drawer height and opacity animation synchronized with the guideline reveal",
     "Monospace technical index prefixes and zero-radius square morphing indicators"
   ],
   "anatomy": [
     "<DottedAccordion> (Root container with projecting vertical and horizontal dotted framing guides)",
     "<button> (Zero-radius trigger header housing monospace index prefix, title, and indicator)",
-    "<DottedBlurText> (Staggered typography blooming engine rendering within expanding drawer)"
+    "<motion.div> (Expanding drawer rendering the description text)"
   ],
   "physics": {
-    "engine": "Motion Spring & CSS Gradient Mask Shaders",
-    "description": "Dual-axis height spring transitions combined with hardware-accelerated WebKit mask image linear-gradients.",
+    "engine": "Motion Tweens & CSS Gradient Masks",
+    "description": "Bezier height tween combined with CSS mask-image linear gradients on the guidelines.",
     "parameters": [
       {
         "label": "Height Transition",
-        "value": "380ms [0.16, 1, 0.3, 1]"
+        "value": "320ms open / 250ms close [0.16, 1, 0.3, 1]"
       },
       {
         "label": "Guideline Extension",
-        "value": "48px past boundary"
+        "value": "48px past boundary (fixed)"
       },
       {
         "label": "Mask Falloff",
-        "value": "48px linear-gradient ramp"
-      },
-      {
-        "label": "Letter Spring",
-        "value": "stiffness: 180, damping: 22, mass: 0.6"
+        "value": "extensionLength px linear-gradient ramp (48px default)"
       },
       {
         "label": "Line Style",
-        "value": "border-dotted border-white/70"
+        "value": "border-dotted, zinc-900/70 (light) / white/70 (dark)"
       },
       {
         "label": "Corner Radius",
@@ -68,14 +64,14 @@
       },
       {
         "label": "Compositing",
-        "value": "GPU filter + transform + mask"
+        "value": "transform + mask"
       }
     ]
   },
   "accessibility": {
     "role": "region",
-    "aria": "Uses semantic button triggers with live aria-expanded state and aria-label accessibility on animated blur text.",
-    "reducedMotion": "Instantaneous height and opacity changes with blur filter disabled when prefers-reduced-motion is active.",
+    "aria": "Triggers are buttons with aria-expanded. Each open panel is a role=\"region\" labelled by its trigger and referenced by aria-controls.",
+    "reducedMotion": "With prefers-reduced-motion, height, opacity and indicator transitions become instant.",
     "keyboard": [
       {
         "key": "Tab",
@@ -96,15 +92,15 @@
     "bestPractices": [
       "Provide sufficient container padding (px-8 or px-12) so extended guidelines fade out naturally",
       "Use technical monospace tags or prefixes to reinforce the architectural grid aesthetic",
-      "Enable reduced-motion fallbacks for users with vestibular sensitivities"
+      "Reduced-motion fallbacks apply automatically from the OS setting; no configuration needed"
     ]
   },
   "props": [
     {
       "name": "items",
       "type": "DottedAccordionItem[]",
-      "defaultValue": "required",
-      "description": "Array of items containing title, description, and optional tag strings."
+      "description": "Array of items containing title, description, and optional tag strings.",
+      "required": true
     },
     {
       "name": "defaultIndex",
@@ -125,30 +121,18 @@
       "description": "Distance in pixels that dotted guidelines project outward beyond the accordion boundary."
     },
     {
-      "name": "letterDelay",
-      "type": "number",
-      "defaultValue": "auto",
-      "description": "Custom stagger delay in seconds between consecutive characters."
-    },
-    {
-      "name": "stiffness",
-      "type": "number",
-      "defaultValue": "180",
-      "description": "Spring stiffness coefficient for the vertical letter translation."
-    },
-    {
-      "name": "damping",
-      "type": "number",
-      "defaultValue": "22",
-      "description": "Spring damping coefficient to control bouncing on letter arrival."
-    },
-    {
       "name": "closeOnClickOutside",
       "type": "boolean",
       "defaultValue": "true",
       "description": "Whether clicking outside the accordion automatically closes any open items."
+    },
+    {
+      "name": "onToggle",
+      "type": "(index: number | null) => void",
+      "description": "Called with the index of the newly opened item, or null when every item is closed."
     }
   ],
+  "usage": "import { DottedAccordion } from \"@/components/ui/dotted-accordion\";\n\nconst items = [\n  { title: \"Installation\", description: \"Add the component with the CLI or copy the source.\" },\n  { title: \"Theming\", description: \"Colors follow your Tailwind light and dark tokens.\" },\n];\n\nexport function DottedAccordionDemo() {\n  return <DottedAccordion items={items} />;\n}",
   "files": [
     {
       "name": "dotted-accordion.tsx",

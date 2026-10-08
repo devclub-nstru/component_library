@@ -4,8 +4,8 @@
   "name": "ASCII Hover Button",
   "title": "ASCII Hover Button",
   "type": "registry:ui",
-  "description": "Interactive button and segmented pill control featuring smooth color transitions and real-time ASCII cipher character scramble glitch on hover.",
-  "summary": "An engineered interactive button and segmented pill tab group designed with an authentic ASCII cipher scramble glitch effect powered by GSAP. Smoothly shifts typography color and luminescence on hover while dynamically scrambling characters through a curated matrix of ASCII glyphs with zero layout jitter, complete dark and light mode synchronization, and full arbitrary color customization.",
+  "description": "Button with color transitions and an ASCII character scramble on hover.",
+  "summary": "An interactive button with an ASCII cipher scramble effect powered by GSAP. On hover the label shifts color and scrambles through a set of ASCII glyphs before resolving. Supports a segmented style with an active state, preset and custom colors, and light and dark modes.",
   "category": "buttons",
   "tags": [
     "button",
@@ -31,39 +31,32 @@
   "interactive": true,
   "supportsColor": true,
   "highlights": [
-    "Hardware-accelerated GSAP progress tween driving real-time ASCII glyph scrambles",
-    "Individual character ghost layout slots guaranteeing zero pixel shifts or font metrics jitter",
-    "Smooth text luminescence and color morphing across dark and light color spaces",
-    "Includes AsciiSegmentedGroup pill container with fluid spring sliding layout indicator",
-    "Seven preset neon and gemstone palettes plus arbitrary hex/rgb color overrides",
-    "Accessible keyboard navigation with Arrow navigation, TabIndex, and aria-selected support",
-    "Respects prefers-reduced-motion media query for seamless accessibility"
+    "GSAP progress tween (power2.out) driving glyph scrambles, re-rolled every 45ms",
+    "Per-character spans; scrambling glyphs render in monospace",
+    "Text color and glow transitions in light and dark modes",
+    "Four surface variants (segmented, card, outline, ghost) with an active prop for selected segments",
+    "Seven preset palettes plus arbitrary hex/rgb color overrides",
+    "Respects prefers-reduced-motion by skipping the scramble"
   ],
   "anatomy": [
-    "<AsciiSegmentedGroup> (Pill container housing segmented tabs)",
-    "<motion.div> (Sliding active pill indicator with spring physics)",
-    "<AsciiHoverButton> (Standalone or tab interactive button)",
-    "<AsciiGlitchText> (Core text primitive with invisible sizer and scrambling glyph overlay)"
+    "<AsciiHoverButton> (Native button with variant, size and icon slots)",
+    "<AsciiGlitchText> (Text primitive that renders per-character spans and the scramble overlay)"
   ],
   "physics": {
-    "engine": "GSAP Core Tween & Motion Spring Physics",
-    "description": "Progressive character resolution curve driven by GSAP power2.out tween combined with spring layout physics.",
+    "engine": "GSAP Core Tween",
+    "description": "Progressive character resolution driven by a GSAP power2.out tween.",
     "parameters": [
       {
         "label": "Scramble Duration",
-        "value": "380ms"
+        "value": "750ms (scrambleDuration)"
       },
       {
         "label": "Tween Easing",
         "value": "power2.out"
       },
       {
-        "label": "Spring Stiffness",
-        "value": "420"
-      },
-      {
-        "label": "Spring Damping",
-        "value": "32"
+        "label": "Glyph Re-roll",
+        "value": "every 45ms"
       },
       {
         "label": "Active Scale",
@@ -72,21 +65,17 @@
     ]
   },
   "accessibility": {
-    "role": "button / tab",
-    "aria": "Applies role='tablist' and role='tab' for segmented groups with proper aria-selected and aria-label attributes.",
+    "role": "button",
+    "aria": "Native button. The glitch text span has aria-label set to the label text so screen readers read the real label during the scramble.",
     "reducedMotion": "Bypasses ASCII glyph scramble and renders target text immediately when prefers-reduced-motion is active.",
     "keyboard": [
       {
-        "key": "ArrowLeft / ArrowRight",
-        "description": "Cycle through segmented options with auto-selection."
-      },
-      {
         "key": "Tab",
-        "description": "Focus active tab or standalone button with visible focus ring."
+        "description": "Focus the button (browser default focus outline)."
       },
       {
         "key": "Enter / Space",
-        "description": "Activate or trigger selection."
+        "description": "Activate the button."
       }
     ]
   },
@@ -94,7 +83,7 @@
     "recommended": [
       "Timeframe selectors (1D, 7D, 1M, 1Y, ALL) in analytics, crypto, and finance charts",
       "High-tech call-to-action triggers on developer tools, AI platforms, and cyberpunk aesthetics",
-      "Segmented view switchers and category filters in modern dark-mode applications"
+      "Segmented view switchers built from several buttons using the active prop"
     ],
     "bestPractices": [
       "Pair with monospace or clean geometric sans-serif fonts for optimal aesthetic cohesion",
@@ -116,6 +105,12 @@
       "description": "Active and hover text accent color preset or custom hex string."
     },
     {
+      "name": "active",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "Keeps the button in its highlighted state, for example to mark the selected segment."
+    },
+    {
       "name": "variant",
       "type": "\"segmented\" | \"card\" | \"outline\" | \"ghost\"",
       "defaultValue": "\"segmented\"",
@@ -128,16 +123,20 @@
       "description": "Size dimensions and font scale."
     },
     {
-      "name": "items",
-      "type": "(string | { id: string; label: string })[]",
-      "defaultValue": "[]",
-      "description": "Options array for AsciiSegmentedGroup."
-    },
-    {
       "name": "scrambleDuration",
       "type": "number",
-      "defaultValue": "0.38",
+      "defaultValue": "0.75",
       "description": "Duration in seconds for the ASCII glitch scramble transition."
+    },
+    {
+      "name": "leftIcon",
+      "type": "ReactNode",
+      "description": "Icon rendered before the label."
+    },
+    {
+      "name": "rightIcon",
+      "type": "ReactNode",
+      "description": "Icon rendered after the label."
     },
     {
       "name": "asciiChars",
@@ -146,6 +145,7 @@
       "description": "Character set used for the random glitch animation."
     }
   ],
+  "usage": "import { AsciiHoverButton } from \"@/components/ui/ascii-hover-button\";\n\nexport function AsciiHoverButtonDemo() {\n  return <AsciiHoverButton text=\"Explore\" variant=\"outline\" />;\n}",
   "files": [
     {
       "name": "ascii-hover-button.tsx",

@@ -25,15 +25,15 @@
   "interactive": true,
   "supportsColor": false,
   "highlights": [
-    "Dynamic SVG quadratic bezier neck interpolation with volume-preserving waist pinching",
+    "Dynamic SVG quadratic bezier neck with a waist that thins by a 1.4 power curve as the gap grows",
     "Simultaneous spring-driven corner radius morphing between fused (0px) and detached (corner) states",
-    "Integrated keyboard accessibility supporting ArrowLeft, ArrowRight, Home, and End navigation",
-    "Customizable spring dynamics with fluid, elastic, and smooth elasticity tuning",
+    "Keyboard selection with ArrowLeft, ArrowRight, Home and End",
+    "Two spring presets: fluid and elastic",
     "Multiple visual variants including solid elevated surface, vibrant aura glow, and frosted glass",
     "Independent active color palettes with matching linear gradients spanning the seam gaps"
   ],
   "anatomy": [
-    "<nav> (Semantic navigation shell with role='tablist' and keyboard event listeners)",
+    "<nav> (Wrapper) containing <ul role=\"tablist\"> with the keyboard handler",
     "<Segment> (Spring-positioned segment with dynamic margin-left and corner radius morphing)",
     "<svg> (Connecting seam bridge rendering the dynamic bezier neck path)",
     "<linearGradient> (Dynamic two-stop color transition bridging neighboring tiles)",
@@ -45,11 +45,11 @@
     "parameters": [
       {
         "label": "Spring Stiffness",
-        "value": "170 - 320"
+        "value": "220 (fluid) / 320 (elastic)"
       },
       {
         "label": "Spring Damping",
-        "value": "18 - 26"
+        "value": "24 (fluid) / 18 (elastic)"
       },
       {
         "label": "Neck Break Threshold",
@@ -71,20 +71,28 @@
     "reducedMotion": "useReducedMotion fallback jumps positions instantly with zero duration.",
     "keyboard": [
       {
+        "key": "Tab",
+        "description": "Moves focus into the tablist (active tab only)."
+      },
+      {
         "key": "ArrowRight",
-        "description": "Select the next navigation tab."
+        "description": "Selects the next tab, wrapping from last to first."
       },
       {
         "key": "ArrowLeft",
-        "description": "Select the previous navigation tab."
+        "description": "Selects the previous tab, wrapping from first to last."
       },
       {
         "key": "Home",
-        "description": "Jump to the first tab."
+        "description": "Selects the first tab."
       },
       {
         "key": "End",
-        "description": "Jump to the last tab."
+        "description": "Selects the last tab."
+      },
+      {
+        "key": "Enter / Space",
+        "description": "Activates the focused tab (button click or link navigation)."
       }
     ]
   },
@@ -105,7 +113,6 @@
       "name": "items",
       "type": "GooeyNavItem[]",
       "required": true,
-      "defaultValue": "[]",
       "description": "Array of tab navigation items as strings or objects with label, icon, and optional href."
     },
     {
@@ -181,6 +188,7 @@
       "description": "Additional CSS classes passed to the outer nav element."
     }
   ],
+  "usage": "\"use client\";\n\nimport { GooeyNav } from \"@/components/ui/gooey-nav\";\n\nexport function GooeyNavDemo() {\n  return (\n    <GooeyNav\n      items={[\"Home\", \"Docs\", \"Components\", \"Blog\"]}\n      onChange={(index) => console.log(index)}\n    />\n  );\n}",
   "files": [
     {
       "name": "gooey-nav.tsx",

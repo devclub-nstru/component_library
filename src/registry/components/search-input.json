@@ -46,7 +46,7 @@
     "parameters": [
       {
         "label": "Energy Boost Per Key",
-        "value": "+0.5"
+        "value": "+0.5 per keystroke (max 1)"
       },
       {
         "label": "Decay Factor",
@@ -72,8 +72,26 @@
   },
   "accessibility": {
     "role": "search",
-    "aria": "Form carries role='search' with sr-only labels and live aria-label on the submit orb button.",
-    "reducedMotion": "Thinking Orb automatically pauses or reduces motion when prefers-reduced-motion is detected."
+    "aria": "The form has role=\"search\". The input has one sr-only label (\"Describe an image\"). The submit button's aria-label switches between \"Search\" and \"Searching\". The orb is aria-hidden.",
+    "reducedMotion": "With prefers-reduced-motion, the thinking orb renders a static frame. The VoiceBeam glow stops its idle breathing, flow and hue drift but still reacts to typing.",
+    "keyboard": [
+      {
+        "key": "/",
+        "description": "Focus the search input when focus is not already in an input."
+      },
+      {
+        "key": "Enter",
+        "description": "Submit the current query."
+      },
+      {
+        "key": "Escape",
+        "description": "Clear the query (uncontrolled), call onClear and blur the input."
+      },
+      {
+        "key": "Tab",
+        "description": "Move to the submit button."
+      }
+    ]
   },
   "guidelines": {
     "recommended": [
@@ -93,6 +111,12 @@
       "type": "string",
       "defaultValue": "undefined",
       "description": "Controlled search query string."
+    },
+    {
+      "name": "defaultValue",
+      "type": "string",
+      "defaultValue": "\"\"",
+      "description": "Initial query when the input is uncontrolled."
     },
     {
       "name": "onChange",
@@ -129,8 +153,15 @@
       "type": "string",
       "defaultValue": "undefined",
       "description": "Optional custom CSS class name for the wrapper."
+    },
+    {
+      "name": "autoFocus",
+      "type": "boolean",
+      "defaultValue": "true",
+      "description": "Focuses the input on mount."
     }
   ],
+  "usage": "\"use client\";\n\nimport { useState } from \"react\";\nimport { SearchInput } from \"@/components/ui/search-input\";\n\nexport function SearchInputDemo() {\n  const [busy, setBusy] = useState(false);\n\n  return (\n    <SearchInput\n      busy={busy}\n      autoFocus={false}\n      onSubmit={async (query) => {\n        setBusy(true);\n        await fetch(`/api/search?q=${encodeURIComponent(query)}`);\n        setBusy(false);\n      }}\n    />\n  );\n}",
   "files": [
     {
       "name": "search-input.tsx",

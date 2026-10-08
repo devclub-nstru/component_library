@@ -5,7 +5,7 @@
   "title": "Liquid Media",
   "type": "registry:ui",
   "description": "Interactive WebGL fluid ripple distortion effect for images and videos with responsive cursor displacement.",
-  "summary": "An Awwwards-grade interactive WebGL media component that responds to cursor movements with fluid ripples and dynamic displacement. Features offscreen FBO sprite splat simulation, damping physics, smooth object-fit texture mapping, and automatic WebGL provider scoping.",
+  "summary": "An interactive WebGL media component that responds to cursor movement with fluid ripples and displacement. Features offscreen FBO sprite splats, damping, object-fit texture mapping, and automatic WebGL provider scoping.",
   "category": "galleries-and-media",
   "tags": [
     "liquid",
@@ -37,21 +37,21 @@
     "Sub-pixel cursor velocity tracking with dual-mode idle and active damping physics",
     "Automatic CSS object-fit calculation preserving aspect-ratio cover and contain cropping",
     "Teleported 3D plane synchronization maintaining pixel-perfect DOM alignment on scroll and resize",
-    "Support for both static high-res images and animated video textures with fallback decoding"
+    "Supports images and videos (videos default to autoplay, muted, loop and playsInline)"
   ],
   "anatomy": [
-    "<div> (Responsive Media Container: handles DOM bounding rect and pointer event tracking)",
+    "<div> (WebglProvider wrapper, position: relative, hosts the canvas when no provider exists)",
     "<img> / <video> (Native Media Elements: sets aspect ratio, sizing flow, and accessible fallback)",
     "<Canvas> (React Three Fiber Canvas: manages WebGL viewport, frame synchronization, and render loop)",
     "<shaderMaterial> (Custom GLSL Displacement Shader: computes trigonometric UV deflection from FBO)"
   ],
   "physics": {
     "engine": "Three.js GLSL Fragment Shader & Offscreen FBO",
-    "description": "Multi-sprite particle pooling rendered to an offscreen floating-point buffer that calculates directional wave gradients based on cursor velocity vectors.",
+    "description": "Up to 100 brush sprites are rendered additively into an offscreen half-float buffer. The shader offsets UVs in a direction derived from the buffer value, scaled by damped cursor speed.",
     "parameters": [
       {
         "label": "Rotation Speed",
-        "value": "0.1 rad/sec"
+        "value": "0.2 rad/sec"
       },
       {
         "label": "Initial Opacity",
@@ -68,63 +68,87 @@
     ]
   },
   "accessibility": {
-    "aria": "Maintains native semantic <img> or <video> elements with complete alt and title accessibility attributes in the DOM.",
+    "aria": "Renders a native <img> with alt text, or a native <video> (pass aria-label yourself). The DOM element stays in place at opacity 0 under the canvas.",
     "keyboard": [
       {
-        "key": "Tab",
-        "description": "Standard focus navigation through interactive elements"
+        "key": "None",
+        "description": "Not interactive. The effect is pointer-only."
       }
     ],
-    "reducedMotion": "Supports webglEnabled={false} fallback to render the pristine un-distorted media directly."
+    "reducedMotion": "With prefers-reduced-motion, the ripple effect is disabled and the media renders undistorted. Set webglEnabled={false} to turn the effect off explicitly."
   },
   "props": [
     {
+      "name": "rippleMap",
+      "type": "Texture",
+      "description": "Custom three.js brush texture for the ripples. Defaults to the built-in brush."
+    },
+    {
       "name": "src",
       "type": "string",
-      "description": "Source path or URL of the image or video texture to displace."
+      "description": "Source path or URL of the image or video texture to displace.",
+      "required": true
     },
     {
       "name": "alt",
       "type": "string",
-      "description": "Accessible descriptive text for the image element."
+      "description": "Alternative text for the image. Required when type is \"image\"."
+    },
+    {
+      "name": "containerClassName",
+      "type": "string",
+      "description": "Classes for the WebGL provider wrapper created when LiquidMedia is used without a WebglProvider."
     },
     {
       "name": "type",
-      "type": "'image' | 'video'",
+      "type": "\"image\" | \"video\"",
       "description": "Media type discriminator for choosing image or video texture pipeline.",
-      "default": "'image'"
+      "default": "'image'",
+      "defaultValue": "\"image\""
     },
     {
       "name": "intensity",
       "type": "number",
       "description": "Strength of the liquid displacement distortion waves.",
-      "default": "0.2"
+      "default": "0.2",
+      "defaultValue": "0.2"
     },
     {
       "name": "radius",
       "type": "number",
       "description": "Radius of the ripple splats relative to viewport dimensions.",
-      "default": "12"
+      "default": "12",
+      "defaultValue": "12"
     },
     {
       "name": "expandRate",
       "type": "number",
       "description": "Rate at which ripple rings expand outward over time.",
-      "default": "11"
+      "default": "11",
+      "defaultValue": "11"
     },
     {
       "name": "decayRate",
       "type": "number",
       "description": "Exponential fade decay rate of active ripples.",
-      "default": "3"
+      "default": "3",
+      "defaultValue": "3"
+    },
+    {
+      "name": "segments",
+      "type": "number",
+      "defaultValue": "1",
+      "description": "Plane mesh subdivisions used for the media quad."
     },
     {
       "name": "webglEnabled",
       "type": "boolean",
       "description": "Toggle to enable WebGL shader displacement or fallback to native DOM media.",
-      "default": "true"
+      "default": "true",
+      "defaultValue": "true"
     }
   ],
+  "usage": "import { LiquidMedia } from \"@/components/ui/liquid-media\";\n\nexport function LiquidMediaDemo() {\n  return (\n    <div className=\"relative aspect-video w-full\">\n      <LiquidMedia\n        src=\"/images/portrait.jpg\"\n        alt=\"Editorial portrait\"\n        className=\"h-full w-full object-cover\"\n      />\n    </div>\n  );\n}",
   "files": [
     {
       "name": "liquid-media.tsx",

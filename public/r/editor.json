@@ -3,7 +3,7 @@
   "name": "editor",
   "type": "registry:ui",
   "title": "Selection AI Editor",
-  "description": "Contextual floating AI toolbar and formatting bar that anchors seamlessly to text selections with multi-stage LLM reasoning, streaming, and inline editing.",
+  "description": "Contextual floating AI toolbar and formatting bar that anchors to text selections, with simulated multi-stage reasoning, word-by-word answer reveal and inline editing.",
   "dependencies": [
     "motion",
     "lucide-react",

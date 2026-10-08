@@ -1,8 +1,8 @@
 {
   "slug": "dither",
   "name": "Dither",
-  "description": "Hardware-accelerated procedural WebGL dithered grainient with fluid warping, noise, and animated grain.",
-  "summary": "A high-performance WebGL 2.0 procedural dithered gradient shader built on OGL. Generates fluid, organic distortion waves using multi-frequency warping and animated filmic grain with full color customization, rotation, and lighting modes.",
+  "description": "WebGL gradient shader with fluid warping, noise-driven rotation and optional animated grain.",
+  "summary": "A WebGL 2 gradient shader built on OGL. Generates organic distortion waves with sine-based domain warping and noise-driven rotation, blends three colors, and adds film grain that can be static or animated. Includes contrast, gamma, saturation, zoom and light-mode controls.",
   "category": "backgrounds-and-effects",
   "tags": [
     "dither",
@@ -25,15 +25,15 @@
   "supportsColor": true,
   "highlights": [
     "Lightweight OGL WebGL 2.0 renderer with full GPU pipeline lifecycle management",
-    "Procedural fbm noise and trigonometric fluid warp distortion",
-    "Sub-pixel animated grain and dither simulation with zero texture overhead",
+    "Gradient noise rotation and sine-wave domain warp",
+    "Hash-based film grain with no texture lookups (animated only when grainAnimated is true)",
     "Dynamic color blending between three customizable chromatic palette points",
-    "Light and dark adaptive mode with real-time uniform synchronization"
+    "Optional lightMode prop that remaps the output onto a white base"
   ],
   "anatomy": [
     "<div> (Responsive Canvas Container: manages ResizeObserver and IntersectionObserver lifecycle)",
     "<canvas> (OGL WebGL 2.0 Canvas: full-resolution viewport rendering pipeline)",
-    "Triangle (Full-screen quad geometry rendering vertex and fragment shaders)"
+    "Triangle (Single full-screen triangle geometry running the vertex and fragment shaders)"
   ],
   "physics": {
     "engine": "OGL WebGL 2.0 Fragment Shader",
@@ -41,26 +41,25 @@
     "parameters": [
       {
         "label": "Warp Frequency",
-        "value": "5.0 domain cycles"
+        "value": "5.0 (warpFrequency)"
       },
       {
         "label": "Noise Scale",
-        "value": "2.0 octave frequency"
+        "value": "2.0 (noise input multiplier)"
       },
       {
         "label": "Rotation Amount",
-        "value": "500.0 degrees"
+        "value": "500 (noise-driven rotation range, plus or minus 250 degrees)"
       },
       {
         "label": "Grain Scale",
-        "value": "2.0 sub-pixel resolution"
+        "value": "2.0 (grainScale)"
       }
     ]
   },
   "accessibility": {
-    "role": "presentation",
-    "aria": "aria-hidden='true' for purely decorative background shaders.",
-    "reducedMotion": "Pauses animation loops when prefers-reduced-motion is detected or when tab is inactive."
+    "aria": "The shader container is aria-hidden=\"true\"; it is a purely decorative background.",
+    "reducedMotion": "Pauses the animation loop when prefers-reduced-motion is set. The loop also stops while the canvas is offscreen or the tab is hidden."
   },
   "guidelines": {
     "recommended": [
@@ -69,7 +68,7 @@
       "Overlay layer for orbs, badges, or interactive creative canvases"
     ],
     "bestPractices": [
-      "Use subtle grainAmount (0.1 - 0.2) to maintain smooth performance and aesthetic balance",
+      "Use a subtle grainAmount (0.1 to 0.2) for a balanced texture",
       "Match color1 with your active theme primary accent for cohesive brand identity",
       "Ensure parent container has relative positioning and explicit dimensions"
     ]
@@ -94,10 +93,28 @@
       "description": "Darker base color for the background depth."
     },
     {
+      "name": "lightMode",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "Remaps the output onto a white base for light backgrounds."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "defaultValue": "\"\"",
+      "description": "Additional CSS classes for the canvas container."
+    },
+    {
       "name": "timeSpeed",
       "type": "number",
       "defaultValue": "0.25",
       "description": "Speed of the procedural fluid time evolution."
+    },
+    {
+      "name": "colorBalance",
+      "type": "number",
+      "defaultValue": "0",
+      "description": "Shifts the blend point between the three colors."
     },
     {
       "name": "warpStrength",
@@ -106,18 +123,103 @@
       "description": "Magnitude of domain warping displacement."
     },
     {
+      "name": "warpFrequency",
+      "type": "number",
+      "defaultValue": "5",
+      "description": "Frequency of the sine warp applied to the gradient."
+    },
+    {
+      "name": "warpSpeed",
+      "type": "number",
+      "defaultValue": "2",
+      "description": "Speed of the warp animation."
+    },
+    {
+      "name": "warpAmplitude",
+      "type": "number",
+      "defaultValue": "50",
+      "description": "Amplitude of the warp. Higher values give gentler waves."
+    },
+    {
+      "name": "blendAngle",
+      "type": "number",
+      "defaultValue": "0",
+      "description": "Rotation in degrees of the color blend axis."
+    },
+    {
+      "name": "blendSoftness",
+      "type": "number",
+      "defaultValue": "0.05",
+      "description": "Softness of the transitions between colors."
+    },
+    {
+      "name": "rotationAmount",
+      "type": "number",
+      "defaultValue": "500",
+      "description": "Strength of the noise-driven rotation of the gradient field."
+    },
+    {
+      "name": "noiseScale",
+      "type": "number",
+      "defaultValue": "2",
+      "description": "Scale of the noise that drives the rotation."
+    },
+    {
       "name": "grainAmount",
       "type": "number",
       "defaultValue": "0.1",
       "description": "Intensity of the simulated dither grain overlay."
     },
     {
+      "name": "grainScale",
+      "type": "number",
+      "defaultValue": "2",
+      "description": "Scale of the film grain pattern."
+    },
+    {
       "name": "grainAnimated",
       "type": "boolean",
       "defaultValue": "false",
       "description": "Whether the grain noise particles shift dynamically each frame."
+    },
+    {
+      "name": "contrast",
+      "type": "number",
+      "defaultValue": "1.5",
+      "description": "Output contrast."
+    },
+    {
+      "name": "gamma",
+      "type": "number",
+      "defaultValue": "1",
+      "description": "Output gamma correction."
+    },
+    {
+      "name": "saturation",
+      "type": "number",
+      "defaultValue": "1",
+      "description": "Output saturation. 0 renders grayscale."
+    },
+    {
+      "name": "centerX",
+      "type": "number",
+      "defaultValue": "0",
+      "description": "Horizontal offset of the gradient center."
+    },
+    {
+      "name": "centerY",
+      "type": "number",
+      "defaultValue": "0",
+      "description": "Vertical offset of the gradient center."
+    },
+    {
+      "name": "zoom",
+      "type": "number",
+      "defaultValue": "0.9",
+      "description": "Zoom level of the gradient field."
     }
   ],
+  "usage": "import { Dither } from \"@/components/ui/dither\";\n\nexport function DitherDemo() {\n  return (\n    <div className=\"relative h-80 w-full\">\n      <Dither color1=\"#FF9FFC\" color2=\"#5227FF\" color3=\"#B497CF\" />\n    </div>\n  );\n}",
   "files": [
     {
       "name": "dither.tsx",

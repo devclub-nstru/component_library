@@ -1,8 +1,8 @@
 {
   "slug": "sparkle-button",
   "name": "Sparkle Button",
-  "description": "Monochromatic AI generation button featuring staggered letter-wave luminescence, smooth fade-and-blur morphing, and gentle star flare pulsing.",
-  "summary": "An ultra-tactile generation trigger engineered with staggered character-level wave animations, buttery-smooth blur-and-fade text morphing between idle ('Generate') and active ('Generating') modes, tactile multi-layer black and white inset bevel lighting, and an ambient pulsing star flare. Features pure monochromatic aesthetics with zero harsh color distortion.",
+  "description": "Monochrome generate button with staggered per-character blur-in text, a width spring between labels, and a pulsing sparkle icon while loading.",
+  "summary": "A generation trigger with per-character blur-in text, a blur-and-fade swap between the idle label (\"Generate Magic\") and the loading label (\"Generating...\"), a width spring between them, and a sparkle icon that pulses while loading. Comes in default, outline and glass variants.",
   "category": "buttons",
   "tags": [
     "button",
@@ -27,9 +27,9 @@
   "interactive": true,
   "supportsColor": false,
   "highlights": [
-    "Character-by-character staggered wave shimmer animation with sequential delays",
-    "Liquid-smooth AnimatePresence fade-and-blur morphing between 'Generate' and 'Generating' states with layout size animation",
-    "Tri-star magic SVG with ambient flicker and non-rotating luminescent pulse when generating",
+    "Staggered per-character blur-in when the label changes",
+    "Old label exits with blur and fade over dissolveDuration while the width springs (stiffness 350, damping 28, mass 0.8) to the new label",
+    "Sparkle icon pulses (scale 1 to 1.15 with a glow) on a 1.6s easeInOut loop while loading",
     "Monochromatic deep tactile bevel with multi-stop black and white composite inset shadows and upper specular reflection",
     "Three precision size scales (sm, default, lg) with automatic vector scaling",
     "Full keyboard focus ring and accessible ARIA state support"
@@ -39,50 +39,50 @@
     "<button> (Focus-visible tactile pill container with monochromatic inset bevel lighting)",
     "<motion.svg> (Pulsing tri-star magic sparkle vector with soft ambient glow)",
     "<AnimatePresence> (Handles seamless blur and fade crossfade between idle and active states)",
-    "<span> (Individual animated character glyph with staggered wave keyframe delays)"
+    "<span> (Individual character glyph with a staggered blur-in)"
   ],
   "physics": {
     "engine": "Motion Glyphs & Monochromatic Optics",
-    "description": "Hardware-accelerated sequential character wave animations combined with non-rotating vector pulsing and composite inset lighting.",
+    "description": "Staggered character blur-in, a width spring between labels, and a looping icon pulse while loading.",
     "parameters": [
       {
         "label": "Letter Delay",
-        "value": "80ms per character stagger"
+        "value": "40ms per segment (delay prop)"
       },
       {
-        "label": "Wave Cycle",
-        "value": "2200ms ease-in-out infinite loop"
+        "label": "Segment Blur-in",
+        "value": "350ms (stepDuration), blur 10px to 4px to 0px"
       },
       {
-        "label": "Star Flicker",
-        "value": "2000ms linear opacity respiration"
+        "label": "Loading Pulse",
+        "value": "1600ms easeInOut, infinite"
       },
       {
-        "label": "State Morph",
-        "value": "280ms cubic-bezier(0.16, 1, 0.3, 1) fade & blur"
+        "label": "Exit Dissolve",
+        "value": "200ms (dissolveDuration) cubic-bezier(0.16, 1, 0.3, 1)"
+      },
+      {
+        "label": "Width Spring",
+        "value": "stiffness: 350, damping: 28, mass: 0.8"
       },
       {
         "label": "Tactile Compression",
-        "value": "scale-[0.98] on active press"
-      },
-      {
-        "label": "Shadow Optics",
-        "value": "Multi-tier black and white specular insets"
+        "value": "whileTap scale 0.98"
       }
     ]
   },
   "accessibility": {
     "role": "button",
-    "aria": "Inherits native button attributes, with automatic aria-busy reflection during active generating state.",
-    "reducedMotion": "Suppresses continuous letter wave and star flicker loops when prefers-reduced-motion is active.",
+    "aria": "A native button. aria-busy is true while isLoading is set; the decorative sparkle layers are aria-hidden.",
+    "reducedMotion": "With prefers-reduced-motion, the per-character blur-in, the loading pulse and the width spring are skipped.",
     "keyboard": [
       {
         "key": "Tab",
-        "description": "Focus button with high-contrast dual ring outline."
+        "description": "Focus the button."
       },
       {
         "key": "Enter / Space",
-        "description": "Toggle between Generate and Generating states with smooth morph."
+        "description": "Activate. Uncontrolled: toggles the loading state. Controlled: calls onLoadingChange."
       }
     ]
   },
@@ -95,7 +95,7 @@
     "bestPractices": [
       "Pair with real backend generation callbacks via loading and onLoadingChange props",
       "Keep the monochromatic palette intact for clean developer and dark-mode aesthetics",
-      "Use AnimatePresence mode='wait' for seamless crossfading without abrupt jumps"
+      "Keep text and activeText short so the width spring stays tight"
     ]
   },
   "props": [
@@ -104,6 +104,12 @@
       "type": "string",
       "defaultValue": "\"Generate Magic\"",
       "description": "Idle label rendered with BlurText staggered reveal animation."
+    },
+    {
+      "name": "variant",
+      "type": "\"default\" | \"outline\" | \"glass\"",
+      "defaultValue": "\"default\"",
+      "description": "Surface style of the button."
     },
     {
       "name": "activeText",
@@ -166,6 +172,11 @@
       "description": "Button dimensions, font sizes, and icon scaling."
     },
     {
+      "name": "icon",
+      "type": "ReactNode",
+      "description": "Custom icon. Replaces the default sparkle icon."
+    },
+    {
       "name": "onLoadingChange",
       "type": "(loading: boolean) => void",
       "defaultValue": "undefined",
@@ -178,6 +189,7 @@
       "description": "Additional CSS classes to override dimensions or margins."
     }
   ],
+  "usage": "\"use client\";\n\nimport { useState } from \"react\";\nimport { SparkleButton } from \"@/components/ui/sparkle-button\";\n\nexport function SparkleButtonDemo() {\n  const [loading, setLoading] = useState(false);\n\n  return (\n    <SparkleButton\n      text=\"Generate\"\n      activeText=\"Generating...\"\n      loading={loading}\n      onLoadingChange={setLoading}\n    />\n  );\n}",
   "files": [
     {
       "name": "sparkle-button.tsx",

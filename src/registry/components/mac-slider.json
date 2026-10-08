@@ -34,7 +34,7 @@
     "Three size variants (sm, md, lg) and three glass materials (liquid, frosted, clear)",
     "Seven color themes including macOS System Blue, Emerald, Violet, Amber, Rose, Cyan, and Graphite",
     "Full keyboard accessibility with Arrow keys, PageUp/Down, Home, End, and ARIA slider semantics",
-    "Live interactive parameter sliders driven by MotionValues with zero React re-render overhead"
+    "Optical props (specularOpacity, specularSaturation, refractionLevel, blurLevel) are synced into MotionValues without re-rendering"
   ],
   "anatomy": [
     "<motion.div> (Track shell with role=\"slider\", ARIA value attributes, and focus ring)",
@@ -44,7 +44,7 @@
   ],
   "physics": {
     "engine": "Harmonic Damped Spring Oscillator & SVG Refraction Shader",
-    "description": "Analytical spring integration driving scale expansion, backdrop opacity, and track seek animations, coupled with GPU-accelerated displacement mapping.",
+    "description": "Spring-driven thumb scale, backdrop opacity and track seek, coupled with an SVG displacement filter.",
     "parameters": [
       {
         "label": "Rest Scale",
@@ -79,7 +79,7 @@
   "accessibility": {
     "role": "slider",
     "aria": "Standard role=\"slider\" with aria-valuenow, aria-valuemin, aria-valuemax, and focus-visible ring.",
-    "reducedMotion": "Instant state transitions and graceful settling when motion is reduced.",
+    "reducedMotion": "With prefers-reduced-motion, thumb travel and scale changes apply instantly instead of springing.",
     "keyboard": [
       {
         "key": "ArrowLeft / ArrowDown",
@@ -107,8 +107,8 @@
     ],
     "bestPractices": [
       "Position over visually rich backgrounds to showcase the optical refraction effect",
-      "Ensure sufficient contrast between the track background and active progress fill",
-      "Provide explicit min, max, and onChange callbacks for controlled state integration"
+      "Ensure sufficient contrast between the track background and the active fill",
+      "Pass min, max, step, value and onChange for controlled use"
     ]
   },
   "props": [
@@ -203,12 +203,19 @@
       "description": "Disables interaction with the slider."
     },
     {
+      "name": "label",
+      "type": "string",
+      "defaultValue": "\"Value\"",
+      "description": "Accessible name announced by screen readers for the slider. Pass a name that describes what the slider controls."
+    },
+    {
       "name": "className",
       "type": "string",
       "defaultValue": "undefined",
       "description": "Additional CSS class names for outer container."
     }
   ],
+  "usage": "\"use client\";\n\nimport { useState } from \"react\";\nimport { MacSlider } from \"@/components/ui/mac-slider\";\n\nexport function MacSliderDemo() {\n  const [volume, setVolume] = useState(40);\n\n  return <MacSlider value={volume} onChange={setVolume} min={0} max={100} label=\"Volume\" />;\n}",
   "files": [
     {
       "name": "mac-slider.tsx",

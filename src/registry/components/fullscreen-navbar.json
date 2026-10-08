@@ -35,7 +35,7 @@
     "Physically damped spring response with adjustable stiffness and damping",
     "Featured component, connect links and primary action",
     "Full-screen scrollable mobile layout with a persistent header",
-    "Radix dialog focus management, Escape, scroll locking and reduced-motion fallback",
+    "Radix dialog focus management, Escape to close and reduced-motion fallback",
     "Profile-style moving hover highlight with spring-driven labels and arrows"
   ],
   "anatomy": [
@@ -256,5 +256,6 @@
       "type": "registry:ui",
       "target": "@ui/fullscreen-navbar.tsx"
     }
-  ]
+  ],
+  "usage": "import { FullscreenNavbar } from \"@/components/ui/fullscreen-navbar\";\n\nexport function FullscreenNavbarDemo() {\n  return <FullscreenNavbar brand=\"devclub\" actionLabel=\"Start building\" actionHref=\"/docs\" />;\n}"
 }
