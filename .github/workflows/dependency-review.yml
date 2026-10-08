@@ -1,23 +1,26 @@
-name: "Dependency Review"
+name: Dependency Review
 
 on:
   pull_request:
-    paths:
-      - "package.json"
-      - "package-lock.json"
 
 permissions:
   contents: read
 
 jobs:
   dependency-review:
-    name: Dependency Review
+    name: Dependency review
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Dependency Review
-        uses: actions/dependency-review-action@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          fail-on-severity: high
+          persist-credentials: false
+
+      - name: Review dependency changes
+        uses: actions/dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294 # v5.0.0
+        with:
+          fail-on-severity: moderate
+          deny-licenses: GPL-2.0-only, GPL-2.0-or-later, GPL-3.0-only, GPL-3.0-or-later, AGPL-3.0-only, AGPL-3.0-or-later, SSPL-1.0
+          show-openssf-scorecard: true
+          warn-on-openssf-scorecard-level: 3

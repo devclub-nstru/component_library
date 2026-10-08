@@ -42,7 +42,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "registry:sync": "node scripts/sync-registry.mjs"
+    "registry:sync": "node scripts/sync-registry.mjs",
+    "typecheck": "tsc --noEmit",
+    "check:lockfile": "node scripts/check-lockfile.mjs"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
