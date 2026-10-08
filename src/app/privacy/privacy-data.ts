@@ -66,8 +66,9 @@ export const PRIVACY_ITEMS: PrivacyItem[] = [
     id: 7,
     title: "7. Cookies and Similar Technologies",
     paragraphs: [
-      "Our website utilizes local storage and minimal session mechanisms strictly for essential functions, such as preserving your chosen dark theme preference, remembering dismissed notices, and maintaining playground UI state.",
-      "We do not deploy third-party advertising tracking cookies or cross-site profiling pixels.",
+      "Our website uses browser local storage for interface preferences, such as your chosen light or dark theme and your preferred code language and styling options.",
+      "Our website also loads Microsoft Clarity on every page. Clarity sets the following cookies when the page loads: _clck (first-party, stores the Clarity user ID and preferences, observed lifetime of about one year), _clsk (first-party, connects page views into a single Clarity session, observed lifetime of one day), and the third-party cookies MUID, CLID, MR, SM and ANONCHK on the clarity.ms and bing.com domains (observed lifetime of up to about thirteen months). Microsoft describes these cookies at https://learn.microsoft.com/en-us/clarity/setup-and-installation/clarity-cookies.",
+      "Vercel Web Analytics and Vercel Speed Insights do not set cookies. See Section 19 for details of both services and how to opt out.",
     ],
   },
   {
@@ -144,6 +145,7 @@ export const PRIVACY_ITEMS: PrivacyItem[] = [
     title: "17. Third-Party Services",
     paragraphs: [
       "Our services link to external platforms (GitHub, Twitter, npm, Radix UI). Third-party platforms operate under their own independent privacy notices, which you should review before engaging with them.",
+      "Some component previews load images and media directly from third-party hosts, including i.pinimg.com (Pinterest), images.unsplash.com (Unsplash), pbs.twimg.com and api.fxtwitter.com (X/Twitter content), and cdn.21st.dev. When your browser requests these files, the host receives your IP address, browser user agent and the referring page, as with any web request.",
     ],
   },
   {
@@ -157,7 +159,11 @@ export const PRIVACY_ITEMS: PrivacyItem[] = [
     id: 19,
     title: "19. Analytics",
     paragraphs: [
-      "Where aggregate performance analytics are gathered, they are configured to anonymize IP addresses and minimize data retention, focusing strictly on high-level page views, load times, and error rates.",
+      "We use the following analytics services on this website:",
+      "Microsoft Clarity (provided by Microsoft Corporation). Purpose: session replays, heatmaps and aggregated usage statistics that show how visitors use the site. Clarity records page views and interactions such as clicks, scrolling and mouse movement, together with device and browser information, and uses the cookies listed in Section 7 to link page views to a pseudonymous ID. Microsoft privacy statement: https://privacy.microsoft.com/privacystatement. Clarity documentation: https://learn.microsoft.com/en-us/clarity/.",
+      "Vercel Web Analytics (provided by Vercel Inc.). Purpose: aggregated page view statistics. According to Vercel, it does not use cookies; visitors are identified by a hash of the incoming request that is discarded after 24 hours, and each data point may include the page URL, referrer, approximate location, device type, operating system and browser. Details: https://vercel.com/docs/analytics/privacy-policy.",
+      "Vercel Speed Insights (provided by Vercel Inc.). Purpose: measuring page performance (Core Web Vitals). According to Vercel, it does not use cookies and records the page route and URL, network speed, browser, device type, operating system, country and performance metrics. Details: https://vercel.com/docs/speed-insights/privacy-policy. Vercel privacy notice: https://vercel.com/legal/privacy-policy.",
+      "How to opt out: you can block or delete cookies for clarity.ms, bing.com and this website in your browser settings, and you can block requests to clarity.ms and to the Vercel analytics scripts with a content blocker or privacy extension. Blocking these services does not affect your ability to browse the documentation or copy components.",
     ],
   },
   {
@@ -395,7 +401,7 @@ export const PRIVACY_ITEMS: PrivacyItem[] = [
     id: 53,
     title: "53. Do Not Track Signals",
     paragraphs: [
-      "Because our website does not engage in cross-site tracking or third-party behavioral profiling, your browsing privacy is respected by default.",
+      "Our website does not currently change its behavior in response to Do Not Track browser signals. The analytics services we use are described in Section 19, together with instructions for opting out.",
     ],
   },
   {
@@ -444,7 +450,7 @@ export const PRIVACY_ITEMS: PrivacyItem[] = [
     id: 60,
     title: "60. Subprocessors",
     paragraphs: [
-      "We utilize reputable cloud infrastructure providers (such as GitHub, Vercel, and Cloudflare) who adhere to strict data security and privacy compliance standards.",
+      "We utilize reputable cloud infrastructure providers (such as GitHub, Vercel, and Cloudflare) who adhere to strict data security and privacy compliance standards. Website analytics are provided by Microsoft (Clarity) and Vercel (Web Analytics and Speed Insights), as described in Section 19.",
     ],
   },
   {
@@ -473,6 +479,7 @@ export const PRIVACY_ITEMS: PrivacyItem[] = [
     title: "64. Privacy Policy Version History",
     paragraphs: [
       "Version 1.0 published on 23 September 2026. Comprehensive initial release covering developer documentation, registry endpoints, and client-side execution.",
+      "Version 1.1 published on 8 October 2026. Discloses the analytics services used on this website (Microsoft Clarity, Vercel Web Analytics and Vercel Speed Insights), the cookies Clarity sets, and third-party image hosts used by component previews.",
     ],
   },
   {
@@ -549,7 +556,7 @@ export const PRIVACY_ITEMS: PrivacyItem[] = [
     id: 75,
     title: "75. Browser Storage",
     paragraphs: [
-      "Our website utilizes browser local storage solely for non-sensitive UI preferences (such as dark mode theme selection). Do not store unencrypted secrets in browser storage.",
+      "Our website uses browser local storage for non-sensitive UI preferences (such as dark mode theme selection). Cookies set by Microsoft Clarity are described in Section 7. Do not store unencrypted secrets in browser storage.",
     ],
   },
   {

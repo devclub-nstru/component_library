@@ -5,7 +5,19 @@ import Link from "next/link";
 import Image from "next/image";
 import { GitHubLogoIcon, ExternalLinkIcon } from "@radix-ui/react-icons";
 import { SITE_CONFIG } from "@/lib/constants";
+import { COMPONENT_CATEGORIES } from "@/lib/component-categories";
 import { useIsDark } from "@/lib/use-is-dark";
+import type { ComponentCategory } from "@/types/component";
+
+const FOOTER_CATEGORY_IDS: ComponentCategory[] = [
+  "accordion",
+  "backgrounds-and-effects",
+  "ai-stuff",
+];
+
+const FOOTER_CATEGORIES = FOOTER_CATEGORY_IDS.flatMap((id) =>
+  COMPONENT_CATEGORIES.filter((category) => category.value === id),
+);
 
 export const Footer = () => {
   const isDark = useIsDark();
@@ -63,30 +75,16 @@ export const Footer = () => {
                   All Components
                 </Link>
               </li>
-              <li>
-                <Link
-                  href="/components?category=accordion"
-                  className="hover:text-foreground transition-colors"
-                >
-                  Accordions
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/components?category=scales"
-                  className="hover:text-foreground transition-colors"
-                >
-                  Scales & Borders
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/components?category=ai-stuff"
-                  className="hover:text-foreground transition-colors"
-                >
-                  AI Stuff & Shaders
-                </Link>
-              </li>
+              {FOOTER_CATEGORIES.map((category) => (
+                <li key={category.value}>
+                  <Link
+                    href={`/components?category=${category.value}`}
+                    className="hover:text-foreground transition-colors"
+                  >
+                    {category.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -117,6 +115,14 @@ export const Footer = () => {
                   className="hover:text-foreground transition-colors"
                 >
                   Theming
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/docs/typeset"
+                  className="hover:text-foreground transition-colors"
+                >
+                  Typeset
                 </Link>
               </li>
               <li>

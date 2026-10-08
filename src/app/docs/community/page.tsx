@@ -1,13 +1,13 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { SITE_CONFIG } from "@/lib/constants";
+import { createPageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata = createPageMetadata({
   title: "Community",
   description:
     "Find DevClub UI support, contribution guidance, community standards, and package updates.",
-  alternates: { canonical: "/docs/community" },
-};
+  path: "/docs/community",
+});
 
 const sections = [
   { id: "explore", title: "Explore the library" },

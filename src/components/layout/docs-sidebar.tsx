@@ -15,7 +15,17 @@ import {
 } from "@radix-ui/react-icons";
 import { cn } from "@/lib/utils";
 
-export function DocsSidebar() {
+export interface DocsSidebarCategory {
+  value: string;
+  label: string;
+  count: number;
+}
+
+interface DocsSidebarProps {
+  componentCategories: DocsSidebarCategory[];
+}
+
+export function DocsSidebar({ componentCategories }: DocsSidebarProps) {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -83,16 +93,34 @@ export function DocsSidebar() {
 
       <div className="pt-4 border-t border-border space-y-2">
         <h4 className="text-[11px] font-sans font-medium uppercase tracking-wider text-muted-foreground/80 px-2 select-none">
-          Library
+          Components
         </h4>
-        <Link
-          href="/components"
-          onClick={() => setIsOpen(false)}
-          className="flex items-center justify-between px-3 py-2 rounded-xl text-xs font-sans text-muted-foreground hover:bg-muted/60 hover:text-foreground transition-all"
-        >
-          <span>Browse Components</span>
-          <ExternalLinkIcon className="h-3.5 w-3.5 text-muted-foreground/60" />
-        </Link>
+        <ul className="space-y-1">
+          <li>
+            <Link
+              href="/components"
+              onClick={() => setIsOpen(false)}
+              className="flex min-h-11 items-center justify-between px-3 py-2 rounded-xl text-xs font-sans text-muted-foreground hover:bg-muted/60 hover:text-foreground transition-all"
+            >
+              <span>All components</span>
+              <ExternalLinkIcon className="h-3.5 w-3.5 text-muted-foreground/60" />
+            </Link>
+          </li>
+          {componentCategories.map((category) => (
+            <li key={category.value}>
+              <Link
+                href={`/components?category=${category.value}`}
+                onClick={() => setIsOpen(false)}
+                className="flex min-h-9 items-center justify-between px-3 py-1.5 rounded-xl text-xs font-sans text-muted-foreground hover:bg-muted/60 hover:text-foreground transition-all"
+              >
+                <span>{category.label}</span>
+                <span className="font-mono text-[10px] tabular-nums text-muted-foreground/80">
+                  {category.count}
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );
