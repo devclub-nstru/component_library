@@ -73,10 +73,10 @@ export const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="/components?category=scales"
+                  href="/components?category=backgrounds-and-effects"
                   className="hover:text-foreground transition-colors"
                 >
-                  Scales & Borders
+                  Backgrounds & Effects
                 </Link>
               </li>
               <li>
@@ -84,7 +84,7 @@ export const Footer = () => {
                   href="/components?category=ai-stuff"
                   className="hover:text-foreground transition-colors"
                 >
-                  AI Stuff & Shaders
+                  AI & Editors
                 </Link>
               </li>
             </ul>
@@ -117,6 +117,14 @@ export const Footer = () => {
                   className="hover:text-foreground transition-colors"
                 >
                   Theming
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/docs/typeset"
+                  className="hover:text-foreground transition-colors"
+                >
+                  Typeset
                 </Link>
               </li>
               <li>
