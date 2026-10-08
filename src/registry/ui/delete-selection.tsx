@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { Check, FileSpreadsheet, FileText, Minus, Trash2 } from "lucide-react";
-import { ConfirmMorph } from "@/registry/components/confirm-morph/confirm-morph";
+import { ConfirmMorph } from "./confirm-morph";
 import { cn } from "@/lib/utils";
 
 export const deleteFiles = async (ids: string[]) => {
