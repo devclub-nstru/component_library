@@ -157,6 +157,18 @@ void main() {
 }
 `;
 
+const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
+
+function subscribeReducedMotion(onChange: () => void) {
+  const media = window.matchMedia(REDUCED_MOTION_QUERY);
+  media.addEventListener("change", onChange);
+  return () => media.removeEventListener("change", onChange);
+}
+
+function getReducedMotion() {
+  return window.matchMedia(REDUCED_MOTION_QUERY).matches;
+}
+
 function hexToRgb(hex: string): [number, number, number] {
   let clean = hex.replace("#", "");
   if (clean.length === 3) {
@@ -228,7 +240,7 @@ export function AiOrb({
   text = "Generating",
   variant = "chromatic",
 }: AiOrbProps) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const canvasHostRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const mousePos = useRef({ x: -1000, y: -1000 });
 
@@ -243,12 +255,25 @@ export function AiOrb({
   );
 
   const letters = useMemo(() => text.split(""), [text]);
+  const reduceMotion = React.useSyncExternalStore(
+    subscribeReducedMotion,
+    getReducedMotion,
+    () => false,
+  );
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    const host = canvasHostRef.current;
+    if (!host) return;
+
+    const canvas = document.createElement("canvas");
+    canvas.className = "relative block h-full w-full";
+    host.appendChild(canvas);
 
     let gl: WebGLRenderingContext | null = null;
+    const releaseCanvas = () => {
+      gl?.getExtension("WEBGL_lose_context")?.loseContext();
+      canvas.remove();
+    };
     try {
       gl = canvas.getContext("webgl", {
         alpha: true,
@@ -257,11 +282,11 @@ export function AiOrb({
         preserveDrawingBuffer: false,
       });
     } catch {
-      return;
+      return releaseCanvas;
     }
 
     if (!gl) {
-      return;
+      return releaseCanvas;
     }
 
     const compileShader = (type: number, src: string) => {
@@ -280,18 +305,18 @@ export function AiOrb({
     const fs = compileShader(gl.FRAGMENT_SHADER, FRAGMENT_SHADER);
 
     if (!vs || !fs) {
-      return;
+      return releaseCanvas;
     }
 
     const program = gl.createProgram();
-    if (!program) return;
+    if (!program) return releaseCanvas;
     gl.attachShader(program, vs);
     gl.attachShader(program, fs);
     gl.linkProgram(program);
 
     if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
       gl.deleteProgram(program);
-      return;
+      return releaseCanvas;
     }
 
     gl.useProgram(program);
@@ -351,21 +376,36 @@ export function AiOrb({
 
       gl.drawArrays(gl.TRIANGLES, 0, 6);
 
-      animationFrameId = requestAnimationFrame(render);
+      if (!reduceMotion) {
+        animationFrameId = requestAnimationFrame(render);
+      }
     };
 
     animationFrameId = requestAnimationFrame(render);
 
+    const resizeObserver = reduceMotion ? new ResizeObserver(render) : null;
+    resizeObserver?.observe(host);
+
     return () => {
       cancelAnimationFrame(animationFrameId);
+      resizeObserver?.disconnect();
       if (gl) {
         gl.deleteBuffer(quadBuffer);
         gl.deleteProgram(program);
         gl.deleteShader(vs);
         gl.deleteShader(fs);
       }
+      releaseCanvas();
     };
-  }, [colorNum, dither, pixelSize, rgbPrimary, rgbSecondary, speed]);
+  }, [
+    colorNum,
+    dither,
+    pixelSize,
+    reduceMotion,
+    rgbPrimary,
+    rgbSecondary,
+    speed,
+  ]);
 
   const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!interactive) return;
@@ -410,21 +450,17 @@ export function AiOrb({
             background: `radial-gradient(circle at 35% 35%, ${primaryColor} 0%, ${secondaryColor} 55%, #050508 100%)`,
           }}
         />
-        <canvas
-          ref={canvasRef}
-          className="relative w-full h-full block"
-          style={{ width: "100%", height: "100%" }}
-        />
+        <div ref={canvasHostRef} className="relative h-full w-full" />
       </div>
 
       <motion.div
         className="absolute inset-0 rounded-full pointer-events-none z-10"
-        animate={{ rotate: 360 }}
-        transition={{
-          repeat: Infinity,
-          duration: 3.5 / speed,
-          ease: "linear",
-        }}
+        animate={{ rotate: reduceMotion ? 0 : 360 }}
+        transition={
+          reduceMotion
+            ? { duration: 0 }
+            : { repeat: Infinity, duration: 3.5 / speed, ease: "linear" }
+        }
         style={{
           boxShadow: `
             0 10px 22px 0 rgba(255, 255, 255, 0.85) inset,
@@ -437,12 +473,12 @@ export function AiOrb({
 
       <motion.div
         className="absolute inset-0.75 rounded-full pointer-events-none z-10 border border-white/20"
-        animate={{ rotate: -360 }}
-        transition={{
-          repeat: Infinity,
-          duration: 7 / speed,
-          ease: "linear",
-        }}
+        animate={{ rotate: reduceMotion ? 0 : -360 }}
+        transition={
+          reduceMotion
+            ? { duration: 0 }
+            : { repeat: Infinity, duration: 7 / speed, ease: "linear" }
+        }
         style={{
           boxShadow: `
             0 -8px 18px 0 rgba(255, 255, 255, 0.4) inset,
@@ -473,17 +509,25 @@ export function AiOrb({
             <motion.span
               key={`${char}-${index}`}
               initial={{ opacity: 0.35, y: 0, scale: 1 }}
-              animate={{
-                opacity: [0.35, 1, 0.65, 0.35],
-                scale: [1, 1.18, 1, 1],
-                y: [0, -2.5, 0, 0],
-              }}
-              transition={{
-                duration: 2.2 / speed,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: index * 0.1,
-              }}
+              animate={
+                reduceMotion
+                  ? { opacity: 0.85, scale: 1, y: 0 }
+                  : {
+                      opacity: [0.35, 1, 0.65, 0.35],
+                      scale: [1, 1.18, 1, 1],
+                      y: [0, -2.5, 0, 0],
+                    }
+              }
+              transition={
+                reduceMotion
+                  ? { duration: 0 }
+                  : {
+                      duration: 2.2 / speed,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay: index * 0.1,
+                    }
+              }
               className="inline-block font-sans font-light tracking-wide text-white text-sm drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]"
             >
               {char}

@@ -391,9 +391,10 @@ function Thumb({
         className={cn(
           "pointer-events-auto absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2",
           "w-5 h-5 rounded-full bg-white dark:bg-white shadow-[0_1px_4px_rgba(0,0,0,0.35),0_3px_10px_rgba(0,0,0,0.2)]",
+          "before:absolute before:-inset-2.5 before:rounded-full before:content-['']",
           "border border-black/10 dark:border-white/10 ring-offset-background",
           "cursor-grab active:cursor-grabbing",
-          "focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2",
+          "focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 dark:focus-visible:ring-white/70 focus-visible:ring-offset-2",
           "transition-shadow",
           lifted && "shadow-[0_2px_12px_rgba(0,0,0,0.45)] cursor-grabbing",
           disabled && "cursor-not-allowed opacity-50"

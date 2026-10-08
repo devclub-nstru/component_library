@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState, useRef, useCallback, memo } from "react";
+import React, { useState, useRef, useCallback, useId, memo } from "react";
 import {
   motion,
   AnimatePresence,
   useMotionValue,
+  useReducedMotion,
   useSpring,
 } from "motion/react";
 import { ChevronDown } from "lucide-react";
@@ -172,13 +173,13 @@ const TestimonialSpanItem = memo(function TestimonialSpanItem({
     <span
       onMouseEnter={() => onHover(item.id)}
       className={cn(
-        "inline cursor-pointer select-none transition-all duration-300 ease-out will-change-[opacity,filter,color]",
+        "inline cursor-pointer select-none transition-all duration-300 ease-out will-change-[opacity,filter,color] motion-reduce:transition-none motion-reduce:blur-none",
         stateClass,
       )}
     >
       <span
         className={cn(
-          "inline-flex items-center justify-center align-middle mr-2 sm:mr-2.5 w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 rounded-full overflow-hidden shrink-0 aspect-square select-none [clip-path:circle(50%_at_50%_50%)] transition-all duration-300 ease-out will-change-[transform,filter,opacity]",
+          "inline-flex items-center justify-center align-middle mr-2 sm:mr-2.5 w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 rounded-full overflow-hidden shrink-0 aspect-square select-none [clip-path:circle(50%_at_50%_50%)] transition-all duration-300 ease-out will-change-[transform,filter,opacity] motion-reduce:transition-none motion-reduce:blur-none motion-reduce:scale-100",
           avatarClass,
         )}
       >
@@ -213,6 +214,8 @@ export function FocusTestimonials({
   const [hoveredId, setHoveredId] = useState<number | null>(null);
   const [showMore, setShowMore] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const quotesId = useId();
+  const reduceMotion = useReducedMotion();
 
   const rawMouseX = useMotionValue(0);
   const rawMouseY = useMotionValue(0);
@@ -289,15 +292,18 @@ export function FocusTestimonials({
                 opacity: 0,
                 scale: 0.9,
                 y: 6,
-                transition: { duration: 0.15, ease: "easeOut" },
+                transition: reduceMotion
+                  ? { duration: 0 }
+                  : { duration: 0.15, ease: "easeOut" },
               }}
-              transition={{
-                duration: 0.2,
-                ease: [0.16, 1, 0.3, 1],
-              }}
+              transition={
+                reduceMotion
+                  ? { duration: 0 }
+                  : { duration: 0.2, ease: [0.16, 1, 0.3, 1] }
+              }
               style={{
-                x: smoothX,
-                y: smoothY,
+                x: reduceMotion ? rawMouseX : smoothX,
+                y: reduceMotion ? rawMouseY : smoothY,
                 translateX: 18,
                 translateY: -56,
               }}
@@ -306,10 +312,20 @@ export function FocusTestimonials({
               <AnimatePresence mode="wait" initial={false}>
                 <motion.div
                   key={activeItem.id}
-                  initial={{ opacity: 0, filter: "blur(3px)" }}
+                  initial={{
+                    opacity: 0,
+                    filter: reduceMotion ? "blur(0px)" : "blur(3px)",
+                  }}
                   animate={{ opacity: 1, filter: "blur(0px)" }}
-                  exit={{ opacity: 0, filter: "blur(3px)" }}
-                  transition={{ duration: 0.14, ease: "easeOut" }}
+                  exit={{
+                    opacity: 0,
+                    filter: reduceMotion ? "blur(0px)" : "blur(3px)",
+                  }}
+                  transition={
+                    reduceMotion
+                      ? { duration: 0 }
+                      : { duration: 0.14, ease: "easeOut" }
+                  }
                   className="flex items-center gap-2.5"
                 >
                   <div className="h-7 w-7 rounded-full overflow-hidden shrink-0 aspect-square [clip-path:circle(50%_at_50%_50%)]">
@@ -339,6 +355,7 @@ export function FocusTestimonials({
         </AnimatePresence>
 
         <div
+          id={quotesId}
           onMouseLeave={() => setHoveredId(null)}
           className="relative flex-1 text-xl sm:text-2xl md:text-3xl lg:text-[32px] font-normal leading-[160%] tracking-tight text-zinc-900 dark:text-zinc-100"
         >
@@ -358,7 +375,11 @@ export function FocusTestimonials({
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.35, ease: "easeOut" }}
+                transition={
+                  reduceMotion
+                    ? { duration: 0 }
+                    : { duration: 0.35, ease: "easeOut" }
+                }
                 className="inline"
               >
                 {" "}
@@ -379,8 +400,10 @@ export function FocusTestimonials({
         <div className="mt-8 sm:mt-10 flex justify-center">
           <button
             type="button"
+            aria-expanded={showMore}
+            aria-controls={quotesId}
             onClick={handleToggleShowMore}
-            className="group inline-flex items-center gap-1.5 text-xs sm:text-sm tracking-tight text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors active:scale-[0.98] cursor-pointer outline-none focus-visible:underline"
+            className="group inline-flex min-h-10 items-center gap-1.5 rounded-md px-3 text-xs sm:text-sm tracking-tight text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors active:scale-[0.98] cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 dark:focus-visible:ring-white/40 motion-reduce:active:scale-100"
           >
             <span>
               {showMore
@@ -390,7 +413,11 @@ export function FocusTestimonials({
 
             <motion.span
               animate={{ rotate: showMore ? 180 : 0 }}
-              transition={{ type: "spring", stiffness: 360, damping: 22 }}
+              transition={
+                reduceMotion
+                  ? { duration: 0 }
+                  : { type: "spring", stiffness: 360, damping: 22 }
+              }
               className="inline-flex"
             >
               <ChevronDown className="h-3.5 w-3.5 text-current" />
