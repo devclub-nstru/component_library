@@ -1,7 +1,12 @@
 "use client";
 
-import React, { useId, useRef, useState, useMemo } from "react";
-import { AnimatePresence, motion, type Transition } from "motion/react";
+import React, { useEffect, useId, useRef, useState, useMemo } from "react";
+import {
+  AnimatePresence,
+  motion,
+  useReducedMotion,
+  type Transition,
+} from "motion/react";
 import { cn } from "@/lib/utils";
 
 export type SpotlightFilterId = "apps" | "folders" | "layers" | "docs";
@@ -89,6 +94,11 @@ const microSpring: Transition = {
   damping: 26,
   mass: 0.8,
 };
+
+const instantTransition: Transition = { duration: 0 };
+
+const MAX_WIDTH = 480;
+const BAR_HEIGHT = 48;
 
 function AppsIcon() {
   return (
@@ -211,8 +221,11 @@ export const SpotlightSearch: React.FC<SpotlightSearchProps> = ({
   const generatedId = useId();
   const filterId = `spotlight-gooey-${generatedId.replace(/:/g, "")}`;
   const inputId = useId();
+  const listboxId = `${inputId}-results`;
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const reduceMotion = useReducedMotion();
+  const [width, setWidth] = useState(MAX_WIDTH);
 
   const [isHovered, setIsHovered] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
@@ -233,6 +246,24 @@ export const SpotlightSearch: React.FC<SpotlightSearchProps> = ({
 
   const isExpanded = isHovered || isFocused || query.length > 0;
 
+  const isCompact = width < MAX_WIDTH;
+  const buttonSize = isCompact ? 40 : BAR_HEIGHT;
+  const buttonGap = isCompact ? 6 : 10;
+  const buttonStep = buttonSize + buttonGap;
+  const buttonOffsetY = (BAR_HEIGHT - buttonSize) / 2;
+  const expandedWidth = width - FILTER_BUTTONS.length * buttonStep;
+  const layoutTransition = reduceMotion ? instantTransition : fluidSpring;
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+    const measure = () => setWidth(Math.min(MAX_WIDTH, container.clientWidth));
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, []);
+
   const filteredItems = useMemo(() => {
     return items.filter((item) => {
       const matchesFilter = !currentFilter || item.category === currentFilter;
@@ -249,6 +280,13 @@ export const SpotlightSearch: React.FC<SpotlightSearchProps> = ({
     filteredItems.length > 0
       ? Math.min(Math.max(0, highlightedIndex), filteredItems.length - 1)
       : 0;
+
+  const isResultsOpen =
+    showResults && isFocused && (query.trim().length > 0 || !!currentFilter);
+  const hasOptions = isResultsOpen && filteredItems.length > 0;
+  const activeOptionId = hasOptions
+    ? `${inputId}-option-${filteredItems[safeHighlightedIndex].id}`
+    : undefined;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
@@ -325,12 +363,16 @@ export const SpotlightSearch: React.FC<SpotlightSearchProps> = ({
         setIsHovered(false);
         setHoveredButtonId(null);
       }}
+      onFocus={() => setIsFocused(true)}
+      onBlur={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget)) setIsFocused(false);
+      }}
       className={cn(
         "relative flex flex-col items-center select-none",
         disabled && "opacity-50 pointer-events-none",
         className,
       )}
-      style={{ width: 480 }}
+      style={{ width: "100%", maxWidth: MAX_WIDTH }}
     >
       <svg
         width="0"
@@ -369,9 +411,9 @@ export const SpotlightSearch: React.FC<SpotlightSearchProps> = ({
           <motion.div
             initial={false}
             animate={{
-              width: isExpanded ? 248 : 480,
+              width: isExpanded ? expandedWidth : width,
             }}
-            transition={fluidSpring}
+            transition={layoutTransition}
             className="absolute left-0 top-0 h-12 rounded-full bg-zinc-200/90 dark:bg-[#1c1c1f]"
           />
 
@@ -380,17 +422,25 @@ export const SpotlightSearch: React.FC<SpotlightSearchProps> = ({
               key={`gooey-blob-${btn.id}`}
               initial={false}
               animate={{
-                x: isExpanded ? 258 + idx * 58 : 248,
+                x: isExpanded
+                  ? expandedWidth + buttonGap + idx * buttonStep
+                  : expandedWidth,
+                y: buttonOffsetY,
                 scale: isExpanded ? 1 : 0.3,
                 opacity: isExpanded ? 1 : 0,
               }}
-              transition={{
-                ...fluidSpring,
-                delay: isExpanded
-                  ? idx * 0.035
-                  : (FILTER_BUTTONS.length - 1 - idx) * 0.025,
-              }}
-              className="absolute left-0 top-0 w-12 h-12 rounded-full bg-zinc-200/90 dark:bg-[#1c1c1f]"
+              transition={
+                reduceMotion
+                  ? instantTransition
+                  : {
+                      ...fluidSpring,
+                      delay: isExpanded
+                        ? idx * 0.035
+                        : (FILTER_BUTTONS.length - 1 - idx) * 0.025,
+                    }
+              }
+              className="absolute left-0 top-0 rounded-full bg-zinc-200/90 dark:bg-[#1c1c1f]"
+              style={{ width: buttonSize, height: buttonSize }}
             />
           ))}
         </div>
@@ -398,16 +448,15 @@ export const SpotlightSearch: React.FC<SpotlightSearchProps> = ({
         <motion.div
           initial={false}
           animate={{
-            width: isExpanded ? 248 : 480,
+            width: isExpanded ? expandedWidth : width,
           }}
-          transition={fluidSpring}
+          transition={layoutTransition}
           onClick={() => inputRef.current?.focus()}
           className={cn(
             "absolute left-0 top-0 h-12 flex items-center px-4 rounded-full border transition-colors cursor-text select-none",
             "bg-white/90 backdrop-blur-2xl border-zinc-200 dark:bg-[#1c1c1f]/85 dark:border-white/12",
             "shadow-[0_8px_32px_rgba(0,0,0,0.08),inset_0_1px_1.5px_rgba(255,255,255,0.8)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.6),inset_0_1px_1.5px_rgba(255,255,255,0.12)]",
-            isFocused &&
-              "border-zinc-400 ring-1 ring-zinc-300 dark:border-white/30 dark:ring-white/20",
+            "focus-within:border-zinc-400 focus-within:ring-1 focus-within:ring-zinc-300 dark:focus-within:border-white/30 dark:focus-within:ring-white/20",
           )}
         >
           <span className="shrink-0 text-zinc-400 mr-2.5 flex items-center justify-center">
@@ -421,10 +470,14 @@ export const SpotlightSearch: React.FC<SpotlightSearchProps> = ({
               type="text"
               value={query}
               onChange={handleInputChange}
-              onFocus={() => setIsFocused(true)}
-              onBlur={() => setIsFocused(false)}
               onKeyDown={handleKeyDown}
               placeholder={dynamicPlaceholder}
+              role="combobox"
+              aria-label={placeholder}
+              aria-autocomplete="list"
+              aria-expanded={isResultsOpen}
+              aria-controls={hasOptions ? listboxId : undefined}
+              aria-activedescendant={activeOptionId}
               autoComplete="off"
               spellCheck="false"
               className="w-full bg-transparent text-[15px] font-normal text-zinc-900 placeholder:text-zinc-400 outline-none caret-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-400 dark:caret-white"
@@ -452,40 +505,46 @@ export const SpotlightSearch: React.FC<SpotlightSearchProps> = ({
           const IconComponent = btn.icon;
           const isActive = currentFilter === btn.id;
           const isHoveredBtn = hoveredButtonId === btn.id;
-          const targetX = 258 + idx * 58;
+          const targetX = expandedWidth + buttonGap + idx * buttonStep;
 
           return (
             <motion.div
               key={btn.id}
               initial={false}
               animate={{
-                x: isExpanded ? targetX : 248,
+                x: isExpanded ? targetX : expandedWidth,
+                y: buttonOffsetY,
                 scale: isExpanded ? 1 : 0.3,
                 opacity: isExpanded ? 1 : 0,
                 pointerEvents: isExpanded ? "auto" : "none",
               }}
-              transition={{
-                ...fluidSpring,
-                delay: isExpanded
-                  ? idx * 0.035
-                  : (FILTER_BUTTONS.length - 1 - idx) * 0.025,
-                opacity: {
-                  duration: 0.22,
-                  delay: isExpanded ? 0.05 + idx * 0.035 : 0,
-                },
-              }}
-              className="absolute left-0 top-0 w-12 h-12"
+              transition={
+                reduceMotion
+                  ? instantTransition
+                  : {
+                      ...fluidSpring,
+                      delay: isExpanded
+                        ? idx * 0.035
+                        : (FILTER_BUTTONS.length - 1 - idx) * 0.025,
+                      opacity: {
+                        duration: 0.22,
+                        delay: isExpanded ? 0.05 + idx * 0.035 : 0,
+                      },
+                    }
+              }
+              className="absolute left-0 top-0"
+              style={{ width: buttonSize, height: buttonSize }}
             >
               <motion.button
                 type="button"
-                whileHover={{ scale: 1.08 }}
-                whileTap={{ scale: 0.92 }}
+                whileHover={reduceMotion ? undefined : { scale: 1.08 }}
+                whileTap={reduceMotion ? undefined : { scale: 0.92 }}
                 transition={microSpring}
                 onMouseEnter={() => setHoveredButtonId(btn.id)}
                 onMouseLeave={() => setHoveredButtonId(null)}
                 onClick={() => handleFilterToggle(btn.id)}
                 className={cn(
-                  "w-full h-full rounded-full flex items-center justify-center cursor-pointer outline-none transition-colors",
+                  "w-full h-full rounded-full flex items-center justify-center cursor-pointer outline-none transition-colors focus-visible:ring-2 focus-visible:ring-zinc-400 dark:focus-visible:ring-white/40",
                   "bg-white/90 backdrop-blur-2xl border border-zinc-200 dark:bg-[#1c1c1f]/85 dark:border-white/12",
                   "shadow-[0_8px_32px_rgba(0,0,0,0.08),inset_0_1px_1.5px_rgba(255,255,255,0.8)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.6),inset_0_1px_1.5px_rgba(255,255,255,0.12)]",
                   isActive
@@ -493,6 +552,7 @@ export const SpotlightSearch: React.FC<SpotlightSearchProps> = ({
                     : "text-zinc-500 hover:text-zinc-900 hover:border-zinc-300 dark:text-zinc-400 dark:hover:text-white dark:hover:border-white/25",
                 )}
                 aria-label={btn.label}
+                aria-pressed={isActive}
                 title={btn.label}
               >
                 <IconComponent />
@@ -504,7 +564,7 @@ export const SpotlightSearch: React.FC<SpotlightSearchProps> = ({
                     initial={{ opacity: 0, y: 6, scale: 0.9 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 4, scale: 0.9 }}
-                    transition={microSpring}
+                    transition={reduceMotion ? instantTransition : microSpring}
                     className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-md bg-zinc-900/90 border border-zinc-700 text-[10px] text-zinc-100 font-medium whitespace-nowrap pointer-events-none z-50 shadow-lg dark:bg-black/90 dark:border-white/10 dark:text-zinc-200"
                   >
                     {btn.label}
@@ -517,70 +577,77 @@ export const SpotlightSearch: React.FC<SpotlightSearchProps> = ({
       </div>
 
       <AnimatePresence>
-        {showResults &&
-          isFocused &&
-          (query.trim().length > 0 || currentFilter) && (
-            <motion.div
-              initial={{ opacity: 0, y: -6, scale: 0.98 }}
-              animate={{ opacity: 1, y: 10, scale: 1 }}
-              exit={{ opacity: 0, y: -6, scale: 0.98 }}
-              transition={fluidSpring}
-              className={cn(
-                "absolute top-full inset-x-0 z-40 rounded-2xl border border-zinc-200 bg-white/95 backdrop-blur-3xl shadow-[0_24px_60px_rgba(0,0,0,0.1)] p-2 overflow-hidden flex flex-col gap-1 dark:border-white/12 dark:bg-[#141416]/95 dark:shadow-[0_24px_60px_rgba(0,0,0,0.85)]",
-              )}
-            >
-              {filteredItems.length === 0 ? (
-                <div className="py-6 text-center text-xs text-zinc-500 dark:text-zinc-500">
-                  No matching results found
-                </div>
-              ) : (
-                <div className="flex flex-col gap-0.5 max-h-64 overflow-y-auto pr-1">
-                  {filteredItems.map((item, idx) => {
-                    const isHighlighted = idx === safeHighlightedIndex;
-                    return (
-                      <button
-                        key={item.id}
-                        type="button"
-                        onMouseEnter={() => setHighlightedIndex(idx)}
-                        onClick={() => onSubmit?.(item.title, currentFilter)}
-                        className={cn(
-                          "relative flex items-center justify-between px-3 py-2 rounded-xl text-left transition-colors cursor-pointer w-full select-none",
-                          isHighlighted
-                            ? "bg-zinc-100 text-zinc-950 dark:bg-white/10 dark:text-white"
-                            : "text-zinc-700 hover:bg-zinc-50 dark:text-zinc-300 dark:hover:bg-white/5",
-                        )}
-                      >
-                        <div className="flex items-center gap-2.5 overflow-hidden">
-                          <span className="w-6 h-6 rounded-lg bg-zinc-100 border border-zinc-200 flex items-center justify-center shrink-0 text-zinc-500 dark:bg-white/5 dark:border-white/10 dark:text-zinc-400">
-                            {item.category === "apps" && <AppsIcon />}
-                            {item.category === "folders" && <FolderIcon />}
-                            {item.category === "layers" && <LayersIcon />}
-                            {item.category === "docs" && <DocsIcon />}
+        {isResultsOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -6, scale: 0.98 }}
+            animate={{ opacity: 1, y: 10, scale: 1 }}
+            exit={{ opacity: 0, y: -6, scale: 0.98 }}
+            transition={layoutTransition}
+            className={cn(
+              "absolute top-full inset-x-0 z-40 rounded-2xl border border-zinc-200 bg-white/95 backdrop-blur-3xl shadow-[0_24px_60px_rgba(0,0,0,0.1)] p-2 overflow-hidden flex flex-col gap-1 dark:border-white/12 dark:bg-[#141416]/95 dark:shadow-[0_24px_60px_rgba(0,0,0,0.85)]",
+            )}
+          >
+            {filteredItems.length === 0 ? (
+              <div className="py-6 text-center text-xs text-zinc-500 dark:text-zinc-500">
+                No matching results found
+              </div>
+            ) : (
+              <div
+                id={listboxId}
+                role="listbox"
+                aria-label={placeholder}
+                className="flex flex-col gap-0.5 max-h-64 overflow-y-auto pr-1"
+              >
+                {filteredItems.map((item, idx) => {
+                  const isHighlighted = idx === safeHighlightedIndex;
+                  return (
+                    <button
+                      key={item.id}
+                      id={`${inputId}-option-${item.id}`}
+                      type="button"
+                      role="option"
+                      aria-selected={isHighlighted}
+                      tabIndex={-1}
+                      onMouseEnter={() => setHighlightedIndex(idx)}
+                      onClick={() => onSubmit?.(item.title, currentFilter)}
+                      className={cn(
+                        "relative flex items-center justify-between px-3 py-2 rounded-xl text-left transition-colors cursor-pointer w-full select-none",
+                        isHighlighted
+                          ? "bg-zinc-100 text-zinc-950 dark:bg-white/10 dark:text-white"
+                          : "text-zinc-700 hover:bg-zinc-50 dark:text-zinc-300 dark:hover:bg-white/5",
+                      )}
+                    >
+                      <div className="flex items-center gap-2.5 overflow-hidden">
+                        <span className="w-6 h-6 rounded-lg bg-zinc-100 border border-zinc-200 flex items-center justify-center shrink-0 text-zinc-500 dark:bg-white/5 dark:border-white/10 dark:text-zinc-400">
+                          {item.category === "apps" && <AppsIcon />}
+                          {item.category === "folders" && <FolderIcon />}
+                          {item.category === "layers" && <LayersIcon />}
+                          {item.category === "docs" && <DocsIcon />}
+                        </span>
+                        <div className="flex flex-col min-w-0">
+                          <span className="text-xs font-medium truncate text-zinc-900 dark:text-zinc-100">
+                            {item.title}
                           </span>
-                          <div className="flex flex-col min-w-0">
-                            <span className="text-xs font-medium truncate text-zinc-900 dark:text-zinc-100">
-                              {item.title}
+                          {item.subtitle && (
+                            <span className="text-[10px] text-zinc-500 dark:text-zinc-500 truncate">
+                              {item.subtitle}
                             </span>
-                            {item.subtitle && (
-                              <span className="text-[10px] text-zinc-500 dark:text-zinc-500 truncate">
-                                {item.subtitle}
-                              </span>
-                            )}
-                          </div>
+                          )}
                         </div>
+                      </div>
 
-                        {item.shortcut && (
-                          <span className="text-[10px] font-mono text-zinc-500 px-1.5 py-0.5 rounded bg-zinc-100 border border-zinc-200 shrink-0 ml-2 dark:bg-white/5 dark:border-white/5">
-                            {item.shortcut}
-                          </span>
-                        )}
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
-            </motion.div>
-          )}
+                      {item.shortcut && (
+                        <span className="text-[10px] font-mono text-zinc-500 px-1.5 py-0.5 rounded bg-zinc-100 border border-zinc-200 shrink-0 ml-2 dark:bg-white/5 dark:border-white/5">
+                          {item.shortcut}
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </motion.div>
+        )}
       </AnimatePresence>
     </div>
   );
