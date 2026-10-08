@@ -15,11 +15,12 @@
   ],
   "dependencies": [
     "sonner",
-    "next-themes",
-    "@radix-ui/react-slot",
-    "class-variance-authority",
     "clsx",
     "tailwind-merge"
+  ],
+  "registryDependencies": [
+    "button",
+    "sonner"
   ],
   "version": "1.0.0",
   "createdDate": "2026-09-22",
@@ -30,7 +31,7 @@
     "Physics-tuned blur dissolving entrance transitioning from 12px blur to crisp clarity",
     "Silky smooth vanishing exit animation dissolving into 14px blur and fading away",
     "Native Sonner stacking architecture supporting interactive action and undo callbacks",
-    "High-density glassmorphic styling with backdrop-blur-md and subtle border hairlines",
+    "backdrop-filter: blur(16px) with border hairlines",
     "First-class async promise handling with animated spinners and automatic state resolution"
   ],
   "anatomy": [
@@ -40,7 +41,7 @@
   ],
   "physics": {
     "engine": "GPU CSS Hardware-Accelerated Blur & Cubic Bezier",
-    "description": "Sub-pixel calibrated cubic-bezier(0.16, 1, 0.3, 1) transition curves synchronizing opacity, scale, and backdrop blur filters with zero layout reflows.",
+    "description": "Transitions transform, opacity and the filter blur of each toast.",
     "parameters": [
       {
         "label": "Entry Duration",
@@ -60,7 +61,7 @@
       },
       {
         "label": "Easing Curve",
-        "value": "cubic-bezier(0.16, 1, 0.3, 1)"
+        "value": "cubic-bezier(0.16, 1, 0.3, 1) on entry; ease on exit opacity and blur"
       },
       {
         "label": "Backdrop Filter",
@@ -69,9 +70,22 @@
     ]
   },
   "accessibility": {
-    "role": "status / alert",
-    "aria": "Uses ARIA live regions managed by Sonner for automatic screen-reader announcements of transient system alerts.",
-    "reducedMotion": "Automatically suppresses blur filters and switches to instantaneous 150ms opacity fades when prefers-reduced-motion is detected."
+    "aria": "Sonner renders a section with aria-live=\"polite\", so toasts are announced to screen readers.",
+    "reducedMotion": "With prefers-reduced-motion, the blur filter is removed and transitions are limited to a 150ms opacity fade.",
+    "keyboard": [
+      {
+        "key": "Alt + T",
+        "description": "Expand and focus the notifications region."
+      },
+      {
+        "key": "Escape",
+        "description": "Collapse the toast stack when focus is inside it."
+      },
+      {
+        "key": "Tab",
+        "description": "Move between toast action and close buttons."
+      }
+    ]
   },
   "guidelines": {
     "recommended": [
@@ -82,7 +96,8 @@
     "bestPractices": [
       "Render <Toaster /> once at the root level of your layout or modal boundary",
       "Keep toast descriptions concise (under 80 characters) for rapid scanning",
-      "Provide clear undo action handlers for destructive operations"
+      "Provide clear undo action handlers for destructive operations",
+      "The blur entry and exit transitions come from [data-sonner-toast] rules in the DevClub UI global CSS; copy them into your globals.css to match the demo"
     ]
   },
   "props": [
@@ -117,6 +132,7 @@
       "description": "Time in milliseconds before automatically dissolving and vanishing."
     }
   ],
+  "usage": "\"use client\";\n\nimport { Toaster, toast } from \"@/components/ui/toast\";\n\nexport function ToastDemo() {\n  return (\n    <>\n      <Toaster position=\"bottom-right\" />\n      <button type=\"button\" onClick={() => toast.success(\"Changes saved\")}>\n        Save\n      </button>\n    </>\n  );\n}",
   "files": [
     {
       "name": "sonner.tsx",
@@ -129,16 +145,16 @@
     {
       "name": "button.tsx",
       "path": "components/ui/button.tsx",
-      "code": "\"use client\";\n\nimport * as React from \"react\";\nimport { Slot } from \"@radix-ui/react-slot\";\nimport { cva, type VariantProps } from \"class-variance-authority\";\nimport { cn } from \"@/lib/utils\";\n\nconst buttonVariants = cva(\n  \"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-xs font-medium tracking-wide transition-all duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-400 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-3.5 [&_svg]:shrink-0 cursor-pointer select-none ease-[cubic-bezier(0.16,1,0.3,1)]\",\n  {\n    variants: {\n      variant: {\n        default:\n          \"bg-zinc-900 text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200 active:scale-[0.97] shadow-xs\",\n        destructive:\n          \"bg-red-500/90 text-white hover:bg-red-500 active:scale-[0.97] shadow-xs\",\n        outline:\n          \"border border-zinc-200 bg-white text-zinc-800 hover:border-zinc-300 hover:bg-zinc-100 hover:text-zinc-950 dark:border-white/15 dark:bg-zinc-900/60 dark:text-zinc-300 dark:hover:border-white/30 dark:hover:bg-zinc-800 dark:hover:text-white active:scale-[0.97]\",\n        secondary:\n          \"bg-zinc-100 text-zinc-900 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700 active:scale-[0.97]\",\n        ghost:\n          \"hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-white/10 dark:hover:text-white active:scale-[0.97]\",\n        link: \"text-zinc-900 dark:text-white underline-offset-4 hover:underline\",\n      },\n      size: {\n        default: \"h-9 px-4 py-2\",\n        sm: \"h-8 rounded-md px-3 text-xs\",\n        lg: \"h-10 rounded-lg px-6 text-sm\",\n        icon: \"h-9 w-9\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n      size: \"default\",\n    },\n  },\n);\n\nexport interface ButtonProps\n  extends\n    React.ButtonHTMLAttributes<HTMLButtonElement>,\n    VariantProps<typeof buttonVariants> {\n  asChild?: boolean;\n}\n\nconst Button = React.forwardRef<HTMLButtonElement, ButtonProps>(\n  ({ className, variant, size, asChild = false, ...props }, ref) => {\n    const Comp = asChild ? Slot : \"button\";\n    return (\n      <Comp\n        className={cn(buttonVariants({ variant, size, className }))}\n        ref={ref}\n        {...props}\n      />\n    );\n  },\n);\nButton.displayName = \"Button\";\n\nexport { Button, buttonVariants };\nexport default Button;\n",
-      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { Slot } from \"@radix-ui/react-slot\";\nimport { cva, type VariantProps } from \"class-variance-authority\";\nimport { cn } from \"@/lib/utils\";\n\nconst buttonVariants = cva(\n  \"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-xs font-medium tracking-wide transition-all duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-400 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-3.5 [&_svg]:shrink-0 cursor-pointer select-none ease-[cubic-bezier(0.16,1,0.3,1)]\",\n  {\n    variants: {\n      variant: {\n        default:\n          \"bg-zinc-900 text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200 active:scale-[0.97] shadow-xs\",\n        destructive:\n          \"bg-red-500/90 text-white hover:bg-red-500 active:scale-[0.97] shadow-xs\",\n        outline:\n          \"border border-zinc-200 bg-white text-zinc-800 hover:border-zinc-300 hover:bg-zinc-100 hover:text-zinc-950 dark:border-white/15 dark:bg-zinc-900/60 dark:text-zinc-300 dark:hover:border-white/30 dark:hover:bg-zinc-800 dark:hover:text-white active:scale-[0.97]\",\n        secondary:\n          \"bg-zinc-100 text-zinc-900 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700 active:scale-[0.97]\",\n        ghost:\n          \"hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-white/10 dark:hover:text-white active:scale-[0.97]\",\n        link: \"text-zinc-900 dark:text-white underline-offset-4 hover:underline\",\n      },\n      size: {\n        default: \"h-9 px-4 py-2\",\n        sm: \"h-8 rounded-md px-3 text-xs\",\n        lg: \"h-10 rounded-lg px-6 text-sm\",\n        icon: \"h-9 w-9\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n      size: \"default\",\n    },\n  },\n);\n\nexport interface ButtonProps\n  extends\n    React.ButtonHTMLAttributes<HTMLButtonElement>,\n    VariantProps<typeof buttonVariants> {\n  asChild?: boolean;\n}\n\nconst Button = React.forwardRef<HTMLButtonElement, ButtonProps>(\n  ({ className, variant, size, asChild = false, ...props }, ref) => {\n    const Comp = asChild ? Slot : \"button\";\n    return (\n      <Comp\n        className={cn(buttonVariants({ variant, size, className }))}\n        ref={ref}\n        {...props}\n      />\n    );\n  },\n);\nButton.displayName = \"Button\";\n\nexport { Button, buttonVariants };\nexport default Button;\n",
+      "code": "\"use client\";\n\nimport * as React from \"react\";\nimport { Slot } from \"@radix-ui/react-slot\";\nimport { cva, type VariantProps } from \"class-variance-authority\";\nimport { cn } from \"@/lib/utils\";\n\nconst buttonVariants = cva(\n  \"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-xs font-medium tracking-wide transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 dark:focus-visible:ring-white/60 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-3.5 [&_svg]:shrink-0 cursor-pointer select-none ease-[cubic-bezier(0.16,1,0.3,1)]\",\n  {\n    variants: {\n      variant: {\n        default:\n          \"bg-zinc-900 text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200 active:scale-[0.97] shadow-xs\",\n        destructive:\n          \"bg-red-500/90 text-white hover:bg-red-500 active:scale-[0.97] shadow-xs\",\n        outline:\n          \"border border-zinc-200 bg-white text-zinc-800 hover:border-zinc-300 hover:bg-zinc-100 hover:text-zinc-950 dark:border-white/15 dark:bg-zinc-900/60 dark:text-zinc-300 dark:hover:border-white/30 dark:hover:bg-zinc-800 dark:hover:text-white active:scale-[0.97]\",\n        secondary:\n          \"bg-zinc-100 text-zinc-900 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700 active:scale-[0.97]\",\n        ghost:\n          \"hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-white/10 dark:hover:text-white active:scale-[0.97]\",\n        link: \"text-zinc-900 dark:text-white underline-offset-4 hover:underline\",\n      },\n      size: {\n        default: \"h-9 px-4 py-2\",\n        sm: \"h-8 rounded-md px-3 text-xs\",\n        lg: \"h-10 rounded-lg px-6 text-sm\",\n        icon: \"h-9 w-9\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n      size: \"default\",\n    },\n  },\n);\n\nexport interface ButtonProps\n  extends\n    React.ButtonHTMLAttributes<HTMLButtonElement>,\n    VariantProps<typeof buttonVariants> {\n  asChild?: boolean;\n}\n\nconst Button = React.forwardRef<HTMLButtonElement, ButtonProps>(\n  ({ className, variant, size, asChild = false, ...props }, ref) => {\n    const Comp = asChild ? Slot : \"button\";\n    return (\n      <Comp\n        className={cn(buttonVariants({ variant, size, className }))}\n        ref={ref}\n        {...props}\n      />\n    );\n  },\n);\nButton.displayName = \"Button\";\n\nexport { Button, buttonVariants };\nexport default Button;\n",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { Slot } from \"@radix-ui/react-slot\";\nimport { cva, type VariantProps } from \"class-variance-authority\";\nimport { cn } from \"@/lib/utils\";\n\nconst buttonVariants = cva(\n  \"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-xs font-medium tracking-wide transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 dark:focus-visible:ring-white/60 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-3.5 [&_svg]:shrink-0 cursor-pointer select-none ease-[cubic-bezier(0.16,1,0.3,1)]\",\n  {\n    variants: {\n      variant: {\n        default:\n          \"bg-zinc-900 text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200 active:scale-[0.97] shadow-xs\",\n        destructive:\n          \"bg-red-500/90 text-white hover:bg-red-500 active:scale-[0.97] shadow-xs\",\n        outline:\n          \"border border-zinc-200 bg-white text-zinc-800 hover:border-zinc-300 hover:bg-zinc-100 hover:text-zinc-950 dark:border-white/15 dark:bg-zinc-900/60 dark:text-zinc-300 dark:hover:border-white/30 dark:hover:bg-zinc-800 dark:hover:text-white active:scale-[0.97]\",\n        secondary:\n          \"bg-zinc-100 text-zinc-900 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700 active:scale-[0.97]\",\n        ghost:\n          \"hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-white/10 dark:hover:text-white active:scale-[0.97]\",\n        link: \"text-zinc-900 dark:text-white underline-offset-4 hover:underline\",\n      },\n      size: {\n        default: \"h-9 px-4 py-2\",\n        sm: \"h-8 rounded-md px-3 text-xs\",\n        lg: \"h-10 rounded-lg px-6 text-sm\",\n        icon: \"h-9 w-9\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n      size: \"default\",\n    },\n  },\n);\n\nexport interface ButtonProps\n  extends\n    React.ButtonHTMLAttributes<HTMLButtonElement>,\n    VariantProps<typeof buttonVariants> {\n  asChild?: boolean;\n}\n\nconst Button = React.forwardRef<HTMLButtonElement, ButtonProps>(\n  ({ className, variant, size, asChild = false, ...props }, ref) => {\n    const Comp = asChild ? Slot : \"button\";\n    return (\n      <Comp\n        className={cn(buttonVariants({ variant, size, className }))}\n        ref={ref}\n        {...props}\n      />\n    );\n  },\n);\nButton.displayName = \"Button\";\n\nexport { Button, buttonVariants };\nexport default Button;\n",
       "type": "registry:ui",
       "target": "@ui/button.tsx"
     },
     {
       "name": "toast.tsx",
       "path": "registry/ui/toast.tsx",
-      "code": "\"use client\";\n\nimport React from \"react\";\nimport { toast } from \"sonner\";\nimport { Button } from \"@/components/ui/button\";\nimport { Toaster } from \"@/components/ui/sonner\";\n\nexport function ToasterDemo() {\n  return (\n    <div className=\"flex flex-col items-center justify-center gap-4 w-full select-none p-2\">\n      <Toaster />\n      <div className=\"flex flex-wrap items-center justify-center gap-2.5\">\n        <Button\n          variant=\"outline\"\n          onClick={() =>\n            toast(\"Event has been created\", {\n              description: \"Sunday, December 03, 2023 at 9:00 AM\",\n              action: {\n                label: \"Undo\",\n                onClick: () => console.log(\"Undo\"),\n              },\n            })\n          }\n        >\n          Default Toast\n        </Button>\n\n        <Button\n          variant=\"outline\"\n          onClick={() =>\n            toast.success(\"Success!\", {\n              description: \"Your action was completed successfully\",\n            })\n          }\n        >\n          Success Toast\n        </Button>\n\n        <Button\n          variant=\"outline\"\n          onClick={() =>\n            toast.error(\"Error!\", {\n              description: \"Something went wrong. Please try again.\",\n            })\n          }\n        >\n          Error Toast\n        </Button>\n\n        <Button\n          variant=\"outline\"\n          onClick={() =>\n            toast.promise(new Promise((resolve) => setTimeout(resolve, 2000)), {\n              loading: \"Loading...\",\n              success: \"Promise resolved\",\n              error: \"Promise rejected\",\n            })\n          }\n        >\n          Promise Toast\n        </Button>\n      </div>\n    </div>\n  );\n}\n\nexport { Toaster, toast };\nexport default ToasterDemo;\n",
-      "content": "\"use client\";\n\nimport React from \"react\";\nimport { toast } from \"sonner\";\nimport { Button } from \"@/components/ui/button\";\nimport { Toaster } from \"@/components/ui/sonner\";\n\nexport function ToasterDemo() {\n  return (\n    <div className=\"flex flex-col items-center justify-center gap-4 w-full select-none p-2\">\n      <Toaster />\n      <div className=\"flex flex-wrap items-center justify-center gap-2.5\">\n        <Button\n          variant=\"outline\"\n          onClick={() =>\n            toast(\"Event has been created\", {\n              description: \"Sunday, December 03, 2023 at 9:00 AM\",\n              action: {\n                label: \"Undo\",\n                onClick: () => console.log(\"Undo\"),\n              },\n            })\n          }\n        >\n          Default Toast\n        </Button>\n\n        <Button\n          variant=\"outline\"\n          onClick={() =>\n            toast.success(\"Success!\", {\n              description: \"Your action was completed successfully\",\n            })\n          }\n        >\n          Success Toast\n        </Button>\n\n        <Button\n          variant=\"outline\"\n          onClick={() =>\n            toast.error(\"Error!\", {\n              description: \"Something went wrong. Please try again.\",\n            })\n          }\n        >\n          Error Toast\n        </Button>\n\n        <Button\n          variant=\"outline\"\n          onClick={() =>\n            toast.promise(new Promise((resolve) => setTimeout(resolve, 2000)), {\n              loading: \"Loading...\",\n              success: \"Promise resolved\",\n              error: \"Promise rejected\",\n            })\n          }\n        >\n          Promise Toast\n        </Button>\n      </div>\n    </div>\n  );\n}\n\nexport { Toaster, toast };\nexport default ToasterDemo;\n",
+      "code": "\"use client\";\n\nimport { toast } from \"sonner\";\nimport { Button } from \"@/components/ui/button\";\nimport { Toaster } from \"@/components/ui/sonner\";\n\nexport function ToasterDemo() {\n  return (\n    <div className=\"flex flex-col items-center justify-center gap-4 w-full select-none p-2\">\n      <Toaster />\n      <div className=\"flex flex-wrap items-center justify-center gap-2.5\">\n        <Button\n          variant=\"outline\"\n          onClick={() =>\n            toast(\"Event has been created\", {\n              description: \"Sunday, December 03, 2023 at 9:00 AM\",\n              action: {\n                label: \"Undo\",\n                onClick: () => console.log(\"Undo\"),\n              },\n            })\n          }\n        >\n          Default Toast\n        </Button>\n\n        <Button\n          variant=\"outline\"\n          onClick={() =>\n            toast.success(\"Success!\", {\n              description: \"Your action was completed successfully\",\n            })\n          }\n        >\n          Success Toast\n        </Button>\n\n        <Button\n          variant=\"outline\"\n          onClick={() =>\n            toast.error(\"Error!\", {\n              description: \"Something went wrong. Please try again.\",\n            })\n          }\n        >\n          Error Toast\n        </Button>\n\n        <Button\n          variant=\"outline\"\n          onClick={() =>\n            toast.promise(new Promise((resolve) => setTimeout(resolve, 2000)), {\n              loading: \"Loading...\",\n              success: \"Promise resolved\",\n              error: \"Promise rejected\",\n            })\n          }\n        >\n          Promise Toast\n        </Button>\n      </div>\n    </div>\n  );\n}\n\nexport { Toaster, toast };\nexport default ToasterDemo;\n",
+      "content": "\"use client\";\n\nimport { toast } from \"sonner\";\nimport { Button } from \"@/components/ui/button\";\nimport { Toaster } from \"@/components/ui/sonner\";\n\nexport function ToasterDemo() {\n  return (\n    <div className=\"flex flex-col items-center justify-center gap-4 w-full select-none p-2\">\n      <Toaster />\n      <div className=\"flex flex-wrap items-center justify-center gap-2.5\">\n        <Button\n          variant=\"outline\"\n          onClick={() =>\n            toast(\"Event has been created\", {\n              description: \"Sunday, December 03, 2023 at 9:00 AM\",\n              action: {\n                label: \"Undo\",\n                onClick: () => console.log(\"Undo\"),\n              },\n            })\n          }\n        >\n          Default Toast\n        </Button>\n\n        <Button\n          variant=\"outline\"\n          onClick={() =>\n            toast.success(\"Success!\", {\n              description: \"Your action was completed successfully\",\n            })\n          }\n        >\n          Success Toast\n        </Button>\n\n        <Button\n          variant=\"outline\"\n          onClick={() =>\n            toast.error(\"Error!\", {\n              description: \"Something went wrong. Please try again.\",\n            })\n          }\n        >\n          Error Toast\n        </Button>\n\n        <Button\n          variant=\"outline\"\n          onClick={() =>\n            toast.promise(new Promise((resolve) => setTimeout(resolve, 2000)), {\n              loading: \"Loading...\",\n              success: \"Promise resolved\",\n              error: \"Promise rejected\",\n            })\n          }\n        >\n          Promise Toast\n        </Button>\n      </div>\n    </div>\n  );\n}\n\nexport { Toaster, toast };\nexport default ToasterDemo;\n",
       "type": "registry:ui",
       "target": "@ui/toast.tsx"
     }

@@ -75,8 +75,8 @@
     "aria": "The timer exposes a single formatted time label. Duplicate visual faces are hidden from assistive technology. Time ticks do not trigger live announcements; completion has a separate polite status.",
     "keyboard": [
       {
-        "key": "Tab / Enter / Space",
-        "description": "Use the studio controls and countdown pause, resume and restart buttons."
+        "key": "None",
+        "description": "The clock is not interactive and has no focusable elements."
       }
     ],
     "reducedMotion": "Respects prefers-reduced-motion and updates the time immediately without rotations or moving shadows."
@@ -104,7 +104,7 @@
     {
       "name": "duration",
       "type": "number",
-      "description": "Relative countdown duration in seconds, clamped to 0\u2013863999999. Changing it starts a new countdown.",
+      "description": "Relative countdown duration in seconds, clamped to 0–863999999. Changing it starts a new countdown.",
       "defaultValue": "3600"
     },
     {
@@ -179,43 +179,43 @@
     {
       "name": "flipDuration",
       "type": "number",
-      "description": "Total flip duration in seconds, clamped to 0.15\u20130.9 so each flip settles before the next second.",
+      "description": "Total flip duration in seconds, clamped to 0.15–0.9 so each flip settles before the next second.",
       "defaultValue": "0.65"
     },
     {
       "name": "bounce",
       "type": "number",
-      "description": "Small settling overshoot, clamped to 0\u20130.4.",
+      "description": "Small settling overshoot, clamped to 0–0.4.",
       "defaultValue": "0.12"
     },
     {
       "name": "shadowIntensity",
       "type": "number",
-      "description": "Maximum moving flap shadow opacity, clamped to 0\u20130.7.",
+      "description": "Maximum moving flap shadow opacity, clamped to 0–0.7.",
       "defaultValue": "0.28"
     },
     {
       "name": "perspective",
       "type": "number",
-      "description": "3D perspective distance in pixels, clamped to 250\u20132000.",
+      "description": "3D perspective distance in pixels, clamped to 250–2000.",
       "defaultValue": "900"
     },
     {
       "name": "cardSize",
       "type": "number",
-      "description": "Maximum panel width in pixels, clamped to 64\u2013600. Panels scale together to fit the container.",
+      "description": "Maximum panel width in pixels, clamped to 64–600. Panels scale together to fit the container.",
       "defaultValue": "280"
     },
     {
       "name": "gap",
       "type": "number",
-      "description": "Maximum spacing between panels in pixels, clamped to 0\u201348. Scales with the layout.",
+      "description": "Maximum spacing between panels in pixels, clamped to 0–48. Scales with the layout.",
       "defaultValue": "16"
     },
     {
       "name": "borderRadius",
       "type": "number",
-      "description": "Maximum corner radius in pixels, clamped to 0\u201340 and scaled with smaller panels.",
+      "description": "Maximum corner radius in pixels, clamped to 0–40 and scaled with smaller panels.",
       "defaultValue": "14"
     },
     {
@@ -268,6 +268,7 @@
       "description": "Called once when a countdown reaches zero, including when an absolute deadline is already past. Remount with a new key to restart an unchanged duration."
     }
   ],
+  "usage": "import { FlipClock } from \"@/components/ui/flip-clock\";\n\nexport function FlipClockDemo() {\n  return <FlipClock mode=\"countdown\" duration={300} showSeconds />;\n}",
   "files": [
     {
       "name": "flip-clock.tsx",

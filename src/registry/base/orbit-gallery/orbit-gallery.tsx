@@ -339,7 +339,7 @@ export function OrbitGallery({
           return;
         const scale = Math.max(0.32, width / 1600);
         const imageWidth = Math.max(30, size * scale);
-        buttons.forEach((button, index) => {
+        buttons.forEach((_button, index) => {
           const slot = slots[index];
           const direction = slot.ring % 2 ? -1 : 1;
           const angle =

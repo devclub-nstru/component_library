@@ -24,10 +24,10 @@
   "hidden": true,
   "highlights": [
     "Client-side pointer calculation with getBoundingClientRect() coordinate tracking",
-    "600px radial gradient spotlight with exponential 40% falloff curve",
+    "600px radial gradient spotlight that fades to transparent at 40%",
     "Instantaneous coordinate binding directly to CSS radial-gradient styles",
     "Smooth 300ms opacity transition during cursor boundary entry and departure",
-    "Backdrop blur integration (backdrop-blur-md) with semi-transparent zinc-950 surfaces"
+    "backdrop-blur-md over semi-transparent white (light) or zinc-950 (dark) surfaces"
   ],
   "anatomy": [
     "<div> (Relative rounded card wrapper with border containment and hover border brightening)",
@@ -44,7 +44,7 @@
       },
       {
         "label": "Decay Curve",
-        "value": "Radial transparent at 40%"
+        "value": "Linear stop, transparent at 40%"
       },
       {
         "label": "Fade Duration",
@@ -57,25 +57,16 @@
       {
         "label": "Backdrop Filter",
         "value": "12px blur-md"
-      },
-      {
-        "label": "Compositing",
-        "value": "GPU layer isolated"
       }
     ]
   },
   "accessibility": {
-    "role": "region",
-    "aria": "Accepts aria-labelledby or aria-describedby for container identification.",
-    "reducedMotion": "Radial gradient renders with static position or instant opacity when motion is reduced.",
+    "aria": "The root is a plain div with no role. Pass role, aria-labelledby or aria-describedby through props when the card needs a name.",
+    "reducedMotion": "No reduced-motion handling. The glow follows the pointer and fades over 300ms.",
     "keyboard": [
       {
         "key": "Tab",
-        "description": "Standard keyboard tab navigation passes cleanly to interactive child elements."
-      },
-      {
-        "key": "Enter / Space",
-        "description": "Triggers card onClick callback if interactive handler is assigned."
+        "description": "Moves focus to interactive children. The card itself is not focusable."
       }
     ]
   },
@@ -117,6 +108,7 @@
       "description": "Optional click handler for making the spotlight card act as an interactive clickable surface."
     }
   ],
+  "usage": "import { SpotlightCard } from \"@/components/ui/spotlight-card\";\n\nexport function SpotlightCardDemo() {\n  return (\n    <SpotlightCard className=\"p-6\">\n      <h3 className=\"text-lg font-semibold\">Spotlight Card</h3>\n      <p>Move the pointer over the card.</p>\n    </SpotlightCard>\n  );\n}",
   "files": [
     {
       "name": "spotlight-card.tsx",

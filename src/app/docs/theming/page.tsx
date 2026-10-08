@@ -1,11 +1,22 @@
 import React from "react";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { CodeBlock } from "@/components/showcase/code-block";
+import { createPageMetadata } from "@/lib/metadata";
+import { extractSourceBlocks } from "@/lib/source-blocks";
 
-export const metadata = {
+export const metadata = createPageMetadata({
   title: "Theming",
   description:
     "Monochromatic design tokens, CSS variables, and Tailwind CSS v4 theme integration.",
-};
+  path: "/docs/theming",
+});
+
+const THEME_SNIPPET = extractSourceBlocks(
+  readFileSync(join(process.cwd(), "src/app/globals.css"), "utf8"),
+  /^(?:@import "tailwindcss";|@custom-variant dark .*;|(?::root|\.dark|@theme inline) \{\n[\s\S]*?\n\})$/gm,
+  5,
+);
 
 const THEME_TOKENS = [
   {
@@ -44,6 +55,16 @@ const THEME_TOKENS = [
     usage: "High-precision edge highlights and rulers",
   },
   {
+    token: "--card",
+    value: "#ffffff / #0c0c0e",
+    usage: "Card surfaces, paired with --card-foreground for text",
+  },
+  {
+    token: "--primary",
+    value: "#18181b / #f4f4f5",
+    usage: "Solid emphasis fills, paired with --primary-foreground",
+  },
+  {
     token: "--panel",
     value: "#ffffff / #151517",
     usage: "Elevated dialogs, floating toolbars, and studios",
@@ -52,6 +73,26 @@ const THEME_TOKENS = [
     token: "--line",
     value: "rgba(0,0,0,0.08) / rgb(255,255,255,0.08)",
     usage: "Architectural blueprint and grid lines",
+  },
+  {
+    token: "--line-strong",
+    value: "rgba(0,0,0,0.14) / rgb(255,255,255,0.16)",
+    usage: "Stronger outlines and focus borders",
+  },
+  {
+    token: "--text",
+    value: "#09090b / #f2f2f3",
+    usage: "Text inside panels and inputs",
+  },
+  {
+    token: "--faint",
+    value: "#a1a1aa / #56565c",
+    usage: "Placeholders and faint hints",
+  },
+  {
+    token: "--ink",
+    value: "#ffffff / #0b0b0c",
+    usage: "Inverse text, the opposite of --text",
   },
 ];
 
@@ -109,33 +150,35 @@ export default function DocsThemingPage() {
           Tailwind CSS v4 Integration
         </h2>
         <p className="text-xs sm:text-[13px] text-muted-foreground font-light leading-relaxed">
-          Tailwind CSS v4 introduces native theme tokens and custom variants:
+          Declare the variables on <code className="text-foreground">:root</code>{" "}
+          and <code className="text-foreground">.dark</code>, then map them to
+          Tailwind colors in an <code className="text-foreground">@theme inline</code>{" "}
+          block. The mapping is what turns each variable into utilities such as{" "}
+          <code className="text-foreground">bg-background</code>,{" "}
+          <code className="text-foreground">text-muted-foreground</code> and{" "}
+          <code className="text-foreground">border-border</code>. Without it,
+          those classes are not generated.
         </p>
         <div className="rounded-2xl border border-border/80 bg-card/40 p-4 sm:p-5">
           <CodeBlock
             filename="src/app/globals.css"
             language="css"
-            code={`@import "tailwindcss";
-
-@custom-variant dark (&:where(.dark, .dark *));
-
-:root {
-  --background: #fdfdfd;
-  --foreground: #09090b;
-  --border: rgba(0, 0, 0, 0.12);
-  --muted: #f4f4f5;
-  --muted-foreground: #71717a;
-}
-
-.dark {
-  --background: #050505;
-  --foreground: #f4f4f5;
-  --border: rgba(255, 255, 255, 0.12);
-  --muted: #18181b;
-  --muted-foreground: #a1a1aa;
-}`}
+            code={THEME_SNIPPET}
           />
         </div>
+        <p className="text-xs sm:text-[13px] text-muted-foreground font-light leading-relaxed">
+          If your project already ran <code className="text-foreground">npx shadcn@latest init</code>,
+          keep its variables and add any DevClub tokens that are missing, such as{" "}
+          <code className="text-foreground">--border-subtle</code>,{" "}
+          <code className="text-foreground">--border-hairline</code>,{" "}
+          <code className="text-foreground">--panel</code>,{" "}
+          <code className="text-foreground">--line</code>,{" "}
+          <code className="text-foreground">--line-strong</code>,{" "}
+          <code className="text-foreground">--text</code>,{" "}
+          <code className="text-foreground">--faint</code> and{" "}
+          <code className="text-foreground">--ink</code>, with matching{" "}
+          <code className="text-foreground">--color-*</code> entries.
+        </p>
       </section>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

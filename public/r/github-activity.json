@@ -3,11 +3,14 @@
   "name": "github-activity",
   "type": "registry:ui",
   "title": "GitHub Activity",
-  "description": "A minimalist, glass-inspired contribution heatmap matrix with interactive hover feedback and activity tiers.",
+  "description": "A glass-style contribution heatmap with hover tooltips, three color variants and an activity legend.",
   "dependencies": [
     "clsx",
     "tailwind-merge",
     "motion"
+  ],
+  "registryDependencies": [
+    "utils"
   ],
   "files": [
     {

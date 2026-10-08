@@ -31,7 +31,7 @@
     "A responsive counter travels from left to right without clipping",
     "Milestone pauses and coordinated staggered panel motion",
     "Automatic sequence or externally controlled loading progress",
-    "Replay and motion controls in the component studio",
+    "Replay by remounting with a new key",
     "Scoped GSAP cleanup and reduced-motion support"
   ],
   "anatomy": [
@@ -139,6 +139,7 @@
       "description": "Called once after all panels finish revealing. Remount with a new key to replay."
     }
   ],
+  "usage": "import { Loader } from \"@/components/ui/loader\";\n\nexport function LoaderDemo() {\n  return (\n    <Loader className=\"h-[480px]\">\n      <h1>Content is ready</h1>\n    </Loader>\n  );\n}",
   "files": [
     {
       "name": "loader.tsx",

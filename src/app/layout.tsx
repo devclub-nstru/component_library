@@ -16,24 +16,9 @@ const poppins = Poppins({
 const gambetta = localFont({
   src: [
     {
-      path: "../../public/fonts/Gambetta-Light.otf",
-      weight: "300",
-      style: "normal",
-    },
-    {
-      path: "../../public/fonts/Gambetta-LightItalic.otf",
-      weight: "300",
-      style: "italic",
-    },
-    {
       path: "../../public/fonts/Gambetta-Regular.otf",
       weight: "400",
       style: "normal",
-    },
-    {
-      path: "../../public/fonts/Gambetta-Italic.otf",
-      weight: "400",
-      style: "italic",
     },
     {
       path: "../../public/fonts/Gambetta-Medium.otf",
@@ -41,42 +26,35 @@ const gambetta = localFont({
       style: "normal",
     },
     {
-      path: "../../public/fonts/Gambetta-MediumItalic.otf",
-      weight: "500",
-      style: "italic",
-    },
-    {
       path: "../../public/fonts/Gambetta-Semibold.otf",
       weight: "600",
       style: "normal",
-    },
-    {
-      path: "../../public/fonts/Gambetta-SemiboldItalic.otf",
-      weight: "600",
-      style: "italic",
-    },
-    {
-      path: "../../public/fonts/Gambetta-Bold.otf",
-      weight: "700",
-      style: "normal",
-    },
-    {
-      path: "../../public/fonts/Gambetta-BoldItalic.otf",
-      weight: "700",
-      style: "italic",
     },
   ],
   variable: "--font-gambetta",
   display: "swap",
 });
 
+const defaultTitle = `${SITE_CONFIG.name} — High Performance UI Components`;
+
 export const metadata: Metadata = {
   title: {
-    default: `${SITE_CONFIG.name} — High Performance UI Components`,
+    default: defaultTitle,
     template: `%s | ${SITE_CONFIG.name}`,
   },
   description: SITE_CONFIG.description,
   metadataBase: new URL(SITE_CONFIG.url),
+  openGraph: {
+    type: "website",
+    siteName: SITE_CONFIG.name,
+    title: defaultTitle,
+    description: SITE_CONFIG.description,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: defaultTitle,
+    description: SITE_CONFIG.description,
+  },
 };
 
 export default function RootLayout({

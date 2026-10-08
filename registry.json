@@ -13,6 +13,9 @@
         "tailwind-merge",
         "motion"
       ],
+      "registryDependencies": [
+        "utils"
+      ],
       "files": [
         {
           "path": "src/registry/ui/accordion.tsx",
@@ -29,6 +32,9 @@
       "dependencies": [
         "clsx",
         "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "utils"
       ],
       "files": [
         {
@@ -48,6 +54,10 @@
         "tailwind-merge",
         "motion"
       ],
+      "registryDependencies": [
+        "utils",
+        "https://ui.devclubxnst.online/r/dither.json"
+      ],
       "files": [
         {
           "path": "src/registry/ui/ai-orb.tsx",
@@ -66,6 +76,9 @@
         "tailwind-merge",
         "@radix-ui/react-icons"
       ],
+      "registryDependencies": [
+        "utils"
+      ],
       "files": [
         {
           "path": "src/registry/ui/animated-button.tsx",
@@ -78,11 +91,14 @@
       "name": "animated-counter",
       "type": "registry:ui",
       "title": "Animated Counter",
-      "description": "High-precision rolling drum counter with spring physics, acoustic feedback, and reactive typography.",
+      "description": "Rolling drum counter with spring physics, number grouping and prefix/suffix slots.",
       "dependencies": [
         "motion",
         "clsx",
         "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "utils"
       ],
       "files": [
         {
@@ -96,36 +112,21 @@
       "name": "ascii-hover-button",
       "type": "registry:ui",
       "title": "ASCII Hover Button",
-      "description": "Interactive button and segmented pill control featuring smooth color transitions and real-time ASCII cipher character scramble glitch on hover.",
+      "description": "Button with color transitions and an ASCII character scramble on hover.",
       "dependencies": [
         "gsap",
         "@gsap/react",
-        "motion",
         "clsx",
         "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "utils"
       ],
       "files": [
         {
           "path": "src/registry/ui/ascii-hover-button.tsx",
           "type": "registry:ui",
           "target": "@ui/ascii-hover-button.tsx"
-        }
-      ]
-    },
-    {
-      "name": "bento-grid",
-      "type": "registry:ui",
-      "title": "Bento Grid",
-      "description": "Responsive 3-column asymmetric layout grid for high-impact feature displays.",
-      "dependencies": [
-        "clsx",
-        "tailwind-merge"
-      ],
-      "files": [
-        {
-          "path": "src/registry/ui/bento-grid.tsx",
-          "type": "registry:ui",
-          "target": "@ui/bento-grid.tsx"
         }
       ]
     },
@@ -137,6 +138,9 @@
       "dependencies": [
         "clsx",
         "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "utils"
       ],
       "files": [
         {
@@ -156,6 +160,9 @@
         "tailwind-merge",
         "@radix-ui/react-icons"
       ],
+      "registryDependencies": [
+        "utils"
+      ],
       "files": [
         {
           "path": "src/registry/ui/code-block.tsx",
@@ -174,6 +181,9 @@
         "tailwind-merge",
         "motion",
         "lucide-react"
+      ],
+      "registryDependencies": [
+        "utils"
       ],
       "files": [
         {
@@ -200,16 +210,15 @@
         "clsx",
         "tailwind-merge"
       ],
+      "registryDependencies": [
+        "utils",
+        "https://ui.devclubxnst.online/r/animated-counter.json"
+      ],
       "files": [
         {
           "path": "src/registry/ui/cursor-trail-loader.tsx",
           "type": "registry:ui",
           "target": "@ui/cursor-trail-loader.tsx"
-        },
-        {
-          "path": "src/registry/ui/animated-counter.tsx",
-          "type": "registry:ui",
-          "target": "@ui/animated-counter.tsx"
         }
       ]
     },
@@ -225,16 +234,15 @@
         "clsx",
         "tailwind-merge"
       ],
+      "registryDependencies": [
+        "utils",
+        "https://ui.devclubxnst.online/r/ascii-hover-button.json"
+      ],
       "files": [
         {
           "path": "src/registry/ui/curtain-navbar.tsx",
           "type": "registry:ui",
           "target": "@ui/curtain-navbar.tsx"
-        },
-        {
-          "path": "src/registry/ui/ascii-hover-button.tsx",
-          "type": "registry:ui",
-          "target": "@ui/ascii-hover-button.tsx"
         }
       ]
     },
@@ -250,6 +258,9 @@
         "clsx",
         "tailwind-merge"
       ],
+      "registryDependencies": [
+        "utils"
+      ],
       "files": [
         {
           "path": "src/registry/ui/curved-navbar.tsx",
@@ -262,12 +273,15 @@
       "name": "date-range-picker",
       "type": "registry:ui",
       "title": "Date Range Picker",
-      "description": "Smooth physics-driven date range picker calendar featuring dual-month navigation, quick presets rail, gliding thumb springs, and rolling label animations.",
+      "description": "Date range picker calendar with dual-month navigation, a quick presets rail, range capsules and rolling label animations.",
       "dependencies": [
         "clsx",
         "tailwind-merge",
         "motion",
         "lucide-react"
+      ],
+      "registryDependencies": [
+        "utils"
       ],
       "files": [
         {
@@ -281,7 +295,7 @@
       "name": "dither",
       "type": "registry:ui",
       "title": "Dither",
-      "description": "Hardware-accelerated procedural WebGL dithered grainient with fluid warping, noise, and animated grain.",
+      "description": "WebGL gradient shader with fluid warping, noise-driven rotation and optional animated grain.",
       "dependencies": [
         "ogl"
       ],
@@ -303,6 +317,9 @@
         "tailwind-merge",
         "motion"
       ],
+      "registryDependencies": [
+        "utils"
+      ],
       "files": [
         {
           "path": "src/registry/ui/dotted-accordion.tsx",
@@ -315,18 +332,36 @@
       "name": "editor",
       "type": "registry:ui",
       "title": "Selection AI Editor",
-      "description": "Contextual floating AI toolbar and formatting bar that anchors seamlessly to text selections with multi-stage LLM reasoning, streaming, and inline editing.",
+      "description": "Contextual floating AI toolbar and formatting bar that anchors to text selections, with simulated multi-stage reasoning, word-by-word answer reveal and inline editing.",
       "dependencies": [
         "motion",
         "lucide-react",
         "clsx",
         "tailwind-merge"
       ],
+      "registryDependencies": [
+        "utils"
+      ],
       "files": [
         {
           "path": "src/registry/ui/editor.tsx",
           "type": "registry:ui",
           "target": "@ui/editor.tsx"
+        },
+        {
+          "path": "src/components/ui/editor-orb.tsx",
+          "type": "registry:ui",
+          "target": "@ui/editor-orb.tsx"
+        },
+        {
+          "path": "src/components/ui/streaming-text.tsx",
+          "type": "registry:ui",
+          "target": "@ui/streaming-text.tsx"
+        },
+        {
+          "path": "src/components/ui/text-shimmer.tsx",
+          "type": "registry:ui",
+          "target": "@ui/text-shimmer.tsx"
         }
       ]
     },
@@ -334,18 +369,25 @@
       "name": "file-dropzone",
       "type": "registry:ui",
       "title": "File Dropzone",
-      "description": "Interactive drag-and-drop file dropzone with magnetic cursor glow, fanned sheets choreography, and animated file lifecycle rows.",
+      "description": "Drag-and-drop file dropzone with a fanned sheets illustration, drag state styling and animated file lifecycle rows.",
       "dependencies": [
         "motion",
         "lucide-react",
         "clsx",
         "tailwind-merge"
       ],
+      "registryDependencies": [
+        "utils"
+      ],
       "files": [
         {
           "path": "src/registry/ui/file-dropzone.tsx",
           "type": "registry:ui",
           "target": "@ui/file-dropzone.tsx"
+        },
+        {
+          "path": "src/lib/motion-tokens.ts",
+          "type": "registry:lib"
         }
       ]
     },
@@ -359,6 +401,9 @@
         "tailwind-merge",
         "motion",
         "lucide-react"
+      ],
+      "registryDependencies": [
+        "utils"
       ],
       "files": [
         {
@@ -381,12 +426,11 @@
         "clsx",
         "tailwind-merge"
       ],
+      "registryDependencies": [
+        "utils",
+        "button"
+      ],
       "files": [
-        {
-          "path": "src/components/ui/button.tsx",
-          "type": "registry:ui",
-          "target": "@ui/button.tsx"
-        },
         {
           "path": "src/registry/ui/file-upload.tsx",
           "type": "registry:ui",
@@ -404,6 +448,9 @@
         "@gsap/react",
         "clsx",
         "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "utils"
       ],
       "files": [
         {
@@ -429,6 +476,9 @@
         "tailwind-merge",
         "lucide-react"
       ],
+      "registryDependencies": [
+        "utils"
+      ],
       "files": [
         {
           "path": "src/registry/ui/focus-testimonials.tsx",
@@ -450,6 +500,9 @@
         "clsx",
         "tailwind-merge"
       ],
+      "registryDependencies": [
+        "utils"
+      ],
       "files": [
         {
           "path": "src/registry/ui/fullscreen-navbar.tsx",
@@ -462,34 +515,20 @@
       "name": "github-activity",
       "type": "registry:ui",
       "title": "GitHub Activity",
-      "description": "A minimalist, glass-inspired contribution heatmap matrix with interactive hover feedback and activity tiers.",
+      "description": "A glass-style contribution heatmap with hover tooltips, three color variants and an activity legend.",
       "dependencies": [
         "clsx",
         "tailwind-merge",
         "motion"
+      ],
+      "registryDependencies": [
+        "utils"
       ],
       "files": [
         {
           "path": "src/registry/ui/github-activity.tsx",
           "type": "registry:ui",
           "target": "@ui/github-activity.tsx"
-        }
-      ]
-    },
-    {
-      "name": "glowing-badge",
-      "type": "registry:ui",
-      "title": "Glowing Badge",
-      "description": "Compact status and tag badge with glowing borders and pulsing indicator.",
-      "dependencies": [
-        "clsx",
-        "tailwind-merge"
-      ],
-      "files": [
-        {
-          "path": "src/registry/ui/glowing-badge.tsx",
-          "type": "registry:ui",
-          "target": "@ui/glowing-badge.tsx"
         }
       ]
     },
@@ -501,7 +540,11 @@
       "dependencies": [
         "clsx",
         "tailwind-merge",
-        "motion"
+        "motion",
+        "next"
+      ],
+      "registryDependencies": [
+        "utils"
       ],
       "files": [
         {
@@ -523,21 +566,15 @@
         "clsx",
         "tailwind-merge"
       ],
+      "registryDependencies": [
+        "https://ui.devclubxnst.online/r/cursor-trail-loader.json",
+        "https://ui.devclubxnst.online/r/animated-counter.json"
+      ],
       "files": [
         {
           "path": "src/registry/ui/grid-image-loader.tsx",
           "type": "registry:ui",
           "target": "@ui/grid-image-loader.tsx"
-        },
-        {
-          "path": "src/registry/ui/cursor-trail-loader.tsx",
-          "type": "registry:ui",
-          "target": "@ui/cursor-trail-loader.tsx"
-        },
-        {
-          "path": "src/registry/ui/animated-counter.tsx",
-          "type": "registry:ui",
-          "target": "@ui/animated-counter.tsx"
         }
       ]
     },
@@ -549,7 +586,11 @@
       "dependencies": [
         "clsx",
         "tailwind-merge",
-        "motion"
+        "motion",
+        "next"
+      ],
+      "registryDependencies": [
+        "utils"
       ],
       "files": [
         {
@@ -570,6 +611,9 @@
         "clsx",
         "tailwind-merge"
       ],
+      "registryDependencies": [
+        "utils"
+      ],
       "files": [
         {
           "path": "src/registry/ui/image-loader.tsx",
@@ -585,11 +629,16 @@
       "description": "Interactive WebGL fluid ripple distortion effect for images and videos with responsive cursor displacement.",
       "dependencies": [
         "three",
-        "@types/three",
         "@react-three/fiber",
         "@react-three/drei",
         "@react-three/postprocessing",
         "motion"
+      ],
+      "devDependencies": [
+        "@types/three"
+      ],
+      "registryDependencies": [
+        "utils"
       ],
       "files": [
         {
@@ -607,6 +656,9 @@
       "dependencies": [
         "clsx",
         "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "utils"
       ],
       "files": [
         {
@@ -627,6 +679,9 @@
         "clsx",
         "tailwind-merge"
       ],
+      "registryDependencies": [
+        "utils"
+      ],
       "files": [
         {
           "path": "src/registry/ui/loader.tsx",
@@ -644,6 +699,9 @@
         "clsx",
         "tailwind-merge",
         "motion"
+      ],
+      "registryDependencies": [
+        "utils"
       ],
       "files": [
         {
@@ -663,6 +721,9 @@
         "tailwind-merge",
         "motion"
       ],
+      "registryDependencies": [
+        "utils"
+      ],
       "files": [
         {
           "path": "src/registry/ui/mac-switch.tsx",
@@ -681,6 +742,9 @@
         "@gsap/react",
         "clsx",
         "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "utils"
       ],
       "files": [
         {
@@ -708,6 +772,9 @@
         "clsx",
         "tailwind-merge"
       ],
+      "registryDependencies": [
+        "utils"
+      ],
       "files": [
         {
           "path": "src/registry/ui/morph-invite.tsx",
@@ -726,6 +793,9 @@
         "tailwind-merge",
         "motion"
       ],
+      "registryDependencies": [
+        "utils"
+      ],
       "files": [
         {
           "path": "src/registry/ui/morph-search.tsx",
@@ -737,11 +807,14 @@
     {
       "name": "noise",
       "type": "registry:ui",
-      "title": "Noise",
+      "title": "Noise Background",
       "description": "High-performance procedural grain noise background with CRT static, film dust, vignette, and scanlines.",
       "dependencies": [
         "clsx",
         "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "utils"
       ],
       "files": [
         {
@@ -759,7 +832,11 @@
       "dependencies": [
         "clsx",
         "tailwind-merge",
-        "thinking-orbs"
+        "thinking-orbs",
+        "next"
+      ],
+      "registryDependencies": [
+        "utils"
       ],
       "files": [
         {
@@ -782,6 +859,9 @@
         "clsx",
         "tailwind-merge"
       ],
+      "registryDependencies": [
+        "utils"
+      ],
       "files": [
         {
           "path": "src/registry/base/orbit-gallery/orbit-gallery.tsx",
@@ -800,11 +880,37 @@
         "tailwind-merge",
         "motion"
       ],
+      "registryDependencies": [
+        "utils"
+      ],
       "files": [
         {
           "path": "src/registry/ui/otp-input.tsx",
           "type": "registry:ui",
           "target": "@ui/otp-input.tsx"
+        }
+      ]
+    },
+    {
+      "name": "parallax-strip-transition",
+      "type": "registry:ui",
+      "title": "Parallax Strip Transition",
+      "description": "Full-bleed image scenes with directional strip reveals, a soft parallax zoom, and a smoothly rolling numeric counter.",
+      "dependencies": [
+        "gsap",
+        "@gsap/react",
+        "lucide-react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/parallax-strip-transition.tsx",
+          "type": "registry:ui",
+          "target": "@ui/parallax-strip-transition.tsx"
         }
       ]
     },
@@ -819,6 +925,9 @@
         "gsap",
         "@gsap/react"
       ],
+      "registryDependencies": [
+        "utils"
+      ],
       "files": [
         {
           "path": "src/registry/ui/pixel-card.tsx",
@@ -830,11 +939,14 @@
     {
       "name": "profile-menu",
       "type": "registry:ui",
-      "title": "Profile Command Menu",
+      "title": "Profile Menu",
       "description": "Tactile profile pill command menu with cycling status ticker, keyboard navigation, theme switcher, and smooth gliding highlight.",
       "dependencies": [
         "clsx",
         "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "utils"
       ],
       "files": [
         {
@@ -857,6 +969,9 @@
         "clsx",
         "tailwind-merge"
       ],
+      "registryDependencies": [
+        "utils"
+      ],
       "files": [
         {
           "path": "src/registry/ui/project-reveal.tsx",
@@ -874,6 +989,9 @@
         "clsx",
         "tailwind-merge",
         "motion"
+      ],
+      "registryDependencies": [
+        "utils"
       ],
       "files": [
         {
@@ -896,6 +1014,17 @@
         "clsx",
         "tailwind-merge"
       ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "cssVars": {
+        "light": {
+          "line": "rgba(0, 0, 0, 0.08)"
+        },
+        "dark": {
+          "line": "rgb(255 255 255 / 0.08)"
+        }
+      },
       "files": [
         {
           "path": "src/registry/ui/reveal-sheet.tsx",
@@ -913,6 +1042,19 @@
         "clsx",
         "tailwind-merge"
       ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "cssVars": {
+        "light": {
+          "pattern-line": "rgba(0, 0, 0, 0.16)",
+          "pattern": "rgba(0, 0, 0, 0.12)"
+        },
+        "dark": {
+          "pattern-line": "rgba(255, 255, 255, 0.1)",
+          "pattern": "rgba(255, 255, 255, 0.08)"
+        }
+      },
       "files": [
         {
           "path": "src/registry/ui/scales.tsx",
@@ -933,6 +1075,9 @@
         "clsx",
         "tailwind-merge"
       ],
+      "registryDependencies": [
+        "utils"
+      ],
       "files": [
         {
           "path": "src/registry/ui/scrolling-cards.tsx",
@@ -949,9 +1094,34 @@
       "dependencies": [
         "clsx",
         "tailwind-merge",
-        "voice-glow",
-        "thinking-orbs"
+        "voice-glow@^0.2.1"
       ],
+      "registryDependencies": [
+        "https://ui.devclubxnst.online/r/orb.json"
+      ],
+      "cssVars": {
+        "theme": {
+          "color-line": "var(--line)",
+          "color-line-strong": "var(--line-strong)",
+          "color-panel": "var(--panel)",
+          "color-text": "var(--text)",
+          "color-faint": "var(--faint)"
+        },
+        "light": {
+          "line": "rgba(0, 0, 0, 0.08)",
+          "line-strong": "rgba(0, 0, 0, 0.14)",
+          "panel": "#ffffff",
+          "text": "#09090b",
+          "faint": "#a1a1aa"
+        },
+        "dark": {
+          "line": "rgb(255 255 255 / 0.08)",
+          "line-strong": "rgb(255 255 255 / 0.16)",
+          "panel": "#151517",
+          "text": "#f2f2f3",
+          "faint": "#56565c"
+        }
+      },
       "files": [
         {
           "path": "src/registry/ui/search-input.tsx",
@@ -969,13 +1139,17 @@
       "name": "segmented-progress",
       "type": "registry:ui",
       "title": "Segmented Progress",
-      "description": "Tactile segmented progress bar with real-time hover data inspection, dynamic wave proximity physics, and staggered GSAP fill animation.",
+      "description": "Metric card with segmented progress bars, hover value preview, a proximity wave and staggered GSAP fill.",
       "dependencies": [
         "clsx",
         "tailwind-merge",
         "gsap",
         "@gsap/react",
-        "lucide-react"
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "utils"
       ],
       "files": [
         {
@@ -994,6 +1168,9 @@
         "clsx",
         "tailwind-merge",
         "motion"
+      ],
+      "registryDependencies": [
+        "utils"
       ],
       "files": [
         {
@@ -1014,6 +1191,9 @@
         "motion",
         "@radix-ui/react-icons"
       ],
+      "registryDependencies": [
+        "utils"
+      ],
       "files": [
         {
           "path": "src/registry/ui/smooth-accordion.tsx",
@@ -1026,34 +1206,20 @@
       "name": "sparkle-button",
       "type": "registry:ui",
       "title": "Sparkle Button",
-      "description": "Monochromatic AI generation button featuring staggered letter-wave luminescence, smooth fade-and-blur morphing, and gentle star flare pulsing.",
+      "description": "Monochrome generate button with staggered per-character blur-in text, a width spring between labels, and a pulsing sparkle icon while loading.",
       "dependencies": [
         "clsx",
         "tailwind-merge",
         "motion"
+      ],
+      "registryDependencies": [
+        "utils"
       ],
       "files": [
         {
           "path": "src/registry/ui/sparkle-button.tsx",
           "type": "registry:ui",
           "target": "@ui/sparkle-button.tsx"
-        }
-      ]
-    },
-    {
-      "name": "spotlight-card",
-      "type": "registry:ui",
-      "title": "Spotlight Card",
-      "description": "Card container with cursor-following radial gradient glow effect.",
-      "dependencies": [
-        "clsx",
-        "tailwind-merge"
-      ],
-      "files": [
-        {
-          "path": "src/registry/ui/spotlight-card.tsx",
-          "type": "registry:ui",
-          "target": "@ui/spotlight-card.tsx"
         }
       ]
     },
@@ -1066,6 +1232,9 @@
         "clsx",
         "tailwind-merge",
         "motion"
+      ],
+      "registryDependencies": [
+        "utils"
       ],
       "files": [
         {
@@ -1084,6 +1253,9 @@
         "motion",
         "clsx",
         "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "utils"
       ],
       "files": [
         {
@@ -1106,16 +1278,15 @@
         "clsx",
         "tailwind-merge"
       ],
+      "registryDependencies": [
+        "utils",
+        "avatar"
+      ],
       "files": [
         {
           "path": "src/registry/ui/task-card.tsx",
           "type": "registry:ui",
           "target": "@ui/task-card.tsx"
-        },
-        {
-          "path": "src/components/ui/avatar.tsx",
-          "type": "registry:ui",
-          "target": "@ui/avatar.tsx"
         }
       ]
     },
@@ -1129,6 +1300,9 @@
         "clsx",
         "tailwind-merge"
       ],
+      "registryDependencies": [
+        "utils"
+      ],
       "files": [
         {
           "path": "src/registry/ui/task-list.tsx",
@@ -1141,11 +1315,14 @@
       "name": "theme-toggle",
       "type": "registry:ui",
       "title": "Theme Toggle",
-      "description": "View Transitions API powered theme toggle button with tactile obsidian candy styling, geometric clip-path ripples, and seamless mode synchronization.",
+      "description": "View Transitions API theme toggle with geometric clip-path ripples, optional obsidian candy styling, and mode synchronization.",
       "dependencies": [
         "lucide-react",
         "clsx",
         "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "utils"
       ],
       "files": [
         {
@@ -1162,23 +1339,14 @@
       "description": "Sonner-powered toast notifications featuring ultra-smooth blur dissolving entry and exit transitions.",
       "dependencies": [
         "sonner",
-        "next-themes",
-        "@radix-ui/react-slot",
-        "class-variance-authority",
         "clsx",
         "tailwind-merge"
       ],
+      "registryDependencies": [
+        "button",
+        "sonner"
+      ],
       "files": [
-        {
-          "path": "src/components/ui/sonner.tsx",
-          "type": "registry:ui",
-          "target": "@ui/sonner.tsx"
-        },
-        {
-          "path": "src/components/ui/button.tsx",
-          "type": "registry:ui",
-          "target": "@ui/button.tsx"
-        },
         {
           "path": "src/registry/ui/toast.tsx",
           "type": "registry:ui",
@@ -1189,12 +1357,15 @@
     {
       "name": "twitter-card",
       "type": "registry:ui",
-      "title": "Twitter Card",
+      "title": "Twitter(X) Card",
       "description": "Interactive Twitter (X) profile card component featuring magnetic 3D tilt, spring physics, and real-time public profile data fetching.",
       "dependencies": [
         "clsx",
         "tailwind-merge",
         "motion"
+      ],
+      "registryDependencies": [
+        "utils"
       ],
       "files": [
         {

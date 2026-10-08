@@ -1,6 +1,8 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { Suspense, useMemo, useState } from "react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { ComponentCard } from "@/components/showcase/component-card";
@@ -52,6 +54,7 @@ import { MatrixClockDemo } from "@/components/showcase/matrix-clock-demo";
 import OrbitGalleryDemo from "@/components/showcase/orbit-gallery-demo";
 import { ProjectReveal } from "@/registry/ui/project-reveal";
 import { PROJECT_REVEAL_DEMO_ITEMS } from "@/components/showcase/project-reveal-demo";
+import { ParallaxStripTransitionDemo } from "@/components/showcase/parallax-strip-transition-demo";
 import { ScrollingCardsDemo } from "@/components/showcase/scrolling-cards-demo";
 import { LoaderDemo } from "@/components/showcase/loader-demo";
 import { ImageLoaderDemo } from "@/components/showcase/image-loader-demo";
@@ -108,6 +111,96 @@ function CounterPreview() {
   );
 }
 
+type ComponentCategoryGroup = ReturnType<typeof getComponentCategories>[number];
+
+interface CategorySectionsProps {
+  categories: ComponentCategoryGroup[];
+  previewRenderers: Record<string, React.ReactNode>;
+  newReleaseSlugs: Set<string>;
+}
+
+function CategorySections({
+  categories,
+  previewRenderers,
+  newReleaseSlugs,
+}: CategorySectionsProps) {
+  return (
+    <div className="space-y-14 sm:space-y-16">
+      {categories.map((category) => (
+        <section
+          key={category.value}
+          aria-labelledby={`category-${category.value}`}
+        >
+          <div className="mb-6 border-b border-border pb-4">
+            <div className="flex items-center gap-3">
+              <h2
+                id={`category-${category.value}`}
+                className="font-serif text-xl font-medium tracking-tight text-foreground sm:text-2xl"
+              >
+                {category.label}
+              </h2>
+              <span className="rounded-md bg-muted px-2 py-0.5 font-mono text-xs tabular-nums text-muted-foreground">
+                {category.items.length}
+              </span>
+            </div>
+            <p className="mt-2 text-sm text-muted-foreground">
+              {category.description}
+            </p>
+          </div>
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {category.items.map((item) => (
+              <ComponentCard
+                key={item.slug}
+                component={item}
+                preview={previewRenderers[item.slug]}
+                badge={newReleaseSlugs.has(item.slug) ? "NEW" : ""}
+              />
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
+  );
+}
+
+function FilteredCategorySections({
+  categories,
+  ...sectionProps
+}: CategorySectionsProps) {
+  const categoryParam = useSearchParams().get("category");
+  const activeCategory = categories.find(
+    (category) => category.value === categoryParam,
+  );
+
+  if (!activeCategory) {
+    return <CategorySections categories={categories} {...sectionProps} />;
+  }
+
+  return (
+    <div className="space-y-8">
+      <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-muted/40 px-4 py-3 text-sm">
+        <p role="status" className="text-muted-foreground">
+          Showing{" "}
+          <span className="font-medium text-foreground">
+            {activeCategory.items.length}
+          </span>{" "}
+          {activeCategory.items.length === 1 ? "component" : "components"} in{" "}
+          <span className="font-medium text-foreground">
+            {activeCategory.label}
+          </span>
+        </p>
+        <Link
+          href="/components"
+          className="rounded-full px-3 py-1.5 text-xs font-medium text-foreground underline decoration-border underline-offset-4 hover:decoration-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20"
+        >
+          Show all components
+        </Link>
+      </div>
+      <CategorySections categories={[activeCategory]} {...sectionProps} />
+    </div>
+  );
+}
+
 export default function ComponentsPage() {
   const allComponents = useMemo(() => getAllComponents(), []);
   const categories = useMemo(
@@ -118,6 +211,7 @@ export default function ComponentsPage() {
 
   const previewRenderers: Record<string, React.ReactNode> = {
     "scrolling-cards": <ScrollingCardsDemo compact />,
+    "parallax-strip-transition": <ParallaxStripTransitionDemo compact />,
     loader: <LoaderDemo compact />,
     "image-loader": <ImageLoaderDemo compact />,
     "cursor-trail-loader": <CursorTrailLoaderDemo compact />,
@@ -527,7 +621,7 @@ export default function ComponentsPage() {
     <div className="min-h-screen flex flex-col bg-background text-foreground transition-colors duration-200">
       <Navbar searchAction={<ComponentSearch />} />
 
-      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10 sm:py-20">
+      <main id="main-content" className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10 sm:py-20">
         <div className="flex flex-col items-center text-center mb-10 sm:mb-12">
           <h1 className="font-serif text-3xl sm:text-5xl font-normal tracking-tight text-foreground max-w-3xl leading-tight">
             {allComponents.length} rare and unique components
@@ -539,41 +633,21 @@ export default function ComponentsPage() {
           </p>
         </div>
 
-        <div className="space-y-14 sm:space-y-16">
-          {categories.map((category) => (
-            <section
-              key={category.value}
-              aria-labelledby={`category-${category.value}`}
-            >
-              <div className="mb-6 border-b border-border pb-4">
-                <div className="flex items-center gap-3">
-                  <h2
-                    id={`category-${category.value}`}
-                    className="font-serif text-xl font-medium tracking-tight text-foreground sm:text-2xl"
-                  >
-                    {category.label}
-                  </h2>
-                  <span className="rounded-md bg-muted px-2 py-0.5 font-mono text-xs tabular-nums text-muted-foreground">
-                    {category.items.length}
-                  </span>
-                </div>
-                <p className="mt-2 text-sm text-muted-foreground">
-                  {category.description}
-                </p>
-              </div>
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {category.items.map((item) => (
-                  <ComponentCard
-                    key={item.slug}
-                    component={item}
-                    preview={previewRenderers[item.slug]}
-                    badge={newReleaseSlugs.has(item.slug) ? "NEW" : ""}
-                  />
-                ))}
-              </div>
-            </section>
-          ))}
-        </div>
+        <Suspense
+          fallback={
+            <CategorySections
+              categories={categories}
+              previewRenderers={previewRenderers}
+              newReleaseSlugs={newReleaseSlugs}
+            />
+          }
+        >
+          <FilteredCategorySections
+            categories={categories}
+            previewRenderers={previewRenderers}
+            newReleaseSlugs={newReleaseSlugs}
+          />
+        </Suspense>
       </main>
 
       <Footer />

@@ -20,19 +20,6 @@ export const NAV_ITEMS = [
   { label: "Docs", href: "/docs" },
 ];
 
-export const CATEGORIES = [
-  { id: "all", label: "All Components" },
-  { id: "accordion", label: "Accordions" },
-  { id: "scales", label: "Scales & Borders" },
-  { id: "buttons", label: "Buttons & Actions" },
-  { id: "cards", label: "Cards & Bento" },
-  { id: "feedback", label: "Badges & Feedback" },
-  { id: "layout", label: "Layout & Grids" },
-  { id: "ai-stuff", label: "AI Stuff" },
-  { id: "apple-ui", label: "Apple UI" },
-  { id: "menus", label: "Profile & Menus" },
-];
-
 export interface DocsNavItem {
   title: string;
   href: string;

@@ -1,10 +1,13 @@
 import React from "react";
 import { CodeBlock } from "@/components/showcase/code-block";
+import { createPageMetadata } from "@/lib/metadata";
 
-export const metadata = {
+export const metadata = createPageMetadata({
   title: "Agent Skills",
-  description: "Curated AI Agent Skills for Claude Code, Cursor, Antigravity, and Copilot.",
-};
+  description:
+    "Curated AI Agent Skills for Claude Code, Cursor, Antigravity, and Copilot.",
+  path: "/docs/skills",
+});
 
 const SKILL_MODULES = [
   { name: "gsap-core", purpose: "gsap.to(), from(), easing, duration, stagger, matchMedia for responsive animations." },

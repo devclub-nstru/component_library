@@ -2,7 +2,7 @@
   "slug": "task-card",
   "name": "Task Card",
   "description": "Layered task cards with colored priority bands, recessed dashed outlines, stacked avatars and soft shadows.",
-  "summary": "A customizable task card with a tactile project board. The studio includes DevClub project planning and development tasks for 2026, individual card editing, priority colors, status badges, date and count controls, light/dark themes and responsive layouts.",
+  "summary": "A customizable task card with a colored priority band, recessed dashed outline, stacked assignee avatars, status badge, counts and due date, in light and dark themes.",
   "category": "cards",
   "tags": [
     "card",
@@ -22,6 +22,9 @@
     "clsx",
     "tailwind-merge"
   ],
+  "registryDependencies": [
+    "avatar"
+  ],
   "version": "1.0.0",
   "createdDate": "2026-10-03",
   "updatedDate": "2026-10-03",
@@ -32,7 +35,7 @@
     "Recessed surface, dashed inset outline and adjustable layered shadows",
     "Stacked avatars with image fallbacks and an overflow badge",
     "Status badges, comment/link/file counts and calendar-safe due dates",
-    "Per-card editing and a responsive two-column board example",
+    "Optional title action through onOpen",
     "Subtle GSAP hover and focus lift with reduced-motion support"
   ],
   "anatomy": [
@@ -67,11 +70,11 @@
     "keyboard": [
       {
         "key": "Tab",
-        "description": "Focuses the optional title action and board controls."
+        "description": "Focus the title button when onOpen is provided."
       },
       {
         "key": "Enter / Space",
-        "description": "Activates the optional title action and studio customization controls."
+        "description": "Activate the title button (calls onOpen)."
       }
     ]
   },
@@ -245,6 +248,7 @@
       "description": "Makes the title a keyboard-accessible open button."
     }
   ],
+  "usage": "import { TaskCard } from \"@/components/ui/task-card\";\n\nexport function TaskCardDemo() {\n  return (\n    <TaskCard\n      title=\"Ship onboarding flow\"\n      description=\"Finish the empty states and copy review.\"\n      priority=\"urgent\"\n      status=\"In Progress\"\n      assignees={[{ name: \"Ada Lovelace\" }, { name: \"Alan Turing\" }]}\n      dueDate=\"2026-10-20\"\n    />\n  );\n}",
   "files": [
     {
       "name": "task-card.tsx",

@@ -192,7 +192,7 @@ const Dash = ({
       aria-label={`Go to ${section.label}`}
       title={section.label}
       className={cn(
-        "group relative flex h-1.5 items-center border-0 bg-transparent p-0 outline-none select-none cursor-pointer",
+        "group relative flex h-1.5 pointer-coarse:h-6 items-center border-0 bg-transparent p-0 outline-none select-none cursor-pointer",
         side === "right" ? "justify-end" : "justify-start",
       )}
       style={{ width: maxDashWidth }}
@@ -327,18 +327,23 @@ export function ProximitySidebar({
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLDivElement>) => {
-      const currentIndex = sections.findIndex((s) => s.id === activeId);
+      if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;
+      const focusedId = sections.find(
+        (s) => dashRefs.current.get(s.id) === event.target,
+      )?.id;
+      const currentIndex = sections.findIndex(
+        (s) => s.id === (focusedId ?? activeId),
+      );
       if (currentIndex === -1) return;
 
-      if (event.key === "ArrowDown") {
-        event.preventDefault();
-        const nextIndex = Math.min(sections.length - 1, currentIndex + 1);
-        selectSection(sections[nextIndex].id);
-      } else if (event.key === "ArrowUp") {
-        event.preventDefault();
-        const prevIndex = Math.max(0, currentIndex - 1);
-        selectSection(sections[prevIndex].id);
-      }
+      event.preventDefault();
+      const nextIndex =
+        event.key === "ArrowDown"
+          ? Math.min(sections.length - 1, currentIndex + 1)
+          : Math.max(0, currentIndex - 1);
+      const nextId = sections[nextIndex].id;
+      selectSection(nextId);
+      dashRefs.current.get(nextId)?.focus();
     },
     [activeId, sections, selectSection],
   );
@@ -484,7 +489,7 @@ export function ProximitySidebar({
         aria-label="Proximity navigation"
         onKeyDown={handleKeyDown}
         className={cn(
-          "flex flex-col outline-none gap-1 py-0",
+          "flex flex-col outline-none gap-1 pointer-coarse:gap-0 py-0",
           side === "right" ? "items-end" : "items-start",
         )}
         onPointerEnter={(event) => {

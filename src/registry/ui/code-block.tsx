@@ -83,7 +83,7 @@ export const CodeBlock = ({
   const lines = useMemo(() => {
     return code.split("\n").map((line, lineIdx) => {
       const regex =
-        /(".*?"|'.*?'|`.*?`|<\/?[A-Za-z0-9_$.]+|\/?>|\b[A-Za-z_$][A-Za-z0-9_$]*\b|\b\d+\b|[{}()[\];:,.=><&|!+*/?-]|\s+)/g;
+        /(".*?"|'.*?'|`.*?`|<\/?[A-Za-z0-9_$.]+|\/?>|[A-Za-z_$][A-Za-z0-9_$]*|0[xX][\da-fA-F]+|\d*\.?\d+|[{}()[\];:,.=><&|!+*/?-]|\s+|.)/gu;
       const tokens: React.ReactNode[] = [];
       let match;
       const isImportLine = line.trimStart().startsWith("import ");
@@ -128,7 +128,7 @@ export const CodeBlock = ({
               {token}
             </span>,
           );
-        } else if (/^\d+$/.test(token)) {
+        } else if (/^(?:0[xX][\da-fA-F]+|\d*\.?\d+)$/.test(token)) {
           tokens.push(
             <span key={key} style={{ color }}>
               {token}
@@ -170,6 +170,7 @@ export const CodeBlock = ({
         onClick={handleCopy}
         className="absolute top-0 right-0 z-10 flex h-8 w-8 items-center justify-center rounded-full border border-border dark:border-white/10 bg-muted/40 dark:bg-white/4 text-muted-foreground dark:text-zinc-400 backdrop-blur-sm transition-colors hover:border-foreground/20 dark:hover:border-white/20 hover:bg-muted dark:hover:bg-white/8 hover:text-foreground dark:hover:text-white cursor-pointer"
         title={copied ? "Copied" : "Copy code"}
+        aria-label="Copy code"
       >
         {copied ? (
           <CheckIcon className="h-4 w-4 text-emerald-500 dark:text-emerald-400" />
@@ -177,13 +178,19 @@ export const CodeBlock = ({
           <CopyIcon className="h-4 w-4" />
         )}
       </button>
+      <span className="sr-only" aria-live="polite">
+        {copied ? "Copied" : ""}
+      </span>
 
-      <div className="overflow-x-auto pr-10">
+      <div className="mr-10 overflow-x-auto">
         <div className="font-mono text-[13px] leading-6 sm:text-sm sm:leading-6">
           {lines.map((line, idx) => (
             <div key={idx} className="flex">
               {showLineNumbers && (
-                <span className="w-8 shrink-0 select-none text-right pr-6 font-mono text-zinc-400 dark:text-zinc-600">
+                <span
+                  className="box-content shrink-0 select-none whitespace-nowrap text-right pr-6 font-mono text-zinc-400 dark:text-zinc-600"
+                  style={{ width: `${String(lines.length).length}ch` }}
+                >
                   {idx + 1}
                 </span>
               )}

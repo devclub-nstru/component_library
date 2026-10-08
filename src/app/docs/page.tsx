@@ -1,11 +1,14 @@
 import React from "react";
 import Link from "next/link";
 import { ArrowRightIcon, CheckIcon } from "@radix-ui/react-icons";
+import { createPageMetadata } from "@/lib/metadata";
 
-export const metadata = {
+export const metadata = createPageMetadata({
   title: "Introduction",
-  description: "DevClub UI philosophy, architecture, and high-performance design principles.",
-};
+  description:
+    "DevClub UI philosophy, architecture, and high-performance design principles.",
+  path: "/docs",
+});
 
 export default function DocsIntroductionPage() {
   return (

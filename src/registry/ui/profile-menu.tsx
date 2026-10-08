@@ -1,6 +1,6 @@
 "use client";
 
-import React, {
+import {
   type ReactNode,
   useCallback,
   useEffect,
@@ -89,6 +89,14 @@ const STYLES = `
     filter: blur(0);
   }
 }
+.pm-status {
+  animation: pm-slide-in 0.3s ease-out backwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pm-status {
+    animation: none;
+  }
+}
 `;
 
 const subscribePlatform = () => () => { };
@@ -139,7 +147,10 @@ export function ProfileMenu({
   const panelRef = useRef<HTMLDivElement>(null);
   const highlightRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<(HTMLButtonElement | null)[]>([]);
-  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLDivElement>(null);
+  const pendingFocusRef = useRef<number | null>(null);
 
   const rawStatuses = status ?? DEFAULT_STATUS_ITEMS;
   const statusItems: ProfileMenuStatusItem[] = rawStatuses.map((s) =>
@@ -343,13 +354,9 @@ export function ProfileMenu({
   });
 
   const items = resolvedSections.flatMap((s) => s.items);
-  const itemsRef = useRef(items);
-  const selectedRef = useRef(selected);
-
-  useEffect(() => {
-    itemsRef.current = items;
-    selectedRef.current = selected;
-  }, [items, selected]);
+  const itemCount = items.length;
+  const triggerId = `${id}-trigger`;
+  const menuId = `${id}-menu`;
 
   useLayoutEffect(() => {
     const hl = highlightRef.current;
@@ -366,6 +373,12 @@ export function ProfileMenu({
     hl.style.opacity = "1";
   }, [isOpen, selected]);
 
+  useLayoutEffect(() => {
+    if (!isOpen || pendingFocusRef.current === null) return;
+    itemRefs.current[pendingFocusRef.current]?.focus({ preventScroll: true });
+    pendingFocusRef.current = null;
+  }, [isOpen]);
+
   useEffect(() => {
     if (isOpen || statusItems.length < 2) return;
     const interval = setInterval(() => {
@@ -376,36 +389,123 @@ export function ProfileMenu({
     return () => clearInterval(interval);
   }, [isOpen, statusItems.length, statusInterval]);
 
-  const toggleMenu = useCallback(() => {
+  const clearHoverTimeout = useCallback(() => {
     if (hoverTimeoutRef.current) {
       clearTimeout(hoverTimeoutRef.current);
       hoverTimeoutRef.current = null;
     }
-    setSelected(0);
-    setIsOpen((prev) => {
-      const next = !prev;
-      setIsPinned(next);
-      return next;
-    });
   }, []);
 
-  const handleMouseEnter = useCallback(() => {
-    if (hoverTimeoutRef.current) {
-      clearTimeout(hoverTimeoutRef.current);
-      hoverTimeoutRef.current = null;
-    }
-    if (!isOpen) {
-      setSelected(0);
-      setIsOpen(true);
-    }
-  }, [isOpen]);
+  const focusItem = useCallback((index: number) => {
+    setSelected(index);
+    itemRefs.current[index]?.focus({ preventScroll: true });
+  }, []);
 
-  const handleMouseLeave = useCallback(() => {
-    if (isPinned) return;
-    hoverTimeoutRef.current = setTimeout(() => {
-      setIsOpen(false);
-    }, 200);
-  }, [isPinned]);
+  const openMenu = useCallback(
+    (focusIndex: number | null) => {
+      clearHoverTimeout();
+      setSelected(focusIndex ?? 0);
+      setIsPinned(true);
+      if (isOpen) {
+        if (focusIndex !== null) focusItem(focusIndex);
+        return;
+      }
+      pendingFocusRef.current = focusIndex;
+      setIsOpen(true);
+    },
+    [clearHoverTimeout, focusItem, isOpen],
+  );
+
+  const closeMenu = useCallback(() => {
+    clearHoverTimeout();
+    setIsOpen(false);
+    setIsPinned(false);
+    if (rootRef.current?.contains(document.activeElement)) {
+      triggerRef.current?.focus({ preventScroll: true });
+    }
+  }, [clearHoverTimeout]);
+
+  const toggleMenu = useCallback(() => {
+    if (isOpen) closeMenu();
+    else openMenu(0);
+  }, [closeMenu, isOpen, openMenu]);
+
+  const handleTriggerClick = useCallback(() => {
+    if (isOpen && isPinned) closeMenu();
+    else openMenu(null);
+  }, [closeMenu, isOpen, isPinned, openMenu]);
+
+  const handleTriggerKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    switch (event.key) {
+      case "Enter":
+      case " ":
+        event.preventDefault();
+        if (isOpen && isPinned) closeMenu();
+        else openMenu(0);
+        break;
+      case "ArrowDown":
+        event.preventDefault();
+        openMenu(0);
+        break;
+      case "ArrowUp":
+        event.preventDefault();
+        openMenu(itemCount - 1);
+        break;
+    }
+  };
+
+  const handleMenuKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (itemCount === 0) return;
+    const current = itemRefs.current.findIndex(
+      (node) => node === document.activeElement,
+    );
+    const from = current < 0 ? selected : current;
+    switch (event.key) {
+      case "ArrowDown":
+      case "j":
+        event.preventDefault();
+        focusItem((from + 1) % itemCount);
+        break;
+      case "ArrowUp":
+      case "k":
+        event.preventDefault();
+        focusItem((from - 1 + itemCount) % itemCount);
+        break;
+      case "Home":
+        event.preventDefault();
+        focusItem(0);
+        break;
+      case "End":
+        event.preventDefault();
+        focusItem(itemCount - 1);
+        break;
+      case "Tab":
+        clearHoverTimeout();
+        setIsOpen(false);
+        setIsPinned(false);
+        break;
+    }
+  };
+
+  const handlePointerEnter = useCallback(
+    (event: React.PointerEvent<HTMLDivElement>) => {
+      if (event.pointerType !== "mouse") return;
+      clearHoverTimeout();
+      if (!isOpen) {
+        setSelected(0);
+        setIsOpen(true);
+      }
+    },
+    [clearHoverTimeout, isOpen],
+  );
+
+  const handlePointerLeave = useCallback(
+    (event: React.PointerEvent<HTMLDivElement>) => {
+      if (event.pointerType !== "mouse" || isPinned) return;
+      hoverTimeoutRef.current = setTimeout(closeMenu, 200);
+    },
+    [closeMenu, isPinned],
+  );
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
@@ -429,48 +529,15 @@ export function ProfileMenu({
     if (!isOpen) return;
 
     function onKeyDown(event: KeyboardEvent) {
-      const count = itemsRef.current.length;
-      if (count === 0) return;
-
-      const move = (delta: number) => {
-        setSelected((prev) => (prev + delta + count) % count);
-      };
-
-      switch (event.key) {
-        case "ArrowUp":
-        case "k":
-          event.preventDefault();
-          move(-1);
-          break;
-        case "ArrowDown":
-        case "j":
-          event.preventDefault();
-          move(1);
-          break;
-        case "Enter": {
-          event.preventDefault();
-          const target = itemsRef.current[selectedRef.current];
-          if (target) {
-            target.onSelect?.();
-            if (target.closeOnSelect) {
-              setIsOpen(false);
-              setIsPinned(false);
-            }
-          }
-          break;
-        }
-        case "Escape":
-          event.preventDefault();
-          setIsOpen(false);
-          setIsPinned(false);
-          break;
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closeMenu();
       }
     }
 
     function onClickOutside(event: MouseEvent) {
       if (!(event.target as HTMLElement).closest(`#${id}`)) {
-        setIsOpen(false);
-        setIsPinned(false);
+        closeMenu();
       }
     }
 
@@ -480,17 +547,18 @@ export function ProfileMenu({
       window.removeEventListener("keydown", onKeyDown);
       window.removeEventListener("click", onClickOutside);
     };
-  }, [isOpen, id]);
+  }, [closeMenu, isOpen, id]);
 
   const currentStatus = statusItems[statusIndex];
 
   return (
     <div
+      ref={rootRef}
       id={id}
       role="region"
       aria-label="Profile command menu"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      onPointerEnter={handlePointerEnter}
+      onPointerLeave={handlePointerLeave}
       className={cn(
         "relative w-90 max-w-[calc(100vw-2rem)] rounded-2xl select-none",
         "bg-background/95 dark:bg-zinc-950/90 text-foreground backdrop-blur-2xl",
@@ -505,16 +573,16 @@ export function ProfileMenu({
       <style>{STYLES}</style>
 
       <div
+        ref={triggerRef}
+        id={triggerId}
         role="button"
         tabIndex={0}
-        onClick={toggleMenu}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            toggleMenu();
-          }
-        }}
-        className="flex items-center gap-3 p-2.5 cursor-pointer outline-none select-none group"
+        aria-haspopup="menu"
+        aria-expanded={isOpen}
+        aria-controls={menuId}
+        onClick={handleTriggerClick}
+        onKeyDown={handleTriggerKeyDown}
+        className="flex items-center gap-3 p-2.5 rounded-2xl cursor-pointer outline-none select-none group focus-visible:ring-2 focus-visible:ring-foreground/30"
       >
         <div className="relative shrink-0">
           {avatar ? (
@@ -528,7 +596,7 @@ export function ProfileMenu({
           )}
           {online && (
             <span className="absolute bottom-0 right-0 flex size-2.5 items-center justify-center">
-              <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+              <span className="absolute inline-flex size-full animate-ping motion-reduce:animate-none rounded-full bg-emerald-400 opacity-75" />
               <span className="relative inline-flex size-2 rounded-full bg-emerald-500 ring-2 ring-background dark:ring-zinc-950" />
             </span>
           )}
@@ -545,8 +613,7 @@ export function ProfileMenu({
             <div className="relative h-4 overflow-hidden text-[11px] font-sans text-muted-foreground mt-0.5">
               <div
                 key={statusIndex}
-                style={{ animation: "pm-slide-in 0.3s ease-out backwards" }}
-                className="absolute inset-0 flex items-center gap-1.5 truncate text-muted-foreground"
+                className="pm-status absolute inset-0 flex items-center gap-1.5 truncate text-muted-foreground"
               >
                 {currentStatus.icon && (
                   <span className="shrink-0 size-3 text-muted-foreground/80 flex items-center justify-center">
@@ -566,7 +633,7 @@ export function ProfileMenu({
           </kbd>
           <span
             className={cn(
-              "text-muted-foreground/60 transition-transform duration-300 flex items-center justify-center size-4",
+              "text-muted-foreground/60 transition-transform duration-300 motion-reduce:transition-none flex items-center justify-center size-4",
               isOpen && "rotate-180 text-foreground",
             )}
           >
@@ -576,8 +643,9 @@ export function ProfileMenu({
       </div>
 
       <div
+        inert={!isOpen}
         className={cn(
-          "grid transition-[grid-template-rows,opacity] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+          "grid transition-[grid-template-rows,opacity] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none",
           isOpen
             ? "grid-rows-[1fr] opacity-100"
             : "grid-rows-[0fr] opacity-0 pointer-events-none",
@@ -586,7 +654,7 @@ export function ProfileMenu({
         <div className="overflow-hidden">
           <div
             className={cn(
-              "transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+              "transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none",
               isOpen ? "translate-y-0" : "-translate-y-1.5",
             )}
           >
@@ -594,21 +662,33 @@ export function ProfileMenu({
 
             <div
               ref={panelRef}
+              id={menuId}
+              role="menu"
+              aria-labelledby={triggerId}
+              onKeyDown={handleMenuKeyDown}
               className="relative flex flex-col gap-1 p-2 pt-0"
             >
               <div
                 ref={highlightRef}
                 aria-hidden="true"
-                className="pointer-events-none absolute top-0 left-0 rounded-xl bg-foreground/6 dark:bg-white/10 z-0 opacity-0 transition-[transform,width,height,opacity] duration-250 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                className="pointer-events-none absolute top-0 left-0 rounded-xl bg-foreground/6 dark:bg-white/10 z-0 opacity-0 transition-[transform,width,height,opacity] duration-250 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none"
               />
 
               {resolvedSections.map((section, sIdx) => (
-                <div key={section.label || sIdx} className="space-y-1">
+                <div
+                  key={section.label || sIdx}
+                  role="group"
+                  aria-label={section.label}
+                  className="space-y-1"
+                >
                   {sIdx > 0 && (
                     <div className="my-1.5 mx-1 h-px bg-border/40 dark:bg-white/5" />
                   )}
                   {section.label && (
-                    <span className="block px-2.5 pt-1 text-[10px] font-sans font-medium uppercase tracking-wider text-muted-foreground/60 select-none">
+                    <span
+                      aria-hidden="true"
+                      className="block px-2.5 pt-1 text-[10px] font-sans font-medium uppercase tracking-wider text-muted-foreground/60 select-none"
+                    >
                       {section.label}
                     </span>
                   )}
@@ -626,14 +706,19 @@ export function ProfileMenu({
                             itemRefs.current[index] = node;
                           }}
                           type="button"
+                          role={
+                            item.active === undefined
+                              ? "menuitem"
+                              : "menuitemradio"
+                          }
+                          aria-checked={item.active}
+                          tabIndex={-1}
                           onMouseEnter={() => setSelected(index)}
+                          onFocus={() => setSelected(index)}
                           onClick={(e) => {
                             e.stopPropagation();
                             item.onSelect?.();
-                            if (item.closeOnSelect) {
-                              setIsOpen(false);
-                              setIsPinned(false);
-                            }
+                            if (item.closeOnSelect) closeMenu();
                           }}
                           className={cn(
                             "relative z-10 flex w-full cursor-pointer items-center gap-2.5 rounded-xl px-2.5 py-2 text-xs font-sans transition-colors",

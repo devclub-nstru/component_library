@@ -129,6 +129,11 @@ import OrbitGalleryDemo, {
 } from "./orbit-gallery-demo";
 import { ProjectReveal } from "@/registry/ui/project-reveal";
 import {
+  ParallaxStripTransitionDemo,
+  ParallaxStripTransitionControls,
+  PARALLAX_STRIP_DEFAULT_CONFIG,
+} from "./parallax-strip-transition-demo";
+import {
   ScrollingCardsDemo,
   ScrollingCardsControls,
   SCROLLING_CARDS_DEFAULT_CONFIG,
@@ -708,7 +713,7 @@ const fadeVariants = {
 function highlightCode(code: string) {
   return code.split("\n").map((line, lineIdx) => {
     const regex =
-      /(".*?"|'.*?'|`.*?`|\b[A-Za-z_$][A-Za-z0-9_$]*\b|[{}()[\];:,.=><&|!+*/?-]|\s+)/g;
+      /(".*?"|'.*?'|`.*?`|[A-Za-z_$][A-Za-z0-9_$]*|0[xX][\da-fA-F]+|\d*\.?\d+|[{}()[\];:,.=><&|!+*/?-]|\s+|.)/gu;
     const tokens = [];
     let match;
     while ((match = regex.exec(line)) !== null) {
@@ -726,7 +731,7 @@ function highlightCode(code: string) {
         colorClass = "text-zinc-200";
       } else if (/^[{}()[\];:,.=><&|!+*/?-]+$/.test(token)) {
         colorClass = "text-zinc-500";
-      } else if (/^\d+$/.test(token)) {
+      } else if (/^(?:0[xX][\da-fA-F]+|\d*\.?\d+)$/.test(token)) {
         colorClass = "text-zinc-300";
       }
       tokens.push(
@@ -1197,6 +1202,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
   const [projectRevealConfig, setProjectRevealConfig] = useState({
     ...PROJECT_REVEAL_DEFAULT_CONFIG,
   });
+  const [parallaxStripConfig, setParallaxStripConfig] = useState({
+    ...PARALLAX_STRIP_DEFAULT_CONFIG,
+  });
   const [scrollingCardsConfig, setScrollingCardsConfig] = useState({
     ...SCROLLING_CARDS_DEFAULT_CONFIG,
   });
@@ -1321,7 +1329,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     expandRate: 11,
     decayRate: 3.0,
     image: "portrait",
-    caption: "Hover anywhere!",
+    caption: "Editorial Portrait",
     showCaption: true,
     webglEnabled: true,
   });
@@ -1334,7 +1342,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
       expandRate: 11,
       decayRate: 3.0,
       image: "portrait",
-      caption: "Hover anywhere!",
+      caption: "Editorial Portrait",
       showCaption: true,
       webglEnabled: true,
     });
@@ -1881,7 +1889,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         );
       case "morph-search":
         return (
-          <div className="flex items-center justify-center w-full max-w-xl mx-auto p-8">
+          <div className="flex items-center justify-center w-full max-w-xl mx-auto p-4 sm:p-8">
             <MorphSearch />
           </div>
         );
@@ -1982,6 +1990,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         );
       case "orbit-gallery":
         return <OrbitGalleryDemo {...orbitGalleryConfig} />;
+      case "parallax-strip-transition":
+        return <ParallaxStripTransitionDemo config={parallaxStripConfig} />;
       case "scrolling-cards":
         return <ScrollingCardsDemo config={scrollingCardsConfig} />;
       case "loader":
@@ -2029,7 +2039,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
       case "slider":
         return (
           <div className="flex flex-col items-center justify-center w-full h-full min-h-96 select-none p-4 sm:p-8">
-            <div className="w-full max-w-xl flex flex-col gap-10 p-6 sm:p-10 rounded-2xl bg-zinc-950/40 dark:bg-black/40 border border-zinc-800/80 dark:border-white/10 backdrop-blur-xl shadow-2xl transition-all">
+            <div className="w-full max-w-xl flex flex-col gap-10 p-6 sm:p-10 rounded-2xl bg-card/80 dark:bg-black/40 border border-border dark:border-white/10 backdrop-blur-xl shadow-2xl transition-all">
               {(sliderIdeation === "both" || sliderIdeation === "budget") && (
                 <div className="w-full">
                   <Slider
@@ -2064,7 +2074,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           setSliderVolume((v) => (v === 0 ? 60 : 0))
                         }
                         className="w-9 h-9 rounded-full bg-zinc-900 border border-white/10 flex items-center justify-center text-zinc-300 hover:text-white transition-colors cursor-pointer"
-                        aria-label="Toggle mute"
+                        aria-label="Mute"
+                        aria-pressed={sliderVolume === 0}
                       >
                         {sliderVolume === 0 ? (
                           <VolumeX className="w-4 h-4" />
@@ -2179,7 +2190,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         );
       case "gooey-nav":
         return (
-          <div className="flex items-center justify-center w-full h-full min-h-96 select-none p-8">
+          <div className="flex items-center justify-center w-full h-full min-h-96 select-none p-2 sm:p-8">
             <GooeyNav
               items={GOOEY_DEMO_ITEMS}
               value={gooeyNavIndex}
@@ -2226,7 +2237,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               <CandyButton color={color} size="sm">
                 Explore
               </CandyButton>
-              <CandyButton color={color} size="icon">
+              <CandyButton color={color} size="icon" aria-label="Confirm">
                 <CheckIcon className="h-4 w-4" />
               </CandyButton>
             </div>
@@ -2588,6 +2599,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
           <div className="w-full max-w-6xl flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-12 p-4 sm:p-6 select-none">
             <div className="w-full max-w-72 shrink-0 flex items-center justify-center">
               <PixelCard
+                aria-label="Pixel card preview"
                 className="w-full aspect-4/5 p-6 border-border dark:border-white/10 bg-card dark:bg-[#0c0c0e]"
                 variant={pixelVariant}
                 pattern={pixelPattern}
@@ -2614,7 +2626,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               </div>
 
               <div className="rounded-xl border border-border dark:border-white/5 bg-muted/40 dark:bg-[#0b0b0e] p-2 sm:p-2.5 flex flex-col gap-2">
-                <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3.5 flex items-center gap-3 text-xs">
+                <div className="rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3.5 py-2 sm:py-0 sm:h-9 flex flex-col items-stretch gap-2 sm:flex-row sm:items-center sm:gap-3 text-xs">
                   <span className="w-16 text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                     Pattern
                   </span>
@@ -2632,7 +2644,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         type="button"
                         onClick={() => setPixelPattern(p.id)}
                         className={cn(
-                          "relative flex-1 min-w-0 h-6.5 px-2 rounded text-[11px] font-medium flex items-center justify-center transition-colors cursor-pointer select-none",
+                          "relative flex-1 min-w-0 h-10 sm:h-6.5 px-2 rounded text-[11px] font-medium flex items-center justify-center transition-colors cursor-pointer select-none",
                           pixelPattern === p.id
                             ? "text-background font-semibold dark:text-black"
                             : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
@@ -2657,11 +2669,11 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   </div>
                 </div>
 
-                <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3.5 flex items-center gap-3 text-xs">
+                <div className="rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3.5 py-2 sm:py-0 sm:h-9 flex flex-col items-stretch gap-2 sm:flex-row sm:items-center sm:gap-3 text-xs">
                   <span className="w-16 text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                     Color
                   </span>
-                  <div className="flex-1 min-w-0 flex items-center gap-1 bg-muted/80 dark:bg-black/30 p-0.5 rounded-md border border-border dark:border-white/5 overflow-hidden">
+                  <div className="flex-1 min-w-0 grid grid-cols-3 sm:flex items-center gap-1 bg-muted/80 dark:bg-black/30 p-0.5 rounded-md border border-border dark:border-white/5 overflow-hidden">
                     {(
                       [
                         { id: "default", label: "Cyan", dot: "bg-sky-400" },
@@ -2685,7 +2697,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         type="button"
                         onClick={() => setPixelVariant(v.id)}
                         className={cn(
-                          "relative flex-1 min-w-0 h-6.5 px-1.5 sm:px-2 rounded text-[11px] font-medium flex items-center justify-center gap-1.5 transition-colors cursor-pointer select-none",
+                          "relative flex-1 min-w-0 h-10 sm:h-6.5 px-1.5 sm:px-2 rounded text-[11px] font-medium flex items-center justify-center gap-1.5 transition-colors cursor-pointer select-none",
                           pixelVariant === v.id
                             ? "text-background font-semibold dark:text-black"
                             : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
@@ -2716,7 +2728,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   </div>
                 </div>
 
-                <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3.5 flex items-center gap-3 text-xs">
+                <div className="rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3.5 py-2 sm:py-0 sm:h-9 flex flex-col items-stretch gap-2 sm:flex-row sm:items-center sm:gap-3 text-xs">
                   <span className="w-16 text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                     Speed
                   </span>
@@ -2734,7 +2746,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         type="button"
                         onClick={() => setPixelSpeed(s.val)}
                         className={cn(
-                          "relative flex-1 min-w-0 h-6.5 px-2 rounded text-[11px] font-medium flex items-center justify-center transition-colors cursor-pointer select-none",
+                          "relative flex-1 min-w-0 h-10 sm:h-6.5 px-2 rounded text-[11px] font-medium flex items-center justify-center transition-colors cursor-pointer select-none",
                           pixelSpeed === s.val
                             ? "text-background font-semibold dark:text-black"
                             : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
@@ -2759,7 +2771,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   </div>
                 </div>
 
-                <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3.5 flex items-center gap-3 text-xs">
+                <div className="rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3.5 py-2 sm:py-0 sm:h-9 flex flex-col items-stretch gap-2 sm:flex-row sm:items-center sm:gap-3 text-xs">
                   <span className="w-16 text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                     Noise
                   </span>
@@ -2777,7 +2789,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         type="button"
                         onClick={() => setPixelNoise(n.val)}
                         className={cn(
-                          "relative flex-1 min-w-0 h-6.5 px-2 rounded text-[11px] font-medium flex items-center justify-center transition-colors cursor-pointer select-none",
+                          "relative flex-1 min-w-0 h-10 sm:h-6.5 px-2 rounded text-[11px] font-medium flex items-center justify-center transition-colors cursor-pointer select-none",
                           pixelNoise === n.val
                             ? "text-background font-semibold dark:text-black"
                             : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
@@ -2802,7 +2814,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   </div>
                 </div>
 
-                <div className="h-9 rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3.5 flex items-center gap-3 text-xs">
+                <div className="rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3.5 py-2 sm:py-0 sm:h-9 flex flex-col items-stretch gap-2 sm:flex-row sm:items-center sm:gap-3 text-xs">
                   <span className="w-16 text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
                     Density
                   </span>
@@ -2819,7 +2831,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         type="button"
                         onClick={() => setPixelGap(g.val)}
                         className={cn(
-                          "relative flex-1 min-w-0 h-6.5 px-2 rounded text-[11px] font-medium flex items-center justify-center transition-colors cursor-pointer select-none",
+                          "relative flex-1 min-w-0 h-10 sm:h-6.5 px-2 rounded text-[11px] font-medium flex items-center justify-center transition-colors cursor-pointer select-none",
                           pixelGap === g.val
                             ? "text-background font-semibold dark:text-black"
                             : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
@@ -3610,6 +3622,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 activeComponent.slug === "noise" ||
                 activeComponent.slug === "orbit-gallery" ||
                 activeComponent.slug === "scrolling-cards" ||
+                activeComponent.slug === "parallax-strip-transition" ||
                 activeComponent.slug === "fullscreen-navbar" ||
                 activeComponent.slug === "curtain-navbar" ||
                 activeComponent.slug === "curved-navbar" ||
@@ -3622,7 +3635,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 : "p-2 sm:p-6",
             )}
           >
-            {activeComponent.slug !== "scrolling-cards" && (
+            {activeComponent.slug !== "scrolling-cards" &&
+              activeComponent.slug !== "parallax-strip-transition" && (
               <div className="absolute inset-0 bg-[radial-gradient(currentColor_1px,transparent_1px)] text-foreground/8 bg-size-[20px_20px] pointer-events-none" />
             )}
 
@@ -3649,6 +3663,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 "relative min-w-0 max-w-full max-h-full flex flex-col items-center justify-center overflow-hidden transition-colors",
                 viewport !== "desktop" &&
                   "border border-border bg-background dark:bg-[#09090b] shadow-[0_25px_60px_rgba(0,0,0,0.08)] dark:shadow-[0_25px_60px_rgba(0,0,0,0.9)] my-auto max-h-[90vh]",
+                activeComponent.slug === "parallax-strip-transition" &&
+                  viewport !== "desktop" &&
+                  "min-h-0 max-h-full",
               )}
             >
               {viewport === "mobile" && (
@@ -3670,6 +3687,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       activeComponent.slug === "noise" ||
                       activeComponent.slug === "orbit-gallery" ||
                       activeComponent.slug === "scrolling-cards" ||
+                      activeComponent.slug === "parallax-strip-transition" ||
                       activeComponent.slug === "fullscreen-navbar" ||
                       activeComponent.slug === "curtain-navbar" ||
                       activeComponent.slug === "curved-navbar" ||
@@ -5549,6 +5567,13 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 />
               )}
 
+              {activeComponent.slug === "parallax-strip-transition" && (
+                <ParallaxStripTransitionControls
+                  config={parallaxStripConfig}
+                  onChange={setParallaxStripConfig}
+                />
+              )}
+
               {activeComponent.slug === "scrolling-cards" && (
                 <ScrollingCardsControls
                   config={scrollingCardsConfig}
@@ -6701,6 +6726,25 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 )}
               </motion.div>
 
+              {activeComponent.usage && (
+                <motion.div
+                  variants={fadeVariants}
+                  className="space-y-2.5 pt-4 border-t border-border"
+                >
+                  <div className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
+                    Usage
+                  </div>
+                  <div className="min-w-0 rounded-xl border border-border bg-muted/40 p-3">
+                    <CodeBlock
+                      code={activeComponent.usage}
+                      language="tsx"
+                      showLineNumbers={false}
+                      className="max-w-none"
+                    />
+                  </div>
+                </motion.div>
+              )}
+
               {activeComponent.highlights &&
                 activeComponent.highlights.length > 0 && (
                   <motion.div
@@ -7018,11 +7062,19 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     </span>
                   ))}
                 </div>
-                {activeComponent.files && activeComponent.files[0] && (
-                  <div className="flex items-center justify-between text-[11px] font-mono text-muted-foreground bg-muted/40 border border-border rounded-lg px-3 py-2 mt-2">
-                    <span>Source File</span>
-                    <span className="text-foreground">
-                      {activeComponent.files[0].path}
+                {activeComponent.files.length > 0 && (
+                  <div className="flex items-start justify-between gap-3 text-[11px] font-mono text-muted-foreground bg-muted/40 border border-border rounded-lg px-3 py-2 mt-2">
+                    <span className="shrink-0">
+                      {activeComponent.files.length > 1
+                        ? "Source Files"
+                        : "Source File"}
+                    </span>
+                    <span className="flex min-w-0 flex-col items-end gap-1 text-right text-foreground">
+                      {activeComponent.files.map((file) => (
+                        <span key={file.path} className="break-all">
+                          {file.path.replace(/^src\//, "")}
+                        </span>
+                      ))}
                     </span>
                   </div>
                 )}

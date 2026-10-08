@@ -22,7 +22,7 @@ export default function Home() {
       style={{ colorScheme: "dark" }}
     >
       <Navbar showThemeToggle={false} forceLight={!isDark} />
-      <main className="flex-1 flex flex-col">
+      <main id="main-content" className="flex-1 flex flex-col">
         <HeroSection />
       </main>
     </div>

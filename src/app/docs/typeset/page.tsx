@@ -1,38 +1,40 @@
 import React from "react";
 import { CodeBlock } from "@/components/showcase/code-block";
+import { createPageMetadata } from "@/lib/metadata";
 
-export const metadata = {
+export const metadata = createPageMetadata({
   title: "Typeset",
   description:
     "Typography hierarchy, font pairings, and editorial scale in DevClub UI.",
-};
+  path: "/docs/typeset",
+});
 
 const TYPE_SCALES = [
   {
     role: "Display Large",
     font: "Gambetta Serif",
-    size: "48px - 64px",
-    weight: "300 / 400",
+    size: "24px - 48px",
+    weight: "400",
     sample: "DevClub Architecture",
   },
   {
     role: "Section Heading",
     font: "Poppins Sans",
-    size: "20px - 28px",
+    size: "16px - 18px",
     weight: "600",
     sample: "Design Tokens & Physics",
   },
   {
     role: "Body Standard",
     font: "Poppins Sans",
-    size: "14px - 16px",
+    size: "12px - 15px",
     weight: "300 / 400",
     sample: "Components engineered for high visual fidelity and frame rate.",
   },
   {
     role: "Code & Metadata",
-    font: "Monospace",
-    size: "11px - 13px",
+    font: "System Monospace",
+    size: "11px - 14px",
     weight: "400",
     sample: "GET /api/components/[slug]",
   },
@@ -46,8 +48,9 @@ export default function DocsTypesetPage() {
           Typeset & Typography
         </h1>
         <p className="text-xs sm:text-[13px] text-muted-foreground font-light leading-relaxed">
-          An editorial typographic scale combining high-craft Italian serifs,
-          clean geometric grotesques, and technical monospace labels.
+          An editorial typographic scale combining a high-contrast display
+          serif, a clean geometric sans, and the system monospace stack for
+          code.
         </p>
       </div>
 
@@ -62,7 +65,7 @@ export default function DocsTypesetPage() {
             </span>
             <h3 className="text-xl font-serif text-foreground">Gambetta</h3>
             <p className="text-xs text-muted-foreground font-light leading-relaxed">
-              Used for hero titles, quotes, and primary section headers. Conveys craft, timelessness, and prestige.
+              Used for hero titles, quotes, and primary section headers. Designed by Indian Type Foundry (ITF) and distributed through Fontshare. The site self-hosts the Regular, Medium and Semibold weights.
             </p>
           </div>
           <div className="rounded-2xl border border-border/80 bg-card/40 p-5 space-y-2 transition-all hover:border-foreground/20 hover:bg-muted/20">
@@ -80,9 +83,9 @@ export default function DocsTypesetPage() {
             <span className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-sans font-medium tracking-wide uppercase bg-muted text-muted-foreground border border-border/60">
               Technical Mono
             </span>
-            <h3 className="text-xl font-mono text-foreground">JetBrains Mono</h3>
+            <h3 className="text-xl font-mono text-foreground">System Mono</h3>
             <p className="text-xs text-muted-foreground font-light leading-relaxed">
-              Used strictly for code blocks, terminal snippets, API payload fields, and technical parameters.
+              Tailwind&apos;s default <code className="text-foreground">font-mono</code> stack (ui-monospace, SF Mono, Menlo, Consolas). Used for code blocks, terminal snippets, API payload fields, and technical parameters. No web font is downloaded.
             </p>
           </div>
         </div>
@@ -132,7 +135,11 @@ export default function DocsTypesetPage() {
         </h2>
         <p className="text-xs sm:text-[13px] text-muted-foreground font-light leading-relaxed">
           Configure fonts via Next.js Google Fonts and local font loader in{" "}
-          <code className="text-foreground">src/app/layout.tsx</code>:
+          <code className="text-foreground">src/app/layout.tsx</code>, then
+          apply both variables to the <code className="text-foreground">&lt;html&gt;</code>{" "}
+          element and map them in <code className="text-foreground">@theme inline</code>{" "}
+          as <code className="text-foreground">--font-sans</code> and{" "}
+          <code className="text-foreground">--font-serif</code>:
         </p>
         <div className="rounded-2xl border border-border/80 bg-card/40 p-4 sm:p-5">
           <CodeBlock
@@ -149,12 +156,33 @@ const poppins = Poppins({
 });
 
 const gambetta = localFont({
-  src: "../../public/fonts/Gambetta-Regular.otf",
+  src: [
+    {
+      path: "../../public/fonts/Gambetta-Regular.otf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Gambetta-Medium.otf",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Gambetta-Semibold.otf",
+      weight: "600",
+      style: "normal",
+    },
+  ],
   variable: "--font-gambetta",
   display: "swap",
 });`}
           />
         </div>
+        <p className="text-xs sm:text-[13px] text-muted-foreground font-light leading-relaxed">
+          Gambetta is copyright Indian Type Foundry. If you self-host it in
+          your own project, download it from Fontshare and follow the licence
+          that ships with the font files.
+        </p>
       </section>
     </article>
   );

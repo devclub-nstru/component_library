@@ -15,6 +15,7 @@ export type ComponentCategory =
   | "ai-stuff"
   | "search"
   | "galleries-and-media"
+  | "page-transitions"
   | "backgrounds-and-effects"
   | "menus";
 
@@ -74,6 +75,7 @@ export interface ComponentItem {
     code: string;
   }[];
   props?: ComponentProp[];
+  usage?: string;
   interactive?: boolean;
   supportsColor?: boolean;
   hidden?: boolean;

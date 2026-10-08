@@ -15,7 +15,7 @@ import {
   RotateCcw as IconReset,
 } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { Orb, EditorOrb, type OrbVariant } from "@/components/ui/orb";
+import { Orb, EditorOrb, type OrbVariant } from "@/components/ui/editor-orb";
 import { StreamingText } from "@/components/ui/streaming-text";
 import { TextShimmer } from "@/components/ui/text-shimmer";
 import { cn } from "@/lib/utils";
@@ -39,6 +39,9 @@ const BUTTON_SPRING = {
 } as const;
 
 const SETTLE = 100;
+const TOOLBAR_WIDTH = { base: 370, sm: 410 };
+const TOOLBAR_GAP = 10;
+const TOOLBAR_ROOM = 58;
 const ANSWER_WORD_MS = 24;
 
 const FORMATS = [
@@ -82,6 +85,7 @@ export function Editor({
   const [at, setAt] = useState<{
     x: number;
     y: number;
+    width: number;
     arrowOffset: number;
     placeBottom: boolean;
   } | null>(null);
@@ -129,7 +133,7 @@ export function Editor({
     setAskMode(false);
   }, []);
 
-  const handleFormat = (name: string, command: string) => {
+  const handleFormat = (_name: string, command: string) => {
     if (!prose.current) return;
     isFormatting.current = true;
 
@@ -213,29 +217,38 @@ export function Editor({
       savedRange.current = range.cloneRange();
       const origin = wrapEl.getBoundingClientRect();
       const rects = range.getClientRects();
+      const box = range.getBoundingClientRect();
+      const firstRect = rects[0] ?? box;
+      const lastRect = rects[rects.length - 1] ?? box;
 
-      let targetX: number;
-      let targetY: number;
+      const targetX = lastPointerPosition.current
+        ? lastPointerPosition.current.x - origin.left
+        : rects.length > 0
+          ? lastRect.right - origin.left
+          : box.left + box.width / 2 - origin.left;
 
-      if (lastPointerPosition.current) {
-        targetX = lastPointerPosition.current.x - origin.left;
-        targetY = lastPointerPosition.current.y - origin.top;
-      } else if (rects.length > 0) {
-        const lastRect = rects[rects.length - 1];
-        targetX = lastRect.right - origin.left;
-        targetY = lastRect.top - origin.top;
-      } else {
-        const box = range.getBoundingClientRect();
-        targetX = box.left + box.width / 2 - origin.left;
-        targetY = box.top - origin.top;
-      }
+      const width = Math.min(
+        origin.width,
+        window.matchMedia("(min-width: 640px)").matches
+          ? TOOLBAR_WIDTH.sm
+          : TOOLBAR_WIDTH.base,
+      );
+      const left = Math.max(
+        0,
+        Math.min(origin.width - width, targetX - width / 2),
+      );
+      const arrowLimit = width / 2 - 16;
+      const arrowOffset = Math.max(
+        -arrowLimit,
+        Math.min(arrowLimit, targetX - left - width / 2),
+      );
+      const selectionTop = firstRect.top - origin.top;
+      const placeBottom = selectionTop < TOOLBAR_ROOM;
+      const y = placeBottom
+        ? lastRect.bottom - origin.top + TOOLBAR_GAP
+        : origin.height - selectionTop + TOOLBAR_GAP;
 
-      const clampedX = Math.max(200, Math.min(origin.width - 200, targetX));
-      const arrowOffset = Math.max(-140, Math.min(140, targetX - clampedX));
-      const placeBottom = targetY < 58;
-      const finalY = placeBottom ? targetY + 22 : targetY - 10;
-
-      setAt({ x: clampedX, y: finalY, arrowOffset, placeBottom });
+      setAt({ x: left, y, width, arrowOffset, placeBottom });
       updateActiveFormats();
     };
 
@@ -330,10 +343,8 @@ export function Editor({
             className="absolute z-50 pointer-events-auto"
             style={{
               left: at.x,
-              top: at.y,
-              transform: at.placeBottom
-                ? "translate(-50%, 0)"
-                : "translate(-50%, -100%)",
+              width: at.width,
+              ...(at.placeBottom ? { top: at.y } : { bottom: at.y }),
             }}
             initial={{
               opacity: 0,
@@ -479,7 +490,7 @@ function SelectionToolbar({
         }
       }}
       className={cn(
-        "group relative flex w-92.5 sm:w-102.5 flex-col overflow-hidden rounded-2xl",
+        "group relative flex w-full flex-col overflow-hidden rounded-2xl",
         "border border-border/80 bg-card/95 dark:bg-[#121215]/95 backdrop-blur-2xl",
         "text-muted-foreground shadow-[0_16px_44px_-8px_rgba(0,0,0,0.22),0_4px_16px_-4px_rgba(0,0,0,0.12)]",
         "dark:shadow-[0_24px_56px_-10px_rgba(0,0,0,0.85),0_0_0_1px_rgba(255,255,255,0.08)]",
@@ -528,7 +539,7 @@ function SelectionToolbar({
                   );
                 }}
                 className={cn(
-                  "flex h-8 items-center gap-2 rounded-xl pl-2 pr-3.5 text-xs font-semibold text-foreground",
+                  "flex h-8 shrink-0 items-center gap-2 rounded-xl pl-2 pr-3.5 text-xs font-semibold text-foreground",
                   "bg-linear-to-r from-violet-500/10 via-cyan-500/10 to-transparent",
                   "border border-border/60 hover:border-violet-500/40 hover:from-violet-500/15 hover:to-cyan-500/15",
                   "transition-all cursor-pointer shadow-2xs",
@@ -538,9 +549,9 @@ function SelectionToolbar({
                 <span>Ask AI</span>
               </motion.button>
 
-              <div className="mx-2 h-4.5 w-px shrink-0 bg-border/80" />
+              <div className="mx-1 h-4.5 w-px shrink-0 bg-border/80 sm:mx-2" />
 
-              <div className="flex items-center gap-1">
+              <div className="flex min-w-0 items-center gap-0.5 overflow-x-auto [scrollbar-width:none] sm:gap-1">
                 {FORMATS.map(({ name, icon: Icon, command }) => {
                   const isActive = activeFormats.includes(name);
                   return (

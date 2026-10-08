@@ -112,11 +112,8 @@ export function MatrixClockDemo({
           <button
             type="button"
             aria-label="Replay clock scramble"
-            onClick={() => {
-              setRunning(true);
-              setReplayKey((value) => value + 1);
-            }}
-            disabled={!config.animated}
+            onClick={() => setReplayKey((value) => value + 1)}
+            disabled={!config.animated || !running}
             className="flex min-h-10 cursor-pointer items-center gap-2 rounded-full border border-current/20 px-4 opacity-65 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current disabled:cursor-not-allowed disabled:opacity-25"
           >
             <RotateCcw size={13} aria-hidden="true" />

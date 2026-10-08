@@ -58,14 +58,13 @@
       },
       {
         "label": "Border Transition",
-        "value": "border-zinc-800 to border-zinc-700"
+        "value": "zinc-200/80 to zinc-300 (light), zinc-800/80 to zinc-700 (dark)"
       }
     ]
   },
   "accessibility": {
-    "role": "region",
-    "aria": "Accepts aria-labelledby linked to the main section heading for screen readers.",
-    "reducedMotion": "Pure CSS transitions instantly respect prefers-reduced-motion media queries.",
+    "aria": "BentoGrid renders a plain div with no role. Pass role and aria-labelledby through props when the grid forms a labelled section.",
+    "reducedMotion": "No reduced-motion handling. The 300ms hover transitions always run.",
     "keyboard": [
       {
         "key": "Tab",
@@ -131,6 +130,7 @@
       "description": "Additional CSS utility classes passed to BentoGrid or BentoCard."
     }
   ],
+  "usage": "import { BentoGrid, BentoCard } from \"@/components/ui/bento-grid\";\n\nexport function BentoGridDemo() {\n  return (\n    <BentoGrid>\n      <BentoCard colSpan={2} title=\"Analytics\" description=\"Track usage across every project.\" />\n      <BentoCard title=\"Security\" description=\"Audit logs and access controls.\" />\n    </BentoGrid>\n  );\n}",
   "files": [
     {
       "name": "bento-grid.tsx",

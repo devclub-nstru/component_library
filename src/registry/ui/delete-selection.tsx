@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { Check, FileSpreadsheet, FileText, Minus, Trash2 } from "lucide-react";
-import { ConfirmMorph } from "@/registry/components/confirm-morph/confirm-morph";
+import { ConfirmMorph } from "./confirm-morph";
 import { cn } from "@/lib/utils";
 
 export const deleteFiles = async (ids: string[]) => {
@@ -197,6 +197,13 @@ export function DeleteSelectionShowcase() {
                 <motion.button
                   key="select-all-btn"
                   type="button"
+                  role="checkbox"
+                  aria-checked={
+                    isAllSelected ? true : isPartiallySelected ? "mixed" : false
+                  }
+                  aria-label={
+                    isAllSelected ? "Deselect all files" : "Select all files"
+                  }
                   initial={{ scale: 0, opacity: 0, width: 0 }}
                   animate={{ scale: 1, opacity: 1, width: 28 }}
                   exit={{ scale: 0, opacity: 0, width: 0 }}

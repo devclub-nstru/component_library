@@ -3,18 +3,25 @@ import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { DocsSidebar } from "@/components/layout/docs-sidebar";
 import { DocsPagination } from "@/components/layout/docs-pagination";
+import { getComponentCategories } from "@/lib/registry";
 
 export default function DocsLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const componentCategories = getComponentCategories().map((category) => ({
+    value: category.value,
+    label: category.label,
+    count: category.items.length,
+  }));
+
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground transition-colors duration-200">
       <Navbar />
       <div className="flex-1 max-w-7xl mx-auto w-full flex flex-col lg:flex-row lg:items-start">
-        <DocsSidebar />
-        <main className="w-full flex-1 min-w-0 px-4 sm:px-8 lg:px-12 py-10 lg:py-14">
+        <DocsSidebar componentCategories={componentCategories} />
+        <main id="main-content" className="w-full flex-1 min-w-0 px-4 sm:px-8 lg:px-12 py-10 lg:py-14">
           <div className="docs-content max-w-3xl">
             {children}
             <DocsPagination />

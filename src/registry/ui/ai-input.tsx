@@ -727,6 +727,9 @@ export const PromptInput = React.forwardRef<PromptInputRef, PromptInputProps>(
     const topFadeRef = useRef<HTMLDivElement>(null);
     const bottomFadeRef = useRef<HTMLDivElement>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const modelTriggerRef = useRef<HTMLButtonElement>(null);
+    const modelMenuRef = useRef<HTMLDivElement>(null);
+    const modelMenuId = `${inputId}-models`;
     const thumbRefs = useRef<Map<string, HTMLButtonElement | null>>(new Map());
 
     useEffect(() => {
@@ -983,6 +986,14 @@ export const PromptInput = React.forwardRef<PromptInputRef, PromptInputProps>(
       updateFades();
     }, [value, expanded, updateFades]);
 
+    const closeModelSelect = useCallback(() => {
+      const restoreFocus = modelMenuRef.current?.contains(
+        document.activeElement,
+      );
+      setIsModelSelectOpen(false);
+      if (restoreFocus) modelTriggerRef.current?.focus();
+    }, []);
+
     useEffect(() => {
       if (!isModelSelectOpen) return;
 
@@ -994,10 +1005,19 @@ export const PromptInput = React.forwardRef<PromptInputRef, PromptInputProps>(
           setIsModelSelectOpen(false);
         }
       };
+      const handleEscape = (e: KeyboardEvent) => {
+        if (e.key !== "Escape") return;
+        e.preventDefault();
+        e.stopPropagation();
+        closeModelSelect();
+      };
       document.addEventListener("mousedown", handleOutsideClick);
-      return () =>
+      window.addEventListener("keydown", handleEscape, true);
+      return () => {
         document.removeEventListener("mousedown", handleOutsideClick);
-    }, [isModelSelectOpen]);
+        window.removeEventListener("keydown", handleEscape, true);
+      };
+    }, [isModelSelectOpen, closeModelSelect]);
 
     const handleBlur = (e: React.FocusEvent<HTMLDivElement>) => {
       if (
@@ -1044,7 +1064,50 @@ export const PromptInput = React.forwardRef<PromptInputRef, PromptInputProps>(
         setInternalModel(modelName);
       }
       onModelChange?.(modelName);
-      setIsModelSelectOpen(false);
+      closeModelSelect();
+    };
+
+    const activeModelIndex = Math.max(
+      0,
+      normalizedModels.findIndex((m) => m.name === activeModel),
+    );
+
+    const highlightModel = (idx: number) => {
+      setHoverStyle({
+        opacity: 1,
+        transform: `translateY(${idx * 34}px) scale(1)`,
+        transition:
+          "transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.15s ease",
+      });
+    };
+
+    const focusModelOption = (idx: number) => {
+      const options = modelMenuRef.current?.querySelectorAll<HTMLElement>(
+        '[role="menuitemradio"]',
+      );
+      if (!options?.length) return;
+      options[(idx + options.length) % options.length].focus();
+    };
+
+    const openModelSelectWithFocus = () => {
+      setIsModelSelectOpen(true);
+      requestAnimationFrame(() => focusModelOption(activeModelIndex));
+    };
+
+    const handleModelMenuKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+      const options = Array.from(
+        e.currentTarget.querySelectorAll<HTMLElement>('[role="menuitemradio"]'),
+      );
+      const current = options.indexOf(document.activeElement as HTMLElement);
+      if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+        e.preventDefault();
+        focusModelOption(current + (e.key === "ArrowDown" ? 1 : -1));
+      } else if (e.key === "Home" || e.key === "End") {
+        e.preventDefault();
+        focusModelOption(e.key === "Home" ? 0 : options.length - 1);
+      } else if (e.key === "Tab") {
+        setIsModelSelectOpen(false);
+      }
     };
 
     const openFileChooser = (e: React.MouseEvent) => {
@@ -1298,12 +1361,12 @@ export const PromptInput = React.forwardRef<PromptInputRef, PromptInputProps>(
                 if (
                   e.key === "Escape" &&
                   value.trim() === "" &&
-                  !hasAttachments
+                  !hasAttachments &&
+                  !isModelSelectOpen
                 ) {
                   setIsSmoothResize(false);
                   setInternalExpanded(false);
                   onExpandedChange?.(false);
-                  setIsModelSelectOpen(false);
                 }
               }}
               placeholder={placeholder}
@@ -1369,6 +1432,7 @@ export const PromptInput = React.forwardRef<PromptInputRef, PromptInputProps>(
               {allowModelSelect && (
                 <div className="relative">
                   <button
+                    ref={modelTriggerRef}
                     type="button"
                     onMouseDown={(e) => e.preventDefault()}
                     onClick={(e) => {
@@ -1383,10 +1447,25 @@ export const PromptInput = React.forwardRef<PromptInputRef, PromptInputProps>(
                           transition: "none",
                         });
                       }
-                      setIsModelSelectOpen((prev) => !prev);
+                      if (isModelSelectOpen) {
+                        setIsModelSelectOpen(false);
+                      } else if (e.detail === 0) {
+                        openModelSelectWithFocus();
+                      } else {
+                        setIsModelSelectOpen(true);
+                      }
                     }}
+                    onKeyDown={(e) => {
+                      if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+                        e.preventDefault();
+                        openModelSelectWithFocus();
+                      }
+                    }}
+                    aria-haspopup="menu"
+                    aria-expanded={isModelSelectOpen}
+                    aria-controls={modelMenuId}
                     className={cn(
-                      "group flex items-center gap-1.5 rounded-full px-2.5 py-1 text-zinc-500 dark:text-zinc-400 transition-all duration-200 outline-none hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-white/10 dark:hover:text-zinc-100 cursor-pointer select-none",
+                      "group relative flex items-center gap-1.5 rounded-full px-2.5 py-1 text-zinc-500 dark:text-zinc-400 transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 dark:focus-visible:ring-white/40 after:absolute after:-inset-y-2.5 after:inset-x-0 hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-white/10 dark:hover:text-zinc-100 cursor-pointer select-none",
                       isModelSelectOpen ? "bg-zinc-100 text-zinc-900 dark:bg-white/10 dark:text-white" : "",
                     )}
                     aria-label={`Select model. Current: ${activeModel}`}
@@ -1405,6 +1484,12 @@ export const PromptInput = React.forwardRef<PromptInputRef, PromptInputProps>(
                   </button>
 
                   <div
+                    ref={modelMenuRef}
+                    id={modelMenuId}
+                    role="menu"
+                    aria-label="Models"
+                    inert={!isModelSelectOpen}
+                    onKeyDown={handleModelMenuKeyDown}
                     style={{ transformOrigin: "bottom left" }}
                     onMouseLeave={() => {
                       const activeIdx = normalizedModels.findIndex(
@@ -1448,15 +1533,12 @@ export const PromptInput = React.forwardRef<PromptInputRef, PromptInputProps>(
                           <button
                             key={m.name}
                             type="button"
+                            role="menuitemradio"
+                            aria-checked={isSelected}
+                            tabIndex={-1}
                             onMouseDown={(e) => e.preventDefault()}
-                            onMouseEnter={() => {
-                              setHoverStyle({
-                                opacity: 1,
-                                transform: `translateY(${idx * 34}px) scale(1)`,
-                                transition:
-                                  "transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.15s ease",
-                              });
-                            }}
+                            onMouseEnter={() => highlightModel(idx)}
+                            onFocus={() => highlightModel(idx)}
                             onClick={(e) => {
                               e.stopPropagation();
                               selectModel(m.name);
@@ -1499,7 +1581,7 @@ export const PromptInput = React.forwardRef<PromptInputRef, PromptInputProps>(
                   type="button"
                   onMouseDown={(e) => e.preventDefault()}
                   onClick={cycleEffort}
-                  className="group flex items-center gap-1.5 rounded-full px-2.5 py-1 text-zinc-500 dark:text-zinc-400 transition-all duration-200 hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-white/10 dark:hover:text-zinc-100 outline-none cursor-pointer select-none"
+                  className="group relative flex items-center gap-1.5 rounded-full px-2.5 py-1 text-zinc-500 dark:text-zinc-400 transition-all duration-200 hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-white/10 dark:hover:text-zinc-100 outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 dark:focus-visible:ring-white/40 after:absolute after:-inset-y-2.5 after:inset-x-0 cursor-pointer select-none"
                   aria-label={`Cycle effort level. Current: ${currentEffort}`}
                 >
                   <DynamicBarsIcon level={currentEffort} />
@@ -1515,7 +1597,7 @@ export const PromptInput = React.forwardRef<PromptInputRef, PromptInputProps>(
                   onMouseDown={(e) => e.preventDefault()}
                   onClick={openFileChooser}
                   disabled={attachments.length >= maxAttachments || disabled}
-                  className="ml-auto flex size-7 items-center justify-center rounded-full text-zinc-500 dark:text-zinc-400 transition-all duration-200 hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-white/10 dark:hover:text-zinc-100 outline-none cursor-pointer disabled:opacity-40 disabled:pointer-events-none select-none"
+                  className="relative ml-auto flex size-7 items-center justify-center rounded-full text-zinc-500 dark:text-zinc-400 transition-all duration-200 hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-white/10 dark:hover:text-zinc-100 outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 dark:focus-visible:ring-white/40 after:absolute after:-inset-y-2 after:-left-2 after:right-0 cursor-pointer disabled:opacity-40 disabled:pointer-events-none select-none"
                   aria-label="Attach images"
                 >
                   <PlusIcon />
@@ -1565,7 +1647,7 @@ export const PromptInput = React.forwardRef<PromptInputRef, PromptInputProps>(
                 backgroundColor: accentColor || undefined,
                 color: accentColor ? "#000000" : undefined,
               }}
-              className="absolute right-2 bottom-2 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-zinc-900 text-white dark:bg-white dark:text-black transition-all duration-300 hover:opacity-90 active:scale-95 outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 dark:focus-visible:ring-white/40 cursor-pointer shadow-sm"
+              className="absolute right-2 bottom-2 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-zinc-900 text-white dark:bg-white dark:text-black transition-all duration-300 hover:opacity-90 active:scale-95 outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 dark:focus-visible:ring-white/40 after:absolute after:-inset-1.5 cursor-pointer shadow-sm"
             >
               <span className="relative flex h-full w-full items-center justify-center">
                 <span

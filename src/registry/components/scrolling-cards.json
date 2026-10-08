@@ -29,7 +29,7 @@
   "interactive": true,
   "supportsColor": false,
   "highlights": [
-    "Full-bleed Virat Kohli photography with consistent image crops",
+    "Full-bleed images with per-item imagePosition crops",
     "A shared timeline keeps card entry and stack scaling synchronized",
     "Spring stiffness and friction control the actual motion response",
     "Contained scrolling that works inside Component Studio",
@@ -72,8 +72,12 @@
         "description": "Focus the scrolling collection."
       },
       {
-        "key": "Arrow keys / Page Up / Page Down",
+        "key": "Arrow Up / Arrow Down",
         "description": "Scroll through the card collection."
+      },
+      {
+        "key": "Page Up / Page Down / Space / Shift+Space",
+        "description": "Scroll by one viewport."
       },
       {
         "key": "Home / End",
@@ -111,7 +115,8 @@
     {
       "name": "subtitle",
       "type": "string",
-      "description": "Supporting introduction copy."
+      "description": "Supporting introduction copy.",
+      "defaultValue": "\"Scroll down. Let every card become part of the story.\""
     },
     {
       "name": "eyebrow",
@@ -173,6 +178,7 @@
       "description": "Accessible name of the keyboard-focusable scroll region."
     }
   ],
+  "usage": "import { ScrollingCards } from \"@/components/ui/scrolling-cards\";\n\nconst items = [\n  { id: \"one\", image: \"/images/card-1.jpg\", imageAlt: \"Sunrise over hills\" },\n  { id: \"two\", image: \"/images/card-2.jpg\", imageAlt: \"Harbor at dusk\" },\n  { id: \"three\", image: \"/images/card-3.jpg\", imageAlt: \"Snowy peaks\" },\n];\n\nexport function ScrollingCardsDemo() {\n  return <ScrollingCards items={items} title=\"Our journey\" />;\n}",
   "files": [
     {
       "name": "scrolling-cards.tsx",
