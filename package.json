@@ -45,7 +45,6 @@
     "registry:sync": "node scripts/sync-registry.mjs"
   },
   "dependencies": {
-    "@devclubnst/ui": "^2.0.11",
     "@gsap/react": "^2.1.2",
     "@radix-ui/react-avatar": "^1.2.6",
     "@radix-ui/react-dialog": "^1.1.23",
