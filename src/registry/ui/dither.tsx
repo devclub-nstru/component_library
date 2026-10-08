@@ -248,6 +248,8 @@ export const Grainient: React.FC<GrainientProps> = ({
     let raf = 0;
     let isVisible = true;
     let isPageVisible = !document.hidden;
+    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let reduceMotion = motionQuery.matches;
     const t0 = performance.now();
 
     const loop = (t: number) => {
@@ -257,7 +259,7 @@ export const Grainient: React.FC<GrainientProps> = ({
     };
 
     const tryStart = () => {
-      if (isVisible && isPageVisible && raf === 0) {
+      if (!reduceMotion && isVisible && isPageVisible && raf === 0) {
         raf = requestAnimationFrame(loop);
       }
     };
@@ -291,6 +293,16 @@ export const Grainient: React.FC<GrainientProps> = ({
     };
     document.addEventListener("visibilitychange", onVisibility);
 
+    const onMotionPreference = () => {
+      reduceMotion = motionQuery.matches;
+      if (reduceMotion) {
+        tryStop();
+      } else {
+        tryStart();
+      }
+    };
+    motionQuery.addEventListener("change", onMotionPreference);
+
     tryStart();
 
     return () => {
@@ -298,10 +310,12 @@ export const Grainient: React.FC<GrainientProps> = ({
       ro.disconnect();
       io.disconnect();
       document.removeEventListener("visibilitychange", onVisibility);
+      motionQuery.removeEventListener("change", onMotionPreference);
       ctxMap.delete(container);
       try {
         container.removeChild(canvas);
       } catch {}
+      gl.getExtension("WEBGL_lose_context")?.loseContext();
     };
   }, []);
 
@@ -310,7 +324,7 @@ export const Grainient: React.FC<GrainientProps> = ({
     if (!container) return;
     const ctx = ctxMap.get(container);
     if (!ctx) return;
-    const { program } = ctx;
+    const { renderer, program, mesh } = ctx;
     const u = program.uniforms as Record<string, { value: unknown }>;
 
     u.uTimeSpeed.value = timeSpeed;
@@ -335,6 +349,7 @@ export const Grainient: React.FC<GrainientProps> = ({
     u.uColor2.value = new Float32Array(hexToRgb(color2));
     u.uColor3.value = new Float32Array(hexToRgb(color3));
     u.uLightMode.value = lightMode ? 1.0 : 0.0;
+    renderer.render({ scene: mesh });
   }, [
     timeSpeed,
     colorBalance,
@@ -364,6 +379,7 @@ export const Grainient: React.FC<GrainientProps> = ({
   return (
     <div
       ref={containerRef}
+      aria-hidden="true"
       className={`relative h-full w-full overflow-hidden ${className}`.trim()}
     />
   );

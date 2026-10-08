@@ -29,7 +29,7 @@
   "supportsColor": false,
   "highlights": [
     "Five synchronized cities including India (Asia/Kolkata)",
-    "5\u00d77 SVG dot glyphs with a dim inactive grid",
+    "5×7 SVG dot glyphs with a dim inactive grid",
     "One GSAP timeline coordinates scrambling and progressive resolution",
     "Custom IANA zones with daylight-saving rules handled by Intl",
     "Editable cities, formats, colors, dot geometry and timing",
@@ -56,7 +56,7 @@
       },
       {
         "label": "Character matrix",
-        "value": "5\u00d77 dots"
+        "value": "5×7 dots"
       }
     ]
   },
@@ -120,7 +120,7 @@
       "name": "scrambleDuration",
       "type": "number",
       "defaultValue": "1.6",
-      "description": "Scramble and resolution duration in seconds, bounded to 0.3\u20134."
+      "description": "Scramble and resolution duration in seconds, bounded to 0.3–4."
     },
     {
       "name": "scrambleInterval",
@@ -138,25 +138,25 @@
       "name": "dotRadius",
       "type": "number",
       "defaultValue": "0.36",
-      "description": "Radius within each unit-sized dot cell, bounded to 0.15\u20130.48."
+      "description": "Radius within each unit-sized dot cell, bounded to 0.15–0.48."
     },
     {
       "name": "rowGap",
       "type": "number",
       "defaultValue": "3",
-      "description": "Space between seven-dot-high rows, bounded to 1\u20138 units."
+      "description": "Space between seven-dot-high rows, bounded to 1–8 units."
     },
     {
       "name": "inactiveOpacity",
       "type": "number",
       "defaultValue": "0.13",
-      "description": "Dim grid opacity, bounded to 0\u20130.35."
+      "description": "Dim grid opacity, bounded to 0–0.35."
     },
     {
       "name": "glow",
       "type": "number",
       "defaultValue": "0.3",
-      "description": "Subtle SVG glow radius in pixels, bounded to 0\u20131.5."
+      "description": "Subtle SVG glow radius in pixels, bounded to 0–1.5."
     },
     {
       "name": "color",
@@ -174,7 +174,7 @@
       "name": "maxWidth",
       "type": "number",
       "defaultValue": "640",
-      "description": "Maximum display width in pixels, bounded to 180\u20131200. Scales down to its container."
+      "description": "Maximum display width in pixels, bounded to 180–1200. Scales down to its container."
     },
     {
       "name": "className",
@@ -189,6 +189,7 @@
       "description": "Accessible label for the group of city times."
     }
   ],
+  "usage": "import { MatrixClock } from \"@/components/ui/matrix-clock\";\n\nexport function MatrixClockDemo() {\n  return (\n    <MatrixClock\n      cities={[\n        { label: \"London\", timeZone: \"Europe/London\" },\n        { label: \"Tokyo\", timeZone: \"Asia/Tokyo\" },\n      ]}\n      hourFormat=\"24\"\n    />\n  );\n}",
   "files": [
     {
       "name": "matrix-clock.tsx",

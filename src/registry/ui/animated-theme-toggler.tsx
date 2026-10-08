@@ -422,7 +422,7 @@ export const AnimatedThemeToggler = ({
 
   const candyClasses = candy
     ? cn(
-        "relative inline-flex items-center justify-center font-medium select-none overflow-hidden cursor-pointer transition-all duration-200 ease-out active:scale-[0.95] active:brightness-95 hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 border-0",
+        "relative inline-flex items-center justify-center font-medium select-none overflow-hidden cursor-pointer transition-all duration-200 ease-out active:scale-[0.95] active:brightness-95 hover:brightness-110 border-0",
         "after:absolute after:top-0 after:left-[15%] after:right-[15%] after:h-px after:bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.65),transparent)] after:pointer-events-none",
         !candyColor &&
           (candyVariant === "auto"
@@ -437,8 +437,12 @@ export const AnimatedThemeToggler = ({
       ref={buttonRef}
       onClick={toggleTheme}
       style={customCandyStyle}
-      className={cn(className, candyClasses)}
-      aria-label="Toggle theme"
+      className={cn(
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:ring-offset-2 focus-visible:ring-offset-background dark:focus-visible:ring-zinc-300",
+        className,
+        candyClasses,
+      )}
+      aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
       {...props}
     >
       {candy && (
@@ -465,7 +469,6 @@ export const AnimatedThemeToggler = ({
           />
         )}
       </span>
-      <span className="sr-only">Toggle theme</span>
     </button>
   );
 };

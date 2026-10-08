@@ -228,6 +228,7 @@
       "description": "Additional wrapper styles."
     }
   ],
+  "usage": "import { CurvedNavbar } from \"@/components/ui/curved-navbar\";\n\nexport function CurvedNavbarDemo() {\n  return <CurvedNavbar brand=\"devclub\" actionLabel=\"Get started\" actionHref=\"/docs\" />;\n}",
   "files": [
     {
       "name": "curved-navbar.tsx",

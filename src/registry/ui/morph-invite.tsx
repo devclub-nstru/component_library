@@ -252,8 +252,13 @@ export function MorphInvite({
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (disabled || busy || requestRef.current || !validEmail) return;
+    if (disabled || busy || requestRef.current) return;
     const address = email.trim();
+    if (!validEmail) {
+      setError(address ? "Enter a valid email address." : "Enter an email address.");
+      inputRef.current?.focus();
+      return;
+    }
     if (roster.some((member) => member.email?.toLowerCase() === address.toLowerCase())) {
       setError("This person has already been invited.");
       inputRef.current?.focus();
@@ -352,6 +357,7 @@ export function MorphInvite({
           aria-hidden={!expanded || undefined}
           aria-busy={state === "sending"}
           inert={!expanded}
+          noValidate
           onSubmit={submit}
           className="invisible absolute top-[5px] right-[5px] flex h-9 min-w-0 items-center gap-2 rounded-full bg-[#efeee8] pl-3 pr-1 opacity-0 dark:bg-white/8"
           style={{ left: compactWidth + (compactWidth ? 15 : 5) }}
@@ -383,13 +389,13 @@ export function MorphInvite({
           />
           <button
             type="submit"
-            disabled={disabled || !validEmail || busy}
+            disabled={disabled || busy}
             aria-label={
               state === "sending" ? "Sending invitation"
                 : state === "sent" ? "Invitation sent" : "Send invitation"
             }
             className={cn(
-              "flex h-7 min-w-[56px] shrink-0 cursor-pointer items-center justify-center gap-1 rounded-full px-2.5 text-[11px] font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 disabled:cursor-default",
+              "relative flex h-7 min-w-[56px] shrink-0 cursor-pointer items-center before:absolute before:inset-x-0 before:-inset-y-1.5 justify-center gap-1 rounded-full px-2.5 text-[11px] font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 disabled:cursor-default",
               state === "sent"
                 ? "bg-indigo-600 text-white"
                 : validEmail

@@ -360,34 +360,55 @@ export function GooeyNav({
   const fill = (i: number) =>
     i === active ? computedActiveColor : inactiveFill;
 
-  const handleKeyDown = (e: KeyboardEvent<HTMLUListElement>) => {
-    if (e.key === "ArrowRight") {
-      e.preventDefault();
-      const next = (active + 1) % items.length;
-      if (value === undefined) setUncontrolled(next);
-      onChange?.(next);
-    } else if (e.key === "ArrowLeft") {
-      e.preventDefault();
-      const prev = (active - 1 + items.length) % items.length;
-      if (value === undefined) setUncontrolled(prev);
-      onChange?.(prev);
-    } else if (e.key === "Home") {
-      e.preventDefault();
-      if (value === undefined) setUncontrolled(0);
-      onChange?.(0);
-    } else if (e.key === "End") {
-      e.preventDefault();
-      const last = items.length - 1;
-      if (value === undefined) setUncontrolled(last);
-      onChange?.(last);
-    }
+  const select = (index: number) => {
+    if (value === undefined) setUncontrolled(index);
+    onChange?.(index);
   };
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLUListElement>) => {
+    const last = items.length - 1;
+    const target =
+      e.key === "ArrowRight"
+        ? (active + 1) % items.length
+        : e.key === "ArrowLeft"
+          ? (active - 1 + items.length) % items.length
+          : e.key === "Home"
+            ? 0
+            : e.key === "End"
+              ? last
+              : null;
+    if (target === null) return;
+    e.preventDefault();
+    select(target);
+    navRef.current
+      ?.querySelectorAll<HTMLElement>('[role="tab"]')
+      [target]?.focus({ preventScroll: true });
+  };
+
+  useEffect(() => {
+    const nav = navRef.current;
+    const tab = nav?.querySelectorAll<HTMLElement>('[role="tab"]')[active];
+    if (!nav || !tab || nav.scrollWidth <= nav.clientWidth) return;
+    const navBox = nav.getBoundingClientRect();
+    const tabBox = tab.getBoundingClientRect();
+    nav.scrollTo({
+      left:
+        nav.scrollLeft +
+        tabBox.left -
+        navBox.left -
+        (navBox.width - tabBox.width) / 2,
+      behavior: reduced ? "auto" : "smooth",
+    });
+  }, [active, reduced]);
 
   return (
     <nav
       ref={navRef}
       data-slot="gooey-nav"
-      className={cn("inline-block select-none", className)}
+      className={cn(
+        "inline-block select-none max-md:-my-6 max-md:max-w-full max-md:overflow-x-auto max-md:py-6 max-md:[scrollbar-width:none]",
+        className,
+      )}
       {...props}
     >
       <ul
@@ -438,10 +459,7 @@ export function GooeyNav({
                 size={size}
                 activeLabelColor={computedLabelColor}
                 tabIndex={isActive ? 0 : -1}
-                onSelect={() => {
-                  if (value === undefined) setUncontrolled(i);
-                  onChange?.(i);
-                }}
+                onSelect={() => select(i)}
               />
             </Segment>
           );

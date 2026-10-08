@@ -232,6 +232,7 @@
       "defaultValue": "0.08"
     }
   ],
+  "usage": "import { CursorTrailLoader } from \"@/components/ui/cursor-trail-loader\";\n\nconst images = [\"/images/trail-1.jpg\", \"/images/trail-2.jpg\", \"/images/trail-3.jpg\"];\n\nexport function CursorTrailLoaderDemo() {\n  return (\n    <CursorTrailLoader images={images} className=\"h-[480px]\">\n      <h1>Welcome</h1>\n    </CursorTrailLoader>\n  );\n}",
   "files": [
     {
       "name": "cursor-trail-loader.tsx",

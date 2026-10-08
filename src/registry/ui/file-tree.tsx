@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useState, useCallback, useMemo, useRef } from "react";
 import { ChevronRight, Folder, FolderOpen, File } from "lucide-react";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { cn } from "@/lib/utils";
@@ -129,6 +129,76 @@ export function TreeView({
     ],
   );
 
+  const visibleNodes = useMemo(() => {
+    const list: { node: TreeNode; parentId: string | null }[] = [];
+    const walk = (nodes: TreeNode[], parentId: string | null) => {
+      for (const node of nodes) {
+        list.push({ node, parentId });
+        if (node.children?.length && currentExpandedSet.has(node.id)) {
+          walk(node.children, node.id);
+        }
+      }
+    };
+    walk(data, null);
+    return list;
+  }, [data, currentExpandedSet]);
+
+  const itemRefs = useRef(new Map<string, HTMLDivElement>());
+  const [focusedId, setFocusedId] = useState<string | null>(null);
+
+  const tabStopId = useMemo(() => {
+    const visibleIds = visibleNodes.map(({ node }) => node.id);
+    if (focusedId && visibleIds.includes(focusedId)) return focusedId;
+    return (
+      visibleIds.find((id) => currentSelectedIds.includes(id)) ??
+      visibleIds[0] ??
+      null
+    );
+  }, [visibleNodes, focusedId, currentSelectedIds]);
+
+  const focusNode = useCallback((nodeId: string | null | undefined) => {
+    if (!nodeId) return;
+    setFocusedId(nodeId);
+    itemRefs.current.get(nodeId)?.focus();
+  }, []);
+
+  const moveFocus = useCallback(
+    (nodeId: string, key: string) => {
+      const index = visibleNodes.findIndex(({ node }) => node.id === nodeId);
+      if (index === -1) return false;
+      const current = visibleNodes[index];
+      const hasChildren = (current.node.children?.length ?? 0) > 0;
+      const isExpanded = currentExpandedSet.has(nodeId);
+
+      switch (key) {
+        case "ArrowDown":
+          focusNode(visibleNodes[index + 1]?.node.id);
+          return true;
+        case "ArrowUp":
+          focusNode(visibleNodes[index - 1]?.node.id);
+          return true;
+        case "Home":
+          focusNode(visibleNodes[0]?.node.id);
+          return true;
+        case "End":
+          focusNode(visibleNodes[visibleNodes.length - 1]?.node.id);
+          return true;
+        case "ArrowRight":
+          if (!hasChildren) return false;
+          if (isExpanded) focusNode(current.node.children?.[0]?.id);
+          else toggleExpanded(nodeId);
+          return true;
+        case "ArrowLeft":
+          if (hasChildren && isExpanded) toggleExpanded(nodeId);
+          else focusNode(current.parentId);
+          return true;
+        default:
+          return false;
+      }
+    },
+    [visibleNodes, currentExpandedSet, focusNode, toggleExpanded],
+  );
+
   const handleNodeClick = useCallback(
     (node: TreeNode, e: React.MouseEvent) => {
       e.stopPropagation();
@@ -153,10 +223,17 @@ export function TreeView({
     return (
       <div key={node.id} className="relative">
         <div
+          ref={(element) => {
+            if (element) itemRefs.current.set(node.id, element);
+            else itemRefs.current.delete(node.id);
+          }}
           role="treeitem"
+          aria-level={level + 1}
           aria-expanded={hasChildren ? isExpanded : undefined}
           aria-selected={selectable ? isSelected : undefined}
-          tabIndex={0}
+          aria-disabled={node.disabled || undefined}
+          tabIndex={node.id === tabStopId ? 0 : -1}
+          onFocus={() => setFocusedId(node.id)}
           className={cn(
             "group/node relative flex items-center h-8 px-2 rounded-md cursor-pointer select-none transition-colors duration-150 outline-none focus-visible:ring-1 focus-visible:ring-zinc-400 dark:focus-visible:ring-zinc-600",
             isSelected
@@ -170,12 +247,8 @@ export function TreeView({
             if (e.key === "Enter" || e.key === " ") {
               e.preventDefault();
               handleNodeClick(node, e as unknown as React.MouseEvent);
-            } else if (e.key === "ArrowRight" && hasChildren && !isExpanded) {
+            } else if (moveFocus(node.id, e.key)) {
               e.preventDefault();
-              toggleExpanded(node.id);
-            } else if (e.key === "ArrowLeft" && hasChildren && isExpanded) {
-              e.preventDefault();
-              toggleExpanded(node.id);
             }
           }}
         >
@@ -262,6 +335,7 @@ export function TreeView({
                         opacity: { duration: 0.1 },
                       },
               }}
+              role="group"
               className="overflow-hidden"
             >
               {node.children!.map((child) => renderNode(child, level + 1))}

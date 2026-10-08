@@ -75,6 +75,7 @@ export interface ComponentItem {
     code: string;
   }[];
   props?: ComponentProp[];
+  usage?: string;
   interactive?: boolean;
   supportsColor?: boolean;
   hidden?: boolean;

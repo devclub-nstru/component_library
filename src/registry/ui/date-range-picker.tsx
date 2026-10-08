@@ -2,6 +2,7 @@
 
 import {
   useCallback,
+  useEffect,
   useId,
   useMemo,
   useRef,
@@ -327,6 +328,7 @@ interface MonthProps {
   onHover: (date: Date) => void;
   onKey: (event: ReactKeyboardEvent<HTMLButtonElement>, date: Date) => void;
   onFocusDay: (date: Date) => void;
+  focusRequest: string | null;
   idBase: string;
 }
 
@@ -343,8 +345,10 @@ function Month({
   onHover,
   onKey,
   onFocusDay,
+  focusRequest,
   idBase,
 }: MonthProps) {
+  const gridRef = useRef<HTMLDivElement>(null);
   const first = useMemo(
     () => addDays(month, -((month.getDay() - weekStartsOn + 7) % 7)),
     [month, weekStartsOn],
@@ -357,6 +361,13 @@ function Month({
     [first],
   );
   const titleId = `${idBase}-${keyOf(month)}`;
+
+  useEffect(() => {
+    if (!focusRequest) return;
+    gridRef.current
+      ?.querySelector<HTMLButtonElement>(`[data-date="${focusRequest}"]`)
+      ?.focus();
+  }, [focusRequest]);
   const inMonth = (date: Date) => monthDiff(date, month) === 0;
 
   const lo = range?.start;
@@ -399,7 +410,12 @@ function Month({
       >
         {formatters.title.format(month)}
       </p>
-      <div role="grid" aria-labelledby={titleId} className="flex flex-col">
+      <div
+        ref={gridRef}
+        role="grid"
+        aria-labelledby={titleId}
+        className="flex flex-col"
+      >
         <div role="row" className="grid grid-cols-7 mb-2.5">
           {rows[0].map((date) => (
             <span
@@ -561,6 +577,7 @@ export function DateRangePicker({
   const reduced = useReducedFlag();
   const isSmallScreen = useIsSmallScreen();
   const detectedToday = useToday();
+  const hydrated = detectedToday !== undefined;
   const today = useMemo(() => detectedToday ?? new Date(), [detectedToday]);
   const uid = useId();
 
@@ -587,6 +604,7 @@ export function DateRangePicker({
   const [anchor, setAnchor] = useState<Date | null>(null);
   const [hover, setHover] = useState<Date | null>(null);
   const [focusKey, setFocusKey] = useState("");
+  const [focusRequest, setFocusRequest] = useState<string | null>(null);
   const [isApplied, setIsApplied] = useState(false);
   const appliedTimerRef = useRef<number | null>(null);
 
@@ -632,7 +650,7 @@ export function DateRangePicker({
 
   const shown = anchor ? ordered(anchor, hover ?? anchor) : draft;
   const activePreset =
-    today && !anchor
+    hydrated && !anchor
       ? presets.findIndex((preset) => sameRange(preset.range(today), draft))
       : -1;
   const days = shown ? dayDiff(shown.end, shown.start) + 1 : 0;
@@ -734,6 +752,7 @@ export function DateRangePicker({
     event.preventDefault();
     const next = clampDate(move(), minDate, maxDate);
     setFocusKey(keyOf(next));
+    setFocusRequest(keyOf(next));
     if (anchor) setHover(next);
     const first = view;
     const last = addMonths(view, count - 1);
@@ -750,13 +769,16 @@ export function DateRangePicker({
     return keyOf(visible[0]);
   }, [focusKey, shown, visible]);
 
-  const shownText = shown ? format(shown) : placeholder;
-  const countText = shown ? `${days} ${days === 1 ? "day" : "days"}` : "";
-  const status = anchor
-    ? `Start ${formatters.label.format(anchor)}. Choose an end date.`
-    : shown
-      ? `${shownText}, ${countText}`
-      : "";
+  const shownText = !hydrated ? "" : shown ? format(shown) : placeholder;
+  const countText =
+    hydrated && shown ? `${days} ${days === 1 ? "day" : "days"}` : "";
+  const status = !hydrated
+    ? ""
+    : anchor
+      ? `Start ${formatters.label.format(anchor)}. Choose an end date.`
+      : shown
+        ? `${shownText}, ${countText}`
+        : "";
 
   return (
     <div
@@ -844,39 +866,45 @@ export function DateRangePicker({
           </div>
 
           <div className="relative overflow-hidden w-full min-h-73.5">
-            <AnimatePresence initial={false} mode="wait" custom={direction}>
-              <MonthsView
-                key={`${keyOf(view)}-${count}`}
-                direction={direction}
-                reduced={reduced}
-              >
-                {visible.map((month) => (
-                  <Month
-                    key={keyOf(month)}
-                    month={month}
-                    range={shown}
-                    tabbable={tabbable}
-                    today={today}
-                    minDate={minDate}
-                    maxDate={maxDate}
-                    weekStartsOn={weekStartsOn}
-                    formatters={formatters}
-                    idBase={uid}
-                    onPick={pick}
-                    onHover={(date) => {
-                      if (anchor) setHover(date);
-                    }}
-                    onKey={onDayKey}
-                    onFocusDay={(date) => setFocusKey(keyOf(date))}
-                  />
-                ))}
-              </MonthsView>
-            </AnimatePresence>
+            {hydrated && (
+              <AnimatePresence initial={false} mode="wait" custom={direction}>
+                <MonthsView
+                  key={`${keyOf(view)}-${count}`}
+                  direction={direction}
+                  reduced={reduced}
+                >
+                  {visible.map((month) => (
+                    <Month
+                      key={keyOf(month)}
+                      month={month}
+                      range={shown}
+                      tabbable={tabbable}
+                      today={today}
+                      minDate={minDate}
+                      maxDate={maxDate}
+                      weekStartsOn={weekStartsOn}
+                      formatters={formatters}
+                      idBase={uid}
+                      onPick={pick}
+                      onHover={(date) => {
+                        if (anchor) setHover(date);
+                      }}
+                      onKey={onDayKey}
+                      onFocusDay={(date) => {
+                        setFocusKey(keyOf(date));
+                        setFocusRequest(null);
+                      }}
+                      focusRequest={focusRequest}
+                    />
+                  ))}
+                </MonthsView>
+              </AnimatePresence>
+            )}
           </div>
         </div>
       </div>
 
-      <div className="mt-6 pt-5 border-t border-zinc-200/80 dark:border-white/8 flex items-center justify-between gap-4">
+      <div className="mt-6 pt-5 border-t border-zinc-200/80 dark:border-white/8 flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-zinc-100 dark:bg-white/6 border border-zinc-200/60 dark:border-white/8 flex items-center justify-center text-zinc-600 dark:text-zinc-400 shrink-0 shadow-xs">
             <Calendar size={15} strokeWidth={2} />
@@ -907,7 +935,7 @@ export function DateRangePicker({
           </div>
         </div>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2.5 ml-auto">
           <motion.button
             type="button"
             whileHover={{ scale: 1.03 }}

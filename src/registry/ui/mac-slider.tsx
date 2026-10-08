@@ -1,9 +1,11 @@
 "use client";
 
-import React, { useEffect, useRef, useId, useCallback } from "react";
+import React, { useEffect, useRef, useId, useCallback, useState } from "react";
 import {
   motion,
   useMotionValue,
+  useMotionValueEvent,
+  useReducedMotion,
   useSpring,
   useTransform,
   animate,
@@ -119,6 +121,17 @@ const SIZE_CONFIGS: Record<
     bezelWidth: 20,
   },
 };
+
+type SpringConfig = Parameters<typeof useSpring>[1];
+
+function useReducibleSpring(
+  source: MotionValue<number>,
+  config: SpringConfig,
+  instant: boolean,
+): MotionValue<number> {
+  const spring = useSpring(source, config);
+  return instant ? source : spring;
+}
 
 function isMotionValue(val: unknown): val is MotionValue<number> {
   return typeof val === "object" && val !== null && "get" in val && "on" in val;
@@ -332,6 +345,7 @@ export interface MacSliderProps {
   blurLevel?: number;
   className?: string;
   disabled?: boolean;
+  label?: string;
 }
 
 export const MacSlider: React.FC<MacSliderProps> = ({
@@ -351,9 +365,11 @@ export const MacSlider: React.FC<MacSliderProps> = ({
   blurLevel = 0,
   className,
   disabled = false,
+  label = "Value",
 }) => {
   const generatedId = useId();
   const filterId = `mac-filter-${generatedId.replace(/:/g, "")}`;
+  const reduceMotion = useReducedMotion() ?? false;
 
   const currentTheme = COLOR_THEMES[color] ?? COLOR_THEMES.blue;
   const currentSize = SIZE_CONFIGS[size] ?? SIZE_CONFIGS.md;
@@ -375,6 +391,8 @@ export const MacSlider: React.FC<MacSliderProps> = ({
   const initialVal =
     controlledValue !== undefined ? controlledValue : defaultValue;
   const valueMotion = useMotionValue(initialVal);
+  const [ariaValue, setAriaValue] = useState(initialVal);
+  useMotionValueEvent(valueMotion, "change", setAriaValue);
   const initialRatio = Math.max(
     0,
     Math.min(1, (initialVal - min) / (max - min)),
@@ -413,7 +431,7 @@ export const MacSlider: React.FC<MacSliderProps> = ({
     refractionBase.set(refractionLevel);
   }, [refractionLevel, refractionBase]);
 
-  const scaleRatio = useSpring(
+  const scaleRatio = useReducibleSpring(
     useTransform((): number => {
       const press = isUp.get() > 0.5 ? 0.9 : 0.4;
       return press * (refractionBase.get() || 0);
@@ -423,6 +441,7 @@ export const MacSlider: React.FC<MacSliderProps> = ({
       damping: 30,
       mass: 0.8,
     },
+    reduceMotion,
   );
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -434,20 +453,41 @@ export const MacSlider: React.FC<MacSliderProps> = ({
     width: sliderWidth,
   });
 
-  const scaleSpring = useSpring(
+  const scaleSpring = useReducibleSpring(
     useTransform(isUp, [0, 1], [SCALE_REST, SCALE_DRAG]),
     {
       stiffness: 400,
       damping: 30,
       mass: 0.8,
     },
+    reduceMotion,
   );
 
-  const backgroundOpacity = useSpring(useTransform(isUp, [0, 1], [1, 0.1]), {
-    stiffness: 400,
-    damping: 30,
-    mass: 0.8,
-  });
+  const backgroundOpacity = useReducibleSpring(
+    useTransform(isUp, [0, 1], [1, 0.1]),
+    {
+      stiffness: 400,
+      damping: 30,
+      mass: 0.8,
+    },
+    reduceMotion,
+  );
+
+  const seekThumb = useCallback(
+    (targetX: number) => {
+      if (reduceMotion) {
+        thumbX.jump(targetX);
+        return;
+      }
+      animate(thumbX, targetX, {
+        type: "spring",
+        stiffness: 450,
+        damping: 32,
+        mass: 0.75,
+      });
+    },
+    [reduceMotion, thumbX],
+  );
 
   const updatePositionFromClientX = useCallback(
     (clientX: number, animateSpring = false) => {
@@ -470,12 +510,7 @@ export const MacSlider: React.FC<MacSliderProps> = ({
       const targetX = minX + normalizedRatio * trackTravel;
 
       if (animateSpring) {
-        animate(thumbX, targetX, {
-          type: "spring",
-          stiffness: 450,
-          damping: 32,
-          mass: 0.75,
-        });
+        seekThumb(targetX);
       } else {
         thumbX.set(targetX);
       }
@@ -493,6 +528,7 @@ export const MacSlider: React.FC<MacSliderProps> = ({
       trackTravel,
       minX,
       thumbX,
+      seekThumb,
       valueMotion,
       onChange,
     ],
@@ -512,15 +548,9 @@ export const MacSlider: React.FC<MacSliderProps> = ({
         0,
         Math.min(1, (controlledValue - min) / (max - min)),
       );
-      const targetX = minX + ratio * trackTravel;
-      animate(thumbX, targetX, {
-        type: "spring",
-        stiffness: 450,
-        damping: 32,
-        mass: 0.75,
-      });
+      seekThumb(minX + ratio * trackTravel);
     }
-  }, [controlledValue, min, max, minX, trackTravel, thumbX, valueMotion]);
+  }, [controlledValue, min, max, minX, trackTravel, seekThumb, valueMotion]);
 
   const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     if (disabled || !trackRef.current) return;
@@ -580,13 +610,7 @@ export const MacSlider: React.FC<MacSliderProps> = ({
     valueMotion.set(nextVal);
     onChange?.(nextVal);
     const ratio = (nextVal - min) / (max - min);
-    const targetX = minX + ratio * trackTravel;
-    animate(thumbX, targetX, {
-      type: "spring",
-      stiffness: 450,
-      damping: 32,
-      mass: 0.75,
-    });
+    seekThumb(minX + ratio * trackTravel);
   };
 
   const backdropStyle =
@@ -610,7 +634,9 @@ export const MacSlider: React.FC<MacSliderProps> = ({
         role="slider"
         aria-valuemin={min}
         aria-valuemax={max}
-        aria-valuenow={valueMotion.get()}
+        aria-valuenow={ariaValue}
+        aria-label={label}
+        aria-disabled={disabled || undefined}
         onKeyDown={handleKeyDown}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}

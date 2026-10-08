@@ -197,6 +197,13 @@ export function DeleteSelectionShowcase() {
                 <motion.button
                   key="select-all-btn"
                   type="button"
+                  role="checkbox"
+                  aria-checked={
+                    isAllSelected ? true : isPartiallySelected ? "mixed" : false
+                  }
+                  aria-label={
+                    isAllSelected ? "Deselect all files" : "Select all files"
+                  }
                   initial={{ scale: 0, opacity: 0, width: 0 }}
                   animate={{ scale: 1, opacity: 1, width: 28 }}
                   exit={{ scale: 0, opacity: 0, width: 0 }}

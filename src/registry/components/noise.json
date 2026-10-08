@@ -50,17 +50,16 @@
       },
       {
         "label": "Frame Rate Cap",
-        "value": "30 / 60 FPS configurable"
+        "value": "30 FPS default (fps prop)"
       },
       {
         "label": "Refresh Interval",
-        "value": "2 frame stride default"
+        "value": "1 (every rendered frame) default"
       }
     ]
   },
   "accessibility": {
-    "role": "presentation",
-    "aria": "data-slot='noise' rendered with aria-hidden or presentation semantics for decorative textures.",
+    "aria": "No role or aria-hidden is set. Extra props are spread onto the root div, so pass aria-hidden=\"true\" for purely decorative use without children.",
     "reducedMotion": "Automatically stops animated pattern jitter and freezes grain texture when prefers-reduced-motion is active."
   },
   "guidelines": {
@@ -177,8 +176,19 @@
       "type": "string",
       "defaultValue": "undefined",
       "description": "Additional CSS classes passed directly to the underlying canvas element."
+    },
+    {
+      "name": "canvasRef",
+      "type": "React.Ref<HTMLCanvasElement>",
+      "description": "Ref to the internal canvas element."
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "description": "Content rendered above the noise layer."
     }
   ],
+  "usage": "import { Noise } from \"@/components/ui/noise\";\n\nexport function NoiseDemo() {\n  return (\n    <Noise patternAlpha={18} vignette className=\"h-80 w-full bg-zinc-950\">\n      <h2 className=\"p-8 text-white\">Film grain</h2>\n    </Noise>\n  );\n}",
   "files": [
     {
       "name": "noise.tsx",

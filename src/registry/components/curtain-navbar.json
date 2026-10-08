@@ -5,7 +5,7 @@
   "title": "Curtain Navbar",
   "type": "registry:ui",
   "description": "A floating glass header opens into a full-screen color curtain with oversized condensed links and synchronized hover details.",
-  "summary": "Inspired by the TUX Creative House navigation, this Dev Club navbar reveals a rounded curtain from below, then staggers oversized centered links into view. Pointer hover and keyboard focus animate supporting category and description text. A reversible GSAP timeline keeps opening and closing synchronized, while Radix Dialog manages focus, Escape and scroll locking. Customize colors, links, notes and motion timing. Header links scramble through ASCII glyphs, and cursor height smoothly controls the oversized menu scroll on fine pointers. Wheel, touch and keyboard navigation remain available.",
+  "summary": "Inspired by the TUX Creative House navigation, this Dev Club navbar reveals a rounded curtain from below, then staggers oversized centered links into view. Pointer hover and keyboard focus animate supporting category and description text. A reversible GSAP timeline keeps opening and closing synchronized, while Radix Dialog manages focus and Escape. Customize colors, links, notes and motion timing. Header links scramble through ASCII glyphs, and cursor height smoothly controls the oversized menu scroll on fine pointers. Wheel, touch and keyboard navigation remain available.",
   "category": "navbar",
   "tags": [
     "navbar",
@@ -37,7 +37,7 @@
     "Oversized centered menu links with supporting hover and focus details",
     "Reversible timeline and configurable closing speed",
     "Full-screen mobile layout with scrollable navigation",
-    "Radix focus trap, Escape, scroll locking and reduced-motion support",
+    "Radix focus trap, Escape to close and reduced-motion support",
     "ASCII glitch on header links reuses the existing AsciiGlitchText component",
     "Pointer-controlled smooth menu scrolling with native wheel and touch input"
   ],
@@ -253,6 +253,7 @@
       "description": "Pointer scroll easing duration in seconds, bounded to 0.2–1.5."
     }
   ],
+  "usage": "import { CurtainNavbar } from \"@/components/ui/curtain-navbar\";\n\nexport function CurtainNavbarDemo() {\n  return <CurtainNavbar brand=\"devclub\" brandHref=\"/\" />;\n}",
   "files": [
     {
       "name": "curtain-navbar.tsx",

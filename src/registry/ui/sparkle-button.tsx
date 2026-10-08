@@ -7,7 +7,12 @@ import React, {
   useLayoutEffect,
   useEffect,
 } from "react";
-import { motion, AnimatePresence, type HTMLMotionProps } from "motion/react";
+import {
+  motion,
+  AnimatePresence,
+  useReducedMotion,
+  type HTMLMotionProps,
+} from "motion/react";
 import { cn } from "@/lib/utils";
 
 export type SparkleButtonSize = "sm" | "default" | "lg";
@@ -87,6 +92,7 @@ export const SparkleButton = React.forwardRef<
     },
     ref,
   ) => {
+    const reduceMotion = useReducedMotion();
     const [internalLoading, setInternalLoading] = useState(false);
     const isControlled = loading !== undefined;
     const isLoading = isControlled ? loading : internalLoading;
@@ -199,9 +205,11 @@ export const SparkleButton = React.forwardRef<
       <div className="relative inline-flex items-center justify-center p-1 select-none">
         <motion.button
           ref={ref}
+          type="button"
+          aria-busy={isLoading}
           disabled={disabled}
           onClick={handleClick}
-          whileTap={{ scale: 0.98 }}
+          whileTap={reduceMotion ? undefined : { scale: 0.98 }}
           className={cn(
             "group relative inline-flex items-center justify-center rounded-full font-medium select-none overflow-hidden cursor-pointer",
             "transition-[border-color,box-shadow,filter,background-color] duration-300 ease-out",
@@ -228,7 +236,12 @@ export const SparkleButton = React.forwardRef<
             {activeText}
           </span>
 
-          <span className="relative z-10 flex items-center justify-center gap-2.5">
+          <span className="sr-only">{currentTargetText}</span>
+
+          <span
+            aria-hidden="true"
+            className="relative z-10 flex items-center justify-center gap-2.5"
+          >
             {icon ? (
               <span className="shrink-0">{icon}</span>
             ) : (
@@ -236,7 +249,7 @@ export const SparkleButton = React.forwardRef<
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 animate={
-                  isLoading
+                  isLoading && !reduceMotion
                     ? {
                         scale: [1, 1.15, 1],
                         filter: [
@@ -251,13 +264,15 @@ export const SparkleButton = React.forwardRef<
                       }
                 }
                 transition={
-                  isLoading
-                    ? {
-                        duration: 1.6,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                      }
-                    : { duration: 0.25 }
+                  reduceMotion
+                    ? { duration: 0 }
+                    : isLoading
+                      ? {
+                          duration: 1.6,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                        }
+                      : { duration: 0.25 }
                 }
                 className={cn(
                   "shrink-0 transition-colors duration-300",
@@ -276,29 +291,37 @@ export const SparkleButton = React.forwardRef<
 
             <motion.div
               animate={targetWidth > 0 ? { width: targetWidth } : undefined}
-              transition={{
-                type: "spring",
-                stiffness: springStiffness,
-                damping: springDamping,
-                mass: 0.8,
-              }}
+              transition={
+                reduceMotion
+                  ? { duration: 0 }
+                  : {
+                      type: "spring",
+                      stiffness: springStiffness,
+                      damping: springDamping,
+                      mass: 0.8,
+                    }
+              }
               style={{ willChange: "width" }}
               className="relative inline-flex items-center justify-center overflow-hidden"
             >
               <AnimatePresence mode="popLayout" initial={false}>
                 <motion.span
                   key={isLoading ? "active" : "idle"}
-                  initial={{ opacity: 0 }}
+                  initial={reduceMotion ? false : { opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  exit={{
-                    opacity: 0,
-                    filter: "blur(8px)",
-                    y: direction === "top" ? 8 : -8,
-                    transition: {
-                      duration: dissolveDuration,
-                      ease: [0.16, 1, 0.3, 1] as const,
-                    },
-                  }}
+                  exit={
+                    reduceMotion
+                      ? { opacity: 0, transition: { duration: 0 } }
+                      : {
+                          opacity: 0,
+                          filter: "blur(8px)",
+                          y: direction === "top" ? 8 : -8,
+                          transition: {
+                            duration: dissolveDuration,
+                            ease: [0.16, 1, 0.3, 1] as const,
+                          },
+                        }
+                  }
                   className={cn(
                     "inline-flex items-center justify-center tracking-tight font-medium whitespace-nowrap",
                     variant === "outline" || variant === "glass"
@@ -309,14 +332,22 @@ export const SparkleButton = React.forwardRef<
                   {segments.map((segment, index) => (
                     <motion.span
                       key={`${isLoading ? "act" : "idl"}-${index}`}
-                      initial={defaultFrom}
-                      animate={animateKeyframes}
-                      transition={{
-                        duration: stepDuration,
-                        times,
-                        delay: (index * delay) / 1000,
-                        ease: [0.16, 1, 0.3, 1] as const,
-                      }}
+                      initial={reduceMotion ? false : defaultFrom}
+                      animate={
+                        reduceMotion
+                          ? { filter: "blur(0px)", opacity: 1, y: 0 }
+                          : animateKeyframes
+                      }
+                      transition={
+                        reduceMotion
+                          ? { duration: 0 }
+                          : {
+                              duration: stepDuration,
+                              times,
+                              delay: (index * delay) / 1000,
+                              ease: [0.16, 1, 0.3, 1] as const,
+                            }
+                      }
                       style={{
                         display: "inline-block",
                         willChange: "transform, filter, opacity",

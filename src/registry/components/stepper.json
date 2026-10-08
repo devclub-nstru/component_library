@@ -50,7 +50,7 @@
     "keyboard": [
       {
         "key": "Tab / Shift+Tab",
-        "description": "Move between enabled step buttons."
+        "description": "Move between enabled step buttons (buttons render only when onStepChange is provided)."
       },
       {
         "key": "Enter / Space",
@@ -145,6 +145,7 @@
       "required": false
     }
   ],
+  "usage": "\"use client\";\n\nimport { useState } from \"react\";\nimport { Stepper } from \"@/components/ui/stepper\";\n\nconst steps = [\n  { id: \"account\", title: \"Account\" },\n  { id: \"workspace\", title: \"Workspace\" },\n  { id: \"review\", title: \"Review\" },\n];\n\nexport function StepperDemo() {\n  const [step, setStep] = useState(1);\n\n  return <Stepper steps={steps} currentStep={step} onStepChange={setStep} />;\n}",
   "files": [
     {
       "name": "stepper.tsx",

@@ -6,6 +6,7 @@ import React, {
   useEffect,
   useMemo,
   forwardRef,
+  useId,
   useImperativeHandle,
 } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
@@ -45,6 +46,7 @@ export const DottedAccordion = forwardRef<HTMLDivElement, DottedAccordionProps>(
     const [activeIndex, setActiveIndex] = useState<number | null>(defaultIndex);
     const innerRef = useRef<HTMLDivElement>(null);
     const prefersReducedMotion = useReducedMotion();
+    const baseId = useId();
 
     useImperativeHandle(ref, () => innerRef.current as HTMLDivElement);
 
@@ -102,6 +104,8 @@ export const DottedAccordion = forwardRef<HTMLDivElement, DottedAccordionProps>(
           <div className="flex flex-col gap-0 rounded-none divide-y divide-zinc-200 dark:divide-white/10 relative z-10">
             {items.map((item, index) => {
               const isOpen = activeIndex === index;
+              const triggerId = `${baseId}-trigger-${index}`;
+              const panelId = `${baseId}-panel-${index}`;
 
               return (
                 <div
@@ -154,7 +158,9 @@ export const DottedAccordion = forwardRef<HTMLDivElement, DottedAccordionProps>(
 
                   <button
                     type="button"
+                    id={triggerId}
                     aria-expanded={isOpen}
+                    aria-controls={isOpen ? panelId : undefined}
                     onClick={() => toggleAccordion(index)}
                     className="group flex w-full cursor-pointer items-center justify-between px-5 py-4 text-left rounded-none transition-colors outline-none focus-visible:ring-1 focus-visible:ring-foreground/30 dark:focus-visible:ring-white/30"
                   >
@@ -236,6 +242,9 @@ export const DottedAccordion = forwardRef<HTMLDivElement, DottedAccordionProps>(
                                 },
                               },
                         }}
+                        id={panelId}
+                        role="region"
+                        aria-labelledby={triggerId}
                         className="overflow-hidden rounded-none"
                       >
                         <div

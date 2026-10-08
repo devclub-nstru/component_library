@@ -1,6 +1,12 @@
 "use client";
 
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   motion,
   useMotionValue,
@@ -30,6 +36,8 @@ export interface TwitterCardProps {
   linkClassName?: string;
   labelClassName?: string;
 }
+
+const VIEWPORT_MARGIN = 24;
 
 const XIcon = ({ className }: { className?: string }) => (
   <svg viewBox="0 0 24 24" className={cn("fill-current", className)}>
@@ -135,6 +143,9 @@ export const TwitterCard = ({
   const profileUrl = href || `https://x.com/${username}`;
   const linkRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const tapRevealRef = useRef(false);
+  const [cardShift, setCardShift] = useState(0);
 
   const [profile, setProfile] = useState({
     name: name || "Twitter User",
@@ -270,6 +281,57 @@ export const TwitterCard = ({
     cardX.set(0);
     cardY.set(0);
   }, [linkX, linkY, cardX, cardY]);
+
+  useLayoutEffect(() => {
+    if (!isHovered) return;
+    const updateShift = () => {
+      const container = containerRef.current;
+      const card = cardRef.current;
+      if (!container || !card) return;
+      const box = container.getBoundingClientRect();
+      const width = card.offsetWidth;
+      const naturalLeft = box.left + box.width / 2 - width / 2;
+      const maxLeft = window.innerWidth - VIEWPORT_MARGIN - width;
+      const left = Math.max(VIEWPORT_MARGIN, Math.min(maxLeft, naturalLeft));
+      setCardShift(left - naturalLeft);
+    };
+    updateShift();
+    window.addEventListener("resize", updateShift);
+    return () => window.removeEventListener("resize", updateShift);
+  }, [isHovered]);
+
+  useEffect(() => {
+    if (!isHovered) return;
+    const closeOnOutsidePointer = (event: PointerEvent) => {
+      if (!containerRef.current?.contains(event.target as Node)) {
+        handleContainerMouseLeave();
+      }
+    };
+    document.addEventListener("pointerdown", closeOnOutsidePointer);
+    return () =>
+      document.removeEventListener("pointerdown", closeOnOutsidePointer);
+  }, [isHovered, handleContainerMouseLeave]);
+
+  const handleTriggerPointerDown = (e: React.PointerEvent) => {
+    tapRevealRef.current = e.pointerType !== "mouse" && !isHovered;
+  };
+
+  const handleTriggerClick = (e: React.MouseEvent) => {
+    if (!tapRevealRef.current) return;
+    tapRevealRef.current = false;
+    e.preventDefault();
+    setIsHovered(true);
+  };
+
+  const handleContainerBlur = (e: React.FocusEvent) => {
+    if (!e.currentTarget.contains(e.relatedTarget as Node | null)) {
+      handleContainerMouseLeave();
+    }
+  };
+
+  const handleContainerKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Escape" && isHovered) handleContainerMouseLeave();
+  };
 
   const handleStaticMouseLeave = useCallback(() => {
     cardX.set(0);
@@ -460,9 +522,13 @@ export const TwitterCard = ({
       </span>
 
       <div
+        ref={containerRef}
         className="relative inline-flex flex-col items-center perspective-[1000px]"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={handleContainerMouseLeave}
+        onFocus={() => setIsHovered(true)}
+        onBlur={handleContainerBlur}
+        onKeyDown={handleContainerKeyDown}
       >
         <motion.div
           ref={linkRef}
@@ -483,6 +549,8 @@ export const TwitterCard = ({
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block"
+            onPointerDown={handleTriggerPointerDown}
+            onClick={handleTriggerClick}
           >
             <span
               className={cn(
@@ -495,7 +563,11 @@ export const TwitterCard = ({
           </a>
         </motion.div>
 
-        <div className="pointer-events-none absolute bottom-full left-1/2 z-50 mb-3.5 -translate-x-1/2">
+        <div
+          inert={!isHovered}
+          className="pointer-events-none absolute bottom-full left-1/2 z-50 mb-3.5"
+          style={{ transform: `translateX(calc(-50% + ${cardShift}px))` }}
+        >
           <motion.div
             ref={cardRef}
             onMouseMove={handleCardMouseMove}
@@ -536,7 +608,7 @@ export const TwitterCard = ({
                 : undefined
             }
             className={cn(
-              "w-80 rounded-2xl border border-dashed border-neutral-300 bg-white/95 p-4 shadow-2xl backdrop-blur-xl transition-colors select-text dark:border-neutral-800 dark:bg-neutral-950/85",
+              "w-80 max-w-[calc(100vw-3rem)] rounded-2xl border border-dashed border-neutral-300 bg-white/95 p-4 shadow-2xl backdrop-blur-xl transition-colors select-text dark:border-neutral-800 dark:bg-neutral-950/85",
               "after:absolute after:top-full after:left-0 after:h-4 after:w-full after:content-['']",
               popoverClassName,
             )}

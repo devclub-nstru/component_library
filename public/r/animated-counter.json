@@ -3,7 +3,7 @@
   "name": "animated-counter",
   "type": "registry:ui",
   "title": "Animated Counter",
-  "description": "High-precision rolling drum counter with spring physics, acoustic feedback, and reactive typography.",
+  "description": "Rolling drum counter with spring physics, number grouping and prefix/suffix slots.",
   "dependencies": [
     "motion",
     "clsx",

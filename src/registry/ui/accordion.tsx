@@ -6,6 +6,7 @@ import React, {
   useEffect,
   useMemo,
   forwardRef,
+  useId,
   useImperativeHandle,
 } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
@@ -231,6 +232,7 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
     const [activeIndex, setActiveIndex] = useState<number | null>(defaultIndex);
     const innerRef = useRef<HTMLDivElement>(null);
     const prefersReducedMotion = useReducedMotion();
+    const baseId = useId();
 
     useImperativeHandle(ref, () => innerRef.current as HTMLDivElement);
 
@@ -269,6 +271,8 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
           <div className="space-y-1.5">
             {items.map((item, index) => {
               const isOpen = activeIndex === index;
+              const triggerId = `${baseId}-trigger-${index}`;
+              const panelId = `${baseId}-panel-${index}`;
 
               return (
                 <div
@@ -282,7 +286,9 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
                 >
                   <button
                     type="button"
+                    id={triggerId}
                     aria-expanded={isOpen}
+                    aria-controls={isOpen ? panelId : undefined}
                     className="group flex w-full cursor-pointer items-center justify-between px-5 py-4 text-left text-base font-medium transition-colors text-gray-800 hover:text-gray-950 dark:text-zinc-200 dark:hover:text-white"
                     onClick={() => toggleAccordion(index)}
                   >
@@ -357,6 +363,9 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
                                 },
                               },
                         }}
+                        id={panelId}
+                        role="region"
+                        aria-labelledby={triggerId}
                         className="overflow-hidden"
                       >
                         <div

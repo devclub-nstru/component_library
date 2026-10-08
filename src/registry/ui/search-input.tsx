@@ -82,7 +82,7 @@ export function SearchComposer({
         e.preventDefault();
         submit();
       }}
-      className="flex w-full items-center gap-3 rounded-[5px] border border-line bg-panel/95 py-3 pl-6 pr-3 backdrop-blur-2xl transition-colors duration-300 focus-within:border-line-strong"
+      className="flex w-full items-center gap-3 rounded-[5px] border border-line bg-panel/95 py-3 pl-6 pr-3 backdrop-blur-2xl transition-colors duration-300 focus-within:border-line-strong has-[input:focus-visible]:ring-2 has-[input:focus-visible]:ring-inset has-[input:focus-visible]:ring-zinc-500 dark:has-[input:focus-visible]:ring-white/50"
     >
       <label htmlFor="q" className="sr-only">
         Describe an image
@@ -122,7 +122,7 @@ export function SearchComposer({
         type="submit"
         disabled={busy || currentValue.trim().length < 2}
         aria-label={busy ? "Searching" : "Search"}
-        className="grid size-12 shrink-0 place-items-center rounded-[5px] border border-line transition-all duration-300 ease-out enabled:hover:border-line-strong enabled:hover:bg-white/6 enabled:active:scale-95 disabled:opacity-45"
+        className="grid size-12 shrink-0 place-items-center rounded-[5px] border border-line transition-all duration-300 ease-out enabled:hover:border-line-strong enabled:hover:bg-white/6 enabled:active:scale-95 disabled:opacity-45 outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 dark:focus-visible:ring-white/60"
       >
         <Orb
           state={busy ? "searching" : "breathing"}

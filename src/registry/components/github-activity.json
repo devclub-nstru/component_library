@@ -1,8 +1,8 @@
 {
   "slug": "github-activity",
   "name": "GitHub Activity",
-  "description": "A minimalist, glass-inspired contribution heatmap matrix with interactive hover feedback and activity tiers.",
-  "summary": "An interactive, glassmorphic GitHub contribution heatmap modeled after Dradix and GitHub's developer activity matrix. Renders 26 calendar weeks across 7 weekday rows with interactive coordinate hover tooltips, live commit count feedback, multi-tier color themes, and an activity level legend. Built with translucent backdrop blur, subtle perimeter highlights, and rich layered shadows.",
+  "description": "A glass-style contribution heatmap with hover tooltips, three color variants and an activity legend.",
+  "summary": "A glass-style GitHub contribution heatmap. Renders one calendar year (Jan 1 to Dec 31 of year, 53 or 54 week columns) across 7 weekday rows, with a hover tooltip showing the count and date, three color variants, a total count footer and a Less/More legend. Pass your own contribution data; without it the component generates deterministic sample data for the year. It does not fetch from GitHub.",
   "category": "display",
   "tags": [
     "heatmap",
@@ -24,9 +24,9 @@
   "interactive": true,
   "supportsColor": false,
   "highlights": [
-    "26×7 contribution cell matrix with pseudo-random seed distribution generator",
-    "Multi-tier color grading supporting signature Dradix teal and classic GitHub emerald",
-    "Interactive cell hover scale (scale-125) with smooth spring-gliding glass tooltip",
+    "Full-year grid of 7 weekday rows (53 or 54 week columns) with deterministic sample data when no data is passed",
+    "Three color variants: teal (default), emerald and github",
+    "Cell hover scale (scale-125) with a spring-animated glass tooltip",
     "Pure chart architecture with zero extra drawer blocks for maximum minimalism",
     "Multi-layered glassmorphic container with backdrop-blur-xl and delicate light sheen"
   ],
@@ -34,13 +34,13 @@
     "<div> (Glass Shell: rounded-2xl container with backdrop-blur-xl and multi-layer depth shadow)",
     "<div> (Header: matrix title and subtitle)",
     "<div> (Month Labels: horizontal interval markers across the top of the grid)",
-    "<div> (Grid Matrix: 26 column flex containers each containing 7 weekday cells)",
+    "<div> (Grid Matrix: one flex column per week, 53 or 54 columns, each with 7 day cells)",
     "<motion.div> (Gliding Tooltip: spring-animated floating glass pill with live rolling text)",
-    "<div> (Activity Legend: bottom Less/More intensity tier indicator)"
+    "<div> (Footer: total count and Less/More legend)"
   ],
   "physics": {
     "engine": "Motion Spring Gliding & popLayout Text Transitions",
-    "description": "Spring physics (stiffness: 480, damping: 32) smoothly glides the tooltip between hovered cells, while popLayout transitions animate rolling commit count updates.",
+    "description": "A spring (stiffness 480, damping 32, mass 0.5) moves the tooltip between hovered cells, and popLayout transitions (140ms ease-out) swap the count and date text.",
     "parameters": [
       {
         "label": "Cell Hover Scale",
@@ -48,7 +48,7 @@
       },
       {
         "label": "Transition Duration",
-        "value": "150ms ease-out"
+        "value": "150ms cubic-bezier(0.4, 0, 0.2, 1)"
       },
       {
         "label": "Tooltip Delay",
@@ -57,13 +57,12 @@
     ]
   },
   "accessibility": {
-    "role": "region",
-    "aria": "aria-label='GitHub Contribution Heatmap', and aria-hidden on decorative grid visuals.",
-    "reducedMotion": "Cell hover scale transitions collapse to instant states when prefers-reduced-motion is active.",
+    "aria": "No ARIA attributes are set. Cells are unlabelled divs, so counts and dates are only available through the mouse hover tooltip. The root spreads extra props, so you can pass role and aria-label.",
+    "reducedMotion": "No reduced-motion handling. The cell hover scale and the tooltip spring and text transitions always run.",
     "keyboard": [
       {
-        "key": "Tab",
-        "description": "Focus interactive container."
+        "key": "None",
+        "description": "No element is focusable. The tooltip opens on mouse hover only."
       }
     ]
   },
@@ -74,9 +73,9 @@
       "Telemetry and commit streak tracking widgets"
     ],
     "bestPractices": [
-      "Pass real contribution data arrays to override default simulated data",
-      "Keep totalContributions synchronized with the sum of all cell values",
-      "Ensure container has minimum width of 360px to prevent horizontal grid clipping"
+      "Pass real contribution data through data or contributions to replace the generated sample data. The component does not fetch from GitHub.",
+      "totalContributions is optional. When omitted it is the sum of all cell counts; if you pass it, keep it equal to that sum.",
+      "With the default blockSize (10) and blockGap (3) a full year is about 690px wide. Narrower containers scroll horizontally, and below a 768px viewport the grid starts scrolled to the latest week."
     ]
   },
   "props": [
@@ -84,7 +83,7 @@
       "name": "username",
       "type": "string",
       "defaultValue": "undefined",
-      "description": "Target GitHub username for dynamic API data fetching or profile attribution."
+      "description": "GitHub username shown as @username under the title when no subtitle is set. No data is fetched."
     },
     {
       "name": "title",
@@ -101,34 +100,57 @@
     {
       "name": "totalContributions",
       "type": "number",
-      "defaultValue": "1863",
-      "description": "Total annual contribution count displayed in the top card header."
+      "defaultValue": "sum of data",
+      "description": "Total shown in the footer. Defaults to the sum of the contribution counts."
     },
     {
       "name": "year",
       "type": "number",
-      "defaultValue": "2025",
-      "description": "Calendar year corresponding to the displayed 26-week contribution window."
+      "defaultValue": "current year",
+      "description": "Year used for the footer label and for the generated sample data when no data is passed."
     },
     {
       "name": "variant",
       "type": "\"teal\" | \"emerald\" | \"github\"",
       "defaultValue": "\"teal\"",
-      "description": "Visual theme variant: signature Dradix teal or classic GitHub emerald."
+      "description": "Color theme of the heatmap cells."
+    },
+    {
+      "name": "blockSize",
+      "type": "number",
+      "defaultValue": "10",
+      "description": "Size of each day cell in pixels."
+    },
+    {
+      "name": "blockGap",
+      "type": "number",
+      "defaultValue": "3",
+      "description": "Gap between day cells in pixels."
     },
     {
       "name": "contributions",
       "type": "Contribution[]",
-      "defaultValue": "[]",
-      "description": "Custom array of contribution data points with ISO date string, count, and level (0-4)."
+      "defaultValue": "generated sample year",
+      "description": "Contribution entries ({ date, count, level }) to render. When empty, a deterministic sample for the full year is generated."
+    },
+    {
+      "name": "data",
+      "type": "Contribution[]",
+      "description": "Alias of contributions. Takes precedence when both are set."
     },
     {
       "name": "className",
       "type": "string",
       "defaultValue": "undefined",
       "description": "Additional CSS utility classes applied to the root card wrapper."
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "description": "Custom layout built from the ContributionGraph* subcomponents. Replaces the default header, calendar and footer."
     }
   ],
+  "usage": "import { GitHubActivity, type Contribution } from \"@/components/ui/github-activity\";\n\nconst data: Contribution[] = [\n  { date: \"2026-01-05\", count: 4, level: 2 },\n  { date: \"2026-01-06\", count: 9, level: 3 },\n];\n\nexport function GitHubActivityDemo() {\n  return <GitHubActivity username=\"octocat\" year={2026} data={data} />;\n}",
   "files": [
     {
       "name": "github-activity.tsx",
