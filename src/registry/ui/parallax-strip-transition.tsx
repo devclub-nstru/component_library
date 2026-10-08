@@ -66,6 +66,7 @@ function StripTransitionStage({
   const rootRef = useRef<HTMLDivElement>(null);
   const busyRef = useRef(false);
   const touchRef = useRef<{ x: number; y: number } | null>(null);
+  const hoveredRef = useRef(false);
   const [current, setCurrent] = useState(0);
   const [transition, setTransition] = useState<{
     index: number;
@@ -226,7 +227,6 @@ function StripTransitionStage({
       media.add("(prefers-reduced-motion: no-preference)", () => {
         let timer: gsap.core.Tween | undefined;
         let visible = false;
-        let hovered = false;
         let disposed = false;
         const schedule = () => {
           timer?.kill();
@@ -234,7 +234,7 @@ function StripTransitionStage({
             !disposed &&
             visible &&
             !document.hidden &&
-            !hovered &&
+            !hoveredRef.current &&
             !root.contains(document.activeElement)
           ) {
             timer = gsap.delayedCall(interval / 1000, () =>
@@ -245,11 +245,11 @@ function StripTransitionStage({
         const stop = () => timer?.kill();
         const onPointerEnter = (event: PointerEvent) => {
           if (event.pointerType !== "mouse") return;
-          hovered = true;
+          hoveredRef.current = true;
           stop();
         };
         const onPointerLeave = () => {
-          hovered = false;
+          hoveredRef.current = false;
           schedule();
         };
         const onFocusOut = () => {
@@ -316,6 +316,12 @@ function StripTransitionStage({
           "--strip-padding": "clamp(16px, 4cqw, 48px)",
         } as CSSProperties
       }
+      onPointerEnter={(event) => {
+        if (event.pointerType === "mouse") hoveredRef.current = true;
+      }}
+      onPointerLeave={() => {
+        hoveredRef.current = false;
+      }}
       onFocus={() => setFocused(true)}
       onBlur={(event) => {
         if (!event.currentTarget.contains(event.relatedTarget as Node | null))
