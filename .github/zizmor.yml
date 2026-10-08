@@ -3,5 +3,4 @@ rules:
     ignore:
       - greetings.yml
       - pr-labeler.yml
-      - pr-size.yml
       - pr-title.yml
