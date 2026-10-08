@@ -66,6 +66,7 @@ function StripTransitionStage({
   const rootRef = useRef<HTMLDivElement>(null);
   const busyRef = useRef(false);
   const touchRef = useRef<{ x: number; y: number } | null>(null);
+  const hoveredRef = useRef(false);
   const [current, setCurrent] = useState(0);
   const [transition, setTransition] = useState<{
     index: number;
@@ -73,6 +74,8 @@ function StripTransitionStage({
     ready: boolean;
   } | null>(null);
   const [paused, setPaused] = useState(false);
+  const [focused, setFocused] = useState(false);
+  const [systemReducedMotion, setSystemReducedMotion] = useState(false);
   const total = slides.length;
   const count = Math.round(bounded(stripCount, 2, 20, 10));
   const timing = bounded(duration, 0.35, 2, 0.85);
@@ -81,6 +84,21 @@ function StripTransitionStage({
   const interval = bounded(autoplayInterval, 3000, 30000, 6000);
   const active = slides[current];
   const incoming = transition ? slides[transition.index] : null;
+  const canAutoplay =
+    autoplay &&
+    showControls &&
+    !reduceMotion &&
+    !systemReducedMotion &&
+    total > 1;
+  const rotating = canAutoplay && !paused && !focused;
+
+  useEffect(() => {
+    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setSystemReducedMotion(query.matches);
+    update();
+    query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
+  }, []);
 
   useEffect(() => {
     if (total < 2) return;
@@ -204,15 +222,7 @@ function StripTransitionStage({
   useGSAP(
     () => {
       const root = rootRef.current;
-      if (
-        !root ||
-        !autoplay ||
-        paused ||
-        reduceMotion ||
-        total < 2 ||
-        transition
-      )
-        return;
+      if (!root || !canAutoplay || paused || transition) return;
       const media = gsap.matchMedia();
       media.add("(prefers-reduced-motion: no-preference)", () => {
         let timer: gsap.core.Tween | undefined;
@@ -224,7 +234,7 @@ function StripTransitionStage({
             !disposed &&
             visible &&
             !document.hidden &&
-            !root.matches(":hover") &&
+            !hoveredRef.current &&
             !root.contains(document.activeElement)
           ) {
             timer = gsap.delayedCall(interval / 1000, () =>
@@ -233,6 +243,15 @@ function StripTransitionStage({
           }
         };
         const stop = () => timer?.kill();
+        const onPointerEnter = (event: PointerEvent) => {
+          if (event.pointerType !== "mouse") return;
+          hoveredRef.current = true;
+          stop();
+        };
+        const onPointerLeave = () => {
+          hoveredRef.current = false;
+          schedule();
+        };
         const onFocusOut = () => {
           stop();
           timer = gsap.delayedCall(0, schedule);
@@ -245,8 +264,8 @@ function StripTransitionStage({
           { threshold: 0.25 },
         );
         observer.observe(root);
-        root.addEventListener("pointerenter", stop);
-        root.addEventListener("pointerleave", schedule);
+        root.addEventListener("pointerenter", onPointerEnter);
+        root.addEventListener("pointerleave", onPointerLeave);
         root.addEventListener("focusin", stop);
         root.addEventListener("focusout", onFocusOut);
         document.addEventListener("visibilitychange", schedule);
@@ -254,8 +273,8 @@ function StripTransitionStage({
           disposed = true;
           stop();
           observer.disconnect();
-          root.removeEventListener("pointerenter", stop);
-          root.removeEventListener("pointerleave", schedule);
+          root.removeEventListener("pointerenter", onPointerEnter);
+          root.removeEventListener("pointerleave", onPointerLeave);
           root.removeEventListener("focusin", stop);
           root.removeEventListener("focusout", onFocusOut);
           document.removeEventListener("visibilitychange", schedule);
@@ -266,10 +285,8 @@ function StripTransitionStage({
     {
       scope: rootRef,
       dependencies: [
-        autoplay,
+        canAutoplay,
         paused,
-        reduceMotion,
-        total,
         transition,
         current,
         interval,
@@ -299,6 +316,17 @@ function StripTransitionStage({
           "--strip-padding": "clamp(16px, 4cqw, 48px)",
         } as CSSProperties
       }
+      onPointerEnter={(event) => {
+        if (event.pointerType === "mouse") hoveredRef.current = true;
+      }}
+      onPointerLeave={() => {
+        hoveredRef.current = false;
+      }}
+      onFocus={() => setFocused(true)}
+      onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget as Node | null))
+          setFocused(false);
+      }}
       onKeyDown={(event) => {
         if (
           !showControls ||
@@ -443,7 +471,7 @@ function StripTransitionStage({
                     </span>
                   </div>
                   <div className="flex shrink-0 items-center gap-2">
-                    {autoplay && (
+                    {canAutoplay && (
                       <button
                         type="button"
                         aria-label={
@@ -485,7 +513,7 @@ function StripTransitionStage({
           <p
             className="sr-only"
             role="status"
-            aria-live={autoplay && !paused ? "off" : "polite"}
+            aria-live={rotating ? "off" : "polite"}
             aria-atomic="true"
           >
             {active.title ?? active.alt}. Page {current + 1} of {total}.
