@@ -70,13 +70,26 @@ const gambetta = localFont({
   display: "swap",
 });
 
+const defaultTitle = `${SITE_CONFIG.name} — High Performance UI Components`;
+
 export const metadata: Metadata = {
   title: {
-    default: `${SITE_CONFIG.name} — High Performance UI Components`,
+    default: defaultTitle,
     template: `%s | ${SITE_CONFIG.name}`,
   },
   description: SITE_CONFIG.description,
   metadataBase: new URL(SITE_CONFIG.url),
+  openGraph: {
+    type: "website",
+    siteName: SITE_CONFIG.name,
+    title: defaultTitle,
+    description: SITE_CONFIG.description,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: defaultTitle,
+    description: SITE_CONFIG.description,
+  },
 };
 
 export default function RootLayout({
