@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useId, useState } from "react";
 import {
   motion,
   useMotionValue,
+  useReducedMotion,
   useSpring,
   useTransform,
   mix,
@@ -313,6 +314,17 @@ export const SwitchFilter: React.FC<SwitchFilterProps> = ({
 
 export const Filter = SwitchFilter;
 
+type SpringConfig = Parameters<typeof useSpring>[1];
+
+function useReducibleSpring(
+  source: MotionValue<number>,
+  config: SpringConfig,
+  instant: boolean,
+): MotionValue<number> {
+  const spring = useSpring(source, config);
+  return instant ? source : spring;
+}
+
 export interface MacSwitchProps {
   checked?: boolean;
   defaultChecked?: boolean;
@@ -327,6 +339,7 @@ export interface MacSwitchProps {
   refractionLevel?: number;
   blurLevel?: number;
   className?: string;
+  label?: string;
 }
 
 export const MacSwitch: React.FC<MacSwitchProps> = ({
@@ -343,8 +356,10 @@ export const MacSwitch: React.FC<MacSwitchProps> = ({
   refractionLevel = 1.0,
   blurLevel = 0.2,
   className,
+  label = "Toggle switch",
 }) => {
   const generatedId = useId();
+  const reduceMotion = useReducedMotion() ?? false;
   const filterId = `mac-switch-filter-${generatedId.replace(/:/g, "")}`;
 
   const currentTheme = SWITCH_COLORS[color] ?? SWITCH_COLORS.green;
@@ -411,7 +426,7 @@ export const MacSwitch: React.FC<MacSwitchProps> = ({
     refractionBase.set(refractionLevel);
   }, [refractionLevel, refractionBase]);
 
-  const xRatio = useSpring(
+  const xRatio = useReducibleSpring(
     useTransform((): number => {
       const c = checked.get();
       const dragRatio = xDragRatio.get();
@@ -421,24 +436,28 @@ export const MacSwitch: React.FC<MacSwitchProps> = ({
       return c > 0.5 ? 1 : 0;
     }),
     { damping: 42, stiffness: 520, mass: 0.8 },
+    reduceMotion,
   );
 
-  const backgroundOpacity = useSpring(
+  const backgroundOpacity = useReducibleSpring(
     useTransform(active, (v) => 1 - 0.9 * v),
     { damping: 42, stiffness: 600, mass: 0.8 },
+    reduceMotion,
   );
 
-  const thumbScale = useSpring(
+  const thumbScale = useReducibleSpring(
     useTransform(
       active,
       (v) => THUMB_REST_SCALE + (THUMB_ACTIVE_SCALE - THUMB_REST_SCALE) * v,
     ),
     { damping: 42, stiffness: 600, mass: 0.8 },
+    reduceMotion,
   );
 
-  const scaleRatio = useSpring(
+  const scaleRatio = useReducibleSpring(
     useTransform(() => (0.4 + 0.5 * active.get()) * refractionBase.get()),
     { damping: 42, stiffness: 600, mass: 0.8 },
+    reduceMotion,
   );
 
   const considerChecked = useTransform((): number => {
@@ -448,7 +467,11 @@ export const MacSwitch: React.FC<MacSwitchProps> = ({
   });
 
   const backgroundColor = useTransform(
-    useSpring(considerChecked, { damping: 42, stiffness: 520 }),
+    useReducibleSpring(
+      considerChecked,
+      { damping: 42, stiffness: 520 },
+      reduceMotion,
+    ),
     mix("#94949F55", currentTheme.fill),
   );
 
@@ -565,6 +588,8 @@ export const MacSwitch: React.FC<MacSwitchProps> = ({
       <motion.div
         role="switch"
         aria-checked={isChecked}
+        aria-label={label}
+        aria-disabled={disabled || undefined}
         tabIndex={disabled ? -1 : 0}
         onKeyDown={handleKeyDown}
         onPointerDown={handlePointerDown}

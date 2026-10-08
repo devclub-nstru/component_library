@@ -192,6 +192,16 @@ export function LiquidToggle({
 
   const run = useCallback(() => {
     const m = motion.current;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      cancelAnimationFrame(m.raf);
+      m.raf = 0;
+      if (!m.dragging) m.x = m.target;
+      m.dropX = m.x;
+      m.v = 0;
+      m.dropV = 0;
+      paint();
+      return;
+    }
     if (m.raf) return;
     m.last = performance.now();
 
@@ -327,7 +337,7 @@ export function LiquidToggle({
       onPointerCancel={handlePointerUp}
       onKeyDown={handleKeyDown}
       className={cn(
-        "group relative shrink-0 cursor-pointer select-none touch-none rounded-full border outline-none transition-all duration-300 ease-out focus-visible:ring-2 focus-visible:ring-white/20 active:scale-95 disabled:pointer-events-none disabled:opacity-40",
+        "group relative shrink-0 cursor-pointer select-none touch-none rounded-full border outline-none transition-all duration-300 ease-out focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-zinc-500 dark:focus-visible:outline-white/60 active:scale-95 motion-reduce:transition-none motion-reduce:active:scale-100 disabled:pointer-events-none disabled:opacity-40",
         isChecked ? colorTheme.trackOn : colorTheme.trackOff,
         className,
       )}
@@ -339,7 +349,7 @@ export function LiquidToggle({
       <span
         ref={auraRef}
         className={cn(
-          "pointer-events-none absolute -inset-1 rounded-full blur-md transition-opacity duration-300",
+          "pointer-events-none absolute -inset-1 rounded-full blur-md transition-opacity duration-300 motion-reduce:transition-none",
           colorTheme.aura,
         )}
         style={{ opacity: isChecked ? 1 : 0 }}

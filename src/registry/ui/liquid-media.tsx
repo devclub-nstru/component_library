@@ -1035,6 +1035,18 @@ function LiquidMediaMaterial({
   );
 }
 
+const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
+
+function subscribeReducedMotion(onChange: () => void) {
+  const media = window.matchMedia(REDUCED_MOTION_QUERY);
+  media.addEventListener("change", onChange);
+  return () => media.removeEventListener("change", onChange);
+}
+
+function getReducedMotion() {
+  return window.matchMedia(REDUCED_MOTION_QUERY).matches;
+}
+
 function LiquidMediaInner(props: LiquidMediaProps) {
   const {
     rippleMap,
@@ -1086,20 +1098,37 @@ export function LiquidMedia(
   props: LiquidMediaProps & { containerClassName?: string },
 ) {
   const hasProvider = React.useContext(WebglContext);
+  const reduceMotion = useSyncExternalStore(
+    subscribeReducedMotion,
+    getReducedMotion,
+    () => false,
+  );
   const { containerClassName, ...mediaProps } = props;
 
-  if (!hasProvider) {
+  const media = reduceMotion ? (
+    <LiquidMediaInner {...mediaProps} webglEnabled={false} />
+  ) : (
+    <LiquidMediaInner {...mediaProps} />
+  );
+
+  if (hasProvider) return media;
+
+  if (reduceMotion) {
     return (
-      <WebglProvider
-        contained
-        className={cn("relative w-full h-full", containerClassName)}
-      >
-        <LiquidMediaInner {...mediaProps} />
-      </WebglProvider>
+      <div className={cn("relative w-full h-full", containerClassName)}>
+        {media}
+      </div>
     );
   }
 
-  return <LiquidMediaInner {...mediaProps} />;
+  return (
+    <WebglProvider
+      contained
+      className={cn("relative w-full h-full", containerClassName)}
+    >
+      {media}
+    </WebglProvider>
+  );
 }
 
 export type LiquidMediaShowcaseProps = {
@@ -1118,7 +1147,7 @@ export type LiquidMediaShowcaseProps = {
 export function LiquidMediaShowcase({
   src = "/liquid-media-demo.jpg",
   alt = "Editorial portrait",
-  caption = "Hover anywhere!",
+  caption = "Editorial Portrait",
   className,
   intensity,
   radius,
@@ -1216,7 +1245,7 @@ export const LIQUID_MEDIA_IMAGES: Record<
   portrait: {
     label: "Portrait",
     src: "/liquid-media-demo.jpg",
-    caption: "Hover anywhere!",
+    caption: "Editorial Portrait",
   },
   architecture: {
     label: "Architecture",
