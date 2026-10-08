@@ -77,7 +77,7 @@ export default function DocsCliPage() {
           </h2>
         </div>
         <p className="text-xs sm:text-[13px] text-muted-foreground font-light leading-relaxed">
-          List the available components, view CLI help, or replace a component you already added with --overwrite. The DevClub CLI adds one component per command.
+          List the available components, view CLI help, add several components in one command, or replace a component you already added with --overwrite.
         </p>
         <div className="rounded-2xl border border-border/80 bg-card/40 p-4 sm:p-5">
           <CodeBlock
@@ -85,6 +85,7 @@ export default function DocsCliPage() {
             language="bash"
             code={`npx @devclubnst/ui@latest list
 npx @devclubnst/ui@latest --help
+npx @devclubnst/ui add noise orb
 npx @devclubnst/ui add noise --overwrite`}
           />
         </div>

@@ -102,9 +102,9 @@ npx shadcn@latest add https://ui.devclubxnst.online/r/[component].json
 
 ## DevClub CLI
 \`\`\`bash
-npx @devclubnst/ui add [component]
+npx @devclubnst/ui add [component...]
 \`\`\`
-Existing files are skipped. Pass \`--overwrite\` to replace them.
+Existing files are skipped. Pass \`--overwrite\` to replace them. Requires @devclubnst/ui 2.1.0 or later.
 
 ## Manual Installation
 1. Pick a component from https://ui.devclubxnst.online/components
@@ -396,7 +396,7 @@ export default function Page() {
 
               <p className="text-xs text-muted-foreground font-light leading-relaxed">
                 Files that already exist in your project are skipped, so your
-                local edits are kept. Pass{" "}
+                local edits are kept (version 2.1.0 or later). Pass{" "}
                 <code className="text-foreground">--overwrite</code> to replace
                 them with the registry version:
               </p>
@@ -450,7 +450,7 @@ export default function Page() {
                 selects <code className="text-foreground">src/components/ui</code>{" "}
                 or <code className="text-foreground">components/ui</code> based
                 on your project structure. Declared dependencies are installed
-                using your project&apos;s package manager. Add one component per command.
+                using your project&apos;s package manager. Pass several names to add more than one component in one command.
               </p>
             </section>
 
