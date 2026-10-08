@@ -132,11 +132,25 @@ const appendCssVars = (cwd, config, items) => {
   }
 
   const css = fs.readFileSync(cssPath, "utf8");
+  const declaredIn = (selectorPattern) => {
+    const names = new Set();
+    for (const block of css.matchAll(new RegExp(`${selectorPattern}\\s*\\{([^}]*)\\}`, "g"))) {
+      for (const declaration of block[1].matchAll(/--([\w-]+)\s*:/g)) {
+        names.add(declaration[1]);
+      }
+    }
+    return names;
+  };
+  const declared = {
+    theme: declaredIn("@theme(?:\\s+inline)?"),
+    light: declaredIn(":root"),
+    dark: declaredIn("\\.dark"),
+  };
   const blocks = { theme: new Map(), light: new Map(), dark: new Map() };
   for (const item of withVars) {
     for (const scope of Object.keys(blocks)) {
       for (const [name, value] of Object.entries(item.cssVars[scope] || {})) {
-        if (!css.includes(`--${name}:`)) {
+        if (!declared[scope].has(name)) {
           blocks[scope].set(name, value);
         }
       }
@@ -197,7 +211,12 @@ if (command === "list") {
 
 if (command === "add") {
   const options = args.slice(1).filter((arg) => arg.startsWith("-"));
-  const overwrite = options.includes("--overwrite") || options.includes("-o");
+  const unknownOptions = options.filter((option) => option !== "--overwrite" && option !== "-o");
+  if (unknownOptions.length) {
+    console.error(`Error: Unknown option ${unknownOptions.join(", ")}. The only option for add is --overwrite (-o).`);
+    process.exit(1);
+  }
+  const overwrite = options.length > 0;
   const names = args
     .slice(1)
     .filter((arg) => !arg.startsWith("-"))
@@ -240,17 +259,20 @@ if (command === "add") {
   }
 
   const skipped = [];
+  let written = 0;
   for (const item of items) {
     for (const file of item.files || []) {
       const destPath = getDestination(file, targetDir, libDir);
       const relativePath = path.relative(cwd, destPath);
-      if (fs.existsSync(destPath) && !overwrite) {
+      const exists = fs.existsSync(destPath);
+      if (exists && !overwrite) {
         skipped.push(relativePath);
         continue;
       }
       fs.mkdirSync(path.dirname(destPath), { recursive: true });
       fs.writeFileSync(destPath, file.content || "", "utf8");
-      console.log(`✓ Created ${relativePath}`);
+      written++;
+      console.log(`✓ ${exists ? "Replaced" : "Created"} ${relativePath}`);
     }
   }
 
@@ -280,7 +302,11 @@ if (command === "add") {
     }
   }
 
-  console.log(`\n✓ Successfully added ${names.join(", ")}!\n`);
+  console.log(
+    written
+      ? `\n✓ Successfully added ${names.join(", ")}!\n`
+      : "\nNothing new to add: every file already exists. Run again with --overwrite to replace them.\n",
+  );
   process.exit(0);
 }
 
