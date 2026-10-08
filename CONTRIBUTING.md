@@ -17,15 +17,15 @@ By participating in this project, you agree to abide by our [Code of Conduct](CO
 Ensure you have the following installed on your machine:
 
 - **Node.js**: `v20.0.0` or higher
-- **Package Manager**: `npm` (v10+), `pnpm` (v9+), or `bun` (v1.1+)
+- **npm**: `v10` or higher. The repo uses `package-lock.json`, so use npm rather than pnpm, yarn, or bun.
 - **Git**: `v2.30.0` or higher
 
 ### 2. Fork and Clone the Repository
 
 ```bash
 # Fork the repository on GitHub, then clone your fork locally:
-git clone https://github.com/YOUR_USERNAME/dev-club-components.git
-cd dev-club-components
+git clone https://github.com/YOUR_USERNAME/component_library.git
+cd component_library
 
 # Set up upstream remote
 git remote add upstream https://github.com/devclub-nstru/component_library.git
@@ -34,7 +34,7 @@ git remote add upstream https://github.com/devclub-nstru/component_library.git
 ### 3. Install Dependencies
 
 ```bash
-npm install
+npm ci
 ```
 
 ### 4. Start the Development Server
@@ -50,7 +50,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser to view the 
 ## Project Structure Overview
 
 ```text
-devclub-co/
+component_library/
 ├── src/
 │   ├── app/                    # Next.js 16 App Router pages and REST API routes
 │   │   ├── api/
@@ -172,44 +172,98 @@ To contribute a new component to DevClub UI:
 
 ---
 
-## Code Quality & Linting
+## Before you open a pull request
 
-Before opening a pull request, verify that your code builds cleanly and adheres to code quality standards:
+Run the same checks CI runs:
 
 ```bash
-# Check TypeScript types and lint rules
 npm run lint
-
-# Verify build
+npm run typecheck
 npm run build
+npm run check:lockfile
 ```
+
+If you changed anything under `src/registry/`, run `npm run registry:sync` and commit the regenerated `public/r/` and `registry.json`. CI rebuilds the registry and fails if the committed files differ from the source. People install components from `public/r/`, so it has to match the reviewed code exactly.
 
 ---
 
-## Pull Request Process
+## Pull request process
 
-1. **Create a Feature Branch**:
+Every change goes to `main` through a pull request. Nobody pushes to `main` directly, maintainers included.
 
-   ```bash
-   git checkout -b feature/add-awesome-component
-   ```
-
-2. **Commit Your Changes**:
-   Follow conventional commit messages:
-   - `feat: add new liquid particle button component`
-   - `fix(dither): resolve memory leak on webgl context loss`
-   - `docs: update installation instructions in README`
-
-3. **Push to Your Fork & Open PR**:
+1. Fork the repository and create a branch from `main`:
 
    ```bash
-   git push origin feature/add-awesome-component
+   git fetch upstream
+   git checkout -b feat/liquid-particle-button upstream/main
    ```
 
-   Open a Pull Request targeting the `main` branch of `devclub-nstru/component_library`.
+2. Make one focused change. A new component, a bug fix, and a docs cleanup are three separate PRs.
 
-4. **PR Review**:
-   Maintainers will review your code for responsiveness, animation performance, accessibility, and registry metadata completeness.
+3. Title the PR as a [Conventional Commit](https://www.conventionalcommits.org/). CI rejects other formats. PRs are squash-merged, so the title becomes the commit message on `main`.
+   - `feat(dither): add grain intensity prop`
+   - `fix(otp-input): keep focus on paste`
+   - `docs: correct registry install command`
+
+   Allowed types: `feat`, `fix`, `perf`, `refactor`, `style`, `docs`, `test`, `build`, `ci`, `chore`, `revert`. The subject starts with a lowercase letter.
+
+4. Fill in the PR template, including screenshots or a recording for any visual change.
+
+### PR size
+
+A bot labels every PR by the number of changed lines. Generated files (`public/r/`, `registry.json`, `package-lock.json`) don't count.
+
+| Label          | Changed lines | What to expect                                 |
+| -------------- | ------------- | ---------------------------------------------- |
+| `size/xs`      | under 10      | Quick review                                   |
+| `size/small`   | 10 to 99      | Normal review                                  |
+| `size/medium`  | 100 to 299    | Normal review                                  |
+| `size/large`   | 300 to 699    | Slower review, explain the structure in the PR |
+| `size/x-large` | 700 to 1499   | Expect a request to split it                   |
+| `size/excess`  | 1500 or more  | Split it before review starts                  |
+
+A single new component usually lands in `small` or `medium`. If yours is bigger, put shared helpers in their own PR first.
+
+### Review and merge
+
+- CI runs on your PR after a maintainer approves the workflow run. That's GitHub's protection against untrusted code using our runners, so the wait isn't a sign that something is wrong.
+- Every PR needs **two approvals** from code owners, every required check passing, and every review thread resolved.
+- New commits pushed after an approval dismiss it. The last push needs a fresh approval from someone other than its author.
+- Your branch has to be up to date with `main` before merging. Use the "Update branch" button.
+- Maintainers squash-merge. Merge commits and rebase merges are disabled.
+
+---
+
+## Security and supply chain rules
+
+DevClub UI code ends up copied straight into other people's apps, so we hold contributions to a stricter standard than most projects. A PR that breaks any of these rules will be closed.
+
+### Dependencies
+
+- **Open an issue before adding a dependency.** Explain why existing dependencies or a few lines of code won't do. Every new package becomes a dependency of every app that installs the component.
+- Use `npm` only. Don't commit `yarn.lock`, `pnpm-lock.yaml`, or `bun.lock`.
+- Change `package-lock.json` only by running `npm install`, never by hand. CI checks that every package resolves to `https://registry.npmjs.org/` with a `sha512` integrity hash and that each URL matches the package name.
+- No packages with install scripts unless a maintainer has signed off. The repo's `.npmrc` sets `ignore-scripts=true`, and CI installs with `--ignore-scripts`.
+- Dependency Review blocks PRs that add packages with known vulnerabilities (moderate or worse) or GPL, AGPL, or SSPL licenses.
+- Dependabot waits 7 days before proposing a new version (30 for major versions), so freshly published malicious releases have time to be caught upstream. Security updates skip the wait.
+
+### Code
+
+- No minified, obfuscated, or bundled code. No binaries other than images and fonts in `public/`.
+- No network requests from component code unless the component's purpose requires it and the PR says so.
+- No `eval`, `new Function`, or `dangerouslySetInnerHTML` with values that come from props or user input.
+- Don't hand-edit `public/r/` or `registry.json`. Generate them with `npm run registry:sync`.
+- Never commit secrets, `.env` files, or tokens. Secret scanning with push protection is on and will reject the push.
+
+### Workflows and tooling
+
+- Changes to `.github/`, `bin/`, `scripts/`, `package.json`, `package-lock.json`, or `.npmrc` get extra scrutiny. Expect questions.
+- Pin every GitHub Action to a full commit SHA with the version in a trailing comment, for example `actions/checkout@<sha> # v7.0.1`. The repository rejects unpinned actions.
+- Workflows that run on `pull_request_target` must never check out or execute PR code.
+
+### Reporting vulnerabilities
+
+Don't open public issues for security problems. Follow [SECURITY.md](SECURITY.md).
 
 ---
 
