@@ -3,7 +3,7 @@
   "name": "sparkle-button",
   "type": "registry:ui",
   "title": "Sparkle Button",
-  "description": "Monochromatic AI generation button featuring staggered letter-wave luminescence, smooth fade-and-blur morphing, and gentle star flare pulsing.",
+  "description": "Monochrome generate button with staggered per-character blur-in text, a width spring between labels, and a pulsing sparkle icon while loading.",
   "dependencies": [
     "clsx",
     "tailwind-merge",

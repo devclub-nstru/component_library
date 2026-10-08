@@ -33,37 +33,37 @@
     "Accessible keyboard handling with Escape to cancel, focus management, and polite screen reader announcements"
   ],
   "anatomy": [
-    "<ConfirmMorph> (Main polymorphic interactive shell with animated width spring)",
+    "<ConfirmMorph> (Root wrapper with animated width spring)",
     "<Face> (Motion container handling enter/exit transitions and natural size measurements)",
     "<Check> (SVG circular pop and checkmark stroke drawing animation)",
     "<DeleteSelection> (Selection orchestrator binding multi-file selection to confirm morph)"
   ],
   "physics": {
     "engine": "Motion Spring & ResizeObserver Geometry",
-    "description": "Harmonic oscillator spring physics calculating width transitions between faces with zero layout jitter.",
+    "description": "Spring-driven width transitions between measured faces, with faces sliding and fading in and out.",
     "parameters": [
       {
         "label": "Grow Spring",
-        "value": "stiffness: 140, damping: 18, bounce: 0.14"
+        "value": "stiffness: 420, damping: 32, mass: 0.8"
       },
       {
         "label": "Shrink Spring",
-        "value": "stiffness: 240, damping: 31, bounce: 0"
+        "value": "stiffness: 460, damping: 34, mass: 0.8"
       },
       {
         "label": "Slide Spring",
-        "value": "stiffness: 215, damping: 27, bounce: 0.05"
+        "value": "stiffness: 420, damping: 32, mass: 0.8 (8px horizontal slide)"
       },
       {
-        "label": "Blur Dissolve",
-        "value": "4px blur with standard ease"
+        "label": "Face Fade",
+        "value": "opacity 160ms in, 90ms out"
       }
     ]
   },
   "accessibility": {
     "role": "button / group",
     "aria": "Exposes aria-labelledby for confirm prompts, aria-busy when pending, and polite live region announcements.",
-    "reducedMotion": "Switches from spatial slide and blur transforms to instant fades when prefers-reduced-motion is active.",
+    "reducedMotion": "With prefers-reduced-motion, faces cross-fade (120ms in, 80ms out) without sliding, width changes jump instantly, and the checkmark does not draw in.",
     "keyboard": [
       {
         "key": "Escape",
@@ -96,7 +96,8 @@
       "name": "label",
       "type": "React.ReactNode",
       "defaultValue": "undefined",
-      "description": "Resting button label, such as 'Delete'."
+      "description": "Resting button label, such as 'Delete'.",
+      "required": true
     },
     {
       "name": "icon",
@@ -159,6 +160,12 @@
       "description": "Label for undo button when onUndo is provided."
     },
     {
+      "name": "undoingLabel",
+      "type": "string",
+      "defaultValue": "\"Restoring\"",
+      "description": "Label shown while onUndo is running."
+    },
+    {
       "name": "onConfirm",
       "type": "() => void | Promise<unknown>",
       "defaultValue": "undefined",
@@ -171,10 +178,26 @@
       "description": "Optional callback offering undo on success."
     },
     {
+      "name": "onCancel",
+      "type": "() => void",
+      "description": "Called when the confirmation is dismissed without confirming."
+    },
+    {
       "name": "state",
       "type": "\"idle\" | \"confirming\" | \"pending\" | \"done\" | \"error\"",
       "defaultValue": "undefined",
       "description": "Controlled state of the morph control."
+    },
+    {
+      "name": "defaultState",
+      "type": "\"idle\" | \"confirming\" | \"pending\" | \"done\" | \"error\"",
+      "defaultValue": "\"idle\"",
+      "description": "Initial state when the component is uncontrolled."
+    },
+    {
+      "name": "onStateChange",
+      "type": "(state: ConfirmMorphState) => void",
+      "description": "Called whenever the state changes."
     },
     {
       "name": "confirmTimeout",
@@ -187,8 +210,31 @@
       "type": "number",
       "defaultValue": "5000",
       "description": "Milliseconds a result stays before returning to rest (0 turns off)."
+    },
+    {
+      "name": "cancelOnOutsidePress",
+      "type": "boolean",
+      "defaultValue": "true",
+      "description": "Cancels the confirmation when the user presses outside the component."
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "Disables the trigger."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "description": "Additional CSS classes for the root element."
+    },
+    {
+      "name": "ref",
+      "type": "React.Ref<HTMLDivElement>",
+      "description": "Ref to the root element."
     }
   ],
+  "usage": "\"use client\";\n\nimport { ConfirmMorph } from \"@/components/ui/confirm-morph\";\n\nexport function ConfirmMorphDemo() {\n  return (\n    <ConfirmMorph\n      label=\"Delete file\"\n      prompt=\"Delete report.pdf?\"\n      onConfirm={() => fetch(\"/api/files/report.pdf\", { method: \"DELETE\" })}\n    />\n  );\n}",
   "files": [
     {
       "name": "confirm-morph.tsx",

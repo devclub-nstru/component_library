@@ -2,7 +2,7 @@
   "slug": "scales",
   "name": "Scales & Borders",
   "description": "Symmetric repeating linear gradient borders and geometric scale dividers.",
-  "summary": "Technical boundary elements and geometric scale dividers engineered to replace generic horizontal rules with architectural, sci-fi, and developer console aesthetics. Built entirely with pure CSS repeating linear gradients (315deg angle with 14px pitch and 1px sub-pixel line calibration) and theme-driven CSS custom properties (--pattern-line, --pattern), delivering high-density boundary aesthetics with zero JavaScript runtime overhead.",
+  "summary": "Technical boundary elements and scale dividers that replace generic horizontal rules with an architectural, developer-console look. Built with CSS repeating linear gradients (315deg, a 1px line every 10px inside 14px x 14px tiles) and theme CSS custom properties (--pattern-line, --pattern), with no JavaScript runtime.",
   "category": "display",
   "tags": [
     "borders",
@@ -26,7 +26,7 @@
     "Zero cumulative layout shift (CLS 0.0) with GPU-accelerated compositing",
     "Three specialized geometric layout variants: HorizontalScale, VerticalScale, and Lines",
     "Themeable token variables (--pattern-line, --pattern) for seamless light/dark adaptation",
-    "Sub-pixel calibrated 14px repeating tile pitch with 1px hairline boundary strokes"
+    "14px background tile with a 1px line repeating every 10px"
   ],
   "anatomy": [
     "<HorizontalScale> (40px horizontal ribbon with diagonal 315° repeating hatch marks)",
@@ -43,7 +43,7 @@
       },
       {
         "label": "Tile Pitch",
-        "value": "14px × 14px repeat"
+        "value": "14px x 14px tile, 1px line every 10px"
       },
       {
         "label": "Hairline Weight",
@@ -64,8 +64,7 @@
     ]
   },
   "accessibility": {
-    "role": "separator",
-    "aria": "aria-hidden='true' when purely decorative, or role='separator' with aria-orientation when separating semantic document regions.",
+    "aria": "Renders an empty div with no role or ARIA attributes. Only className is accepted, so wrap it in an element with role=\"separator\" or aria-hidden=\"true\" if needed.",
     "reducedMotion": "Static CSS background gradient pattern; completely unaffected by motion preferences."
   },
   "guidelines": {
@@ -77,7 +76,7 @@
     "bestPractices": [
       "Define --pattern-line and --pattern in your theme root for consistent contrast across light and dark modes",
       "Use VerticalScale inside flex containers with h-full for crisp column separation",
-      "Apply h-auto or custom height classes to adapt the scale to your layout grid"
+      "Override the default h-10 / h-14 height or w-10 width with className"
     ]
   },
   "props": [
@@ -88,6 +87,7 @@
       "description": "Additional CSS classes to customize dimensions, border colors, or pattern line token overrides."
     }
   ],
+  "usage": "import { HorizontalScale, VerticalScale, Lines } from \"@/components/ui/scales\";\n\nexport function ScalesDemo() {\n  return (\n    <div className=\"space-y-4\">\n      <HorizontalScale />\n      <Lines />\n      <div className=\"flex h-32\">\n        <VerticalScale />\n      </div>\n    </div>\n  );\n}",
   "files": [
     {
       "name": "scales.tsx",

@@ -3,7 +3,7 @@
   "name": "dither",
   "type": "registry:ui",
   "title": "Dither",
-  "description": "Hardware-accelerated procedural WebGL dithered grainient with fluid warping, noise, and animated grain.",
+  "description": "WebGL gradient shader with fluid warping, noise-driven rotation and optional animated grain.",
   "dependencies": [
     "ogl"
   ],

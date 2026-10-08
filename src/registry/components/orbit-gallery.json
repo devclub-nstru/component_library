@@ -73,15 +73,19 @@
     "keyboard": [
       {
         "key": "Tab / Shift+Tab",
-        "description": "Navigate gallery images and the pause control."
+        "description": "Move between the gallery region, the first-ring images and the pause control."
       },
       {
         "key": "ArrowLeft / ArrowRight",
-        "description": "Rotate the gallery in either direction."
+        "description": "Rotate the rings."
       },
       {
         "key": "Enter / Space",
-        "description": "Open a focused image or toggle motion when the gallery region is focused."
+        "description": "Open the focused image or activate the pause control."
+      },
+      {
+        "key": "Space",
+        "description": "Pause or resume rotation when the gallery region itself is focused."
       },
       {
         "key": "Escape",
@@ -233,6 +237,7 @@
       "description": "Called with the selected image on opening, and null when closing begins."
     }
   ],
+  "usage": "import { OrbitGallery } from \"@/components/ui/orbit-gallery\";\n\nconst items = [\n  { src: \"/images/orbit-1.jpg\", alt: \"Mountain lake\" },\n  { src: \"/images/orbit-2.jpg\", alt: \"City at night\" },\n  { src: \"/images/orbit-3.jpg\", alt: \"Desert road\" },\n];\n\nexport function OrbitGalleryDemo() {\n  return (\n    <div className=\"relative h-[640px] w-full\">\n      <OrbitGallery items={items} />\n    </div>\n  );\n}",
   "files": [
     {
       "name": "orbit-gallery.tsx",

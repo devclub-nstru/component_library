@@ -78,7 +78,7 @@
       "name": "animated-counter",
       "type": "registry:ui",
       "title": "Animated Counter",
-      "description": "High-precision rolling drum counter with spring physics, acoustic feedback, and reactive typography.",
+      "description": "Rolling drum counter with spring physics, number grouping and prefix/suffix slots.",
       "dependencies": [
         "motion",
         "clsx",
@@ -96,7 +96,7 @@
       "name": "ascii-hover-button",
       "type": "registry:ui",
       "title": "ASCII Hover Button",
-      "description": "Interactive button and segmented pill control featuring smooth color transitions and real-time ASCII cipher character scramble glitch on hover.",
+      "description": "Button with color transitions and an ASCII character scramble on hover.",
       "dependencies": [
         "gsap",
         "@gsap/react",
@@ -262,7 +262,7 @@
       "name": "date-range-picker",
       "type": "registry:ui",
       "title": "Date Range Picker",
-      "description": "Smooth physics-driven date range picker calendar featuring dual-month navigation, quick presets rail, gliding thumb springs, and rolling label animations.",
+      "description": "Date range picker calendar with dual-month navigation, a quick presets rail, range capsules and rolling label animations.",
       "dependencies": [
         "clsx",
         "tailwind-merge",
@@ -281,7 +281,7 @@
       "name": "dither",
       "type": "registry:ui",
       "title": "Dither",
-      "description": "Hardware-accelerated procedural WebGL dithered grainient with fluid warping, noise, and animated grain.",
+      "description": "WebGL gradient shader with fluid warping, noise-driven rotation and optional animated grain.",
       "dependencies": [
         "ogl"
       ],
@@ -315,7 +315,7 @@
       "name": "editor",
       "type": "registry:ui",
       "title": "Selection AI Editor",
-      "description": "Contextual floating AI toolbar and formatting bar that anchors seamlessly to text selections with multi-stage LLM reasoning, streaming, and inline editing.",
+      "description": "Contextual floating AI toolbar and formatting bar that anchors to text selections, with simulated multi-stage reasoning, word-by-word answer reveal and inline editing.",
       "dependencies": [
         "motion",
         "lucide-react",
@@ -334,7 +334,7 @@
       "name": "file-dropzone",
       "type": "registry:ui",
       "title": "File Dropzone",
-      "description": "Interactive drag-and-drop file dropzone with magnetic cursor glow, fanned sheets choreography, and animated file lifecycle rows.",
+      "description": "Drag-and-drop file dropzone with a fanned sheets illustration, drag state styling and animated file lifecycle rows.",
       "dependencies": [
         "motion",
         "lucide-react",
@@ -462,7 +462,7 @@
       "name": "github-activity",
       "type": "registry:ui",
       "title": "GitHub Activity",
-      "description": "A minimalist, glass-inspired contribution heatmap matrix with interactive hover feedback and activity tiers.",
+      "description": "A glass-style contribution heatmap with hover tooltips, three color variants and an activity legend.",
       "dependencies": [
         "clsx",
         "tailwind-merge",
@@ -989,7 +989,7 @@
       "name": "segmented-progress",
       "type": "registry:ui",
       "title": "Segmented Progress",
-      "description": "Tactile segmented progress bar with real-time hover data inspection, dynamic wave proximity physics, and staggered GSAP fill animation.",
+      "description": "Metric card with segmented progress bars, hover value preview, a proximity wave and staggered GSAP fill.",
       "dependencies": [
         "clsx",
         "tailwind-merge",
@@ -1046,7 +1046,7 @@
       "name": "sparkle-button",
       "type": "registry:ui",
       "title": "Sparkle Button",
-      "description": "Monochromatic AI generation button featuring staggered letter-wave luminescence, smooth fade-and-blur morphing, and gentle star flare pulsing.",
+      "description": "Monochrome generate button with staggered per-character blur-in text, a width spring between labels, and a pulsing sparkle icon while loading.",
       "dependencies": [
         "clsx",
         "tailwind-merge",
@@ -1161,7 +1161,7 @@
       "name": "theme-toggle",
       "type": "registry:ui",
       "title": "Theme Toggle",
-      "description": "View Transitions API powered theme toggle button with tactile obsidian candy styling, geometric clip-path ripples, and seamless mode synchronization.",
+      "description": "View Transitions API theme toggle with geometric clip-path ripples, optional obsidian candy styling, and mode synchronization.",
       "dependencies": [
         "lucide-react",
         "clsx",

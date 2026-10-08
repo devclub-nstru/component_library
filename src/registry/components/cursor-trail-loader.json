@@ -51,7 +51,7 @@
       },
       {
         "label": "Pointer smoothing",
-        "value": "0.2s \u00b7 power3.out"
+        "value": "0.2s · power3.out"
       },
       {
         "label": "Trail spacing",
@@ -59,7 +59,7 @@
       },
       {
         "label": "Reveal",
-        "value": "0.9s \u00b7 power3.inOut"
+        "value": "0.9s · power3.inOut"
       }
     ]
   },
@@ -213,22 +213,23 @@
     {
       "name": "gridColumns",
       "type": "number",
-      "description": "Number of grid columns, bounded to 2\u20138.",
+      "description": "Number of grid columns, bounded to 2–8.",
       "defaultValue": "4"
     },
     {
       "name": "gridRows",
       "type": "number",
-      "description": "Number of grid rows, bounded to 2\u20138.",
+      "description": "Number of grid rows, bounded to 2–8.",
       "defaultValue": "4"
     },
     {
       "name": "gridOpacity",
       "type": "number",
-      "description": "Grid line opacity, bounded to 0\u20130.3.",
+      "description": "Grid line opacity, bounded to 0–0.3.",
       "defaultValue": "0.08"
     }
   ],
+  "usage": "import { CursorTrailLoader } from \"@/components/ui/cursor-trail-loader\";\n\nconst images = [\"/images/trail-1.jpg\", \"/images/trail-2.jpg\", \"/images/trail-3.jpg\"];\n\nexport function CursorTrailLoaderDemo() {\n  return (\n    <CursorTrailLoader images={images} className=\"h-[480px]\">\n      <h1>Welcome</h1>\n    </CursorTrailLoader>\n  );\n}",
   "files": [
     {
       "name": "cursor-trail-loader.tsx",

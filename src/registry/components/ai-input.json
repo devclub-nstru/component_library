@@ -49,7 +49,7 @@
   ],
   "physics": {
     "engine": "CSS Spring Physics (cubic-bezier) & Web Audio API Analyser",
-    "description": "Custom cubic-bezier(0.16, 1, 0.3, 1) spring physics for container dimensions, combined with FFT 64-point audio frequency spectrum normalization.",
+    "description": "Custom cubic-bezier(0.16, 1, 0.3, 1) curve for container dimensions, combined with an FFT analyser that drives the voice bars.",
     "parameters": [
       {
         "label": "Container Expand Curve",
@@ -65,11 +65,11 @@
       },
       {
         "label": "Audio Analyser FFT",
-        "value": "64 bands normalized 0..1"
+        "value": "fftSize 64 (32 bins) averaged into 5 bands, normalized 0..1"
       },
       {
         "label": "Audio Visualizer Frequency",
-        "value": "60 FPS requestAnimationFrame"
+        "value": "requestAnimationFrame (display refresh rate); 90ms interval in simulated mode"
       }
     ]
   },
@@ -112,6 +112,11 @@
       "description": "Placeholder text displayed when the input is empty or collapsed."
     },
     {
+      "name": "className",
+      "type": "string",
+      "description": "Additional CSS classes for the outer wrapper."
+    },
+    {
       "name": "models",
       "type": "(string | ModelOption)[]",
       "defaultValue": "[\"GPT 5.5\", \"Opus 4.8\", \"Gemini 3.5 Flash\", \"Composer 2.5\", \"GLM 5.2\"]",
@@ -148,6 +153,12 @@
       "description": "Callback invoked when the user toggles effort level."
     },
     {
+      "name": "defaultValue",
+      "type": "string",
+      "defaultValue": "\"\"",
+      "description": "Initial prompt text when the input is uncontrolled."
+    },
+    {
       "name": "value",
       "type": "string",
       "defaultValue": "undefined",
@@ -158,6 +169,16 @@
       "type": "(value: string) => void",
       "defaultValue": "undefined",
       "description": "Callback invoked on prompt text changes."
+    },
+    {
+      "name": "expanded",
+      "type": "boolean",
+      "description": "Controlled expanded state of the composer."
+    },
+    {
+      "name": "onExpandedChange",
+      "type": "(expanded: boolean) => void",
+      "description": "Called when the composer expands or collapses."
     },
     {
       "name": "onSubmit",
@@ -208,6 +229,12 @@
       "description": "Maximum width of the expanded input container."
     },
     {
+      "name": "collapsedHeight",
+      "type": "number",
+      "defaultValue": "48",
+      "description": "Height in pixels of the collapsed composer."
+    },
+    {
       "name": "autoFocus",
       "type": "boolean",
       "defaultValue": "false",
@@ -218,8 +245,25 @@
       "type": "boolean",
       "defaultValue": "false",
       "description": "Disables interaction with the input."
+    },
+    {
+      "name": "accentColor",
+      "type": "string",
+      "description": "CSS color used for the send button and the glow variant shadow."
+    },
+    {
+      "name": "variant",
+      "type": "\"default\" | \"glow\" | \"minimal\"",
+      "defaultValue": "\"default\"",
+      "description": "Surface style of the composer."
+    },
+    {
+      "name": "modelIcons",
+      "type": "Record<string, string | ReactNode>",
+      "description": "Icon (image URL or element) per model name, used in the model picker."
     }
   ],
+  "usage": "\"use client\";\n\nimport { AiInput } from \"@/components/ui/ai-input\";\n\nexport function AiInputDemo() {\n  return (\n    <AiInput\n      placeholder=\"Ask anything\"\n      onSubmit={(value, meta) => console.log(value, meta.model, meta.attachments)}\n    />\n  );\n}",
   "files": [
     {
       "name": "ai-input.tsx",

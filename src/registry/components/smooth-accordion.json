@@ -2,7 +2,7 @@
   "slug": "smooth-accordion",
   "name": "Smooth Accordion",
   "description": "Fluid collapsible accordion with synchronized layout transitions and smooth blur-reveal mechanics.",
-  "summary": "An ultra-smooth collapsible accordion designed for developer portals, FAQs, and settings panels. Features simultaneous synchronized collapsing and expanding where one item smoothly closes while another expands without layout stutter. Answers emerge through an optical blur-to-sharp transition and vertical translation curve. Supports single exclusive or multiple modes, custom accent colors, and multiple visual variants.",
+  "summary": "A collapsible accordion for developer portals, FAQs and settings panels. One item closes while another opens without layout stutter, and answers appear through a blur-to-sharp transition with a vertical offset. Supports single or multiple modes, an adjustable blurAmount, and three visual variants.",
   "category": "accordion",
   "tags": [
     "accordion",
@@ -29,8 +29,8 @@
     "Simultaneous synchronized expansion and collapse with zero layout jitter",
     "Dynamic optical blur-reveal transition on expandable content with staggered delay",
     "Spring-calibrated 180° indicator rotation with dampening",
-    "Three dark-mode tailored variants: separated cards, connected bordered list, and ghost",
-    "Compound component architecture with full keyboard and ARIA accessibility",
+    "Three variants (separated, bordered, ghost) with light and dark styles",
+    "Native button triggers with aria-expanded, aria-controls and labelled content regions",
     "Adaptive prefers-reduced-motion fallback ensuring instant zero-motion toggling"
   ],
   "anatomy": [
@@ -45,7 +45,7 @@
     "parameters": [
       {
         "label": "Height Transition",
-        "value": "380ms [0.16, 1, 0.3, 1]"
+        "value": "380ms open / 300ms close [0.16, 1, 0.3, 1]"
       },
       {
         "label": "Content Delay",
@@ -53,7 +53,7 @@
       },
       {
         "label": "Blur Reveal",
-        "value": "8px -> 0px (340ms)"
+        "value": "blurAmount (8px default) -> 0px, 340ms in / 180ms out"
       },
       {
         "label": "Opacity Curve",
@@ -75,8 +75,8 @@
   },
   "accessibility": {
     "role": "region",
-    "aria": "Each trigger links to its corresponding content via aria-controls and aria-labelledby with live aria-expanded state.",
-    "reducedMotion": "Instantaneous height and opacity changes with blur filter disabled when prefers-reduced-motion is active.",
+    "aria": "Each trigger has aria-expanded and aria-controls pointing to its content. Open content renders as role=\"region\" with aria-labelledby set to the trigger.",
+    "reducedMotion": "With prefers-reduced-motion, height, opacity, blur, offset and chevron transitions use zero duration, so items open and close instantly.",
     "keyboard": [
       {
         "key": "Tab",
@@ -108,6 +108,21 @@
       "description": "Determines whether one item or multiple items can be expanded simultaneously."
     },
     {
+      "name": "value",
+      "type": "string | string[]",
+      "description": "Controlled open item value (single) or values (multiple)."
+    },
+    {
+      "name": "defaultValue",
+      "type": "string | string[]",
+      "description": "Initially open item value(s) when uncontrolled."
+    },
+    {
+      "name": "onValueChange",
+      "type": "(value: string | string[]) => void",
+      "description": "Called when the open item(s) change."
+    },
+    {
       "name": "collapsible",
       "type": "boolean",
       "defaultValue": "true",
@@ -132,6 +147,7 @@
       "description": "Optional declarative array of items to render without writing JSX compound children."
     }
   ],
+  "usage": "import { SmoothAccordion } from \"@/components/ui/smooth-accordion\";\n\nconst items = [\n  { value: \"shipping\", title: \"Shipping\", content: \"Orders ship within two business days.\" },\n  { value: \"returns\", title: \"Returns\", content: \"Return any item within 30 days.\" },\n];\n\nexport function SmoothAccordionDemo() {\n  return <SmoothAccordion items={items} defaultValue=\"shipping\" />;\n}",
   "files": [
     {
       "name": "smooth-accordion.tsx",

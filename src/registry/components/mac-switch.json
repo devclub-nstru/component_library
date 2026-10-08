@@ -28,12 +28,12 @@
     "Ultra-smooth pointer-capture tracking with zero-latency MotionValue synchronization and drag overflow damping",
     "Real-time squircle normal-map refraction distortion using SVG feDisplacementMap with lip bezel optics",
     "Dynamic specular lighting highlights along the 19px lip bezel lens contour",
-    "Damped harmonic spring dynamics (stiffness: 520, damping: 42) for tactile drag expansion",
+    "Damped springs: thumb travel at stiffness 520 / damping 42, press expansion at stiffness 600 / damping 42",
     "Fluid track color morphing from neutral zinc to vibrant macOS system tints via motion mix interpolation",
     "Three size presets (sm, md, lg) and three glass optical materials (liquid, frosted, clear)",
     "Seven macOS color themes including Green, Blue, Purple, Orange, Pink, Amber, and Graphite",
     "Full keyboard accessibility with Space, Enter, ArrowLeft, ArrowRight, and ARIA switch semantics",
-    "Live interactive parameter controls driven by MotionValues with zero React re-render overhead"
+    "Optical props are synced into MotionValues without re-rendering"
   ],
   "anatomy": [
     "<motion.div> (Track shell with role=\"switch\", ARIA checked attributes, and focus ring)",
@@ -42,7 +42,7 @@
   ],
   "physics": {
     "engine": "Harmonic Damped Spring Oscillator & SVG Refraction Shader",
-    "description": "Analytical spring integration driving scale expansion, backdrop opacity, and track seek animations, coupled with GPU-accelerated displacement mapping.",
+    "description": "Spring-driven thumb travel, press scale, backdrop opacity and track color, combined with an SVG displacement filter.",
     "parameters": [
       {
         "label": "Rest Scale",
@@ -77,7 +77,7 @@
   "accessibility": {
     "role": "switch",
     "aria": "Standard role=\"switch\" with aria-checked and focus-visible ring.",
-    "reducedMotion": "Instant state transitions and graceful settling when motion is reduced.",
+    "reducedMotion": "With prefers-reduced-motion, the thumb and track change state instantly instead of springing.",
     "keyboard": [
       {
         "key": "Space / Enter",
@@ -101,8 +101,8 @@
     ],
     "bestPractices": [
       "Position over visually rich backgrounds to showcase the optical refraction effect",
-      "Ensure sufficient contrast between the track background and active progress fill",
-      "Provide explicit checked and onChange callbacks for controlled state integration"
+      "Ensure sufficient contrast between the off track color and the selected on color",
+      "Pass checked and onChange for controlled state integration"
     ]
   },
   "props": [
@@ -185,6 +185,7 @@
       "description": "Additional CSS class names for outer container."
     }
   ],
+  "usage": "\"use client\";\n\nimport { useState } from \"react\";\nimport { MacSwitch } from \"@/components/ui/mac-switch\";\n\nexport function MacSwitchDemo() {\n  const [enabled, setEnabled] = useState(true);\n\n  return <MacSwitch checked={enabled} onChange={setEnabled} color=\"green\" />;\n}",
   "files": [
     {
       "name": "mac-switch.tsx",

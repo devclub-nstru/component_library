@@ -3,8 +3,8 @@
   "name": "Selection AI Editor",
   "title": "Selection AI Editor",
   "type": "registry:ui",
-  "description": "Contextual floating AI toolbar and formatting bar that anchors seamlessly to text selections with multi-stage LLM reasoning, streaming, and inline editing.",
-  "summary": "An intelligent selection editor engineered with CSS Custom Highlight API, spring-based floating physics, non-collapsing formatting controls, animated reasoning orb, staggered source citations, and real-time word-by-word streaming with inline document replacement.",
+  "description": "Contextual floating AI toolbar and formatting bar that anchors to text selections, with simulated multi-stage reasoning, word-by-word answer reveal and inline editing.",
+  "summary": "A selection editor built on the CSS Custom Highlight API, with a spring-positioned floating toolbar, formatting controls that stay open between toggles, an animated reasoning orb, staggered source citations, and a word-by-word reveal of the provided answer that can replace the selection.",
   "category": "ai-stuff",
   "tags": [
     "ai",
@@ -30,27 +30,27 @@
   "supportsColor": false,
   "highlights": [
     "Precise cursor-targeted anchoring that calculates exact pointerup release coordinates rather than ambiguous multi-line centers",
-    "Zero-dissolve formatting persistence allowing sequential Bold, Italic, Underline, and Code toggles without losing the active toolbar",
+    "Formatting persistence allowing sequential Bold, Italic, Underline and Strikethrough toggles without losing the toolbar",
     "Native CSS Highlight API (::highlight(editor-ask)) integration that keeps text selections visibly active during input focus",
-    "Multi-stage thinking drawer animating seamlessly through context understanding, source gathering, and response streaming",
+    "Multi-stage thinking drawer that runs on timers: understanding the context, gathering sources, then revealing the answer",
     "Pure in-place focus dissolution on dismiss (opacity: 0, blur: 6px) eliminating jarring position snaps or scale jumps",
     "Dynamic bi-directional indicator arrow with auto-clamping boundary detection and offset calculation",
-    "Actions to Replace Selection, Insert Below, or Copy to clipboard once streaming response concludes"
+    "Replace selection, Append to document, or Copy to clipboard once the answer finishes"
   ],
   "anatomy": [
     "<Editor> (Outer relative wrapper with selectionchange listener and highlight provider)",
     "<ContentEditable> (Accessible semantic text surface with title and body paragraph)",
     "<FloatingToolbar> (Absolute-positioned pill with spring entrance and in-place dissolve exit)",
     "<IndicatorArrow> (Bi-directional directional pointer aligning directly with cursor release coordinates)",
-    "<FormattingGroup> (Functional Bold, Italic, Underline, Strikethrough, and Code buttons with active state binding)",
-    "<AskAIButton> (Animated micro-orb trigger button with stirring hover and gradient aura)",
+    "<FormattingGroup> (Bold, Italic, Underline and Strikethrough with active state, plus a Code button)",
+    "<AskAIButton> (Ask AI button with a static micro orb and gradient border)",
     "<PromptComposer> (Inline query input field with autofocus, enter-to-submit, and escape-to-collapse)",
-    "<StageDrawer> (Expanding panel with hardware-accelerated height interpolation)",
-    "<ReasoningOrb> (Multi-frequency SVG animated orb cycling through S1, S2, and S3 dynamic states)",
+    "<StageDrawer> (Expanding panel with spring height animation)",
+    "<ReasoningOrb> (Animated SVG orb switching from S3 (understanding) to S2 (gathering sources))",
     "<TextShimmer> (Radiant linear gradient sweep passing over stage status indicators)",
     "<SourceCitations> (Staggered favicon badges loaded dynamically from external domains)",
-    "<StreamingText> (Real-time typewriter streaming text with animated blinking cursor)",
-    "<CompletionActions> (Replace selection, insert below, and copy-to-clipboard buttons)"
+    "<StreamingText> (Word-by-word reveal of the answer prop with a blinking cursor)",
+    "<CompletionActions> (Replace selection, append to document, and copy-to-clipboard buttons)"
   ],
   "physics": {
     "engine": "Framer Motion Spring Physics",
@@ -88,30 +88,30 @@
   },
   "accessibility": {
     "role": "toolbar",
-    "aria": "Accessible contentEditable document with aria-label, role='textbox', role='toolbar' with aria-label='Selection', semantic button labels, and focus-visible indicators.",
+    "aria": "Accessible contentEditable document with aria-label and role=\"textbox\", a role=\"toolbar\" with aria-label=\"Selection\", and labelled buttons. The text surface has a focus-visible style.",
     "keyboard": [
       {
         "key": "Enter",
-        "description": "Submits the question in Ask AI input mode"
+        "description": "In the Ask AI input, submits the question."
       },
       {
         "key": "Escape",
-        "description": "Exits Ask AI mode and dismisses the floating toolbar"
+        "description": "In the Ask AI input, closes the toolbar and exits Ask AI mode."
       },
       {
         "key": "Tab / Shift + Tab",
-        "description": "Navigates between formatting controls and prompt input"
+        "description": "Moves between toolbar buttons and the prompt input."
       },
       {
         "key": "Ctrl/Cmd + B",
-        "description": "Natively toggles bold styling on selected text"
+        "description": "Browser-native bold in the editable text (not handled by the component)."
       },
       {
         "key": "Ctrl/Cmd + I",
-        "description": "Natively toggles italic styling on selected text"
+        "description": "Browser-native italic in the editable text (not handled by the component)."
       }
     ],
-    "reducedMotion": "All spring translations and height animations gracefully respect prefers-reduced-motion: reduce."
+    "reducedMotion": "With prefers-reduced-motion, the toolbar layout resize and the stage panel height change instantly. Other entrance, exit and hover animations still run."
   },
   "props": [
     {
@@ -142,6 +142,7 @@
       "description": "Callback triggered when the user submits an AI query from the toolbar."
     }
   ],
+  "usage": "import { Editor } from \"@/components/ui/editor\";\n\nexport function EditorDemo() {\n  return (\n    <Editor\n      title=\"Release notes\"\n      answer=\"The update adds keyboard support and faster loading.\"\n    >\n      Select any sentence in this paragraph and ask the assistant to rewrite it.\n    </Editor>\n  );\n}",
   "guidelines": {
     "recommended": [
       "Notion or Lex-style collaborative and AI-assisted text editors",

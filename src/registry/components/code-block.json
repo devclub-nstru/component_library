@@ -2,7 +2,7 @@
   "slug": "code-block",
   "name": "Code Block",
   "description": "Minimal syntax-highlighted code block with line numbers, copy action, and accent color customization.",
-  "summary": "A pure, borderless syntax-highlighted code block component engineered for seamless developer experiences. Eliminates bulky outer card frames and box shadows in favor of a clean, line-synchronized layout where line numbers and tokens maintain mathematical alignment across empty and wrapped lines. Features instant one-click clipboard copying, interactive token styling, and dynamic accent color theming.",
+  "summary": "A borderless syntax-highlighted code block. Line numbers and tokens stay aligned across empty lines, and long lines scroll horizontally. Includes one-click clipboard copy and an accent color for highlighted tokens.",
   "category": "display",
   "tags": [
     "code",
@@ -25,14 +25,14 @@
   "highlights": [
     "Borderless, container-free aesthetic designed to float cleanly on dark backgrounds",
     "Per-row line synchronization ensuring line numbers never desync from code lines",
-    "Dynamic accent color customization for keywords, tags, numbers, and attributes",
+    "Accent color applied to keywords, JSX tags, numbers and strings",
     "One-click clipboard copy button with active feedback states",
     "Zero-dependency lightweight syntax tokenizer"
   ],
   "anatomy": [
     "<CodeBlock> (Root container with font-mono and select-text styling)",
-    "<CopyButton> (Absolute top-right floating translucent action button)",
-    "<LineRow> (Line-synchronized flex row pairing line number with tokens)"
+    "<button> (Absolute top-right copy button)",
+    "<div> (Line row pairing the line number with its tokens)"
   ],
   "guidelines": {
     "recommended": [
@@ -51,6 +51,11 @@
       "type": "string",
       "defaultValue": "DEFAULT_CODE",
       "description": "Code string to display and syntax highlight."
+    },
+    {
+      "name": "language",
+      "type": "string",
+      "description": "Language hint for the snippet. The built-in tokenizer highlights every language the same way."
     },
     {
       "name": "color",
@@ -77,6 +82,7 @@
       "description": "Additional CSS classes to customize spacing or container."
     }
   ],
+  "usage": "import { CodeBlock } from \"@/components/ui/code-block\";\n\nexport function CodeBlockDemo() {\n  return (\n    <CodeBlock\n      filename=\"greet.ts\"\n      code={`export const greet = (name: string) => \\`Hello, \\${name}\\`;`}\n    />\n  );\n}",
   "files": [
     {
       "name": "code-block.tsx",

@@ -1,8 +1,8 @@
 {
   "slug": "segmented-progress",
   "name": "Segmented Progress",
-  "description": "Tactile segmented progress bar with real-time hover data inspection, dynamic wave proximity physics, and staggered GSAP fill animation.",
-  "summary": "A high-fidelity segmented progress bar component crafted with capsule tick metrics, interactive hover data preview, proximity wave physics, and smooth GSAP entrance choreography. Features custom color palettes, interactive value scrubbing, and a dark obsidian card presentation matching modern productivity suites.",
+  "description": "Metric card with segmented progress bars, hover value preview, a proximity wave and staggered GSAP fill.",
+  "summary": "A dark card with a title, an icon, a more-options button, one or more segmented progress metrics with trend badges and rolling-number readouts, and an optional footer banner. Bars can be scrubbed by pointer or keyboard, and hovering previews values.",
   "category": "feedback",
   "tags": [
     "progress",
@@ -30,24 +30,23 @@
   "supportsColor": true,
   "highlights": [
     "Segmented vertical capsule progress tracking with configurable segment resolution",
-    "Smooth hover inspection with animated floating tooltip tracking the active cursor",
+    "Hovering a segment previews its value in the metric readout",
     "Proximity wave physics applying organic Gaussian scaleY expansion to neighboring segments",
     "Staggered entrance choreographing sequential segment illumination via GSAP",
-    "Live percentage readout smoothly interpolating to hovered values and settling back on leave",
+    "Rolling-digit readout that shows the hovered value and returns to the stored value on leave",
     "Complete dark obsidian card layout with metallic squircle progress icon, trend badges, and footer banner",
     "Full keyboard accessibility with Arrow keys, Home, End, and ARIA progressbar semantics"
   ],
   "anatomy": [
-    "<div> (Card Shell: dark obsidian container with inner shadow and subtle border)",
-    "<div> (Card Header: squircle progress icon, title, subtitle, and options trigger)",
-    "<div> (Metric Row: label, trend badge, and tabular-nums percentage readout)",
-    "<div> (Segmented Track: responsive row of vertical rounded capsule pills)",
-    "<div> (Floating Tooltip: glassmorphism badge tracking active segment with arrow pointer)",
-    "<div> (Footer Banner: forest green status compartment with arrow icon)"
+    "<div> (Card Shell: dark container with inner shadow and subtle border)",
+    "<div> (Card Header: progress icon, title, subtitle, and more-options button)",
+    "<div> (Metric Row: label, trend badge, and rolling percentage readout)",
+    "<div> (Segmented Track: row of vertical rounded capsule segments)",
+    "<div> (Footer Banner: tinted with the card color, with an arrow icon)"
   ],
   "physics": {
     "engine": "GSAP Staggered Fill & Gaussian Proximity Wave",
-    "description": "Hardware-accelerated scaleY transforms driven by Gaussian proximity decay with smooth inertial quickTo positioning.",
+    "description": "GSAP staggered scaleY and opacity fill on value change, plus a Gaussian scaleY wave over segments near the pointer.",
     "parameters": [
       {
         "label": "Stagger Duration",
@@ -59,11 +58,11 @@
       },
       {
         "label": "Proximity Radius",
-        "value": "3.5 Gaussian decay"
+        "value": "exp(-d^2 / 3.5), segments within 3 of the pointer"
       },
       {
-        "label": "Settling Ease",
-        "value": "power2.out (250ms)"
+        "label": "Fill Tween",
+        "value": "0.45s power2.out from scaleY 0.35 / opacity 0.2"
       }
     ]
   },
@@ -100,36 +99,79 @@
   },
   "props": [
     {
-      "name": "value",
-      "type": "number",
-      "defaultValue": "0",
-      "description": "Controlled progress value from 0 to 100."
+      "name": "title",
+      "type": "string",
+      "defaultValue": "\"Project Progress\"",
+      "description": "Card heading."
     },
     {
-      "name": "segments",
-      "type": "number",
-      "defaultValue": "32",
-      "description": "Total number of vertical segments rendered along the track."
+      "name": "subtitle",
+      "type": "string",
+      "defaultValue": "\"Overall completion rate all projects.\"",
+      "description": "Text under the heading."
+    },
+    {
+      "name": "icon",
+      "type": "ReactNode",
+      "description": "Icon next to the heading. Defaults to a progress pie icon."
     },
     {
       "name": "color",
       "type": "\"emerald\" | \"blue\" | \"violet\" | \"amber\" | \"rose\" | \"cyan\" | string",
       "defaultValue": "\"emerald\"",
-      "description": "Color preset or custom hex color for active segments and ambient glow."
+      "description": "Preset name or CSS color for the filled segments. A metric's own color overrides it."
+    },
+    {
+      "name": "metrics",
+      "type": "SegmentedProgressMetric[]",
+      "defaultValue": "two sample metrics",
+      "description": "Rows to render. Each metric has id, label, value (0 to 100) and optional trend, trendDirection, color, unit and formatValue."
+    },
+    {
+      "name": "segments",
+      "type": "number",
+      "defaultValue": "32",
+      "description": "Number of segments per bar."
+    },
+    {
+      "name": "footerText",
+      "type": "string",
+      "defaultValue": "\"Up by 6% compared to last week, great momentum!\"",
+      "description": "Text in the card footer."
+    },
+    {
+      "name": "footerHref",
+      "type": "string",
+      "description": "Turns the footer into a link to this URL."
+    },
+    {
+      "name": "footerAction",
+      "type": "() => void",
+      "description": "Makes the footer clickable and calls this handler."
+    },
+    {
+      "name": "onMoreClick",
+      "type": "() => void",
+      "description": "Called when the header's more button is pressed."
     },
     {
       "name": "interactive",
       "type": "boolean",
       "defaultValue": "true",
-      "description": "Enables hover inspection, wave proximity physics, and scrubbing."
+      "description": "Lets users click, drag or use arrow keys on the bars to change values."
     },
     {
-      "name": "onChange",
-      "type": "(value: number) => void",
-      "defaultValue": "undefined",
-      "description": "Callback triggered when progress is adjusted via dragging or keyboard."
+      "name": "onMetricChange",
+      "type": "(metricId: string, newValue: number) => void",
+      "description": "Called when the user changes a metric value."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "description": "Additional CSS classes for the card."
     }
   ],
+  "usage": "import { SegmentedProgress } from \"@/components/ui/segmented-progress\";\n\nconst metrics = [\n  { id: \"design\", label: \"Design\", value: 82 },\n  { id: \"build\", label: \"Build\", value: 54 },\n];\n\nexport function SegmentedProgressDemo() {\n  return <SegmentedProgress title=\"Sprint progress\" metrics={metrics} />;\n}",
   "files": [
     {
       "name": "segmented-progress.tsx",

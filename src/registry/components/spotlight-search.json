@@ -2,7 +2,7 @@
   "slug": "spotlight-search",
   "name": "Spotlight Search",
   "description": "Apple-inspired Spotlight search bar with fluid capsule-to-quad-button expansion, staggered harmonic spring physics, and real-time category filtering.",
-  "summary": "An ultra-fluid macOS Spotlight search bar component engineered with harmonic spring physics and dynamic layout morphing. At rest, it presents an iconic 480px glass capsule search bar with pulsing caret and dark frosted aesthetics. Upon hover, keyboard focus, or text input, the search capsule smoothly compresses to 248px while seamlessly breaking into four 48px circular action buttons (Applications, Folders, Workspaces, and Documents) with staggered spring kinematics, zero cumulative layout shift (total width fixed at 480px), full keyboard navigation, active category filters, and an interactive search results tray.",
+  "summary": "A macOS Spotlight-style search bar built with spring physics and layout morphing. At rest it is a 480px glass capsule. On hover, keyboard focus or text input, the capsule compresses to 248px and four 48px circular action buttons (Applications, Folders, Workspaces and Documents) spring out beside it, inside a fixed 480px box so surrounding layout does not shift. Includes keyboard navigation, category filters and a results tray.",
   "category": "search",
   "tags": [
     "spotlight",
@@ -29,18 +29,18 @@
   "highlights": [
     "Seamless layout morphing from a single unified 480px capsule into a search input and four satellite action buttons",
     "Viscous SVG gooey liquid layer creating organic metaball neck stretching and detachment during expansion and fusion during collapse",
-    "Continuous absolute coordinate transforms ensuring zero flexbox layout reflows and zero cumulative layout shift",
+    "Absolutely positioned capsule (width spring) and buttons (x/scale) inside a fixed 480px box, so surrounding layout does not shift",
     "Deliberate friction-damped spring kinematics (stiffness: 170, damping: 24, mass: 1.0) for luxurious Apple liquid gliding",
-    "High-fidelity macOS icons: Apple 'A' Applications, system Folders, multi-tier Workspaces, and Folded Documents",
+    "Custom stroke icons for Applications, Folders, Workspaces and Documents",
     "Real-time category-based filtering with dynamic placeholder hints and active filter badge dismissals",
-    "Interactive results tray with keyboard arrow-key navigation (ArrowUp, ArrowDown, Enter, Escape)",
-    "Micro-tooled hover tooltips with scale-in micro springs and dark frosted glass backdrop styling"
+    "Results tray with keyboard navigation between options, Enter to submit and Escape to clear",
+    "Mouse-hover tooltips with a scale-in spring (stiffness 380, damping 26, mass 0.8)"
   ],
   "anatomy": [
     "<svg> (Scoped filter definition with feGaussianBlur stdDeviation 5.5 and high-contrast feColorMatrix alpha thresholding)",
     "<div> (Gooey liquid backdrop layer with capsule and button blobs under the SVG goo filter)",
     "<motion.div> (Morphing search capsule with dark frosted glass, white border highlights, and search icon)",
-    "<input> (Accessible text input with dynamic placeholder and keyboard navigation)",
+    "<input> (Text input with dynamic placeholder and keyboard navigation)",
     "<motion.div> (Satellite filter button cluster with staggered spring transitions and custom SVG iconography)",
     "<motion.div> (Expandable floating search results tray with item metadata and shortcut badges)"
   ],
@@ -83,9 +83,27 @@
     ]
   },
   "accessibility": {
-    "role": "search",
-    "aria": "aria-label on search input and filter buttons, title tooltips, full keyboard navigation with Escape to clear, ArrowUp/ArrowDown to select, and Enter to submit.",
-    "reducedMotion": "Responsive spring animations respect reduced motion preferences with graceful CSS fallback transitions."
+    "role": "combobox",
+    "aria": "The input is a role=\"combobox\" labelled by its placeholder. It controls a role=\"listbox\" of role=\"option\" results and tracks the highlighted option with aria-activedescendant. Filter buttons have aria-label, aria-pressed and title tooltips.",
+    "reducedMotion": "With prefers-reduced-motion, the capsule, buttons and results tray change state without spring animation.",
+    "keyboard": [
+      {
+        "key": "Tab",
+        "description": "Move between the input and the filter buttons."
+      },
+      {
+        "key": "ArrowDown / ArrowUp",
+        "description": "Move the highlight through the results."
+      },
+      {
+        "key": "Enter",
+        "description": "Submit the highlighted result, or the query if there are no results."
+      },
+      {
+        "key": "Escape",
+        "description": "Clear the query; if it is already empty, leave the input."
+      }
+    ]
   },
   "guidelines": {
     "recommended": [
@@ -167,6 +185,7 @@
       "description": "Whether the search bar and filter buttons are disabled."
     }
   ],
+  "usage": "\"use client\";\n\nimport { SpotlightSearch } from \"@/components/ui/spotlight-search\";\n\nexport function SpotlightSearchDemo() {\n  return (\n    <SpotlightSearch\n      onSubmit={(query, filter) => console.log(query, filter)}\n    />\n  );\n}",
   "files": [
     {
       "name": "spotlight-search.tsx",

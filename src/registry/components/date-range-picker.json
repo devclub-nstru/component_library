@@ -4,8 +4,8 @@
   "name": "Date Range Picker",
   "title": "Date Range Picker",
   "type": "registry:ui",
-  "description": "Smooth physics-driven date range picker calendar featuring dual-month navigation, quick presets rail, gliding thumb springs, and rolling label animations.",
-  "summary": "A high-performance date range picker and calendar primitive featuring side-by-side months, seamless week-spanning range highlight capsules, physical spring-damped gliding indicators, directional month slide choreography, and rolling numeric text transitions.",
+  "description": "Date range picker calendar with dual-month navigation, a quick presets rail, range capsules and rolling label animations.",
+  "summary": "A date range picker and calendar with side-by-side months, per-week range highlight capsules, a hover preview between the start date and the hovered day, directional month slides, and rolling text transitions in the summary.",
   "category": "date-and-time",
   "tags": [
     "calendar",
@@ -30,45 +30,77 @@
   "supportsColor": false,
   "highlights": [
     "Side-by-side dual-month calendar view with fluid month slide transitions",
-    "Connected continuous range capsules that stretch smoothly across week boundaries",
+    "Per-week range capsules behind in-range days",
     "Interactive hover preview projection between start date and hovered date",
-    "Physical spring-driven gliding indicator thumbs that travel smoothly from day to day",
-    "Quick preset rail with gliding spring background pill",
+    "Hover preview of the range while choosing the end date",
+    "Quick preset rail with a spring background pill",
     "Direction-aware rolling label odometer animations for summary dates and counts",
     "Today date marker dot indicator adapting to selected edge states",
-    "Full keyboard navigation with arrow keys, page up/down, and home/end",
+    "Keyboard navigation with arrow keys, Page Up/Down, Shift+Page Up/Down and Home/End",
     "Responsive single-month auto collapse on compact viewports",
     "100% self-contained Tailwind CSS implementation with zero external CSS module dependencies"
   ],
   "anatomy": [
-    "<div className=\"relative inline-flex flex-col bg-[#161618] border border-zinc-800/80 rounded-2xl md:rounded-3xl p-5 md:p-6 shadow-2xl text-zinc-100\"> (Root calendar card)",
-    "<div className=\"flex flex-col md:flex-row gap-6 md:gap-8 items-stretch\"> (Main body splitting presets rail and dual calendars)",
-    "<div className=\"flex flex-row md:flex-col gap-1 ...\"> (Quick preset shortcuts rail)",
-    "<div className=\"relative flex-1\"> (Dual-month calendars viewport with directional slide)",
-    "<Bar> (Continuous week-spanning capsule slice animated with physical stretch spring)",
-    "<Thumb> (Gliding white circular thumb pill with GLIDE spring)",
-    "<Month> (Month grid with weekday headers, day buttons, and today indicator)",
-    "<div className=\"mt-5 pt-4 border-t border-zinc-800/80 flex items-center justify-between\"> (Footer with Rolling date summary and action buttons)"
+    "<div role=\"region\"> (Root calendar card labelled by the label prop)",
+    "<div role=\"group\"> (Quick preset rail)",
+    "<button> (Previous and next month navigation)",
+    "<Month> (Month grid with role=\"grid\", range capsules and day buttons)",
+    "<div> (Footer with rolling summary, day count, Cancel and Apply)"
   ],
   "physics": {
-    "engine": "Time-derived Harmonic Damped Springs with Directional Motion Choreography",
-    "description": "Calculated harmonic spring dynamics converting visual duration and bounce into exact stiffness and damping ratios, powering fluid segment stretching, gliding thumbs, and rolling labels.",
+    "engine": "Motion Tweens and Springs",
+    "description": "Directional month slide tweens, CSS transitions for range capsules, a spring for the preset pill, and rolling label tweens for the summary.",
     "parameters": [
       {
-        "label": "Stretch Spring",
-        "value": "visualDuration: 0.30s, bounce: 0.04"
+        "label": "Month Slide",
+        "value": "0.2s [0.16, 1, 0.3, 1] enter / 0.14s exit, 28px"
       },
       {
-        "label": "Glide Spring",
-        "value": "visualDuration: 0.30s, bounce: 0.10"
-      },
-      {
-        "label": "Slide Spring",
-        "value": "visualDuration: 0.40s, bounce: 0.06"
+        "label": "Range Capsule",
+        "value": "CSS 150ms transition"
       },
       {
         "label": "Preset Pill Spring",
         "value": "stiffness: 420, damping: 32"
+      },
+      {
+        "label": "Rolling Label",
+        "value": "0.24s enter / 0.14s exit, 2px blur"
+      }
+    ]
+  },
+  "accessibility": {
+    "role": "region",
+    "aria": "Region labelled by the label prop. Each month is a role=\"grid\" labelled by its title; day cells use aria-selected and aria-current=\"date\" for today; presets use aria-pressed; a polite live region announces the selection status.",
+    "reducedMotion": "With prefers-reduced-motion, the month slide and rolling labels switch to short opacity fades.",
+    "keyboard": [
+      {
+        "key": "ArrowLeft / ArrowRight",
+        "description": "Move to the previous or next day."
+      },
+      {
+        "key": "ArrowUp / ArrowDown",
+        "description": "Move to the previous or next week."
+      },
+      {
+        "key": "Home / End",
+        "description": "Move to the start or end of the week."
+      },
+      {
+        "key": "PageUp / PageDown",
+        "description": "Move to the previous or next month."
+      },
+      {
+        "key": "Shift + PageUp / PageDown",
+        "description": "Move to the previous or next year."
+      },
+      {
+        "key": "Enter / Space",
+        "description": "Select the focused day as the range start or end."
+      },
+      {
+        "key": "Tab",
+        "description": "Move between presets, month navigation, the day grid and the footer buttons."
       }
     ]
   },
@@ -102,6 +134,18 @@
       "type": "() => void",
       "defaultValue": "undefined",
       "description": "Callback invoked when clicking the Cancel button."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "defaultValue": "\"Date range\"",
+      "description": "Accessible name of the picker region."
+    },
+    {
+      "name": "placeholder",
+      "type": "string",
+      "defaultValue": "\"Select dates\"",
+      "description": "Summary text shown while no range is selected."
     },
     {
       "name": "presets",
@@ -146,6 +190,7 @@
       "description": "Additional CSS class names applied to the root container."
     }
   ],
+  "usage": "\"use client\";\n\nimport { DateRangePicker } from \"@/components/ui/date-range-picker\";\n\nexport function DateRangePickerDemo() {\n  return (\n    <DateRangePicker\n      onApply={(range) => console.log(range.start, range.end)}\n    />\n  );\n}",
   "files": [
     {
       "name": "date-range-picker.tsx",

@@ -226,6 +226,7 @@
       "description": "Called with the project on opening and null when closing begins."
     }
   ],
+  "usage": "import { ProjectReveal } from \"@/components/ui/project-reveal\";\n\nconst items = [\n  {\n    id: \"atlas\",\n    title: \"Atlas\",\n    category: \"Brand identity\",\n    year: 2026,\n    image: \"/images/atlas.jpg\",\n    description: \"Identity system for a mapping startup.\",\n  },\n];\n\nexport function ProjectRevealDemo() {\n  return <ProjectReveal items={items} />;\n}",
   "files": [
     {
       "name": "project-reveal.tsx",

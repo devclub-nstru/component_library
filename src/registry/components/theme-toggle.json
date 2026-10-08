@@ -1,8 +1,8 @@
 {
   "slug": "theme-toggle",
   "name": "Theme Toggle",
-  "description": "View Transitions API powered theme toggle button with tactile obsidian candy styling, geometric clip-path ripples, and seamless mode synchronization.",
-  "summary": "A high-performance theme toggle switch engineered for seamless transitions between dark and light modes. Powered by the native View Transitions API with custom SVG polygon and circular clipping paths, delivering 60fps geometric morphs across the viewport. Features an ultra-tactile obsidian candy button with physical specular reflections, upper glass dome sheen, and hardware-accelerated press compression.",
+  "description": "View Transitions API theme toggle with geometric clip-path ripples, optional obsidian candy styling, and mode synchronization.",
+  "summary": "A theme toggle for switching between dark and light modes. Uses the View Transitions API with circle and polygon clip paths that expand across the viewport. Set candy for an obsidian button with a specular line and glass sheen; without it the button is unstyled apart from className.",
   "category": "sliders-and-toggles",
   "tags": [
     "theme",
@@ -28,27 +28,27 @@
   "highlights": [
     "Hardware-accelerated native View Transitions API with polygon and circular clipping path morphing",
     "Seven geometric ripple shape transitions: circle, square, triangle, diamond, hexagon, rectangle, and star",
-    "Tactile obsidian candy gemstone button style with physical radial shaders, specular reflection rim, and glass sheen",
-    "Automatic dark and light mode detection with zero hydration flash via MutationObserver and system preference sync",
+    "Optional obsidian candy button style (candy prop) with radial gradient, specular line and glass sheen",
+    "Uncontrolled mode follows the html .dark class via MutationObserver, storage and theme-change events, and saves the choice to localStorage \"theme\"",
     "Graceful degradation when the View Transitions API is unsupported or reduced motion is active"
   ],
   "anatomy": [
-    "<button> (Focus-visible interactive trigger shell with obsidian candy gradient or minimalist border)",
-    "<span> (Specular reflection line anchored along the upper perimeter)",
-    "<span> (Translucent glass dome sheen layer providing convex highlight)",
+    "<button> (Unstyled unless candy, which adds the obsidian gradient)",
+    "::after (Specular line along the top edge, candy only)",
+    "<span> (Glass sheen, candy only)",
     "<span> (Animated Lucide Sun and Moon icons with rotation micro-interactions)"
   ],
   "physics": {
     "engine": "View Transitions API & CSS Radial Shaders",
-    "description": "Screen-wide geometric clip-path expansion combined with tactile spring active compression and specular lighting insets.",
+    "description": "Screen-wide clip-path expansion through the View Transitions API, plus CSS press compression in candy mode.",
     "parameters": [
       {
         "label": "Ripple Duration",
-        "value": "450ms cubic-bezier(0.16, 1, 0.3, 1)"
+        "value": "450ms ease-in-out (linear for star), duration prop"
       },
       {
         "label": "Clip Geometry",
-        "value": "circle / polygon coordinates dynamically computed from click origin"
+        "value": "Computed from the button center, or the viewport center with fromCenter"
       },
       {
         "label": "Glass Sheen",
@@ -56,18 +56,18 @@
       },
       {
         "label": "Tactile Compression",
-        "value": "scale-[0.98] on active press with 150ms ease-out"
+        "value": "scale-[0.98] on press, 200ms ease-out, candy only"
       }
     ]
   },
   "accessibility": {
     "role": "button",
-    "aria": "Includes aria-label='Toggle theme' with accessible screen-reader state announcement.",
+    "aria": "aria-label=\"Toggle theme\". The current theme is not exposed (no aria-pressed or live region).",
     "reducedMotion": "Suppresses screen-wide clip path ripple when prefers-reduced-motion is active.",
     "keyboard": [
       {
         "key": "Tab",
-        "description": "Focuses the theme toggler with high-contrast dual ring."
+        "description": "Focus the toggle."
       },
       {
         "key": "Enter / Space",
@@ -83,7 +83,7 @@
     ],
     "bestPractices": [
       "Use candy mode for tactile obsidian hero action matching GitHub candy button",
-      "Trigger from the click coordinate for natural ripple expansion across the viewport",
+      "Set fromCenter to expand the ripple from the middle of the viewport",
       "Respect user prefers-reduced-motion preference"
     ]
   },
@@ -125,6 +125,7 @@
       "description": "Callback fired whenever the theme changes."
     }
   ],
+  "usage": "import { ThemeToggle } from \"@/components/ui/theme-toggle\";\n\nexport function ThemeToggleDemo() {\n  return <ThemeToggle variant=\"circle\" candy />;\n}",
   "files": [
     {
       "name": "theme-toggle.tsx",

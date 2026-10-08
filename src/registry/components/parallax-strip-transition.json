@@ -168,6 +168,7 @@
       "defaultValue": "\"Image collection\""
     }
   ],
+  "usage": "import { ParallaxStripTransition } from \"@/components/ui/parallax-strip-transition\";\n\nconst slides = [\n  { id: \"coast\", src: \"/images/coast.jpg\", alt: \"Rocky coastline\", title: \"Coast\" },\n  { id: \"forest\", src: \"/images/forest.jpg\", alt: \"Pine forest\", title: \"Forest\" },\n];\n\nexport function ParallaxStripTransitionDemo() {\n  return <ParallaxStripTransition slides={slides} className=\"h-[520px]\" />;\n}",
   "files": [
     {
       "name": "parallax-strip-transition.tsx",

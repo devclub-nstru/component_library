@@ -3,7 +3,7 @@
   "name": "ascii-hover-button",
   "type": "registry:ui",
   "title": "ASCII Hover Button",
-  "description": "Interactive button and segmented pill control featuring smooth color transitions and real-time ASCII cipher character scramble glitch on hover.",
+  "description": "Button with color transitions and an ASCII character scramble on hover.",
   "dependencies": [
     "gsap",
     "@gsap/react",

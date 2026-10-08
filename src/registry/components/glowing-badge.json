@@ -28,10 +28,10 @@
     "Concentric dual-element ping pulse with 75% peak opacity and infinite loop",
     "Compact uppercase monospace typography tailored for developer interfaces",
     "Zero-JS CSS-only animation for exceptional performance in dense data tables",
-    "Flexible pill geometry supporting arbitrary child icons, metrics, or labels"
+    "Rectangular badge supporting arbitrary child icons, metrics or labels"
   ],
   "anatomy": [
-    "<div> (Badge Shell: inline-flex container with rounded pill border, background, and radial box shadow)",
+    "<div> (Badge Shell: inline-flex container with 1px border, background and box-shadow glow)",
     "<span> (Pulse Ring: expanding ping ring with animate-ping keyframe effect)",
     "<span> (Core Dot: solid static colored dot anchoring the pulse animation)",
     "<span> (Label: monospace text container displaying status text)"
@@ -50,7 +50,7 @@
       },
       {
         "label": "Dot Diameter",
-        "value": "6px (1.5rem / 6px)"
+        "value": "6px (h-1.5, 0.375rem)"
       },
       {
         "label": "Border Weight",
@@ -63,9 +63,8 @@
     ]
   },
   "accessibility": {
-    "role": "status",
-    "aria": "Accepts aria-live='polite' or aria-label for live telemetry status announcements.",
-    "reducedMotion": "Pulse ping animation automatically pauses when prefers-reduced-motion is active.",
+    "aria": "No role is set. Pass role=\"status\" and aria-live=\"polite\" through props for live status announcements.",
+    "reducedMotion": "No reduced-motion handling. The ping runs under prefers-reduced-motion; set pulse={false} to remove it.",
     "keyboard": [
       {
         "key": "Non-interactive",
@@ -88,8 +87,8 @@
   "props": [
     {
       "name": "variant",
-      "type": "\"blue\" | \"emerald\" | \"amber\" | \"violet\"",
-      "defaultValue": "\"blue\"",
+      "type": "\"default\" | \"blue\" | \"emerald\" | \"amber\" | \"violet\"",
+      "defaultValue": "\"default\"",
       "description": "Color palette controlling border tint, diffuse glow shadow, and pulse dot color: blue, emerald, amber, or violet."
     },
     {
@@ -111,6 +110,7 @@
       "description": "Additional CSS classes to customize pill borders, spacing, or typography."
     }
   ],
+  "usage": "import { GlowingBadge } from \"@/components/ui/glowing-badge\";\n\nexport function GlowingBadgeDemo() {\n  return <GlowingBadge variant=\"emerald\">Operational</GlowingBadge>;\n}",
   "files": [
     {
       "name": "glowing-badge.tsx",

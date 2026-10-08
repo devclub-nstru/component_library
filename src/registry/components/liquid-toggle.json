@@ -41,23 +41,23 @@
   ],
   "physics": {
     "engine": "Dual Spring Harmonic Oscillator with SVG Meta-Ball Thresholding",
-    "description": "Analytical Euler integration simulating independent spring tension on the main thumb and satellite drop, linked with velocity squash-and-stretch.",
+    "description": "Semi-implicit Euler integration of two springs (thumb and trailing drop) with velocity-based squash and stretch.",
     "parameters": [
       {
         "label": "Thumb Stiffness",
-        "value": "260 - 460"
+        "value": "260 (fluid) / 340 (jelly)"
       },
       {
         "label": "Thumb Damping",
-        "value": "14 - 26"
+        "value": "20 (fluid) / 14 (jelly)"
       },
       {
         "label": "Drop Stiffness",
-        "value": "125 - 240"
+        "value": "125 (fluid) / 160 (jelly)"
       },
       {
         "label": "Drop Damping",
-        "value": "12 - 20"
+        "value": "15 (fluid) / 12 (jelly)"
       },
       {
         "label": "Goo Threshold",
@@ -65,14 +65,14 @@
       },
       {
         "label": "Velocity Stretch",
-        "value": "0.002 - 0.005 factor"
+        "value": "0.003 (fluid) / 0.005 (jelly) factor"
       }
     ]
   },
   "accessibility": {
     "role": "switch",
     "aria": "Standard role='switch' with aria-checked, aria-label, and disabled state reflection.",
-    "reducedMotion": "Physics settling handles graceful termination and supports instant state transitions.",
+    "reducedMotion": "With prefers-reduced-motion, the thumb moves to its new position without the spring and goo animation.",
     "keyboard": [
       {
         "key": "Space / Enter",
@@ -100,7 +100,6 @@
     {
       "name": "checked",
       "type": "boolean",
-      "defaultValue": "false",
       "description": "Controlled checked state of the liquid toggle."
     },
     {
@@ -150,8 +149,14 @@
       "type": "string",
       "defaultValue": "undefined",
       "description": "Additional CSS classes passed to the outer track button."
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "description": "id applied to the switch button, for pairing with an external label."
     }
   ],
+  "usage": "\"use client\";\n\nimport { useState } from \"react\";\nimport { LiquidToggle } from \"@/components/ui/liquid-toggle\";\n\nexport function LiquidToggleDemo() {\n  const [enabled, setEnabled] = useState(false);\n\n  return <LiquidToggle checked={enabled} onChange={setEnabled} label=\"Notifications\" />;\n}",
   "files": [
     {
       "name": "liquid-toggle.tsx",

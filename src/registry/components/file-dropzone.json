@@ -4,8 +4,8 @@
   "name": "File Dropzone",
   "title": "File Dropzone",
   "type": "registry:ui",
-  "description": "Interactive drag-and-drop file dropzone with magnetic cursor glow, fanned sheets choreography, and animated file lifecycle rows.",
-  "summary": "A modern file dropzone built with motion springs and Tailwind CSS. Features dynamic SVG dash perimeter math, pointer tracking glow, fanning paper sheets, staged file row transitions, in-line progress, and retry actions.",
+  "description": "Drag-and-drop file dropzone with a fanned sheets illustration, drag state styling and animated file lifecycle rows.",
+  "summary": "A file dropzone built with Motion springs and Tailwind CSS. Features a fanned paper sheets illustration, drag-over styling, staged file row transitions, inline progress, retry actions and clipboard paste.",
   "category": "inputs",
   "tags": [
     "file",
@@ -28,34 +28,38 @@
   "interactive": true,
   "supportsColor": false,
   "highlights": [
-    "Dashed SVG perimeter with exact closed-loop dash sizing calculated to border radius",
-    "Pointer-tracking spring glow and soft radial wash on drag and hover",
-    "Interactive 3-sheet fanning illustration with hover and drag response",
+    "Rounded drop zone whose border and background change while files are dragged over it",
+    "Fanned three-sheet illustration that spreads on hover and further on drag",
+    "Optional compact list layout via compactAt",
     "Individual row entrance, shake on error, and smooth spring collapse on removal",
     "In-place progress bar and animated checkmark draw transition",
     "Clipboard paste detection and keyboard navigation between rows"
   ],
   "anatomy": [
-    "FileDropzone (drop target, SVG dashed edge, pointer wash, drag state)",
+    "FileDropzone (drop target button, sheet illustration, drag state)",
     "FileRow (item thumbnail, status badge, progress bar, retry/remove controls)",
     "TypeIcon (contextual file extension icon resolver)",
     "DrawnCheck (animated SVG path checkmark)"
   ],
   "physics": {
     "engine": "Motion Springs",
-    "description": "Uses critically damped spring physics for height expansion, row insertion, and pointer-following glow with decay shake on failure.",
+    "description": "Spring height for row insertion and removal, spring progress fill, and a decaying keyframe shake on failure.",
     "parameters": [
       {
-        "label": "Spring Smooth",
-        "value": "visualDuration: 0.4, bounce: 0"
+        "label": "Row Height",
+        "value": "stiffness: 320, damping: 28, mass: 0.8"
       },
       {
-        "label": "Spring Snappy",
-        "value": "visualDuration: 0.35, bounce: 0.15"
+        "label": "Collapse",
+        "value": "stiffness: 380, damping: 30, mass: 0.8"
       },
       {
-        "label": "Glow Spring",
-        "value": "stiffness: 260, damping: 32, mass: 0.8"
+        "label": "Sheet Fan",
+        "value": "stiffness: 340, damping: 24, mass: 0.8"
+      },
+      {
+        "label": "Shake",
+        "value": "420ms easeOut keyframes"
       }
     ]
   },
@@ -64,19 +68,27 @@
     "keyboard": [
       {
         "key": "Enter / Space",
-        "description": "Opens the native file picker"
+        "description": "Opens the native file picker."
+      },
+      {
+        "key": "Tab / Shift+Tab",
+        "description": "Moves between the drop zone and the row Retry and Remove buttons."
       },
       {
         "key": "ArrowUp / ArrowDown",
-        "description": "Moves focus between file rows"
+        "description": "Moves focus to the previous or next file row's action button."
       },
       {
         "key": "Delete / Backspace",
-        "description": "Removes the currently focused file row"
+        "description": "Removes the file row containing focus."
+      },
+      {
+        "key": "Ctrl/Cmd + V",
+        "description": "Pastes files from the clipboard while the component is hovered or focused."
       }
     ],
     "aria": "aria-describedby for labels/notes, aria-valuemin/max/now for progress, live regions for screen reader status updates",
-    "reducedMotion": "Gracefully collapses transitions to instant opacity changes when prefers-reduced-motion is active"
+    "reducedMotion": "With prefers-reduced-motion, rows, text and progress use short opacity fades or instant changes and the shake is skipped. The sheet illustration still springs on hover and drag."
   },
   "guidelines": {
     "recommended": [
@@ -86,7 +98,7 @@
     ],
     "bestPractices": [
       "Handle cancellation signals gracefully in onUpload handlers",
-      "Clean up generated object URLs when removing items to prevent memory leaks"
+      "Revoke object URLs you create for defaultItems previews. The component revokes the preview URLs it generates itself."
     ]
   },
   "props": [
@@ -106,6 +118,11 @@
       "type": "number",
       "defaultValue": "5",
       "description": "Maximum number of files allowed."
+    },
+    {
+      "name": "onFilesChange",
+      "type": "(files: File[]) => void",
+      "description": "Called with the current list of files whenever files are added or removed."
     },
     {
       "name": "maxSize",
@@ -130,6 +147,11 @@
       "description": "Small note under the description, e.g. accepted formats and size."
     },
     {
+      "name": "dropLabel",
+      "type": "string",
+      "description": "Text shown while files are dragged over the zone. Defaults to a message based on onUpload and multiple."
+    },
+    {
       "name": "defaultItems",
       "type": "FileDropzoneItem[]",
       "description": "Pre-populated file rows displayed upon mount."
@@ -149,8 +171,14 @@
       "name": "compactAt",
       "type": "number",
       "description": "Folds the prompt into a slim bar once this many files are added."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "description": "Additional CSS classes for the root element."
     }
   ],
+  "usage": "\"use client\";\n\nimport { FileDropzone } from \"@/components/ui/file-dropzone\";\n\nexport function FileDropzoneDemo() {\n  return (\n    <FileDropzone\n      accept=\"image/*\"\n      maxFiles={5}\n      onUpload={async (item, { onProgress, signal }) => {\n        const body = new FormData();\n        if (item.file) body.append(\"file\", item.file);\n        await fetch(\"/api/upload\", { method: \"POST\", body, signal });\n        onProgress(100);\n      }}\n    />\n  );\n}",
   "files": [
     {
       "name": "file-dropzone.tsx",

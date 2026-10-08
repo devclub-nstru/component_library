@@ -5,7 +5,7 @@
   "title": "Grid Image Loader",
   "type": "registry:ui",
   "description": "A dark grid loader with smooth cycling phrases, images on cursor hover, and an upward content reveal.",
-  "summary": "Move across the grid to reveal photographs inside each hovered cell. Centered phrases change with a scoped GSAP sequence before the loading curtain lifts. Customize phrases, images, grid dimensions, timing, colors and progress. The showcase opens onto the requested Virat Kohli photograph.",
+  "summary": "Move across the grid to reveal photographs inside each hovered cell. Centered phrases change with a scoped GSAP sequence before the loading curtain lifts. Customize phrases, images, grid dimensions, timing, colors and progress.",
   "category": "loaders",
   "tags": [
     "loader",
@@ -53,7 +53,7 @@
       },
       {
         "label": "Grid",
-        "value": "4 \u00d7 4 cells"
+        "value": "4 × 4 cells"
       },
       {
         "label": "Phrase transition",
@@ -61,7 +61,7 @@
       },
       {
         "label": "Reveal",
-        "value": "0.95s \u00b7 power3.inOut"
+        "value": "0.95s · power3.inOut"
       }
     ]
   },
@@ -174,22 +174,23 @@
     {
       "name": "gridColumns",
       "type": "number",
-      "description": "Number of grid columns, bounded to 2\u20138.",
+      "description": "Number of grid columns, bounded to 2–8.",
       "defaultValue": "4"
     },
     {
       "name": "gridRows",
       "type": "number",
-      "description": "Number of grid rows, bounded to 2\u20138.",
+      "description": "Number of grid rows, bounded to 2–8.",
       "defaultValue": "4"
     },
     {
       "name": "gridOpacity",
       "type": "number",
-      "description": "Grid line opacity, bounded to 0\u20130.3.",
+      "description": "Grid line opacity, bounded to 0–0.3.",
       "defaultValue": "0.07"
     }
   ],
+  "usage": "import { GridImageLoader } from \"@/components/ui/grid-image-loader\";\n\nconst images = [\"/images/grid-1.jpg\", \"/images/grid-2.jpg\", \"/images/grid-3.jpg\"];\n\nexport function GridImageLoaderDemo() {\n  return (\n    <GridImageLoader images={images} className=\"h-[480px]\">\n      <h1>Ready</h1>\n    </GridImageLoader>\n  );\n}",
   "files": [
     {
       "name": "grid-image-loader.tsx",
