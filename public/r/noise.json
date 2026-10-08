@@ -2,11 +2,14 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "noise",
   "type": "registry:ui",
-  "title": "Noise",
+  "title": "Noise Background",
   "description": "High-performance procedural grain noise background with CRT static, film dust, vignette, and scanlines.",
   "dependencies": [
     "clsx",
     "tailwind-merge"
+  ],
+  "registryDependencies": [
+    "utils"
   ],
   "files": [
     {

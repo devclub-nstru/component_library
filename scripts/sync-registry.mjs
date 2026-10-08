@@ -8,6 +8,12 @@ const rootDir = path.resolve(__dirname, "..");
 const componentsDir = path.join(rootDir, "src", "registry", "components");
 const publicRDir = path.join(rootDir, "public", "r");
 const rootRDir = path.join(rootDir, "r");
+const registryBaseUrl = (
+  process.env.REGISTRY_BASE_URL || "https://ui.devclubxnst.online"
+).replace(/\/+$/, "");
+const catalogFiles = new Set(["registry.json", "index.json"]);
+const runtimePackages = new Set(["react", "react-dom"]);
+const utilsPackages = new Set(["clsx", "tailwind-merge"]);
 
 if (!fs.existsSync(publicRDir)) {
   fs.mkdirSync(publicRDir, { recursive: true });
@@ -16,61 +22,41 @@ if (!fs.existsSync(rootRDir)) {
   fs.mkdirSync(rootRDir, { recursive: true });
 }
 
-const componentTitles = {
-  accordion: "Blur Reveal Accordion",
-  "ai-input": "AI Input",
-  "ai-orb": "AI Orb",
-  "animated-button": "Animated Button",
-  "ascii-hover-button": "ASCII Hover Button",
-  "animated-counter": "Animated Counter",
-  "bento-grid": "Bento Grid",
-  "candy-button": "Candy Button",
-  "code-block": "Code Block",
-  "confirm-morph": "Confirm Morph",
-  dither: "Dither",
-  "dotted-accordion": "Dotted Accordion",
-  editor: "Selection AI Editor",
-  "file-upload": "File Upload",
-  "file-dropzone": "File Dropzone",
-  "file-tree": "File Tree",
-  "focus-testimonials": "Focus Testimonials",
-  "github-activity": "GitHub Activity",
-  "glowing-badge": "Glowing Badge",
-  "gooey-nav": "Gooey Nav",
-  "hook-sidebar": "Hook Sidebar",
-  "liquid-media": "Liquid Media",
-  "liquid-toggle": "Liquid Toggle",
-  "mac-slider": "Mac Slider",
-  "mac-switch": "Mac Switch",
-  slider: "Slider",
-  "morph-search": "Morph Search",
-  noise: "Noise",
-  orb: "Thinking Orb",
-  "otp-input": "OTP Input",
-  "pixel-card": "Pixel Card",
-  "proximity-sidebar": "Proximity Sidebar",
-  scales: "Scales & Borders",
-  "search-input": "Search Input",
-  "smooth-accordion": "Smooth Accordion",
-  "sparkle-button": "Sparkle Button",
-  "spotlight-card": "Spotlight Card",
-  "spotlight-search": "Spotlight Search",
-  "task-list": "Task List",
-  "theme-toggle": "Theme Toggle",
-  toast: "Toast",
-  "twitter-card": "Twitter Card",
-  "profile-menu": "Profile Command Menu",
-  "date-range-picker": "Date Range Picker",
-  "segmented-progress": "Segmented Progress",
-  stepper: "Stepper",
-};
+const toRel = (filePath) => filePath.replace(/^src\//, "");
+
+const isLibFile = (file) => file.type === "registry:lib";
+
+const getFileType = (file) => (isLibFile(file) ? "registry:lib" : "registry:ui");
 
 const getTarget = (filePath, fileName) => {
-  const clean = filePath.replace(/^src\//, "");
-  if (clean.includes("registry/ui/fx/")) {
+  if (filePath.includes("registry/ui/fx/")) {
     return `@ui/fx/${fileName}`;
   }
   return `@ui/${fileName}`;
+};
+
+const withoutExtension = (value) => value.replace(/\.(tsx?|jsx?)$/, "");
+
+const packageName = (specifier) => {
+  const parts = specifier.split("/");
+  return specifier.startsWith("@") ? parts.slice(0, 2).join("/") : parts[0];
+};
+
+const declaredName = (dependency) => dependency.replace(/(?!^)@.*$/, "");
+
+const readImports = (code) => {
+  const specifiers = new Set();
+  const patterns = [
+    /^(?:import|export)\s[^;'"]*?from\s*["']([^"']+)["']/gm,
+    /^import\s*["']([^"']+)["']/gm,
+    /\bimport\(\s*["']([^"']+)["']\s*\)/g,
+  ];
+  for (const pattern of patterns) {
+    for (const match of code.matchAll(pattern)) {
+      specifiers.add(match[1]);
+    }
+  }
+  return [...specifiers];
 };
 
 const files = fs
@@ -80,17 +66,17 @@ const files = fs
 
 let updatedCount = 0;
 let hasError = false;
-const registryItems = [];
+const fail = (message) => {
+  console.error(`Error: ${message}`);
+  hasError = true;
+};
+
+const components = [];
 
 for (const file of files) {
   const jsonPath = path.join(componentsDir, file);
-  const rawData = fs.readFileSync(jsonPath, "utf8");
-  const data = JSON.parse(rawData);
-
+  const data = JSON.parse(fs.readFileSync(jsonPath, "utf8"));
   let modified = false;
-
-  const slug = data.slug;
-  const title = componentTitles[slug] || data.name;
 
   if (data.type !== "registry:ui") {
     data.type = "registry:ui";
@@ -100,34 +86,40 @@ for (const file of files) {
     data.$schema = "https://ui.shadcn.com/schema/registry-item.json";
     modified = true;
   }
-  if (data.title !== title) {
-    data.title = title;
+  if (data.title !== data.name) {
+    data.title = data.name;
     modified = true;
   }
 
-  if (Array.isArray(data.files)) {
-    for (const item of data.files) {
-      if (!item.path) continue;
-      const sourcePath = path.join(rootDir, "src", item.path.replace(/^src\//, ""));
-      if (!fs.existsSync(sourcePath)) {
-        console.error(`Error: File not found: ${sourcePath} referenced in ${file}`);
-        hasError = true;
-        continue;
-      }
-      const currentCode = fs.readFileSync(sourcePath, "utf8");
-      if (item.code !== currentCode) {
-        item.code = currentCode;
+  for (const item of data.files || []) {
+    if (!item.path) continue;
+    const rel = toRel(item.path);
+    const sourcePath = path.join(rootDir, "src", rel);
+    if (!fs.existsSync(sourcePath)) {
+      fail(`File not found: ${sourcePath} referenced in ${file}`);
+      continue;
+    }
+    const currentCode = fs.readFileSync(sourcePath, "utf8");
+    if (item.code !== currentCode) {
+      item.code = currentCode;
+      modified = true;
+    }
+    if (item.content !== currentCode) {
+      item.content = currentCode;
+      modified = true;
+    }
+    const type = getFileType(item);
+    if (item.type !== type) {
+      item.type = type;
+      modified = true;
+    }
+    if (isLibFile(item)) {
+      if (item.target !== undefined) {
+        delete item.target;
         modified = true;
       }
-      if (item.content !== currentCode) {
-        item.content = currentCode;
-        modified = true;
-      }
-      if (item.type !== "registry:ui") {
-        item.type = "registry:ui";
-        modified = true;
-      }
-      const target = getTarget(item.path.replace(/^src\//, ""), item.name);
+    } else {
+      const target = getTarget(rel, item.name);
       if (item.target !== target) {
         item.target = target;
         modified = true;
@@ -140,54 +132,180 @@ for (const file of files) {
     updatedCount++;
   }
 
-  const itemFilesForRegistry = (data.files || []).map((f) => {
-    const rel = f.path.replace(/^src\//, "");
-    return {
-      path: `src/${rel}`,
-      type: "registry:ui",
-      target: getTarget(rel, f.name),
-    };
-  });
+  components.push(data);
+}
 
-  const registryItem = {
-    name: slug,
+const published = components.filter((data) => !data.hidden);
+const publishedSlugs = new Set(published.map((data) => data.slug));
+
+const resolveRegistryDependency = (name) =>
+  publishedSlugs.has(name) ? `${registryBaseUrl}/r/${name}.json` : name;
+
+const buildItem = (data) => {
+  const declared = data.registryDependencies || [];
+  const provided = new Set(declared);
+  const itemFiles = (data.files || [])
+    .filter((f) => !provided.has(withoutExtension(f.name)))
+    .map((f) => {
+      const rel = toRel(f.path);
+      const sourcePath = path.join(rootDir, "src", rel);
+      const content = fs.existsSync(sourcePath)
+        ? fs.readFileSync(sourcePath, "utf8")
+        : "";
+      const entry = { path: `src/${rel}`, content, type: getFileType(f) };
+      if (!isLibFile(f)) {
+        entry.target = getTarget(rel, f.name);
+      }
+      return entry;
+    });
+
+  const imports = itemFiles.flatMap((f) =>
+    readImports(f.content).map((specifier) => ({ file: f, specifier })),
+  );
+  const registryDependencies = [...declared];
+  if (
+    imports.some(({ specifier }) => specifier === "@/lib/utils") &&
+    !registryDependencies.includes("utils")
+  ) {
+    registryDependencies.unshift("utils");
+  }
+
+  return {
+    data,
+    files: itemFiles,
+    imports,
+    registryDependencies,
+  };
+};
+
+const items = new Map(published.map((data) => [data.slug, buildItem(data)]));
+
+const collectTargets = (slug, seen = new Set()) => {
+  if (seen.has(slug)) return [];
+  seen.add(slug);
+  const item = items.get(slug);
+  if (!item) return [];
+  const own = item.files.map((f) =>
+    f.target
+      ? withoutExtension(f.target)
+      : `@lib/${withoutExtension(path.basename(f.path))}`,
+  );
+  const fromDeps = item.registryDependencies
+    .filter((name) => publishedSlugs.has(name))
+    .flatMap((name) => collectTargets(name, seen));
+  return [...own, ...fromDeps];
+};
+
+for (const [slug, item] of items) {
+  const available = new Set(collectTargets(slug));
+  const shadcnDependencies = new Set(
+    item.registryDependencies.filter((name) => !publishedSlugs.has(name)),
+  );
+  const dependencies = item.data.dependencies || [];
+  const declaredPackages = new Set(
+    [...dependencies, ...(item.data.devDependencies || [])].map(declaredName),
+  );
+  const usedPackages = new Set(
+    (item.data.files || [])
+      .flatMap((f) => readImports(f.code || ""))
+      .filter((specifier) => !specifier.startsWith(".") && !specifier.startsWith("@/"))
+      .map(packageName),
+  );
+
+  for (const { file, specifier } of item.imports) {
+    if (specifier.startsWith(".")) {
+      const resolved = path.posix.normalize(
+        path.posix.join(path.posix.dirname(file.target || "@lib/x"), specifier),
+      );
+      if (!available.has(withoutExtension(resolved))) {
+        fail(`${slug}: ${file.path} imports "${specifier}", which is not shipped`);
+      }
+    } else if (specifier === "@/lib/utils") {
+      continue;
+    } else if (specifier.startsWith("@/components/ui/")) {
+      const name = specifier.slice("@/components/ui/".length);
+      if (!available.has(`@ui/${name}`) && !shadcnDependencies.has(name)) {
+        fail(`${slug}: ${file.path} imports "${specifier}", which is not shipped`);
+      }
+    } else if (specifier.startsWith("@/lib/")) {
+      if (!available.has(`@lib/${specifier.slice("@/lib/".length)}`)) {
+        fail(`${slug}: ${file.path} imports "${specifier}", which is not shipped`);
+      }
+    } else if (specifier.startsWith("@/")) {
+      fail(`${slug}: ${file.path} imports site-internal path "${specifier}"`);
+    } else {
+      const name = packageName(specifier);
+      if (!runtimePackages.has(name) && !declaredPackages.has(name)) {
+        fail(`${slug}: imports "${name}" but does not declare it`);
+      }
+    }
+  }
+
+  for (const dependency of dependencies) {
+    const name = declaredName(dependency);
+    if (!usedPackages.has(name) && !utilsPackages.has(name)) {
+      fail(`${slug}: declares "${dependency}" but never imports it`);
+    }
+  }
+}
+
+const toRegistryEntry = ({ data, registryDependencies }, itemFiles) => {
+  const entry = {
+    name: data.slug,
     type: "registry:ui",
-    title,
+    title: data.name,
     description: data.description,
     dependencies: data.dependencies || [],
-    files: itemFilesForRegistry,
   };
+  if (data.devDependencies?.length) {
+    entry.devDependencies = data.devDependencies;
+  }
+  if (registryDependencies.length) {
+    entry.registryDependencies = registryDependencies.map(
+      resolveRegistryDependency,
+    );
+  }
+  if (data.cssVars) {
+    entry.cssVars = data.cssVars;
+  }
+  entry.files = itemFiles;
+  return entry;
+};
 
-  registryItems.push(registryItem);
+const registryItems = [];
+const writtenFiles = new Set(catalogFiles);
 
-  const itemFilesForIndividual = (data.files || []).map((f) => {
-    const rel = f.path.replace(/^src\//, "");
-    const sourcePath = path.join(rootDir, "src", rel);
-    const content = fs.existsSync(sourcePath) ? fs.readFileSync(sourcePath, "utf8") : "";
-    return {
-      path: `src/${rel}`,
-      content,
-      type: "registry:ui",
-      target: getTarget(rel, f.name),
-    };
-  });
+for (const item of items.values()) {
+  registryItems.push(
+    toRegistryEntry(
+      item,
+      item.files.map(({ path: filePath, type, target }) =>
+        target ? { path: filePath, type, target } : { path: filePath, type },
+      ),
+    ),
+  );
 
-  const individualRegistryItem = {
-    $schema: "https://ui.shadcn.com/schema/registry-item.json",
-    name: slug,
-    type: "registry:ui",
-    title,
-    description: data.description,
-    dependencies: data.dependencies || [],
-    files: itemFilesForIndividual,
-  };
-
-  const itemJsonPath = path.join(publicRDir, `${slug}.json`);
-  const rootRItemJsonPath = path.join(rootRDir, `${slug}.json`);
   const individualContent =
-    JSON.stringify(individualRegistryItem, null, 2) + "\n";
-  fs.writeFileSync(itemJsonPath, individualContent, "utf8");
-  fs.writeFileSync(rootRItemJsonPath, individualContent, "utf8");
+    JSON.stringify(
+      {
+        $schema: "https://ui.shadcn.com/schema/registry-item.json",
+        ...toRegistryEntry(item, item.files),
+      },
+      null,
+      2,
+    ) + "\n";
+  const fileName = `${item.data.slug}.json`;
+  writtenFiles.add(fileName);
+  fs.writeFileSync(path.join(publicRDir, fileName), individualContent, "utf8");
+  fs.writeFileSync(path.join(rootRDir, fileName), individualContent, "utf8");
+}
+
+for (const dir of [publicRDir, rootRDir]) {
+  for (const existing of fs.readdirSync(dir)) {
+    if (existing.endsWith(".json") && !writtenFiles.has(existing)) {
+      fs.rmSync(path.join(dir, existing));
+    }
+  }
 }
 
 const registryJson = {
@@ -210,5 +328,5 @@ if (hasError) {
 }
 
 console.log(
-  `Registry sync completed. Total components: ${files.length}. Internal updated: ${updatedCount}. Public registry synced in public/r/.`
+  `Registry sync completed. Components: ${files.length}. Published: ${published.length}. Internal updated: ${updatedCount}. Public registry synced in public/r/.`
 );

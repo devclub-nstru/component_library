@@ -22,6 +22,9 @@
     "clsx",
     "tailwind-merge"
   ],
+  "registryDependencies": [
+    "animated-counter"
+  ],
   "version": "1.0.0",
   "createdDate": "2026-10-03",
   "updatedDate": "2026-10-03",

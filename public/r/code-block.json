@@ -9,6 +9,9 @@
     "tailwind-merge",
     "@radix-ui/react-icons"
   ],
+  "registryDependencies": [
+    "utils"
+  ],
   "files": [
     {
       "path": "src/registry/ui/code-block.tsx",

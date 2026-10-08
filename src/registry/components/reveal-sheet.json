@@ -22,6 +22,14 @@
     "clsx",
     "tailwind-merge"
   ],
+  "cssVars": {
+    "light": {
+      "line": "rgba(0, 0, 0, 0.08)"
+    },
+    "dark": {
+      "line": "rgb(255 255 255 / 0.08)"
+    }
+  },
   "version": "1.0.0",
   "createdDate": "2026-09-28",
   "updatedDate": "2026-09-29",

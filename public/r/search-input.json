@@ -7,9 +7,34 @@
   "dependencies": [
     "clsx",
     "tailwind-merge",
-    "voice-glow",
-    "thinking-orbs"
+    "voice-glow@^0.2.1"
   ],
+  "registryDependencies": [
+    "https://ui.devclubxnst.online/r/orb.json"
+  ],
+  "cssVars": {
+    "theme": {
+      "color-line": "var(--line)",
+      "color-line-strong": "var(--line-strong)",
+      "color-panel": "var(--panel)",
+      "color-text": "var(--text)",
+      "color-faint": "var(--faint)"
+    },
+    "light": {
+      "line": "rgba(0, 0, 0, 0.08)",
+      "line-strong": "rgba(0, 0, 0, 0.14)",
+      "panel": "#ffffff",
+      "text": "#09090b",
+      "faint": "#a1a1aa"
+    },
+    "dark": {
+      "line": "rgb(255 255 255 / 0.08)",
+      "line-strong": "rgb(255 255 255 / 0.16)",
+      "panel": "#151517",
+      "text": "#f2f2f3",
+      "faint": "#56565c"
+    }
+  },
   "files": [
     {
       "path": "src/registry/ui/search-input.tsx",

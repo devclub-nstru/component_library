@@ -11,6 +11,9 @@
     "clsx",
     "tailwind-merge"
   ],
+  "registryDependencies": [
+    "utils"
+  ],
   "files": [
     {
       "path": "src/registry/ui/parallax-strip-transition.tsx",

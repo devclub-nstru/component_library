@@ -21,11 +21,13 @@
   ],
   "dependencies": [
     "three",
-    "@types/three",
     "@react-three/fiber",
     "@react-three/drei",
     "@react-three/postprocessing",
     "motion"
+  ],
+  "devDependencies": [
+    "@types/three"
   ],
   "version": "1.0.0",
   "createdDate": "2026-10-01",

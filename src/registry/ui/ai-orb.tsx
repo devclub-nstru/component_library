@@ -3,7 +3,7 @@
 import React, { useEffect, useMemo, useRef } from "react";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
-import { Dither } from "@/registry/ui/dither";
+import { Dither } from "./dither";
 
 export interface AiOrbProps {
   className?: string;

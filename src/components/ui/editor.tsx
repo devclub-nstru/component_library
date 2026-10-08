@@ -15,7 +15,7 @@ import {
   RotateCcw as IconReset,
 } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { Orb, EditorOrb, type OrbVariant } from "@/components/ui/orb";
+import { Orb, EditorOrb, type OrbVariant } from "@/components/ui/editor-orb";
 import { StreamingText } from "@/components/ui/streaming-text";
 import { TextShimmer } from "@/components/ui/text-shimmer";
 import { cn } from "@/lib/utils";

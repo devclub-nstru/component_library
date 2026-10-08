@@ -6,11 +6,16 @@
   "description": "Interactive WebGL fluid ripple distortion effect for images and videos with responsive cursor displacement.",
   "dependencies": [
     "three",
-    "@types/three",
     "@react-three/fiber",
     "@react-three/drei",
     "@react-three/postprocessing",
     "motion"
+  ],
+  "devDependencies": [
+    "@types/three"
+  ],
+  "registryDependencies": [
+    "utils"
   ],
   "files": [
     {

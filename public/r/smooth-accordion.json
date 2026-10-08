@@ -10,6 +10,9 @@
     "motion",
     "@radix-ui/react-icons"
   ],
+  "registryDependencies": [
+    "utils"
+  ],
   "files": [
     {
       "path": "src/registry/ui/smooth-accordion.tsx",

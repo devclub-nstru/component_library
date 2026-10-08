@@ -12,6 +12,9 @@
     "clsx",
     "tailwind-merge"
   ],
+  "registryDependencies": [
+    "utils"
+  ],
   "files": [
     {
       "path": "src/registry/ui/fullscreen-navbar.tsx",

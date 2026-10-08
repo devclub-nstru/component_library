@@ -9,7 +9,11 @@
     "tailwind-merge",
     "gsap",
     "@gsap/react",
-    "lucide-react"
+    "lucide-react",
+    "motion"
+  ],
+  "registryDependencies": [
+    "utils"
   ],
   "files": [
     {

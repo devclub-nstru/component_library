@@ -17,7 +17,8 @@
   "dependencies": [
     "clsx",
     "tailwind-merge",
-    "thinking-orbs"
+    "thinking-orbs",
+    "next"
   ],
   "version": "1.0.0",
   "createdDate": "2026-09-22",

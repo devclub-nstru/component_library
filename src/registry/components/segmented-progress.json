@@ -21,7 +21,8 @@
     "tailwind-merge",
     "gsap",
     "@gsap/react",
-    "lucide-react"
+    "lucide-react",
+    "motion"
   ],
   "version": "1.0.0",
   "createdDate": "2026-10-01",

@@ -1,6 +1,6 @@
 "use client";
 
-import React, {
+import {
   type ReactNode,
   useCallback,
   useEffect,
@@ -147,7 +147,7 @@ export function ProfileMenu({
   const panelRef = useRef<HTMLDivElement>(null);
   const highlightRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<(HTMLButtonElement | null)[]>([]);
-  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const rootRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLDivElement>(null);
   const pendingFocusRef = useRef<number | null>(null);

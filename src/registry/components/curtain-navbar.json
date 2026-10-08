@@ -23,6 +23,9 @@
     "clsx",
     "tailwind-merge"
   ],
+  "registryDependencies": [
+    "ascii-hover-button"
+  ],
   "version": "1.0.0",
   "createdDate": "2026-10-04",
   "updatedDate": "2026-10-04",
