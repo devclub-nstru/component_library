@@ -1,12 +1,12 @@
 export const SITE_CONFIG = {
   name: "DevClub UI",
   description: "High performance UI components engineered for speed and visual excellence.",
-  url: "https://devclub.co",
+  url: "https://ui.devclubxnst.online",
   ogImage: "https://wallpapercave.com/wp/wp4140937.jpg",
   links: {
     github: "https://github.com/devclub-nstru/component_library",
-    twitter: "https://twitter.com",
-    discord: "https://discord.gg",
+    npm: "https://www.npmjs.com/package/@devclubnst/ui",
+    email: "mailto:softwaredevg.club@rishihood.edu.in",
   },
 };
 
@@ -62,5 +62,8 @@ export const DOCS_NAV: DocsNavSection[] = [
       { title: "Registry", href: "/docs/registry", badge: "v1.0" },
     ],
   },
+  {
+    title: "Project",
+    items: [{ title: "Community", href: "/docs/community" }],
+  },
 ];
-

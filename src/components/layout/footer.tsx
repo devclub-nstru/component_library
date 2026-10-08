@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { GitHubLogoIcon, TwitterLogoIcon } from "@radix-ui/react-icons";
+import { GitHubLogoIcon, ExternalLinkIcon } from "@radix-ui/react-icons";
 import { SITE_CONFIG } from "@/lib/constants";
 import { useIsDark } from "@/lib/use-is-dark";
 
@@ -39,13 +39,13 @@ export const Footer = () => {
                 <GitHubLogoIcon className="h-4 w-4" />
               </a>
               <a
-                href={SITE_CONFIG.links.twitter}
+                href={SITE_CONFIG.links.npm}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-2 border border-border text-muted-foreground hover:text-foreground hover:bg-foreground/5 transition-colors"
-                aria-label="Twitter Account"
+                aria-label="DevClub UI on npm"
               >
-                <TwitterLogoIcon className="h-4 w-4" />
+                <ExternalLinkIcon className="h-4 w-4" />
               </a>
             </div>
           </div>
@@ -141,6 +141,14 @@ export const Footer = () => {
                   className="hover:text-foreground transition-colors"
                 >
                   Registry API
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/docs/community"
+                  className="hover:text-foreground transition-colors"
+                >
+                  Community
                 </Link>
               </li>
             </ul>

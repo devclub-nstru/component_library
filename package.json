@@ -3,6 +3,24 @@
   "version": "2.0.11",
   "description": "DevClub UI animated component primitives",
   "license": "MIT",
+  "homepage": "https://ui.devclubxnst.online",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devclub-nstru/component_library.git"
+  },
+  "bugs": {
+    "email": "softwaredevg.club@rishihood.edu.in"
+  },
+  "keywords": [
+    "react",
+    "typescript",
+    "tailwindcss",
+    "gsap",
+    "animation",
+    "ui-components",
+    "shadcn",
+    "registry"
+  ],
   "publishConfig": {
     "access": "public"
   },
