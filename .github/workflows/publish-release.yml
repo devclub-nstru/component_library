@@ -1,0 +1,45 @@
+name: Publish Release
+
+on:
+  push:
+    branches:
+      - release
+
+concurrency:
+  group: publish-release
+  cancel-in-progress: false
+
+permissions: {}
+
+jobs:
+  publish:
+    name: Tag and publish GitHub release
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout release branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Verify release only contains commits from main
+        run: |
+          git fetch --no-tags origin main
+          if ! git merge-base --is-ancestor "$GITHUB_SHA" origin/main; then
+            echo "::error::release must point at a commit that is already on main. Fast-forward it with: git push origin <main-sha>:release"
+            exit 1
+          fi
+
+      - name: Create tag and release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version="v$(node -p "require('./package.json').version")"
+          if gh release view "$version" >/dev/null 2>&1 || git rev-parse -q --verify "refs/tags/$version" >/dev/null; then
+            echo "::error::$version already exists. Bump the version in package.json through a PR to main before releasing."
+            exit 1
+          fi
+          gh release create "$version" --target "$GITHUB_SHA" --title "$version" --generate-notes
