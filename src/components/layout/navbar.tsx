@@ -47,6 +47,12 @@ export const Navbar = ({
           : "border-border bg-background/85 backdrop-blur-xl",
       )}
     >
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-3 focus:z-110 focus:rounded-full focus:bg-foreground focus:px-4 focus:py-2 focus:text-xs focus:font-medium focus:text-background focus:outline-none focus:ring-2 focus:ring-foreground/20"
+      >
+        Skip to main content
+      </a>
       <div className="max-w-7xl mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex items-center md:gap-4 lg:gap-6">
           <Link
