@@ -44,8 +44,8 @@ Everyone else, including other org owners, follows the rules. Org owners can sti
 
 | Label | Applied by | Meaning |
 | --- | --- | --- |
-| `size/*` | [PR Size](workflows/pr-size.yml) | Changed lines, excluding generated files |
-| `area/*` | [PR Labeler](workflows/pr-labeler.yml) | Which part of the repo changed ([labeler.yml](labeler.yml)) |
+| `size/*` | [PR Triage](workflows/pr-labeler.yml) | Changed lines, excluding generated files |
+| `area/*` | [PR Triage](workflows/pr-labeler.yml) | Which part of the repo changed ([labeler.yml](labeler.yml)) |
 | `dependencies` | Dependabot | Dependency update |
 | `skip-changelog` | Maintainers | Leave out of release notes |
 | `stale` | [Stale Triage](workflows/stale.yml) | No activity for 60 days. Closed after 7 more. |
