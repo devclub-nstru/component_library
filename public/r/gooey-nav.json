@@ -7,7 +7,11 @@
   "dependencies": [
     "clsx",
     "tailwind-merge",
-    "motion"
+    "motion",
+    "next"
+  ],
+  "registryDependencies": [
+    "utils"
   ],
   "files": [
     {

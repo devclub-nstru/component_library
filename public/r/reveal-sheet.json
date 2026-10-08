@@ -12,6 +12,17 @@
     "clsx",
     "tailwind-merge"
   ],
+  "registryDependencies": [
+    "utils"
+  ],
+  "cssVars": {
+    "light": {
+      "line": "rgba(0, 0, 0, 0.08)"
+    },
+    "dark": {
+      "line": "rgb(255 255 255 / 0.08)"
+    }
+  },
   "files": [
     {
       "path": "src/registry/ui/reveal-sheet.tsx",

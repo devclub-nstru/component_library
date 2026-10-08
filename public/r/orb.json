@@ -7,7 +7,11 @@
   "dependencies": [
     "clsx",
     "tailwind-merge",
-    "thinking-orbs"
+    "thinking-orbs",
+    "next"
+  ],
+  "registryDependencies": [
+    "utils"
   ],
   "files": [
     {

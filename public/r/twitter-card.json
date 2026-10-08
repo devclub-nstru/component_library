@@ -2,12 +2,15 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "twitter-card",
   "type": "registry:ui",
-  "title": "Twitter Card",
+  "title": "Twitter(X) Card",
   "description": "Interactive Twitter (X) profile card component featuring magnetic 3D tilt, spring physics, and real-time public profile data fetching.",
   "dependencies": [
     "clsx",
     "tailwind-merge",
     "motion"
+  ],
+  "registryDependencies": [
+    "utils"
   ],
   "files": [
     {

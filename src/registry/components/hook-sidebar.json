@@ -15,7 +15,8 @@
   "dependencies": [
     "clsx",
     "tailwind-merge",
-    "motion"
+    "motion",
+    "next"
   ],
   "version": "1.0.0",
   "createdDate": "2026-09-20",

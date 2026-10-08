@@ -10,6 +10,9 @@
     "motion",
     "lucide-react"
   ],
+  "registryDependencies": [
+    "utils"
+  ],
   "files": [
     {
       "path": "src/registry/ui/file-tree.tsx",

@@ -8,10 +8,23 @@
     "clsx",
     "tailwind-merge"
   ],
+  "registryDependencies": [
+    "utils"
+  ],
+  "cssVars": {
+    "light": {
+      "pattern-line": "rgba(0, 0, 0, 0.16)",
+      "pattern": "rgba(0, 0, 0, 0.12)"
+    },
+    "dark": {
+      "pattern-line": "rgba(255, 255, 255, 0.1)",
+      "pattern": "rgba(255, 255, 255, 0.08)"
+    }
+  },
   "files": [
     {
       "path": "src/registry/ui/scales.tsx",
-      "content": "import React from \"react\";\nimport { cn } from \"@/lib/utils\";\n\nexport const HorizontalScale = ({ className }: { className?: string }) => {\n  return (\n    <div\n      className={cn(\n        \"h-10 w-full bg-[repeating-linear-gradient(315deg,var(--pattern-line)_0px,var(--pattern-line)_1px,transparent_1px,transparent_10px)] bg-size-[14px_14px] border-y border-(--pattern)\",\n        className\n      )}\n    />\n  );\n};\n\nexport const VerticalScale = ({ className }: { className?: string }) => {\n  return (\n    <div\n      className={cn(\n        \"w-10 h-full bg-[repeating-linear-gradient(315deg,var(--pattern-line)_0px,var(--pattern-line)_1px,transparent_1px,transparent_10px)] bg-size-[14px_14px] border-x border-(--pattern)\",\n        className\n      )}\n    />\n  );\n};\n\nexport const Lines = ({ className }: { className?: string }) => {\n  return (\n    <div\n      className={cn(\n        \"h-14 w-full bg-[repeating-linear-gradient(to_bottom,var(--pattern-line)_0,var(--pattern-line)_1px,transparent_1px,transparent_0.5rem)] border-y border-(--pattern)\",\n        className\n      )}\n    />\n  );\n};\n",
+      "content": "import { cn } from \"@/lib/utils\";\n\nexport const HorizontalScale = ({ className }: { className?: string }) => {\n  return (\n    <div\n      className={cn(\n        \"h-10 w-full bg-[repeating-linear-gradient(315deg,var(--pattern-line)_0px,var(--pattern-line)_1px,transparent_1px,transparent_10px)] bg-size-[14px_14px] border-y border-(--pattern)\",\n        className\n      )}\n    />\n  );\n};\n\nexport const VerticalScale = ({ className }: { className?: string }) => {\n  return (\n    <div\n      className={cn(\n        \"w-10 h-full bg-[repeating-linear-gradient(315deg,var(--pattern-line)_0px,var(--pattern-line)_1px,transparent_1px,transparent_10px)] bg-size-[14px_14px] border-x border-(--pattern)\",\n        className\n      )}\n    />\n  );\n};\n\nexport const Lines = ({ className }: { className?: string }) => {\n  return (\n    <div\n      className={cn(\n        \"h-14 w-full bg-[repeating-linear-gradient(to_bottom,var(--pattern-line)_0,var(--pattern-line)_1px,transparent_1px,transparent_0.5rem)] border-y border-(--pattern)\",\n        className\n      )}\n    />\n  );\n};\n",
       "type": "registry:ui",
       "target": "@ui/scales.tsx"
     }

@@ -8,6 +8,9 @@
     "clsx",
     "tailwind-merge"
   ],
+  "registryDependencies": [
+    "utils"
+  ],
   "files": [
     {
       "path": "src/registry/ui/ai-input.tsx",

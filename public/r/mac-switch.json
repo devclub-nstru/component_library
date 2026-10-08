@@ -9,6 +9,9 @@
     "tailwind-merge",
     "motion"
   ],
+  "registryDependencies": [
+    "utils"
+  ],
   "files": [
     {
       "path": "src/registry/ui/mac-switch.tsx",

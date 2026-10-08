@@ -7,9 +7,11 @@
   "dependencies": [
     "gsap",
     "@gsap/react",
-    "motion",
     "clsx",
     "tailwind-merge"
+  ],
+  "registryDependencies": [
+    "utils"
   ],
   "files": [
     {

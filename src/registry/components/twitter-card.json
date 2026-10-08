@@ -219,5 +219,5 @@
   ],
   "type": "registry:ui",
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
-  "title": "Twitter Card"
+  "title": "Twitter(X) Card"
 }

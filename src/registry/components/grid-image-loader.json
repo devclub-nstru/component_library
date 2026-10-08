@@ -23,6 +23,10 @@
     "clsx",
     "tailwind-merge"
   ],
+  "registryDependencies": [
+    "cursor-trail-loader",
+    "animated-counter"
+  ],
   "version": "1.0.0",
   "createdDate": "2026-10-03",
   "updatedDate": "2026-10-03",
@@ -53,7 +57,7 @@
       },
       {
         "label": "Grid",
-        "value": "4 \u00d7 4 cells"
+        "value": "4 × 4 cells"
       },
       {
         "label": "Phrase transition",
@@ -61,7 +65,7 @@
       },
       {
         "label": "Reveal",
-        "value": "0.95s \u00b7 power3.inOut"
+        "value": "0.95s · power3.inOut"
       }
     ]
   },
@@ -174,19 +178,19 @@
     {
       "name": "gridColumns",
       "type": "number",
-      "description": "Number of grid columns, bounded to 2\u20138.",
+      "description": "Number of grid columns, bounded to 2–8.",
       "defaultValue": "4"
     },
     {
       "name": "gridRows",
       "type": "number",
-      "description": "Number of grid rows, bounded to 2\u20138.",
+      "description": "Number of grid rows, bounded to 2–8.",
       "defaultValue": "4"
     },
     {
       "name": "gridOpacity",
       "type": "number",
-      "description": "Grid line opacity, bounded to 0\u20130.3.",
+      "description": "Grid line opacity, bounded to 0–0.3.",
       "defaultValue": "0.07"
     }
   ],

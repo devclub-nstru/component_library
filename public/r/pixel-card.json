@@ -10,6 +10,9 @@
     "gsap",
     "@gsap/react"
   ],
+  "registryDependencies": [
+    "utils"
+  ],
   "files": [
     {
       "path": "src/registry/ui/pixel-card.tsx",

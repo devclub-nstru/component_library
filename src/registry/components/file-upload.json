@@ -20,6 +20,9 @@
     "clsx",
     "tailwind-merge"
   ],
+  "registryDependencies": [
+    "button"
+  ],
   "version": "1.0.0",
   "createdDate": "2026-09-29",
   "updatedDate": "2026-09-29",

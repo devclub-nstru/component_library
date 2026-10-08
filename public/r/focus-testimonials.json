@@ -10,6 +10,9 @@
     "tailwind-merge",
     "lucide-react"
   ],
+  "registryDependencies": [
+    "utils"
+  ],
   "files": [
     {
       "path": "src/registry/ui/focus-testimonials.tsx",
