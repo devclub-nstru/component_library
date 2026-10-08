@@ -383,8 +383,12 @@ export function AiOrb({
 
     animationFrameId = requestAnimationFrame(render);
 
+    const resizeObserver = reduceMotion ? new ResizeObserver(render) : null;
+    resizeObserver?.observe(host);
+
     return () => {
       cancelAnimationFrame(animationFrameId);
+      resizeObserver?.disconnect();
       if (gl) {
         gl.deleteBuffer(quadBuffer);
         gl.deleteProgram(program);
