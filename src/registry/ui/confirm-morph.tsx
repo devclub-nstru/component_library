@@ -580,7 +580,7 @@ export function ConfirmMorph({
       ref={rootRef}
       className={cn(
         "relative inline-flex items-center select-none",
-        disabled && "opacity-50 pointer-events-none",
+        disabled && state === "idle" && "opacity-50 pointer-events-none",
         className,
       )}
       data-state={state}
