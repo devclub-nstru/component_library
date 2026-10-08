@@ -79,7 +79,7 @@
   },
   "accessibility": {
     "role": "region",
-    "aria": "The card is a focusable role=\"region\" unless noFocus is set, in which case it is a plain container out of the tab order. The pixel canvas is decorative and pointer-events-none.",
+    "aria": "The card is focusable unless noFocus is set, in which case it is a plain container out of the tab order. It takes role=\"region\" only when you pass aria-label or aria-labelledby, so give it a name to expose it as a landmark. The pixel canvas is decorative and pointer-events-none.",
     "reducedMotion": "With prefers-reduced-motion, the tilt and the expanding wavefront are disabled so pixels appear at once; the pixel shimmer still animates while hovered or focused.",
     "keyboard": [
       {
@@ -186,7 +186,7 @@
       "description": "Interactive card content, headlines, telemetry, or badges elevated in 3D parallax space."
     }
   ],
-  "usage": "import { PixelCard } from \"@/components/ui/pixel-card\";\n\nexport function PixelCardDemo() {\n  return (\n    <PixelCard variant=\"blue\" className=\"h-72 w-64\">\n      <h3 className=\"text-lg font-semibold\">Pixel Card</h3>\n    </PixelCard>\n  );\n}",
+  "usage": "import { PixelCard } from \"@/components/ui/pixel-card\";\n\nexport function PixelCardDemo() {\n  return (\n    <PixelCard variant=\"blue\" className=\"h-72 w-64\" aria-label=\"Pixel card\">\n      <h3 className=\"text-lg font-semibold\">Pixel Card</h3>\n    </PixelCard>\n  );\n}",
   "files": [
     {
       "name": "pixel-card.tsx",

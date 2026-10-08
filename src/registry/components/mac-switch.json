@@ -179,13 +179,19 @@
       "description": "Disables interaction with the switch."
     },
     {
+      "name": "label",
+      "type": "string",
+      "defaultValue": "\"Toggle switch\"",
+      "description": "Accessible name announced by screen readers for the switch. Pass a name that describes the setting it toggles."
+    },
+    {
       "name": "className",
       "type": "string",
       "defaultValue": "undefined",
       "description": "Additional CSS class names for outer container."
     }
   ],
-  "usage": "\"use client\";\n\nimport { useState } from \"react\";\nimport { MacSwitch } from \"@/components/ui/mac-switch\";\n\nexport function MacSwitchDemo() {\n  const [enabled, setEnabled] = useState(true);\n\n  return <MacSwitch checked={enabled} onChange={setEnabled} color=\"green\" />;\n}",
+  "usage": "\"use client\";\n\nimport { useState } from \"react\";\nimport { MacSwitch } from \"@/components/ui/mac-switch\";\n\nexport function MacSwitchDemo() {\n  const [enabled, setEnabled] = useState(true);\n\n  return <MacSwitch checked={enabled} onChange={setEnabled} color=\"green\" label=\"Wi-Fi\" />;\n}",
   "files": [
     {
       "name": "mac-switch.tsx",
