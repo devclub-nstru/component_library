@@ -484,6 +484,7 @@ export function ConfirmMorph({
                   ? "bg-rose-600 text-white hover:bg-rose-500 focus-visible:ring-1 focus-visible:ring-rose-400"
                   : "bg-foreground text-background hover:bg-foreground/90 focus-visible:ring-1 focus-visible:ring-foreground/30",
               )}
+              disabled={disabled}
               onClick={() => void perform("confirm")}
             >
               {confirmLabel}
@@ -580,7 +581,9 @@ export function ConfirmMorph({
       ref={rootRef}
       className={cn(
         "relative inline-flex items-center select-none",
-        disabled && state === "idle" && "opacity-50 pointer-events-none",
+        disabled &&
+          (state === "idle" || state === "confirming") &&
+          "opacity-50 pointer-events-none",
         className,
       )}
       data-state={state}
