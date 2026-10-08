@@ -378,6 +378,8 @@ export function OtpInput({
       data-slot="otp-input"
       data-status={status}
       data-variant={variant}
+      role="group"
+      aria-label="One-time code"
       className={cn(
         "relative inline-flex flex-col items-center select-none",
         className,

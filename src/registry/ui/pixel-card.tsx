@@ -575,6 +575,7 @@ export const PixelCard = React.forwardRef<HTMLDivElement, PixelCardProps>(
           }
         }}
         tabIndex={finalNoFocus ? -1 : 0}
+        role={finalNoFocus ? undefined : "region"}
         onMouseMove={handleMouseMove}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
