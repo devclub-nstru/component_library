@@ -66,6 +66,20 @@ const installCommand = (pkgManager, packages, dev) => {
 
 const itemJsonPath = (name) => path.join(publicRDir, `${name}.json`);
 
+const PACKAGE_SPEC = /^(@[a-z0-9][a-z0-9._-]*\/)?[a-z0-9][a-z0-9._-]*(@[a-z0-9.^~*-]+)?$/;
+const SHADCN_ITEM = /^([a-z0-9-]+|https:\/\/[a-z0-9.-]+\/[a-z0-9._/-]+\.json)$/;
+
+const assertSafeItem = (name, data) => {
+  const unsafe = [
+    ...[...(data.dependencies || []), ...(data.devDependencies || [])].filter((spec) => !PACKAGE_SPEC.test(spec)),
+    ...(data.registryDependencies || []).filter((dependency) => !SHADCN_ITEM.test(dependency)),
+  ];
+  if (unsafe.length) {
+    console.error(`Error: Component "${name}" declares invalid dependencies: ${unsafe.join(", ")}`);
+    process.exit(1);
+  }
+};
+
 const devclubItemName = (dependency) => {
   const match = dependency.match(/\/r\/([^/]+)\.json$/);
   if (match && fs.existsSync(itemJsonPath(match[1]))) return match[1];
@@ -81,6 +95,7 @@ const resolveItems = (names) => {
     if (seen.has(name)) return;
     seen.add(name);
     const data = JSON.parse(fs.readFileSync(itemJsonPath(name), "utf8"));
+    assertSafeItem(name, data);
     for (const dependency of data.registryDependencies || []) {
       const devclubName = devclubItemName(dependency);
       if (devclubName) {
@@ -96,7 +111,7 @@ const resolveItems = (names) => {
   return { items: ordered, shadcnDependencies: [...shadcnDependencies] };
 };
 
-const getDestination = (file, uiDir, libDir) => {
+const resolveDestination = (file, uiDir, libDir) => {
   if (file.type === "registry:lib") {
     return path.join(libDir, path.basename(file.path));
   }
@@ -104,6 +119,20 @@ const getDestination = (file, uiDir, libDir) => {
     return path.join(uiDir, ...file.target.slice("@ui/".length).split("/"));
   }
   return path.join(uiDir, path.basename(file.target || file.path));
+};
+
+const isInside = (dir, target) => {
+  const relative = path.relative(dir, target);
+  return relative !== "" && !relative.startsWith("..") && !path.isAbsolute(relative);
+};
+
+const getDestination = (file, uiDir, libDir) => {
+  const destination = resolveDestination(file, uiDir, libDir);
+  if (!isInside(uiDir, destination) && !isInside(libDir, destination)) {
+    console.error(`Error: Refusing to write "${file.target || file.path}" outside ${uiDir} and ${libDir}.`);
+    process.exit(1);
+  }
+  return destination;
 };
 
 const shadcnDependencyExists = (name, uiDir, libDir) => {
