@@ -4,11 +4,11 @@ import { useState } from "react";
 import { ArrowUpRight, RotateCcw } from "lucide-react";
 import { CurvedNavbar, CURVED_NAVBAR_ITEMS } from "@/registry/ui/curved-navbar";
 import { CustomizationRange } from "./customization-controls";
+import { SITE_CONFIG } from "@/lib/constants";
 
 export const CURVED_NAVBAR_DEFAULT_CONFIG = {
   brand: "devclub",
-  logoSrc:
-    "https://i.pinimg.com/736x/16/16/72/16167292c79a7d3ca27ef4f94d1b7424.jpg",
+  logoSrc: SITE_CONFIG.logos.icon,
   actionLabel: "Get started",
   panelHeading: "A space for everything.",
   duration: 0.6,
@@ -105,6 +105,15 @@ export function CurvedNavbarDemo({
       />
       <CurvedNavbar
         {...settings}
+        logo={
+          settings.logoSrc ? (
+            <img
+              src={settings.logoSrc}
+              alt=""
+              className="size-full rounded-[inherit] object-contain"
+            />
+          ) : undefined
+        }
         items={CURVED_NAVBAR_ITEMS}
         className="top-1.5"
       >

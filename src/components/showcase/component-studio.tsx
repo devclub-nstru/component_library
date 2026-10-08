@@ -34,6 +34,7 @@ import {
 import { ComponentRegistryItem } from "@/types/component";
 import { getComponentBySlug } from "@/registry";
 import { useIsDark } from "@/lib/use-is-dark";
+import { SITE_CONFIG } from "@/lib/constants";
 import { SparkleButton } from "@/registry/ui/sparkle-button";
 import { CandyButton } from "@/registry/ui/candy-button";
 import { AnimatedButton } from "@/registry/ui/animated-button";
@@ -3126,11 +3127,11 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               title="DevClub Home"
             >
               <Image
-                src={isDark ? "/logo-he.png" : "/logo-he-bl.png"}
+                src={isDark ? SITE_CONFIG.logos.dark : SITE_CONFIG.logos.light}
                 alt="DevClub"
                 width={120}
                 height={50}
-                className="h-12 w-auto object-contain"
+                className="h-12 w-auto aspect-[12/5] object-contain"
               />
             </Link>
           ) : (

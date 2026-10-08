@@ -18,11 +18,11 @@ export const Footer = () => {
           <div className="space-y-3 md:col-span-2">
             <div className="flex items-center gap-2.5">
               <Image
-                src={isDark ? "/logo-he.png" : "/logo-he-bl.png"}
+                src={isDark ? SITE_CONFIG.logos.dark : SITE_CONFIG.logos.light}
                 alt="DevClub"
                 width={180}
                 height={60}
-                className="h-12 w-auto object-contain"
+                className="h-12 w-auto aspect-[12/5] object-contain"
               />
             </div>
             <p className="text-xs text-muted-foreground max-w-sm leading-relaxed font-sans">

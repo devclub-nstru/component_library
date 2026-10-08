@@ -8,10 +8,11 @@ import {
   type FullscreenNavbarItem,
 } from "@/registry/ui/fullscreen-navbar";
 import { CustomizationRange } from "./customization-controls";
+import { SITE_CONFIG } from "@/lib/constants";
 
 export const FULLSCREEN_NAVBAR_DEFAULT_CONFIG = {
   brand: "devclub",
-  logoSrc: "/logo-favicon.png",
+  logoSrc: SITE_CONFIG.logos.icon,
   actionLabel: "Start building",
   duration: 0.8,
   stiffness: 220,
@@ -86,7 +87,7 @@ export function FullscreenNavbarDemo({
           <img
             src={logoSrc}
             alt=""
-            className="size-8 rounded-lg object-cover"
+            className="size-8 rounded-lg object-contain"
           />
         }
         spotlight={
