@@ -229,10 +229,12 @@ function NavbarRow({
   const arrowRef = useRef<SVGSVGElement>(null);
   const animateRef = useRef<((next: boolean) => void) | null>(null);
   const expandedRef = useRef(expanded);
+  const hoverOpenedRef = useRef(false);
   const id = useId();
   const hasLinks = Boolean(item.links?.length);
   useEffect(() => {
     expandedRef.current = expanded;
+    if (!expanded) hoverOpenedRef.current = false;
   }, [expanded]);
 
   useGSAP(
@@ -347,15 +349,23 @@ function NavbarRow({
           id={`trigger-${id}`}
           aria-expanded={expanded}
           aria-controls={`panel-${id}`}
-          onClick={onExpand}
+          onClick={(event) => {
+            if (event.detail > 0 && hoverOpenedRef.current) {
+              hoverOpenedRef.current = false;
+              return;
+            }
+            onExpand();
+          }}
           onPointerEnter={(event) => {
             if (
               !mobile &&
               hoverDropdowns &&
               event.pointerType === "mouse" &&
               !expanded
-            )
+            ) {
+              hoverOpenedRef.current = true;
               onExpand();
+            }
           }}
           className={cn(rowClass, "cursor-pointer")}
         >
