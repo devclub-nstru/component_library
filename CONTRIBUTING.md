@@ -249,7 +249,7 @@ DevClub UI code ends up copied straight into other people's apps, so we hold con
 
 ### Code
 
-- No minified, obfuscated, or bundled code. No binaries other than images and fonts in `public/`.
+- No minified, obfuscated, or bundled code. No binaries other than images and fonts in `public/` and maintainer-added README media in `.github/assets/`.
 - No network requests from component code unless the component's purpose requires it and the PR says so.
 - No `eval`, `new Function`, or `dangerouslySetInnerHTML` with values that come from props or user input.
 - Don't hand-edit `public/r/` or `registry.json`. Generate them with `npm run registry:sync`.
