@@ -50,6 +50,15 @@ Everyone else, including other org owners, follows the rules. Org owners can sti
 | `skip-changelog` | Maintainers | Leave out of release notes |
 | `stale` | [Stale Triage](workflows/stale.yml) | No activity for 60 days. Closed after 7 more. |
 
+## Dependency updates
+
+Dependabot skips two kinds of major update on purpose:
+
+- `@types/node` stays on the major of the oldest Node version we support (20). Newer types allow APIs that crash on Node 20.
+- `eslint` stays on 9 until `eslint-config-next` and its plugins support 10.
+
+Lift an ignore in `dependabot.yml` when its reason no longer holds.
+
 ## Required checks on `main`
 
 Lint, Typecheck, Supply chain integrity, Build (Node 20.x), Build (Node 22.x), Dependency review, Conventional PR title, and Analyze for both CodeQL languages. GitHub only accepts each check from the GitHub Actions app, so a commit status posted through the API can't satisfy it. Merging is also blocked while CodeQL has open alerts of high severity or above.
