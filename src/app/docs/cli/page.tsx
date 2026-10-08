@@ -14,7 +14,7 @@ export default function DocsCliPage() {
           Command Line Interface
         </h1>
         <p className="text-xs sm:text-[13px] text-muted-foreground font-light leading-relaxed">
-          Add components, initialize project configs, and synchronize registry items directly from your terminal.
+          Add component source to your project, browse the catalog, and install from the public registry directly from your terminal.
         </p>
       </div>
 
@@ -70,17 +70,18 @@ export default function DocsCliPage() {
             2
           </span>
           <h2 className="text-base sm:text-lg font-sans font-semibold tracking-tight text-foreground">
-            Batch Installation
+            Discover Components
           </h2>
         </div>
         <p className="text-xs sm:text-[13px] text-muted-foreground font-light leading-relaxed">
-          Install multiple components in a single execution to scaffold complete application views:
+          List the available components and view CLI help. The DevClub CLI adds one component per command.
         </p>
         <div className="rounded-2xl border border-border/80 bg-card/40 p-4 sm:p-5">
           <CodeBlock
             filename="Terminal"
             language="bash"
-            code="npx @devclubnst/ui add dotted-accordion ai-orb proximity-sidebar pixel-card"
+            code={`npx @devclubnst/ui@latest list
+npx @devclubnst/ui@latest --help`}
           />
         </div>
       </section>
@@ -95,7 +96,7 @@ export default function DocsCliPage() {
           </h2>
         </div>
         <p className="text-xs sm:text-[13px] text-muted-foreground font-light leading-relaxed">
-          Every component created by the CLI follows a predictable, atomic architecture inside your project:
+          The CLI uses an @/-based aliases.ui path from components.json when available. Otherwise, it selects src/components/ui or components/ui based on your project structure. Shared utilities such as lib/utils.ts should already be configured in your project.
         </p>
         <div className="rounded-2xl border border-border/80 bg-card/40 p-4 sm:p-5">
           <CodeBlock

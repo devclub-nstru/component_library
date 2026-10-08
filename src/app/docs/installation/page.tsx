@@ -322,10 +322,10 @@ export default function Page() {
               <SnippetBlock code="npx @devclubnst/ui add noise" />
 
               <p className="text-xs text-muted-foreground font-light leading-relaxed">
-                You can also add multiple components simultaneously:
+                List available components before choosing one to add:
               </p>
 
-              <SnippetBlock code="npx @devclubnst/ui add accordion noise animated-counter" />
+              <SnippetBlock code="npx @devclubnst/ui@latest list" />
 
               <p className="text-xs text-muted-foreground font-light leading-relaxed">
                 Supports pnpm and bun natively:
@@ -359,9 +359,13 @@ export default function Page() {
                 3. Component Placement
               </h3>
               <p className="text-xs text-muted-foreground font-light leading-relaxed">
-                Components are automatically written to your{" "}
-                <code className="text-foreground">@/components/ui/</code>{" "}
-                directory. Peer dependencies are installed automatically.
+                The CLI uses an <code className="text-foreground">@/</code>-based{" "}
+                <code className="text-foreground">aliases.ui</code> path from{" "}
+                <code className="text-foreground">components.json</code>, or
+                selects <code className="text-foreground">src/components/ui</code>{" "}
+                or <code className="text-foreground">components/ui</code> based
+                on your project structure. Declared dependencies are installed
+                using your project&apos;s package manager. Add one component per command.
               </p>
             </section>
 
