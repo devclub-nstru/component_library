@@ -1,7 +1,10 @@
 import React from "react";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { CodeBlock } from "@/components/showcase/code-block";
 import { createPageMetadata } from "@/lib/metadata";
 import { fetchComponentBySlug, getComponentCategories } from "@/lib/registry";
+import { extractSourceBlocks } from "@/lib/source-blocks";
 
 export const metadata = createPageMetadata({
   title: "Registry",
@@ -31,32 +34,11 @@ function shortenSample(value: unknown): unknown {
   return value;
 }
 
-const REGISTRY_ITEM_INTERFACE = `export interface ComponentRegistryItem {
-  slug: string;
-  name: string;
-  description: string;
-  summary?: string;
-  category: ComponentCategory;
-  tags: string[];
-  dependencies: string[];
-  registryDependencies?: string[];
-  version: string;
-  createdDate: string;
-  updatedDate: string;
-  highlights?: string[];
-  anatomy?: string[];
-  physics?: ComponentPhysicsSpec;
-  accessibility?: ComponentAccessibilitySpec;
-  guidelines?: ComponentGuidelines;
-  props?: ComponentProp[];
-  files: {
-    name: string;
-    path: string;
-    code: string;
-  }[];
-  interactive?: boolean;
-  supportsColor?: boolean;
-}`;
+const REGISTRY_ITEM_INTERFACE = extractSourceBlocks(
+  readFileSync(join(process.cwd(), "src/types/component.ts"), "utf8"),
+  /^export interface (?:ComponentItem|ComponentRegistryItem extends ComponentItem) \{\n[\s\S]*?\n\}$/gm,
+  2,
+);
 
 const LIST_RESPONSE_SHAPE = `{
   "success": true,
