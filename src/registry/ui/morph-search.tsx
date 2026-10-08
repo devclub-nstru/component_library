@@ -267,6 +267,7 @@ export function MorphSearch({
 
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
   const reduceMotion = useReducedMotion();
   const inputId = useId();
 
@@ -329,6 +330,11 @@ export function MorphSearch({
     inputRef.current?.blur();
   }, []);
 
+  const closeToTrigger = useCallback(() => {
+    handleClose();
+    triggerRef.current?.focus();
+  }, [handleClose]);
+
   const handleClear = useCallback(() => {
     updateQuery("");
     onClear?.();
@@ -384,7 +390,7 @@ export function MorphSearch({
       if (query) {
         handleClear();
       } else {
-        handleClose();
+        closeToTrigger();
       }
     } else if (e.key === "Enter" && !e.nativeEvent.isComposing) {
       e.preventDefault();
@@ -519,7 +525,7 @@ export function MorphSearch({
             />
 
             {!query && (
-              <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center overflow-hidden">
+              <span className="pointer-events-none absolute inset-0 flex items-center overflow-hidden">
                 <AnimatePresence mode="popLayout" initial={false}>
                   <motion.span
                     key={placeholderIndex}
@@ -556,23 +562,16 @@ export function MorphSearch({
               </button>
             )}
 
-            {!isOpen ? (
-              <button
-                type="button"
-                onClick={handleOpen}
-                className="flex items-center rounded-full border border-zinc-200 bg-zinc-100/80 px-2 py-0.5 text-[11px] font-mono text-zinc-500 hover:text-zinc-900 hover:border-zinc-300 dark:border-white/10 dark:bg-white/5 dark:text-zinc-400 dark:hover:text-white dark:hover:border-white/20 transition-colors cursor-pointer"
-              >
-                <span>/</span>
-              </button>
-            ) : (
-              <button
-                type="button"
-                onClick={handleClose}
-                className="flex items-center rounded-full border border-zinc-200 bg-zinc-100/80 px-2 py-0.5 text-[11px] font-mono text-zinc-500 hover:text-zinc-900 hover:border-zinc-300 dark:border-white/10 dark:bg-white/5 dark:text-zinc-400 dark:hover:text-white dark:hover:border-white/20 transition-colors cursor-pointer"
-              >
-                <span>ESC</span>
-              </button>
-            )}
+            <button
+              ref={triggerRef}
+              type="button"
+              onClick={isOpen ? closeToTrigger : handleOpen}
+              aria-label={isOpen ? "Close search" : "Open search"}
+              aria-expanded={isOpen}
+              className="relative flex items-center rounded-full border border-zinc-200 bg-zinc-100/80 px-2 py-0.5 text-[11px] font-mono text-zinc-500 hover:text-zinc-900 hover:border-zinc-300 dark:border-white/10 dark:bg-white/5 dark:text-zinc-400 dark:hover:text-white dark:hover:border-white/20 transition-colors cursor-pointer after:absolute after:-inset-x-2.5 after:-inset-y-3 outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 dark:focus-visible:ring-white/40"
+            >
+              <span>{isOpen ? "ESC" : "/"}</span>
+            </button>
           </div>
         </motion.div>
 
