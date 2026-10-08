@@ -713,7 +713,7 @@ const fadeVariants = {
 function highlightCode(code: string) {
   return code.split("\n").map((line, lineIdx) => {
     const regex =
-      /(".*?"|'.*?'|`.*?`|\b[A-Za-z_$][A-Za-z0-9_$]*\b|[{}()[\];:,.=><&|!+*/?-]|\s+)/g;
+      /(".*?"|'.*?'|`.*?`|[A-Za-z_$][A-Za-z0-9_$]*|0[xX][\da-fA-F]+|\d*\.?\d+|[{}()[\];:,.=><&|!+*/?-]|\s+|.)/gu;
     const tokens = [];
     let match;
     while ((match = regex.exec(line)) !== null) {
@@ -731,7 +731,7 @@ function highlightCode(code: string) {
         colorClass = "text-zinc-200";
       } else if (/^[{}()[\];:,.=><&|!+*/?-]+$/.test(token)) {
         colorClass = "text-zinc-500";
-      } else if (/^\d+$/.test(token)) {
+      } else if (/^(?:0[xX][\da-fA-F]+|\d*\.?\d+)$/.test(token)) {
         colorClass = "text-zinc-300";
       }
       tokens.push(
