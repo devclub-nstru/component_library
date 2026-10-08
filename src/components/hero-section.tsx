@@ -1,7 +1,14 @@
 "use client";
 
 import Image from "next/image";
+import dynamic from "next/dynamic";
+import { useMediaQuery } from "@/lib/use-media-query";
 import { cn } from "../lib/utils";
+
+const LiquidMedia = dynamic(
+  () => import("@/registry/ui/liquid-media").then((module) => module.LiquidMedia),
+  { ssr: false },
+);
 
 const LANDMARK_POINTS = [
   { id: 1, x: 33.0, y: 4.5 },
@@ -16,9 +23,11 @@ const LANDMARK_POINTS = [
 ];
 
 export default function HeroSection() {
+  const liquidEnabled = useMediaQuery("(prefers-reduced-motion: no-preference)");
+
   return (
     <section className="relative flex-1 min-h-[calc(100svh-4rem)] w-full bg-background text-foreground flex flex-col justify-between overflow-hidden select-none transition-colors duration-200">
-      <div className="absolute inset-0 w-full h-full pointer-events-none select-none z-0">
+      <div className="absolute inset-0 w-full h-full select-none z-0">
         <Image
           src="/COMP-HE.png"
           alt="Visual artwork"
@@ -27,6 +36,23 @@ export default function HeroSection() {
           draggable={false}
           className="object-cover object-center pointer-events-none select-none contrast-105 dark:contrast-110 opacity-75 dark:opacity-100 transition-opacity"
         />
+        {liquidEnabled && (
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 contrast-105 dark:contrast-110 opacity-75 dark:opacity-100"
+          >
+            <LiquidMedia
+              src="/COMP-HE.png"
+              alt=""
+              draggable={false}
+              intensity={0.52}
+              radius={12}
+              expandRate={10}
+              decayRate={4}
+              className="absolute inset-0 h-full w-full object-cover object-center select-none"
+            />
+          </div>
+        )}
         <div className="absolute inset-0 bg-white/45 dark:bg-black/30 pointer-events-none transition-colors duration-200" />
       </div>
 
