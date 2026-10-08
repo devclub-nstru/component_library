@@ -519,8 +519,8 @@ function FileRow({
           >
             {item.name}
           </span>
-          <span className="flex items-center gap-1.5 text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
-            <span>{formatFileSize(item.size)}</span>
+          <span className="flex min-w-0 items-center gap-1.5 text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+            <span className="shrink-0 whitespace-nowrap">{formatFileSize(item.size)}</span>
             {phase && (
               <>
                 <span
@@ -529,12 +529,12 @@ function FileRow({
                 >
                   ·
                 </span>
-                <span className="inline-flex items-center">
+                <span className="inline-flex min-w-0 items-center">
                   <AnimatePresence mode="popLayout" initial={false}>
                     <Swap
                       key={phase}
                       className={cn(
-                        "inline-flex items-center gap-1.5 font-medium",
+                        "inline-flex min-w-0 items-center gap-1.5 font-medium",
                         phase === "uploaded" &&
                           "text-emerald-600 dark:text-emerald-400",
                         phase === "failed" &&
@@ -684,13 +684,13 @@ function FileRow({
                 >
                   <button
                     type="button"
-                    className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-full bg-neutral-200/80 hover:bg-neutral-200 dark:bg-neutral-800/90 dark:hover:bg-neutral-700 text-neutral-800 dark:text-neutral-200 border border-neutral-300/80 dark:border-white/10 transition-colors cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-neutral-400"
+                    className="inline-flex items-center gap-1.5 px-3 py-1 max-sm:px-2 text-xs font-medium rounded-full bg-neutral-200/80 hover:bg-neutral-200 dark:bg-neutral-800/90 dark:hover:bg-neutral-700 text-neutral-800 dark:text-neutral-200 border border-neutral-300/80 dark:border-white/10 transition-colors cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-neutral-400"
                     onClick={onRetry}
                     aria-label={`Retry ${item.name}`}
                     title="Retry"
                   >
                     <RotateCw size={12} strokeWidth={2.25} aria-hidden="true" />
-                    <span>Retry</span>
+                    <span className="max-sm:sr-only">Retry</span>
                   </button>
                 </motion.span>
               </motion.span>

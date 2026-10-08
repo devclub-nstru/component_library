@@ -77,6 +77,7 @@ const RevealSheetPanel = ({
   const contentRef = React.useRef<HTMLDivElement>(null);
   const shineRef = React.useRef<HTMLDivElement>(null);
   const timelineRef = React.useRef<gsap.core.Timeline | null>(null);
+  const returnFocusRef = React.useRef<HTMLElement | null>(null);
   const bounceAmount = Number.isFinite(bounce)
     ? Math.min(2, Math.max(0, bounce))
     : 1;
@@ -201,6 +202,19 @@ const RevealSheetPanel = ({
   return (
     <Dialog.Content
       ref={contentRef}
+      onOpenAutoFocus={() => {
+        returnFocusRef.current =
+          document.activeElement instanceof HTMLElement
+            ? document.activeElement
+            : null;
+      }}
+      onCloseAutoFocus={(event) => {
+        const target = returnFocusRef.current;
+        returnFocusRef.current = null;
+        if (!target?.isConnected) return;
+        event.preventDefault();
+        target.focus({ preventScroll: true });
+      }}
       className={cn(
         "fixed z-50 flex flex-col overflow-hidden border-border/80 bg-[linear-gradient(155deg,#fff_0%,#f5f5f7_100%)] text-foreground shadow-[0_24px_80px_-28px_rgba(0,0,0,0.75)] outline-none dark:bg-[linear-gradient(155deg,#1c1c20_0%,#101013_100%)]",
         sideClasses[side],

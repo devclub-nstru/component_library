@@ -423,6 +423,8 @@ export function SegmentedProgressBar({
   const clampedValue = Math.max(0, Math.min(100, Math.round(value)));
   const baselineCount = Math.round((clampedValue / 100) * segments);
 
+  const isAdjustable = interactive && !disabled && Boolean(onChange);
+
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
   const isDraggingRef = useRef(false);
 
@@ -562,13 +564,20 @@ export function SegmentedProgressBar({
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
       if (disabled || !interactive || !onChange) return;
-      const step = 100 / segments;
       if (e.key === "ArrowRight" || e.key === "ArrowUp") {
         e.preventDefault();
-        onChange(Math.min(100, clampedValue + step));
+        onChange(Math.min(100, clampedValue + 1));
       } else if (e.key === "ArrowLeft" || e.key === "ArrowDown") {
         e.preventDefault();
-        onChange(Math.max(0, clampedValue - step));
+        onChange(Math.max(0, clampedValue - 1));
+      } else if (e.key === "PageUp") {
+        e.preventDefault();
+        onChange(
+          Math.round((Math.min(segments, baselineCount + 1) / segments) * 100),
+        );
+      } else if (e.key === "PageDown") {
+        e.preventDefault();
+        onChange(Math.round((Math.max(0, baselineCount - 1) / segments) * 100));
       } else if (e.key === "Home") {
         e.preventDefault();
         onChange(0);
@@ -577,7 +586,7 @@ export function SegmentedProgressBar({
         onChange(100);
       }
     },
-    [disabled, interactive, onChange, segments, clampedValue],
+    [disabled, interactive, onChange, clampedValue, baselineCount, segments],
   );
 
   return (
@@ -591,11 +600,12 @@ export function SegmentedProgressBar({
     >
       <div
         ref={trackRef}
-        role="progressbar"
-        tabIndex={interactive && !disabled ? 0 : -1}
+        role={isAdjustable ? "slider" : "progressbar"}
+        tabIndex={isAdjustable ? 0 : -1}
         aria-valuenow={clampedValue}
         aria-valuemin={0}
         aria-valuemax={100}
+        aria-valuetext={`${clampedValue}%`}
         aria-label={ariaLabel || "Progress bar"}
         onPointerMove={handlePointerMove}
         onPointerDown={handlePointerDown}
@@ -606,7 +616,7 @@ export function SegmentedProgressBar({
         className={cn(
           "relative flex w-full items-center justify-between gap-0.75 sm:gap-1 outline-none",
           interactive &&
-            "cursor-pointer focus-visible:ring-1 focus-visible:ring-white/30 rounded-md",
+            "cursor-pointer focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded-md",
         )}
         style={{ height }}
       >

@@ -1889,7 +1889,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         );
       case "morph-search":
         return (
-          <div className="flex items-center justify-center w-full max-w-xl mx-auto p-8">
+          <div className="flex items-center justify-center w-full max-w-xl mx-auto p-4 sm:p-8">
             <MorphSearch />
           </div>
         );
@@ -2189,7 +2189,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         );
       case "gooey-nav":
         return (
-          <div className="flex items-center justify-center w-full h-full min-h-96 select-none p-8">
+          <div className="flex items-center justify-center w-full h-full min-h-96 select-none p-2 sm:p-8">
             <GooeyNav
               items={GOOEY_DEMO_ITEMS}
               value={gooeyNavIndex}
