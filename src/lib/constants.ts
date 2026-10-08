@@ -3,6 +3,11 @@ export const SITE_CONFIG = {
   description: "High performance UI components engineered for speed and visual excellence.",
   url: "https://ui.devclubxnst.online",
   ogImage: "https://wallpapercave.com/wp/wp4140937.jpg",
+  logos: {
+    light: "/logo/BLACK-LOGO.png",
+    dark: "/logo/WHITE-LOGO.png",
+    icon: "/logo/ICON.png",
+  },
   links: {
     github: "https://github.com/devclub-nstru/component_library",
     npm: "https://www.npmjs.com/package/@devclubnst/ui",

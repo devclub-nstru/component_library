@@ -9,7 +9,7 @@ import {
   Cross2Icon,
   ChevronRightIcon,
 } from "@radix-ui/react-icons";
-import { NAV_ITEMS } from "@/lib/constants";
+import { NAV_ITEMS, SITE_CONFIG } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { GitHubButton } from "@/components/ui/github-button";
 import { CandyButton } from "@/registry/ui/candy-button";
@@ -48,18 +48,18 @@ export const Navbar = ({
       )}
     >
       <div className="max-w-7xl mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center">
+        <div className="flex items-center md:gap-4 lg:gap-6">
           <Link
             href="/"
             className="group flex items-center shrink-0 focus-visible:outline-none"
             aria-label="DevClub Home"
           >
             <Image
-              src={isDark ? "/logo-he.png" : "/logo-he-bl.png"}
+              src={isDark && !forceLight ? SITE_CONFIG.logos.dark : SITE_CONFIG.logos.light}
               alt="DevClub"
               width={180}
               height={60}
-              className="h-10 w-auto max-w-30 sm:h-12 sm:max-w-none object-contain transition-opacity group-hover:opacity-80"
+              className="h-10 w-auto aspect-[12/5] max-w-30 sm:h-12 sm:max-w-none object-contain transition-opacity group-hover:opacity-80"
               priority
             />
           </Link>

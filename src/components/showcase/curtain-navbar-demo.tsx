@@ -8,10 +8,11 @@ import {
   type CurtainNavbarItem,
 } from "@/registry/ui/curtain-navbar";
 import { CustomizationRange } from "./customization-controls";
+import { SITE_CONFIG } from "@/lib/constants";
 
 export const CURTAIN_NAVBAR_DEFAULT_CONFIG = {
   brand: "devclub",
-  logoSrc: "/logo-favicon.png",
+  logoSrc: SITE_CONFIG.logos.icon,
   duration: 0.85,
   stagger: 0.045,
   hoverDuration: 0.35,
@@ -75,7 +76,7 @@ export function CurtainNavbarDemo({
         {...settings}
         contained
         logo={
-          <img src={logoSrc} alt="" className="h-full w-full object-cover" />
+          <img src={logoSrc} alt="" className="h-full w-full object-contain" />
         }
       />
       <div className="pointer-events-none absolute inset-x-6 bottom-9 text-white @[760px]/curtain-demo:inset-x-9">
