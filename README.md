@@ -8,7 +8,7 @@ React components with expressive motion. Copy the source into your project, make
 [Components](https://ui.devclubxnst.online/components) · [Documentation](https://ui.devclubxnst.online/docs) · [npm](https://www.npmjs.com/package/@devclubnst/ui) · [Community](https://ui.devclubxnst.online/docs/community)
 
 ## What you get
-
+ 
 - React and TypeScript component source, styled with Tailwind CSS.
 - Animated interfaces using GSAP, Motion, and component-specific WebGL effects.
 - Live previews, source code, and customization controls in the component studio.
