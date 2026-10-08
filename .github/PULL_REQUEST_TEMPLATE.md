@@ -7,7 +7,6 @@ Provide a concise summary of the changes proposed in this pull request. Explain 
 ## Related Issue
 
 Closes #
-Fixes #
 
 ---
 
@@ -42,8 +41,10 @@ Before submitting this pull request, verify each item:
 - [ ] The component respects `prefers-reduced-motion` media queries and provides accessible fallback behavior.
 - [ ] Full keyboard navigation (`Tab`, `Shift+Tab`, `Enter`, `Space`, `Escape`) is tested and operational.
 - [ ] If a new component was added, it is properly registered with JSON metadata in `src/registry/components/` and exported in `src/registry/index.ts`.
-- [ ] I have executed `npm run lint` and resolved all lint errors.
-- [ ] I have executed `npm run build` locally and the production build completes successfully.
+- [ ] The PR title follows Conventional Commits, for example `feat(dither): add grain intensity prop`.
+- [ ] `npm run lint`, `npm run typecheck`, and `npm run build` pass locally.
+- [ ] If I changed `src/registry/`, I ran `npm run registry:sync` and committed the regenerated `public/r/` and `registry.json`.
+- [ ] This PR adds no new dependencies, or it links the issue where a maintainer approved them.
 - [ ] No uncleaned debug logs or unnecessary comments were left in the codebase.
 
 ---

@@ -1,0 +1,28 @@
+{
+  "name": "release tags",
+  "target": "tag",
+  "enforcement": "active",
+  "conditions": {
+    "ref_name": {
+      "include": ["refs/tags/v*"],
+      "exclude": []
+    }
+  },
+  "bypass_actors": [
+    {
+      "actor_type": "Team",
+      "actor_id": 19994465,
+      "bypass_mode": "always"
+    },
+    {
+      "actor_type": "Integration",
+      "actor_id": 15368,
+      "bypass_mode": "always"
+    }
+  ],
+  "rules": [
+    { "type": "creation" },
+    { "type": "update" },
+    { "type": "deletion" }
+  ]
+}
