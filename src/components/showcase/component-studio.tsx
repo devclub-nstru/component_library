@@ -6724,6 +6724,25 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 )}
               </motion.div>
 
+              {activeComponent.usage && (
+                <motion.div
+                  variants={fadeVariants}
+                  className="space-y-2.5 pt-4 border-t border-border"
+                >
+                  <div className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
+                    Usage
+                  </div>
+                  <div className="min-w-0 rounded-xl border border-border bg-muted/40 p-3">
+                    <CodeBlock
+                      code={activeComponent.usage}
+                      language="tsx"
+                      showLineNumbers={false}
+                      className="max-w-none"
+                    />
+                  </div>
+                </motion.div>
+              )}
+
               {activeComponent.highlights &&
                 activeComponent.highlights.length > 0 && (
                   <motion.div
@@ -7041,11 +7060,19 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                     </span>
                   ))}
                 </div>
-                {activeComponent.files && activeComponent.files[0] && (
-                  <div className="flex items-center justify-between text-[11px] font-mono text-muted-foreground bg-muted/40 border border-border rounded-lg px-3 py-2 mt-2">
-                    <span>Source File</span>
-                    <span className="text-foreground">
-                      {activeComponent.files[0].path}
+                {activeComponent.files.length > 0 && (
+                  <div className="flex items-start justify-between gap-3 text-[11px] font-mono text-muted-foreground bg-muted/40 border border-border rounded-lg px-3 py-2 mt-2">
+                    <span className="shrink-0">
+                      {activeComponent.files.length > 1
+                        ? "Source Files"
+                        : "Source File"}
+                    </span>
+                    <span className="flex min-w-0 flex-col items-end gap-1 text-right text-foreground">
+                      {activeComponent.files.map((file) => (
+                        <span key={file.path} className="break-all">
+                          {file.path.replace(/^src\//, "")}
+                        </span>
+                      ))}
                     </span>
                   </div>
                 )}
