@@ -372,7 +372,7 @@ export const SpotlightSearch: React.FC<SpotlightSearchProps> = ({
         disabled && "opacity-50 pointer-events-none",
         className,
       )}
-      style={{ width: "100%", maxWidth: MAX_WIDTH }}
+      style={{ width: MAX_WIDTH, maxWidth: "100%" }}
     >
       <svg
         width="0"
