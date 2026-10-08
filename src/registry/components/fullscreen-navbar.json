@@ -247,7 +247,6 @@
       "description": "Additional container styling."
     }
   ],
-  "usage": "import { FullscreenNavbar } from \"@/components/ui/fullscreen-navbar\";\n\nexport function FullscreenNavbarDemo() {\n  return <FullscreenNavbar brand=\"devclub\" actionLabel=\"Start building\" actionHref=\"/docs\" />;\n}",
   "files": [
     {
       "name": "fullscreen-navbar.tsx",
@@ -257,5 +256,6 @@
       "type": "registry:ui",
       "target": "@ui/fullscreen-navbar.tsx"
     }
-  ]
+  ],
+  "usage": "import { FullscreenNavbar } from \"@/components/ui/fullscreen-navbar\";\n\nexport function FullscreenNavbarDemo() {\n  return <FullscreenNavbar brand=\"devclub\" actionLabel=\"Start building\" actionHref=\"/docs\" />;\n}"
 }
