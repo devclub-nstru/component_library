@@ -209,7 +209,7 @@ if (command === "add") {
   }
 
   for (const name of names) {
-    if (!fs.existsSync(itemJsonPath(name))) {
+    if (!/^[a-z0-9-]+$/.test(name) || !fs.existsSync(itemJsonPath(name))) {
       console.error(`Error: Component "${name}" not found in @devclubnst/ui.`);
       console.log("Run 'npx @devclubnst/ui list' to view all available components.");
       process.exit(1);
