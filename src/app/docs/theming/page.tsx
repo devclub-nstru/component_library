@@ -1,6 +1,9 @@
 import React from "react";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { CodeBlock } from "@/components/showcase/code-block";
 import { createPageMetadata } from "@/lib/metadata";
+import { extractSourceBlocks } from "@/lib/source-blocks";
 
 export const metadata = createPageMetadata({
   title: "Theming",
@@ -8,6 +11,12 @@ export const metadata = createPageMetadata({
     "Monochromatic design tokens, CSS variables, and Tailwind CSS v4 theme integration.",
   path: "/docs/theming",
 });
+
+const THEME_SNIPPET = extractSourceBlocks(
+  readFileSync(join(process.cwd(), "src/app/globals.css"), "utf8"),
+  /^(?:@import "tailwindcss";|@custom-variant dark .*;|(?::root|\.dark|@theme inline) \{\n[\s\S]*?\n\})$/gm,
+  5,
+);
 
 const THEME_TOKENS = [
   {
@@ -64,6 +73,26 @@ const THEME_TOKENS = [
     token: "--line",
     value: "rgba(0,0,0,0.08) / rgb(255,255,255,0.08)",
     usage: "Architectural blueprint and grid lines",
+  },
+  {
+    token: "--line-strong",
+    value: "rgba(0,0,0,0.14) / rgb(255,255,255,0.16)",
+    usage: "Stronger outlines and focus borders",
+  },
+  {
+    token: "--text",
+    value: "#09090b / #f2f2f3",
+    usage: "Text inside panels and inputs",
+  },
+  {
+    token: "--faint",
+    value: "#a1a1aa / #56565c",
+    usage: "Placeholders and faint hints",
+  },
+  {
+    token: "--ink",
+    value: "#ffffff / #0b0b0c",
+    usage: "Inverse text, the opposite of --text",
   },
 ];
 
@@ -134,57 +163,7 @@ export default function DocsThemingPage() {
           <CodeBlock
             filename="src/app/globals.css"
             language="css"
-            code={`@import "tailwindcss";
-
-@custom-variant dark (&:where(.dark, .dark *));
-
-:root {
-  --background: #fdfdfd;
-  --foreground: #09090b;
-  --border: rgba(0, 0, 0, 0.12);
-  --border-subtle: rgba(0, 0, 0, 0.08);
-  --border-hairline: rgba(0, 0, 0, 0.14);
-  --muted: #f4f4f5;
-  --muted-foreground: #71717a;
-  --primary: #18181b;
-  --primary-foreground: #ffffff;
-  --card: #ffffff;
-  --card-foreground: #09090b;
-  --panel: #ffffff;
-  --line: rgba(0, 0, 0, 0.08);
-}
-
-.dark {
-  --background: #050505;
-  --foreground: #f4f4f5;
-  --border: rgba(255, 255, 255, 0.12);
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-hairline: rgba(255, 255, 255, 0.16);
-  --muted: #18181b;
-  --muted-foreground: #a1a1aa;
-  --primary: #f4f4f5;
-  --primary-foreground: #09090b;
-  --card: #0c0c0e;
-  --card-foreground: #f4f4f5;
-  --panel: #151517;
-  --line: rgb(255 255 255 / 0.08);
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-border: var(--border);
-  --color-border-subtle: var(--border-subtle);
-  --color-border-hairline: var(--border-hairline);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-panel: var(--panel);
-  --color-line: var(--line);
-}`}
+            code={THEME_SNIPPET}
           />
         </div>
         <p className="text-xs sm:text-[13px] text-muted-foreground font-light leading-relaxed">
@@ -192,8 +171,12 @@ export default function DocsThemingPage() {
           keep its variables and add any DevClub tokens that are missing, such as{" "}
           <code className="text-foreground">--border-subtle</code>,{" "}
           <code className="text-foreground">--border-hairline</code>,{" "}
-          <code className="text-foreground">--panel</code> and{" "}
-          <code className="text-foreground">--line</code>, with matching{" "}
+          <code className="text-foreground">--panel</code>,{" "}
+          <code className="text-foreground">--line</code>,{" "}
+          <code className="text-foreground">--line-strong</code>,{" "}
+          <code className="text-foreground">--text</code>,{" "}
+          <code className="text-foreground">--faint</code> and{" "}
+          <code className="text-foreground">--ink</code>, with matching{" "}
           <code className="text-foreground">--color-*</code> entries.
         </p>
       </section>
