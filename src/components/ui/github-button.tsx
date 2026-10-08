@@ -8,7 +8,6 @@ import { CandyButton } from "@/registry/ui/candy-button";
 
 interface GitHubButtonProps {
   className?: string;
-  repoUrl?: string;
 }
 
 function formatStars(count: number) {
@@ -21,10 +20,7 @@ function formatStars(count: number) {
   return count.toString();
 }
 
-export function GitHubButton({
-  className,
-  repoUrl = SITE_CONFIG.links.github,
-}: GitHubButtonProps) {
+export function GitHubButton({ className }: GitHubButtonProps) {
   const [stars, setStars] = useState<string | null>(null);
 
   useEffect(() => {
@@ -45,7 +41,7 @@ export function GitHubButton({
   return (
     <CandyButton
       as="a"
-      href={repoUrl}
+      href={SITE_CONFIG.links.github}
       target="_blank"
       rel="noopener noreferrer"
       variant="obsidian"
