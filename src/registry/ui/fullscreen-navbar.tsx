@@ -197,6 +197,8 @@ function NavbarHeader({
   );
 }
 
+const HOVER_CLICK_GRACE_MS = 350;
+
 const menuButtonClass =
   "flex min-h-10 min-w-24 cursor-pointer items-center justify-center gap-2 rounded-full border border-current/15 bg-current/5 px-4 text-xs font-medium backdrop-blur-lg hover:bg-current/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--fullnav-accent)]";
 
@@ -229,12 +231,11 @@ function NavbarRow({
   const arrowRef = useRef<SVGSVGElement>(null);
   const animateRef = useRef<((next: boolean) => void) | null>(null);
   const expandedRef = useRef(expanded);
-  const hoverOpenedRef = useRef(false);
+  const hoverOpenedAtRef = useRef(0);
   const id = useId();
   const hasLinks = Boolean(item.links?.length);
   useEffect(() => {
     expandedRef.current = expanded;
-    if (!expanded) hoverOpenedRef.current = false;
   }, [expanded]);
 
   useGSAP(
@@ -350,8 +351,13 @@ function NavbarRow({
           aria-expanded={expanded}
           aria-controls={`panel-${id}`}
           onClick={(event) => {
-            if (event.detail > 0 && hoverOpenedRef.current) {
-              hoverOpenedRef.current = false;
+            const hoverOpenedAt = hoverOpenedAtRef.current;
+            hoverOpenedAtRef.current = 0;
+            if (
+              event.detail > 0 &&
+              hoverOpenedAt > 0 &&
+              performance.now() - hoverOpenedAt < HOVER_CLICK_GRACE_MS
+            ) {
               return;
             }
             onExpand();
@@ -363,7 +369,7 @@ function NavbarRow({
               event.pointerType === "mouse" &&
               !expanded
             ) {
-              hoverOpenedRef.current = true;
+              hoverOpenedAtRef.current = performance.now();
               onExpand();
             }
           }}
