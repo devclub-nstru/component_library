@@ -1006,13 +1006,16 @@ export const PromptInput = React.forwardRef<PromptInputRef, PromptInputProps>(
         }
       };
       const handleEscape = (e: KeyboardEvent) => {
-        if (e.key === "Escape") closeModelSelect();
+        if (e.key !== "Escape") return;
+        e.preventDefault();
+        e.stopPropagation();
+        closeModelSelect();
       };
       document.addEventListener("mousedown", handleOutsideClick);
-      document.addEventListener("keydown", handleEscape);
+      window.addEventListener("keydown", handleEscape, true);
       return () => {
         document.removeEventListener("mousedown", handleOutsideClick);
-        document.removeEventListener("keydown", handleEscape);
+        window.removeEventListener("keydown", handleEscape, true);
       };
     }, [isModelSelectOpen, closeModelSelect]);
 
