@@ -129,6 +129,11 @@ import OrbitGalleryDemo, {
 } from "./orbit-gallery-demo";
 import { ProjectReveal } from "@/registry/ui/project-reveal";
 import {
+  ParallaxStripTransitionDemo,
+  ParallaxStripTransitionControls,
+  PARALLAX_STRIP_DEFAULT_CONFIG,
+} from "./parallax-strip-transition-demo";
+import {
   ScrollingCardsDemo,
   ScrollingCardsControls,
   SCROLLING_CARDS_DEFAULT_CONFIG,
@@ -1197,6 +1202,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
   const [projectRevealConfig, setProjectRevealConfig] = useState({
     ...PROJECT_REVEAL_DEFAULT_CONFIG,
   });
+  const [parallaxStripConfig, setParallaxStripConfig] = useState({
+    ...PARALLAX_STRIP_DEFAULT_CONFIG,
+  });
   const [scrollingCardsConfig, setScrollingCardsConfig] = useState({
     ...SCROLLING_CARDS_DEFAULT_CONFIG,
   });
@@ -1982,6 +1990,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         );
       case "orbit-gallery":
         return <OrbitGalleryDemo {...orbitGalleryConfig} />;
+      case "parallax-strip-transition":
+        return <ParallaxStripTransitionDemo config={parallaxStripConfig} />;
       case "scrolling-cards":
         return <ScrollingCardsDemo config={scrollingCardsConfig} />;
       case "loader":
@@ -3610,6 +3620,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 activeComponent.slug === "noise" ||
                 activeComponent.slug === "orbit-gallery" ||
                 activeComponent.slug === "scrolling-cards" ||
+                activeComponent.slug === "parallax-strip-transition" ||
                 activeComponent.slug === "fullscreen-navbar" ||
                 activeComponent.slug === "curtain-navbar" ||
                 activeComponent.slug === "curved-navbar" ||
@@ -3622,7 +3633,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 : "p-2 sm:p-6",
             )}
           >
-            {activeComponent.slug !== "scrolling-cards" && (
+            {activeComponent.slug !== "scrolling-cards" &&
+              activeComponent.slug !== "parallax-strip-transition" && (
               <div className="absolute inset-0 bg-[radial-gradient(currentColor_1px,transparent_1px)] text-foreground/8 bg-size-[20px_20px] pointer-events-none" />
             )}
 
@@ -3649,6 +3661,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 "relative min-w-0 max-w-full max-h-full flex flex-col items-center justify-center overflow-hidden transition-colors",
                 viewport !== "desktop" &&
                   "border border-border bg-background dark:bg-[#09090b] shadow-[0_25px_60px_rgba(0,0,0,0.08)] dark:shadow-[0_25px_60px_rgba(0,0,0,0.9)] my-auto max-h-[90vh]",
+                activeComponent.slug === "parallax-strip-transition" &&
+                  viewport !== "desktop" &&
+                  "min-h-0 max-h-full",
               )}
             >
               {viewport === "mobile" && (
@@ -3670,6 +3685,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       activeComponent.slug === "noise" ||
                       activeComponent.slug === "orbit-gallery" ||
                       activeComponent.slug === "scrolling-cards" ||
+                      activeComponent.slug === "parallax-strip-transition" ||
                       activeComponent.slug === "fullscreen-navbar" ||
                       activeComponent.slug === "curtain-navbar" ||
                       activeComponent.slug === "curved-navbar" ||
@@ -5546,6 +5562,13 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 <ProjectRevealControls
                   config={projectRevealConfig}
                   onChange={setProjectRevealConfig}
+                />
+              )}
+
+              {activeComponent.slug === "parallax-strip-transition" && (
+                <ParallaxStripTransitionControls
+                  config={parallaxStripConfig}
+                  onChange={setParallaxStripConfig}
                 />
               )}
 

@@ -809,6 +809,26 @@
       ]
     },
     {
+      "name": "parallax-strip-transition",
+      "type": "registry:ui",
+      "title": "Parallax Strip Transition",
+      "description": "Full-bleed image scenes with directional strip reveals, a soft parallax zoom, and a smoothly rolling numeric counter.",
+      "dependencies": [
+        "gsap",
+        "@gsap/react",
+        "lucide-react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/parallax-strip-transition.tsx",
+          "type": "registry:ui",
+          "target": "@ui/parallax-strip-transition.tsx"
+        }
+      ]
+    },
+    {
       "name": "pixel-card",
       "type": "registry:ui",
       "title": "Pixel Card",

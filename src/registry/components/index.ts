@@ -44,6 +44,7 @@ import pixelCard from "./pixel-card.json";
 import profileMenu from "./profile-menu.json";
 import projectReveal from "./project-reveal.json";
 import scrollingCards from "./scrolling-cards.json";
+import parallaxStripTransition from "./parallax-strip-transition.json";
 import proximitySidebar from "./proximity-sidebar.json";
 import revealSheet from "./reveal-sheet.json";
 import scales from "./scales.json";
@@ -106,6 +107,7 @@ export {
   profileMenu,
   projectReveal,
   scrollingCards,
+  parallaxStripTransition,
   proximitySidebar,
   revealSheet,
   scales,
@@ -170,6 +172,7 @@ export const componentsList: ComponentRegistryItem[] = [
   profileMenu as ComponentRegistryItem,
   projectReveal as ComponentRegistryItem,
   scrollingCards as ComponentRegistryItem,
+  parallaxStripTransition as ComponentRegistryItem,
   proximitySidebar as ComponentRegistryItem,
   revealSheet as ComponentRegistryItem,
   scales as ComponentRegistryItem,

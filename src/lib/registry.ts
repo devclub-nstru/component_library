@@ -55,6 +55,11 @@ export const COMPONENT_CATEGORIES: {
     description: "Interactive galleries, project reveals and image effects.",
   },
   {
+    value: "page-transitions",
+    label: "Page Transitions",
+    description: "Coordinated scene changes for portfolios and immersive pages.",
+  },
+  {
     value: "ai-stuff",
     label: "AI & editors",
     description: "AI inputs, visual orbs and editing experiences.",

@@ -15,6 +15,7 @@ export type ComponentCategory =
   | "ai-stuff"
   | "search"
   | "galleries-and-media"
+  | "page-transitions"
   | "backgrounds-and-effects"
   | "menus";
 

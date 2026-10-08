@@ -52,6 +52,7 @@ import { MatrixClockDemo } from "@/components/showcase/matrix-clock-demo";
 import OrbitGalleryDemo from "@/components/showcase/orbit-gallery-demo";
 import { ProjectReveal } from "@/registry/ui/project-reveal";
 import { PROJECT_REVEAL_DEMO_ITEMS } from "@/components/showcase/project-reveal-demo";
+import { ParallaxStripTransitionDemo } from "@/components/showcase/parallax-strip-transition-demo";
 import { ScrollingCardsDemo } from "@/components/showcase/scrolling-cards-demo";
 import { LoaderDemo } from "@/components/showcase/loader-demo";
 import { ImageLoaderDemo } from "@/components/showcase/image-loader-demo";
@@ -118,6 +119,7 @@ export default function ComponentsPage() {
 
   const previewRenderers: Record<string, React.ReactNode> = {
     "scrolling-cards": <ScrollingCardsDemo compact />,
+    "parallax-strip-transition": <ParallaxStripTransitionDemo compact />,
     loader: <LoaderDemo compact />,
     "image-loader": <ImageLoaderDemo compact />,
     "cursor-trail-loader": <CursorTrailLoaderDemo compact />,

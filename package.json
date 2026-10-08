@@ -1,6 +1,6 @@
 {
   "name": "@devclubnst/ui",
-  "version": "2.0.11",
+  "version": "2.0.12",
   "description": "DevClub UI animated component primitives",
   "license": "MIT",
   "homepage": "https://ui.devclubxnst.online",
@@ -45,6 +45,7 @@
     "registry:sync": "node scripts/sync-registry.mjs"
   },
   "dependencies": {
+    "@devclubnst/ui": "^2.0.11",
     "@gsap/react": "^2.1.2",
     "@radix-ui/react-avatar": "^1.2.6",
     "@radix-ui/react-dialog": "^1.1.23",
