@@ -11,7 +11,7 @@ const packageNameFromKey = (key) => key.slice(key.lastIndexOf("node_modules/") +
 const problems = [];
 let checked = 0;
 for (const [key, entry] of Object.entries(lockfile.packages ?? {})) {
-  if (key === "" || entry.link || !key.includes("node_modules/")) continue;
+  if (key === "" || entry.link || entry.inBundle || !key.includes("node_modules/")) continue;
 
   checked++;
   const name = entry.name ?? packageNameFromKey(key);
