@@ -1,11 +1,13 @@
 import React from "react";
 import { CodeBlock } from "@/components/showcase/code-block";
+import { createPageMetadata } from "@/lib/metadata";
 
-export const metadata = {
+export const metadata = createPageMetadata({
   title: "Theming",
   description:
     "Monochromatic design tokens, CSS variables, and Tailwind CSS v4 theme integration.",
-};
+  path: "/docs/theming",
+});
 
 const THEME_TOKENS = [
   {
@@ -42,6 +44,16 @@ const THEME_TOKENS = [
     token: "--border-hairline",
     value: "rgba(0,0,0,0.14) / rgba(255,255,255,0.16)",
     usage: "High-precision edge highlights and rulers",
+  },
+  {
+    token: "--card",
+    value: "#ffffff / #0c0c0e",
+    usage: "Card surfaces, paired with --card-foreground for text",
+  },
+  {
+    token: "--primary",
+    value: "#18181b / #f4f4f5",
+    usage: "Solid emphasis fills, paired with --primary-foreground",
   },
   {
     token: "--panel",
@@ -109,7 +121,14 @@ export default function DocsThemingPage() {
           Tailwind CSS v4 Integration
         </h2>
         <p className="text-xs sm:text-[13px] text-muted-foreground font-light leading-relaxed">
-          Tailwind CSS v4 introduces native theme tokens and custom variants:
+          Declare the variables on <code className="text-foreground">:root</code>{" "}
+          and <code className="text-foreground">.dark</code>, then map them to
+          Tailwind colors in an <code className="text-foreground">@theme inline</code>{" "}
+          block. The mapping is what turns each variable into utilities such as{" "}
+          <code className="text-foreground">bg-background</code>,{" "}
+          <code className="text-foreground">text-muted-foreground</code> and{" "}
+          <code className="text-foreground">border-border</code>. Without it,
+          those classes are not generated.
         </p>
         <div className="rounded-2xl border border-border/80 bg-card/40 p-4 sm:p-5">
           <CodeBlock
@@ -123,19 +142,60 @@ export default function DocsThemingPage() {
   --background: #fdfdfd;
   --foreground: #09090b;
   --border: rgba(0, 0, 0, 0.12);
+  --border-subtle: rgba(0, 0, 0, 0.08);
+  --border-hairline: rgba(0, 0, 0, 0.14);
   --muted: #f4f4f5;
   --muted-foreground: #71717a;
+  --primary: #18181b;
+  --primary-foreground: #ffffff;
+  --card: #ffffff;
+  --card-foreground: #09090b;
+  --panel: #ffffff;
+  --line: rgba(0, 0, 0, 0.08);
 }
 
 .dark {
   --background: #050505;
   --foreground: #f4f4f5;
   --border: rgba(255, 255, 255, 0.12);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-hairline: rgba(255, 255, 255, 0.16);
   --muted: #18181b;
   --muted-foreground: #a1a1aa;
+  --primary: #f4f4f5;
+  --primary-foreground: #09090b;
+  --card: #0c0c0e;
+  --card-foreground: #f4f4f5;
+  --panel: #151517;
+  --line: rgb(255 255 255 / 0.08);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-border: var(--border);
+  --color-border-subtle: var(--border-subtle);
+  --color-border-hairline: var(--border-hairline);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-panel: var(--panel);
+  --color-line: var(--line);
 }`}
           />
         </div>
+        <p className="text-xs sm:text-[13px] text-muted-foreground font-light leading-relaxed">
+          If your project already ran <code className="text-foreground">npx shadcn@latest init</code>,
+          keep its variables and add any DevClub tokens that are missing, such as{" "}
+          <code className="text-foreground">--border-subtle</code>,{" "}
+          <code className="text-foreground">--border-hairline</code>,{" "}
+          <code className="text-foreground">--panel</code> and{" "}
+          <code className="text-foreground">--line</code>, with matching{" "}
+          <code className="text-foreground">--color-*</code> entries.
+        </p>
       </section>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

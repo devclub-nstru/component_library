@@ -1,10 +1,13 @@
 import React from "react";
 import { CodeBlock } from "@/components/showcase/code-block";
+import { createPageMetadata } from "@/lib/metadata";
 
-export const metadata = {
+export const metadata = createPageMetadata({
   title: "CLI",
-  description: "DevClub command-line interface and direct registry installation workflows.",
-};
+  description:
+    "DevClub command-line interface and direct registry installation workflows.",
+  path: "/docs/cli",
+});
 
 export default function DocsCliPage() {
   return (
@@ -74,14 +77,15 @@ export default function DocsCliPage() {
           </h2>
         </div>
         <p className="text-xs sm:text-[13px] text-muted-foreground font-light leading-relaxed">
-          List the available components and view CLI help. The DevClub CLI adds one component per command.
+          List the available components, view CLI help, or replace a component you already added with --overwrite. The DevClub CLI adds one component per command.
         </p>
         <div className="rounded-2xl border border-border/80 bg-card/40 p-4 sm:p-5">
           <CodeBlock
             filename="Terminal"
             language="bash"
             code={`npx @devclubnst/ui@latest list
-npx @devclubnst/ui@latest --help`}
+npx @devclubnst/ui@latest --help
+npx @devclubnst/ui add noise --overwrite`}
           />
         </div>
       </section>
@@ -96,7 +100,7 @@ npx @devclubnst/ui@latest --help`}
           </h2>
         </div>
         <p className="text-xs sm:text-[13px] text-muted-foreground font-light leading-relaxed">
-          The CLI uses an @/-based aliases.ui path from components.json when available. Otherwise, it selects src/components/ui or components/ui based on your project structure. Shared utilities such as lib/utils.ts should already be configured in your project.
+          The CLI uses an @/-based aliases.ui path from components.json when available. Otherwise, it selects src/components/ui or components/ui based on your project structure. Files that already exist are skipped; pass --overwrite to replace them. The cn() helper in lib/utils.ts must exist before you add components: run npx shadcn@latest init or follow the Project setup step in Installation.
         </p>
         <div className="rounded-2xl border border-border/80 bg-card/40 p-4 sm:p-5">
           <CodeBlock

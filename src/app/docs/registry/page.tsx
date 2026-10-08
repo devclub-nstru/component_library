@@ -1,12 +1,86 @@
 import React from "react";
 import { CodeBlock } from "@/components/showcase/code-block";
+import { createPageMetadata } from "@/lib/metadata";
+import { fetchComponentBySlug, getComponentCategories } from "@/lib/registry";
 
-export const metadata = {
+export const metadata = createPageMetadata({
   title: "Registry",
-  description: "DevClub UI JSON registry schema, REST endpoints, and programmatic distribution.",
-};
+  description:
+    "DevClub UI JSON registry schema, REST endpoints, and programmatic distribution.",
+  path: "/docs/registry",
+});
+
+const SAMPLE_SLUG = "noise";
+const SAMPLE_STRING_LENGTH = 96;
+const SAMPLE_ARRAY_LENGTH = 2;
+
+function shortenSample(value: unknown): unknown {
+  if (typeof value === "string") {
+    return value.length > SAMPLE_STRING_LENGTH
+      ? `${value.slice(0, SAMPLE_STRING_LENGTH)}…`
+      : value;
+  }
+  if (Array.isArray(value)) {
+    return value.slice(0, SAMPLE_ARRAY_LENGTH).map(shortenSample);
+  }
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value).map(([key, entry]) => [key, shortenSample(entry)]),
+    );
+  }
+  return value;
+}
+
+const REGISTRY_ITEM_INTERFACE = `export interface ComponentRegistryItem {
+  slug: string;
+  name: string;
+  description: string;
+  summary?: string;
+  category: ComponentCategory;
+  tags: string[];
+  dependencies: string[];
+  registryDependencies?: string[];
+  version: string;
+  createdDate: string;
+  updatedDate: string;
+  highlights?: string[];
+  anatomy?: string[];
+  physics?: ComponentPhysicsSpec;
+  accessibility?: ComponentAccessibilitySpec;
+  guidelines?: ComponentGuidelines;
+  props?: ComponentProp[];
+  files: {
+    name: string;
+    path: string;
+    code: string;
+  }[];
+  interactive?: boolean;
+  supportsColor?: boolean;
+}`;
+
+const LIST_RESPONSE_SHAPE = `{
+  "success": true,
+  "data": {
+    "components": ComponentRegistryItem[],
+    "total": number,
+    "categories": ComponentCategory[]
+  },
+  "timestamp": string
+}`;
 
 export default function DocsRegistryPage() {
+  const categories = getComponentCategories();
+  const sampleComponent = fetchComponentBySlug(SAMPLE_SLUG);
+  const samplePayload = JSON.stringify(
+    {
+      success: true,
+      data: shortenSample(sampleComponent),
+      timestamp: new Date().toISOString(),
+    },
+    null,
+    2,
+  );
+
   return (
     <article className="space-y-10">
       <div className="space-y-2 border-b border-border pb-6">
@@ -39,7 +113,7 @@ export default function DocsRegistryPage() {
               <span className="text-xs text-muted-foreground">List Catalog</span>
             </div>
             <p className="text-xs text-muted-foreground font-light leading-relaxed">
-              Returns all available registry components. Supports query parameters <code className="text-foreground">?category=</code>, <code className="text-foreground">?q=</code>, and <code className="text-foreground">?tag=</code>.
+              Returns all browsable registry components with their full source, the total count, and the list of category ids. Supports query parameters <code className="text-foreground">?category=</code>, <code className="text-foreground">?q=</code>, and <code className="text-foreground">?tag=</code>.
             </p>
           </div>
 
@@ -56,7 +130,7 @@ export default function DocsRegistryPage() {
               <span className="text-xs text-muted-foreground">Fetch Component Detail</span>
             </div>
             <p className="text-xs text-muted-foreground font-light leading-relaxed">
-              Returns the complete JSON schema for a single component, including raw TSX source code, dependencies, and metadata.
+              Returns a single component item, including its source files, dependencies, props, and accessibility metadata. Unknown slugs return a 404 with <code className="text-foreground">success: false</code>.
             </p>
           </div>
 
@@ -90,7 +164,7 @@ export default function DocsRegistryPage() {
               <span className="text-xs text-muted-foreground">Health & Diagnostics</span>
             </div>
             <p className="text-xs text-muted-foreground font-light leading-relaxed">
-              Diagnostic status check returning active component counts and API uptime.
+              Status check returning <code className="text-foreground">status</code>, <code className="text-foreground">version</code>, <code className="text-foreground">uptime</code> (seconds since the serving instance started), <code className="text-foreground">timestamp</code>, and <code className="text-foreground">environment</code>. Use <code className="text-foreground">/api/components</code> for component counts.
             </p>
           </div>
         </div>
@@ -101,26 +175,49 @@ export default function DocsRegistryPage() {
           Registry Item Schema
         </h2>
         <p className="text-xs sm:text-[13px] text-muted-foreground font-light leading-relaxed">
-          Each component definition in the registry adheres to the following TypeScript interface:
+          Each component returned by the API has the following shape. Items also carry the shadcn registry fields <code className="text-foreground">$schema</code>, <code className="text-foreground">type</code> and <code className="text-foreground">title</code>, and each file includes <code className="text-foreground">content</code>, <code className="text-foreground">type</code> and <code className="text-foreground">target</code>.
         </p>
         <div className="rounded-2xl border border-border/80 bg-card/40 p-4 sm:p-5">
           <CodeBlock
             filename="src/types/component.ts"
             language="typescript"
-            code={`export interface ComponentRegistryItem {
-  id: string;
-  name: string;
-  slug: string;
-  description: string;
-  category: "accordion" | "scales" | "buttons" | "cards" | "feedback" | "layout" | "ai-stuff";
-  tags: string[];
-  dependencies: string[];
-  devDependencies?: string[];
-  code: string;
-  interactiveProps?: Record<string, unknown>;
-}`}
+            code={REGISTRY_ITEM_INTERFACE}
           />
         </div>
+        <p className="text-xs sm:text-[13px] text-muted-foreground font-light leading-relaxed">
+          <code className="text-foreground">GET /api/components</code> wraps the items in this envelope:
+        </p>
+        <div className="rounded-2xl border border-border/80 bg-card/40 p-4 sm:p-5">
+          <CodeBlock
+            filename="Response shape"
+            language="typescript"
+            code={LIST_RESPONSE_SHAPE}
+          />
+        </div>
+      </section>
+
+      <section className="space-y-3">
+        <h2 className="text-base sm:text-lg font-sans font-semibold tracking-tight text-foreground">
+          Categories
+        </h2>
+        <p className="text-xs sm:text-[13px] text-muted-foreground font-light leading-relaxed">
+          <code className="text-foreground">ComponentCategory</code> is one of the {categories.length} ids below. Pass the id to <code className="text-foreground">?category=</code>.
+        </p>
+        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+          {categories.map((category) => (
+            <li
+              key={category.value}
+              className="flex items-center justify-between gap-3 rounded-xl border border-border/80 bg-card/40 px-3 py-2"
+            >
+              <code className="font-mono text-[11px] text-foreground">
+                {category.value}
+              </code>
+              <span className="text-muted-foreground font-light">
+                {category.label} ({category.items.length})
+              </span>
+            </li>
+          ))}
+        </ul>
       </section>
 
       <section className="space-y-3">
@@ -128,24 +225,13 @@ export default function DocsRegistryPage() {
           Sample Response Payload
         </h2>
         <p className="text-xs sm:text-[13px] text-muted-foreground font-light leading-relaxed">
-          Executing a GET request against <code className="text-foreground">/api/components/noise</code> produces the following response:
+          Executing a GET request against <code className="text-foreground">/api/components/{SAMPLE_SLUG}</code> produces the following response. It is generated from the live registry data; long strings and arrays are shortened here.
         </p>
         <div className="rounded-2xl border border-border/80 bg-card/40 p-4 sm:p-5">
           <CodeBlock
             filename="Response (application/json)"
             language="json"
-            code={`{
-  "success": true,
-  "data": {
-    "name": "Noise Generator",
-    "slug": "noise",
-    "category": "ai-stuff",
-    "description": "High-performance Perlin / Simplex procedural grain canvas with GSAP blending.",
-    "dependencies": ["gsap", "@gsap/react"],
-    "code": "\\"use client\\";\\\\n\\\\nimport React, { useRef, useEffect } from 'react';..."
-  },
-  "timestamp": "2026-09-23T15:00:00.000Z"
-}`}
+            code={samplePayload}
           />
         </div>
       </section>

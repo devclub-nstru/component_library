@@ -8,6 +8,7 @@ import {
   FileTextIcon,
   CodeIcon,
 } from "@radix-ui/react-icons";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { toast } from "@/registry/ui/toast";
 
@@ -61,6 +62,20 @@ function SnippetBlock({
   );
 }
 
+const UTILS_SOURCE = `import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}`;
+
+const PREREQUISITES = [
+  "React 19 with TypeScript. Components are built and tested in Next.js (App Router); a few import next/link, next/navigation or next/dynamic and need small changes in other frameworks.",
+  "Tailwind CSS v4, with the DevClub theme tokens mapped in @theme inline (see Theming).",
+  "An @/ path alias pointing at your source folder, for example \"@/*\": [\"./src/*\"] in tsconfig.json.",
+  "A cn() helper at @/lib/utils. Every component imports it.",
+];
+
 export default function DocsInstallationPage() {
   const [method, setMethod] = useState<"manual" | "cli">("manual");
   const [copiedMarkdown, setCopiedMarkdown] = useState(false);
@@ -68,23 +83,33 @@ export default function DocsInstallationPage() {
   const handleCopyMarkdown = async () => {
     const md = `# DevClub UI Installation
 
-## Manual Installation
-1. Pick a component from https://ui.devclubxnst.online/components
-2. Copy component source into your \`src/components/ui/\` folder
-3. Install core dependencies:
+## Prerequisites
+${PREREQUISITES.map((item) => `- ${item}`).join("\n")}
+
+## Project setup
 \`\`\`bash
-npm install clsx tailwind-merge gsap @gsap/react motion
+npx shadcn@latest init
+\`\`\`
+This creates \`components.json\`, configures the \`@/\` alias and adds \`lib/utils.ts\`. Without shadcn, create \`lib/utils.ts\` yourself:
+\`\`\`ts
+${UTILS_SOURCE}
 \`\`\`
 
-## CLI Installation
-\`\`\`bash
-npx @devclubnst/ui add [component]
-\`\`\`
-
-## Shadcn Compatibility
+## shadcn CLI
 \`\`\`bash
 npx shadcn@latest add https://ui.devclubxnst.online/r/[component].json
 \`\`\`
+
+## DevClub CLI
+\`\`\`bash
+npx @devclubnst/ui add [component]
+\`\`\`
+Existing files are skipped. Pass \`--overwrite\` to replace them.
+
+## Manual Installation
+1. Pick a component from https://ui.devclubxnst.online/components
+2. Copy the component source into your \`components/ui/\` folder
+3. Install the npm packages listed in the component's Code tab
 `;
     await navigator.clipboard.writeText(md);
     setCopiedMarkdown(true);
@@ -123,6 +148,48 @@ npx shadcn@latest add https://ui.devclubxnst.online/r/[component].json
           them in with a CLI. Your choice is saved and used across the site.
         </p>
       </div>
+
+      <section className="space-y-3">
+        <h2 className="text-base sm:text-lg font-sans font-semibold tracking-tight text-foreground">
+          Prerequisites
+        </h2>
+        <ul className="list-disc pl-5 space-y-1.5 text-xs text-muted-foreground font-light leading-relaxed">
+          {PREREQUISITES.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="space-y-3">
+        <h2 className="text-base sm:text-lg font-sans font-semibold tracking-tight text-foreground">
+          Project setup
+        </h2>
+        <p className="text-xs text-muted-foreground font-light leading-relaxed">
+          Run the shadcn initialiser once per project. It creates{" "}
+          <code className="text-foreground">components.json</code>, configures
+          the <code className="text-foreground">@/</code> path alias, adds{" "}
+          <code className="text-foreground">lib/utils.ts</code> with the{" "}
+          <code className="text-foreground">cn()</code> helper, and writes theme
+          variables to your global CSS file.
+        </p>
+        <SnippetBlock code="npx shadcn@latest init" />
+        <p className="text-xs text-muted-foreground font-light leading-relaxed">
+          Not using shadcn? Install{" "}
+          <code className="text-foreground">clsx</code> and{" "}
+          <code className="text-foreground">tailwind-merge</code>, then create{" "}
+          <code className="text-foreground">lib/utils.ts</code> inside the folder
+          your <code className="text-foreground">@/</code> alias points to:
+        </p>
+        <SnippetBlock code={UTILS_SOURCE} />
+        <p className="text-xs text-muted-foreground font-light leading-relaxed">
+          Finally, add the DevClub tokens and the{" "}
+          <code className="text-foreground">@theme inline</code> mapping from{" "}
+          <Link href="/docs/theming" className="text-foreground underline decoration-border underline-offset-4 hover:decoration-foreground">
+            Theming
+          </Link>{" "}
+          to your global CSS.
+        </p>
+      </section>
 
       <div className="space-y-3">
         <h2 className="text-base sm:text-lg font-sans font-semibold tracking-tight text-foreground">
@@ -255,12 +322,18 @@ npx shadcn@latest add https://ui.devclubxnst.online/r/[component].json
                 4. Install dependencies & use it
               </h3>
               <p className="text-xs text-muted-foreground font-light leading-relaxed">
-                If a component relies on external libraries, its{" "}
+                Each component needs different packages, and its{" "}
                 <strong className="text-foreground font-medium">Code</strong>{" "}
-                tab lists them. Install what it needs:
+                tab lists them. For example, Noise only needs the two packages
+                behind <code className="text-foreground">cn()</code>:
               </p>
 
-              <SnippetBlock code="npm install clsx tailwind-merge gsap @gsap/react motion" />
+              <SnippetBlock code="npm install clsx tailwind-merge" />
+
+              <p className="text-xs text-muted-foreground font-light leading-relaxed">
+                If the component imports other DevClub components, copy those
+                files too.
+              </p>
 
               <p className="text-xs text-muted-foreground font-light leading-relaxed pt-2">
                 Then import and render it like any other component:
@@ -322,6 +395,15 @@ export default function Page() {
               <SnippetBlock code="npx @devclubnst/ui add noise" />
 
               <p className="text-xs text-muted-foreground font-light leading-relaxed">
+                Files that already exist in your project are skipped, so your
+                local edits are kept. Pass{" "}
+                <code className="text-foreground">--overwrite</code> to replace
+                them with the registry version:
+              </p>
+
+              <SnippetBlock code="npx @devclubnst/ui add noise --overwrite" />
+
+              <p className="text-xs text-muted-foreground font-light leading-relaxed">
                 List available components before choosing one to add:
               </p>
 
@@ -340,9 +422,12 @@ export default function Page() {
                 2. Install via shadcn CLI
               </h3>
               <p className="text-xs text-muted-foreground font-light leading-relaxed">
-                Every DevClub UI component complies with the open shadcn
-                registry schema. You can add components with the standard shadcn
-                CLI:
+                Every DevClub UI component is published as a shadcn registry
+                item. Items declare the <code className="text-foreground">utils</code>{" "}
+                helper and any other DevClub items they import as{" "}
+                <code className="text-foreground">registryDependencies</code>, so
+                the shadcn CLI installs them alongside the component, together
+                with its npm dependencies:
               </p>
 
               <SnippetBlock code="npx shadcn@latest add https://ui.devclubxnst.online/r/noise.json" />
@@ -359,7 +444,7 @@ export default function Page() {
                 3. Component Placement
               </h3>
               <p className="text-xs text-muted-foreground font-light leading-relaxed">
-                The CLI uses an <code className="text-foreground">@/</code>-based{" "}
+                The DevClub CLI uses an <code className="text-foreground">@/</code>-based{" "}
                 <code className="text-foreground">aliases.ui</code> path from{" "}
                 <code className="text-foreground">components.json</code>, or
                 selects <code className="text-foreground">src/components/ui</code>{" "}
@@ -367,6 +452,46 @@ export default function Page() {
                 on your project structure. Declared dependencies are installed
                 using your project&apos;s package manager. Add one component per command.
               </p>
+            </section>
+
+            <section className="space-y-2">
+              <h3 className="text-sm font-sans font-medium text-foreground">
+                4. Troubleshooting
+              </h3>
+              <ul className="list-disc pl-5 space-y-2 text-xs text-muted-foreground font-light leading-relaxed">
+                <li>
+                  <strong className="text-foreground font-medium">
+                    Cannot find module <code>@/lib/utils</code>
+                  </strong>
+                  : run <code className="text-foreground">npx shadcn@latest init</code>{" "}
+                  or create <code className="text-foreground">lib/utils.ts</code>{" "}
+                  as shown in Project setup, and check that the{" "}
+                  <code className="text-foreground">@/</code> alias in{" "}
+                  <code className="text-foreground">tsconfig.json</code> points
+                  at the folder that contains it.
+                </li>
+                <li>
+                  <strong className="text-foreground font-medium">
+                    Classes such as <code>bg-background</code> or{" "}
+                    <code>text-muted-foreground</code> have no effect
+                  </strong>
+                  : Tailwind v4 only generates these utilities when the
+                  variables are mapped in an{" "}
+                  <code className="text-foreground">@theme inline</code> block.
+                  Copy the mapping from{" "}
+                  <Link href="/docs/theming" className="text-foreground underline decoration-border underline-offset-4 hover:decoration-foreground">
+                    Theming
+                  </Link>
+                  .
+                </li>
+                <li>
+                  <strong className="text-foreground font-medium">
+                    A file was not updated
+                  </strong>
+                  : the DevClub CLI skips files that already exist. Re-run the
+                  command with <code className="text-foreground">--overwrite</code>.
+                </li>
+              </ul>
             </section>
 
             <section className="space-y-2 pt-4 border-t border-border/60">
