@@ -125,7 +125,7 @@ How a change gets in:
 2. Open a PR to `main` with a [Conventional Commit](https://www.conventionalcommits.org/) title, for example `feat(dither): add grain intensity prop`.
 3. CI runs lint, typecheck, two builds, CodeQL, dependency review, and a supply-chain check that confirms the published registry matches the source.
 4. A bot labels the PR by size, from `size/xs` to `size/excess`. Smaller PRs get reviewed faster, and `excess` PRs get asked to split.
-5. Two maintainers approve and the PR is squash-merged.
+5. One code owner approves and the PR is squash-merged.
 
 ### Local development
 

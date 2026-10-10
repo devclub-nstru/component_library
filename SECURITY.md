@@ -60,7 +60,7 @@ When you submit a security report:
 
 ## How we protect the supply chain
 
-- `main` only changes through pull requests with two code-owner approvals and passing CI. Force pushes and branch deletion are blocked.
+- `main` only changes through pull requests with a code-owner approval and passing CI. Force pushes and branch deletion are blocked.
 - Releases come from the `release` branch. Only one maintainer can update it, and only to a commit that is already on `main`.
 - CI checks that every lockfile entry resolves to the npm registry with a `sha512` hash, fails on high-severity advisories in production dependencies, and verifies that the published registry files match the reviewed source.
 - GitHub Actions are pinned to commit SHAs. Workflows run with read-only tokens by default, and runs on PRs from outside collaborators need a maintainer's approval.
