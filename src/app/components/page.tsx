@@ -18,6 +18,7 @@ import { SpotlightCard } from "@/registry/ui/spotlight-card";
 import { PixelCard } from "@/registry/ui/pixel-card";
 import { HookSidebar } from "@/registry/ui/hook-sidebar";
 import { GitHubActivity } from "@/registry/ui/github-activity";
+import { CandlestickChart } from "@/registry/ui/candlestick-chart";
 import { AnimatedCounter } from "@/registry/ui/animated-counter";
 import { OtpInput } from "@/registry/ui/otp-input";
 import { CodeBlock } from "@/registry/ui/code-block";
@@ -211,6 +212,13 @@ export default function ComponentsPage() {
   const [revealSheetOpen, setRevealSheetOpen] = useState(false);
 
   const previewRenderers: Record<string, React.ReactNode> = {
+    "candlestick-chart": (
+      <CandlestickChart
+        animated={false}
+        ranges={[{ label: "Preview", sessions: 12 }]}
+        className="w-[420px] max-w-none shrink-0 scale-50 sm:max-w-none"
+      />
+    ),
     "scrolling-cards": <ScrollingCardsDemo compact />,
     "scroll-text": <ScrollTextThumbnail />,
     "parallax-strip-transition": <ParallaxStripTransitionDemo compact />,

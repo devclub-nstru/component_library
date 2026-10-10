@@ -61,6 +61,11 @@ export const COMPONENT_CATEGORIES: {
     description: "AI inputs, visual orbs and editing experiences.",
   },
   {
+    value: "charts-and-graphs",
+    label: "Charts & graphs",
+    description: "Interactive charts and visual data exploration.",
+  },
+  {
     value: "display",
     label: "Data & display",
     description: "Counters, activity, code and structured information.",

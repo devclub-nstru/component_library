@@ -131,6 +131,32 @@
       ]
     },
     {
+      "name": "candlestick-chart",
+      "type": "registry:ui",
+      "title": "Candlestick Chart",
+      "description": "An interactive OHLC chart with volume, candle pinning, time ranges, and price-change measurements.",
+      "dependencies": [
+        "gsap",
+        "@gsap/react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/candlestick-chart.tsx",
+          "type": "registry:ui",
+          "target": "@ui/candlestick-chart.tsx"
+        },
+        {
+          "path": "src/lib/utils.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
       "name": "candy-button",
       "type": "registry:ui",
       "title": "Candy Button",
