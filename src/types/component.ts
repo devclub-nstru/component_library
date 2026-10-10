@@ -7,6 +7,7 @@ export type ComponentCategory =
   | "navigation"
   | "navbar"
   | "display"
+  | "charts-and-graphs"
   | "inputs"
   | "sliders-and-toggles"
   | "clocks-and-timers"

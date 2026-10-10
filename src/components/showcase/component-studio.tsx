@@ -45,6 +45,7 @@ import { BentoGrid, BentoCard } from "@/registry/ui/bento-grid";
 import { GlowingBadge } from "@/registry/ui/glowing-badge";
 import { HookSidebar } from "@/registry/ui/hook-sidebar";
 import { GitHubActivity } from "@/registry/ui/github-activity";
+import { CandlestickChart } from "@/registry/ui/candlestick-chart";
 import { AnimatedCounter } from "@/registry/ui/animated-counter";
 import {
   OtpInput,
@@ -1990,6 +1991,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         return (
           <TaskCardDemo config={taskCardConfig} selectedId={selectedTaskCard} />
         );
+      case "candlestick-chart":
+        return <CandlestickChart />;
       case "matrix-clock":
         return <MatrixClockDemo config={matrixClockConfig} />;
       case "flip-clock":

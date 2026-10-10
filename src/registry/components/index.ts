@@ -6,6 +6,7 @@ import animatedButton from "./animated-button.json";
 import asciiHoverButton from "./ascii-hover-button.json";
 import animatedCounter from "./animated-counter.json";
 import bentoGrid from "./bento-grid.json";
+import candlestickChart from "./candlestick-chart.json";
 import candyButton from "./candy-button.json";
 import codeBlock from "./code-block.json";
 import confirmMorph from "./confirm-morph.json";
@@ -71,6 +72,7 @@ export {
   asciiHoverButton,
   animatedCounter,
   bentoGrid,
+  candlestickChart,
   candyButton,
   codeBlock,
   confirmMorph,
@@ -137,6 +139,7 @@ export const componentsList: ComponentRegistryItem[] = [
   asciiHoverButton as ComponentRegistryItem,
   animatedCounter as ComponentRegistryItem,
   bentoGrid as ComponentRegistryItem,
+  candlestickChart as ComponentRegistryItem,
   candyButton as ComponentRegistryItem,
   codeBlock as ComponentRegistryItem,
   confirmMorph as ComponentRegistryItem,

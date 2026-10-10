@@ -7,6 +7,7 @@ import {
   asciiHoverButton,
   animatedCounter,
   bentoGrid,
+  candlestickChart,
   candyButton,
   codeBlock,
   confirmMorph,
@@ -66,6 +67,7 @@ import {
 } from "./components";
 
 export const COMPONENT_REGISTRY: Record<string, ComponentRegistryItem> = {
+  "candlestick-chart": candlestickChart as ComponentRegistryItem,
   "curved-navbar": curvedNavbar as ComponentRegistryItem,
   "fullscreen-navbar": fullscreenNavbar as ComponentRegistryItem,
   "curtain-navbar": curtainNavbar as ComponentRegistryItem,
