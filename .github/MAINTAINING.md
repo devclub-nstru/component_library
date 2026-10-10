@@ -6,7 +6,7 @@ This is the rulebook for people with write access. Contributors should read [CON
 
 | Role | Who | Can do |
 | --- | --- | --- |
-| Code owners | @Yash121l, @AdityaInnovates, @kevish-dev, @PiyushY111, @3ncryptor (see [CODEOWNERS](CODEOWNERS)) | Approve PRs. Two approvals are needed to merge. |
+| Code owners | @Yash121l, @AdityaInnovates, @kevish-dev, @PiyushY111, @3ncryptor (see [CODEOWNERS](CODEOWNERS)) | Approve PRs. One code-owner approval is needed to merge. |
 | Release manager | @Yash121l, through the `component-library-admins` team | Bypass `main` rules when merging a PR, update the `release` branch, move or delete `v*` tags |
 
 Everyone else, including other org owners, follows the rules. Org owners can still edit rulesets, so any ruleset change has to be agreed in an issue first and then committed to [`rulesets/`](rulesets) in a PR.
