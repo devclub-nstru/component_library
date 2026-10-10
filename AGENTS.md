@@ -276,6 +276,61 @@ The priority order is:
 
 The final implementation must be production-quality, clean, structured, maintainable, and consistent with the rest of the codebase.
 
+## 15. Mandatory GitHub Checks and Production Quality Validation
+
+Before considering any task complete, inspect and follow all relevant configurations, workflows, and quality checks defined inside the `.github/` directory.
+
+### GitHub Configuration and Workflow Checks
+
+- Inspect all relevant files inside `.github/`, including GitHub Actions workflows, pull request templates, issue templates, code ownership rules, repository instructions, and other project-specific configurations.
+- Identify all required CI/CD checks, build validations, linting rules, formatting checks, type checks, security scans, dependency audits, and automated tests configured by the repository.
+- Follow existing branch protection requirements, repository rules, and pull request conventions wherever applicable.
+- Ensure all applicable GitHub Actions workflows pass successfully for the changes being made.
+- Never bypass, disable, remove, or weaken existing checks simply to make a build or pull request pass.
+- If a check fails, identify the root cause, fix the underlying issue, and rerun the relevant validation.
+- Do not claim that a check has passed unless it has actually been executed and its result verified.
+- If a check cannot be executed locally or requires GitHub-specific permissions, report the limitation clearly and identify the remaining validation required.
+
+### UI Alignment and Responsive Design Validation
+
+For every UI-related change, ensure that the implementation is visually consistent, properly aligned, and responsive across supported screen sizes.
+
+- Verify layouts on mobile, tablet, laptop, and desktop viewports.
+- Ensure containers, grids, flex layouts, sections, navigation elements, buttons, forms, cards, images, and typography are correctly aligned.
+- Prevent horizontal overflow, overlapping elements, clipped content, unexpected whitespace, broken layouts, and inconsistent spacing.
+- Follow existing design tokens, spacing scales, typography, breakpoints, component variants, and styling conventions.
+- Ensure images, videos, tables, dialogs, dropdowns, navigation menus, and other interactive elements adapt correctly to smaller screens.
+- Verify that fixed, sticky, and absolutely positioned elements do not obscure content or interfere with interaction.
+- Check hover, focus, active, disabled, loading, empty, error, and success states wherever applicable.
+- Preserve semantic HTML, keyboard navigation, accessible focus indicators, appropriate contrast, and reduced-motion support.
+- Ensure all interactive elements work correctly with touch input as well as mouse and keyboard input.
+- Avoid introducing layout shifts, unnecessary animations, or performance regressions.
+
+### Functional, Code Quality, and Regression Checks
+
+- Verify that the requested functionality works as intended, including relevant edge cases and error states.
+- Run the applicable tests, linting, formatting, type checking, production build, and other checks required by the project.
+- Check for console errors, runtime exceptions, broken imports, missing dependencies, failed network requests, and incorrect API integrations where the available environment permits.
+- Verify that existing functionality, routes, components, authentication, data handling, and integrations remain unaffected unless explicitly included in the requested change.
+- Review the final changes for duplicated logic, unused imports, unused variables, dead code, unnecessary dependencies, and accidental modifications to unrelated files.
+- Validate animations, event listeners, subscriptions, and other resources for proper initialization and cleanup.
+- Check for security issues, exposed secrets, unsafe input handling, and unintended changes to permissions or configuration.
+- Use existing project utilities and testing infrastructure rather than introducing unnecessary tools or parallel implementations.
+
+### Final Acceptance Criteria
+
+A task is complete only when:
+
+1. The implementation follows the existing project architecture and all relevant files in the `skills/` directory.
+2. Applicable `.github/` rules, workflows, and repository checks have been inspected and respected.
+3. The requested functionality has been implemented and validated.
+4. UI alignment, responsiveness, accessibility, and interaction behavior have been checked wherever applicable.
+5. Relevant tests, linting, type checks, and production builds have passed, or any unverified checks have been explicitly reported.
+6. No unrelated functionality, repository rules, or existing quality safeguards have been broken.
+7. The final implementation is clean, maintainable, performant, and suitable for production.
+
+**Core principle:** Never mark a task as complete merely because the code has been written or the page looks correct on one screen. Validate the implementation against the project's existing standards, GitHub checks, functional requirements, responsive behavior, and production build requirements before reporting completion.
+
 <!-- BEGIN:nextjs-agent-rules -->
 
 # This is NOT the Next.js you know
