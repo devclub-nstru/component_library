@@ -227,7 +227,7 @@ A single new component usually lands in `small` or `medium`. If yours is bigger,
 ### Review and merge
 
 - CI runs on your PR after a maintainer approves the workflow run. That's GitHub's protection against untrusted code using our runners, so the wait isn't a sign that something is wrong.
-- Every PR needs **two approvals** from code owners, every required check passing, and every review thread resolved.
+- Every PR needs **one approval** from a code owner, every required check passing, and every review thread resolved.
 - New commits pushed after an approval dismiss it. The last push needs a fresh approval from someone other than its author.
 - Your branch has to be up to date with `main` before merging. Use the "Update branch" button.
 - Maintainers squash-merge. Merge commits and rebase merges are disabled.
