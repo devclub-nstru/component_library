@@ -41,6 +41,7 @@ export function ScrollTextDemo({
   config?: ScrollTextConfig;
 }) {
   const scrollerRef = useRef<HTMLDivElement>(null);
+  const { fontSize, lineHeight, maxWidth, ...revealConfig } = config;
 
   return (
     <div
@@ -53,7 +54,7 @@ export function ScrollTextDemo({
       <div aria-hidden="true" className="h-[50%] min-h-24" />
       <div className="px-6 @lg/st:px-10">
         <ScrollText
-          {...config}
+          {...revealConfig}
           text="Scroll systems, cursor effects, text reveals, page transitions, and WebGL scenes, refined on real client launches. Preview the moment you need, install it with one command, then tune it in your own repo. It’s not a black box. It’s not another UI kit. It’s real, inspectable code you own."
           highlightWords={["systems", "refined", "tune", "black", "inspectable", "own"]}
           scroller={scrollerRef}
@@ -62,9 +63,9 @@ export function ScrollTextDemo({
           className="mx-auto text-[clamp(22px,4.4cqi,var(--st-font-size))]"
           style={
             {
-              "--st-font-size": `${config.fontSize}px`,
-              maxWidth: config.maxWidth,
-              lineHeight: config.lineHeight,
+              "--st-font-size": `${fontSize}px`,
+              maxWidth,
+              lineHeight,
             } as CSSProperties
           }
         />

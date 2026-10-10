@@ -184,13 +184,13 @@ export function ScrollText({
   return (
     <p
       ref={rootRef}
-      aria-label={text}
       className={cn(
         "m-0 whitespace-pre-wrap text-[clamp(24px,4vw,48px)] font-medium leading-[1.3] tracking-[-0.035em]",
         className,
       )}
       style={{ color, textAlign: align, ...style }}
     >
+      <span className="sr-only">{text}</span>
       <span aria-hidden="true">
         {text.split(/(\s+)/).map((part, index) =>
           /^\s*$/.test(part) ? part : (
