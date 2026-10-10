@@ -1064,6 +1064,27 @@
       ]
     },
     {
+      "name": "scroll-text",
+      "type": "registry:ui",
+      "title": "Scroll Text",
+      "description": "A smooth, reversible scroll-driven text reveal with Fade, ASCII, and Mosaic effects.",
+      "dependencies": [
+        "gsap",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/scroll-text.tsx",
+          "type": "registry:ui",
+          "target": "@ui/scroll-text.tsx"
+        }
+      ]
+    },
+    {
       "name": "scrolling-cards",
       "type": "registry:ui",
       "title": "Scrolling Cards",

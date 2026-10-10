@@ -139,6 +139,11 @@ import {
   SCROLLING_CARDS_DEFAULT_CONFIG,
 } from "./scrolling-cards-demo";
 import {
+  ScrollTextDemo,
+  ScrollTextControls,
+  SCROLL_TEXT_DEFAULT_CONFIG,
+} from "./scroll-text-demo";
+import {
   LoaderDemo,
   LoaderControls,
   LOADER_DEFAULT_CONFIG,
@@ -1208,6 +1213,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
   const [scrollingCardsConfig, setScrollingCardsConfig] = useState({
     ...SCROLLING_CARDS_DEFAULT_CONFIG,
   });
+  const [scrollTextConfig, setScrollTextConfig] = useState({
+    ...SCROLL_TEXT_DEFAULT_CONFIG,
+  });
   const [loaderConfig, setLoaderConfig] = useState({
     ...LOADER_DEFAULT_CONFIG,
   });
@@ -1994,6 +2002,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         return <ParallaxStripTransitionDemo config={parallaxStripConfig} />;
       case "scrolling-cards":
         return <ScrollingCardsDemo config={scrollingCardsConfig} />;
+      case "scroll-text":
+        return <ScrollTextDemo config={scrollTextConfig} />;
       case "loader":
         return <LoaderDemo config={loaderConfig} />;
       case "image-loader":
@@ -3622,6 +3632,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 activeComponent.slug === "noise" ||
                 activeComponent.slug === "orbit-gallery" ||
                 activeComponent.slug === "scrolling-cards" ||
+                activeComponent.slug === "scroll-text" ||
                 activeComponent.slug === "parallax-strip-transition" ||
                 activeComponent.slug === "fullscreen-navbar" ||
                 activeComponent.slug === "curtain-navbar" ||
@@ -3636,6 +3647,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
             )}
           >
             {activeComponent.slug !== "scrolling-cards" &&
+              activeComponent.slug !== "scroll-text" &&
               activeComponent.slug !== "parallax-strip-transition" && (
               <div className="absolute inset-0 bg-[radial-gradient(currentColor_1px,transparent_1px)] text-foreground/8 bg-size-[20px_20px] pointer-events-none" />
             )}
@@ -3687,6 +3699,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       activeComponent.slug === "noise" ||
                       activeComponent.slug === "orbit-gallery" ||
                       activeComponent.slug === "scrolling-cards" ||
+                      activeComponent.slug === "scroll-text" ||
                       activeComponent.slug === "parallax-strip-transition" ||
                       activeComponent.slug === "fullscreen-navbar" ||
                       activeComponent.slug === "curtain-navbar" ||
@@ -5578,6 +5591,13 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 <ScrollingCardsControls
                   config={scrollingCardsConfig}
                   onChange={setScrollingCardsConfig}
+                />
+              )}
+
+              {activeComponent.slug === "scroll-text" && (
+                <ScrollTextControls
+                  config={scrollTextConfig}
+                  onChange={setScrollTextConfig}
                 />
               )}
 
