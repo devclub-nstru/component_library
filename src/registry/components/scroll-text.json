@@ -36,8 +36,8 @@
     "Initializes after native scroll-container refs are attached"
   ],
   "anatomy": [
-    "<ScrollText> semantic paragraph with the complete text in a visually hidden span",
-    "Whitespace-preserving visual word spans hidden from screen readers",
+    "<ScrollText> semantic paragraph with the full text rendered once in an sr-only span",
+    "Whitespace-preserving visual word spans marked aria-hidden",
     "A shared staggered timeline connected to one ScrollTrigger"
   ],
   "physics": {
