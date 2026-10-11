@@ -60,6 +60,7 @@ import taskCard from "./task-card.json";
 import themeToggle from "./theme-toggle.json";
 import toast from "./toast.json";
 import twitterCard from "./twitter-card.json";
+import calendarCard from "./calendar-card.json";
 import dateRangePicker from "./date-range-picker.json";
 import segmentedProgress from "./segmented-progress.json";
 import stepper from "./stepper.json";
@@ -126,6 +127,7 @@ export {
   themeToggle,
   toast,
   twitterCard,
+  calendarCard,
   dateRangePicker,
   segmentedProgress,
   stepper,
@@ -193,6 +195,7 @@ export const componentsList: ComponentRegistryItem[] = [
   themeToggle as ComponentRegistryItem,
   toast as ComponentRegistryItem,
   twitterCard as ComponentRegistryItem,
+  calendarCard as ComponentRegistryItem,
   dateRangePicker as ComponentRegistryItem,
   segmentedProgress as ComponentRegistryItem,
   stepper as ComponentRegistryItem,

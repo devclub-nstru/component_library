@@ -131,6 +131,28 @@
       ]
     },
     {
+      "name": "calendar-card",
+      "type": "registry:ui",
+      "title": "Calendar Card",
+      "description": "A tactile calendar with animated date selection, event dots, hover event popups and an optional event creation form.",
+      "dependencies": [
+        "gsap",
+        "@gsap/react",
+        "lucide-react",
+        "@radix-ui/react-dialog"
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/calendar-card.tsx",
+          "type": "registry:ui",
+          "target": "@ui/calendar-card.tsx"
+        }
+      ]
+    },
+    {
       "name": "candlestick-chart",
       "type": "registry:ui",
       "title": "Candlestick Chart",

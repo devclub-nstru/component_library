@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, useEffect, useRef } from "react";
+import React, { useState, useMemo, useEffect, useRef, useSyncExternalStore } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -107,6 +107,7 @@ import { Volume2, VolumeX } from "lucide-react";
 import { MacSwitch, type MacSwitchColor } from "@/registry/ui/mac-switch";
 import { SpotlightSearch } from "@/registry/ui/spotlight-search";
 import { ProfileMenu } from "@/registry/ui/profile-menu";
+import { CalendarCard, type CalendarEvent } from "@/registry/ui/calendar-card";
 import { DateRangePicker } from "@/registry/ui/date-range-picker";
 import { RevealSheet, type RevealSheetSide } from "@/registry/ui/reveal-sheet";
 import {
@@ -642,6 +643,10 @@ const PROXIMITY_DEMO_SECTIONS: DemoSection[] = [
 
   { id: "appendix", label: "Specification Appendix", kind: "title", level: 1 },
 ];
+
+const subscribeCalendarToday = () => () => {};
+const getCalendarToday = () => new Date().setHours(0, 0, 0, 0);
+const getServerCalendarToday = () => 0;
 
 const PALETTE = [
   { id: "blue", hex: "#3B82F6", label: "Electric Blue" },
@@ -1196,6 +1201,28 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     TASK_CARD_DEFAULT_CONFIG,
   );
   const [selectedTaskCard, setSelectedTaskCard] = useState("interface");
+  const [calendarConfig, setCalendarConfig] = useState({
+    accentColor: "#ff675c",
+    density: "comfortable" as "comfortable" | "compact",
+    weekStartsOn: 1 as 0 | 1,
+    showEvents: true,
+    showProgress: true,
+  });
+  const [calendarDate, setCalendarDate] = useState<Date>();
+  const [addedCalendarEvents, setAddedCalendarEvents] = useState<CalendarEvent[]>([]);
+  const calendarToday = useSyncExternalStore(subscribeCalendarToday, getCalendarToday, getServerCalendarToday);
+  const calendarEvents = useMemo(() => {
+    if (!calendarDate && !calendarToday) return [];
+    const shownDate = calendarDate ?? new Date(calendarToday);
+    const prefix = `${shownDate.getFullYear()}-${String(shownDate.getMonth() + 1).padStart(2, "0")}`;
+    return [
+      { id: "planning", date: `${prefix}-05`, title: "Weekly planning", time: "09:00", color: "#a5b4fc" },
+      { id: "review", date: `${prefix}-11`, title: "Design review", time: "10:30", color: "#fbbf24", assignee: "Design team" },
+      { id: "coffee", date: `${prefix}-11`, title: "Coffee with Alex", time: "14:00", color: "#6ee7b7" },
+      { id: "workshop", date: `${prefix}-18`, title: "Creative workshop", time: "11:00", color: "#a5b4fc" },
+      { id: "launch", date: `${prefix}-24`, title: "Launch day", color: "#fbbf24" },
+    ];
+  }, [calendarDate, calendarToday]);
   const [matrixClockConfig, setMatrixClockConfig] = useState({
     ...MATRIX_CLOCK_DEFAULT_CONFIG,
   });
@@ -2122,6 +2149,19 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
             <div className="w-full flex justify-center">
               <ProfileMenu />
             </div>
+          </div>
+        );
+      case "calendar-card":
+        return (
+          <div className="flex min-h-[32rem] w-full items-center justify-center p-2 sm:p-8">
+            <Toaster />
+            <CalendarCard
+              {...calendarConfig}
+              events={[...calendarEvents, ...addedCalendarEvents]}
+              onEventAdd={(event) => setAddedCalendarEvents((events) => [...events, event])}
+              onChange={setCalendarDate}
+              onEventClick={(event) => toast.info(event.title, { description: `${event.date} · ${event.time ?? "All day"}` })}
+            />
           </div>
         );
       case "date-range-picker":
@@ -5548,6 +5588,44 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 </div>
               )}
 
+              {activeComponent.slug === "calendar-card" && (
+                <div className="flex flex-col gap-4 p-4 font-sans">
+                  <div className="flex items-center justify-between gap-6">
+                    <span className="text-sm font-medium">Calendar</span>
+                    <button type="button" onClick={() => setCalendarConfig({ accentColor: "#ff675c", density: "comfortable", weekStartsOn: 1, showEvents: true, showProgress: true })} className="rounded-lg px-3 py-2 text-xs text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400">Reset</button>
+                  </div>
+                  <span className="text-xs text-muted-foreground">Accent color</span>
+                  <ColorSwatches
+                    options={[
+                      { value: "#ff675c", label: "Coral", color: "#ff675c" },
+                      { value: "#a5b4fc", label: "Lavender", color: "#a5b4fc" },
+                      { value: "#6ee7b7", label: "Mint", color: "#6ee7b7" },
+                      { value: "#fbbf24", label: "Amber", color: "#fbbf24" },
+                    ]}
+                    value={calendarConfig.accentColor}
+                    onChange={(accentColor) => setCalendarConfig((config) => ({ ...config, accentColor }))}
+                  />
+                  <span className="text-xs text-muted-foreground">Spacing</span>
+                  <SegmentedControlGroup aria-label="Calendar spacing" className="w-full">
+                    {(["comfortable", "compact"] as const).map((density) => (
+                      <button key={density} type="button" aria-pressed={calendarConfig.density === density} onClick={() => setCalendarConfig((config) => ({ ...config, density }))} className="relative z-10 min-h-10 flex-1 rounded-lg px-2 text-xs capitalize focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400">{density}</button>
+                    ))}
+                  </SegmentedControlGroup>
+                  <span className="text-xs text-muted-foreground">Week starts on</span>
+                  <SegmentedControlGroup aria-label="Calendar week start" className="w-full">
+                    {([1, 0] as const).map((weekStartsOn) => (
+                      <button key={weekStartsOn} type="button" aria-pressed={calendarConfig.weekStartsOn === weekStartsOn} onClick={() => setCalendarConfig((config) => ({ ...config, weekStartsOn }))} className="relative z-10 min-h-10 flex-1 rounded-lg px-2 text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400">{weekStartsOn === 1 ? "Monday" : "Sunday"}</button>
+                    ))}
+                  </SegmentedControlGroup>
+                  {([ ["showEvents", "Show event popups"], ["showProgress", "Show month progress"] ] as const).map(([key, label]) => (
+                    <label key={key} className="flex cursor-pointer items-center justify-between gap-4 text-xs">
+                      {label}
+                      <input type="checkbox" checked={calendarConfig[key]} onChange={(event) => setCalendarConfig((config) => ({ ...config, [key]: event.target.checked }))} className="size-4 accent-orange-500" />
+                    </label>
+                  ))}
+                  <p className="max-w-64 text-[11px] text-muted-foreground">Hover, focus or tap a marked date for details. Use Add event to schedule and assign an event. Added events last for this preview session.</p>
+                </div>
+              )}
               {activeComponent.slug === "task-card" && (
                 <TaskCardControls
                   config={taskCardConfig}

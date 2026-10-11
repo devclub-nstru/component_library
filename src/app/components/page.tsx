@@ -18,6 +18,7 @@ import { SpotlightCard } from "@/registry/ui/spotlight-card";
 import { PixelCard } from "@/registry/ui/pixel-card";
 import { HookSidebar } from "@/registry/ui/hook-sidebar";
 import { GitHubActivity } from "@/registry/ui/github-activity";
+import { CalendarCard } from "@/registry/ui/calendar-card";
 import { CandlestickChart } from "@/registry/ui/candlestick-chart";
 import { AnimatedCounter } from "@/registry/ui/animated-counter";
 import { OtpInput } from "@/registry/ui/otp-input";
@@ -212,6 +213,12 @@ export default function ComponentsPage() {
   const [revealSheetOpen, setRevealSheetOpen] = useState(false);
 
   const previewRenderers: Record<string, React.ReactNode> = {
+    "calendar-card": (
+      <CalendarCard
+        showProgress={false}
+        className="w-[600px] max-w-none shrink-0 scale-[0.35] sm:max-w-none"
+      />
+    ),
     "candlestick-chart": (
       <CandlestickChart
         animated={false}
