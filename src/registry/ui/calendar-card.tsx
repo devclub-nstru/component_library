@@ -353,13 +353,13 @@ export function CalendarCard({
           <div className={cn("flex items-start justify-between gap-3 @min-[480px]:flex-col-reverse @min-[480px]:gap-5", onEventAdd && "flex-col-reverse gap-4")}>
             <div className="flex min-w-0 items-center gap-4 @min-[480px]:block">
               <span className="mb-3 hidden text-[10px] font-medium uppercase tracking-[0.18em] text-zinc-400 @min-[480px]:block">Selected date</span>
-              <div data-calendar-day-number className="relative h-14 shrink-0 overflow-hidden text-5xl font-medium leading-none tracking-[-0.07em] tabular-nums @min-[480px]:h-20 @min-[480px]:text-7xl" aria-hidden="true">
+              <div data-calendar-day-number className="relative h-14 w-[2ch] shrink-0 overflow-hidden text-5xl font-medium leading-none tracking-[-0.07em] tabular-nums @min-[480px]:h-20 @min-[480px]:text-7xl" aria-hidden="true">
                 <span data-calendar-day-out className="absolute inset-x-0 top-0 opacity-0" />
                 <span data-calendar-day className="block">{day}</span>
               </div>
-              <button ref={titleRef} type="button" aria-expanded={pickerYear !== null} aria-controls={panelId} aria-label="Choose month and year" onClick={() => setPickerYear(pickerYear === null ? year : null)} className={cn(buttonClass, "grid min-h-11 grid-cols-[auto_auto] items-center gap-x-2 px-2 py-1 text-left text-base hover:bg-white/5 @min-[480px]:-ml-2 @min-[480px]:flex @min-[480px]:min-h-0 @min-[480px]:gap-1")}>
-                <span className="col-start-1 font-medium">{months[month]}</span>
-                <span className="col-start-1 row-start-2 text-sm text-zinc-400 @min-[480px]:text-base">{year}</span>
+              <button ref={titleRef} type="button" aria-expanded={pickerYear !== null} aria-controls={panelId} aria-label="Choose month and year" onClick={() => setPickerYear(pickerYear === null ? year : null)} className={cn(buttonClass, "grid min-h-11 flex-1 grid-cols-[1fr_auto] items-center gap-x-2 px-2 py-1 text-left text-base hover:bg-white/5 @min-[480px]:-ml-2 @min-[480px]:flex @min-[480px]:flex-none @min-[480px]:min-h-0 @min-[480px]:gap-1")}>
+                <span className="col-start-1 font-medium @min-[480px]:w-24 @min-[480px]:shrink-0">{months[month]}</span>
+                <span className="col-start-1 row-start-2 text-sm text-zinc-400 @min-[480px]:w-[4ch] @min-[480px]:shrink-0 @min-[480px]:text-base @min-[480px]:tabular-nums">{year}</span>
                 <ChevronDown aria-hidden="true" size={14} className={cn("col-start-2 row-span-2 row-start-1 text-zinc-400", pickerYear !== null && "rotate-180")} />
               </button>
             </div>
@@ -387,7 +387,7 @@ export function CalendarCard({
           </div>}
         </div>
 
-        <div id={panelId} data-calendar-panel className="min-h-64 @min-[480px]:col-start-2 @min-[480px]:row-span-2 @min-[480px]:row-start-1 @min-[480px]:min-h-86 @min-[480px]:border-l @min-[480px]:border-white/5 @min-[480px]:pl-8" onKeyDown={(event) => { if (event.key === "Escape" && pickerYear !== null) { setPickerYear(null); titleRef.current?.focus(); } }}>
+        <div id={panelId} data-calendar-panel className="min-h-72 @min-[480px]:col-start-2 @min-[480px]:row-span-2 @min-[480px]:row-start-1 @min-[480px]:min-h-86 @min-[480px]:border-l @min-[480px]:border-white/5 @min-[480px]:pl-8" onKeyDown={(event) => { if (event.key === "Escape" && pickerYear !== null) { setPickerYear(null); titleRef.current?.focus(); } }}>
           {pickerYear !== null ? (
             <div>
               <div className="mb-5 flex items-center justify-between">
@@ -486,7 +486,7 @@ export function CalendarCard({
         )}
         <div className="mt-4 flex items-center justify-between border-t border-white/5 pt-3 @min-[480px]:col-start-1 @min-[480px]:row-start-2 @min-[480px]:self-end">
           <button type="button" aria-label="Previous month" onClick={() => { pick(inMonth(date, year, month - 1)); setPickerYear(null); }} className={cn(buttonClass, "flex h-11 w-11 items-center justify-center text-zinc-400 @min-[480px]:h-8 @min-[480px]:w-8 hover:bg-white/5 hover:text-white")}><ChevronLeft aria-hidden="true" size={15} /></button>
-          <span className="text-xs font-medium text-zinc-400">{weekdays[(date.getDay() + 6) % 7].slice(0, 3)}, {months[month].slice(0, 3)} {day}</span>
+          <span className="flex-1 text-center text-xs font-medium text-zinc-400">{weekdays[(date.getDay() + 6) % 7].slice(0, 3)}, {months[month].slice(0, 3)} {day}</span>
           <button type="button" aria-label="Advance one month" onClick={() => { pick(inMonth(date, year, month + 1)); setPickerYear(null); }} className={cn(buttonClass, "flex h-11 w-11 items-center justify-center text-zinc-400 @min-[480px]:h-8 @min-[480px]:w-8 hover:bg-white/5 hover:text-white")}><ChevronRight aria-hidden="true" size={15} /></button>
         </div>
         <span role="status" className="sr-only">Selected date: {selectedLabel}{events.length > 0 && `, ${selectedEvents.length} ${selectedEvents.length === 1 ? "event" : "events"}`}</span>
