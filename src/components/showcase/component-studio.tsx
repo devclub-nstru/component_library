@@ -645,8 +645,8 @@ const PROXIMITY_DEMO_SECTIONS: DemoSection[] = [
 ];
 
 const subscribeCalendarToday = () => () => {};
-const getCalendarToday = () => new Date().toDateString();
-const getServerCalendarToday = () => "";
+const getCalendarToday = () => new Date().setHours(0, 0, 0, 0);
+const getServerCalendarToday = () => 0;
 
 const PALETTE = [
   { id: "blue", hex: "#3B82F6", label: "Electric Blue" },

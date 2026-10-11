@@ -49,8 +49,8 @@ const weekdays = [
   "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday",
 ];
 const subscribe = () => () => {};
-const readToday = () => new Date().toDateString();
-const serverToday = () => "";
+const readToday = () => new Date().setHours(0, 0, 0, 0);
+const serverToday = () => 0;
 
 function inMonth(date: Date, year: number, month: number) {
   return new Date(
@@ -67,7 +67,7 @@ export function CalendarCard({
 }: CalendarCardProps) {
   const today = useSyncExternalStore(subscribe, readToday, serverToday);
   const [internalDate, setInternalDate] = useState(defaultValue);
-  const date = value ?? internalDate ?? new Date(today || "January 1, 2000");
+  const date = value ?? internalDate ?? new Date(today);
   const ready = Boolean(value || internalDate || today);
   const year = date.getFullYear();
   const month = date.getMonth();
@@ -76,6 +76,7 @@ export function CalendarCard({
   const rootRef = useRef<HTMLDivElement>(null);
   const popupRef = useRef<HTMLDivElement>(null);
   const eventTitleRef = useRef<HTMLInputElement>(null);
+  const eventCounter = useRef(0);
   const popupAnchor = useRef<HTMLButtonElement | null>(null);
   const closePopupTween = useRef<gsap.core.Tween | null>(null);
   const [popupDay, setPopupDay] = useState<number | null>(null);
@@ -335,6 +336,7 @@ export function CalendarCard({
     <div
       ref={rootRef}
       data-slot="calendar-card"
+      role="group"
       aria-label="Date picker"
       aria-busy={!ready}
       onKeyDown={(event) => { if (event.key === "Escape" && popupOpen) { event.stopPropagation(); popupAnchor.current?.focus(); setPopupDay(null); } }}
@@ -413,8 +415,8 @@ export function CalendarCard({
             </div>
           ) : (
             <div role="group" aria-label={`${months[month]} ${year}`}>
-              <div className="mb-3 grid grid-cols-7 @min-[480px]:mb-5">
-                {week.map((name) => <span key={name} aria-label={name} className="text-center text-xs font-medium text-zinc-400">{name[0]}</span>)}
+              <div aria-hidden="true" className="mb-3 grid grid-cols-7 @min-[480px]:mb-5">
+                {week.map((name) => <span key={name} className="text-center text-xs font-medium text-zinc-400">{name[0]}</span>)}
               </div>
               <div data-calendar-grid className="relative grid grid-cols-7 gap-y-1 @min-[480px]:gap-y-2">
                 <span data-calendar-highlight aria-hidden="true" className="pointer-events-none absolute left-0 top-0 h-[var(--calendar-cell-mobile)] w-[calc(100%/7)] rounded-lg bg-[var(--calendar-accent)] opacity-0 shadow-[0_2px_12px_color-mix(in_srgb,var(--calendar-accent)_16%,transparent)] @min-[480px]:h-[var(--calendar-cell-desktop)]" />
@@ -506,7 +508,7 @@ export function CalendarCard({
           const titleInput = form.elements.namedItem("title") as HTMLInputElement;
           if (!title) { titleInput.setCustomValidity("Enter an event title."); titleInput.reportValidity(); return; }
           const eventDate = String(fields.get("date"));
-          onEventAdd?.({ id: crypto.randomUUID(), date: eventDate, title, time: String(fields.get("time") ?? "") || undefined, assignee: String(fields.get("assignee") ?? "").trim() || undefined, color: String(fields.get("color")) });
+          onEventAdd?.({ id: `${panelId}-event-${++eventCounter.current}`, date: eventDate, title, time: String(fields.get("time") ?? "") || undefined, assignee: String(fields.get("assignee") ?? "").trim() || undefined, color: String(fields.get("color")) });
           pick(new Date(`${eventDate}T00:00:00`));
           setEventFormDate(null);
         }}>
