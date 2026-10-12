@@ -3737,7 +3737,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 viewport === "tablet" &&
                   "border border-border bg-background dark:bg-[#09090b] shadow-[0_25px_60px_rgba(0,0,0,0.08)] dark:shadow-[0_25px_60px_rgba(0,0,0,0.9)] my-auto max-h-[90vh]",
                 viewport === "mobile" &&
-                  "border-[11px] border-black bg-background dark:bg-[#09090b] shadow-[0_0_0_1.5px_#52525b,0_0_0_3px_#18181b,0_25px_60px_rgba(0,0,0,0.18)] dark:shadow-[0_0_0_1.5px_#3f3f46,0_0_0_3px_#09090b,0_25px_60px_rgba(0,0,0,0.9)] my-auto max-h-[90vh] mx-[15px]",
+                  "border-[11px] border-black bg-background dark:bg-[#09090b] shadow-[0_0_0_1.5px_#52525b,0_0_0_3px_#18181b,0_25px_60px_rgba(0,0,0,0.18)] dark:shadow-[0_0_0_1.5px_#3f3f46,0_0_0_3px_#09090b,0_25px_60px_rgba(0,0,0,0.9)] my-auto mx-[15px]",
                 activeComponent.slug === "parallax-strip-transition" &&
                   viewport !== "desktop" &&
                   "min-h-0 max-h-full",
