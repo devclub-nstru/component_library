@@ -208,6 +208,11 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { getComponentCategories, getCategoryLabel } from "@/lib/registry";
 import { MobilePanel } from "@/components/layout/mobile-panel";
+import {
+  PhoneHomeIndicator,
+  PhoneSideButtons,
+  PhoneStatusBar,
+} from "@/components/showcase/phone-frame";
 import { useMediaQuery } from "@/lib/use-media-query";
 import { CustomizationDock } from "./customization-dock";
 import { SegmentedControl, SegmentedControlGroup } from "./segmented-control";
@@ -3713,33 +3718,40 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               animate={{
                 width:
                   viewport === "mobile"
-                    ? 390
+                    ? 412
                     : viewport === "tablet"
                       ? 768
                       : "100%",
                 height:
                   viewport === "mobile"
-                    ? 640
+                    ? 800
                     : viewport === "tablet"
                       ? 520
                       : "100%",
                 borderRadius:
-                  viewport === "mobile" ? 40 : viewport === "tablet" ? 24 : 0,
+                  viewport === "mobile" ? 55 : viewport === "tablet" ? 24 : 0,
               }}
               className={cn(
-                "relative min-w-0 max-w-full max-h-full flex flex-col items-center justify-center overflow-hidden transition-colors",
-                viewport !== "desktop" &&
+                "relative min-w-0 max-w-full max-h-full flex flex-col items-center justify-center transition-colors",
+                viewport !== "mobile" && "overflow-hidden",
+                viewport === "tablet" &&
                   "border border-border bg-background dark:bg-[#09090b] shadow-[0_25px_60px_rgba(0,0,0,0.08)] dark:shadow-[0_25px_60px_rgba(0,0,0,0.9)] my-auto max-h-[90vh]",
+                viewport === "mobile" &&
+                  "border-[11px] border-black bg-background dark:bg-[#09090b] shadow-[0_0_0_1.5px_#52525b,0_0_0_3px_#18181b,0_25px_60px_rgba(0,0,0,0.18)] dark:shadow-[0_0_0_1.5px_#3f3f46,0_0_0_3px_#09090b,0_25px_60px_rgba(0,0,0,0.9)] my-auto max-h-[90vh] mx-[15px]",
                 activeComponent.slug === "parallax-strip-transition" &&
                   viewport !== "desktop" &&
                   "min-h-0 max-h-full",
               )}
             >
-              {viewport === "mobile" && (
-                <div className="absolute top-3 inset-x-0 flex justify-center z-30 pointer-events-none">
-                  <div className="w-20 h-3.5 bg-black rounded-full border border-white/10" />
-                </div>
-              )}
+              {viewport === "mobile" && <PhoneSideButtons />}
+
+              <div
+                className={cn(
+                  "relative flex flex-col w-full h-full min-h-0 min-w-0 overflow-hidden",
+                  viewport === "mobile" && "rounded-[44px]",
+                )}
+              >
+              {viewport === "mobile" && <PhoneStatusBar />}
 
               <AnimatePresence mode="wait" initial={false}>
                 <motion.div
@@ -3749,7 +3761,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   exit={{ opacity: 0, scale: 0.97, y: -10 }}
                   transition={panelSpring}
                   className={cn(
-                    "studio-preview w-full h-full min-h-0 min-w-0 flex items-center justify-center overflow-auto",
+                    "studio-preview w-full flex-1 min-h-0 min-w-0 flex items-center justify-center overflow-auto",
                     activeComponent.slug === "dither" ||
                       activeComponent.slug === "noise" ||
                       activeComponent.slug === "orbit-gallery" ||
@@ -3771,6 +3783,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   {renderComponentPreview(activeComponent.slug, activeColor)}
                 </motion.div>
               </AnimatePresence>
+
+              {viewport === "mobile" && <PhoneHomeIndicator />}
+              </div>
             </motion.div>
 
             <CustomizationDock key={activeComponent.slug}>
