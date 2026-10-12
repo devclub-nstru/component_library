@@ -27,6 +27,19 @@ Copy the source into your project and change whatever you want. There's no runti
 
 </div>
 
+<details>
+<summary>Workflow Card interaction preview</summary>
+
+A single theme-synced checklist card with soft disclosure, gliding hover feedback, status selection, and teammate filters.
+
+| Desktop | Mobile |
+| :---: | :---: |
+| ![Workflow Card desktop preview](.github/assets/workflow-card-desktop.png) | ![Workflow Card mobile preview](.github/assets/workflow-card-mobile.png) |
+
+[Desktop recording](.github/assets/workflow-card-desktop.mp4) · [Mobile recording](.github/assets/workflow-card-mobile.mp4)
+
+</details>
+
 ## What you get
 
 - 59 components written in React and TypeScript and styled with Tailwind CSS.

@@ -31,6 +31,7 @@ import { AiOrb } from "@/registry/ui/ai-orb";
 import { TwitterCard } from "@/registry/ui/twitter-card";
 import { ToasterDemo } from "@/registry/ui/toast";
 import { TaskList } from "@/registry/ui/task-list";
+import { WorkflowCardDemo } from "@/components/showcase/workflow-card-demo";
 import { TaskCard } from "@/registry/ui/task-card";
 import { TASK_CARD_DEMO_TASKS } from "@/components/showcase/task-card-demo";
 import { FileUpload } from "@/registry/ui/file-upload";
@@ -236,6 +237,7 @@ export default function ComponentsPage() {
     "curved-navbar": <CurvedNavbarDemo compact />,
     "fullscreen-navbar": <FullscreenNavbarDemo compact />,
     "curtain-navbar": <CurtainNavbarDemo compact />,
+    "workflow-card": <WorkflowCardDemo compact />,
     "task-card": (
       <div className="w-full max-w-76 scale-75">
         <TaskCard {...TASK_CARD_DEMO_TASKS[0]} hoverLift={0} padding={16} />
