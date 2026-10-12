@@ -1443,6 +1443,30 @@
           "target": "@ui/twitter-card.tsx"
         }
       ]
+    },
+    {
+      "name": "workflow-card",
+      "type": "registry:ui",
+      "title": "Workflow Card",
+      "description": "A compact project card that unfolds into grouped checklists with soft spring motion, progress rings, status selection and teammate filters.",
+      "dependencies": [
+        "gsap",
+        "@gsap/react",
+        "motion",
+        "lucide-react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/workflow-card.tsx",
+          "type": "registry:ui",
+          "target": "@ui/workflow-card.tsx"
+        }
+      ]
     }
   ]
 }

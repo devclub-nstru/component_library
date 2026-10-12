@@ -125,6 +125,11 @@ import {
   TaskCardControls,
   TASK_CARD_DEFAULT_CONFIG,
 } from "./task-card-demo";
+import {
+  WorkflowCardDemo,
+  WorkflowCardControls,
+  WORKFLOW_CARD_DEFAULT_CONFIG,
+} from "./workflow-card-demo";
 import OrbitGalleryDemo, {
   ORBIT_GALLERY_DEFAULT_CONFIG,
   OrbitGalleryControls,
@@ -1201,6 +1206,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     TASK_CARD_DEFAULT_CONFIG,
   );
   const [selectedTaskCard, setSelectedTaskCard] = useState("interface");
+  const [workflowCardConfig, setWorkflowCardConfig] = useState(
+    WORKFLOW_CARD_DEFAULT_CONFIG,
+  );
   const [calendarConfig, setCalendarConfig] = useState({
     accentColor: "#ff675c",
     density: "comfortable" as "comfortable" | "compact",
@@ -1660,6 +1668,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     activeComponent.slug !== "slider" &&
     activeComponent.slug !== "pixel-card" &&
     activeComponent.slug !== "task-card" &&
+    activeComponent.slug !== "workflow-card" &&
     activeComponent.slug !== "orb" &&
     activeComponent.slug !== "theme-toggle" &&
     activeComponent.slug !== "animated-theme-toggler" &&
@@ -2014,6 +2023,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
             <FocusTestimonials />
           </div>
         );
+      case "workflow-card":
+        return <WorkflowCardDemo config={workflowCardConfig} />;
       case "task-card":
         return (
           <TaskCardDemo config={taskCardConfig} selectedId={selectedTaskCard} />
@@ -3683,7 +3694,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 activeComponent.slug === "grid-image-loader" ||
                 activeComponent.slug === "matrix-clock" ||
                 activeComponent.slug === "flip-clock" ||
-                activeComponent.slug === "task-card") &&
+                activeComponent.slug === "task-card" ||
+                activeComponent.slug === "workflow-card") &&
                 viewport === "desktop"
                 ? "p-0"
                 : "p-2 sm:p-6",
@@ -3750,7 +3762,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       activeComponent.slug === "grid-image-loader" ||
                       activeComponent.slug === "matrix-clock" ||
                       activeComponent.slug === "flip-clock" ||
-                      activeComponent.slug === "task-card"
+                      activeComponent.slug === "task-card" ||
+                      activeComponent.slug === "workflow-card"
                       ? "p-0"
                       : "p-2 sm:p-6",
                   )}
@@ -5625,6 +5638,12 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   ))}
                   <p className="max-w-64 text-[11px] text-muted-foreground">Hover, focus or tap a marked date for details. Use Add event to schedule and assign an event. Added events last for this preview session.</p>
                 </div>
+              )}
+              {activeComponent.slug === "workflow-card" && (
+                <WorkflowCardControls
+                  config={workflowCardConfig}
+                  onChange={setWorkflowCardConfig}
+                />
               )}
               {activeComponent.slug === "task-card" && (
                 <TaskCardControls
