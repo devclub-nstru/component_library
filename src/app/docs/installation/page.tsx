@@ -11,6 +11,7 @@ import {
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { toast } from "@/registry/ui/toast";
+import { captureEvent } from "@/lib/analytics";
 
 function SnippetBlock({
   code,
@@ -24,6 +25,7 @@ function SnippetBlock({
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(code);
+    captureEvent("docs_copied", { page: "installation", kind: "snippet" });
     setCopied(true);
     toast.success("Copied to clipboard");
     setTimeout(() => setCopied(false), 2000);
@@ -112,6 +114,7 @@ Existing files are skipped. Pass \`--overwrite\` to replace them. Requires @devc
 3. Install the npm packages listed in the component's Code tab
 `;
     await navigator.clipboard.writeText(md);
+    captureEvent("docs_copied", { page: "installation", kind: "markdown" });
     setCopiedMarkdown(true);
     toast.success("Documentation copied as Markdown");
     setTimeout(() => setCopiedMarkdown(false), 2000);

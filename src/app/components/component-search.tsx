@@ -20,6 +20,7 @@ import {
 import gsap from "gsap";
 import { fetchComponents, getCategoryLabel } from "@/lib/registry";
 import { getAllComponents } from "@/registry";
+import { captureEvent } from "@/lib/analytics";
 import { CandyButton } from "@/registry/ui/candy-button";
 import type { ComponentRegistryItem } from "@/types/component";
 
@@ -178,6 +179,12 @@ function SearchPanel({
           onSubmit={(event) => {
             event.preventDefault();
             if (searchTerm && recommendations[0]) {
+              captureEvent("component_search_selected", {
+                slug: recommendations[0].slug,
+                position: 1,
+                query_length: searchTerm.length,
+                result_count: recommendations.length,
+              });
               onOpenChange(false);
               router.push(`/components/${recommendations[0].slug}`);
             }
@@ -229,7 +236,7 @@ function SearchPanel({
                   className="relative z-10 flex flex-col gap-1"
                   aria-label="Component recommendations"
                 >
-                  {recommendations.map((item) => (
+                  {recommendations.map((item, index) => (
                     <li key={item.slug}>
                       <Link
                         ref={(node) => {
@@ -238,7 +245,15 @@ function SearchPanel({
                           else recommendationRefs.current.delete(item.slug);
                         }}
                         href={`/components/${item.slug}`}
-                        onClick={() => onOpenChange(false)}
+                        onClick={() => {
+                          captureEvent("component_search_selected", {
+                            slug: item.slug,
+                            position: index + 1,
+                            query_length: searchTerm.length,
+                            result_count: recommendations.length,
+                          });
+                          onOpenChange(false);
+                        }}
                         onPointerEnter={() => setHighlightedSlug(item.slug)}
                         onFocus={() => setHighlightedSlug(item.slug)}
                         className="group relative flex min-h-14 items-center justify-between gap-3 rounded-xl px-3 py-2 transition-colors duration-250 ease-[cubic-bezier(0.16,1,0.3,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 dark:focus-visible:ring-white/30 motion-reduce:transition-none"
