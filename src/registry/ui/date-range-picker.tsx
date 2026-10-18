@@ -599,7 +599,7 @@ export function DateRangePicker({
 
   const [view, setView] = useState<Date>(() => {
     const end = committed?.end ?? today;
-    return addMonths(monthStart(end), -1);
+    return addMonths(monthStart(end), compact ? 0 : -1);
   });
   const [direction, setDirection] = useState(1);
   const [draft, setDraft] = useState<DateRange | null>(committed);
