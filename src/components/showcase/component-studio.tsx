@@ -2467,8 +2467,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         );
       case "proximity-sidebar":
         return (
-          <div className="@container/proximity w-full max-w-3xl h-full min-h-0 max-h-140 flex items-start justify-center gap-4 @lg/proximity:gap-12 select-text">
-            <div className="sticky top-0 w-14 shrink-0 select-none pt-0.5 @lg/proximity:w-22.5 [&_[data-slot=proximity-dash]]:max-w-full">
+          <div className="@container/proximity w-full max-w-3xl h-full min-h-0 max-h-140 select-text">
+            <div className="flex h-full items-start justify-center gap-4 @lg/proximity:gap-12">
+            <div className="sticky top-0 w-14 shrink-0 select-none pt-0.5 [&_[data-slot=proximity-dash]]:max-w-full">
               <ProximitySidebar
                 sections={PROXIMITY_DEMO_SECTIONS}
                 color={color}
@@ -2509,6 +2510,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   )}
                 </div>
               ))}
+            </div>
             </div>
           </div>
         );
