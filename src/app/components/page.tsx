@@ -222,7 +222,7 @@ export default function ComponentsPage() {
   const [revealSheetOpen, setRevealSheetOpen] = useState(false);
 
   const previewRenderers: Record<string, React.ReactNode> = {
-    "morph-invite": <MorphInvite />,
+    "morph-invite": <MorphInvite onInvite={async () => {}} />,
     "file-dropzone": (
       <div className="w-[360px] max-w-none shrink-0 scale-75">
         <FileDropzone label="Drop your files here" description="Images, documents, and more" />
