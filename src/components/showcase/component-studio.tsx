@@ -2279,7 +2279,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         );
       case "gooey-nav":
         return (
-          <div className="flex items-center justify-center w-full h-full min-h-96 select-none p-2 sm:p-8">
+          <div className="flex items-center justify-[safe_center] w-full min-w-0 h-full min-h-96 select-none p-2">
             <GooeyNav
               items={GOOEY_DEMO_ITEMS}
               value={gooeyNavIndex}
