@@ -2189,7 +2189,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         );
       case "calendar-card":
         return (
-          <div className="flex min-h-[32rem] w-full items-center justify-center p-2 sm:p-8">
+          <div className="flex w-full items-center justify-center p-2">
             <Toaster />
             <CalendarCard
               {...calendarConfig}
@@ -3795,7 +3795,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       activeComponent.slug === "matrix-clock" ||
                       activeComponent.slug === "flip-clock" ||
                       activeComponent.slug === "task-card" ||
-                      activeComponent.slug === "workflow-card"
+                      activeComponent.slug === "workflow-card" ||
+                      activeComponent.slug === "calendar-card"
                       ? "p-0"
                       : "p-2 sm:p-6",
                   )}
