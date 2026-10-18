@@ -251,7 +251,10 @@ export const SpotlightSearch: React.FC<SpotlightSearchProps> = ({
   const buttonGap = isCompact ? 6 : 10;
   const buttonStep = buttonSize + buttonGap;
   const buttonOffsetY = (BAR_HEIGHT - buttonSize) / 2;
-  const expandedWidth = width - FILTER_BUTTONS.length * buttonStep;
+  const stackedFilters = width - FILTER_BUTTONS.length * buttonStep < 220;
+  const expandedWidth = stackedFilters
+    ? width
+    : width - FILTER_BUTTONS.length * buttonStep;
   const layoutTransition = reduceMotion ? instantTransition : fluidSpring;
 
   useEffect(() => {
@@ -403,7 +406,7 @@ export const SpotlightSearch: React.FC<SpotlightSearchProps> = ({
         </defs>
       </svg>
 
-      <div className="relative w-full h-12 overflow-visible">
+      <div className={cn("relative w-full overflow-visible", stackedFilters && isExpanded ? "h-24" : "h-12")}>
         <div
           className="pointer-events-none absolute inset-0 overflow-visible"
           style={{ filter: `url(#${filterId})` }}
@@ -423,9 +426,9 @@ export const SpotlightSearch: React.FC<SpotlightSearchProps> = ({
               initial={false}
               animate={{
                 x: isExpanded
-                  ? expandedWidth + buttonGap + idx * buttonStep
+                  ? (stackedFilters ? idx * buttonStep : expandedWidth + buttonGap + idx * buttonStep)
                   : expandedWidth,
-                y: buttonOffsetY,
+                y: stackedFilters ? BAR_HEIGHT + buttonGap : buttonOffsetY,
                 scale: isExpanded ? 1 : 0.3,
                 opacity: isExpanded ? 1 : 0,
               }}
@@ -505,7 +508,7 @@ export const SpotlightSearch: React.FC<SpotlightSearchProps> = ({
           const IconComponent = btn.icon;
           const isActive = currentFilter === btn.id;
           const isHoveredBtn = hoveredButtonId === btn.id;
-          const targetX = expandedWidth + buttonGap + idx * buttonStep;
+          const targetX = (stackedFilters ? idx * buttonStep : expandedWidth + buttonGap + idx * buttonStep);
 
           return (
             <motion.div
@@ -513,7 +516,7 @@ export const SpotlightSearch: React.FC<SpotlightSearchProps> = ({
               initial={false}
               animate={{
                 x: isExpanded ? targetX : expandedWidth,
-                y: buttonOffsetY,
+                y: stackedFilters ? BAR_HEIGHT + buttonGap : buttonOffsetY,
                 scale: isExpanded ? 1 : 0.3,
                 opacity: isExpanded ? 1 : 0,
                 pointerEvents: isExpanded ? "auto" : "none",
@@ -551,6 +554,7 @@ export const SpotlightSearch: React.FC<SpotlightSearchProps> = ({
                     ? "border-zinc-900/40 bg-zinc-100 text-zinc-950 shadow-[0_0_16px_rgba(0,0,0,0.1)] dark:border-white/40 dark:bg-white/20 dark:text-white dark:shadow-[0_0_16px_rgba(255,255,255,0.2)]"
                     : "text-zinc-500 hover:text-zinc-900 hover:border-zinc-300 dark:text-zinc-400 dark:hover:text-white dark:hover:border-white/25",
                 )}
+                tabIndex={isExpanded ? 0 : -1}
                 aria-label={btn.label}
                 aria-pressed={isActive}
                 title={btn.label}
