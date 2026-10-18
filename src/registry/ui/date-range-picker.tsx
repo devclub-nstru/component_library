@@ -174,19 +174,20 @@ export function useToday() {
   return useMemo(() => (key ? fromKey(key) : undefined), [key]);
 }
 
-const subscribeWindow = (callback: () => void) => {
-  window.addEventListener("resize", callback);
-  return () => window.removeEventListener("resize", callback);
-};
-const getIsSmallScreen = () => window.innerWidth < 768;
-const getServerIsSmallScreen = () => false;
+function useIsSmallContainer(rootRef: React.RefObject<HTMLDivElement | null>) {
+  const [isSmall, setIsSmall] = useState(true);
 
-function useIsSmallScreen() {
-  return useSyncExternalStore(
-    subscribeWindow,
-    getIsSmallScreen,
-    getServerIsSmallScreen,
-  );
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    const observer = new ResizeObserver(([entry]) => {
+      setIsSmall(entry.contentRect.width < 780);
+    });
+    observer.observe(root);
+    return () => observer.disconnect();
+  }, [rootRef]);
+
+  return isSmall;
 }
 
 const noop = () => () => {};
@@ -403,7 +404,7 @@ function Month({
   }, [first, hiKey, loKey, month, rows]);
 
   return (
-    <div className="flex flex-col select-none w-full md:w-66.5 shrink-0">
+    <div className="flex flex-col select-none w-full @min-[520px]/picker:w-66.5 shrink-0">
       <p
         id={titleId}
         className="text-[15px] font-semibold text-zinc-900 dark:text-zinc-100 text-center mb-3.5 tracking-tight"
@@ -551,7 +552,7 @@ function MonthsView({
       initial="enter"
       animate="center"
       exit="exit"
-      className="flex flex-col md:flex-row gap-6 md:gap-10 w-full"
+      className="flex flex-col @min-[780px]/picker:flex-row gap-6 @min-[780px]/picker:gap-10 w-full"
     >
       {children}
     </motion.div>
@@ -575,7 +576,8 @@ export function DateRangePicker({
   className,
 }: DateRangePickerProps) {
   const reduced = useReducedFlag();
-  const isSmallScreen = useIsSmallScreen();
+  const rootRef = useRef<HTMLDivElement>(null);
+  const isSmallScreen = useIsSmallContainer(rootRef);
   const detectedToday = useToday();
   const hydrated = detectedToday !== undefined;
   const today = useMemo(() => detectedToday ?? new Date(), [detectedToday]);
@@ -655,8 +657,6 @@ export function DateRangePicker({
       : -1;
   const days = shown ? dayDiff(shown.end, shown.start) + 1 : 0;
   const shownDirection = useDirection(shown);
-
-  const rootRef = useRef<HTMLDivElement>(null);
 
   const viewFor = useCallback(
     (range: DateRange | null, single: boolean, fallback: Date) => {
@@ -787,17 +787,17 @@ export function DateRangePicker({
       aria-label={label}
       style={{ "--cell": "38px" } as CSSProperties}
       className={cn(
-        "relative inline-flex flex-col bg-white/95 dark:bg-[#141416]/95 border border-zinc-200/90 dark:border-white/8 rounded-3xl p-6 sm:p-7 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.08),0_1px_3px_rgba(0,0,0,0.05)] dark:shadow-[0_24px_60px_-12px_rgba(0,0,0,0.8),0_0_0_1px_rgba(255,255,255,0.04)] backdrop-blur-xl text-zinc-900 dark:text-zinc-100 max-w-full overflow-hidden select-none",
+        "@container/picker relative inline-flex w-[880px] flex-col bg-white/95 dark:bg-[#141416]/95 border border-zinc-200/90 dark:border-white/8 rounded-3xl p-4 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.08),0_1px_3px_rgba(0,0,0,0.05)] dark:shadow-[0_24px_60px_-12px_rgba(0,0,0,0.8),0_0_0_1px_rgba(255,255,255,0.04)] backdrop-blur-xl text-zinc-900 dark:text-zinc-100 max-w-full overflow-hidden select-none",
         className,
       )}
     >
       <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-zinc-400/25 dark:via-white/20 to-transparent pointer-events-none rounded-t-3xl" />
 
-      <div className="flex flex-col md:flex-row gap-6 md:gap-8 items-stretch">
+      <div className="flex flex-col @min-[520px]/picker:flex-row gap-6 @min-[520px]/picker:gap-8 items-stretch">
         <div
           role="group"
           aria-label="Date presets"
-          className="flex flex-row md:flex-col gap-1 overflow-x-auto md:overflow-visible pb-2 md:pb-0 md:pr-6 md:border-r border-zinc-200/80 dark:border-white/6 shrink-0 scrollbar-none w-full md:w-44"
+          className="flex flex-row @min-[520px]/picker:flex-col gap-1 overflow-x-auto @min-[520px]/picker:overflow-visible pb-2 @min-[520px]/picker:pb-0 @min-[520px]/picker:pr-6 @min-[520px]/picker:border-r border-zinc-200/80 dark:border-white/6 shrink-0 scrollbar-none w-full @min-[520px]/picker:w-44"
         >
           {presets.map((preset, index) => {
             const isActive = index === activePreset;
@@ -829,7 +829,7 @@ export function DateRangePicker({
         </div>
 
         <div
-          className="relative flex-1"
+          className="relative min-w-0 flex-1"
           onPointerLeave={() => {
             if (anchor) setHover(null);
           }}
