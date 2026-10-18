@@ -2467,15 +2467,16 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         );
       case "proximity-sidebar":
         return (
-          <div className="w-full max-w-3xl h-140 flex items-start justify-center gap-12 select-text">
-            <div className="sticky top-0 shrink-0 select-none pt-0.5">
+          <div className="@container/proximity w-full max-w-3xl h-full min-h-0 max-h-140 flex items-start justify-center gap-4 @lg/proximity:gap-12 select-text">
+            <div className="sticky top-0 w-14 shrink-0 select-none pt-0.5 @lg/proximity:w-22.5 [&_[data-slot=proximity-dash]]:max-w-full">
               <ProximitySidebar
                 sections={PROXIMITY_DEMO_SECTIONS}
                 color={color}
                 side="left"
+                maxDashWidth={54}
               />
             </div>
-            <div className="flex-1 h-full overflow-y-auto pr-6 space-y-7 scroll-smooth">
+            <div className="min-w-0 flex-1 h-full overflow-y-auto pr-1 @lg/proximity:pr-6 space-y-7 motion-safe:scroll-smooth">
               {PROXIMITY_DEMO_SECTIONS.map((sec, idx) => (
                 <div
                   key={sec.id}
