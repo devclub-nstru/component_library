@@ -139,31 +139,51 @@ How a change gets in:
 
 1. Fork the repo and branch from `main`.
 2. Open a PR to `main` with a [Conventional Commit](https://www.conventionalcommits.org/) title, for example `feat(dither): add grain intensity prop`.
-3. CI runs lint, typecheck, two builds, CodeQL, dependency review, and a supply-chain check that confirms the published registry matches the source.
+3. CI runs lint, typecheck, tests, two builds, CodeQL, dependency review, a DCO sign-off check, and a supply-chain check that confirms the published registry matches the source.
 4. A bot labels the PR by size, from `size/xs` to `size/excess`. Smaller PRs get reviewed faster, and `excess` PRs get asked to split.
 5. One code owner approves and the PR is squash-merged.
 
-### Local development
+### Building from source
 
-Use Node.js 20.9 or newer, and npm.
+You need Node.js 20.9 or newer (CI builds on 20.x and 22.x) and npm 10 or newer. Use npm, since the repo ships `package-lock.json`. There are no native modules or system libraries to install.
 
 ```sh
 git clone https://github.com/devclub-nstru/component_library.git
 cd component_library
-npm ci
-npm run dev
+npm ci                 # exact versions from package-lock.json
+npm run dev            # docs site at http://localhost:3000
 ```
 
-Open [localhost:3000](http://localhost:3000). Before pushing, run the same checks as CI:
+| Task | Command | Output |
+| --- | --- | --- |
+| Production build of the docs site | `npm run build`, then `npm start` | `.next/`, served on port 3000 |
+| Registry | `npm run registry:sync` | `public/r/*.json`, `registry.json` and the npm-only `r/` |
+| CLI | Nothing to build. Run `node bin/cli.mjs --help`. | `bin/cli.mjs` is plain ESM with no dependencies |
+| npm package | `npm run registry:sync && npm pack` | `devclubnst-ui-<version>.tgz` |
+
+Before pushing, run the same checks as CI:
 
 ```sh
 npm run lint
 npm run typecheck
+npm test
 npm run build
 npm run check:lockfile
 ```
 
 If you change component source or registry metadata, run `npm run registry:sync` and commit the regenerated files in `public/r/`.
+
+### Project documents
+
+| Document | What's there |
+| --- | --- |
+| [CHANGELOG.md](CHANGELOG.md) | Functional and security changes in each release |
+| [GOVERNANCE.md](GOVERNANCE.md) | Roles, responsibilities, and who has access to the repo, npm and hosting |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Components, actors, data flows and trust boundaries |
+| [docs/INTERFACES.md](docs/INTERFACES.md) | CLI commands and exit codes, registry JSON, HTTP API, npm package |
+| [docs/DEPENDENCIES.md](docs/DEPENDENCIES.md) | How dependencies are chosen, installed and kept up to date |
+| [docs/SECURITY_ASSESSMENT.md](docs/SECURITY_ASSESSMENT.md) | Threat model and residual risks |
+| [.github/MAINTAINING.md](.github/MAINTAINING.md) | Release process and maintainer procedures |
 
 ## Security
 
@@ -171,7 +191,7 @@ Report vulnerabilities privately through [GitHub security advisories](https://gi
 
 ## Support
 
-Ask questions and share ideas in [issues](https://github.com/devclub-nstru/component_library/issues) or on the [community page](https://ui.devclubxnst.com/docs/community). Release notes are on [GitHub releases](https://github.com/devclub-nstru/component_library/releases), and published versions are on [npm](https://www.npmjs.com/package/@devclubnst/ui?activeTab=versions). You can also email [softwaredevg.club@rishihood.edu.in](mailto:softwaredevg.club@rishihood.edu.in).
+Ask questions and share ideas in [issues](https://github.com/devclub-nstru/component_library/issues) or on the [community page](https://ui.devclubxnst.com/docs/community). Release notes are in [CHANGELOG.md](CHANGELOG.md) and on [GitHub releases](https://github.com/devclub-nstru/component_library/releases), and published versions are on [npm](https://www.npmjs.com/package/@devclubnst/ui?activeTab=versions). You can also email [softwaredevg.club@rishihood.edu.in](mailto:softwaredevg.club@rishihood.edu.in).
 
 ## License
 

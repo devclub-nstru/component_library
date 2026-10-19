@@ -6,8 +6,10 @@ We patch the latest minor release of the `@devclubnst/ui` package and the regist
 
 | Version | Supported |
 | ------- | --------- |
-| 2.1.x   | Yes       |
-| < 2.1   | No        |
+| 2.2.x   | Yes       |
+| < 2.2   | No        |
+
+Versions 2.1.2 and 2.1.3 on npm were not built from a reviewed commit. Upgrade to 2.2.0 or later.
 
 ---
 
@@ -47,25 +49,45 @@ To help us triage and resolve the issue quickly, please include as much detail a
 
 ---
 
-## Response times
+## Coordinated disclosure policy
 
-When you submit a security report:
+We follow coordinated disclosure. Reports go through a private channel, we fix the problem, and then we publish what happened. Business days are Monday to Friday, excluding Indian public holidays.
 
-1. **Acknowledgement**: We will acknowledge receipt of your report within **24 to 48 hours**.
-2. **Assessment & Confirmation**: Our core team will evaluate the issue and confirm impact within **72 hours**.
-3. **Patch & Release**: If verified, we aim to publish a patched release within **7 business days** (or sooner for critical vulnerabilities).
-4. **Public Disclosure**: A public security advisory (GHSA / CVE) will be issued after the fix is published and downstream adopters have had time to update.
+| Step | Timeframe |
+| --- | --- |
+| Acknowledge your report | Within 3 business days |
+| Triage: confirm or reject, and give a severity using CVSS v3.1 | Within 7 days of the report |
+| Fix released for critical or high severity | Target 30 days from confirmation |
+| Fix released for medium or low severity | Target 90 days from confirmation |
+| Public advisory | When the fix is released, or 90 days after the report if there is no fix by then |
+
+While we work on it:
+
+- We keep you updated at least every 14 days in the advisory or email thread.
+- Please keep the details private until the advisory is published. If we can't meet a deadline, we tell you why and agree a new date with you.
+- If the issue is being exploited, we may publish early with mitigations.
+- We credit you in the advisory unless you ask us not to.
+
+## How we publish vulnerabilities
+
+Every confirmed vulnerability is published as a GitHub Security Advisory at <https://github.com/devclub-nstru/component_library/security/advisories>, with the affected and fixed versions, severity, and credit. We request a CVE for each one through GitHub, which is a CVE Numbering Authority. The fix is also listed under `Security` in [CHANGELOG.md](CHANGELOG.md) with a link to the advisory, and the affected npm versions get an `npm deprecate` notice that points to the fixed version.
+
+No vulnerabilities have been reported so far, so the advisories page is empty.
 
 ---
 
 ## How we protect the supply chain
 
 - `main` only changes through pull requests with a code-owner approval and passing CI. Force pushes and branch deletion are blocked.
-- Releases come from the `release` branch. Only one maintainer can update it, and only to a commit that is already on `main`.
+- Releases come from the `release` branch. Only release managers can update it, and only to a commit that is already on `main`.
+- Each GitHub release includes the npm tarball, a `SHA256SUMS` file and a Sigstore-signed build provenance attestation. [docs/INTERFACES.md](docs/INTERFACES.md#2-npm-package) shows how to verify them.
 - CI checks that every lockfile entry resolves to the npm registry with a `sha512` hash, fails on high-severity advisories in production dependencies, and verifies that the published registry files match the reviewed source.
 - GitHub Actions are pinned to commit SHAs. Workflows run with read-only tokens by default, and runs on PRs from outside collaborators need a maintainer's approval.
 - CodeQL, OpenSSF Scorecard, Dependency Review, secret scanning with push protection, and Dependabot security updates are enabled.
-- The CLI rejects registry entries whose dependency names contain shell syntax and refuses to write files outside the configured component and lib directories.
+- The CLI rejects registry entries whose dependency names contain shell syntax, refuses to write files outside the configured component and lib directories, and won't overwrite through a symbolic link.
+- Every commit in a pull request needs a DCO `Signed-off-by` line.
+
+The full threat model, including known residual risks, is in [docs/SECURITY_ASSESSMENT.md](docs/SECURITY_ASSESSMENT.md).
 
 ---
 
