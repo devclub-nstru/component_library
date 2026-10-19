@@ -2469,48 +2469,48 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         return (
           <div className="@container/proximity w-full max-w-3xl h-full min-h-0 max-h-140 select-text">
             <div className="flex h-full items-start justify-center gap-4 @lg/proximity:gap-12">
-            <div className="sticky top-0 w-14 shrink-0 select-none pt-0.5 [&_[data-slot=proximity-dash]]:max-w-full">
-              <ProximitySidebar
-                sections={PROXIMITY_DEMO_SECTIONS}
-                color={color}
-                side="left"
-                maxDashWidth={54}
-              />
-            </div>
-            <div className="min-w-0 flex-1 h-full overflow-y-auto pr-1 @lg/proximity:pr-6 space-y-7 motion-safe:scroll-smooth">
-              {PROXIMITY_DEMO_SECTIONS.map((sec, idx) => (
-                <div
-                  key={sec.id}
-                  id={sec.id}
-                  className="scroll-mt-4 space-y-1.5"
-                >
-                  {sec.kind === "title" ? (
-                    <div
-                      className={cn(
-                        "border-b border-border dark:border-white/8 pb-2",
-                        idx === 0 ? "pt-0" : "pt-5",
-                      )}
-                    >
-                      <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground dark:text-zinc-500 block leading-none">
-                        Section
-                      </span>
-                      <h2 className="text-base font-medium text-foreground dark:text-white tracking-tight mt-1 leading-tight">
-                        {sec.label}
-                      </h2>
-                    </div>
-                  ) : (
-                    <div className="space-y-1">
-                      <h3 className="text-xs font-mono uppercase tracking-wider text-foreground/90 dark:text-zinc-300">
-                        {sec.label}
-                      </h3>
-                      <p className="text-xs leading-relaxed text-muted-foreground dark:text-zinc-400 font-light">
-                        {sec.description}
-                      </p>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
+              <div className="sticky top-0 w-14 shrink-0 select-none pt-0.5 [&_[data-slot=proximity-dash]]:max-w-full">
+                <ProximitySidebar
+                  sections={PROXIMITY_DEMO_SECTIONS}
+                  color={color}
+                  side="left"
+                  maxDashWidth={54}
+                />
+              </div>
+              <div className="min-w-0 flex-1 h-full overflow-y-auto pr-1 @lg/proximity:pr-6 space-y-7 motion-safe:scroll-smooth">
+                {PROXIMITY_DEMO_SECTIONS.map((sec, idx) => (
+                  <div
+                    key={sec.id}
+                    id={sec.id}
+                    className="scroll-mt-4 space-y-1.5"
+                  >
+                    {sec.kind === "title" ? (
+                      <div
+                        className={cn(
+                          "border-b border-border dark:border-white/8 pb-2",
+                          idx === 0 ? "pt-0" : "pt-5",
+                        )}
+                      >
+                        <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground dark:text-zinc-500 block leading-none">
+                          Section
+                        </span>
+                        <h2 className="text-base font-medium text-foreground dark:text-white tracking-tight mt-1 leading-tight">
+                          {sec.label}
+                        </h2>
+                      </div>
+                    ) : (
+                      <div className="space-y-1">
+                        <h3 className="text-xs font-mono uppercase tracking-wider text-foreground/90 dark:text-zinc-300">
+                          {sec.label}
+                        </h3>
+                        <p className="text-xs leading-relaxed text-muted-foreground dark:text-zinc-400 font-light">
+                          {sec.description}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         );
