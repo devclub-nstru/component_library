@@ -44,7 +44,8 @@
     "lint": "eslint",
     "registry:sync": "node scripts/sync-registry.mjs",
     "typecheck": "tsc --noEmit",
-    "check:lockfile": "node scripts/check-lockfile.mjs"
+    "check:lockfile": "node scripts/check-lockfile.mjs",
+    "test": "node --test test/*.test.mjs"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

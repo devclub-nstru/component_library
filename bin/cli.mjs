@@ -150,7 +150,13 @@ const appendCssVars = (cwd, config, items) => {
   const cssPath = config?.tailwind?.css && path.join(cwd, config.tailwind.css);
   const withVars = items.filter((item) => item.cssVars);
   if (!withVars.length) return;
-  if (!cssPath || !fs.existsSync(cssPath)) {
+  let css;
+  try {
+    css = cssPath && fs.readFileSync(cssPath, "utf8");
+  } catch (error) {
+    if (error.code !== "ENOENT" && error.code !== "EISDIR") throw error;
+  }
+  if (typeof css !== "string") {
     console.warn(
       "Warning: Could not find your Tailwind CSS file. Add these CSS variables manually:",
     );
@@ -160,7 +166,6 @@ const appendCssVars = (cwd, config, items) => {
     return;
   }
 
-  const css = fs.readFileSync(cssPath, "utf8");
   const declaredIn = (selectorPattern) => {
     const names = new Set();
     for (const block of css.matchAll(new RegExp(`${selectorPattern}\\s*\\{([^}]*)\\}`, "g"))) {
@@ -293,15 +298,21 @@ if (command === "add") {
     for (const file of item.files || []) {
       const destPath = getDestination(file, targetDir, libDir);
       const relativePath = path.relative(cwd, destPath);
-      const exists = fs.existsSync(destPath);
-      if (exists && !overwrite) {
-        skipped.push(relativePath);
-        continue;
-      }
       fs.mkdirSync(path.dirname(destPath), { recursive: true });
-      fs.writeFileSync(destPath, file.content || "", "utf8");
+      let replaced = false;
+      try {
+        fs.writeFileSync(destPath, file.content || "", { encoding: "utf8", flag: "wx" });
+      } catch (error) {
+        if (error.code !== "EEXIST") throw error;
+        if (!overwrite) {
+          skipped.push(relativePath);
+          continue;
+        }
+        fs.writeFileSync(destPath, file.content || "", "utf8");
+        replaced = true;
+      }
       written++;
-      console.log(`✓ ${exists ? "Replaced" : "Created"} ${relativePath}`);
+      console.log(`✓ ${replaced ? "Replaced" : "Created"} ${relativePath}`);
     }
   }
 
