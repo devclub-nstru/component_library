@@ -236,7 +236,7 @@ const getInstallCommand = (slug: string, tool: InstallTool) => {
     case "bun":
       return `bunx @devclubnst/ui add ${slug}`;
     case "shadcn":
-      return `npx shadcn@latest add https://ui.devclubxnst.online/r/${slug}.json`;
+      return `npx shadcn@latest add https://ui.devclubxnst.com/r/${slug}.json`;
     case "npx":
     default:
       return `npx @devclubnst/ui add ${slug}`;
@@ -3565,7 +3565,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                           Shadcn Registry
                         </span>
                         <span className="text-[11px] font-mono text-muted-foreground truncate select-all">
-                          {`npx shadcn@latest add https://ui.devclubxnst.online/r/${activeComponent.slug}.json`}
+                          {`npx shadcn@latest add https://ui.devclubxnst.com/r/${activeComponent.slug}.json`}
                         </span>
                       </div>
                       <button
@@ -3573,7 +3573,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         onClick={() =>
                           handleCustomCopy(
                             "shadcn_url",
-                            `npx shadcn@latest add https://ui.devclubxnst.online/r/${activeComponent.slug}.json`,
+                            `npx shadcn@latest add https://ui.devclubxnst.com/r/${activeComponent.slug}.json`,
                           )
                         }
                         className="shrink-0 p-1.5 rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer"

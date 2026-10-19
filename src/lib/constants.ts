@@ -1,7 +1,7 @@
 export const SITE_CONFIG = {
   name: "DevClub UI",
   description: "High performance UI components engineered for speed and visual excellence.",
-  url: "https://ui.devclubxnst.online",
+  url: "https://ui.devclubxnst.com",
   ogImage: "https://wallpapercave.com/wp/wp4140937.jpg",
   logos: {
     light: "/logo/BLACK-LOGO.png",

@@ -1,11 +1,11 @@
 blank_issues_enabled: false
 contact_links:
   - name: DevClub Community
-    url: https://ui.devclubxnst.online/docs/community
+    url: https://ui.devclubxnst.com/docs/community
     about: Find support, contribution guidance, and ways to follow DevClub UI.
   - name: Security Vulnerability Report
     url: mailto:softwaredevg.club@rishihood.edu.in
     about: Report security issues privately to softwaredevg.club@rishihood.edu.in.
   - name: DevClub UI Showcase
-    url: https://ui.devclubxnst.online/components
+    url: https://ui.devclubxnst.com/components
     about: Browse live interactive previews, prop controls, and code snippets.

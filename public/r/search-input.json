@@ -10,7 +10,7 @@
     "voice-glow@^0.2.1"
   ],
   "registryDependencies": [
-    "https://ui.devclubxnst.online/r/orb.json"
+    "https://ui.devclubxnst.com/r/orb.json"
   ],
   "cssVars": {
     "theme": {

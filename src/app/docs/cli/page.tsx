@@ -62,7 +62,7 @@ export default function DocsCliPage() {
           <CodeBlock
             filename="Terminal"
             language="bash"
-            code="npx shadcn@latest add https://ui.devclubxnst.online/r/noise.json"
+            code="npx shadcn@latest add https://ui.devclubxnst.com/r/noise.json"
           />
         </div>
       </section>
