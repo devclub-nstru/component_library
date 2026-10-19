@@ -92,11 +92,11 @@ export const DottedAccordion = forwardRef<HTMLDivElement, DottedAccordionProps>(
     );
 
     return (
-      <div className="relative py-12 px-8 sm:px-14 w-full flex justify-center overflow-visible select-none">
+      <div className="@container/accordion relative w-full overflow-clip select-none">
         <div
           ref={innerRef}
           className={cn(
-            "relative w-full max-w-xl rounded-none border border-zinc-200 bg-white dark:border-white/10 dark:bg-black",
+            "relative mx-auto my-6 w-[calc(100%-2rem)] @lg/accordion:my-12 @lg/accordion:w-[calc(100%-7rem)] max-w-xl rounded-none border border-zinc-200 bg-white dark:border-white/10 dark:bg-black",
             className,
           )}
           {...props}
@@ -162,15 +162,15 @@ export const DottedAccordion = forwardRef<HTMLDivElement, DottedAccordionProps>(
                     aria-expanded={isOpen}
                     aria-controls={isOpen ? panelId : undefined}
                     onClick={() => toggleAccordion(index)}
-                    className="group flex w-full cursor-pointer items-center justify-between px-5 py-4 text-left rounded-none transition-colors outline-none focus-visible:ring-1 focus-visible:ring-foreground/30 dark:focus-visible:ring-white/30"
+                    className="group flex w-full cursor-pointer items-center justify-between px-3 @lg/accordion:px-5 py-4 text-left rounded-none transition-colors outline-none focus-visible:ring-1 focus-visible:ring-foreground/30 dark:focus-visible:ring-white/30"
                   >
-                    <div className="flex items-center gap-3.5 min-w-0 flex-1">
+                    <div className="flex items-center gap-2 @lg/accordion:gap-3.5 min-w-0 flex-1">
                       <span className="font-mono text-xs text-zinc-400 group-hover:text-zinc-600 dark:text-zinc-500 dark:group-hover:text-zinc-400 transition-colors shrink-0 w-5">
                         {String(index + 1).padStart(2, "0")}
                       </span>
                       <span
                         className={cn(
-                          "text-sm font-medium tracking-tight transition-colors duration-200 truncate",
+                          "text-sm font-medium tracking-tight transition-colors duration-200 whitespace-normal break-words",
                           isOpen
                             ? "text-zinc-950 dark:text-white"
                             : "text-zinc-700 group-hover:text-zinc-950 dark:text-zinc-300 dark:group-hover:text-white",
@@ -248,7 +248,7 @@ export const DottedAccordion = forwardRef<HTMLDivElement, DottedAccordionProps>(
                         className="overflow-hidden rounded-none"
                       >
                         <div
-                          className="cursor-pointer pl-13.5 pr-5 pb-5 pt-0.5 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400 font-light"
+                          className="cursor-pointer pl-10 @lg/accordion:pl-13.5 pr-3 @lg/accordion:pr-5 pb-5 pt-0.5 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400 font-light"
                           onClick={() => toggleAccordion(index)}
                         >
                           {item.description}

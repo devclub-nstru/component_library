@@ -3054,7 +3054,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         );
       case "dotted-accordion":
         return (
-          <div className="w-full max-w-2xl p-4 sm:p-6 flex items-center justify-center">
+          <div className="w-full max-w-2xl flex items-center justify-center">
             <DottedAccordion
               defaultIndex={0}
               items={[
