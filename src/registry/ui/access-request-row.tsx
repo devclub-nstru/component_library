@@ -22,7 +22,7 @@ interface AccessRequestRowProps {
 }
 
 const actionClass =
-  "relative flex min-h-7 min-w-14 cursor-pointer items-center justify-center gap-1 rounded-full border px-2.5 text-[11px] leading-4 font-medium outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:ring-offset-2 focus-visible:ring-offset-white disabled:cursor-wait disabled:opacity-50 pointer-coarse:min-h-10 dark:focus-visible:ring-offset-[#171717]";
+  "relative flex min-h-7 w-16 min-w-16 cursor-pointer items-center justify-center gap-1 rounded-full border px-2 text-[11px] leading-4 font-medium outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:ring-offset-2 focus-visible:ring-offset-white disabled:cursor-wait disabled:opacity-50 pointer-coarse:min-h-10 dark:focus-visible:ring-offset-[#171717]";
 
 export function AccessRequestRow({
   entry,
@@ -94,6 +94,7 @@ export function AccessRequestRow({
       ref={rowRef}
       data-request-row={person.id}
       data-phase={phase}
+      data-decision={decision}
       className="relative min-w-0 list-none"
       aria-busy={busy}
     >
