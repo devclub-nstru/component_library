@@ -851,7 +851,7 @@ function StepperDemo({
   }, [current]);
 
   return (
-    <div className="@container/setup w-full p-0">
+    <div className="@container/setup w-full">
       <div className="mx-auto w-full max-w-xl space-y-4 @md/setup:space-y-6 rounded-2xl border border-zinc-200 bg-white p-3 @md/setup:p-6 dark:border-white/8 dark:bg-[#141416]">
         <div>
           <h3 className="text-sm font-semibold tracking-tight text-zinc-900 dark:text-white">
