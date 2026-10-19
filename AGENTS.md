@@ -4,13 +4,13 @@
 
 This document defines the rules agents must follow when working on this project. The goal is to ensure that every implementation is based on the existing project structure, skills, utilities, design patterns, and animation systems instead of introducing unnecessary or inconsistent solutions.
 
-## 1. Always Use the `skills` Folder
+## 1. Always Use the `skills` & `skills-agents-all` Folder
 
-Before making any meaningful change, inspect the `skills` folder and all relevant files inside it.
+Before making any meaningful change, inspect the `skills` & `skills-agents-all` folder and all relevant files inside it.
 
 ### Required behavior
 
-- Treat the `skills` folder as a source of project-specific knowledge and implementation guidance.
+- Treat the `skills` & `skills-agents-all` folder as a source of project-specific knowledge and implementation guidance.
 - Read all relevant skill files before starting implementation.
 - If multiple skills are related to the task, inspect all of them instead of selecting only the first obvious match.
 - Follow the patterns, conventions, utilities, APIs, and workflows defined by the skills.
@@ -26,7 +26,7 @@ Do not immediately start writing code.
 Before implementation:
 
 1. Inspect the project structure.
-2. Inspect the `skills` folder.
+2. Inspect the `skills` & `skills-agents-all` folder.
 3. Read relevant configuration files.
 4. Locate existing components, utilities, hooks, animation helpers, styles, and shared patterns.
 5. Identify how similar features are already implemented.
@@ -41,7 +41,7 @@ When implementing animations, use the project's existing GSAP setup and conventi
 
 ### GSAP requirements
 
-- Inspect the `skills` folder for GSAP-specific guidance before writing animations.
+- Inspect the `skills` & `skills-agents-all` folder for GSAP-specific guidance before writing animations.
 - Inspect existing GSAP implementations in the project before creating new ones.
 - Reuse existing animation utilities, hooks, timelines, plugins, and patterns.
 - Use GSAP instead of introducing another animation library when GSAP is already the project's animation system.
@@ -176,7 +176,7 @@ Do not impose a personal coding style when the project already has an establishe
 Before installing or introducing a dependency:
 
 1. Check whether the project already has a dependency that solves the problem.
-2. Check whether the `skills` folder specifies a preferred solution.
+2. Check whether the `skills` & `skills-agents-all` folder specifies a preferred solution.
 3. Check whether an existing project utility already solves it.
 4. Only introduce a new dependency when it is genuinely necessary.
 
@@ -216,7 +216,7 @@ For animations, prefer GPU-friendly properties such as transforms and opacity wh
 
 Before considering a task complete:
 
-1. Verify that the implementation follows the relevant `skills` guidance.
+1. Verify that the implementation follows the relevant `skills` & `skills-agents-all` guidance.
 2. Check that existing patterns were reused where appropriate.
 3. Check for unused imports and variables.
 4. Check for type errors.
@@ -237,7 +237,7 @@ Understand the requested behavior and constraints.
 
 ### Inspect
 
-Inspect the project structure, `skills` folder, relevant files, existing implementations, and dependencies.
+Inspect the project structure, `skills` & `skills-agents-all` folder, relevant files, existing implementations, and dependencies.
 
 ### Analyse
 
@@ -263,12 +263,12 @@ Leave the codebase clean with no unnecessary comments, message tags, temporary c
 
 The agent must not treat the task as an isolated coding problem.
 
-The agent must first understand the project's existing knowledge and architecture, especially everything relevant inside the `skills` folder, and then implement the solution using those established patterns.
+The agent must first understand the project's existing knowledge and architecture, especially everything relevant inside the `skills` & `skills-agents-all` folder, and then implement the solution using those established patterns.
 
 The priority order is:
 
 1. Existing project architecture
-2. Relevant `skills` guidance
+2. Relevant `skills` & `skills-agents-all` guidance
 3. Existing utilities and abstractions
 4. Existing dependencies and patterns
 5. Clean, minimal implementation

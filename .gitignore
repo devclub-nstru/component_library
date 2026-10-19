@@ -24,6 +24,8 @@
 .DS_Store
 *.pem
 
+/skills-agents-all
+
 # debug
 npm-debug.log*
 yarn-debug.log*
