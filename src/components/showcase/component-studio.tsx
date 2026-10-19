@@ -851,8 +851,8 @@ function StepperDemo({
   }, [current]);
 
   return (
-    <div className="w-full p-4 sm:p-8">
-      <div className="mx-auto w-full max-w-xl space-y-6 rounded-2xl border border-zinc-200 bg-white p-5 sm:p-6 dark:border-white/8 dark:bg-[#141416]">
+    <div className="@container/setup w-full">
+      <div className="mx-auto w-full max-w-xl space-y-4 @md/setup:space-y-6 rounded-2xl border border-zinc-200 bg-white p-3 @md/setup:p-6 dark:border-white/8 dark:bg-[#141416]">
         <div>
           <h3 className="text-sm font-semibold tracking-tight text-zinc-900 dark:text-white">
             Workspace setup
@@ -879,7 +879,7 @@ function StepperDemo({
           }
           className="relative overflow-hidden rounded-xl border border-zinc-200/90 bg-zinc-50/70 dark:border-white/10 dark:bg-white/2"
         >
-          <div ref={contentRef} className="p-4 sm:p-5">
+          <div ref={contentRef} className="p-3 @md/setup:p-5">
             <AnimatePresence mode="wait" initial={false}>
               <motion.div
                 key={current}
@@ -903,7 +903,7 @@ function StepperDemo({
                 <div className="mt-4">
                   {current === 0 && (
                     <div className="space-y-3.5">
-                      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                      <div className="grid grid-cols-1 gap-3 @md/setup:grid-cols-2">
                         <div className="space-y-1.5">
                           <label className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
                             Full Name
@@ -971,7 +971,7 @@ function StepperDemo({
                               handleInputChange("workspaceSlug", e.target.value)
                             }
                             placeholder="acme-studio"
-                            className="w-full bg-transparent pl-1 text-zinc-900 outline-none dark:text-zinc-100"
+                            className="min-w-0 w-full bg-transparent pl-1 text-zinc-900 outline-none dark:text-zinc-100"
                           />
                         </div>
                       </div>
@@ -1005,7 +1005,7 @@ function StepperDemo({
                   {current === 2 && (
                     <div className="space-y-3.5">
                       <div className="rounded-lg border border-zinc-200/80 bg-white p-3 text-xs dark:border-white/5 dark:bg-zinc-900/50">
-                        <div className="grid grid-cols-2 gap-2 text-zinc-600 dark:text-zinc-400">
+                        <div className="grid grid-cols-1 @md/setup:grid-cols-2 gap-2 break-words text-zinc-600 dark:text-zinc-400">
                           <div>
                             <span className="block text-[10px] uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
                               Account
@@ -1038,7 +1038,7 @@ function StepperDemo({
                               {formData.teamSize}
                             </span>
                           </div>
-                          <div className="col-span-2">
+                          <div className="@md/setup:col-span-2">
                             <span className="block text-[10px] uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
                               URL
                             </span>
@@ -1071,7 +1071,7 @@ function StepperDemo({
                         <label className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
                           Target Environment
                         </label>
-                        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                        <div className="grid grid-cols-1 gap-2 @md/setup:grid-cols-2">
                           {[
                             {
                               id: "production",
@@ -2065,7 +2065,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
       case "orbit-gallery":
         return <OrbitGalleryDemo {...orbitGalleryConfig} />;
       case "parallax-strip-transition":
-        return <ParallaxStripTransitionDemo config={parallaxStripConfig} />;
+        return <ParallaxStripTransitionDemo config={parallaxStripConfig} reserveControlsSpace={viewport === "desktop"} />;
       case "scrolling-cards":
         return <ScrollingCardsDemo config={scrollingCardsConfig} />;
       case "scroll-text":
@@ -2189,7 +2189,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         );
       case "calendar-card":
         return (
-          <div className="flex min-h-[32rem] w-full items-center justify-center p-2 sm:p-8">
+          <div className="flex w-full items-center justify-center p-2">
             <Toaster />
             <CalendarCard
               {...calendarConfig}
@@ -2279,7 +2279,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         );
       case "gooey-nav":
         return (
-          <div className="flex items-center justify-center w-full h-full min-h-96 select-none p-2 sm:p-8">
+          <div className="flex items-center justify-[safe_center] w-full min-w-0 h-full min-h-96 select-none p-2">
             <GooeyNav
               items={GOOEY_DEMO_ITEMS}
               value={gooeyNavIndex}
@@ -3057,7 +3057,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         );
       case "dotted-accordion":
         return (
-          <div className="w-full max-w-2xl p-4 sm:p-6 flex items-center justify-center">
+          <div className="w-full max-w-2xl flex items-center justify-center">
             <DottedAccordion
               defaultIndex={0}
               items={[
@@ -3798,7 +3798,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       activeComponent.slug === "matrix-clock" ||
                       activeComponent.slug === "flip-clock" ||
                       activeComponent.slug === "task-card" ||
-                      activeComponent.slug === "workflow-card"
+                      activeComponent.slug === "workflow-card" ||
+                      activeComponent.slug === "calendar-card"
                       ? "p-0"
                       : "p-2 sm:p-6",
                   )}
