@@ -85,7 +85,7 @@ export function AccessRequestDemo({
     if (dismissed) restoreRef.current?.focus({ preventScroll: true });
     else if (version > 0)
       cardRef.current
-        ?.querySelector<HTMLButtonElement>("button")
+        ?.querySelector<HTMLButtonElement>("button:not([inert]):not(:disabled)")
         ?.focus({ preventScroll: true });
   }, [dismissed, version]);
 
