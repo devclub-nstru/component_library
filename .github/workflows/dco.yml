@@ -1,0 +1,43 @@
+name: DCO
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  dco:
+    name: DCO
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Check every commit is signed off by its author
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          missing=0
+          for sha in $(git rev-list --no-merges "$BASE_SHA..$HEAD_SHA"); do
+            author_name="$(git log -1 --format='%an' "$sha")"
+            author_email="$(git log -1 --format='%ae' "$sha")"
+            signoffs="$(git log -1 --format='%(trailers:key=Signed-off-by,valueonly)' "$sha")"
+            if printf '%s\n' "$signoffs" | grep -qiF "<$author_email>"; then
+              continue
+            fi
+            case "$author_name" in
+              *"[bot]") [ -n "$signoffs" ] && continue ;;
+            esac
+            echo "::error::$(git log -1 --format='%h %s' "$sha") has no 'Signed-off-by: $author_name <$author_email>' line."
+            missing=1
+          done
+          if [ "$missing" -ne 0 ]; then
+            echo "Sign off with 'git commit -s'. To fix this PR: git rebase --signoff origin/main && git push --force-with-lease"
+            exit 1
+          fi
