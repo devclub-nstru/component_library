@@ -406,7 +406,7 @@ export function GooeyNav({
       ref={navRef}
       data-slot="gooey-nav"
       className={cn(
-        "inline-block select-none max-md:-my-6 max-md:max-w-full max-md:overflow-x-auto max-md:py-6 max-md:[scrollbar-width:none]",
+        "inline-block min-w-0 max-w-full select-none -my-6 overflow-x-auto py-6 [scrollbar-width:none]",
         className,
       )}
       {...props}
