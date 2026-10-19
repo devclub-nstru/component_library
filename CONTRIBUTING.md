@@ -194,9 +194,12 @@ Run the same checks CI runs:
 ```bash
 npm run lint
 npm run typecheck
+npm test
 npm run build
 npm run check:lockfile
 ```
+
+`npm test` runs the suites in `test/` with Node's built-in test runner. They check that every `public/r/` payload matches its source and that the CLI creates, skips and overwrites files correctly. When you add or change behavior in `bin/cli.mjs`, `scripts/` or the registry format, add or update a test in `test/` in the same PR. Reviewers ask for one before approving.
 
 If you changed anything under `src/registry/`, run `npm run registry:sync` and commit the regenerated `public/r/` and `registry.json`. CI rebuilds the registry and fails if the committed files differ from the source. People install components from `public/r/`, so it has to match the reviewed code exactly.
 
