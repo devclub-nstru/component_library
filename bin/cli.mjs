@@ -135,7 +135,17 @@ const getDestination = (file, uiDir, libDir) => {
   return destination;
 };
 
-const shadcnDependencyExists = (name, uiDir, libDir) => {
+const overwriteFile = (destPath, content) => {
+  const flags = fs.constants.O_WRONLY | fs.constants.O_TRUNC | (fs.constants.O_NOFOLLOW ?? 0);
+  const fd = fs.openSync(destPath, flags);
+  try {
+    fs.writeFileSync(fd, content, "utf8");
+  } finally {
+    fs.closeSync(fd);
+  }
+};
+
+const shadcnDependencyExists =(name, uiDir, libDir) => {
   if (name === "utils") {
     return ["utils.ts", "utils.js"].some((file) =>
       fs.existsSync(path.join(libDir, file)),
@@ -308,7 +318,13 @@ if (command === "add") {
           skipped.push(relativePath);
           continue;
         }
-        fs.writeFileSync(destPath, file.content || "", "utf8");
+        try {
+          overwriteFile(destPath, file.content || "");
+        } catch (overwriteError) {
+          if (overwriteError.code !== "ELOOP") throw overwriteError;
+          console.error(`Error: Refusing to overwrite "${relativePath}" because it is a symbolic link.`);
+          process.exit(1);
+        }
         replaced = true;
       }
       written++;
