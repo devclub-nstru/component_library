@@ -99,6 +99,7 @@ const instantTransition: Transition = { duration: 0 };
 
 const MAX_WIDTH = 480;
 const BAR_HEIGHT = 48;
+const MIN_INPUT_WIDTH = 220;
 
 function AppsIcon() {
   return (
@@ -251,10 +252,15 @@ export const SpotlightSearch: React.FC<SpotlightSearchProps> = ({
   const buttonGap = isCompact ? 6 : 10;
   const buttonStep = buttonSize + buttonGap;
   const buttonOffsetY = (BAR_HEIGHT - buttonSize) / 2;
-  const stackedFilters = width - FILTER_BUTTONS.length * buttonStep < 220;
+  const stackedFilters =
+    width - FILTER_BUTTONS.length * buttonStep < MIN_INPUT_WIDTH;
   const expandedWidth = stackedFilters
     ? width
     : width - FILTER_BUTTONS.length * buttonStep;
+  const filterOffsetX = (index: number) =>
+    stackedFilters
+      ? index * buttonStep
+      : expandedWidth + buttonGap + index * buttonStep;
   const layoutTransition = reduceMotion ? instantTransition : fluidSpring;
 
   useEffect(() => {
@@ -406,7 +412,12 @@ export const SpotlightSearch: React.FC<SpotlightSearchProps> = ({
         </defs>
       </svg>
 
-      <div className={cn("relative w-full overflow-visible", stackedFilters && isExpanded ? "h-24" : "h-12")}>
+      <div
+        className={cn(
+          "relative w-full overflow-visible",
+          stackedFilters && isExpanded ? "h-24" : "h-12",
+        )}
+      >
         <div
           className="pointer-events-none absolute inset-0 overflow-visible"
           style={{ filter: `url(#${filterId})` }}
@@ -426,7 +437,7 @@ export const SpotlightSearch: React.FC<SpotlightSearchProps> = ({
               initial={false}
               animate={{
                 x: isExpanded
-                  ? (stackedFilters ? idx * buttonStep : expandedWidth + buttonGap + idx * buttonStep)
+                  ? filterOffsetX(idx)
                   : expandedWidth,
                 y: stackedFilters ? BAR_HEIGHT + buttonGap : buttonOffsetY,
                 scale: isExpanded ? 1 : 0.3,
@@ -508,7 +519,7 @@ export const SpotlightSearch: React.FC<SpotlightSearchProps> = ({
           const IconComponent = btn.icon;
           const isActive = currentFilter === btn.id;
           const isHoveredBtn = hoveredButtonId === btn.id;
-          const targetX = (stackedFilters ? idx * buttonStep : expandedWidth + buttonGap + idx * buttonStep);
+          const targetX = filterOffsetX(idx);
 
           return (
             <motion.div
