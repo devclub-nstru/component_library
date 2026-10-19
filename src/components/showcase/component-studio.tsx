@@ -1557,6 +1557,13 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     });
   };
 
+  const toasterOffset: React.ComponentProps<typeof Toaster>["offset"] =
+    viewport === "mobile"
+      ? { top: 68, bottom: 38, left: 16, right: 16 }
+      : viewport === "tablet"
+        ? 16
+        : undefined;
+
   const [toastConfig, setToastConfig] = useState<{
     position:
       | "top-left"
@@ -2190,7 +2197,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
       case "calendar-card":
         return (
           <div className="flex w-full items-center justify-center p-2">
-            <Toaster />
+            <Toaster offset={toasterOffset} mobileOffset={16} />
             <CalendarCard
               {...calendarConfig}
               events={[...calendarEvents, ...addedCalendarEvents]}
@@ -2581,6 +2588,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         return (
           <div className="flex flex-col items-center justify-center p-12 min-h-80 w-full select-none">
             <Toaster
+              offset={toasterOffset}
+              mobileOffset={16}
               position={toastConfig.position}
               richColors={toastConfig.richColors}
               expand={toastConfig.expand}
@@ -3772,6 +3781,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 className={cn(
                   "relative flex flex-col w-full h-full min-h-0 min-w-0 overflow-hidden",
                   viewport === "mobile" && "rounded-[44px]",
+                  viewport !== "desktop" && "[contain:layout_paint] [&_[data-sonner-toaster]]:max-w-[calc(100%-2rem)] [&_[data-sonner-toast]]:max-w-full",
                 )}
               >
               {viewport === "mobile" && <PhoneStatusBar />}
