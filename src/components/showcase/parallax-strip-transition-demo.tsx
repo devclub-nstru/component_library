@@ -31,9 +31,11 @@ export type ParallaxStripConfig = typeof PARALLAX_STRIP_DEFAULT_CONFIG;
 export function ParallaxStripTransitionDemo({
   config = PARALLAX_STRIP_DEFAULT_CONFIG,
   compact = false,
+  reserveControlsSpace = false,
 }: {
   config?: ParallaxStripConfig;
   compact?: boolean;
+  reserveControlsSpace?: boolean;
 }) {
   return (
     <ParallaxStripTransition
@@ -46,7 +48,9 @@ export function ParallaxStripTransitionDemo({
       className={
         compact
           ? "h-56 min-h-0 w-full rounded-lg"
-          : "h-full min-h-0 [&_footer]:right-[max(var(--strip-padding),88px)]"
+          : reserveControlsSpace
+            ? "h-full min-h-0 [&_footer]:right-[max(var(--strip-padding),88px)]"
+            : "h-full min-h-0"
       }
       ariaLabel="Virat Kohli image collection"
     />
