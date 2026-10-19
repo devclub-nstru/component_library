@@ -7,7 +7,7 @@
 
 ### React components with expressive motion
 
-Copy the source into your project and change whatever you want. There's no runtime package to keep in sync.
+Add individual components to your React project, then make them your own. The CLI copies editable source into your codebase, so you control the styling and behavior.
 
 [![npm version](https://img.shields.io/npm/v/%40devclubnst%2Fui?style=flat-square&color=0a5cff&label=npm)](https://www.npmjs.com/package/@devclubnst/ui)
 [![CI](https://img.shields.io/github/actions/workflow/status/devclub-nstru/component_library/ci.yml?branch=main&style=flat-square&label=CI)](https://github.com/devclub-nstru/component_library/actions/workflows/ci.yml)
@@ -42,7 +42,7 @@ A single theme-synced checklist card with soft disclosure, gliding hover feedbac
 
 ## What you get
 
-- 59 components written in React and TypeScript and styled with Tailwind CSS.
+- React and TypeScript components styled with Tailwind CSS.
 - Motion built on GSAP and Motion. Some components add WebGL shaders through OGL or three.js.
 - A live preview, the full source, and prop controls for every component in the [component studio](https://ui.devclubxnst.online/components).
 - A CLI and a shadcn-compatible registry that copy the source into your codebase and install its dependencies.
@@ -58,6 +58,8 @@ npx @devclubnst/ui@latest add dither
 ```
 
 The CLI writes the component into your UI directory and installs its dependencies with your package manager. If `components.json` sets `aliases.ui` to an `@/` path, it uses that. Otherwise it picks `src/components/ui` or `components/ui`.
+
+Your app imports the copied files directly. The CLI is an installation tool; components still use their declared dependencies, such as GSAP or Motion.
 
 Then import it like any other file in your project:
 
