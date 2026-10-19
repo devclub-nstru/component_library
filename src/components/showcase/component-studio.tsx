@@ -67,6 +67,7 @@ import { Noise, type NoiseMode } from "@/registry/ui/noise";
 import { AiOrb } from "@/registry/ui/ai-orb";
 import { TwitterCard } from "@/registry/ui/twitter-card";
 import { Toaster, toast } from "@/registry/ui/toast";
+import { ToasterDemo, ToasterControls, TOASTER_DEFAULT_CONFIG } from "./toaster-demo";
 import { TaskList } from "@/registry/ui/task-list";
 import { FileUpload, type FileUploadLayout } from "@/registry/ui/file-upload";
 import { FileDropzone } from "@/registry/ui/file-dropzone";
@@ -1208,6 +1209,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
   const [morphInviteConfig, setMorphInviteConfig] = useState({
     ...MORPH_INVITE_DEFAULT_CONFIG,
   });
+  const [toasterConfig, setToasterConfig] = useState(TOASTER_DEFAULT_CONFIG);
   const [taskCardConfig, setTaskCardConfig] = useState(
     TASK_CARD_DEFAULT_CONFIG,
   );
@@ -2584,6 +2586,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
             <AiOrb color={color} />
           </div>
         );
+      case "toaster":
+        return <ToasterDemo key={toasterConfig.replayKey} config={toasterConfig} />;
       case "toast":
         return (
           <div className="flex flex-col items-center justify-center p-12 min-h-80 w-full select-none">
@@ -3732,7 +3736,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 activeComponent.slug === "matrix-clock" ||
                 activeComponent.slug === "flip-clock" ||
                 activeComponent.slug === "task-card" ||
-                activeComponent.slug === "workflow-card") &&
+                activeComponent.slug === "workflow-card" ||
+                activeComponent.slug === "toaster") &&
                 viewport === "desktop"
                 ? "p-0"
                 : "p-2 sm:p-6",
@@ -3809,7 +3814,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       activeComponent.slug === "flip-clock" ||
                       activeComponent.slug === "task-card" ||
                       activeComponent.slug === "workflow-card" ||
-                      activeComponent.slug === "calendar-card"
+                      activeComponent.slug === "calendar-card" ||
+                      activeComponent.slug === "toaster"
                       ? "p-0"
                       : "p-2 sm:p-6",
                   )}
@@ -5687,6 +5693,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   ))}
                   <p className="max-w-64 text-[11px] text-muted-foreground">Hover, focus or tap a marked date for details. Use Add event to schedule and assign an event. Added events last for this preview session.</p>
                 </div>
+              )}
+              {activeComponent.slug === "toaster" && (
+                <ToasterControls config={toasterConfig} onChange={setToasterConfig} />
               )}
               {activeComponent.slug === "workflow-card" && (
                 <WorkflowCardControls

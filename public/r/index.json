@@ -1424,6 +1424,34 @@
       ]
     },
     {
+      "name": "toaster",
+      "type": "registry:ui",
+      "title": "Toaster",
+      "description": "Layered notification cards with coordinated spring motion, synchronized countdowns, undo actions, invoice reminders and contextual footers.",
+      "dependencies": [
+        "gsap",
+        "@gsap/react",
+        "motion",
+        "lucide-react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/toaster.tsx",
+          "type": "registry:ui",
+          "target": "@ui/toaster.tsx"
+        },
+        {
+          "path": "src/lib/use-media-query.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
       "name": "twitter-card",
       "type": "registry:ui",
       "title": "Twitter(X) Card",

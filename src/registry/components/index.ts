@@ -60,6 +60,7 @@ import taskCard from "./task-card.json";
 import workflowCard from "./workflow-card.json";
 import themeToggle from "./theme-toggle.json";
 import toast from "./toast.json";
+import toaster from "./toaster.json";
 import twitterCard from "./twitter-card.json";
 import calendarCard from "./calendar-card.json";
 import dateRangePicker from "./date-range-picker.json";
@@ -128,6 +129,7 @@ export {
   workflowCard,
   themeToggle,
   toast,
+  toaster,
   twitterCard,
   calendarCard,
   dateRangePicker,
@@ -197,6 +199,7 @@ export const componentsList: ComponentRegistryItem[] = [
   workflowCard as ComponentRegistryItem,
   themeToggle as ComponentRegistryItem,
   toast as ComponentRegistryItem,
+  toaster as ComponentRegistryItem,
   twitterCard as ComponentRegistryItem,
   calendarCard as ComponentRegistryItem,
   dateRangePicker as ComponentRegistryItem,
