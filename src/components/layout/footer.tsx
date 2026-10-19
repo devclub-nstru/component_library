@@ -3,10 +3,16 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { GitHubLogoIcon, ExternalLinkIcon } from "@radix-ui/react-icons";
-import { SITE_CONFIG } from "@/lib/constants";
+import {
+  GitHubLogoIcon,
+  ExternalLinkIcon,
+  EnvelopeClosedIcon,
+  ArrowTopRightIcon,
+} from "@radix-ui/react-icons";
+import { DOCS_NAV, SITE_CONFIG } from "@/lib/constants";
 import { COMPONENT_CATEGORIES } from "@/lib/component-categories";
 import { useIsDark } from "@/lib/use-is-dark";
+import { ThemeToggle } from "@/components/ui/animated-theme-toggler";
 import type { ComponentCategory } from "@/types/component";
 
 const FOOTER_CATEGORY_IDS: ComponentCategory[] = [
@@ -15,217 +21,172 @@ const FOOTER_CATEGORY_IDS: ComponentCategory[] = [
   "ai-stuff",
 ];
 
-const FOOTER_CATEGORIES = FOOTER_CATEGORY_IDS.flatMap((id) =>
-  COMPONENT_CATEGORIES.filter((category) => category.value === id),
-);
+const FOOTER_GROUPS = [
+  {
+    title: "Explore",
+    links: [
+      { title: "All components", href: "/components" },
+      ...FOOTER_CATEGORY_IDS.flatMap((id) =>
+        COMPONENT_CATEGORIES.filter((category) => category.value === id).map(
+          (category) => ({
+            title: category.label,
+            href: `/components?category=${category.value}`,
+          }),
+        ),
+      ),
+    ],
+  },
+  {
+    title: "Learn",
+    links: DOCS_NAV.slice(0, 3).flatMap((section) => section.items),
+  },
+  {
+    title: "Connect",
+    links: [
+      { title: "Community", href: "/docs/community" },
+      {
+        title: "Contribute",
+        href: `${SITE_CONFIG.links.github}/blob/main/CONTRIBUTING.md`,
+      },
+      { title: "Report an issue", href: `${SITE_CONFIG.links.github}/issues` },
+      { title: "System status", href: "/api/health" },
+      { title: "MIT license", href: `${SITE_CONFIG.links.github}/blob/main/LICENSE` },
+    ],
+  },
+];
 
-export const Footer = () => {
+const SOCIAL_LINKS = [
+  { label: "GitHub repository", href: SITE_CONFIG.links.github, icon: GitHubLogoIcon },
+  { label: "DevClub UI on npm", href: SITE_CONFIG.links.npm, icon: ExternalLinkIcon },
+  { label: "Email DevClub", href: SITE_CONFIG.links.email, icon: EnvelopeClosedIcon },
+];
+
+const linkClassName =
+  "rounded-sm text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50 focus-visible:ring-offset-4 focus-visible:ring-offset-card";
+
+export interface FooterProps {
+  brand?: React.ReactNode;
+  newsletter?: React.ReactNode;
+  controls?: React.ReactNode;
+}
+
+export const Footer = ({ brand, newsletter, controls }: FooterProps = {}) => {
   const isDark = useIsDark();
+
   return (
-    <footer className="border-t border-border bg-background py-12 text-muted-foreground font-sans transition-colors duration-200">
-      <div className="h-2 w-full mb-10 bg-[repeating-linear-gradient(90deg,currentColor_0px,currentColor_1px,transparent_1px,transparent_8px)] text-border-subtle border-b border-border" />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-10">
-          <div className="space-y-3 md:col-span-2">
-            <div className="flex items-center gap-2.5">
-              <Image
-                src={isDark ? SITE_CONFIG.logos.dark : SITE_CONFIG.logos.light}
-                alt="DevClub"
-                width={180}
-                height={60}
-                className="h-12 w-auto aspect-[12/5] object-contain"
-              />
-            </div>
-            <p className="text-xs text-muted-foreground max-w-sm leading-relaxed font-sans">
-              {SITE_CONFIG.description}
+    <footer className="border-t border-border bg-background px-4 py-6 font-sans sm:px-6 sm:py-10 lg:px-8">
+      <div
+        className="mx-auto max-w-7xl overflow-hidden rounded-3xl border border-border bg-card/80 shadow-sm backdrop-blur-xl"
+      >
+        <div
+          className="flex flex-col gap-5 border-b border-border bg-linear-to-br from-foreground/5 via-transparent to-transparent p-6 sm:p-8 md:flex-row md:items-center md:justify-between lg:px-10"
+        >
+          <div className="max-w-xl">
+            <p className="mb-3 text-xs font-medium uppercase tracking-widest text-muted-foreground">
+              Built to be yours
             </p>
-            <div className="flex items-center gap-3 pt-2">
-              <a
-                href={SITE_CONFIG.links.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 border border-border text-muted-foreground hover:text-foreground hover:bg-foreground/5 transition-colors"
-                aria-label="GitHub Repository"
-              >
-                <GitHubLogoIcon className="h-4 w-4" />
-              </a>
-              <a
-                href={SITE_CONFIG.links.npm}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 border border-border text-muted-foreground hover:text-foreground hover:bg-foreground/5 transition-colors"
-                aria-label="DevClub UI on npm"
-              >
-                <ExternalLinkIcon className="h-4 w-4" />
-              </a>
-            </div>
+            <p className="font-serif text-3xl leading-tight tracking-tight text-foreground sm:text-4xl">
+              Small details. Better interfaces.
+            </p>
           </div>
-
-          <div>
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-foreground mb-3">
-              Components
-            </h4>
-            <ul className="space-y-2 text-xs">
-              <li>
-                <Link
-                  href="/components"
-                  className="hover:text-foreground transition-colors"
-                >
-                  All Components
-                </Link>
-              </li>
-              {FOOTER_CATEGORIES.map((category) => (
-                <li key={category.value}>
-                  <Link
-                    href={`/components?category=${category.value}`}
-                    className="hover:text-foreground transition-colors"
-                  >
-                    {category.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-foreground mb-3">
-              Documentation
-            </h4>
-            <ul className="space-y-2 text-xs">
-              <li>
-                <Link
-                  href="/docs"
-                  className="hover:text-foreground transition-colors"
-                >
-                  Introduction
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/docs/installation"
-                  className="hover:text-foreground transition-colors"
-                >
-                  Installation
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/docs/theming"
-                  className="hover:text-foreground transition-colors"
-                >
-                  Theming
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/docs/typeset"
-                  className="hover:text-foreground transition-colors"
-                >
-                  Typeset
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/docs/cli"
-                  className="hover:text-foreground transition-colors"
-                >
-                  CLI
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/docs/skills"
-                  className="hover:text-foreground transition-colors"
-                >
-                  Agent Skills
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/docs/registry"
-                  className="hover:text-foreground transition-colors"
-                >
-                  Registry API
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/docs/community"
-                  className="hover:text-foreground transition-colors"
-                >
-                  Community
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-foreground mb-3">
-              Legal & Trust
-            </h4>
-            <ul className="space-y-2 text-xs">
-              <li>
-                <Link
-                  href="/terms"
-                  className="hover:text-foreground transition-colors"
-                >
-                  Terms & Conditions
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/privacy"
-                  className="hover:text-foreground transition-colors"
-                >
-                  Privacy Policy
-                </Link>
-              </li>
-              <li>
-                <a
-                  href="https://github.com/devclub-nstru/component_library/blob/main/LICENSE"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-foreground transition-colors"
-                >
-                  MIT License
-                </a>
-              </li>
-              <li>
-                <Link
-                  href="/api/health"
-                  className="hover:text-foreground transition-colors"
-                >
-                  System Status
-                </Link>
-              </li>
-            </ul>
-          </div>
+          <Link
+            href="/components"
+            className="inline-flex min-h-11 w-fit shrink-0 items-center gap-4 rounded-full bg-foreground px-5 py-3 text-sm font-medium text-background hover:opacity-85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50 focus-visible:ring-offset-4 focus-visible:ring-offset-card"
+          >
+            Explore components
+            <ArrowTopRightIcon className="size-4" aria-hidden="true" />
+          </Link>
         </div>
 
-        <div className="border-t border-border pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
-          <p>© {new Date().getFullYear()} devclub. All rights reserved.</p>
-          <div className="flex items-center gap-4">
-            <Link
-              href="/terms"
-              className="hover:text-foreground transition-colors"
+        <div
+          className="grid gap-10 p-6 sm:grid-cols-2 sm:p-8 lg:grid-cols-[1.4fr_1fr_1fr_1fr] lg:gap-12 lg:p-10"
+        >
+          <div className="min-w-0 space-y-5">
+            {brand ?? (
+              <>
+                <Link
+                  href="/"
+                  aria-label="DevClub home"
+                  className="inline-flex rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50 focus-visible:ring-offset-4 focus-visible:ring-offset-card"
+                >
+                  <Image
+                    src={isDark ? SITE_CONFIG.logos.dark : SITE_CONFIG.logos.light}
+                    alt="DevClub"
+                    width={180}
+                    height={60}
+                    className="h-12 w-auto object-contain"
+                  />
+                </Link>
+                <p className="max-w-xs text-sm leading-relaxed text-muted-foreground">
+                  {SITE_CONFIG.description}
+                </p>
+              </>
+            )}
+            <span
+              className="inline-flex items-center gap-2 rounded-full border border-border bg-muted/40 px-3 py-1.5 text-xs text-muted-foreground"
             >
+              <span className="size-1.5 rounded-full bg-foreground/60" aria-hidden="true" />
+              Open source. Made for everyone.
+            </span>
+            <div
+              className="flex flex-wrap gap-2"
+              role="group"
+              aria-label="Find DevClub online"
+            >
+              {SOCIAL_LINKS.map(({ label, href, icon: Icon }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target={href.startsWith("https:") ? "_blank" : undefined}
+                  rel={href.startsWith("https:") ? "noopener noreferrer" : undefined}
+                  aria-label={label}
+                  className="flex size-11 items-center justify-center rounded-full border border-border text-muted-foreground hover:border-foreground/30 hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50 focus-visible:ring-offset-2 focus-visible:ring-offset-card"
+                >
+                  <Icon className="size-4" aria-hidden="true" />
+                </a>
+              ))}
+            </div>
+            {newsletter}
+          </div>
+          {FOOTER_GROUPS.map(({ title, links }) => (
+            <nav key={title} aria-label={`${title} footer links`}>
+              <h2 className="mb-4 text-xs font-semibold uppercase tracking-widest text-foreground">
+                {title}
+              </h2>
+              <ul className="space-y-1">
+                {links.map(({ title: label, href }) => (
+                  <li key={href}>
+                    <Link
+                      href={href}
+                      className={`inline-flex min-h-9 items-center ${linkClassName}`}
+                      target={href.startsWith("https:") ? "_blank" : undefined}
+                      rel={href.startsWith("https:") ? "noopener noreferrer" : undefined}
+                    >
+                      {label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          ))}
+        </div>
+
+        <div
+          className="flex flex-col gap-4 border-t border-border px-6 py-5 sm:px-8 md:flex-row md:items-center md:justify-between lg:px-10"
+        >
+          <p className="text-xs leading-relaxed text-muted-foreground">
+            © {new Date().getFullYear()} DevClub. Built with care, shared with everyone.
+          </p>
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
+            <Link href="/terms" className={linkClassName}>
               Terms
             </Link>
-            <span>•</span>
-            <Link
-              href="/privacy"
-              className="hover:text-foreground transition-colors"
-            >
+            <Link href="/privacy" className={linkClassName}>
               Privacy
             </Link>
-            <span>•</span>
-            <Link
-              href="/docs/registry"
-              className="hover:text-foreground transition-colors"
-            >
-              Registry
-            </Link>
+            {controls ?? (
+              <ThemeToggle className="flex size-11 items-center justify-center rounded-full border border-border bg-background" />
+            )}
           </div>
         </div>
       </div>
