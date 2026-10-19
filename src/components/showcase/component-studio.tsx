@@ -851,7 +851,7 @@ function StepperDemo({
   }, [current]);
 
   return (
-    <div className="@container/setup w-full p-0">
+    <div className="@container/setup w-full">
       <div className="mx-auto w-full max-w-xl space-y-4 @md/setup:space-y-6 rounded-2xl border border-zinc-200 bg-white p-3 @md/setup:p-6 dark:border-white/8 dark:bg-[#141416]">
         <div>
           <h3 className="text-sm font-semibold tracking-tight text-zinc-900 dark:text-white">
@@ -1557,6 +1557,13 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     });
   };
 
+  const toasterOffset: React.ComponentProps<typeof Toaster>["offset"] =
+    viewport === "mobile"
+      ? { top: 68, bottom: 38, left: 16, right: 16 }
+      : viewport === "tablet"
+        ? 16
+        : undefined;
+
   const [toastConfig, setToastConfig] = useState<{
     position:
       | "top-left"
@@ -2190,7 +2197,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
       case "calendar-card":
         return (
           <div className="flex w-full items-center justify-center p-2">
-            <Toaster offset={viewport === "mobile" ? { top: 68, bottom: 38, left: 16, right: 16 } : viewport === "tablet" ? 16 : undefined} mobileOffset={16} />
+            <Toaster offset={toasterOffset} mobileOffset={16} />
             <CalendarCard
               {...calendarConfig}
               events={[...calendarEvents, ...addedCalendarEvents]}
@@ -2469,48 +2476,48 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         return (
           <div className="@container/proximity w-full max-w-3xl h-full min-h-0 max-h-140 select-text">
             <div className="flex h-full items-start justify-center gap-4 @lg/proximity:gap-12">
-            <div className="sticky top-0 w-14 shrink-0 select-none pt-0.5 [&_[data-slot=proximity-dash]]:max-w-full">
-              <ProximitySidebar
-                sections={PROXIMITY_DEMO_SECTIONS}
-                color={color}
-                side="left"
-                maxDashWidth={54}
-              />
-            </div>
-            <div className="min-w-0 flex-1 h-full overflow-y-auto pr-1 @lg/proximity:pr-6 space-y-7 motion-safe:scroll-smooth">
-              {PROXIMITY_DEMO_SECTIONS.map((sec, idx) => (
-                <div
-                  key={sec.id}
-                  id={sec.id}
-                  className="scroll-mt-4 space-y-1.5"
-                >
-                  {sec.kind === "title" ? (
-                    <div
-                      className={cn(
-                        "border-b border-border dark:border-white/8 pb-2",
-                        idx === 0 ? "pt-0" : "pt-5",
-                      )}
-                    >
-                      <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground dark:text-zinc-500 block leading-none">
-                        Section
-                      </span>
-                      <h2 className="text-base font-medium text-foreground dark:text-white tracking-tight mt-1 leading-tight">
-                        {sec.label}
-                      </h2>
-                    </div>
-                  ) : (
-                    <div className="space-y-1">
-                      <h3 className="text-xs font-mono uppercase tracking-wider text-foreground/90 dark:text-zinc-300">
-                        {sec.label}
-                      </h3>
-                      <p className="text-xs leading-relaxed text-muted-foreground dark:text-zinc-400 font-light">
-                        {sec.description}
-                      </p>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
+              <div className="sticky top-0 w-14 shrink-0 select-none pt-0.5 [&_[data-slot=proximity-dash]]:max-w-full">
+                <ProximitySidebar
+                  sections={PROXIMITY_DEMO_SECTIONS}
+                  color={color}
+                  side="left"
+                  maxDashWidth={54}
+                />
+              </div>
+              <div className="min-w-0 flex-1 h-full overflow-y-auto pr-1 @lg/proximity:pr-6 space-y-7 motion-safe:scroll-smooth">
+                {PROXIMITY_DEMO_SECTIONS.map((sec, idx) => (
+                  <div
+                    key={sec.id}
+                    id={sec.id}
+                    className="scroll-mt-4 space-y-1.5"
+                  >
+                    {sec.kind === "title" ? (
+                      <div
+                        className={cn(
+                          "border-b border-border dark:border-white/8 pb-2",
+                          idx === 0 ? "pt-0" : "pt-5",
+                        )}
+                      >
+                        <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground dark:text-zinc-500 block leading-none">
+                          Section
+                        </span>
+                        <h2 className="text-base font-medium text-foreground dark:text-white tracking-tight mt-1 leading-tight">
+                          {sec.label}
+                        </h2>
+                      </div>
+                    ) : (
+                      <div className="space-y-1">
+                        <h3 className="text-xs font-mono uppercase tracking-wider text-foreground/90 dark:text-zinc-300">
+                          {sec.label}
+                        </h3>
+                        <p className="text-xs leading-relaxed text-muted-foreground dark:text-zinc-400 font-light">
+                          {sec.description}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         );
@@ -2581,7 +2588,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         return (
           <div className="flex flex-col items-center justify-center p-12 min-h-80 w-full select-none">
             <Toaster
-              offset={viewport === "mobile" ? { top: 68, bottom: 38, left: 16, right: 16 } : viewport === "tablet" ? 16 : undefined}
+              offset={toasterOffset}
               mobileOffset={16}
               position={toastConfig.position}
               richColors={toastConfig.richColors}
