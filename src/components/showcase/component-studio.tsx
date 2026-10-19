@@ -2202,7 +2202,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         );
       case "date-range-picker":
         return (
-          <div className="flex flex-col items-center justify-center w-full h-full min-h-96 select-none p-4 sm:p-8">
+          <div className="flex flex-col items-center justify-center w-full min-w-0 select-none p-0">
             <DateRangePicker
               onApply={(range) => {
                 const fmt = new Intl.DateTimeFormat("en-US", {
