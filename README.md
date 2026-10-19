@@ -12,6 +12,7 @@ Add individual components to your React project, then make them your own. The CL
 [![npm version](https://img.shields.io/npm/v/%40devclubnst%2Fui?style=flat-square&color=0a5cff&label=npm)](https://www.npmjs.com/package/@devclubnst/ui)
 [![CI](https://img.shields.io/github/actions/workflow/status/devclub-nstru/component_library/ci.yml?branch=main&style=flat-square&label=CI)](https://github.com/devclub-nstru/component_library/actions/workflows/ci.yml)
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/devclub-nstru/component_library/badge?style=flat-square)](https://securityscorecards.dev/viewer/?uri=github.com/devclub-nstru/component_library)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/15667/badge)](https://www.bestpractices.dev/projects/15667)
 [![MIT license](https://img.shields.io/badge/license-MIT-171717?style=flat-square)](LICENSE)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-12c8ff?style=flat-square)](CONTRIBUTING.md)
 
