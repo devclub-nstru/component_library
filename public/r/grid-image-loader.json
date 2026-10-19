@@ -12,8 +12,8 @@
     "tailwind-merge"
   ],
   "registryDependencies": [
-    "https://ui.devclubxnst.online/r/cursor-trail-loader.json",
-    "https://ui.devclubxnst.online/r/animated-counter.json"
+    "https://ui.devclubxnst.com/r/cursor-trail-loader.json",
+    "https://ui.devclubxnst.com/r/animated-counter.json"
   ],
   "files": [
     {

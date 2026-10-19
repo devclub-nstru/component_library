@@ -99,7 +99,7 @@ ${UTILS_SOURCE}
 
 ## shadcn CLI
 \`\`\`bash
-npx shadcn@latest add https://ui.devclubxnst.online/r/[component].json
+npx shadcn@latest add https://ui.devclubxnst.com/r/[component].json
 \`\`\`
 
 ## DevClub CLI
@@ -109,7 +109,7 @@ npx @devclubnst/ui add [component...]
 Existing files are skipped. Pass \`--overwrite\` to replace them. Requires @devclubnst/ui 2.1.0 or later.
 
 ## Manual Installation
-1. Pick a component from https://ui.devclubxnst.online/components
+1. Pick a component from https://ui.devclubxnst.com/components
 2. Copy the component source into your \`components/ui/\` folder
 3. Install the npm packages listed in the component's Code tab
 `;
@@ -433,7 +433,7 @@ export default function Page() {
                 with its npm dependencies:
               </p>
 
-              <SnippetBlock code="npx shadcn@latest add https://ui.devclubxnst.online/r/noise.json" />
+              <SnippetBlock code="npx shadcn@latest add https://ui.devclubxnst.com/r/noise.json" />
 
               <p className="text-xs text-muted-foreground font-light leading-relaxed">
                 Or using the direct unpkg registry link:

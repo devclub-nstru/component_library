@@ -2,7 +2,7 @@
 
 ## Supported versions
 
-We patch the latest minor release of the `@devclubnst/ui` package and the registry at `ui.devclubxnst.online/r/`.
+We patch the latest minor release of the `@devclubnst/ui` package and the registry at `ui.devclubxnst.com/r/`.
 
 | Version | Supported |
 | ------- | --------- |
@@ -15,7 +15,7 @@ We patch the latest minor release of the `@devclubnst/ui` package and the regist
 
 - Component source in `src/registry/` and the registry JSON published from `public/r/`
 - The `@devclubnst/ui` CLI in `bin/cli.mjs`, which writes files and runs package-manager commands on the user's machine
-- The documentation site at `ui.devclubxnst.online`
+- The documentation site at `ui.devclubxnst.com`
 - This repository's GitHub Actions workflows
 
 Vulnerabilities in third-party dependencies belong upstream. Tell us anyway if a component exposes one in a way we can fix.

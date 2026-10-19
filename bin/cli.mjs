@@ -222,7 +222,7 @@ Options for add:
   -o, --overwrite   Overwrite files that already exist
 
 Shadcn CLI usage:
-  npx shadcn@latest add https://ui.devclubxnst.online/r/<component>.json
+  npx shadcn@latest add https://ui.devclubxnst.com/r/<component>.json
   npx shadcn@latest add devclub-nstru/component_library/<component>
 `);
   process.exit(0);

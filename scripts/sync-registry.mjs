@@ -9,7 +9,7 @@ const componentsDir = path.join(rootDir, "src", "registry", "components");
 const publicRDir = path.join(rootDir, "public", "r");
 const rootRDir = path.join(rootDir, "r");
 const registryBaseUrl = (
-  process.env.REGISTRY_BASE_URL || "https://ui.devclubxnst.online"
+  process.env.REGISTRY_BASE_URL || "https://ui.devclubxnst.com"
 ).replace(/\/+$/, "");
 const catalogFiles = new Set(["registry.json", "index.json"]);
 const runtimePackages = new Set(["react", "react-dom"]);
@@ -311,7 +311,7 @@ for (const dir of [publicRDir, rootRDir]) {
 const registryJson = {
   $schema: "https://ui.shadcn.com/schema/registry.json",
   name: "devclubnst",
-  homepage: "https://ui.devclubxnst.online",
+  homepage: "https://ui.devclubxnst.com",
   items: registryItems,
 };
 
