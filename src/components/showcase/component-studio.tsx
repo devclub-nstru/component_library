@@ -68,6 +68,7 @@ import { AiOrb } from "@/registry/ui/ai-orb";
 import { TwitterCard } from "@/registry/ui/twitter-card";
 import { Toaster, toast } from "@/registry/ui/toast";
 import { ToasterDemo, ToasterControls, TOASTER_DEFAULT_CONFIG } from "./toaster-demo";
+import { AccessRequestDemo, AccessRequestControls, ACCESS_REQUEST_DEFAULT_CONFIG } from "./access-request-demo";
 import { TaskList } from "@/registry/ui/task-list";
 import { FileUpload, type FileUploadLayout } from "@/registry/ui/file-upload";
 import { FileDropzone } from "@/registry/ui/file-dropzone";
@@ -1209,6 +1210,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
   const [morphInviteConfig, setMorphInviteConfig] = useState({
     ...MORPH_INVITE_DEFAULT_CONFIG,
   });
+  const [accessRequestConfig, setAccessRequestConfig] = useState(ACCESS_REQUEST_DEFAULT_CONFIG);
   const [toasterConfig, setToasterConfig] = useState(TOASTER_DEFAULT_CONFIG);
   const [taskCardConfig, setTaskCardConfig] = useState(
     TASK_CARD_DEFAULT_CONFIG,
@@ -2586,6 +2588,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
             <AiOrb color={color} />
           </div>
         );
+      case "access-request":
+        return <AccessRequestDemo key={accessRequestConfig.resetKey} config={accessRequestConfig} />;
       case "toaster":
         return <ToasterDemo key={toasterConfig.replayKey} config={toasterConfig} />;
       case "toast":
@@ -3737,7 +3741,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 activeComponent.slug === "flip-clock" ||
                 activeComponent.slug === "task-card" ||
                 activeComponent.slug === "workflow-card" ||
-                activeComponent.slug === "toaster") &&
+                activeComponent.slug === "toaster" ||
+                activeComponent.slug === "access-request") &&
                 viewport === "desktop"
                 ? "p-0"
                 : "p-2 sm:p-6",
@@ -3815,7 +3820,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       activeComponent.slug === "task-card" ||
                       activeComponent.slug === "workflow-card" ||
                       activeComponent.slug === "calendar-card" ||
-                      activeComponent.slug === "toaster"
+                      activeComponent.slug === "toaster" ||
+                      activeComponent.slug === "access-request"
                       ? "p-0"
                       : "p-2 sm:p-6",
                   )}
@@ -5693,6 +5699,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   ))}
                   <p className="max-w-64 text-[11px] text-muted-foreground">Hover, focus or tap a marked date for details. Use Add event to schedule and assign an event. Added events last for this preview session.</p>
                 </div>
+              )}
+              {activeComponent.slug === "access-request" && (
+                <AccessRequestControls config={accessRequestConfig} onChange={setAccessRequestConfig} />
               )}
               {activeComponent.slug === "toaster" && (
                 <ToasterControls config={toasterConfig} onChange={setToasterConfig} />

@@ -1,6 +1,7 @@
 import { ComponentRegistryItem } from "@/types/component";
 import {
   accordion,
+  accessRequest,
   aiInput,
   aiOrb,
   animatedButton,
@@ -109,6 +110,7 @@ export const COMPONENT_REGISTRY: Record<string, ComponentRegistryItem> = {
   "code-block": codeBlock as ComponentRegistryItem,
   "smooth-accordion": smoothAccordion as ComponentRegistryItem,
   accordion: accordion as ComponentRegistryItem,
+  "access-request": accessRequest as ComponentRegistryItem,
   "dotted-accordion": dottedAccordion as ComponentRegistryItem,
   "twitter-card": twitterCard as ComponentRegistryItem,
   toast: toast as ComponentRegistryItem,

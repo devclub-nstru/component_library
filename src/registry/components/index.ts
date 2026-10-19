@@ -1,5 +1,6 @@
 import { ComponentRegistryItem } from "@/types/component";
 import accordion from "./accordion.json";
+import accessRequest from "./access-request.json";
 import aiInput from "./ai-input.json";
 import aiOrb from "./ai-orb.json";
 import animatedButton from "./animated-button.json";
@@ -69,6 +70,7 @@ import stepper from "./stepper.json";
 
 export {
   accordion,
+  accessRequest,
   aiInput,
   aiOrb,
   animatedButton,
@@ -139,6 +141,7 @@ export {
 
 export const componentsList: ComponentRegistryItem[] = [
   accordion as ComponentRegistryItem,
+  accessRequest as ComponentRegistryItem,
   aiInput as ComponentRegistryItem,
   aiOrb as ComponentRegistryItem,
   animatedButton as ComponentRegistryItem,

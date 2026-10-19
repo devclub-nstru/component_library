@@ -4,6 +4,51 @@
   "homepage": "https://ui.devclubxnst.com",
   "items": [
     {
+      "name": "access-request",
+      "type": "registry:ui",
+      "title": "Access Request",
+      "description": "A compact avatar pill that unfolds into access requests with shared avatar motion, individual approve and decline actions, and coordinated spring reflow.",
+      "dependencies": [
+        "gsap",
+        "@gsap/react",
+        "motion",
+        "lucide-react",
+        "@radix-ui/react-avatar",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "utils",
+        "avatar"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/access-request.tsx",
+          "type": "registry:ui",
+          "target": "@ui/access-request.tsx"
+        },
+        {
+          "path": "src/registry/ui/access-request-row.tsx",
+          "type": "registry:ui",
+          "target": "@ui/access-request-row.tsx"
+        },
+        {
+          "path": "src/registry/ui/access-request-state.ts",
+          "type": "registry:ui",
+          "target": "@ui/access-request-state.ts"
+        },
+        {
+          "path": "src/registry/ui/use-access-request-motion.ts",
+          "type": "registry:ui",
+          "target": "@ui/use-access-request-motion.ts"
+        },
+        {
+          "path": "src/lib/use-media-query.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
       "name": "accordion",
       "type": "registry:ui",
       "title": "Blur Reveal Accordion",
