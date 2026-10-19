@@ -12,6 +12,8 @@ updates:
         update-types: ["version-update:semver-major"]
       - dependency-name: "eslint"
         update-types: ["version-update:semver-major"]
+      - dependency-name: "voice-glow"
+        update-types: ["version-update:semver-minor"]
     groups:
       npm-minor-and-patch:
         update-types:
