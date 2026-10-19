@@ -24,7 +24,7 @@
 .DS_Store
 *.pem
 
-/skills-agents-all
+/skills-agents-all/
 
 # debug
 npm-debug.log*
