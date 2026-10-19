@@ -2065,7 +2065,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
       case "orbit-gallery":
         return <OrbitGalleryDemo {...orbitGalleryConfig} />;
       case "parallax-strip-transition":
-        return <ParallaxStripTransitionDemo config={parallaxStripConfig} />;
+        return <ParallaxStripTransitionDemo config={parallaxStripConfig} reserveControlsSpace={viewport === "desktop"} />;
       case "scrolling-cards":
         return <ScrollingCardsDemo config={scrollingCardsConfig} />;
       case "scroll-text":
