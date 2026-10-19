@@ -45,6 +45,20 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) in your browser to view the interactive showcase and documentation live.
 
+### Optional supplemental agent skills
+
+The tracked `skills/` directory provides the required project guidance. Additional skills are available from the public [mattpocock/skills repository](https://github.com/mattpocock/skills).
+
+For a new optional checkout, run this command from the `component_library` repository root:
+
+```bash
+git clone https://github.com/mattpocock/skills.git skills-agents-all
+```
+
+Read relevant `SKILL.md` files under `skills-agents-all/skills/` only if that folder is present. If it is absent, continue with `skills/`; development, builds, and CI do not require the supplemental checkout.
+
+The `/skills-agents-all/` directory is gitignored and remains local. Keep existing checkouts and local customizations intact. Repository-specific architecture and guidance remain authoritative.
+
 ---
 
 ## Project Structure Overview
@@ -65,7 +79,8 @@ component_library/
 │   │   ├── index.ts            # Complete metadata, props, physics, and code catalog
 │   │   └── ui/                 # Production component source files (.tsx)
 │   └── types/                  # TypeScript interface definitions
-├── skills/                     # Project GSAP animation skill definitions & LLM indexes
+├── skills/                     # Required project GSAP skills & LLM indexes
+├── skills-agents-all/           # Optional local supplemental skills checkout (gitignored)
 ├── LICENSE                     # MIT Open Source License
 ├── README.md                   # Primary open source manual
 ├── CONTRIBUTING.md             # Contributor guidelines
