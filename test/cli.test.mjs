@@ -79,6 +79,25 @@ describe("cli", { skip: process.platform === "win32" && "stub binaries are POSIX
     assert.notEqual(fs.readFileSync(file, "utf8"), "local edit");
   });
 
+  test("add installs access request helpers and delegates its standard avatar dependency", () => {
+    const cwd = project();
+    const result = run(cwd, "add", "access-request");
+    assert.equal(result.status, 0, result.stderr);
+    assert.match(result.stdout, /Adding shadcn\/ui dependencies: utils, avatar/);
+    for (const file of [
+      "components/ui/access-request.tsx",
+      "components/ui/access-request-row.tsx",
+      "components/ui/access-request-state.ts",
+      "components/ui/use-access-request-motion.ts",
+      "lib/use-media-query.ts",
+    ]) {
+      assert.ok(fs.existsSync(path.join(cwd, "src", file)), `Missing ${file}`);
+    }
+    const component = fs.readFileSync(path.join(cwd, "src/components/ui/access-request.tsx"), "utf8");
+    assert.match(component, /from "\.\/access-request-state"/);
+    assert.match(component, /from "@\/components\/ui\/avatar"/);
+  });
+
   test("add warns instead of failing when the Tailwind CSS file is missing", () => {
     const cwd = project();
     fs.rmSync(path.join(cwd, "src", "app", "globals.css"));
