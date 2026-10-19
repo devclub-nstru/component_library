@@ -15,6 +15,13 @@ import { CandyButton } from "@/registry/ui/candy-button";
 import { AnimatedButton } from "@/registry/ui/animated-button";
 import { AsciiHoverButton } from "@/registry/ui/ascii-hover-button";
 import { SpotlightCard } from "@/registry/ui/spotlight-card";
+import { FileDropzone } from "@/registry/ui/file-dropzone";
+import { ProximitySidebar } from "@/registry/ui/proximity-sidebar";
+import { FileTree } from "@/registry/ui/file-tree";
+import { ThemeToggle } from "@/registry/ui/theme-toggle";
+import { DateRangePicker } from "@/registry/ui/date-range-picker";
+import { Stepper } from "@/registry/ui/stepper";
+import { Noise } from "@/registry/ui/noise";
 import { PixelCard } from "@/registry/ui/pixel-card";
 import { HookSidebar } from "@/registry/ui/hook-sidebar";
 import { GitHubActivity } from "@/registry/ui/github-activity";
@@ -36,6 +43,7 @@ import { TaskCard } from "@/registry/ui/task-card";
 import { TASK_CARD_DEMO_TASKS } from "@/components/showcase/task-card-demo";
 import { FileUpload } from "@/registry/ui/file-upload";
 import { SearchComposer } from "@/registry/ui/search-input";
+import { MorphInvite } from "@/registry/ui/morph-invite";
 import { MorphSearch } from "@/registry/ui/morph-search";
 import { Orb } from "@/registry/ui/orb";
 import { LiquidToggle } from "@/registry/ui/liquid-toggle";
@@ -214,6 +222,54 @@ export default function ComponentsPage() {
   const [revealSheetOpen, setRevealSheetOpen] = useState(false);
 
   const previewRenderers: Record<string, React.ReactNode> = {
+    "morph-invite": <MorphInvite onInvite={async () => {}} />,
+    "file-dropzone": (
+      <div className="w-[360px] max-w-none shrink-0 scale-75">
+        <FileDropzone label="Drop your files here" description="Images, documents, and more" />
+      </div>
+    ),
+    "proximity-sidebar": (
+      <div className="flex w-full max-w-60 items-start gap-5 rounded-xl border border-border bg-background p-4">
+        <ProximitySidebar maxDashWidth={54} sections={[
+          { id: "gallery-overview", label: "Overview", kind: "title" },
+          { id: "gallery-features", label: "Features", kind: "subtitle" },
+          { id: "gallery-details", label: "Details", kind: "body" },
+        ]} />
+        <div className="space-y-3 text-xs">
+          <p className="font-medium">On this page</p>
+          <p className="text-muted-foreground">Overview</p>
+          <p className="text-muted-foreground">Features</p>
+          <p className="text-muted-foreground">Details</p>
+        </div>
+      </div>
+    ),
+    "file-tree": (
+      <FileTree className="w-full max-w-60 rounded-xl border border-border bg-background p-3" defaultExpandedIds={["src"]} data={[
+        { id: "src", label: "src", children: [
+          { id: "components", label: "components", children: [{ id: "button", label: "button.tsx" }] },
+          { id: "app", label: "app.tsx" },
+        ] },
+        { id: "package", label: "package.json" },
+      ]} />
+    ),
+    "theme-toggle": <ThemeToggle className="flex size-14 items-center justify-center rounded-full border border-border bg-background" />,
+    "date-range-picker": (
+      <div className="w-[600px] max-w-none shrink-0 scale-[0.45]">
+        <DateRangePicker months={1} />
+      </div>
+    ),
+    stepper: (
+      <Stepper className="w-full max-w-64" animated={false} orientation="vertical" currentStep={1} steps={[
+        { id: "account", title: "Create account", description: "Your profile is ready" },
+        { id: "workspace", title: "Set up workspace", description: "Invite your team" },
+        { id: "launch", title: "Launch", description: "Ready when you are" },
+      ]} />
+    ),
+    noise: (
+      <Noise animated={false} fullScreen={false} patternAlpha={60} className="flex h-40 w-full items-center justify-center rounded-xl bg-zinc-900 text-white">
+        <span className="relative z-10 text-sm font-medium">Texture in every detail</span>
+      </Noise>
+    ),
     "calendar-card": (
       <CalendarCard
         showProgress={false}
@@ -361,10 +417,15 @@ export default function ComponentsPage() {
     ),
     "pixel-card": (
       <PixelCard
-        className="w-full max-w-60 aspect-4/5 border-zinc-200 bg-white dark:border-white/10 dark:bg-black/80"
+        className="flex h-40 w-full max-w-60 items-center justify-center border-zinc-200 bg-white dark:border-white/10 dark:bg-black/80"
         variant="default"
-        maxTilt={6}
-      />
+        maxTilt={0}
+      >
+        <div className="relative z-10 text-center">
+          <p className="text-sm font-semibold">Pixel perfect</p>
+          <p className="mt-1 text-xs text-muted-foreground">An interactive canvas card</p>
+        </div>
+      </PixelCard>
     ),
     "bento-grid": (
       <div className="w-full max-w-70 grid grid-cols-2 gap-2">
