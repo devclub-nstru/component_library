@@ -227,6 +227,25 @@ Every change goes to `main` through a pull request. Nobody pushes to `main` dire
 
 4. Fill in the PR template, including screenshots or a recording for any visual change.
 
+### Sign off every commit (DCO)
+
+Every commit in a pull request must have a `Signed-off-by` line. By adding it, you certify the [Developer Certificate of Origin 1.1](https://developercertificate.org/): you wrote the change, or otherwise have the right to submit it under the project's MIT license.
+
+```bash
+git commit -s -m "feat(dither): add grain intensity prop"
+```
+
+`-s` adds `Signed-off-by: Your Name <you@example.com>` using your `git config user.name` and `user.email`. The email must match the commit's author email. The required `DCO` check fails the PR if any commit is missing a matching sign-off. Commits made in the GitHub web editor get one automatically.
+
+To fix a PR whose commits aren't signed off:
+
+```bash
+git rebase --signoff upstream/main
+git push --force-with-lease
+```
+
+The `main` ruleset also requires commits with a [verified signature](https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification). Signing (`-S`) and sign-off (`-s`) are different things, and you need both.
+
 ### PR size
 
 A bot labels every PR by the number of changed lines. Generated files (`public/r/`, `registry.json`, `package-lock.json`) don't count.

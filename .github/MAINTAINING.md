@@ -1,6 +1,6 @@
 # Maintaining DevClub UI
 
-This is the rulebook for people with write access. Contributors should read [CONTRIBUTING.md](../CONTRIBUTING.md) instead.
+This is the rulebook for people with write access. Contributors should read [CONTRIBUTING.md](../CONTRIBUTING.md) instead. The full list of roles and who holds access to the repo, npm and hosting is in [GOVERNANCE.md](../GOVERNANCE.md).
 
 ## Roles
 
@@ -19,7 +19,7 @@ Everyone else, including other org owners, follows the rules. Org owners can sti
 
 ## Cutting a release
 
-1. Open a PR to `main` that bumps `version` in `package.json` (`chore(release): 2.2.0`). Get it reviewed and merged like any other PR.
+1. Open a PR to `main` that bumps `version` in `package.json` and `package-lock.json` (`npm version 2.3.0 --no-git-tag-version`) and moves the `[Unreleased]` entries in [CHANGELOG.md](../CHANGELOG.md) under the new version, including a `Security` section. Title it `chore(release): 2.3.0`. Get it reviewed and merged like any other PR.
 2. Once CI is green on `main`, fast-forward `release`:
 
    ```bash
@@ -27,8 +27,17 @@ Everyone else, including other org owners, follows the rules. Org owners can sti
    git push origin origin/main:release
    ```
 
-3. The [Publish Release](workflows/publish-release.yml) workflow checks that `release` points at a commit on `main`, creates the `v<version>` tag, and publishes a GitHub release with notes generated from PR labels ([release.yml](release.yml)). It fails if the tag already exists, so a release without a version bump can't overwrite an old one.
-4. Publish to npm from a clean checkout of the tag: `git checkout v2.2.0 && npm ci --ignore-scripts && npm publish`. The next hardening step is moving this into the workflow with [npm trusted publishing](https://docs.npmjs.com/trusted-publishers), which adds provenance and removes long-lived npm tokens.
+3. The [Publish Release](workflows/publish-release.yml) workflow checks that `release` points at a commit on `main` and that the tag doesn't exist yet, so a release without a version bump can't overwrite an old one. It packs the npm tarball, writes `SHA256SUMS`, creates a Sigstore-signed build provenance attestation, then creates the `v<version>` tag and a GitHub release. The release notes link to the changelog, followed by notes generated from PR labels ([release.yml](release.yml)), and the tarball and `SHA256SUMS` are attached.
+4. Publish the attested tarball to npm, not a local build, so npm and GitHub serve the same bytes:
+
+   ```bash
+   gh release download v2.3.0 -R devclub-nstru/component_library -p '*.tgz' -p SHA256SUMS
+   sha256sum -c SHA256SUMS
+   gh attestation verify devclubnst-ui-2.3.0.tgz --repo devclub-nstru/component_library
+   npm publish devclubnst-ui-2.3.0.tgz
+   ```
+
+   The next step is publishing from the workflow with [npm trusted publishing](https://docs.npmjs.com/trusted-publishers), which adds npm provenance and removes manual publishing. It needs an npm owner to add the workflow as a trusted publisher.
 
 ## Reviewing pull requests
 
@@ -61,7 +70,7 @@ Lift an ignore in `dependabot.yml` when its reason no longer holds.
 
 ## Required checks on `main`
 
-Lint, Typecheck, Supply chain integrity, Build (Node 20.x), Build (Node 22.x), Dependency review, Conventional PR title, and Analyze for both CodeQL languages. GitHub only accepts each check from the GitHub Actions app, so a commit status posted through the API can't satisfy it. Merging is also blocked while CodeQL has open alerts of high severity or above.
+Lint, Typecheck, Test, Supply chain integrity, Build (Node 20.x), Build (Node 22.x), Dependency review, Conventional PR title, DCO, and Analyze for both CodeQL languages. GitHub only accepts each check from the GitHub Actions app, so a commit status posted through the API can't satisfy it. Merging is also blocked while CodeQL has open alerts of high severity or above.
 
 If you rename a job, update [rulesets/main.json](rulesets/main.json) and re-apply it in the same PR. Otherwise every PR waits forever on a check that no longer exists.
 
@@ -86,6 +95,7 @@ Settings that live outside the rulesets:
 | Fork PR workflows need approval | All outside collaborators |
 | Secret scanning and push protection | On |
 | Private vulnerability reporting | On |
+| Require sign off on web-based commits | On |
 | Dependabot alerts and security updates | On |
 
 ## If something goes wrong

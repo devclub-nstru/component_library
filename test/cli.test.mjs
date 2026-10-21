@@ -79,6 +79,19 @@ describe("cli", { skip: process.platform === "win32" && "stub binaries are POSIX
     assert.notEqual(fs.readFileSync(file, "utf8"), "local edit");
   });
 
+  test("add --overwrite refuses to write through a symbolic link", () => {
+    const cwd = project();
+    const outside = path.join(cwd, "outside.txt");
+    fs.writeFileSync(outside, "outside");
+    fs.mkdirSync(path.join(cwd, "src", "components", "ui"), { recursive: true });
+    fs.symlinkSync(outside, path.join(cwd, "src", "components", "ui", "scales.tsx"));
+
+    const result = run(cwd, "add", "scales", "--overwrite");
+    assert.equal(result.status, 1);
+    assert.match(result.stderr, /Refusing to overwrite "src\/components\/ui\/scales\.tsx"/);
+    assert.equal(fs.readFileSync(outside, "utf8"), "outside");
+  });
+
   test("add installs access request helpers and delegates its standard avatar dependency", () => {
     const cwd = project();
     const result = run(cwd, "add", "access-request");
