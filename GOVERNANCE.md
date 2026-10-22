@@ -74,7 +74,6 @@ Several of these accounts belong to people who only have read access on GitHub. 
 | --- | --- |
 | Vercel project serving `ui.devclubxnst.com` and `/r/*.json` | Club Vercel account. Members aren't listed here yet. |
 | Domain `devclubxnst.com` | Club account. Members aren't listed here yet. |
-| PostHog project for site analytics | Club account. Members aren't listed here yet. |
 | Security inbox `softwaredevg.club@rishihood.edu.in` | Club core team |
 | GitHub Actions secrets | None stored. Workflows use only the per-run `GITHUB_TOKEN` and OIDC. |
 

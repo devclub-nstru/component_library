@@ -35,7 +35,6 @@ import { ComponentRegistryItem } from "@/types/component";
 import { getComponentBySlug } from "@/registry";
 import { useIsDark } from "@/lib/use-is-dark";
 import { SITE_CONFIG } from "@/lib/constants";
-import { captureEvent } from "@/lib/analytics";
 import { SparkleButton } from "@/registry/ui/sparkle-button";
 import { CandyButton } from "@/registry/ui/candy-button";
 import { AnimatedButton } from "@/registry/ui/animated-button";
@@ -1668,13 +1667,6 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     return getComponentBySlug(selectedSlug) || component;
   }, [selectedSlug, component]);
 
-  useEffect(() => {
-    captureEvent("component_viewed", {
-      slug: activeComponent.slug,
-      category: activeComponent.category,
-    });
-  }, [activeComponent.slug, activeComponent.category]);
-
   const supportsColor = Boolean(
     activeComponent.slug !== "liquid-toggle" &&
     activeComponent.slug !== "gooey-nav" &&
@@ -1759,10 +1751,6 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     const targetTool = overrideTool || installTool;
     const cmd = getInstallCommand(activeComponent.slug, targetTool);
     await navigator.clipboard.writeText(cmd);
-    captureEvent("install_command_copied", {
-      slug: activeComponent.slug,
-      tool: targetTool,
-    });
     setInstallCopied(true);
     setCopiedToolKey(targetTool);
     toast.success(`Copied: ${cmd}`);
@@ -1782,10 +1770,6 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
 
   const handleCustomCopy = async (key: string, text: string) => {
     await navigator.clipboard.writeText(text);
-    captureEvent("install_command_copied", {
-      slug: activeComponent.slug,
-      tool: key,
-    });
     setCopiedToolKey(key);
     toast.success(`Copied: ${text}`);
     setTimeout(() => {
@@ -1795,10 +1779,6 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
 
   const handleCodeCopy = async () => {
     await navigator.clipboard.writeText(activeCode);
-    captureEvent("component_code_copied", {
-      slug: activeComponent.slug,
-      file: activeFile?.path ?? null,
-    });
     setCodeCopied(true);
     setTimeout(() => setCodeCopied(false), 2000);
   };
