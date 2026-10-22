@@ -56,7 +56,7 @@ flowchart LR
 
   subgraph VPS["Production VPS"]
     Nginx["nginx (TLS)"]
-    Site["Docs site + /api/*<br/>container on 127.0.0.1:3000"]
+    Site["Docs site + /api/*<br/>container on 127.0.0.1:3005"]
     Static["/r/*.json"]
     Nginx --> Site
     Site --> Static
@@ -113,7 +113,7 @@ flowchart LR
 | Fork to repository | PR code and metadata | Workflow approval for outside contributors, read-only tokens, no `pull_request_target` checkout, code-owner review |
 | Repository to GHCR | Container images built from `main` | The Deploy workflow's `GITHUB_TOKEN` gets `packages: write` only in the image job. Images are tagged with the commit SHA and carry a Sigstore-signed provenance attestation. PRs build the image in CI but never push it. |
 | GitHub Actions to production VPS | SSH session that runs the deploy script | The SSH key, user and host are secrets of the `production` environment, which only `main` can deploy to. The host key is fetched with `ssh-keyscan` at the start of each deploy and then checked strictly for the rest of the job. The VPS pulls with a `GITHUB_TOKEN` that expires when the job ends and logs out afterwards. |
-| Internet to production VPS | Visitor HTTPS requests | nginx terminates TLS and proxies to the container, which listens only on `127.0.0.1:3000`. The container runs as a non-root user with a read-only root filesystem, no Linux capabilities, and memory, CPU and process limits. |
+| Internet to production VPS | Visitor HTTPS requests | nginx terminates TLS and proxies to the container, which listens only on `127.0.0.1:3005`. The container runs as a non-root user with a read-only root filesystem, no Linux capabilities, and memory, CPU and process limits. |
 | Repository to npm | The published tarball | Manual publish by npm maintainers. Hashes and attestations on the GitHub release let anyone compare the two. |
 | npm or the docs site to developer machine | Package code, registry JSON, component source | npm integrity hashes, HTTPS, CLI validation of names and paths, developer review of copied code |
 | Developer machine to package registries | Dependency installs run by the CLI | The user's own package manager and lockfile |

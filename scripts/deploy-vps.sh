@@ -20,7 +20,7 @@ start_container() {
   docker run --detach \
     --name "$name" \
     --restart unless-stopped \
-    --publish 127.0.0.1:3000:3000 \
+    --publish 127.0.0.1:3005:3000 \
     --read-only \
     --tmpfs /tmp \
     --volume devclub-ui-cache:/app/.next/cache \

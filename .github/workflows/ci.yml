@@ -165,6 +165,6 @@ jobs:
       - name: Smoke test routes
         run: |
           for path in / /api/health /docs/registry /r/registry.json; do
-            curl --fail --silent --show-error --output /dev/null "http://127.0.0.1:3000$path"
+            curl --fail --silent --show-error --output /dev/null "http://127.0.0.1:3005$path"
             echo "$path OK"
           done

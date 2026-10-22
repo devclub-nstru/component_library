@@ -10,7 +10,7 @@ Every push to `main` runs the [Deploy](../.github/workflows/deploy.yml) workflow
 2. **Deploy to VPS.** Connects over SSH, logs the VPS in to GHCR with the job's short-lived token, and pipes [scripts/deploy-vps.sh](../scripts/deploy-vps.sh) to `bash` on the server with the image digest. The script:
    - pulls the image,
    - stops the running `devclub-ui` container and keeps it as `devclub-ui-previous`,
-   - starts the new container on `127.0.0.1:3000`,
+   - starts the new container on `127.0.0.1:3005`,
    - waits up to two minutes for the image's health check (`GET /api/health`),
    - on success removes the previous container and runs `docker image prune --all` for this project's images only (filtered by the `org.opencontainers.image.source` label, so other images on the server are left alone),
    - on failure prints the new container's logs, restores the previous container and fails the workflow.
@@ -26,7 +26,7 @@ Deploys are serialized. A new push waits for the running deploy to finish. Each 
 | --- | --- |
 | Base image | `node:22-bookworm-slim`, pinned by digest and updated by Dependabot |
 | Process | `node server.js` (Next.js standalone output) as the `node` user, under `--init` |
-| Port | `127.0.0.1:3000` only. nginx is the only public entry point. |
+| Port | `127.0.0.1:3005` on the host, mapped to port 3000 inside the container. nginx is the only public entry point. |
 | Filesystem | Read-only root, `/tmp` as tmpfs, and the `devclub-ui-cache` volume at `/app/.next/cache` for optimized images |
 | Privileges | `--cap-drop ALL`, `--security-opt no-new-privileges` |
 | Limits | 1 CPU, 1 GB memory, 256 processes |
@@ -95,7 +95,7 @@ server {
     server_name ui.devclubxnst.com;
 
     location / {
-        proxy_pass http://127.0.0.1:3000;
+        proxy_pass http://127.0.0.1:3005;
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
@@ -112,7 +112,7 @@ Then issue a certificate with `sudo certbot --nginx -d ui.devclubxnst.com`, whic
 
 ### 5. First deploy and cutover
 
-1. Run **Actions > Deploy > Run workflow** on `main`. Until DNS moves, the final public check still reaches the old host, so also check the VPS directly: `ssh deploy@<vps-ip> curl -s http://127.0.0.1:3000/api/health`.
+1. Run **Actions > Deploy > Run workflow** on `main`. Until DNS moves, the final public check still reaches the old host, so also check the VPS directly: `ssh deploy@<vps-ip> curl -s http://127.0.0.1:3005/api/health`.
 2. Point the `ui.devclubxnst.com` DNS record at the VPS and wait for it to propagate.
 3. Disconnect the old hosting integrations so they stop posting checks on pull requests: delete the Vercel project, and remove the Cloudflare Workers Builds connection for `component-library`.
 
