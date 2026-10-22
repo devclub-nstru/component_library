@@ -24,6 +24,14 @@ area/ci:
   - changed-files:
       - any-glob-to-any-file: ".github/**/*"
 
+area/deploy:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "Dockerfile"
+          - ".dockerignore"
+          - "scripts/deploy-vps.sh"
+          - ".github/workflows/deploy.yml"
+
 area/dependencies:
   - changed-files:
       - any-glob-to-any-file:

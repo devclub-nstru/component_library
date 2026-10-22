@@ -1,0 +1,17 @@
+.git
+.github
+.next
+.vercel
+.env*
+*.pem
+*.tsbuildinfo
+node_modules
+out
+build
+dist
+coverage
+r
+skills-agents-all
+test
+Dockerfile
+.dockerignore

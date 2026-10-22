@@ -23,18 +23,18 @@ export default function PrivacyPage() {
             Privacy Policy
           </h1>
           <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] font-mono text-muted-foreground">
-            <span>Last Updated: 8 October 2026</span>
+            <span>Last Updated: 22 October 2026</span>
             <span>•</span>
             <span>Effective Date: 23 September 2026</span>
             <span>•</span>
-            <span>Version: 1.1</span>
+            <span>Version: 1.2</span>
             <span>•</span>
             <span>94 Sections</span>
           </div>
         </div>
 
         <div className="p-3 border border-border bg-muted/40 text-[11px] text-muted-foreground font-light leading-relaxed mb-8">
-          <strong className="text-foreground font-medium">Important:</strong> This Privacy Policy outlines data handling practices for DevClub UI. Components run client-side in your application without silent telemetry. This website uses Microsoft Clarity, Vercel Web Analytics and Vercel Speed Insights, as described in Sections 7 and 19.
+          <strong className="text-foreground font-medium">Important:</strong> This Privacy Policy outlines data handling practices for DevClub UI. Components run client-side in your application without silent telemetry. This website uses Microsoft Clarity, as described in Sections 7 and 19.
         </div>
 
         <div className="space-y-6 text-xs font-light text-muted-foreground leading-relaxed">

@@ -193,6 +193,7 @@ If you change component source or registry metadata, run `npm run registry:sync`
 | [docs/INTERFACES.md](docs/INTERFACES.md) | CLI commands and exit codes, registry JSON, HTTP API, npm package |
 | [docs/DEPENDENCIES.md](docs/DEPENDENCIES.md) | How dependencies are chosen, installed and kept up to date |
 | [docs/SECURITY_ASSESSMENT.md](docs/SECURITY_ASSESSMENT.md) | Threat model and residual risks |
+| [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) | How the site is built, deployed to the VPS and rolled back |
 | [.github/MAINTAINING.md](.github/MAINTAINING.md) | Release process and maintainer procedures |
 
 ## Security

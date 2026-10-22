@@ -1,6 +1,6 @@
 # Security assessment
 
-This is the threat model for DevClub UI as of 2026-10-20 (version 2.2.0). It covers the four places where a problem would reach users: the CLI, the registry and docs site, CI/CD, and npm publishing. Each threat has a STRIDE category, likelihood and impact, the mitigations in place, and what's left. [ARCHITECTURE.md](ARCHITECTURE.md) describes the actors and trust boundaries it refers to.
+This is the threat model for DevClub UI as of 2026-10-22 (version 2.2.0, plus the move to VPS hosting). It covers the five places where a problem would reach users: the CLI, the registry and docs site, CI/CD, production hosting, and npm publishing. Each threat has a STRIDE category, likelihood and impact, the mitigations in place, and what's left. [ARCHITECTURE.md](ARCHITECTURE.md) describes the actors and trust boundaries it refers to.
 
 Maintainers review this document when a release changes the CLI, the registry format, a workflow or the publishing process, and at least once a year.
 
@@ -31,19 +31,28 @@ Likelihood and impact are `Low`, `Medium` or `High`. STRIDE categories: **S**poo
 | --- | --- | --- | --- | --- | --- | --- |
 | R1 | A PR changes `public/r/*.json` so the published registry differs from the reviewed source | T | Medium | High | The CI "Supply chain integrity" job regenerates the registry and fails if anything differs. `test/registry.test.mjs` checks every payload against its source. | None while the check is required |
 | R2 | Malicious or unsafe component code is merged, for example XSS through `dangerouslySetInnerHTML` | T, E | Low | High | Code-owner review, CodeQL (`security-extended`) as a required check, the code rules in CONTRIBUTING.md, signed commits | Review can miss subtle code. Users copy source they can read, which limits how hidden it can be. |
-| R3 | Someone with Vercel access deploys a registry that doesn't match `main` | T | Low | High | Production deploys come from `main` through the Vercel GitHub integration | Vercel team membership isn't listed in [GOVERNANCE.md](../GOVERNANCE.md) yet |
-| R4 | Abuse of the read-only API (`/api/components`, `/api/health`, `/api/github/stars`) | D, I | Low | Low | No authentication, secrets or writes. Responses are JSON. The stars call is cached for an hour. Vercel applies platform limits. | Error messages echo the requested slug inside JSON |
+| R3 | Someone deploys a site or registry that doesn't match `main` | T | Low | High | The `production` environment accepts deploys only from `main`. Images are built in GitHub Actions from the pushed commit, tagged with its SHA and attested with Sigstore. A rollback redeploys an image that was already built from `main`. | Anyone with shell access to the VPS can start a different container. VPS access isn't listed in [GOVERNANCE.md](../GOVERNANCE.md) yet. |
+| R4 | Abuse of the read-only API (`/api/components`, `/api/health`, `/api/github/stars`) | D, I | Low | Low | No authentication, secrets or writes. Responses are JSON. The stars call is cached for an hour. The container is capped at 1 CPU, 1 GB of memory and 256 processes, so a flood degrades the site without taking down the rest of the VPS. | Error messages echo the requested slug inside JSON |
 
 ## CI/CD
 
 | # | Threat | STRIDE | Likelihood | Impact | Mitigations | Residual risk |
 | --- | --- | --- | --- | --- | --- | --- |
-| P1 | A fork PR runs code with write tokens or secrets ("pwn request") | E | Low | High | Untrusted code runs only on `pull_request` with a read-only token. The three `pull_request_target` workflows never check out PR code. Outside contributors' runs need approval. No Actions secrets are stored. | None known |
+| P1 | A fork PR runs code with write tokens or secrets ("pwn request") | E | Low | High | Untrusted code runs only on `pull_request` with a read-only token. The three `pull_request_target` workflows never check out PR code. Outside contributors' runs need approval. The only stored secrets are the VPS SSH credentials, held by the `production` environment, which only `main` can deploy to, so no PR workflow can read them. | None known |
 | P2 | Script injection through PR titles, branch names or bodies | E | Low | High | No `${{ }}` expression with untrusted data appears in a `run:` or `script:` block. Values go through `env:`. zizmor audits every workflow change. | None known |
 | P3 | A compromised third-party action | T | Low | High | Every action is pinned to a full SHA (repository setting), only allow-listed actions can run, and Dependabot waits 7 days before proposing action updates | A pinned SHA can still contain a bug or backdoor that was there when it was pinned |
 | P4 | A direct push or force push to `main` or `release` | T | Low | High | The `main`, `release` and `release tags` rulesets block it. Only `component-library-admins` can move `release`, and only to a commit already on `main`. | Org owners can edit rulesets |
 | P5 | A maintainer account is taken over | S, E | Medium | High | Rulesets need a second person's approval for every change to `main`, and commits must be signed | The organization doesn't require two-factor authentication yet (**Settings > Authentication security**) |
 | P6 | A release is changed after it's published | T, R | Low | High | The release workflow refuses to reuse a tag. `v*` tags can't be updated or deleted except by the admins team. Release assets carry a Sigstore-signed provenance attestation. | None known |
+
+## Production hosting
+
+| # | Threat | STRIDE | Likelihood | Impact | Mitigations | Residual risk |
+| --- | --- | --- | --- | --- | --- | --- |
+| H1 | The deploy SSH key leaks and is used to log in to the VPS | S, E | Low | High | The key is stored only as a `production` environment secret, which only `main` can use, and is written to the ephemeral runner for one job. The deploy user should be a dedicated account whose only privilege is Docker. | Membership of the `docker` group is equivalent to root on the VPS. Rotate the key whenever someone with environment access leaves. |
+| H2 | A machine in the network path impersonates the VPS during a deploy | S, T | Low | Medium | The workflow fetches the host key with `ssh-keyscan` at the start of each job, and `StrictHostKeyChecking` holds every later connection in that job to the same key | The host key isn't pinned, so an attacker who can intercept the runner's traffic to the VPS at deploy time could receive the deploy commands and the short-lived GHCR token |
+| H3 | A broken release takes the site down | D | Medium | Medium | CI builds every PR's image and runs the deploy script against it twice. On the VPS the script keeps the previous container until the new one passes its health check, and restores it if it doesn't. Any earlier image can be redeployed from **Actions > Deploy > Run workflow**. | The old container is stopped before the new one starts, so each deploy drops requests for a few seconds |
+| H4 | Remote code execution in the site gives an attacker the server | E | Low | High | The container runs as `node`, with a read-only root filesystem, no capabilities, `no-new-privileges`, and resource limits. It listens only on `127.0.0.1`, behind nginx. | The VPS's own patching, firewall and nginx configuration are outside this repository |
 
 ## npm publishing
 
@@ -67,6 +76,6 @@ Ranked by what we'd fix first:
 
 1. Manual npm publishing by six accounts, and versions that can't be traced to source (N1, N2).
 2. No organization-wide two-factor requirement (P5).
-3. Docs site packages declared as runtime `dependencies` of the CLI package (N3). Moving them to `devDependencies` needs a check that Vercel builds still install them.
+3. Docs site packages declared as runtime `dependencies` of the CLI package (N3). Moving them to `devDependencies` is safe for the site, because the container image installs every dependency before it builds.
 4. Unpinned `npx shadcn@latest` (C6).
 5. `*` allowed in package specs, and partial writes when a path check fails (C1, C2).

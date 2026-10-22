@@ -43,6 +43,7 @@
           { "context": "Supply chain integrity", "integration_id": 15368 },
           { "context": "Build (Node 20.x)", "integration_id": 15368 },
           { "context": "Build (Node 22.x)", "integration_id": 15368 },
+          { "context": "Container image", "integration_id": 15368 },
           { "context": "Dependency review", "integration_id": 15368 },
           { "context": "Conventional PR title", "integration_id": 15368 },
           { "context": "DCO", "integration_id": 15368 },
