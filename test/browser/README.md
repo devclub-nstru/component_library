@@ -12,6 +12,11 @@ Start the app with `npm run dev`, then run with an available Playwright installa
 node test/browser/prompt-composer.mjs
 ```
 
+Run `node test/browser/component-studio.mjs` for Gooey Nav centering, component
+dragging, canvas panning, zoom/reset, keyboard movement, component switching,
+Pixel Card customization and reset, mobile layout, and reduced motion. It uses
+the same environment variables below and optionally saves `studio-mobile.png`.
+
 If Playwright is supplied by your environment rather than installed in this
 repository, set `PLAYWRIGHT_MODULE` to its absolute module entry point. The check
 uses the installed Chrome channel by default; no browser or npm dependency is

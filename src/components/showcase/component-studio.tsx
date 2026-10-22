@@ -41,7 +41,6 @@ import { CandyButton } from "@/registry/ui/candy-button";
 import { AnimatedButton } from "@/registry/ui/animated-button";
 import { HorizontalScale, VerticalScale, Lines } from "@/registry/ui/scales";
 import { SpotlightCard } from "@/registry/ui/spotlight-card";
-import { PixelCard } from "@/registry/ui/pixel-card";
 import { BentoGrid, BentoCard } from "@/registry/ui/bento-grid";
 import { GlowingBadge } from "@/registry/ui/glowing-badge";
 import { HookSidebar } from "@/registry/ui/hook-sidebar";
@@ -219,6 +218,12 @@ import {
 } from "@/components/showcase/phone-frame";
 import { useMediaQuery } from "@/lib/use-media-query";
 import { CustomizationDock } from "./customization-dock";
+import {
+  PixelCardDemo,
+  PixelCardControls,
+  PIXEL_CARD_DEFAULT_CONFIG,
+} from "./pixel-card-demo";
+import { StudioCanvas } from "./studio-canvas";
 import { SegmentedControl, SegmentedControlGroup } from "./segmented-control";
 import { ColorSwatches, CustomizationRange } from "./customization-controls";
 
@@ -1492,23 +1497,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     setNoiseScanlines(false);
   };
 
-  const [pixelVariant, setPixelVariant] = useState<
-    "default" | "blue" | "yellow" | "pink" | "purple" | "emerald"
-  >("default");
-  const [pixelPattern, setPixelPattern] = useState<
-    "wave" | "matrix" | "scan" | "cross"
-  >("wave");
-  const [pixelSpeed, setPixelSpeed] = useState<number>(25);
-  const [pixelNoise, setPixelNoise] = useState<number>(0);
-  const [pixelGap, setPixelGap] = useState<number>(6);
-
-  const resetPixelConfig = () => {
-    setPixelVariant("default");
-    setPixelPattern("wave");
-    setPixelSpeed(25);
-    setPixelNoise(0);
-    setPixelGap(6);
-  };
+  const [pixelConfig, setPixelConfig] = useState({ ...PIXEL_CARD_DEFAULT_CONFIG });
 
   const resetOtpConfig = () => {
     setOtpStatus("idle");
@@ -2294,7 +2283,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         );
       case "gooey-nav":
         return (
-          <div className="flex items-center justify-[safe_center] w-full min-w-0 h-full min-h-96 select-none p-2">
+          <div className="flex items-center justify-center w-full min-w-0 h-full min-h-96 select-none p-2">
             <GooeyNav
               items={GOOEY_DEMO_ITEMS}
               value={gooeyNavIndex}
@@ -2708,270 +2697,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
           </div>
         );
       case "pixel-card":
-        return (
-          <div className="w-full max-w-6xl flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-12 p-4 sm:p-6 select-none">
-            <div className="w-full max-w-72 shrink-0 flex items-center justify-center">
-              <PixelCard
-                aria-label="Pixel card preview"
-                className="w-full aspect-4/5 p-6 border-border dark:border-white/10 bg-card dark:bg-[#0c0c0e]"
-                variant={pixelVariant}
-                pattern={pixelPattern}
-                speed={pixelSpeed}
-                noise={pixelNoise}
-                gap={pixelGap}
-                maxTilt={6}
-              />
-            </div>
-
-            <div className="w-full max-w-xl shrink-0 rounded-2xl border border-border dark:border-white/10 bg-card/95 dark:bg-[#121215]/95 backdrop-blur-2xl p-4 sm:p-5 shadow-[0_16px_40px_rgba(0,0,0,0.08)] dark:shadow-[0_16px_40px_rgba(0,0,0,0.85)] flex flex-col gap-3">
-              <div className="flex items-center justify-between px-1">
-                <span className="text-xs font-semibold text-foreground dark:text-white/90 tracking-tight">
-                  Pixel Card Controls
-                </span>
-                <button
-                  type="button"
-                  onClick={resetPixelConfig}
-                  className="text-[11px] text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
-                >
-                  <ResetIcon className="w-3.5 h-3.5" />
-                  <span>Reset</span>
-                </button>
-              </div>
-
-              <div className="rounded-xl border border-border dark:border-white/5 bg-muted/40 dark:bg-[#0b0b0e] p-2 sm:p-2.5 flex flex-col gap-2">
-                <div className="rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3.5 py-2 sm:py-0 sm:h-9 flex flex-col items-stretch gap-2 sm:flex-row sm:items-center sm:gap-3 text-xs">
-                  <span className="w-16 text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
-                    Pattern
-                  </span>
-                  <div className="flex-1 min-w-0 flex items-center gap-1 bg-muted/80 dark:bg-black/30 p-0.5 rounded-md border border-border dark:border-white/5 overflow-hidden">
-                    {(
-                      [
-                        { id: "wave", label: "Wave" },
-                        { id: "matrix", label: "Matrix" },
-                        { id: "scan", label: "Scan" },
-                        { id: "cross", label: "Cross" },
-                      ] as const
-                    ).map((p) => (
-                      <button
-                        key={p.id}
-                        type="button"
-                        onClick={() => setPixelPattern(p.id)}
-                        className={cn(
-                          "relative flex-1 min-w-0 h-10 sm:h-6.5 px-2 rounded text-[11px] font-medium flex items-center justify-center transition-colors cursor-pointer select-none",
-                          pixelPattern === p.id
-                            ? "text-background font-semibold dark:text-black"
-                            : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
-                        )}
-                      >
-                        {pixelPattern === p.id && (
-                          <motion.div
-                            layoutId="activePixelPatternIndicator"
-                            transition={{
-                              type: "spring",
-                              stiffness: 450,
-                              damping: 32,
-                            }}
-                            className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
-                          />
-                        )}
-                        <span className="relative z-10 truncate">
-                          {p.label}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3.5 py-2 sm:py-0 sm:h-9 flex flex-col items-stretch gap-2 sm:flex-row sm:items-center sm:gap-3 text-xs">
-                  <span className="w-16 text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
-                    Color
-                  </span>
-                  <div className="flex-1 min-w-0 grid grid-cols-3 sm:flex items-center gap-1 bg-muted/80 dark:bg-black/30 p-0.5 rounded-md border border-border dark:border-white/5 overflow-hidden">
-                    {(
-                      [
-                        { id: "default", label: "Cyan", dot: "bg-sky-400" },
-                        { id: "blue", label: "Blue", dot: "bg-blue-500" },
-                        {
-                          id: "emerald",
-                          label: "Matrix",
-                          dot: "bg-emerald-400",
-                        },
-                        { id: "yellow", label: "Amber", dot: "bg-amber-400" },
-                        { id: "pink", label: "Rose", dot: "bg-rose-400" },
-                        {
-                          id: "purple",
-                          label: "Violet",
-                          dot: "bg-purple-400",
-                        },
-                      ] as const
-                    ).map((v) => (
-                      <button
-                        key={v.id}
-                        type="button"
-                        onClick={() => setPixelVariant(v.id)}
-                        className={cn(
-                          "relative flex-1 min-w-0 h-10 sm:h-6.5 px-1.5 sm:px-2 rounded text-[11px] font-medium flex items-center justify-center gap-1.5 transition-colors cursor-pointer select-none",
-                          pixelVariant === v.id
-                            ? "text-background font-semibold dark:text-black"
-                            : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
-                        )}
-                      >
-                        {pixelVariant === v.id && (
-                          <motion.div
-                            layoutId="activePixelVariantIndicator"
-                            transition={{
-                              type: "spring",
-                              stiffness: 450,
-                              damping: 32,
-                            }}
-                            className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
-                          />
-                        )}
-                        <span
-                          className={cn(
-                            "relative z-10 w-2 h-2 rounded-full shrink-0",
-                            v.dot,
-                          )}
-                        />
-                        <span className="relative z-10 truncate">
-                          {v.label}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3.5 py-2 sm:py-0 sm:h-9 flex flex-col items-stretch gap-2 sm:flex-row sm:items-center sm:gap-3 text-xs">
-                  <span className="w-16 text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
-                    Speed
-                  </span>
-                  <div className="flex-1 min-w-0 flex items-center gap-1 bg-muted/80 dark:bg-black/30 p-0.5 rounded-md border border-border dark:border-white/5 overflow-hidden">
-                    {(
-                      [
-                        { val: 12, label: "Slow" },
-                        { val: 25, label: "Normal" },
-                        { val: 45, label: "Fast" },
-                        { val: 70, label: "Turbo" },
-                      ] as const
-                    ).map((s) => (
-                      <button
-                        key={s.val}
-                        type="button"
-                        onClick={() => setPixelSpeed(s.val)}
-                        className={cn(
-                          "relative flex-1 min-w-0 h-10 sm:h-6.5 px-2 rounded text-[11px] font-medium flex items-center justify-center transition-colors cursor-pointer select-none",
-                          pixelSpeed === s.val
-                            ? "text-background font-semibold dark:text-black"
-                            : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
-                        )}
-                      >
-                        {pixelSpeed === s.val && (
-                          <motion.div
-                            layoutId="activePixelSpeedIndicator"
-                            transition={{
-                              type: "spring",
-                              stiffness: 450,
-                              damping: 32,
-                            }}
-                            className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
-                          />
-                        )}
-                        <span className="relative z-10 truncate">
-                          {s.label}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3.5 py-2 sm:py-0 sm:h-9 flex flex-col items-stretch gap-2 sm:flex-row sm:items-center sm:gap-3 text-xs">
-                  <span className="w-16 text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
-                    Noise
-                  </span>
-                  <div className="flex-1 min-w-0 flex items-center gap-1 bg-muted/80 dark:bg-black/30 p-0.5 rounded-md border border-border dark:border-white/5 overflow-hidden">
-                    {(
-                      [
-                        { val: 0, label: "Off" },
-                        { val: 0.25, label: "Subtle" },
-                        { val: 0.5, label: "Medium" },
-                        { val: 0.85, label: "Glitch" },
-                      ] as const
-                    ).map((n) => (
-                      <button
-                        key={n.val}
-                        type="button"
-                        onClick={() => setPixelNoise(n.val)}
-                        className={cn(
-                          "relative flex-1 min-w-0 h-10 sm:h-6.5 px-2 rounded text-[11px] font-medium flex items-center justify-center transition-colors cursor-pointer select-none",
-                          pixelNoise === n.val
-                            ? "text-background font-semibold dark:text-black"
-                            : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
-                        )}
-                      >
-                        {pixelNoise === n.val && (
-                          <motion.div
-                            layoutId="activePixelNoiseIndicator"
-                            transition={{
-                              type: "spring",
-                              stiffness: 450,
-                              damping: 32,
-                            }}
-                            className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
-                          />
-                        )}
-                        <span className="relative z-10 truncate">
-                          {n.label}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="rounded-lg border border-border dark:border-white/5 bg-card dark:bg-[#17171b] px-3.5 py-2 sm:py-0 sm:h-9 flex flex-col items-stretch gap-2 sm:flex-row sm:items-center sm:gap-3 text-xs">
-                  <span className="w-16 text-muted-foreground dark:text-zinc-400 text-xs font-medium shrink-0">
-                    Density
-                  </span>
-                  <div className="flex-1 min-w-0 flex items-center gap-1 bg-muted/80 dark:bg-black/30 p-0.5 rounded-md border border-border dark:border-white/5 overflow-hidden">
-                    {(
-                      [
-                        { val: 4, label: "Dense" },
-                        { val: 6, label: "Balanced" },
-                        { val: 9, label: "Sparse" },
-                      ] as const
-                    ).map((g) => (
-                      <button
-                        key={g.val}
-                        type="button"
-                        onClick={() => setPixelGap(g.val)}
-                        className={cn(
-                          "relative flex-1 min-w-0 h-10 sm:h-6.5 px-2 rounded text-[11px] font-medium flex items-center justify-center transition-colors cursor-pointer select-none",
-                          pixelGap === g.val
-                            ? "text-background font-semibold dark:text-black"
-                            : "text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white",
-                        )}
-                      >
-                        {pixelGap === g.val && (
-                          <motion.div
-                            layoutId="activePixelGapIndicator"
-                            transition={{
-                              type: "spring",
-                              stiffness: 450,
-                              damping: 32,
-                            }}
-                            className="absolute inset-0 bg-foreground dark:bg-white rounded shadow-xs"
-                          />
-                        )}
-                        <span className="relative z-10 truncate">
-                          {g.label}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        );
+        return <PixelCardDemo config={pixelConfig} />;
       case "bento-grid":
         return (
           <div className="w-full max-w-lg bg-card dark:bg-[#0c0c0e] border border-border dark:border-white/10 rounded-2xl p-6 shadow-2xl">
@@ -3728,119 +3454,124 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
             </div>
           </div>
 
-          <div
-            className={cn(
-              "flex-1 flex items-center justify-center overflow-hidden relative",
-              (activeComponent.slug === "dither" ||
-                activeComponent.slug === "noise" ||
-                activeComponent.slug === "orbit-gallery" ||
-                activeComponent.slug === "scrolling-cards" ||
-                activeComponent.slug === "scroll-text" ||
-                activeComponent.slug === "parallax-strip-transition" ||
-                activeComponent.slug === "fullscreen-navbar" ||
-                activeComponent.slug === "curtain-navbar" ||
-                activeComponent.slug === "curved-navbar" ||
-                activeComponent.slug === "grid-image-loader" ||
-                activeComponent.slug === "matrix-clock" ||
-                activeComponent.slug === "flip-clock" ||
-                activeComponent.slug === "task-card" ||
-                activeComponent.slug === "workflow-card" ||
-                activeComponent.slug === "toaster" ||
-                activeComponent.slug === "access-request" ||
-                activeComponent.slug === "prompt-composer") &&
-                viewport === "desktop"
-                ? "p-0"
-                : "p-2 sm:p-6",
-            )}
-          >
-            {activeComponent.slug !== "scrolling-cards" &&
-              activeComponent.slug !== "scroll-text" &&
-              activeComponent.slug !== "parallax-strip-transition" && (
-              <div className="absolute inset-0 bg-[radial-gradient(currentColor_1px,transparent_1px)] text-foreground/8 bg-size-[20px_20px] pointer-events-none" />
-            )}
-
-            <motion.div
-              layout
-              transition={panelSpring}
-              animate={{
-                width:
-                  viewport === "mobile"
-                    ? 412
-                    : viewport === "tablet"
-                      ? 768
-                      : "100%",
-                height:
-                  viewport === "mobile"
-                    ? 800
-                    : viewport === "tablet"
-                      ? 520
-                      : "100%",
-                borderRadius:
-                  viewport === "mobile" ? 55 : viewport === "tablet" ? 24 : 0,
-              }}
+          <div className="relative min-h-0 flex-1 overflow-hidden">
+            <StudioCanvas
+              key={`canvas-${activeComponent.slug}`}
+              showGrid={
+                !["scrolling-cards", "scroll-text", "parallax-strip-transition"].includes(activeComponent.slug)
+              }
               className={cn(
-                "relative min-w-0 max-w-full max-h-full flex flex-col items-center justify-center transition-colors",
-                viewport !== "mobile" && "overflow-hidden",
-                viewport === "tablet" &&
-                  "border border-border bg-background dark:bg-[#09090b] shadow-[0_25px_60px_rgba(0,0,0,0.08)] dark:shadow-[0_25px_60px_rgba(0,0,0,0.9)] my-auto max-h-[90vh]",
-                viewport === "mobile" &&
-                  "border-[11px] border-black bg-background dark:bg-[#09090b] shadow-[0_0_0_1.5px_#52525b,0_0_0_3px_#18181b,0_25px_60px_rgba(0,0,0,0.18)] dark:shadow-[0_0_0_1.5px_#3f3f46,0_0_0_3px_#09090b,0_25px_60px_rgba(0,0,0,0.9)] my-auto mx-[15px]",
-                activeComponent.slug === "parallax-strip-transition" &&
-                  viewport !== "desktop" &&
-                  "min-h-0 max-h-full",
+                (activeComponent.slug === "dither" ||
+                  activeComponent.slug === "noise" ||
+                  activeComponent.slug === "orbit-gallery" ||
+                  activeComponent.slug === "scrolling-cards" ||
+                  activeComponent.slug === "scroll-text" ||
+                  activeComponent.slug === "parallax-strip-transition" ||
+                  activeComponent.slug === "fullscreen-navbar" ||
+                  activeComponent.slug === "curtain-navbar" ||
+                  activeComponent.slug === "curved-navbar" ||
+                  activeComponent.slug === "grid-image-loader" ||
+                  activeComponent.slug === "matrix-clock" ||
+                  activeComponent.slug === "flip-clock" ||
+                  activeComponent.slug === "task-card" ||
+                  activeComponent.slug === "workflow-card" ||
+                  activeComponent.slug === "toaster" ||
+                  activeComponent.slug === "access-request" ||
+                  activeComponent.slug === "prompt-composer") &&
+                  viewport === "desktop"
+                  ? "p-0"
+                  : "p-2 sm:p-6",
               )}
             >
-              {viewport === "mobile" && <PhoneSideButtons />}
-
-              <div
+              <motion.div
+                layout
+                transition={panelSpring}
+                animate={{
+                  width:
+                    viewport === "mobile"
+                      ? 412
+                      : viewport === "tablet"
+                        ? 768
+                        : "100%",
+                  height:
+                    viewport === "mobile"
+                      ? 800
+                      : viewport === "tablet"
+                        ? 520
+                        : "100%",
+                  borderRadius:
+                    viewport === "mobile" ? 55 : viewport === "tablet" ? 24 : 0,
+                }}
                 className={cn(
-                  "relative flex flex-col w-full h-full min-h-0 min-w-0 overflow-hidden",
-                  viewport === "mobile" && "rounded-[44px]",
-                  viewport !== "desktop" && "[contain:layout_paint] [&_[data-sonner-toaster]]:max-w-[calc(100%-2rem)] [&_[data-sonner-toast]]:max-w-full",
+                  "relative min-w-0 max-w-full max-h-full flex flex-col items-center justify-center transition-colors",
+                  viewport !== "mobile" && "overflow-hidden",
+                  viewport === "tablet" &&
+                    "border border-border bg-background dark:bg-[#09090b] shadow-[0_25px_60px_rgba(0,0,0,0.08)] dark:shadow-[0_25px_60px_rgba(0,0,0,0.9)] my-auto max-h-[90vh]",
+                  viewport === "mobile" &&
+                    "border-[11px] border-black bg-background dark:bg-[#09090b] shadow-[0_0_0_1.5px_#52525b,0_0_0_3px_#18181b,0_25px_60px_rgba(0,0,0,0.18)] dark:shadow-[0_0_0_1.5px_#3f3f46,0_0_0_3px_#09090b,0_25px_60px_rgba(0,0,0,0.9)] my-auto mx-[15px]",
+                  activeComponent.slug === "parallax-strip-transition" &&
+                    viewport !== "desktop" &&
+                    "min-h-0 max-h-full",
                 )}
               >
-              {viewport === "mobile" && <PhoneStatusBar />}
+                {viewport === "mobile" && <PhoneSideButtons />}
 
-              <AnimatePresence mode="wait" initial={false}>
-                <motion.div
-                  key={activeComponent.slug}
-                  initial={{ opacity: 0, scale: 0.97, y: 10 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.97, y: -10 }}
-                  transition={panelSpring}
+                <div
                   className={cn(
-                    "studio-preview w-full flex-1 min-h-0 min-w-0 flex items-center justify-center overflow-auto",
-                    activeComponent.slug === "dither" ||
-                      activeComponent.slug === "noise" ||
-                      activeComponent.slug === "orbit-gallery" ||
-                      activeComponent.slug === "scrolling-cards" ||
-                      activeComponent.slug === "scroll-text" ||
-                      activeComponent.slug === "parallax-strip-transition" ||
-                      activeComponent.slug === "fullscreen-navbar" ||
-                      activeComponent.slug === "curtain-navbar" ||
-                      activeComponent.slug === "curved-navbar" ||
-                      activeComponent.slug === "grid-image-loader" ||
-                      activeComponent.slug === "matrix-clock" ||
-                      activeComponent.slug === "flip-clock" ||
-                      activeComponent.slug === "task-card" ||
-                      activeComponent.slug === "workflow-card" ||
-                      activeComponent.slug === "calendar-card" ||
-                      activeComponent.slug === "toaster" ||
-                      activeComponent.slug === "access-request" ||
-                      activeComponent.slug === "prompt-composer"
-                      ? "p-0"
-                      : "p-2 sm:p-6",
+                    "relative flex flex-col w-full h-full min-h-0 min-w-0 overflow-hidden",
+                    viewport === "mobile" && "rounded-[44px]",
+                    viewport !== "desktop" && "[contain:layout_paint] [&_[data-sonner-toaster]]:max-w-[calc(100%-2rem)] [&_[data-sonner-toast]]:max-w-full",
                   )}
                 >
-                  {renderComponentPreview(activeComponent.slug, activeColor)}
-                </motion.div>
-              </AnimatePresence>
+                {viewport === "mobile" && <PhoneStatusBar />}
 
-              {viewport === "mobile" && <PhoneHomeIndicator />}
-              </div>
-            </motion.div>
+                <AnimatePresence mode="wait" initial={false}>
+                  <motion.div
+                    key={activeComponent.slug}
+                    initial={{ opacity: 0, scale: 0.97, y: 10 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.97, y: -10 }}
+                    transition={panelSpring}
+                    className={cn(
+                      "studio-preview w-full flex-1 min-h-0 min-w-0 flex items-center justify-center overflow-auto",
+                      activeComponent.slug === "dither" ||
+                        activeComponent.slug === "noise" ||
+                        activeComponent.slug === "orbit-gallery" ||
+                        activeComponent.slug === "scrolling-cards" ||
+                        activeComponent.slug === "scroll-text" ||
+                        activeComponent.slug === "parallax-strip-transition" ||
+                        activeComponent.slug === "fullscreen-navbar" ||
+                        activeComponent.slug === "curtain-navbar" ||
+                        activeComponent.slug === "curved-navbar" ||
+                        activeComponent.slug === "grid-image-loader" ||
+                        activeComponent.slug === "matrix-clock" ||
+                        activeComponent.slug === "flip-clock" ||
+                        activeComponent.slug === "task-card" ||
+                        activeComponent.slug === "workflow-card" ||
+                        activeComponent.slug === "calendar-card" ||
+                        activeComponent.slug === "toaster" ||
+                        activeComponent.slug === "access-request" ||
+                        activeComponent.slug === "prompt-composer"
+                        ? "p-0"
+                        : "p-2 sm:p-6",
+                    )}
+                  >
+                    {renderComponentPreview(activeComponent.slug, activeColor)}
+                  </motion.div>
+                </AnimatePresence>
+
+                {viewport === "mobile" && <PhoneHomeIndicator />}
+                </div>
+              </motion.div>
+            </StudioCanvas>
 
             <CustomizationDock key={activeComponent.slug}>
+              {activeComponent.slug === "pixel-card" && (
+                <PixelCardControls
+                  config={pixelConfig}
+                  onChange={setPixelConfig}
+                />
+              )}
               {supportsColor && activeComponent.slug !== "file-upload" && (
                 <div
                   key="floating-color-palette"

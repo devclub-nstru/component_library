@@ -48,6 +48,12 @@ A single theme-synced checklist card with soft disclosure, gliding hover feedbac
 - A live preview, the full source, and prop controls for every component in the [component studio](https://ui.devclubxnst.com/components).
 - A CLI and a shadcn-compatible registry that copy the source into your codebase and install its dependencies.
 
+The studio canvas toolbar lets you move the component, pan an infinite grid, and
+zoom from 25% to 200%. Choose Interact to use the component normally. In Move or
+Pan mode, drag the canvas or use the arrow keys (Shift for larger steps); Escape
+returns to Interact. Click the zoom percentage to reset position and zoom. The
+customization button opens the shared controls, including Pixel Card settings.
+
 ## Quick start
 
 You need a React project with Tailwind CSS and the `@/` import alias. The [installation guide](https://ui.devclubxnst.com/docs/installation) covers setup and manual installation.
