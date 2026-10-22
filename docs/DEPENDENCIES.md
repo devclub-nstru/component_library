@@ -24,14 +24,14 @@ A new dependency needs an issue first, explaining why existing dependencies or a
 ## How we obtain dependencies
 
 - npm is the only package manager. [package-lock.json](../package-lock.json) pins every package to an exact version and `sha512` integrity hash.
-- Developers and CI install with `npm ci`, which installs exactly what the lockfile says and fails if `package.json` and the lockfile disagree. CI also passes `--ignore-scripts`.
+- Developers and CI install with `npm ci`, which installs exactly what the lockfile says and fails if `package.json` and the lockfile disagree. CI and the [Dockerfile](../Dockerfile) also pass `--ignore-scripts`.
 - [scripts/check-lockfile.mjs](../scripts/check-lockfile.mjs) (`npm run check:lockfile`) fails if any lockfile entry resolves outside `https://registry.npmjs.org/`, lacks a `sha512` hash, or has a URL that doesn't match its package name.
-- No workflow downloads code with `curl`, `wget` or `| sh`. GitHub Actions are pinned to full commit SHAs, and the repository rejects unpinned actions.
+- No workflow downloads code with `curl`, `wget` or `| sh`. GitHub Actions are pinned to full commit SHAs, and the repository rejects unpinned actions. The Docker base image is pinned to a digest.
 - Component dependencies are installed by the user's own package manager (npm, pnpm, yarn or bun, detected from their lockfile). The CLI only passes names that match a strict package-spec pattern.
 
 ## How we track dependencies
 
-- [.github/dependabot.yml](../.github/dependabot.yml) opens weekly PRs for npm packages and GitHub Actions. Minor and patch updates are grouped. New versions wait 7 days (30 for majors) before Dependabot proposes them, so a malicious release has time to be caught. Security updates skip the wait.
+- [.github/dependabot.yml](../.github/dependabot.yml) opens weekly PRs for npm packages, GitHub Actions and the Docker base image. Minor and patch updates are grouped. New versions wait 7 days (30 for majors) before Dependabot proposes them, so a malicious release has time to be caught. Security updates skip the wait.
 - Dependabot alerts and security updates are on for the repository.
 - The CI "Supply chain integrity" job runs `npm audit --omit=dev --audit-level=high` and the lockfile check on every PR and push to `main`.
 - [Dependency Review](../.github/workflows/dependency-review.yml) runs on every PR.

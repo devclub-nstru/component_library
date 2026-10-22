@@ -71,7 +71,7 @@ gh attestation verify devclubnst-ui-<version>.tgz --repo devclub-nstru/component
 
 ## 3. Registry JSON
 
-Static files on Vercel, generated from source by `npm run registry:sync`. They follow the shadcn [registry](https://ui.shadcn.com/schema/registry.json) and [registry-item](https://ui.shadcn.com/schema/registry-item.json) schemas.
+Static files served by the docs site on the production VPS, generated from source by `npm run registry:sync` and baked into each container image. They follow the shadcn [registry](https://ui.shadcn.com/schema/registry.json) and [registry-item](https://ui.shadcn.com/schema/registry-item.json) schemas.
 
 | URL | Contents |
 | --- | --- |
