@@ -67,17 +67,7 @@ sudo chmod 600 /home/deploy/.ssh/authorized_keys
 
 Check that it works with `ssh -i devclub-ui-deploy deploy@<vps-ip> docker version`.
 
-### 3. Record the host key
-
-Get the server's host key line:
-
-```bash
-ssh-keyscan -t ed25519 <vps-ip>
-```
-
-Before trusting it, check its fingerprint matches the one the server reports for itself (`ssh-keygen -lf /etc/ssh/ssh_host_ed25519_key.pub` on the VPS) by comparing it with `ssh-keyscan -t ed25519 <vps-ip> | ssh-keygen -lf -`.
-
-### 4. Configure GitHub
+### 3. Configure GitHub
 
 In **Settings > Environments**, create an environment named `production`:
 
@@ -89,13 +79,12 @@ In **Settings > Environments**, create an environment named `production`:
   | `VPS_HOST` | The VPS IP address (or hostname) |
   | `VPS_USERNAME` | `deploy` |
   | `VPS_SSH_KEY` | The full contents of the private key file `devclub-ui-deploy`, including the `BEGIN` and `END` lines |
-  | `VPS_KNOWN_HOSTS` | The line printed by `ssh-keyscan` in step 3. Optional, but without it the workflow trusts whatever key the server offers and warns in every run. |
 
 - **Environment variables (optional):** `VPS_SSH_PORT` if SSH doesn't listen on port 22.
 
 Delete the local private key once it's saved in GitHub.
 
-### 5. Configure nginx
+### 4. Configure nginx
 
 Point a server block for `ui.devclubxnst.com` at the container. Buffering is off so streamed React Server Component responses reach the browser as they render:
 
@@ -121,7 +110,7 @@ server {
 
 Then issue a certificate with `sudo certbot --nginx -d ui.devclubxnst.com`, which adds the TLS listener and the HTTP to HTTPS redirect. Next.js already sends `Cache-Control: public, max-age=31536000, immutable` for `/_next/static/*`, so no extra cache rules are needed.
 
-### 6. First deploy and cutover
+### 5. First deploy and cutover
 
 1. Run **Actions > Deploy > Run workflow** on `main`. Until DNS moves, the final public check still reaches the old host, so also check the VPS directly: `ssh deploy@<vps-ip> curl -s http://127.0.0.1:3000/api/health`.
 2. Point the `ui.devclubxnst.com` DNS record at the VPS and wait for it to propagate.

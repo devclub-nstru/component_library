@@ -101,7 +101,7 @@ Settings that live outside the rulesets:
 | Secret scanning and push protection | On |
 | Private vulnerability reporting | On |
 | Require sign off on web-based commits | On |
-| `production` environment | Deploys from `main` only. Holds the VPS secrets ([docs/DEPLOYMENT.md](../docs/DEPLOYMENT.md#4-configure-github)). |
+| `production` environment | Deploys from `main` only. Holds the VPS secrets ([docs/DEPLOYMENT.md](../docs/DEPLOYMENT.md#3-configure-github)). |
 | Dependabot alerts and security updates | On |
 
 ## If something goes wrong

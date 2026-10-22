@@ -114,7 +114,6 @@ jobs:
           VPS_HOST: ${{ secrets.VPS_HOST }}
           VPS_USERNAME: ${{ secrets.VPS_USERNAME }}
           VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
-          VPS_KNOWN_HOSTS: ${{ secrets.VPS_KNOWN_HOSTS }}
           VPS_SSH_PORT: ${{ vars.VPS_SSH_PORT || '22' }}
         run: |
           for name in VPS_HOST VPS_USERNAME VPS_SSH_KEY; do
@@ -126,12 +125,7 @@ jobs:
           install -m 700 -d ~/.ssh
           printf '%s\n' "$VPS_SSH_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          if [ -n "$VPS_KNOWN_HOSTS" ]; then
-            printf '%s\n' "$VPS_KNOWN_HOSTS" > ~/.ssh/known_hosts
-          else
-            echo "::warning::VPS_KNOWN_HOSTS is not set, so the host key is trusted on first use. Add it to pin the server's identity."
-            ssh-keyscan -p "$VPS_SSH_PORT" -H "$VPS_HOST" > ~/.ssh/known_hosts
-          fi
+          ssh-keyscan -p "$VPS_SSH_PORT" -H "$VPS_HOST" > ~/.ssh/known_hosts
           cat > ~/.ssh/config <<EOF
           Host vps
             HostName $VPS_HOST

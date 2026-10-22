@@ -76,7 +76,7 @@ Several of these accounts belong to people who only have read access on GitHub. 
 | Container images at `ghcr.io/devclub-nstru/component_library` | Pushed only by the Deploy workflow. Org owners administer the package. |
 | Domain `devclubxnst.com` | Club account. Members aren't listed here yet. |
 | Security inbox `softwaredevg.club@rishihood.edu.in` | Club core team |
-| GitHub Actions secrets | `VPS_HOST`, `VPS_USERNAME`, `VPS_SSH_KEY` and `VPS_KNOWN_HOSTS`, stored on the `production` environment and readable only by deploys from `main`. Repository admins manage them. All other workflows use only the per-run `GITHUB_TOKEN` and OIDC. |
+| GitHub Actions secrets | `VPS_HOST`, `VPS_USERNAME` and `VPS_SSH_KEY`, stored on the `production` environment and readable only by deploys from `main`. Repository admins manage them. All other workflows use only the per-run `GITHUB_TOKEN` and OIDC. |
 
 Whoever administers each club account adds its members to this table.
 
