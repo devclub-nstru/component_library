@@ -28,8 +28,8 @@ DevClub UI ships React components as source code. Nothing is compiled into a lib
 | npm registry | Trusted third party | Hosts `@devclubnst/ui` and every dependency |
 | Developer (consumer) | User | Runs the CLI or shadcn CLI in their own project and reviews the copied code |
 | shadcn CLI | Third-party tool | Fetches `/r/<name>.json` over HTTPS and writes files. Our CLI also calls it to add shadcn primitives such as `avatar`. |
-| Site visitor | Untrusted | Browses the docs site. The browser loads PostHog through the `/ingest` rewrite. |
-| GitHub API, PostHog | Third-party services | `/api/github/stars` reads the star count from the GitHub API. PostHog receives analytics events. |
+| Site visitor | Untrusted | Browses the docs site. |
+| GitHub API | Third-party service | `/api/github/stars` reads the star count from the GitHub API. |
 
 ## Flows
 
@@ -75,7 +75,6 @@ flowchart LR
   Shadcn -- "writes files" --> App
 
   Visitor(["Site visitor"]) --> Site
-  Site -- "/ingest proxy" --> PostHog[("PostHog")]
   Site -- "stars" --> GHAPI[("GitHub API")]
 ```
 
@@ -107,4 +106,4 @@ flowchart LR
 | Repository to npm | The published tarball | Manual publish by npm maintainers. Hashes and attestations on the GitHub release let anyone compare the two. |
 | npm or Vercel to developer machine | Package code, registry JSON, component source | npm integrity hashes, HTTPS, CLI validation of names and paths, developer review of copied code |
 | Developer machine to package registries | Dependency installs run by the CLI | The user's own package manager and lockfile |
-| Browser to third parties | Analytics events, star count | PostHog through a first-party rewrite. GitHub API is called server-side and cached for an hour. |
+| Site to GitHub API | Star count | Called server-side and cached for an hour. |

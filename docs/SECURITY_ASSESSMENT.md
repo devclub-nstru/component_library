@@ -33,7 +33,6 @@ Likelihood and impact are `Low`, `Medium` or `High`. STRIDE categories: **S**poo
 | R2 | Malicious or unsafe component code is merged, for example XSS through `dangerouslySetInnerHTML` | T, E | Low | High | Code-owner review, CodeQL (`security-extended`) as a required check, the code rules in CONTRIBUTING.md, signed commits | Review can miss subtle code. Users copy source they can read, which limits how hidden it can be. |
 | R3 | Someone with Vercel access deploys a registry that doesn't match `main` | T | Low | High | Production deploys come from `main` through the Vercel GitHub integration | Vercel team membership isn't listed in [GOVERNANCE.md](../GOVERNANCE.md) yet |
 | R4 | Abuse of the read-only API (`/api/components`, `/api/health`, `/api/github/stars`) | D, I | Low | Low | No authentication, secrets or writes. Responses are JSON. The stars call is cached for an hour. Vercel applies platform limits. | Error messages echo the requested slug inside JSON |
-| R5 | Analytics collects more than visitors expect | I | Low | Low | PostHog runs only on the docs site, behind a first-party `/ingest` rewrite, and the site has a privacy policy | None for users of the components, which contain no analytics |
 
 ## CI/CD
 
@@ -52,7 +51,7 @@ Likelihood and impact are `Low`, `Medium` or `High`. STRIDE categories: **S**poo
 | --- | --- | --- | --- | --- | --- | --- |
 | N1 | An npm version contains code that never went through review | T, R | Medium | High | From 2.2.0 the release workflow builds the tarball from the tagged commit and attaches it with `SHA256SUMS` and a provenance attestation, and publishers publish that exact file | **Found in this review:** npm 2.1.2 and 2.1.3 list `gitHead` commits (`c8db9a9`, `dff7b268`) that don't exist in this repository. Publishing is still manual. |
 | N2 | One of the six npm publisher accounts is compromised | S, E | Medium | High | npm account security is up to each publisher | Several publishers have only read access on GitHub, so npm is the weakest point in the supply chain |
-| N3 | `npx @devclubnst/ui` installs much more than the CLI needs | T | Medium | Medium | `ignore-scripts=true` applies only in this repository, not on users' machines | `package.json` lists the docs site's packages (Next.js, three, PostHog and others) as `dependencies`, so every CLI user downloads them |
+| N3 | `npx @devclubnst/ui` installs much more than the CLI needs | T | Medium | Medium | `ignore-scripts=true` applies only in this repository, not on users' machines | `package.json` lists the docs site's packages (Next.js, three and others) as `dependencies`, so every CLI user downloads them |
 
 ## Planned fixes for npm publishing
 

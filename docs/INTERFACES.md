@@ -106,8 +106,6 @@ Read-only JSON endpoints on `https://ui.devclubxnst.com`, from `src/app/api/`. T
 
 `ComponentRegistryItem` is defined in [src/types/component.ts](../src/types/component.ts). It's the metadata in `src/registry/components/<slug>.json`: slug, name, description, category, tags, dependencies, props, accessibility notes and usage examples. Errors return `500` with `success: false`.
 
-The site also forwards `/ingest/*` to PostHog (see [next.config.ts](../next.config.ts)). That's for the site's own analytics and isn't a public interface.
-
 ## 5. Component props
 
 Each component is a React component whose public interface is its exported props type in `src/registry/ui/<slug>.tsx`, the file that gets copied into the user's app. The same props are described in the `props` array (`name`, `type`, `required`, `description`, and `default` or `defaultValue` where set) of `src/registry/components/<slug>.json`. That array is shown on `https://ui.devclubxnst.com/components/<slug>` and returned by `/api/components/<slug>`.
