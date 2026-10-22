@@ -14,7 +14,10 @@ node test/browser/prompt-composer.mjs
 
 Run `node test/browser/component-studio.mjs` for Gooey Nav centering, component
 dragging, canvas panning, zoom/reset, keyboard movement, component switching,
-Pixel Card customization and reset, mobile layout, and reduced motion. It uses
+Pixel Card customization and reset, canvas sizing and pointer/focus alignment at
+50%, 100%, and 150% zoom, color swatches, mobile layout, and reduced motion. The
+hidden Spotlight Card's actual pointer handler is transpiled from source and
+checked against scaled browser geometry without adding a public route. It uses
 the same environment variables below and optionally saves `studio-mobile.png`.
 
 If Playwright is supplied by your environment rather than installed in this

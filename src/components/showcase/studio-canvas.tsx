@@ -121,10 +121,12 @@ export function StudioCanvas({
       const offset = offsets[key];
       const target = mode === "move" ? componentRef.current : cameraRef.current;
       if (!offset || !target) return;
-      const step = (shift ? 50 : 10) / (mode === "move" ? zoomRef.current : 1);
+      const screenStep = shift ? 50 : 10;
+      const parentScale = mode === "move" ? zoomRef.current : 1;
+      const localStep = screenStep / parentScale;
       gsap.set(target, {
-        x: Number(gsap.getProperty(target, "x")) + offset[0] * step,
-        y: Number(gsap.getProperty(target, "y")) + offset[1] * step,
+        x: Number(gsap.getProperty(target, "x")) + offset[0] * localStep,
+        y: Number(gsap.getProperty(target, "y")) + offset[1] * localStep,
       });
       dragRef.current?.update();
       syncGrid();

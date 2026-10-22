@@ -113,6 +113,21 @@ const VARIANTS: Record<PixelCardVariant, VariantConfig> = {
   },
 };
 
+function getPointerPosition(
+  card: HTMLDivElement,
+  event: React.MouseEvent<HTMLDivElement>,
+) {
+  const rect = card.getBoundingClientRect();
+  return {
+    x: rect.width > 0
+      ? (event.clientX - rect.left) * card.offsetWidth / rect.width
+      : 0,
+    y: rect.height > 0
+      ? (event.clientY - rect.top) * card.offsetHeight / rect.height
+      : 0,
+  };
+}
+
 export const PixelCard = React.forwardRef<HTMLDivElement, PixelCardProps>(
   (
     {
@@ -177,9 +192,8 @@ export const PixelCard = React.forwardRef<HTMLDivElement, PixelCardProps>(
       const canvas = canvasRef.current;
       if (!container || !canvas) return;
 
-      const rect = container.getBoundingClientRect();
-      const width = Math.floor(rect.width);
-      const height = Math.floor(rect.height);
+      const width = container.offsetWidth;
+      const height = container.offsetHeight;
       if (width <= 0 || height <= 0) return;
 
       const dpr = Math.min(
@@ -443,9 +457,7 @@ export const PixelCard = React.forwardRef<HTMLDivElement, PixelCardProps>(
       const card = containerRef.current;
       if (!card) return;
 
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      const { x, y } = getPointerPosition(card, e);
 
       targetPointerRef.current.x = x;
       targetPointerRef.current.y = y;
@@ -460,8 +472,8 @@ export const PixelCard = React.forwardRef<HTMLDivElement, PixelCardProps>(
         rotYRef.current &&
         scaleRef.current
       ) {
-        const nx = (x - rect.width / 2) / (rect.width / 2);
-        const ny = (y - rect.height / 2) / (rect.height / 2);
+        const nx = x / (card.offsetWidth || 1) * 2 - 1;
+        const ny = y / (card.offsetHeight || 1) * 2 - 1;
         const clampedX = Math.max(-1, Math.min(1, nx));
         const clampedY = Math.max(-1, Math.min(1, ny));
 
@@ -477,9 +489,7 @@ export const PixelCard = React.forwardRef<HTMLDivElement, PixelCardProps>(
       const card = containerRef.current;
       if (!card) return;
 
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      const { x, y } = getPointerPosition(card, e);
 
       pointerRef.current.x = x;
       pointerRef.current.y = y;
@@ -528,9 +538,8 @@ export const PixelCard = React.forwardRef<HTMLDivElement, PixelCardProps>(
 
       const card = containerRef.current;
       if (card) {
-        const rect = card.getBoundingClientRect();
-        const cx = rect.width / 2;
-        const cy = rect.height / 2;
+        const cx = card.offsetWidth / 2;
+        const cy = card.offsetHeight / 2;
         pointerRef.current.x = cx;
         pointerRef.current.y = cy;
         targetPointerRef.current.x = cx;

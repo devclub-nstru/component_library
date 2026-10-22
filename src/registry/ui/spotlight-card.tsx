@@ -28,9 +28,17 @@ export const SpotlightCard = React.forwardRef<
     const [opacity, setOpacity] = useState(0);
 
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-      if (!divRef.current) return;
-      const rect = divRef.current.getBoundingClientRect();
-      setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+      const card = divRef.current;
+      if (!card) return;
+      const rect = card.getBoundingClientRect();
+      setPosition({
+        x: rect.width > 0
+          ? (e.clientX - rect.left) * card.offsetWidth / rect.width
+          : 0,
+        y: rect.height > 0
+          ? (e.clientY - rect.top) * card.offsetHeight / rect.height
+          : 0,
+      });
     };
 
     const handleMouseEnter = () => {

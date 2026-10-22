@@ -54,6 +54,10 @@ Pan mode, drag the canvas or use the arrow keys (Shift for larger steps); Escape
 returns to Interact. Click the zoom percentage to reset position and zoom. The
 customization button opens the shared controls, including Pixel Card settings.
 
+Keyboard movement covers 10 screen pixels per arrow press, or 50 with Shift.
+Moving a component divides this distance by its parent's zoom scale; panning
+moves the camera outside that scale, so it uses the screen distance directly.
+
 ## Quick start
 
 You need a React project with Tailwind CSS and the `@/` import alias. The [installation guide](https://ui.devclubxnst.com/docs/installation) covers setup and manual installation.

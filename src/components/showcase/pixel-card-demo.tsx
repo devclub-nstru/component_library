@@ -5,6 +5,7 @@ import {
   type PixelCardPattern,
   type PixelCardVariant,
 } from "@/registry/ui/pixel-card";
+import { ColorSwatches } from "./customization-controls";
 import { SegmentedControl } from "./segmented-control";
 
 export interface PixelCardConfig {
@@ -72,14 +73,14 @@ export function PixelCardControls({
       </fieldset>
       <fieldset className="min-w-0 space-y-2">
         <legend className="mb-2 text-xs text-muted-foreground">Color</legend>
-        <SegmentedControl
+        <ColorSwatches
           options={[
-            { value: "default", label: "Cyan" },
-            { value: "blue", label: "Blue" },
-            { value: "emerald", label: "Matrix" },
-            { value: "yellow", label: "Amber" },
-            { value: "pink", label: "Rose" },
-            { value: "purple", label: "Violet" },
+            { value: "default", label: "Cyan", color: "#38bdf8" },
+            { value: "blue", label: "Blue", color: "#0ea5e9" },
+            { value: "emerald", label: "Matrix", color: "#34d399" },
+            { value: "yellow", label: "Amber", color: "#facc15" },
+            { value: "pink", label: "Rose", color: "#f43f5e" },
+            { value: "purple", label: "Violet", color: "#a855f7" },
           ]}
           value={config.variant}
           onChange={(variant) => onChange({ ...config, variant })}
