@@ -49,6 +49,7 @@ import { Orb } from "@/registry/ui/orb";
 import { LiquidToggle } from "@/registry/ui/liquid-toggle";
 import { GooeyNav } from "@/registry/ui/gooey-nav";
 import { PromptInput } from "@/registry/ui/ai-input";
+import { PromptComposer } from "@/registry/ui/prompt-composer";
 import { MacSlider } from "@/registry/ui/mac-slider";
 import { Slider } from "@/registry/ui/slider";
 import { MacSwitch } from "@/registry/ui/mac-switch";
@@ -641,6 +642,11 @@ export default function ComponentsPage() {
           size="sm"
           color="orange"
         />
+      </div>
+    ),
+    "prompt-composer": (
+      <div className="pointer-events-none flex w-full items-center justify-center px-5 py-6" inert>
+        <PromptComposer theme="system" />
       </div>
     ),
     "ai-input": (

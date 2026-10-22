@@ -99,6 +99,7 @@ import {
   type GooeyNavItem,
 } from "@/registry/ui/gooey-nav";
 import { PromptInput, type PromptInputRef } from "@/registry/ui/ai-input";
+import { PromptComposerDemo, PromptComposerControls, PROMPT_COMPOSER_DEFAULT_CONFIG } from "./prompt-composer-demo";
 import {
   MacSlider,
   type MacSliderColor,
@@ -1211,6 +1212,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     ...MORPH_INVITE_DEFAULT_CONFIG,
   });
   const [accessRequestConfig, setAccessRequestConfig] = useState(ACCESS_REQUEST_DEFAULT_CONFIG);
+  const [promptComposerConfig, setPromptComposerConfig] = useState(PROMPT_COMPOSER_DEFAULT_CONFIG);
   const [toasterConfig, setToasterConfig] = useState(TOASTER_DEFAULT_CONFIG);
   const [taskCardConfig, setTaskCardConfig] = useState(
     TASK_CARD_DEFAULT_CONFIG,
@@ -1974,6 +1976,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
             <MorphSearch />
           </div>
         );
+      case "prompt-composer":
+        return <PromptComposerDemo key={promptComposerConfig.resetKey} config={promptComposerConfig} />;
       case "ai-input":
         return (
           <div className="flex items-center justify-center w-full min-h-110 p-4 sm:p-8 select-none">
@@ -5702,6 +5706,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               )}
               {activeComponent.slug === "access-request" && (
                 <AccessRequestControls config={accessRequestConfig} onChange={setAccessRequestConfig} />
+              )}
+              {activeComponent.slug === "prompt-composer" && (
+                <PromptComposerControls config={promptComposerConfig} onChange={setPromptComposerConfig} />
               )}
               {activeComponent.slug === "toaster" && (
                 <ToasterControls config={toasterConfig} onChange={setToasterConfig} />
