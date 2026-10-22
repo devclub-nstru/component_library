@@ -1074,6 +1074,50 @@
       ]
     },
     {
+      "name": "prompt-composer",
+      "type": "registry:ui",
+      "title": "Prompt Composer",
+      "description": "A Tailwind prompt field with a sculpted arc of tinted action cards, a shared model-menu highlight and coordinated GSAP springs.",
+      "dependencies": [
+        "gsap",
+        "@gsap/react",
+        "motion",
+        "lucide-react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/prompt-composer-motion.ts",
+          "type": "registry:ui",
+          "target": "@ui/prompt-composer-motion.ts"
+        },
+        {
+          "path": "src/registry/ui/prompt-composer.tsx",
+          "type": "registry:ui",
+          "target": "@ui/prompt-composer.tsx"
+        },
+        {
+          "path": "src/registry/ui/prompt-composer-art.tsx",
+          "type": "registry:ui",
+          "target": "@ui/prompt-composer-art.tsx"
+        },
+        {
+          "path": "src/registry/ui/prompt-composer-model.tsx",
+          "type": "registry:ui",
+          "target": "@ui/prompt-composer-model.tsx"
+        },
+        {
+          "path": "src/registry/ui/prompt-composer-recorder.tsx",
+          "type": "registry:ui",
+          "target": "@ui/prompt-composer-recorder.tsx"
+        }
+      ]
+    },
+    {
       "name": "proximity-sidebar",
       "type": "registry:ui",
       "title": "Proximity Sidebar",

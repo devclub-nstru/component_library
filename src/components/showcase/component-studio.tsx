@@ -99,6 +99,7 @@ import {
   type GooeyNavItem,
 } from "@/registry/ui/gooey-nav";
 import { PromptInput, type PromptInputRef } from "@/registry/ui/ai-input";
+import { PromptComposerDemo, PromptComposerControls, PROMPT_COMPOSER_DEFAULT_CONFIG } from "./prompt-composer-demo";
 import {
   MacSlider,
   type MacSliderColor,
@@ -1211,6 +1212,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
     ...MORPH_INVITE_DEFAULT_CONFIG,
   });
   const [accessRequestConfig, setAccessRequestConfig] = useState(ACCESS_REQUEST_DEFAULT_CONFIG);
+  const [promptComposerConfig, setPromptComposerConfig] = useState(PROMPT_COMPOSER_DEFAULT_CONFIG);
   const [toasterConfig, setToasterConfig] = useState(TOASTER_DEFAULT_CONFIG);
   const [taskCardConfig, setTaskCardConfig] = useState(
     TASK_CARD_DEFAULT_CONFIG,
@@ -1974,6 +1976,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
             <MorphSearch />
           </div>
         );
+      case "prompt-composer":
+        return <PromptComposerDemo key={promptComposerConfig.resetKey} config={promptComposerConfig} />;
       case "ai-input":
         return (
           <div className="flex items-center justify-center w-full min-h-110 p-4 sm:p-8 select-none">
@@ -3742,7 +3746,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 activeComponent.slug === "task-card" ||
                 activeComponent.slug === "workflow-card" ||
                 activeComponent.slug === "toaster" ||
-                activeComponent.slug === "access-request") &&
+                activeComponent.slug === "access-request" ||
+                activeComponent.slug === "prompt-composer") &&
                 viewport === "desktop"
                 ? "p-0"
                 : "p-2 sm:p-6",
@@ -3821,7 +3826,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       activeComponent.slug === "workflow-card" ||
                       activeComponent.slug === "calendar-card" ||
                       activeComponent.slug === "toaster" ||
-                      activeComponent.slug === "access-request"
+                      activeComponent.slug === "access-request" ||
+                      activeComponent.slug === "prompt-composer"
                       ? "p-0"
                       : "p-2 sm:p-6",
                   )}
@@ -5703,6 +5709,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               {activeComponent.slug === "access-request" && (
                 <AccessRequestControls config={accessRequestConfig} onChange={setAccessRequestConfig} />
               )}
+              {activeComponent.slug === "prompt-composer" && (
+                <PromptComposerControls config={promptComposerConfig} onChange={setPromptComposerConfig} />
+              )}
               {activeComponent.slug === "toaster" && (
                 <ToasterControls config={toasterConfig} onChange={setToasterConfig} />
               )}
@@ -6698,6 +6707,13 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               )}
             </CustomizationDock>
           </div>
+
+          {activeComponent.slug === "prompt-composer" && (
+            <footer className="flex min-h-11 shrink-0 items-center justify-center gap-1.5 border-t border-border bg-card/80 px-4 py-2 text-[11px] text-muted-foreground">
+              <span>Inspired By:</span>
+              <a href="https://www.pinui.xyz/components/prompt-composer" target="_blank" rel="noopener noreferrer" className="rounded font-medium text-foreground underline decoration-border underline-offset-4 hover:decoration-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400">Pin UI<span className="sr-only"> (opens in a new tab)</span></a>
+            </footer>
+          )}
 
           <StudioPanel
             open={activePanel === "code"}
