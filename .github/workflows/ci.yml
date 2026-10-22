@@ -142,3 +142,29 @@ jobs:
         run: npm run build
         env:
           NEXT_TELEMETRY_DISABLED: 1
+
+  container:
+    name: Container image
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: [lint, typecheck]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Build image
+        run: docker build --tag devclub-ui:ci .
+
+      - name: Deploy image with the VPS deploy script
+        run: |
+          bash scripts/deploy-vps.sh devclub-ui:ci
+          bash scripts/deploy-vps.sh devclub-ui:ci
+
+      - name: Smoke test routes
+        run: |
+          for path in / /api/health /docs/registry /r/registry.json; do
+            curl --fail --silent --show-error --output /dev/null "http://127.0.0.1:3000$path"
+            echo "$path OK"
+          done
