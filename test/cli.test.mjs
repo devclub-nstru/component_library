@@ -111,6 +111,22 @@ describe("cli", { skip: process.platform === "win32" && "stub binaries are POSIX
     assert.match(component, /from "@\/components\/ui\/avatar"/);
   });
 
+  test("add installs the prompt composer and all local helpers without a stylesheet", () => {
+    const cwd = project();
+    const cssPath = path.join(cwd, "src", "app", "globals.css");
+    const originalCss = fs.readFileSync(cssPath, "utf8");
+    const result = run(cwd, "add", "prompt-composer");
+    assert.equal(result.status, 0, result.stderr);
+    for (const name of ["prompt-composer.tsx", "prompt-composer-art.tsx", "prompt-composer-model.tsx", "prompt-composer-recorder.tsx", "prompt-composer-motion.ts"]) {
+      const installed = path.join(cwd, "src", "components", "ui", name);
+      assert.ok(fs.existsSync(installed), `Missing ${name}`);
+      const source = fs.readFileSync(path.resolve(import.meta.dirname, "..", "src", "registry", "ui", name), "utf8");
+      assert.equal(fs.readFileSync(installed, "utf8"), source);
+    }
+    assert.equal(fs.readFileSync(cssPath, "utf8"), originalCss);
+    assert.match(result.stdout, /Adding shadcn\/ui dependencies: utils/);
+  });
+
   test("add warns instead of failing when the Tailwind CSS file is missing", () => {
     const cwd = project();
     fs.rmSync(path.join(cwd, "src", "app", "globals.css"));

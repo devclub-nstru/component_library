@@ -46,6 +46,7 @@ export function PromptComposerModelPicker({
   const highlightRef = useRef<HTMLSpanElement>(null);
   const pinnedRef = useRef(false);
   const focusOnOpenRef = useRef(false);
+  const focusEdgeRef = useRef<"first" | "last" | "selected">("selected");
   const closeDelayRef = useRef<gsap.core.Tween | null>(null);
   const highlightedRef = useRef(false);
   const [hovered, setHovered] = useState<string | null>(null);
@@ -62,6 +63,23 @@ export function PromptComposerModelPicker({
     pinnedRef.current = false;
     setOpen(false);
     setHovered(null);
+  }, []);
+
+  const focusMenu = useCallback((edge: "first" | "last" | "selected") => {
+    const options = Array.from(
+      menuRef.current?.querySelectorAll<HTMLButtonElement>(
+        '[role="menuitemradio"]',
+      ) ?? [],
+    );
+    const option =
+      edge === "first"
+        ? options[0]
+        : edge === "last"
+          ? options.at(-1)
+          : options.find(
+              (item) => item.getAttribute("aria-checked") === "true",
+            );
+    option?.focus({ preventScroll: true });
   }, []);
 
   const scheduleClose = () =>
@@ -139,10 +157,7 @@ export function PromptComposerModelPicker({
 
   useEffect(() => {
     if (!visible) return;
-    if (focusOnOpenRef.current)
-      menuRef.current
-        ?.querySelector<HTMLButtonElement>('[aria-checked="true"]')
-        ?.focus({ preventScroll: true });
+    if (focusOnOpenRef.current) focusMenu(focusEdgeRef.current);
     focusOnOpenRef.current = false;
     const dismiss = (event: PointerEvent) => {
       if (
@@ -153,7 +168,7 @@ export function PromptComposerModelPicker({
     };
     document.addEventListener("pointerdown", dismiss);
     return () => document.removeEventListener("pointerdown", dismiss);
-  }, [visible, close]);
+  }, [visible, close, focusMenu]);
 
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key === "Escape") {
@@ -214,22 +229,27 @@ export function PromptComposerModelPicker({
           if (visible && pinnedRef.current) close();
           else {
             pinnedRef.current = true;
+            focusEdgeRef.current = "selected";
             focusOnOpenRef.current = true;
             setOpen(true);
             if (visible) {
               focusOnOpenRef.current = false;
-              menuRef.current
-                ?.querySelector<HTMLButtonElement>('[aria-checked="true"]')
-                ?.focus({ preventScroll: true });
+              focusMenu("selected");
             }
           }
         }}
         onKeyDown={(event) => {
           if (event.key === "ArrowDown" || event.key === "ArrowUp") {
             event.preventDefault();
+            closeDelayRef.current?.kill();
             pinnedRef.current = true;
-            focusOnOpenRef.current = true;
-            setOpen(true);
+            const edge = event.key === "ArrowUp" ? "last" : "first";
+            if (visible) focusMenu(edge);
+            else {
+              focusEdgeRef.current = edge;
+              focusOnOpenRef.current = true;
+              setOpen(true);
+            }
           }
         }}
         className="flex min-h-10 w-36 max-w-full cursor-pointer items-center gap-2 rounded-full bg-[var(--pc-pill)] px-3.5 text-xs font-medium text-[var(--pc-muted)] outline-none hover:text-[var(--pc-ink)] focus-visible:ring-2 focus-visible:ring-[var(--pc-accent)] focus-visible:ring-offset-2 disabled:cursor-default disabled:opacity-60"

@@ -3746,7 +3746,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 activeComponent.slug === "task-card" ||
                 activeComponent.slug === "workflow-card" ||
                 activeComponent.slug === "toaster" ||
-                activeComponent.slug === "access-request") &&
+                activeComponent.slug === "access-request" ||
+                activeComponent.slug === "prompt-composer") &&
                 viewport === "desktop"
                 ? "p-0"
                 : "p-2 sm:p-6",
@@ -3825,7 +3826,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       activeComponent.slug === "workflow-card" ||
                       activeComponent.slug === "calendar-card" ||
                       activeComponent.slug === "toaster" ||
-                      activeComponent.slug === "access-request"
+                      activeComponent.slug === "access-request" ||
+                      activeComponent.slug === "prompt-composer"
                       ? "p-0"
                       : "p-2 sm:p-6",
                   )}

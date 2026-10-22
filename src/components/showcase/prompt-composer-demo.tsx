@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { RotateCcw } from "lucide-react";
 import {
@@ -8,6 +9,8 @@ import {
   type PromptComposerSubmission,
 } from "@/registry/ui/prompt-composer";
 import { CustomizationRange } from "./customization-controls";
+
+gsap.registerPlugin(useGSAP);
 
 export const PROMPT_COMPOSER_DEFAULT_CONFIG = {
   width: 760,
@@ -36,21 +39,26 @@ export function PromptComposerDemo({
   const [lastSent, setLastSent] = useState<PromptComposerSubmission | null>(
     null,
   );
+  const rootRef = useRef<HTMLDivElement>(null);
+  const { contextSafe } = useGSAP({ scope: rootRef });
 
   return (
     <div
+      ref={rootRef}
       data-slot="prompt-composer-demo"
       className="flex min-h-96 w-full flex-col items-center justify-center gap-6 px-4 py-16 sm:px-8"
     >
       <PromptComposer
         {...config}
-        onSend={async (prompt) => {
-          await new Promise<void>((resolve) => {
-            gsap.delayedCall(0.55, resolve);
-          });
-          if (config.failSend) throw new Error("Preview send failure");
-          setLastSent(prompt);
-        }}
+        onSend={(prompt) =>
+          contextSafe(async () => {
+            await new Promise<void>((resolve) => {
+              gsap.delayedCall(0.55, resolve);
+            });
+            if (config.failSend) throw new Error("Preview send failure");
+            setLastSent(prompt);
+          })()
+        }
         errorMessage="Preview failed. Turn off Simulate failed sends and try again."
       />
       <div className="flex min-h-10 w-full max-w-190 flex-col items-center gap-1 text-center text-[11px] leading-5 text-muted-foreground">
