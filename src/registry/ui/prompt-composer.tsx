@@ -106,11 +106,11 @@ export const PROMPT_COMPOSER_MODELS: readonly PromptComposerModel[] = [
 ];
 
 const cardStyle = {
-  image: { tilt: -5, rise: 0, layer: 1, Icon: ImagePlus },
-  note: { tilt: 2.5, rise: 3, layer: 2, Icon: StickyNote },
-  event: { tilt: -2, rise: 6, layer: 4, Icon: CalendarDays },
-  voice: { tilt: 3, rise: 3, layer: 3, Icon: Mic },
-  docs: { tilt: -4.5, rise: 0, layer: 4, Icon: FileText },
+  image: { tilt: -8, rise: 0, layer: 1, Icon: ImagePlus },
+  note: { tilt: -4, rise: 7, layer: 2, Icon: StickyNote },
+  event: { tilt: 0, rise: 12, layer: 4, Icon: CalendarDays },
+  voice: { tilt: 4, rise: 7, layer: 3, Icon: Mic },
+  docs: { tilt: 8, rise: 0, layer: 2, Icon: FileText },
 } as const;
 
 export const PromptComposer = forwardRef<HTMLDivElement, PromptComposerProps>(
@@ -134,7 +134,7 @@ export const PromptComposer = forwardRef<HTMLDivElement, PromptComposerProps>(
       speed = 1,
       stiffness = 360,
       damping = 32,
-      accentColor = "#ee8068",
+      accentColor = "#8662d9",
       defaultTrayOpen = true,
       disabled = false,
       demoVoice = false,
@@ -149,6 +149,7 @@ export const PromptComposer = forwardRef<HTMLDivElement, PromptComposerProps>(
     const inputRef = useRef<HTMLInputElement>(null);
     const mountedRef = useRef(false);
     const sendingRef = useRef(false);
+    const wasSendingRef = useRef(false);
     const timelineRef = useRef<gsap.core.Timeline | null>(null);
     const [draft, setDraft] = useState(defaultValue);
     const [actionId, setActionId] = useState<PromptActionId | null>(null);
@@ -207,6 +208,12 @@ export const PromptComposer = forwardRef<HTMLDivElement, PromptComposerProps>(
         inputRef.current?.focus({ preventScroll: true });
       voiceWasOpenRef.current = recording;
     }, [recording, disabled]);
+
+    useEffect(() => {
+      if (wasSendingRef.current && !sending && !disabled)
+        inputRef.current?.focus({ preventScroll: true });
+      wasSendingRef.current = sending;
+    }, [sending, disabled]);
 
     const updateText = (next: string) => {
       setDraft(next);
@@ -320,7 +327,7 @@ export const PromptComposer = forwardRef<HTMLDivElement, PromptComposerProps>(
           artwork("[data-art-mic], [data-art-dot]", {
             scale: lifted && !reduced ? 1.08 : 1,
           });
-          artwork("[data-art-fold]", { scale: lifted && !reduced ? 1.15 : 1 });
+          artwork("[data-art-wave]", { scaleY: lifted && !reduced ? 0.65 : 1 });
         });
         timeline.to("[data-tray-icon]", { rotation: fanUp ? 0 : 135 }, 0);
         return () => {
@@ -397,11 +404,11 @@ export const PromptComposer = forwardRef<HTMLDivElement, PromptComposerProps>(
     };
 
     const tone =
-      "[--pc-paper:#fff] [--pc-foot:#f2f2f2] [--pc-ink:#363636] [--pc-muted:#797979] [--pc-art:#d4d4d4] [--pc-border:#00000016] [--pc-pill:#f0f0f0] [--pc-field:#fafafa] [--pc-rule:#c6c6c6]";
+      "[--pc-paper:#fff] [--pc-ink:#36333d] [--pc-muted:#77727f] [--pc-border:#3225431c] [--pc-pill:#f1eff5] [--pc-field:#fff] [--pc-image:#e7dcfa] [--pc-note:#f9edc8] [--pc-event:#d9eddf] [--pc-voice:#f6ded9] [--pc-docs:#dbe8f7]";
     const darkTone =
-      "[--pc-paper:#272729] [--pc-foot:#202022] [--pc-ink:#ededee] [--pc-muted:#a3a3a8] [--pc-art:#404044] [--pc-border:#ffffff1a] [--pc-pill:#262628] [--pc-field:#202022] [--pc-rule:#454548]";
+      "[--pc-paper:#25232a] [--pc-ink:#eeeaf4] [--pc-muted:#b1abbc] [--pc-border:#e8daff1c] [--pc-pill:#302c38] [--pc-field:#211f26] [--pc-image:#40334f] [--pc-note:#4c4430] [--pc-event:#2d463d] [--pc-voice:#503835] [--pc-docs:#304156]";
     const systemTone =
-      "dark:[--pc-paper:#272729] dark:[--pc-foot:#202022] dark:[--pc-ink:#ededee] dark:[--pc-muted:#a3a3a8] dark:[--pc-art:#404044] dark:[--pc-border:#ffffff1a] dark:[--pc-pill:#262628] dark:[--pc-field:#202022] dark:[--pc-rule:#454548]";
+      "dark:[--pc-paper:#25232a] dark:[--pc-ink:#eeeaf4] dark:[--pc-muted:#b1abbc] dark:[--pc-border:#e8daff1c] dark:[--pc-pill:#302c38] dark:[--pc-field:#211f26] dark:[--pc-image:#40334f] dark:[--pc-note:#4c4430] dark:[--pc-event:#2d463d] dark:[--pc-voice:#503835] dark:[--pc-docs:#304156]";
     const ChipIcon = picked ? cardStyle[picked.id].Icon : null;
 
     return (
@@ -441,7 +448,7 @@ export const PromptComposer = forwardRef<HTMLDivElement, PromptComposerProps>(
           className="relative grid min-w-0 grid-cols-1 items-end gap-x-3 gap-y-3 @min-[561px]/composer:grid-cols-[auto_minmax(0,1fr)]"
         >
           {model && (
-            <div className="order-2 @min-[561px]/composer:order-0 @min-[561px]/composer:pb-1.5">
+            <div className="order-2 @min-[561px]/composer:order-0 @min-[561px]/composer:pb-2">
               <PromptComposerModelPicker
                 models={availableModels}
                 value={model}
@@ -462,12 +469,17 @@ export const PromptComposer = forwardRef<HTMLDivElement, PromptComposerProps>(
               !model && "col-span-full",
             )}
           >
-            <div className="relative min-w-0 pt-[calc(17cqw+8px)]">
+            <div
+              className={cn(
+                "relative min-w-0",
+                uniqueActions.length ? "pt-[calc(16cqw+22px)]" : "pt-0",
+              )}
+            >
               <div
                 id={fanId}
                 inert={!fanUp || busy}
                 aria-hidden={!fanUp}
-                className="absolute inset-x-0 top-2 h-[21cqw] [clip-path:inset(-64px_-32px_calc(4cqw_-_24px)_-32px)]"
+                className="absolute inset-x-0 top-2 h-[22cqw] [clip-path:inset(-64px_-32px_calc(6cqw_-_42px)_-32px)]"
                 onPointerLeave={() => setHovered(null)}
               >
                 {uniqueActions.map((action, index) => {
@@ -497,53 +509,30 @@ export const PromptComposer = forwardRef<HTMLDivElement, PromptComposerProps>(
                           focusInput();
                         }
                       }}
-                      className="absolute top-0 h-[21cqw] w-[18.6cqw] origin-bottom cursor-pointer rounded-[clamp(8px,2.5cqw,15px)] shadow-[0_2px_6px_#0000000a,0_8px_18px_#0000000a] outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-accent)] disabled:cursor-default disabled:opacity-60"
-                      style={{
-                        left: `calc(${50 + (index - (uniqueActions.length - 1) / 2) * 17.9}% - 9.3cqw)`,
-                        zIndex: hovered === action.id ? 10 : config.layer,
-                        transform: `rotate(${config.tilt}deg)`,
-                      }}
+                      className="absolute top-0 h-[22cqw] w-[17cqw] origin-bottom cursor-pointer rounded-[clamp(9px,2.3cqw,17px)] shadow-[0_2px_3px_#20102d08,0_12px_20px_-8px_#20102d20] outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-accent)] disabled:cursor-default disabled:opacity-60"
+                      style={
+                        {
+                          left: `calc(${50 + (index - (uniqueActions.length - 1) / 2) * 18.8}% - 8.5cqw)`,
+                          "--pc-tint": `var(--pc-${action.id})`,
+                          zIndex: hovered === action.id ? 10 : config.layer,
+                          transform: `rotate(${config.tilt}deg)`,
+                        } as CSSProperties
+                      }
                     >
-                      <span
-                        className={cn(
-                          "absolute inset-0 overflow-hidden rounded-[inherit] border border-[var(--pc-border)] bg-linear-to-b from-[var(--pc-paper)] to-[var(--pc-foot)] shadow-[inset_0_1px_0_#ffffff20]",
-                          action.id === "docs" &&
-                            "[clip-path:polygon(0_0,80%_0,100%_20%,100%_100%,0_100%)]",
-                        )}
-                      >
-                        {(action.id === "note" || action.id === "event") && (
-                          <span
-                            className={cn(
-                              "absolute inset-x-0 top-0 h-[15%] border-b border-black/10 bg-linear-to-b shadow-[inset_0_1px_0_#ffffff60]",
-                              action.id === "note"
-                                ? "from-[#ffe495] to-[#f3ce61]"
-                                : "from-[#f49a9d] to-[#de6b70]",
-                            )}
-                          />
-                        )}
-                        {action.id === "docs" && (
-                          <span
-                            data-art-fold
-                            className="absolute top-0 right-0 size-[3.8cqw] origin-top-right rounded-bl-[0.9cqw] bg-[var(--pc-art)] shadow-[-2px_2px_3px_#00000016]"
-                          />
-                        )}
+                      <span className="absolute inset-0 overflow-hidden rounded-[inherit] border border-[var(--pc-border)] bg-[var(--pc-tint)] shadow-[inset_0_1px_0_#ffffff50]">
                         <span
-                          className={cn(
-                            "absolute inset-x-[7%] top-[9%] text-center text-[clamp(8px,1.75cqw,12px)] leading-tight font-medium text-[var(--pc-muted)]",
-                            (action.id === "note" || action.id === "event") &&
-                              "top-[22%]",
-                            action.id === "docs" && "right-[22%] left-[4%]",
-                          )}
+                          aria-hidden="true"
+                          className="absolute inset-x-[10%] top-[9%] flex items-center justify-between text-[clamp(6px,1cqw,8px)] font-medium text-[var(--pc-ink)]/35"
                         >
+                          <span className="size-[0.65cqw] rounded-full bg-current" />
+                          <span className="font-mono">0{index + 1}</span>
+                        </span>
+                        <span className="absolute inset-x-[7%] top-[23%] text-center text-[clamp(8px,1.65cqw,12px)] leading-tight font-medium tracking-[-0.02em] text-[var(--pc-ink)]/75">
                           {action.label}
                         </span>
                         <span
                           aria-hidden="true"
-                          className={cn(
-                            "absolute inset-x-0 top-[37%] bottom-0 flex justify-center text-[var(--pc-art)]",
-                            (action.id === "event" || action.id === "note") &&
-                              "top-[43%]",
-                          )}
+                          className="absolute inset-x-0 top-[43%] bottom-[2%] flex items-start justify-center text-[color-mix(in_srgb,var(--pc-ink)_45%,var(--pc-tint))]"
                         >
                           <PromptComposerArt id={action.id} />
                         </span>
@@ -552,7 +541,7 @@ export const PromptComposer = forwardRef<HTMLDivElement, PromptComposerProps>(
                   );
                 })}
               </div>
-              <div className="relative z-20 flex h-13 min-w-0 items-center rounded-[var(--pc-radius)] border border-[var(--pc-border)] bg-[var(--pc-field)] pr-1.5 shadow-[0_1px_2px_#00000004,inset_0_1px_0_#ffffff08] focus-within:ring-2 focus-within:ring-[var(--pc-accent)]/40">
+              <div className="relative z-20 flex h-14 min-w-0 items-center rounded-[var(--pc-radius)] border border-[var(--pc-border)] bg-[var(--pc-field)] pr-2 shadow-[0_2px_4px_#20102d05,0_12px_32px_-12px_#20102d25,inset_0_1px_0_#ffffff10] focus-within:ring-2 focus-within:ring-[var(--pc-accent)]/30">
                 {recording ? (
                   <PromptComposerRecorder
                     demo={!onTranscribe && demoVoice}
@@ -576,7 +565,6 @@ export const PromptComposer = forwardRef<HTMLDivElement, PromptComposerProps>(
                   />
                 ) : (
                   <div
-                    key={`${picked?.id ?? "plain"}-${round}`}
                     data-composer-content
                     className="flex h-full min-w-0 flex-1 items-center gap-1 pl-2.5 @min-[421px]/field:gap-2 @min-[421px]/field:pl-4"
                   >
@@ -665,7 +653,7 @@ export const PromptComposer = forwardRef<HTMLDivElement, PromptComposerProps>(
                       type="submit"
                       aria-label={sending ? "Sending message" : "Send message"}
                       disabled={!canSend}
-                      className="grid size-9 shrink-0 cursor-pointer place-items-center rounded-full bg-[var(--pc-accent)] text-white outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-accent)] focus-visible:ring-offset-2 disabled:cursor-default disabled:bg-[var(--pc-pill)] disabled:text-[var(--pc-muted)]"
+                      className="grid size-9 shrink-0 cursor-pointer place-items-center rounded-xl bg-[var(--pc-accent)] text-white shadow-[inset_0_1px_0_#ffffff20] outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-accent)] focus-visible:ring-offset-2 disabled:cursor-default disabled:bg-[var(--pc-pill)] disabled:text-[var(--pc-muted)] disabled:shadow-none"
                     >
                       {sending ? (
                         <LoaderCircle

@@ -1077,7 +1077,7 @@
       "name": "prompt-composer",
       "type": "registry:ui",
       "title": "Prompt Composer",
-      "description": "A Tailwind prompt field with a fanned paper-card action tray, model selection and coordinated GSAP interactions.",
+      "description": "A Tailwind prompt field with a sculpted arc of tinted action cards, a shared model-menu highlight and coordinated GSAP springs.",
       "dependencies": [
         "gsap",
         "@gsap/react",

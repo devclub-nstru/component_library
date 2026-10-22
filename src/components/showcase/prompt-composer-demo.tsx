@@ -17,7 +17,7 @@ export const PROMPT_COMPOSER_DEFAULT_CONFIG = {
   speed: 1,
   stiffness: 360,
   damping: 32,
-  accentColor: "#ee8068",
+  accentColor: "#8662d9",
   placeholder: "Ask anything",
   defaultTrayOpen: true,
   demoVoice: true,

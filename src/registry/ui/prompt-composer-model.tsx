@@ -58,6 +58,7 @@ export function PromptComposerModelPicker({
 
   const close = useCallback(() => {
     closeDelayRef.current?.kill();
+    focusOnOpenRef.current = false;
     pinnedRef.current = false;
     setOpen(false);
     setHovered(null);
@@ -215,10 +216,12 @@ export function PromptComposerModelPicker({
             pinnedRef.current = true;
             focusOnOpenRef.current = true;
             setOpen(true);
-            if (visible)
+            if (visible) {
+              focusOnOpenRef.current = false;
               menuRef.current
                 ?.querySelector<HTMLButtonElement>('[aria-checked="true"]')
                 ?.focus({ preventScroll: true });
+            }
           }
         }}
         onKeyDown={(event) => {

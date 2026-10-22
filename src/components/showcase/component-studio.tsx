@@ -6706,6 +6706,13 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
             </CustomizationDock>
           </div>
 
+          {activeComponent.slug === "prompt-composer" && (
+            <footer className="flex min-h-11 shrink-0 items-center justify-center gap-1.5 border-t border-border bg-card/80 px-4 py-2 text-[11px] text-muted-foreground">
+              <span>Inspired By:</span>
+              <a href="https://www.pinui.xyz/components/prompt-composer" target="_blank" rel="noopener noreferrer" className="rounded font-medium text-foreground underline decoration-border underline-offset-4 hover:decoration-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400">Pin UI<span className="sr-only"> (opens in a new tab)</span></a>
+            </footer>
+          )}
+
           <StudioPanel
             open={activePanel === "code"}
             isMobile={isMobile}
