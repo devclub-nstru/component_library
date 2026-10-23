@@ -1,0 +1,217 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "type": "registry:ui",
+  "slug": "thinking-panel",
+  "name": "Thinking Panel",
+  "title": "Thinking Panel",
+  "description": "An AI activity panel with a live timer, expandable source chips and spring-driven progress steps.",
+  "summary": "Present application-supplied activity with a compact thinking indicator, elapsed time, linked sources and a connected step timeline. Source expansion and panel collapse share a damped spring. Stream steps as work progresses, then show a completed or interrupted state. The studio replays a clearly labelled seven-second offsite-planning example inspired by the supplied video.",
+  "category": "ai-stuff",
+  "tags": [
+    "ai",
+    "thinking",
+    "activity",
+    "sources",
+    "progress",
+    "gsap",
+    "spring"
+  ],
+  "dependencies": [
+    "gsap",
+    "@gsap/react",
+    "motion",
+    "lucide-react",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "version": "1.0.0",
+  "createdDate": "2026-10-23",
+  "updatedDate": "2026-10-23",
+  "interactive": true,
+  "supportsColor": false,
+  "highlights": [
+    "Live elapsed time or application-controlled timing",
+    "Spring-driven expansion and coordinated step entrances",
+    "Expandable, wrapping source chips with safe external links",
+    "Streaming steps, completion and explicit interruption states",
+    "Keyboard disclosure controls and live activity announcements",
+    "Responsive light/dark themes and live reduced-motion support",
+    "Scoped GSAP cleanup with offscreen and background activity pausing"
+  ],
+  "anatomy": [
+    "Disclosure header with nine-pixel activity indicator and timer",
+    "Search sources with expandable chips",
+    "Connected activity steps",
+    "Completion or interruption result"
+  ],
+  "physics": {
+    "engine": "GSAP + spring easing",
+    "description": "A shared damped spring coordinates measured disclosure height, chevron rotation and step movement. Content enters through transform and opacity tweens; ResizeObserver retargets the panel when sources wrap. All observers, tickers and timelines are cleaned up.",
+    "parameters": [
+      {
+        "label": "Stiffness",
+        "value": "380 (120–600)"
+      },
+      {
+        "label": "Damping",
+        "value": "34 (20–60)"
+      },
+      {
+        "label": "Speed",
+        "value": "1× (0.5–2)"
+      }
+    ]
+  },
+  "accessibility": {
+    "role": "region",
+    "aria": "Labelled activity region, native disclosure buttons with expanded state, inert collapsed content, semantic ordered steps, safe named external links, polite step announcements and explicit error alerts. Timer updates are excluded from live announcements.",
+    "reducedMotion": "Disclosure and steps settle immediately; activity pixels stay static. Preferences can change while mounted.",
+    "keyboard": [
+      {
+        "key": "Tab / Shift+Tab",
+        "description": "Move through the header, source links and source disclosure."
+      },
+      {
+        "key": "Enter / Space",
+        "description": "Toggle the panel or source disclosure."
+      },
+      {
+        "key": "Escape",
+        "description": "Hide extra sources and return focus to their trigger; otherwise collapse the panel and focus its header."
+      }
+    ]
+  },
+  "guidelines": {
+    "recommended": [
+      "Display search or agent activity alongside an AI response.",
+      "Append meaningful activity summaries as your application progresses."
+    ],
+    "bestPractices": [
+      "Supply real sources and steps; the primitive does not perform searches or invent activity.",
+      "Use stable unique source and step IDs, and plain-language step labels.",
+      "Pass status=complete or status=error when work stops; supply a safe error message.",
+      "Remount with a request key to reset the internal timer between independent tasks.",
+      "Provide elapsedSeconds for server-authoritative timing and retain expanded state with expanded/onExpandedChange when needed."
+    ]
+  },
+  "props": [
+    {
+      "name": "sources",
+      "type": "readonly ThinkingSource[]",
+      "defaultValue": "[]",
+      "description": "Stable id, label, optional HTTP(S) href and optional ReactNode icon for each real source."
+    },
+    {
+      "name": "steps",
+      "type": "readonly ThinkingStep[]",
+      "defaultValue": "[]",
+      "description": "Stable id and label for each activity step. Append as work progresses."
+    },
+    {
+      "name": "status",
+      "type": "'thinking' | 'complete' | 'error'",
+      "defaultValue": "'thinking'",
+      "description": "Activity lifecycle. Stops the internal timer when work finishes or fails."
+    },
+    {
+      "name": "elapsedSeconds",
+      "type": "number",
+      "description": "Optional application-controlled elapsed time; otherwise uses the live internal timer."
+    },
+    {
+      "name": "expanded",
+      "type": "boolean",
+      "description": "Controlled panel disclosure."
+    },
+    {
+      "name": "defaultExpanded",
+      "type": "boolean",
+      "defaultValue": "true",
+      "description": "Initial uncontrolled panel disclosure."
+    },
+    {
+      "name": "onExpandedChange",
+      "type": "(expanded: boolean) => void",
+      "description": "Receives disclosure changes."
+    },
+    {
+      "name": "visibleSources",
+      "type": "number",
+      "defaultValue": "4",
+      "description": "Number of source chips visible before the more button, bounded to 1–50."
+    },
+    {
+      "name": "completionLabel",
+      "type": "string",
+      "defaultValue": "'Finished thinking'",
+      "description": "Completion text and announcement."
+    },
+    {
+      "name": "errorMessage",
+      "type": "string",
+      "defaultValue": "'Something went wrong. Please try again.'",
+      "description": "Safe interruption text and alert."
+    },
+    {
+      "name": "width",
+      "type": "number",
+      "defaultValue": "440",
+      "description": "Preferred width in pixels, bounded to 240–960 and constrained by the container."
+    },
+    {
+      "name": "stiffness",
+      "type": "number",
+      "defaultValue": "380",
+      "description": "Spring stiffness, bounded to 120–600."
+    },
+    {
+      "name": "damping",
+      "type": "number",
+      "defaultValue": "34",
+      "description": "Spring damping, bounded to 20–60."
+    },
+    {
+      "name": "speed",
+      "type": "number",
+      "defaultValue": "1",
+      "description": "Motion speed multiplier, bounded to 0.5–2. Does not change real elapsed time."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "description": "Additional root classes."
+    },
+    {
+      "name": "ref",
+      "type": "Ref<HTMLDivElement>",
+      "description": "Root element ref."
+    }
+  ],
+  "usage": "import { ThinkingPanel } from '@/components/ui/thinking-panel';\n\n<ThinkingPanel\n  key={requestId}\n  status={isComplete ? 'complete' : 'thinking'}\n  sources={sources}\n  steps={activitySteps}\n/>",
+  "files": [
+    {
+      "name": "thinking-panel.tsx",
+      "path": "src/registry/ui/thinking-panel.tsx",
+      "code": "\"use client\";\n\nimport { useId, useRef, useState, type Ref } from \"react\";\nimport { useGSAP } from \"@gsap/react\";\nimport gsap from \"gsap\";\nimport { Check, ChevronDown, Globe2, TriangleAlert } from \"lucide-react\";\nimport { cn } from \"@/lib/utils\";\nimport {\n  thinkingPanelBounded,\n  thinkingSourceUrl,\n  type ThinkingSource,\n  type ThinkingStatus,\n  type ThinkingStep,\n} from \"./thinking-panel-types\";\nimport { useThinkingPanelMotion } from \"./use-thinking-panel-motion\";\n\nexport type { ThinkingSource, ThinkingStatus, ThinkingStep } from \"./thinking-panel-types\";\n\ngsap.registerPlugin(useGSAP);\n\nexport interface ThinkingPanelProps {\n  sources?: readonly ThinkingSource[];\n  steps?: readonly ThinkingStep[];\n  status?: ThinkingStatus;\n  elapsedSeconds?: number;\n  expanded?: boolean;\n  defaultExpanded?: boolean;\n  onExpandedChange?: (expanded: boolean) => void;\n  visibleSources?: number;\n  completionLabel?: string;\n  errorMessage?: string;\n  width?: number;\n  stiffness?: number;\n  damping?: number;\n  speed?: number;\n  className?: string;\n  ref?: Ref<HTMLDivElement>;\n}\n\nexport function ThinkingPanel({\n  sources = [],\n  steps = [],\n  status = \"thinking\",\n  elapsedSeconds,\n  expanded,\n  defaultExpanded = true,\n  onExpandedChange,\n  visibleSources = 4,\n  completionLabel = \"Finished thinking\",\n  errorMessage = \"Something went wrong. Please try again.\",\n  width = 440,\n  stiffness = 380,\n  damping = 34,\n  speed = 1,\n  className,\n  ref,\n}: ThinkingPanelProps) {\n  const uid = useId();\n  const rootRef = useRef<HTMLDivElement>(null);\n  const panelRef = useRef<HTMLDivElement>(null);\n  const contentRef = useRef<HTMLDivElement>(null);\n  const triggerRef = useRef<HTMLButtonElement>(null);\n  const sourcesTriggerRef = useRef<HTMLButtonElement>(null);\n  const clockRef = useRef({ accumulated: 0, started: 0 });\n  const [seconds, setSeconds] = useState(0);\n  const [ownExpanded, setOwnExpanded] = useState(defaultExpanded);\n  const [showAllSources, setShowAllSources] = useState(false);\n  const [initialExpanded] = useState(expanded ?? defaultExpanded);\n  const isOpen = expanded ?? ownExpanded;\n  const sourceLimit = Math.floor(thinkingPanelBounded(visibleSources, 4, 1, 50));\n  const displayedSources = showAllSources ? sources : sources.slice(0, sourceLimit);\n  const remaining = Math.max(0, sources.length - sourceLimit);\n  const elapsed = Math.floor(thinkingPanelBounded(elapsedSeconds ?? seconds, 0, 0, Number.MAX_SAFE_INTEGER));\n  const signature = JSON.stringify([sources.map((source) => source.id), steps.map((step) => step.id), status, showAllSources]);\n\n  useGSAP(() => {\n    if (status !== \"thinking\" || elapsedSeconds !== undefined) return;\n    const clock = clockRef.current;\n    clock.started = performance.now();\n    const tick = () => {\n      const next = Math.floor((clock.accumulated + performance.now() - clock.started) / 1000);\n      setSeconds((previous) => previous === next ? previous : next);\n    };\n    gsap.ticker.add(tick);\n    return () => {\n      clock.accumulated += performance.now() - clock.started;\n      gsap.ticker.remove(tick);\n    };\n  }, { dependencies: [status, elapsedSeconds], revertOnUpdate: true });\n\n  useThinkingPanelMotion({ rootRef, panelRef, contentRef, signature, expanded: isOpen, status, stiffness, damping, speed });\n\n  const changeExpanded = (next: boolean) => {\n    if (expanded === undefined) setOwnExpanded(next);\n    onExpandedChange?.(next);\n    if (!next) triggerRef.current?.focus({ preventScroll: true });\n  };\n\n  return (\n    <div\n      ref={(node) => {\n        rootRef.current = node;\n        if (typeof ref === \"function\") ref(node);\n        else if (ref) ref.current = node;\n      }}\n      data-slot=\"thinking-panel\"\n      data-expanded={isOpen}\n      data-status={status}\n      role=\"region\"\n      aria-label=\"AI activity\"\n      className={cn(\"max-w-full overflow-hidden rounded-2xl border border-zinc-200/80 bg-white text-[13px] leading-5 text-zinc-600 shadow-[0_8px_32px_-20px_#00000020] dark:border-white/[0.08] dark:bg-[#1b1b1d] dark:text-zinc-400 dark:shadow-[0_12px_40px_-20px_#00000050]\", className)}\n      style={{ width: thinkingPanelBounded(width, 440, 240, 960) }}\n      onKeyDown={(event) => {\n        if (event.key !== \"Escape\" || !isOpen) return;\n        event.preventDefault();\n        event.stopPropagation();\n        if (showAllSources && contentRef.current?.contains(event.target as Node)) {\n          setShowAllSources(false);\n          sourcesTriggerRef.current?.focus({ preventScroll: true });\n        } else changeExpanded(false);\n      }}\n    >\n      <button\n        ref={triggerRef}\n        type=\"button\"\n        aria-expanded={isOpen}\n        aria-controls={`${uid}-content`}\n        onClick={() => changeExpanded(!isOpen)}\n        className=\"flex min-h-13 w-full cursor-pointer items-center gap-2.5 rounded-2xl px-4 text-left outline-none hover:bg-zinc-50 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-violet-400 dark:hover:bg-white/[0.025]\"\n      >\n        <span aria-hidden=\"true\" className=\"grid size-3.5 shrink-0 grid-cols-3 gap-[2px] text-violet-500 dark:text-violet-400\">\n          {Array.from({ length: 9 }, (_, index) => <span key={index} data-thinking-pixel className=\"rounded-[1px] bg-current\" style={{ opacity: 0.65 }} />)}\n        </span>\n        <span className=\"font-medium text-zinc-700 dark:text-zinc-300\">\n          {status === \"thinking\" ? \"Thinking\" : status === \"error\" ? \"Interrupted after\" : \"Worked for\"}{\" \"}\n          <span aria-hidden=\"true\" className=\"font-normal tabular-nums text-zinc-500 dark:text-zinc-400\">{elapsed}s</span>\n          <span className=\"sr-only\">{status === \"thinking\" ? \"in progress\" : `${elapsed} seconds`}</span>\n        </span>\n        <ChevronDown data-thinking-chevron aria-hidden=\"true\" className=\"ml-auto size-4 shrink-0 text-zinc-400\" style={{ transform: initialExpanded ? \"rotate(0deg)\" : \"rotate(-90deg)\" }} />\n      </button>\n      <div ref={panelRef} id={`${uid}-content`} inert={!isOpen} aria-hidden={!isOpen} className=\"overflow-hidden\" style={{ height: initialExpanded ? \"auto\" : 0 }}>\n        <div ref={contentRef} className=\"border-t border-zinc-100 px-4 pt-4 pb-4 dark:border-white/[0.055]\">\n          <ol aria-label=\"Activity steps\" className=\"space-y-0\">\n            <li data-thinking-row=\"sources\" className=\"relative grid grid-cols-[14px_minmax(0,1fr)] gap-x-2.5 pb-3\">\n              <span aria-hidden=\"true\" className=\"absolute top-5 bottom-1 left-[6px] w-px bg-zinc-200 dark:bg-white/[0.09]\" />\n              <Globe2 aria-hidden=\"true\" className=\"mt-0.5 size-3.5 text-zinc-400 dark:text-zinc-500\" />\n              <div className=\"min-w-0\">\n                <p className=\"mb-2\">{sources.length ? \"Searched\" : status === \"thinking\" ? \"Searching sources…\" : \"No sources searched\"}</p>\n                {sources.length > 0 && <div className=\"flex flex-wrap items-center gap-1.5\">\n                  {displayedSources.map((source) => {\n                    const href = thinkingSourceUrl(source.href);\n                    const contents = <><span aria-hidden=\"true\" className=\"flex size-3.5 shrink-0 items-center justify-center overflow-hidden rounded-[3px] text-[10px] font-semibold\">{source.icon ?? <Globe2 className=\"size-3\" />}</span><span className=\"truncate\">{source.label}</span></>;\n                    const chipClass = \"inline-flex min-h-7 max-w-full items-center gap-1.5 rounded-lg border border-zinc-200/80 bg-zinc-50/70 px-2 py-1 text-[11px] leading-4 text-zinc-600 dark:border-white/[0.07] dark:bg-white/[0.025] dark:text-zinc-400\";\n                    return href ? <a key={source.id} data-thinking-source={source.id} href={href} target=\"_blank\" rel=\"noopener noreferrer\" title={href} className={cn(chipClass, \"outline-none hover:border-violet-300 hover:bg-violet-50 focus-visible:ring-2 focus-visible:ring-violet-400 dark:hover:border-violet-400/30 dark:hover:bg-violet-400/10\")}>\n                      {contents}<span className=\"sr-only\"> (opens in a new tab)</span>\n                    </a> : <span key={source.id} data-thinking-source={source.id} className={chipClass}>{contents}</span>;\n                  })}\n                  {remaining > 0 && <button ref={sourcesTriggerRef} type=\"button\" aria-expanded={showAllSources} aria-label={showAllSources ? \"Show fewer sources\" : `Show ${remaining} more sources`} onClick={() => setShowAllSources(!showAllSources)} className=\"min-h-7 cursor-pointer rounded-lg px-2 py-1 text-[11px] leading-4 text-zinc-500 outline-none hover:bg-zinc-100 focus-visible:ring-2 focus-visible:ring-violet-400 dark:hover:bg-white/5 dark:hover:text-zinc-200\">{showAllSources ? \"Show less\" : `+${remaining} more`}</button>}\n                </div>}\n              </div>\n            </li>\n            {steps.map((step, index) => <li key={step.id} data-thinking-row={`step-${step.id}`} className=\"relative grid grid-cols-[14px_minmax(0,1fr)] items-start gap-x-2.5 pb-3\">\n              <span aria-hidden=\"true\" className=\"absolute top-4 bottom-0 left-[6px] w-px bg-zinc-200 dark:bg-white/[0.09]\" />\n              <span aria-hidden=\"true\" data-thinking-active={status === \"thinking\" && index === steps.length - 1 ? \"true\" : undefined} className={cn(\"mx-auto mt-2 size-1.5 rounded-full\", status === \"thinking\" && index === steps.length - 1 ? \"bg-violet-500 dark:bg-violet-400\" : \"bg-zinc-300 dark:bg-zinc-600\")} />\n              <span className=\"min-w-0 break-words\">{step.label}</span>\n            </li>)}\n            {status !== \"thinking\" && <li data-thinking-row=\"result\" className=\"grid grid-cols-[14px_minmax(0,1fr)] items-start gap-x-2.5\">\n              {status === \"complete\" ? <span aria-hidden=\"true\" className=\"mt-0.5 flex size-3.5 items-center justify-center rounded-full bg-violet-500 dark:bg-violet-400\"><Check className=\"size-2.5 text-white dark:text-zinc-950\" strokeWidth={3} /></span> : <TriangleAlert aria-hidden=\"true\" className=\"mt-0.5 size-3.5 text-amber-600 dark:text-amber-400\" />}\n              <span className=\"font-medium text-zinc-700 dark:text-zinc-300\">{status === \"complete\" ? completionLabel : errorMessage}</span>\n            </li>}\n          </ol>\n        </div>\n      </div>\n      <span role={status === \"error\" ? \"alert\" : \"status\"} aria-atomic=\"true\" className=\"sr-only\">{status === \"complete\" ? completionLabel : status === \"error\" ? errorMessage : steps.at(-1)?.label ?? \"Searching sources\"}</span>\n    </div>\n  );\n}\n",
+      "content": "\"use client\";\n\nimport { useId, useRef, useState, type Ref } from \"react\";\nimport { useGSAP } from \"@gsap/react\";\nimport gsap from \"gsap\";\nimport { Check, ChevronDown, Globe2, TriangleAlert } from \"lucide-react\";\nimport { cn } from \"@/lib/utils\";\nimport {\n  thinkingPanelBounded,\n  thinkingSourceUrl,\n  type ThinkingSource,\n  type ThinkingStatus,\n  type ThinkingStep,\n} from \"./thinking-panel-types\";\nimport { useThinkingPanelMotion } from \"./use-thinking-panel-motion\";\n\nexport type { ThinkingSource, ThinkingStatus, ThinkingStep } from \"./thinking-panel-types\";\n\ngsap.registerPlugin(useGSAP);\n\nexport interface ThinkingPanelProps {\n  sources?: readonly ThinkingSource[];\n  steps?: readonly ThinkingStep[];\n  status?: ThinkingStatus;\n  elapsedSeconds?: number;\n  expanded?: boolean;\n  defaultExpanded?: boolean;\n  onExpandedChange?: (expanded: boolean) => void;\n  visibleSources?: number;\n  completionLabel?: string;\n  errorMessage?: string;\n  width?: number;\n  stiffness?: number;\n  damping?: number;\n  speed?: number;\n  className?: string;\n  ref?: Ref<HTMLDivElement>;\n}\n\nexport function ThinkingPanel({\n  sources = [],\n  steps = [],\n  status = \"thinking\",\n  elapsedSeconds,\n  expanded,\n  defaultExpanded = true,\n  onExpandedChange,\n  visibleSources = 4,\n  completionLabel = \"Finished thinking\",\n  errorMessage = \"Something went wrong. Please try again.\",\n  width = 440,\n  stiffness = 380,\n  damping = 34,\n  speed = 1,\n  className,\n  ref,\n}: ThinkingPanelProps) {\n  const uid = useId();\n  const rootRef = useRef<HTMLDivElement>(null);\n  const panelRef = useRef<HTMLDivElement>(null);\n  const contentRef = useRef<HTMLDivElement>(null);\n  const triggerRef = useRef<HTMLButtonElement>(null);\n  const sourcesTriggerRef = useRef<HTMLButtonElement>(null);\n  const clockRef = useRef({ accumulated: 0, started: 0 });\n  const [seconds, setSeconds] = useState(0);\n  const [ownExpanded, setOwnExpanded] = useState(defaultExpanded);\n  const [showAllSources, setShowAllSources] = useState(false);\n  const [initialExpanded] = useState(expanded ?? defaultExpanded);\n  const isOpen = expanded ?? ownExpanded;\n  const sourceLimit = Math.floor(thinkingPanelBounded(visibleSources, 4, 1, 50));\n  const displayedSources = showAllSources ? sources : sources.slice(0, sourceLimit);\n  const remaining = Math.max(0, sources.length - sourceLimit);\n  const elapsed = Math.floor(thinkingPanelBounded(elapsedSeconds ?? seconds, 0, 0, Number.MAX_SAFE_INTEGER));\n  const signature = JSON.stringify([sources.map((source) => source.id), steps.map((step) => step.id), status, showAllSources]);\n\n  useGSAP(() => {\n    if (status !== \"thinking\" || elapsedSeconds !== undefined) return;\n    const clock = clockRef.current;\n    clock.started = performance.now();\n    const tick = () => {\n      const next = Math.floor((clock.accumulated + performance.now() - clock.started) / 1000);\n      setSeconds((previous) => previous === next ? previous : next);\n    };\n    gsap.ticker.add(tick);\n    return () => {\n      clock.accumulated += performance.now() - clock.started;\n      gsap.ticker.remove(tick);\n    };\n  }, { dependencies: [status, elapsedSeconds], revertOnUpdate: true });\n\n  useThinkingPanelMotion({ rootRef, panelRef, contentRef, signature, expanded: isOpen, status, stiffness, damping, speed });\n\n  const changeExpanded = (next: boolean) => {\n    if (expanded === undefined) setOwnExpanded(next);\n    onExpandedChange?.(next);\n    if (!next) triggerRef.current?.focus({ preventScroll: true });\n  };\n\n  return (\n    <div\n      ref={(node) => {\n        rootRef.current = node;\n        if (typeof ref === \"function\") ref(node);\n        else if (ref) ref.current = node;\n      }}\n      data-slot=\"thinking-panel\"\n      data-expanded={isOpen}\n      data-status={status}\n      role=\"region\"\n      aria-label=\"AI activity\"\n      className={cn(\"max-w-full overflow-hidden rounded-2xl border border-zinc-200/80 bg-white text-[13px] leading-5 text-zinc-600 shadow-[0_8px_32px_-20px_#00000020] dark:border-white/[0.08] dark:bg-[#1b1b1d] dark:text-zinc-400 dark:shadow-[0_12px_40px_-20px_#00000050]\", className)}\n      style={{ width: thinkingPanelBounded(width, 440, 240, 960) }}\n      onKeyDown={(event) => {\n        if (event.key !== \"Escape\" || !isOpen) return;\n        event.preventDefault();\n        event.stopPropagation();\n        if (showAllSources && contentRef.current?.contains(event.target as Node)) {\n          setShowAllSources(false);\n          sourcesTriggerRef.current?.focus({ preventScroll: true });\n        } else changeExpanded(false);\n      }}\n    >\n      <button\n        ref={triggerRef}\n        type=\"button\"\n        aria-expanded={isOpen}\n        aria-controls={`${uid}-content`}\n        onClick={() => changeExpanded(!isOpen)}\n        className=\"flex min-h-13 w-full cursor-pointer items-center gap-2.5 rounded-2xl px-4 text-left outline-none hover:bg-zinc-50 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-violet-400 dark:hover:bg-white/[0.025]\"\n      >\n        <span aria-hidden=\"true\" className=\"grid size-3.5 shrink-0 grid-cols-3 gap-[2px] text-violet-500 dark:text-violet-400\">\n          {Array.from({ length: 9 }, (_, index) => <span key={index} data-thinking-pixel className=\"rounded-[1px] bg-current\" style={{ opacity: 0.65 }} />)}\n        </span>\n        <span className=\"font-medium text-zinc-700 dark:text-zinc-300\">\n          {status === \"thinking\" ? \"Thinking\" : status === \"error\" ? \"Interrupted after\" : \"Worked for\"}{\" \"}\n          <span aria-hidden=\"true\" className=\"font-normal tabular-nums text-zinc-500 dark:text-zinc-400\">{elapsed}s</span>\n          <span className=\"sr-only\">{status === \"thinking\" ? \"in progress\" : `${elapsed} seconds`}</span>\n        </span>\n        <ChevronDown data-thinking-chevron aria-hidden=\"true\" className=\"ml-auto size-4 shrink-0 text-zinc-400\" style={{ transform: initialExpanded ? \"rotate(0deg)\" : \"rotate(-90deg)\" }} />\n      </button>\n      <div ref={panelRef} id={`${uid}-content`} inert={!isOpen} aria-hidden={!isOpen} className=\"overflow-hidden\" style={{ height: initialExpanded ? \"auto\" : 0 }}>\n        <div ref={contentRef} className=\"border-t border-zinc-100 px-4 pt-4 pb-4 dark:border-white/[0.055]\">\n          <ol aria-label=\"Activity steps\" className=\"space-y-0\">\n            <li data-thinking-row=\"sources\" className=\"relative grid grid-cols-[14px_minmax(0,1fr)] gap-x-2.5 pb-3\">\n              <span aria-hidden=\"true\" className=\"absolute top-5 bottom-1 left-[6px] w-px bg-zinc-200 dark:bg-white/[0.09]\" />\n              <Globe2 aria-hidden=\"true\" className=\"mt-0.5 size-3.5 text-zinc-400 dark:text-zinc-500\" />\n              <div className=\"min-w-0\">\n                <p className=\"mb-2\">{sources.length ? \"Searched\" : status === \"thinking\" ? \"Searching sources…\" : \"No sources searched\"}</p>\n                {sources.length > 0 && <div className=\"flex flex-wrap items-center gap-1.5\">\n                  {displayedSources.map((source) => {\n                    const href = thinkingSourceUrl(source.href);\n                    const contents = <><span aria-hidden=\"true\" className=\"flex size-3.5 shrink-0 items-center justify-center overflow-hidden rounded-[3px] text-[10px] font-semibold\">{source.icon ?? <Globe2 className=\"size-3\" />}</span><span className=\"truncate\">{source.label}</span></>;\n                    const chipClass = \"inline-flex min-h-7 max-w-full items-center gap-1.5 rounded-lg border border-zinc-200/80 bg-zinc-50/70 px-2 py-1 text-[11px] leading-4 text-zinc-600 dark:border-white/[0.07] dark:bg-white/[0.025] dark:text-zinc-400\";\n                    return href ? <a key={source.id} data-thinking-source={source.id} href={href} target=\"_blank\" rel=\"noopener noreferrer\" title={href} className={cn(chipClass, \"outline-none hover:border-violet-300 hover:bg-violet-50 focus-visible:ring-2 focus-visible:ring-violet-400 dark:hover:border-violet-400/30 dark:hover:bg-violet-400/10\")}>\n                      {contents}<span className=\"sr-only\"> (opens in a new tab)</span>\n                    </a> : <span key={source.id} data-thinking-source={source.id} className={chipClass}>{contents}</span>;\n                  })}\n                  {remaining > 0 && <button ref={sourcesTriggerRef} type=\"button\" aria-expanded={showAllSources} aria-label={showAllSources ? \"Show fewer sources\" : `Show ${remaining} more sources`} onClick={() => setShowAllSources(!showAllSources)} className=\"min-h-7 cursor-pointer rounded-lg px-2 py-1 text-[11px] leading-4 text-zinc-500 outline-none hover:bg-zinc-100 focus-visible:ring-2 focus-visible:ring-violet-400 dark:hover:bg-white/5 dark:hover:text-zinc-200\">{showAllSources ? \"Show less\" : `+${remaining} more`}</button>}\n                </div>}\n              </div>\n            </li>\n            {steps.map((step, index) => <li key={step.id} data-thinking-row={`step-${step.id}`} className=\"relative grid grid-cols-[14px_minmax(0,1fr)] items-start gap-x-2.5 pb-3\">\n              <span aria-hidden=\"true\" className=\"absolute top-4 bottom-0 left-[6px] w-px bg-zinc-200 dark:bg-white/[0.09]\" />\n              <span aria-hidden=\"true\" data-thinking-active={status === \"thinking\" && index === steps.length - 1 ? \"true\" : undefined} className={cn(\"mx-auto mt-2 size-1.5 rounded-full\", status === \"thinking\" && index === steps.length - 1 ? \"bg-violet-500 dark:bg-violet-400\" : \"bg-zinc-300 dark:bg-zinc-600\")} />\n              <span className=\"min-w-0 break-words\">{step.label}</span>\n            </li>)}\n            {status !== \"thinking\" && <li data-thinking-row=\"result\" className=\"grid grid-cols-[14px_minmax(0,1fr)] items-start gap-x-2.5\">\n              {status === \"complete\" ? <span aria-hidden=\"true\" className=\"mt-0.5 flex size-3.5 items-center justify-center rounded-full bg-violet-500 dark:bg-violet-400\"><Check className=\"size-2.5 text-white dark:text-zinc-950\" strokeWidth={3} /></span> : <TriangleAlert aria-hidden=\"true\" className=\"mt-0.5 size-3.5 text-amber-600 dark:text-amber-400\" />}\n              <span className=\"font-medium text-zinc-700 dark:text-zinc-300\">{status === \"complete\" ? completionLabel : errorMessage}</span>\n            </li>}\n          </ol>\n        </div>\n      </div>\n      <span role={status === \"error\" ? \"alert\" : \"status\"} aria-atomic=\"true\" className=\"sr-only\">{status === \"complete\" ? completionLabel : status === \"error\" ? errorMessage : steps.at(-1)?.label ?? \"Searching sources\"}</span>\n    </div>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "@ui/thinking-panel.tsx"
+    },
+    {
+      "name": "thinking-panel-types.ts",
+      "path": "src/registry/ui/thinking-panel-types.ts",
+      "code": "import type { ReactNode } from \"react\";\n\nexport interface ThinkingSource {\n  id: string;\n  label: string;\n  href?: string;\n  icon?: ReactNode;\n}\n\nexport interface ThinkingStep {\n  id: string;\n  label: string;\n}\n\nexport type ThinkingStatus = \"thinking\" | \"complete\" | \"error\";\n\nexport const thinkingPanelBounded = (\n  value: number,\n  fallback: number,\n  min: number,\n  max: number,\n) => (Number.isFinite(value) ? Math.min(max, Math.max(min, value)) : fallback);\n\nexport function thinkingSourceUrl(href?: string) {\n  if (!href) return undefined;\n  try {\n    const url = new URL(href);\n    return url.protocol === \"https:\" || url.protocol === \"http:\"\n      ? url.href\n      : undefined;\n  } catch {\n    return undefined;\n  }\n}\n",
+      "content": "import type { ReactNode } from \"react\";\n\nexport interface ThinkingSource {\n  id: string;\n  label: string;\n  href?: string;\n  icon?: ReactNode;\n}\n\nexport interface ThinkingStep {\n  id: string;\n  label: string;\n}\n\nexport type ThinkingStatus = \"thinking\" | \"complete\" | \"error\";\n\nexport const thinkingPanelBounded = (\n  value: number,\n  fallback: number,\n  min: number,\n  max: number,\n) => (Number.isFinite(value) ? Math.min(max, Math.max(min, value)) : fallback);\n\nexport function thinkingSourceUrl(href?: string) {\n  if (!href) return undefined;\n  try {\n    const url = new URL(href);\n    return url.protocol === \"https:\" || url.protocol === \"http:\"\n      ? url.href\n      : undefined;\n  } catch {\n    return undefined;\n  }\n}\n",
+      "type": "registry:ui",
+      "target": "@ui/thinking-panel-types.ts"
+    },
+    {
+      "name": "use-thinking-panel-motion.ts",
+      "path": "src/registry/ui/use-thinking-panel-motion.ts",
+      "code": "\"use client\";\n\nimport { useRef, type RefObject } from \"react\";\nimport { useGSAP } from \"@gsap/react\";\nimport gsap from \"gsap\";\nimport { calcGeneratorDuration, spring } from \"motion\";\nimport { thinkingPanelBounded, type ThinkingStatus } from \"./thinking-panel-types\";\n\ngsap.registerPlugin(useGSAP);\n\nexport function useThinkingPanelMotion({\n  rootRef, panelRef, contentRef, signature, expanded, status, stiffness, damping, speed,\n}: {\n  rootRef: RefObject<HTMLDivElement | null>;\n  panelRef: RefObject<HTMLDivElement | null>;\n  contentRef: RefObject<HTMLDivElement | null>;\n  signature: string;\n  expanded: boolean;\n  status: ThinkingStatus;\n  stiffness: number;\n  damping: number;\n  speed: number;\n}) {\n  const syncRef = useRef<(() => void) | null>(null);\n\n  useGSAP(() => {\n    const root = rootRef.current;\n    const panel = panelRef.current;\n    const content = contentRef.current;\n    if (!root || !panel || !content) return;\n    const response = spring({\n      keyframes: [0, 1],\n      stiffness: thinkingPanelBounded(stiffness, 380, 120, 600),\n      damping: thinkingPanelBounded(damping, 34, 20, 60),\n      restSpeed: 0.001,\n      restDelta: 0.001,\n    });\n    const settle = calcGeneratorDuration(response);\n    const ease = (progress: number) => progress === 1 ? 1 : response.next(progress * settle).value;\n    const media = gsap.matchMedia();\n    media.add({ reduced: \"(prefers-reduced-motion: reduce)\", standard: \"(prefers-reduced-motion: no-preference)\" }, (context) => {\n      const reduced = Boolean(context.conditions?.reduced);\n      const duration = reduced ? 0 : settle / 1000 / thinkingPanelBounded(speed, 1, 0.5, 2);\n      let timeline: gsap.core.Timeline | null = null;\n      let positions = new Map<string, number>();\n      let visible = true;\n      const pulse = reduced ? null : gsap.to(\"[data-thinking-pixel]\", { opacity: 0.2, duration: 0.6, stagger: { each: 0.08, repeat: -1, yoyo: true }, ease: \"sine.inOut\", paused: true });\n      const updatePulse = () => {\n        if (visible && !document.hidden && root.dataset.expanded === \"true\" && root.dataset.status === \"thinking\") pulse?.resume();\n        else pulse?.pause();\n      };\n      const sync = context.add(\"sync\", (immediate = false) => {\n        const open = root.dataset.expanded === \"true\";\n        const rows = Array.from(content.querySelectorAll<HTMLElement>(\"[data-thinking-row]\"));\n        const measurements = rows.map((row) => ({ row, id: row.dataset.thinkingRow ?? \"\", top: row.offsetTop, y: Number(gsap.getProperty(row, \"y\")) || 0 }));\n        const height = content.offsetHeight;\n        timeline?.kill();\n        timeline = gsap.timeline({ defaults: { duration: immediate ? 0 : duration, ease, overwrite: \"auto\" } });\n        timeline.to(panel, { height: open ? height : 0 }, 0);\n        timeline.to(\"[data-thinking-chevron]\", { rotation: open ? 0 : -90 }, 0);\n        timeline.to(content, { opacity: open ? 1 : 0, duration: immediate || reduced ? 0 : 0.18, ease: \"power2.out\" }, 0);\n        for (const { row, id, top, y } of measurements) {\n          const previous = positions.get(id);\n          if (previous !== undefined) timeline.fromTo(row, { y: previous - top + y }, { y: 0 }, 0);\n          else if (!immediate && open) timeline.fromTo(row, { y: reduced ? 0 : 7, opacity: 0 }, { y: 0, opacity: 1, duration: reduced ? 0 : Math.min(duration, 0.4) }, 0);\n        }\n        positions = new Map(measurements.map(({ id, top }) => [id, top]));\n        updatePulse();\n      });\n      syncRef.current = () => sync();\n      sync(true);\n      const observer = new ResizeObserver(() => sync());\n      observer.observe(content);\n      const visibility = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; updatePulse(); });\n      visibility.observe(root);\n      document.addEventListener(\"visibilitychange\", updatePulse);\n      return () => {\n        observer.disconnect();\n        visibility.disconnect();\n        document.removeEventListener(\"visibilitychange\", updatePulse);\n        timeline?.kill();\n        pulse?.kill();\n        syncRef.current = null;\n      };\n    }, root);\n    return () => media.revert();\n  }, { scope: rootRef, dependencies: [stiffness, damping, speed], revertOnUpdate: true });\n\n  useGSAP((context) => { context.ignore(() => syncRef.current?.()); }, { scope: rootRef, dependencies: [signature, expanded, status] });\n}\n",
+      "content": "\"use client\";\n\nimport { useRef, type RefObject } from \"react\";\nimport { useGSAP } from \"@gsap/react\";\nimport gsap from \"gsap\";\nimport { calcGeneratorDuration, spring } from \"motion\";\nimport { thinkingPanelBounded, type ThinkingStatus } from \"./thinking-panel-types\";\n\ngsap.registerPlugin(useGSAP);\n\nexport function useThinkingPanelMotion({\n  rootRef, panelRef, contentRef, signature, expanded, status, stiffness, damping, speed,\n}: {\n  rootRef: RefObject<HTMLDivElement | null>;\n  panelRef: RefObject<HTMLDivElement | null>;\n  contentRef: RefObject<HTMLDivElement | null>;\n  signature: string;\n  expanded: boolean;\n  status: ThinkingStatus;\n  stiffness: number;\n  damping: number;\n  speed: number;\n}) {\n  const syncRef = useRef<(() => void) | null>(null);\n\n  useGSAP(() => {\n    const root = rootRef.current;\n    const panel = panelRef.current;\n    const content = contentRef.current;\n    if (!root || !panel || !content) return;\n    const response = spring({\n      keyframes: [0, 1],\n      stiffness: thinkingPanelBounded(stiffness, 380, 120, 600),\n      damping: thinkingPanelBounded(damping, 34, 20, 60),\n      restSpeed: 0.001,\n      restDelta: 0.001,\n    });\n    const settle = calcGeneratorDuration(response);\n    const ease = (progress: number) => progress === 1 ? 1 : response.next(progress * settle).value;\n    const media = gsap.matchMedia();\n    media.add({ reduced: \"(prefers-reduced-motion: reduce)\", standard: \"(prefers-reduced-motion: no-preference)\" }, (context) => {\n      const reduced = Boolean(context.conditions?.reduced);\n      const duration = reduced ? 0 : settle / 1000 / thinkingPanelBounded(speed, 1, 0.5, 2);\n      let timeline: gsap.core.Timeline | null = null;\n      let positions = new Map<string, number>();\n      let visible = true;\n      const pulse = reduced ? null : gsap.to(\"[data-thinking-pixel]\", { opacity: 0.2, duration: 0.6, stagger: { each: 0.08, repeat: -1, yoyo: true }, ease: \"sine.inOut\", paused: true });\n      const updatePulse = () => {\n        if (visible && !document.hidden && root.dataset.expanded === \"true\" && root.dataset.status === \"thinking\") pulse?.resume();\n        else pulse?.pause();\n      };\n      const sync = context.add(\"sync\", (immediate = false) => {\n        const open = root.dataset.expanded === \"true\";\n        const rows = Array.from(content.querySelectorAll<HTMLElement>(\"[data-thinking-row]\"));\n        const measurements = rows.map((row) => ({ row, id: row.dataset.thinkingRow ?? \"\", top: row.offsetTop, y: Number(gsap.getProperty(row, \"y\")) || 0 }));\n        const height = content.offsetHeight;\n        timeline?.kill();\n        timeline = gsap.timeline({ defaults: { duration: immediate ? 0 : duration, ease, overwrite: \"auto\" } });\n        timeline.to(panel, { height: open ? height : 0 }, 0);\n        timeline.to(\"[data-thinking-chevron]\", { rotation: open ? 0 : -90 }, 0);\n        timeline.to(content, { opacity: open ? 1 : 0, duration: immediate || reduced ? 0 : 0.18, ease: \"power2.out\" }, 0);\n        for (const { row, id, top, y } of measurements) {\n          const previous = positions.get(id);\n          if (previous !== undefined) timeline.fromTo(row, { y: previous - top + y }, { y: 0 }, 0);\n          else if (!immediate && open) timeline.fromTo(row, { y: reduced ? 0 : 7, opacity: 0 }, { y: 0, opacity: 1, duration: reduced ? 0 : Math.min(duration, 0.4) }, 0);\n        }\n        positions = new Map(measurements.map(({ id, top }) => [id, top]));\n        updatePulse();\n      });\n      syncRef.current = () => sync();\n      sync(true);\n      const observer = new ResizeObserver(() => sync());\n      observer.observe(content);\n      const visibility = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; updatePulse(); });\n      visibility.observe(root);\n      document.addEventListener(\"visibilitychange\", updatePulse);\n      return () => {\n        observer.disconnect();\n        visibility.disconnect();\n        document.removeEventListener(\"visibilitychange\", updatePulse);\n        timeline?.kill();\n        pulse?.kill();\n        syncRef.current = null;\n      };\n    }, root);\n    return () => media.revert();\n  }, { scope: rootRef, dependencies: [stiffness, damping, speed], revertOnUpdate: true });\n\n  useGSAP((context) => { context.ignore(() => syncRef.current?.()); }, { scope: rootRef, dependencies: [signature, expanded, status] });\n}\n",
+      "type": "registry:ui",
+      "target": "@ui/use-thinking-panel-motion.ts"
+    }
+  ]
+}
