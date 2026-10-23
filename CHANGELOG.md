@@ -8,6 +8,18 @@ Every release is tagged `v<version>` and has a [GitHub release](https://github.c
 
 ## [Unreleased]
 
+## [2.3.0] - 2026-10-23
+
+Published to npm before the tagged release workflow completed. A matching attested GitHub release is still required for official release provenance. The planned 2.2.0 release was never published to npm; its entries are included below.
+
+### Added
+
+- Thinking Panel with streamed activity steps, source logos, shared spring hover, live timer and accessible disclosures (#121).
+
+### Security
+
+- Upgrade Next.js and eslint-config-next to 16.4.2, covering [the October security advisories](https://nextjs.org/blog/nextjs-security-update-october-14-2026) (#120).
+
 ### Changed
 
 - The docs site and registry at `ui.devclubxnst.com` are served from a Docker container on the club's VPS instead of Vercel. Every push to `main` builds an attested image, pushes it to GHCR and deploys it with a health-checked rollback. See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
@@ -22,9 +34,9 @@ Every release is tagged `v<version>` and has a [GitHub release](https://github.c
 - New attack surface: the Deploy workflow stores SSH credentials for the VPS as `production` environment secrets, readable only by deploys from `main`. Threats H1 to H4 in [docs/SECURITY_ASSESSMENT.md](docs/SECURITY_ASSESSMENT.md#production-hosting) cover it.
 - The site container runs as a non-root user with a read-only root filesystem, no Linux capabilities and resource limits, bound to `127.0.0.1` behind nginx.
 
-## [2.2.0] - 2026-10-20
+### Changes carried forward from the unpublished 2.2.0 release
 
-This is the first release cut by the [Publish Release](.github/workflows/publish-release.yml) workflow from a tagged commit on `main`. npm versions 2.1.2 and 2.1.3 were published by hand from commits that never reached this repository, so they can't be traced to reviewed source. 2.2.0 replaces them, and the entries below cover everything merged since 2.1.1 (`cc2948f`).
+The following entries cover changes merged since 2.1.1 (`cc2948f`).
 
 ### Added
 
@@ -60,6 +72,6 @@ This is the first release cut by the [Publish Release](.github/workflows/publish
 
 Published to npm from `cc2948f`. Earlier versions (1.0.0 to 2.1.0) were published before this changelog existed. See the [commit history](https://github.com/devclub-nstru/component_library/commits/main) for their changes.
 
-[Unreleased]: https://github.com/devclub-nstru/component_library/compare/v2.2.0...HEAD
-[2.2.0]: https://github.com/devclub-nstru/component_library/compare/cc2948f...v2.2.0
+[Unreleased]: https://github.com/devclub-nstru/component_library/compare/chore/release-2-3-0...HEAD
+[2.3.0]: https://github.com/devclub-nstru/component_library/compare/cc2948f...chore/release-2-3-0
 [2.1.1]: https://github.com/devclub-nstru/component_library/tree/cc2948f
