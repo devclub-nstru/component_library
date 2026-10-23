@@ -127,6 +127,21 @@ describe("cli", { skip: process.platform === "win32" && "stub binaries are POSIX
     assert.match(result.stdout, /Adding shadcn\/ui dependencies: utils/);
   });
 
+  test("add installs thinking panel with every helper and leaves app styles intact", () => {
+    const cwd = project();
+    const cssPath = path.join(cwd, "src", "app", "globals.css");
+    const originalCss = fs.readFileSync(cssPath, "utf8");
+    const result = run(cwd, "add", "thinking-panel");
+    assert.equal(result.status, 0, result.stderr);
+    for (const name of ["thinking-panel.tsx", "thinking-panel-types.ts", "use-thinking-panel-motion.ts", "thinking-panel-sources.tsx", "thinking-panel-spring.ts"]) {
+      const installed = path.join(cwd, "src", "components", "ui", name);
+      const source = path.resolve(import.meta.dirname, "..", "src", "registry", "ui", name);
+      assert.equal(fs.readFileSync(installed, "utf8"), fs.readFileSync(source, "utf8"));
+    }
+    assert.equal(fs.readFileSync(cssPath, "utf8"), originalCss);
+    assert.match(result.stdout, /Adding shadcn\/ui dependencies: utils/);
+  });
+
   test("add warns instead of failing when the Tailwind CSS file is missing", () => {
     const cwd = project();
     fs.rmSync(path.join(cwd, "src", "app", "globals.css"));

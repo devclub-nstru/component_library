@@ -98,6 +98,7 @@ import {
 } from "@/registry/ui/gooey-nav";
 import { PromptInput, type PromptInputRef } from "@/registry/ui/ai-input";
 import { PromptComposerDemo, PromptComposerControls, PROMPT_COMPOSER_DEFAULT_CONFIG } from "./prompt-composer-demo";
+import { ThinkingPanelDemo, ThinkingPanelControls, THINKING_PANEL_DEFAULT_CONFIG } from "./thinking-panel-demo";
 import {
   MacSlider,
   type MacSliderColor,
@@ -1217,6 +1218,7 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
   });
   const [accessRequestConfig, setAccessRequestConfig] = useState(ACCESS_REQUEST_DEFAULT_CONFIG);
   const [promptComposerConfig, setPromptComposerConfig] = useState(PROMPT_COMPOSER_DEFAULT_CONFIG);
+  const [thinkingPanelConfig, setThinkingPanelConfig] = useState(THINKING_PANEL_DEFAULT_CONFIG);
   const [toasterConfig, setToasterConfig] = useState(TOASTER_DEFAULT_CONFIG);
   const [taskCardConfig, setTaskCardConfig] = useState(
     TASK_CARD_DEFAULT_CONFIG,
@@ -1947,6 +1949,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         );
       case "prompt-composer":
         return <PromptComposerDemo key={promptComposerConfig.resetKey} config={promptComposerConfig} />;
+      case "thinking-panel":
+        return <ThinkingPanelDemo config={thinkingPanelConfig} />;
       case "ai-input":
         return (
           <div className="flex items-center justify-center w-full min-h-110 p-4 sm:p-8 select-none">
@@ -3457,7 +3461,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                   activeComponent.slug === "workflow-card" ||
                   activeComponent.slug === "toaster" ||
                   activeComponent.slug === "access-request" ||
-                  activeComponent.slug === "prompt-composer") &&
+                  activeComponent.slug === "prompt-composer" ||
+                  activeComponent.slug === "thinking-panel") &&
                   viewport === "desktop"
                   ? "p-0"
                   : "p-2 sm:p-6",
@@ -3531,7 +3536,8 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                         activeComponent.slug === "calendar-card" ||
                         activeComponent.slug === "toaster" ||
                         activeComponent.slug === "access-request" ||
-                        activeComponent.slug === "prompt-composer"
+                        activeComponent.slug === "prompt-composer" ||
+                        activeComponent.slug === "thinking-panel"
                         ? "p-0"
                         : "p-2 sm:p-6",
                     )}
@@ -5422,6 +5428,9 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
               )}
               {activeComponent.slug === "prompt-composer" && (
                 <PromptComposerControls config={promptComposerConfig} onChange={setPromptComposerConfig} />
+              )}
+              {activeComponent.slug === "thinking-panel" && (
+                <ThinkingPanelControls config={thinkingPanelConfig} onChange={setThinkingPanelConfig} />
               )}
               {activeComponent.slug === "toaster" && (
                 <ToasterControls config={toasterConfig} onChange={setToasterConfig} />
