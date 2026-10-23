@@ -21,7 +21,6 @@ Planned official release through Publish Release after #121 and this PR merge to
 - Calendar Card component with responsive layout and event popups (#71).
 - Responsive, accessible footer navigation on the docs site (#96).
 - iPhone-style frame for the mobile preview in the component studio (#73).
-- PostHog analytics on the docs site, proxied through `/ingest` (#84).
 - `npm test` suites for the registry and the CLI (#108).
 - Release assets: npm tarball, `SHA256SUMS` and a Sigstore-signed build provenance attestation on every GitHub release.
 - DCO sign-off check on pull requests.
