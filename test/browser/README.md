@@ -35,3 +35,20 @@ The browser check is separate from `npm test`, which runs the repository's Node
 tests. It does not access a real microphone or an external transcription service.
 Real recording needs a consumer-provided `onTranscribe` callback and HTTPS or
 localhost. The studio explicitly enables a simulated voice preview.
+
+Run `node test/browser/thinking-panel.mjs` for the Thinking Panel's seven-second
+playback, stopped completion timer, safe source links, local SVG brand marks,
+shared source-chip hover highlight, pointer-to-keyboard focus changes, disclosure
+focus recovery, rapid spring interruption, row alignment, live customization and
+reset, interrupted/replayed searches, light/dark themes, 320–1440px layouts, live
+reduced-motion changes and touch. It uses the same environment variables above
+and optionally saves light, dark, expanded, hover, mobile and studio screenshots.
+The demo explicitly simulates activity; the installable primitive receives real
+sources, steps and status from its consumer. Remount it with a request key to
+reset its internal timer, or provide application-controlled `elapsedSeconds`.
+
+Run `node test/browser/thinking-panel-props.mjs` for isolated public API checks:
+controlled disclosure and timing, empty states, unsafe link fallback, source-label
+updates during hover, stable callback refs, React 19 cleanup callbacks and legacy
+ref detachment. It builds a temporary browser fixture with Next.js's bundled
+Webpack and the existing TypeScript installation; no extra dependency is needed.

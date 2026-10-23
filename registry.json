@@ -1521,6 +1521,16 @@
           "path": "src/registry/ui/use-thinking-panel-motion.ts",
           "type": "registry:ui",
           "target": "@ui/use-thinking-panel-motion.ts"
+        },
+        {
+          "path": "src/registry/ui/thinking-panel-sources.tsx",
+          "type": "registry:ui",
+          "target": "@ui/thinking-panel-sources.tsx"
+        },
+        {
+          "path": "src/registry/ui/thinking-panel-spring.ts",
+          "type": "registry:ui",
+          "target": "@ui/thinking-panel-spring.ts"
         }
       ]
     },

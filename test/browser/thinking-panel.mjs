@@ -19,7 +19,10 @@ async function openPage(options = {}) {
     ...options,
   });
   page.on("pageerror", (error) => errors.push(error.message));
-  await page.goto(`${baseUrl}/components/thinking-panel`, { waitUntil: "domcontentloaded", timeout: 60000 });
+  await page.goto(`${baseUrl}/components/thinking-panel`, {
+    waitUntil: "domcontentloaded",
+    timeout: 60000,
+  });
   await page.locator('[data-slot="thinking-panel"]').waitFor();
   return page;
 }
@@ -45,6 +48,25 @@ async function settled(page) {
     );
   });
   await page.waitForTimeout(700);
+}
+
+async function highlightAligned(page, id) {
+  await page.waitForFunction((sourceId) => {
+    const target = document.querySelector(
+      `[data-thinking-source="${sourceId}"]`,
+    );
+    const highlight = document.querySelector("[data-source-highlight]");
+    if (!target || !highlight) return false;
+    const source = target.getBoundingClientRect();
+    const bounds = highlight.getBoundingClientRect();
+    return (
+      Number(getComputedStyle(highlight).opacity) > 0.99 &&
+      Math.abs(source.x - bounds.x) < 1 &&
+      Math.abs(source.y - bounds.y) < 1 &&
+      Math.abs(source.width - bounds.width) < 1 &&
+      Math.abs(source.height - bounds.height) < 1
+    );
+  }, id);
 }
 
 try {
@@ -77,6 +99,26 @@ try {
   assert.equal(await panel.locator('[data-thinking-row^="step-"]').count(), 4);
   await settled(page);
   assert.match(await header.textContent(), /Worked for/);
+  assert.equal(await panel.locator("[data-brand-logo]").count(), 4);
+  await panel.locator('[data-thinking-source="slack"]').hover();
+  await highlightAligned(page, "slack");
+  await panel.locator('[data-thinking-source="x"]').hover();
+  await highlightAligned(page, "x");
+  await screenshot(page, "thinking-panel-hover");
+  await panel.locator('[data-thinking-source="notion"]').focus();
+  await highlightAligned(page, "notion");
+  for (const source of ["slack", "x", "wikipedia", "notion", "slack"])
+    await panel.locator(`[data-thinking-source="${source}"]`).hover();
+  await highlightAligned(page, "slack");
+  await header.focus();
+  await page.mouse.move(20, 20);
+  await page.waitForFunction(
+    () =>
+      Number(
+        getComputedStyle(document.querySelector("[data-source-highlight]"))
+          .opacity,
+      ) === 0,
+  );
   const finished = await header.textContent();
   await page.waitForTimeout(1100);
   assert.equal(
@@ -142,6 +184,12 @@ try {
   await page.waitForFunction(() =>
     document.documentElement.classList.contains("dark"),
   );
+  await page.waitForFunction(
+    () =>
+      getComputedStyle(document.querySelector('[data-slot="thinking-panel"]'))
+        .backgroundColor === "rgb(27, 27, 29)",
+  );
+  await page.waitForTimeout(800);
   await screenshot(page, "thinking-panel-dark");
   if (output)
     await page.screenshot({
@@ -183,6 +231,52 @@ try {
   await page
     .getByRole("button", { name: "Show customization", exact: true })
     .click();
+  const widthControl = page.getByRole("slider", {
+    name: "Panel width",
+    exact: true,
+  });
+  await widthControl.focus();
+  await widthControl.press("Home");
+  await page.waitForFunction(
+    () =>
+      document.querySelector('[data-slot="thinking-panel"]').style.width ===
+      "280px",
+  );
+  await page
+    .getByRole("slider", { name: "Spring stiffness", exact: true })
+    .focus();
+  await page.keyboard.press("End");
+  assert.equal(
+    await page
+      .getByRole("slider", { name: "Spring stiffness", exact: true })
+      .inputValue(),
+    "600",
+  );
+  await page
+    .getByRole("button", { name: "Reset settings", exact: true })
+    .click();
+  await page.waitForFunction(
+    () => document.querySelectorAll("[data-thinking-source]").length === 4,
+  );
+  await page
+    .getByRole("slider", { name: "Visible sources", exact: true })
+    .focus();
+  await page.keyboard.press("Home");
+  assert.equal(await panel.locator("[data-thinking-source]").count(), 1);
+  await page
+    .getByRole("button", { name: "Reset settings", exact: true })
+    .click();
+  await page.waitForFunction(
+    () =>
+      document.querySelector('[data-slot="thinking-panel"]').style.width ===
+      "440px",
+  );
+  assert.equal(
+    await page
+      .getByRole("slider", { name: "Spring stiffness", exact: true })
+      .inputValue(),
+    "380",
+  );
   await page.getByLabel("Simulate interrupted search", { exact: true }).check();
   await page
     .getByRole("button", { name: "Hide customization", exact: true })
@@ -195,6 +289,11 @@ try {
   assert.equal(await panel.locator('[data-thinking-row^="step-"]').count(), 0);
   assert.match(await header.textContent(), /0s/);
   await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.waitForFunction(() =>
+    Array.from(document.querySelectorAll("[data-thinking-pixel]")).every(
+      (node) => getComputedStyle(node).opacity === "0.65",
+    ),
+  );
   const pixels = await panel
     .locator("[data-thinking-pixel]")
     .evaluateAll((elements) =>
@@ -218,6 +317,10 @@ try {
   );
   await header.click();
   await settled(page);
+  await panel.locator('[data-thinking-source="slack"]').hover();
+  await highlightAligned(page, "slack");
+  await panel.locator('[data-thinking-source="x"]').hover();
+  await highlightAligned(page, "x");
   await page.close();
 
   const touch = await openPage({
