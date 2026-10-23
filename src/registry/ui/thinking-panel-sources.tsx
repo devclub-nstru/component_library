@@ -101,7 +101,9 @@ export function ThinkingPanelSources({
           });
           const enter = (event: PointerEvent) => {
             if (event.pointerType === "touch") return;
-            hovered = targetFor(event.target);
+            const item = targetFor(event.target);
+            if (!item) return;
+            hovered = item;
             move();
           };
           const leave = () => {

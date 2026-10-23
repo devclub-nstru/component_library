@@ -102,6 +102,22 @@ try {
   assert.equal(await panel.locator("[data-brand-logo]").count(), 4);
   await panel.locator('[data-thinking-source="slack"]').hover();
   await highlightAligned(page, "slack");
+  const slackBounds = await panel
+    .locator('[data-thinking-source="slack"]')
+    .boundingBox();
+  await page.mouse.move(
+    slackBounds.x + slackBounds.width + 3,
+    slackBounds.y + slackBounds.height / 2,
+    { steps: 12 },
+  );
+  await page.waitForTimeout(220);
+  assert.ok(
+    await panel
+      .locator("[data-source-highlight]")
+      .evaluate((node) => Number(getComputedStyle(node).opacity) > 0.99),
+    "highlight must remain visible in chip gaps",
+  );
+
   await panel.locator('[data-thinking-source="x"]').hover();
   await highlightAligned(page, "x");
   await screenshot(page, "thinking-panel-hover");

@@ -182,16 +182,16 @@ export function ThinkingPanel({
       style={{ width: thinkingPanelBounded(width, 440, 240, 960) }}
       onKeyDown={(event) => {
         if (event.key !== "Escape" || !isOpen) return;
-        event.preventDefault();
-        event.stopPropagation();
         if (
           showAllSources &&
           event.target instanceof Node &&
           contentRef.current?.contains(event.target)
         ) {
+          event.preventDefault();
+          event.stopPropagation();
           setShowAllSources(false);
           sourcesTriggerRef.current?.focus({ preventScroll: true });
-        } else changeExpanded(false);
+        }
       }}
     >
       <button
