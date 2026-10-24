@@ -9,7 +9,7 @@ We patch the latest minor release of the `@devclubnst/ui` package and the regist
 | 2.2.x   | Yes       |
 | < 2.2   | No        |
 
-Versions 2.1.2 and 2.1.3 on npm were not built from a reviewed commit. Upgrade to 2.2.0 or later.
+Versions 2.1.2 and 2.1.3 on npm were not built from a reviewed commit. Version 2.3.0 was hand-published without a matching release tag or provenance attestation. The planned replacement is 2.3.1; upgrade once its tagged GitHub release and attested tarball are available. Version 2.2.0 was never published to npm.
 
 ---
 

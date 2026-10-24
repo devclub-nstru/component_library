@@ -58,7 +58,7 @@ Likelihood and impact are `Low`, `Medium` or `High`. STRIDE categories: **S**poo
 
 | # | Threat | STRIDE | Likelihood | Impact | Mitigations | Residual risk |
 | --- | --- | --- | --- | --- | --- | --- |
-| N1 | An npm version contains code that never went through review | T, R | Medium | High | From 2.2.0 the release workflow builds the tarball from the tagged commit and attaches it with `SHA256SUMS` and a provenance attestation, and publishers publish that exact file | **Found in this review:** npm 2.1.2 and 2.1.3 list `gitHead` commits (`c8db9a9`, `dff7b268`) that don't exist in this repository. Publishing is still manual. |
+| N1 | An npm version contains code that never went through review | T, R | Medium | High | For the planned 2.3.1 release and subsequent official releases, the release workflow builds the tarball from the tagged commit and attaches it with `SHA256SUMS` and a provenance attestation, and publishers publish that exact file | **Found in this review:** npm 2.1.2 and 2.1.3 list `gitHead` commits (`c8db9a9`, `dff7b268`) that don't exist in this repository. Publishing is still manual. |
 | N2 | One of the six npm publisher accounts is compromised | S, E | Medium | High | npm account security is up to each publisher | Several publishers have only read access on GitHub, so npm is the weakest point in the supply chain |
 | N3 | `npx @devclubnst/ui` installs much more than the CLI needs | T | Medium | Medium | `ignore-scripts=true` applies only in this repository, not on users' machines | `package.json` lists the docs site's packages (Next.js, three and others) as `dependencies`, so every CLI user downloads them |
 
@@ -68,7 +68,7 @@ These need an npm owner of `@devclubnst/ui`. In order:
 
 1. Configure [npm trusted publishing](https://docs.npmjs.com/trusted-publishers) for `devclub-nstru/component_library` and `publish-release.yml`, then publish from the workflow with provenance. That removes manual publishing.
 2. Cut the npm maintainer list down to the release managers in [GOVERNANCE.md](../GOVERNANCE.md), and require two-factor authentication for publishing (`npm access set mfa=publish @devclubnst/ui`).
-3. Deprecate 2.1.2 and 2.1.3 with a pointer to 2.2.0 (`npm deprecate @devclubnst/ui@"2.1.2 - 2.1.3" "Not built from a reviewed commit. Use 2.2.0 or later."`).
+3. Once 2.3.1 has a tagged GitHub release, an attested tarball and an npm publication, maintainers should deprecate 2.1.2 and 2.1.3 with a pointer to 2.3.1 (`npm deprecate @devclubnst/ui@"2.1.2 - 2.1.3" "Not built from a reviewed commit. Use 2.3.1 or later."`). Also review deprecation of the unattested, hand-published 2.3.0. Version 2.2.0 was never published to npm.
 
 ## Residual risks
 
