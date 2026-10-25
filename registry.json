@@ -853,6 +853,29 @@
       ]
     },
     {
+      "name": "meet-team",
+      "type": "registry:ui",
+      "title": "Meet Team",
+      "description": "A perspective portrait fan with smooth GSAP spring motion, pointer exploration, touch dragging, and customizable team content.",
+      "dependencies": [
+        "gsap",
+        "@gsap/react",
+        "lucide-react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/meet-team.tsx",
+          "type": "registry:ui",
+          "target": "@ui/meet-team.tsx"
+        }
+      ]
+    },
+    {
       "name": "morph-invite",
       "type": "registry:ui",
       "title": "Morph Invite",

@@ -52,3 +52,9 @@ controlled disclosure and timing, empty states, unsafe link fallback, source-lab
 updates during hover, stable callback refs, React 19 cleanup callbacks and legacy
 ref detachment. It builds a temporary browser fixture with Next.js's bundled
 Webpack and the existing TypeScript installation; no extra dependency is needed.
+
+Run `node test/browser/meet-team-props.mjs` for isolated public API regressions
+without React Compiler: fresh member arrays during motion and dragging, pointer
+exit settling, asynchronous loading, current callback data, reordering, and
+selected-member removal. It builds a temporary fixture with the existing Next.js
+Webpack and TypeScript packages and accepts the environment variables above.
