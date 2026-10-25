@@ -66,7 +66,6 @@ import { FlipClock } from "@/registry/ui/flip-clock";
 import { MatrixClockDemo } from "@/components/showcase/matrix-clock-demo";
 import OrbitGalleryDemo from "@/components/showcase/orbit-gallery-demo";
 import { ProjectReveal } from "@/registry/ui/project-reveal";
-import { MeetTeamDemo } from "@/components/showcase/meet-team-demo";
 import { PROJECT_REVEAL_DEMO_ITEMS } from "@/components/showcase/project-reveal-demo";
 import { ParallaxStripTransitionDemo } from "@/components/showcase/parallax-strip-transition-demo";
 import { ScrollingCardsDemo } from "@/components/showcase/scrolling-cards-demo";
@@ -316,7 +315,6 @@ export default function ComponentsPage() {
         <OrbitGalleryDemo showControls={false} />
       </div>
     ),
-    "meet-team": <MeetTeamDemo compact />,
     "project-reveal": (
       <ProjectReveal
         items={PROJECT_REVEAL_DEMO_ITEMS}

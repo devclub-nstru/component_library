@@ -139,11 +139,6 @@ import OrbitGalleryDemo, {
 } from "./orbit-gallery-demo";
 import { ProjectReveal } from "@/registry/ui/project-reveal";
 import {
-  MeetTeamDemo,
-  MeetTeamControls,
-  MEET_TEAM_DEFAULT_CONFIG,
-} from "./meet-team-demo";
-import {
   ParallaxStripTransitionDemo,
   ParallaxStripTransitionControls,
   PARALLAX_STRIP_DEFAULT_CONFIG,
@@ -1263,7 +1258,6 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
   const [orbitGalleryConfig, setOrbitGalleryConfig] = useState({
     ...ORBIT_GALLERY_DEFAULT_CONFIG,
   });
-  const [meetTeamConfig, setMeetTeamConfig] = useState({ ...MEET_TEAM_DEFAULT_CONFIG });
   const [projectRevealConfig, setProjectRevealConfig] = useState({
     ...PROJECT_REVEAL_DEFAULT_CONFIG,
   });
@@ -2078,8 +2072,6 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
         return <GridImageLoaderDemo config={gridImageLoaderConfig} />;
       case "cursor-trail-loader":
         return <CursorTrailLoaderDemo config={cursorTrailLoaderConfig} />;
-      case "meet-team":
-        return <MeetTeamDemo config={meetTeamConfig} />;
       case "project-reveal":
         return (
           <div className="flex w-full max-w-3xl items-center justify-center px-4 py-12 sm:px-10">
@@ -3450,13 +3442,12 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
             <StudioCanvas
               key={`canvas-${activeComponent.slug}`}
               showGrid={
-                !["meet-team", "scrolling-cards", "scroll-text", "parallax-strip-transition"].includes(activeComponent.slug)
+                !["scrolling-cards", "scroll-text", "parallax-strip-transition"].includes(activeComponent.slug)
               }
               className={cn(
                 (activeComponent.slug === "dither" ||
                   activeComponent.slug === "noise" ||
                   activeComponent.slug === "orbit-gallery" ||
-                  activeComponent.slug === "meet-team" ||
                   activeComponent.slug === "scrolling-cards" ||
                   activeComponent.slug === "scroll-text" ||
                   activeComponent.slug === "parallax-strip-transition" ||
@@ -3531,7 +3522,6 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                       activeComponent.slug === "dither" ||
                         activeComponent.slug === "noise" ||
                         activeComponent.slug === "orbit-gallery" ||
-                        activeComponent.slug === "meet-team" ||
                         activeComponent.slug === "scrolling-cards" ||
                         activeComponent.slug === "scroll-text" ||
                         activeComponent.slug === "parallax-strip-transition" ||
@@ -5476,13 +5466,6 @@ export const ComponentStudio = ({ component }: ComponentStudioProps) => {
                 <OrbitGalleryControls
                   config={orbitGalleryConfig}
                   onChange={setOrbitGalleryConfig}
-                />
-              )}
-
-              {activeComponent.slug === "meet-team" && (
-                <MeetTeamControls
-                  config={meetTeamConfig}
-                  onChange={setMeetTeamConfig}
                 />
               )}
 
