@@ -39,10 +39,14 @@ Everyone else, including other org owners, follows the rules. Org owners can sti
 
    The next step is publishing from the workflow with [npm trusted publishing](https://docs.npmjs.com/trusted-publishers), which adds npm provenance and removes manual publishing. It needs an npm owner to add the workflow as a trusted publisher.
 
+## Deploying the site
+
+Every merge to `main` deploys `https://ui.devclubxnst.com` through the [Deploy](workflows/deploy.yml) workflow. Nothing needs doing by hand. To roll back, run **Actions > Deploy > Run workflow** on `main` with `image-tag` set to the commit SHA of a good earlier deploy. Server setup, the `production` environment secrets, nginx and day-to-day commands are in [docs/DEPLOYMENT.md](../docs/DEPLOYMENT.md).
+
 ## Reviewing pull requests
 
 - Read the diff before approving the workflow run on a first-time contributor's PR. Approving runs their code on our runners.
-- Pay extra attention to `.github/`, `bin/`, `scripts/`, `package.json`, `package-lock.json`, `.npmrc`, and `public/r/`. A one-line change to any of these can affect every user.
+- Pay extra attention to `.github/`, `bin/`, `scripts/`, `Dockerfile`, `package.json`, `package-lock.json`, `.npmrc`, and `public/r/`. A one-line change to any of these can affect every user.
 - For new dependencies, check who publishes the package, its download history, whether it has install scripts, and whether the maintainers look real. Make the contributor justify it in an issue first.
 - For `public/r/` changes, make sure CI's "Supply chain integrity" job passed. It proves the JSON matches the reviewed source.
 - Don't check out a contributor's branch and run `npm install` on your machine without reading `package.json` and the lockfile diff first.
@@ -65,12 +69,13 @@ Dependabot skips two kinds of major update on purpose:
 
 - `@types/node` stays on the major of the oldest Node version we support (20). Newer types allow APIs that crash on Node 20.
 - `eslint` stays on 9 until `eslint-config-next` and its plugins support 10.
+- The `node` base image in the [Dockerfile](../Dockerfile) stays on 22 to match the Node version CI tests. Dependabot still updates its digest. Move it to the next LTS together with CI's Node matrix.
 
 Lift an ignore in `dependabot.yml` when its reason no longer holds.
 
 ## Required checks on `main`
 
-Lint, Typecheck, Test, Supply chain integrity, Build (Node 20.x), Build (Node 22.x), Dependency review, Conventional PR title, DCO, and Analyze for both CodeQL languages. GitHub only accepts each check from the GitHub Actions app, so a commit status posted through the API can't satisfy it. Merging is also blocked while CodeQL has open alerts of high severity or above.
+Lint, Typecheck, Test, Supply chain integrity, Build (Node 20.x), Build (Node 22.x), Container image, Dependency review, Conventional PR title, DCO, and Analyze for both CodeQL languages. GitHub only accepts each check from the GitHub Actions app, so a commit status posted through the API can't satisfy it. Merging is also blocked while CodeQL has open alerts of high severity or above.
 
 If you rename a job, update [rulesets/main.json](rulesets/main.json) and re-apply it in the same PR. Otherwise every PR waits forever on a check that no longer exists.
 
@@ -96,6 +101,7 @@ Settings that live outside the rulesets:
 | Secret scanning and push protection | On |
 | Private vulnerability reporting | On |
 | Require sign off on web-based commits | On |
+| `production` environment | Deploys from `main` only. Holds the VPS secrets ([docs/DEPLOYMENT.md](../docs/DEPLOYMENT.md#3-configure-github)). |
 | Dependabot alerts and security updates | On |
 
 ## If something goes wrong

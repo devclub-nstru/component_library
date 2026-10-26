@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import { useId, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
@@ -72,16 +72,19 @@ export function MeetTeam({
   const stageRef = useRef<HTMLDivElement>(null);
   const navigationRef = useRef<((index: number) => void) | null>(null);
   const callbackRef = useRef(onMemberChange);
+  const membersRef = useRef(members);
+  const memberKey = JSON.stringify(members.map((member) => member.id));
   const selectionRef = useRef(members[Math.floor(members.length / 2)]?.id);
   const [selectedId, setSelectedId] = useState(
     () => members[Math.floor(members.length / 2)]?.id,
   );
   const headingId = useId();
   const instructionsId = useId();
-  const selectedIndex = Math.max(
-    0,
-    members.findIndex((member) => member.id === selectedId),
+  const selectionIndex = members.findIndex(
+    (member) => member.id === selectedId,
   );
+  const selectedIndex =
+    selectionIndex < 0 ? Math.floor(members.length / 2) : selectionIndex;
   const selected = members[selectedIndex];
   const width = bounded(cardWidth, 210, 100, 360);
   const ratio = bounded(aspectRatio, 0.76, 0.6, 1.2);
@@ -92,15 +95,19 @@ export function MeetTeam({
   const friction = bounded(damping, 28, 10, 80);
   const weight = bounded(mass, 1, 0.5, 3);
 
-  useEffect(() => {
-    callbackRef.current = onMemberChange;
-  }, [onMemberChange]);
+  useGSAP(
+    () => {
+      membersRef.current = members;
+      callbackRef.current = onMemberChange;
+    },
+    { dependencies: [members, onMemberChange] },
+  );
 
   useGSAP(
     () => {
       const root = rootRef.current;
       const stage = stageRef.current;
-      if (!root || !stage || members.length === 0) return;
+      if (!root || !stage || membersRef.current.length === 0) return;
 
       const cards = Array.from(
         stage.querySelectorAll<HTMLButtonElement>("[data-team-card]"),
@@ -113,10 +120,11 @@ export function MeetTeam({
         },
         (context) => {
           const reduced = Boolean(context.conditions?.reduced);
-          let current = Math.max(
-            0,
-            members.findIndex((member) => member.id === selectionRef.current),
+          const initialIndex = membersRef.current.findIndex(
+            (member) => member.id === selectionRef.current,
           );
+          let current =
+            initialIndex < 0 ? Math.floor(cards.length / 2) : initialIndex;
           let target = current;
           let velocity = 0;
           let fittedWidth = width;
@@ -153,7 +161,7 @@ export function MeetTeam({
                   -Math.sign(distance) * Math.min(absolute / 2.5, 1) * angle,
               });
               cards[index].style.zIndex = String(
-                members.length - Math.round(absolute),
+                cards.length - Math.round(absolute),
               );
             });
           };
@@ -197,18 +205,17 @@ export function MeetTeam({
             }
           };
           const choose = (index: number) => {
-            target = gsap.utils.clamp(0, members.length - 1, index);
+            target = gsap.utils.clamp(0, cards.length - 1, index);
             const next = Math.round(target);
-            if (
-              lastIndex !== next ||
-              selectionRef.current !== members[next].id
-            ) {
+            const member = membersRef.current[next];
+            if (!member) return;
+            if (lastIndex !== next || selectionRef.current !== member.id) {
               lastIndex = next;
-              selectionRef.current = members[next].id;
-              setSelectedId(members[next].id);
-              callbackRef.current?.(members[next]);
+              selectionRef.current = member.id;
+              setSelectedId(member.id);
+              callbackRef.current?.(member);
             }
-            root.dataset.activeMember = members[next].id;
+            root.dataset.activeMember = member.id;
             start();
           };
           const measure = () => {
@@ -269,8 +276,11 @@ export function MeetTeam({
                 1,
                 (event.clientX - bounds.left) / Math.max(1, bounds.width),
               );
-              choose(progress * (members.length - 1));
+              choose(progress * (cards.length - 1));
             }
+          };
+          const leave = () => {
+            if (!pointer) choose(Math.round(target));
           };
           const release = (event: PointerEvent) => {
             if (event.type === "lostpointercapture" && event.target !== stage)
@@ -280,7 +290,7 @@ export function MeetTeam({
             if (stage.hasPointerCapture(event.pointerId))
               stage.releasePointerCapture(event.pointerId);
             delete stage.dataset.dragging;
-            if (dragged) choose(Math.round(target));
+            choose(Math.round(target));
           };
           const click = (event: MouseEvent) => {
             if (dragged) {
@@ -298,11 +308,11 @@ export function MeetTeam({
                   : event.key === "Home"
                     ? 0
                     : event.key === "End"
-                      ? members.length - 1
+                      ? cards.length - 1
                       : null;
             if (next === null) return;
             event.preventDefault();
-            const index = gsap.utils.clamp(0, members.length - 1, next);
+            const index = gsap.utils.clamp(0, cards.length - 1, next);
             choose(index);
             cards[index]?.focus({ preventScroll: true });
           };
@@ -332,6 +342,7 @@ export function MeetTeam({
           intersection.observe(stage);
           stage.addEventListener("pointerdown", down);
           stage.addEventListener("pointermove", move);
+          stage.addEventListener("pointerleave", leave);
           window.addEventListener("pointerup", release);
           window.addEventListener("pointercancel", release);
           stage.addEventListener("lostpointercapture", release);
@@ -348,6 +359,7 @@ export function MeetTeam({
               stage.releasePointerCapture(pointer.id);
             stage.removeEventListener("pointerdown", down);
             stage.removeEventListener("pointermove", move);
+            stage.removeEventListener("pointerleave", leave);
             window.removeEventListener("pointerup", release);
             window.removeEventListener("pointercancel", release);
             stage.removeEventListener("lostpointercapture", release);
@@ -368,7 +380,7 @@ export function MeetTeam({
     {
       scope: rootRef,
       dependencies: [
-        members,
+        memberKey,
         width,
         ratio,
         spacing,

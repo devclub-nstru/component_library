@@ -1514,6 +1514,50 @@
       ]
     },
     {
+      "name": "thinking-panel",
+      "type": "registry:ui",
+      "title": "Thinking Panel",
+      "description": "An AI activity panel with a live timer, expandable source chips and spring-driven progress steps.",
+      "dependencies": [
+        "gsap",
+        "@gsap/react",
+        "motion",
+        "lucide-react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/thinking-panel.tsx",
+          "type": "registry:ui",
+          "target": "@ui/thinking-panel.tsx"
+        },
+        {
+          "path": "src/registry/ui/thinking-panel-types.ts",
+          "type": "registry:ui",
+          "target": "@ui/thinking-panel-types.ts"
+        },
+        {
+          "path": "src/registry/ui/use-thinking-panel-motion.ts",
+          "type": "registry:ui",
+          "target": "@ui/use-thinking-panel-motion.ts"
+        },
+        {
+          "path": "src/registry/ui/thinking-panel-sources.tsx",
+          "type": "registry:ui",
+          "target": "@ui/thinking-panel-sources.tsx"
+        },
+        {
+          "path": "src/registry/ui/thinking-panel-spring.ts",
+          "type": "registry:ui",
+          "target": "@ui/thinking-panel-spring.ts"
+        }
+      ]
+    },
+    {
       "name": "toast",
       "type": "registry:ui",
       "title": "Toast",

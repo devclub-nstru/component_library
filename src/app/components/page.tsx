@@ -50,6 +50,7 @@ import { LiquidToggle } from "@/registry/ui/liquid-toggle";
 import { GooeyNav } from "@/registry/ui/gooey-nav";
 import { PromptInput } from "@/registry/ui/ai-input";
 import { PromptComposer } from "@/registry/ui/prompt-composer";
+import { ThinkingPanel } from "@/registry/ui/thinking-panel";
 import { MacSlider } from "@/registry/ui/mac-slider";
 import { Slider } from "@/registry/ui/slider";
 import { MacSwitch } from "@/registry/ui/mac-switch";
@@ -649,6 +650,11 @@ export default function ComponentsPage() {
     "prompt-composer": (
       <div className="pointer-events-none flex w-full items-center justify-center px-5 py-6" inert>
         <PromptComposer theme="system" />
+      </div>
+    ),
+    "thinking-panel": (
+      <div className="pointer-events-none flex w-full items-center justify-center px-5 py-6" inert>
+        <ThinkingPanel status="complete" elapsedSeconds={7} sources={[{ id: "docs", label: "Notion – Offsite plan" }, { id: "wiki", label: "Wikipedia – Lisbon" }]} steps={[{ id: "read", label: "Reading sources about the trip" }, { id: "plan", label: "Drafting the offsite agenda" }]} />
       </div>
     ),
     "ai-input": (

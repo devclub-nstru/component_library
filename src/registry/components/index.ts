@@ -3,6 +3,7 @@ import accordion from "./accordion.json";
 import accessRequest from "./access-request.json";
 import aiInput from "./ai-input.json";
 import promptComposer from "./prompt-composer.json";
+import thinkingPanel from "./thinking-panel.json";
 import aiOrb from "./ai-orb.json";
 import animatedButton from "./animated-button.json";
 import asciiHoverButton from "./ascii-hover-button.json";
@@ -75,6 +76,7 @@ export {
   accessRequest,
   aiInput,
   promptComposer,
+  thinkingPanel,
   aiOrb,
   animatedButton,
   asciiHoverButton,
@@ -148,6 +150,7 @@ export const componentsList: ComponentRegistryItem[] = [
   accessRequest as ComponentRegistryItem,
   aiInput as ComponentRegistryItem,
   promptComposer as ComponentRegistryItem,
+  thinkingPanel as ComponentRegistryItem,
   aiOrb as ComponentRegistryItem,
   animatedButton as ComponentRegistryItem,
   asciiHoverButton as ComponentRegistryItem,

@@ -68,7 +68,7 @@ export const PRIVACY_ITEMS: PrivacyItem[] = [
     paragraphs: [
       "Our website uses browser local storage for interface preferences, such as your chosen light or dark theme and your preferred code language and styling options.",
       "Our website also loads Microsoft Clarity on every page. Clarity sets the following cookies when the page loads: _clck (first-party, stores the Clarity user ID and preferences, observed lifetime of about one year), _clsk (first-party, connects page views into a single Clarity session, observed lifetime of one day), and the third-party cookies MUID, CLID, MR, SM and ANONCHK on the clarity.ms and bing.com domains (observed lifetime of up to about thirteen months). Microsoft describes these cookies at https://learn.microsoft.com/en-us/clarity/setup-and-installation/clarity-cookies.",
-      "Vercel Web Analytics and Vercel Speed Insights do not set cookies. See Section 19 for details of both services and how to opt out.",
+      "See Section 19 for details of Clarity and how to opt out.",
     ],
   },
   {
@@ -106,7 +106,7 @@ export const PRIVACY_ITEMS: PrivacyItem[] = [
     id: 12,
     title: "12. Information From Third Parties",
     paragraphs: [
-      "We may receive technical data from third-party hosting platforms (such as GitHub, Vercel, or Cloudflare) relating to repository activity, CDN bandwidth delivery, and automated security scanning reports.",
+      "We may receive technical data from third-party hosting platforms (such as GitHub) relating to repository activity and automated security scanning reports.",
     ],
   },
   {
@@ -159,11 +159,9 @@ export const PRIVACY_ITEMS: PrivacyItem[] = [
     id: 19,
     title: "19. Analytics",
     paragraphs: [
-      "We use the following analytics services on this website:",
+      "We use the following analytics service on this website:",
       "Microsoft Clarity (provided by Microsoft Corporation). Purpose: session replays, heatmaps and aggregated usage statistics that show how visitors use the site. Clarity records page views and interactions such as clicks, scrolling and mouse movement, together with device and browser information, and uses the cookies listed in Section 7 to link page views to a pseudonymous ID. Microsoft privacy statement: https://privacy.microsoft.com/privacystatement. Clarity documentation: https://learn.microsoft.com/en-us/clarity/.",
-      "Vercel Web Analytics (provided by Vercel Inc.). Purpose: aggregated page view statistics. According to Vercel, it does not use cookies; visitors are identified by a hash of the incoming request that is discarded after 24 hours, and each data point may include the page URL, referrer, approximate location, device type, operating system and browser. Details: https://vercel.com/docs/analytics/privacy-policy.",
-      "Vercel Speed Insights (provided by Vercel Inc.). Purpose: measuring page performance (Core Web Vitals). According to Vercel, it does not use cookies and records the page route and URL, network speed, browser, device type, operating system, country and performance metrics. Details: https://vercel.com/docs/speed-insights/privacy-policy. Vercel privacy notice: https://vercel.com/legal/privacy-policy.",
-      "How to opt out: you can block or delete cookies for clarity.ms, bing.com and this website in your browser settings, and you can block requests to clarity.ms and to the Vercel analytics scripts with a content blocker or privacy extension. Blocking these services does not affect your ability to browse the documentation or copy components.",
+      "How to opt out: you can block or delete cookies for clarity.ms, bing.com and this website in your browser settings, and you can block requests to clarity.ms with a content blocker or privacy extension. Blocking this service does not affect your ability to browse the documentation or copy components.",
     ],
   },
   {
@@ -450,7 +448,7 @@ export const PRIVACY_ITEMS: PrivacyItem[] = [
     id: 60,
     title: "60. Subprocessors",
     paragraphs: [
-      "We utilize reputable cloud infrastructure providers (such as GitHub, Vercel, and Cloudflare) who adhere to strict data security and privacy compliance standards. Website analytics are provided by Microsoft (Clarity) and Vercel (Web Analytics and Speed Insights), as described in Section 19.",
+      "GitHub hosts our source code, runs our automated builds and stores the container images we deploy. The website runs on a virtual private server administered by the DevClub team, which keeps the server access logs described in Section 6. Website analytics are provided by Microsoft (Clarity), as described in Section 19.",
     ],
   },
   {
@@ -480,6 +478,7 @@ export const PRIVACY_ITEMS: PrivacyItem[] = [
     paragraphs: [
       "Version 1.0 published on 23 September 2026. Comprehensive initial release covering developer documentation, registry endpoints, and client-side execution.",
       "Version 1.1 published on 8 October 2026. Discloses the analytics services used on this website (Microsoft Clarity, Vercel Web Analytics and Vercel Speed Insights), the cookies Clarity sets, and third-party image hosts used by component previews.",
+      "Version 1.2 published on 22 October 2026. Removes Vercel Web Analytics and Vercel Speed Insights, and records that the website is now served from a server administered by the DevClub team instead of Vercel.",
     ],
   },
   {

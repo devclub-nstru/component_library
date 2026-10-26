@@ -71,7 +71,7 @@ gh attestation verify devclubnst-ui-<version>.tgz --repo devclub-nstru/component
 
 ## 3. Registry JSON
 
-Static files on Vercel, generated from source by `npm run registry:sync`. They follow the shadcn [registry](https://ui.shadcn.com/schema/registry.json) and [registry-item](https://ui.shadcn.com/schema/registry-item.json) schemas.
+Static files served by the docs site on the production VPS, generated from source by `npm run registry:sync` and baked into each container image. They follow the shadcn [registry](https://ui.shadcn.com/schema/registry.json) and [registry-item](https://ui.shadcn.com/schema/registry-item.json) schemas.
 
 | URL | Contents |
 | --- | --- |
@@ -105,8 +105,6 @@ Read-only JSON endpoints on `https://ui.devclubxnst.com`, from `src/app/api/`. T
 | `GET /api/github/stars` | None | `{ "stars": number \| null }`, cached for an hour |
 
 `ComponentRegistryItem` is defined in [src/types/component.ts](../src/types/component.ts). It's the metadata in `src/registry/components/<slug>.json`: slug, name, description, category, tags, dependencies, props, accessibility notes and usage examples. Errors return `500` with `success: false`.
-
-The site also forwards `/ingest/*` to PostHog (see [next.config.ts](../next.config.ts)). That's for the site's own analytics and isn't a public interface.
 
 ## 5. Component props
 
