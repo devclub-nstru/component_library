@@ -4,6 +4,7 @@ import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { SITE_CONFIG } from "@/lib/constants";
+import { WebsiteBottomBlur } from "@/components/layout/website-bottom-blur";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const poppins = Poppins({
@@ -83,6 +84,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-full flex flex-col bg-background text-foreground font-sans transition-colors duration-200">
         {children}
+        <WebsiteBottomBlur />
         <Analytics />
         <SpeedInsights />
       </body>

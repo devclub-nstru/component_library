@@ -44,7 +44,9 @@ environment variables and optionally saves `meet-team-*.png` screenshots.
 
 Run `node test/browser/hero-section.mjs` for landing hero centering, rounded CandyButton
 actions, light/dark themes, continuous motion and palette blending across theme
-changes, logo-blue tiles, live Liquid Media canvas integration, resizing at
+changes, logo-blue tiles, website-wide progressive viewport blur aligned during scrolling,
+click-through and keyboard interaction, persistence across routes,
+live Liquid Media canvas integration, resizing at
 1440px, 768px, 390px and 320px, dynamic reduced-motion preferences, and navigation
 cleanup. It accepts the environment variables above and saves `hero-*.png`
 screenshots when `SCREENSHOT_DIR` is set. Use `localhost` for the development

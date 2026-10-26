@@ -78,7 +78,10 @@ async function aligned(page) {
     const hero = heading.closest("section").getBoundingClientRect();
     const title = heading.getBoundingClientRect();
     const copy = heading.parentElement.getBoundingClientRect();
+    const blur = document.querySelector("[data-website-bottom-blur]").getBoundingClientRect();
     return {
+      blurAligned: Math.abs(blur.left) < 1 && Math.abs(blur.right - innerWidth) < 1 && Math.abs(blur.bottom - innerHeight) < 1,
+      copyClear: blur.top >= copy.bottom,
       offset: Math.abs(title.x + title.width / 2 - hero.x - hero.width / 2),
       overflow: document.documentElement.scrollWidth > innerWidth,
       fits: title.left >= 20 && title.right <= innerWidth - 20,
@@ -89,6 +92,8 @@ async function aligned(page) {
   assert.ok(!geometry.overflow, "No horizontal overflow");
   assert.ok(geometry.fits, "Heading fits inside the viewport");
   assert.ok(geometry.centered, "Copy and actions remain vertically balanced");
+  assert.ok(geometry.blurAligned, "Progressive blur stays aligned to the viewport edges");
+  assert.ok(geometry.copyClear, "The blur stays below the copy and actions");
 }
 
 async function screenshot(page, name) {
@@ -119,6 +124,17 @@ try {
   await page.waitForTimeout(500);
   await moving(page, initial);
   await screenshot(page, "hero-desktop");
+  const blurStart = await page.locator("[data-website-bottom-blur]").boundingBox();
+  await page.evaluate(() => scrollTo(0, 300));
+  await aligned(page);
+  const blurScrolled = await page.locator("[data-website-bottom-blur]").boundingBox();
+  assert.ok(Math.abs(blurStart.y - blurScrolled.y) < 1, "Blur stays at the viewport bottom while the page scrolls");
+  assert.equal(await page.locator("[data-website-bottom-blur]").evaluate((element) => element.closest("section")), null, "Blur belongs to the website layout");
+  const filters = await page.locator("[data-website-bottom-blur] > div").evaluateAll((layers) => layers.map((layer) => getComputedStyle(layer).backdropFilter));
+  assert.ok(filters.length > 1 && filters.every((filter) => filter.startsWith("blur(")), "The blur builds progressively across layers");
+  assert.equal(await page.locator("[data-website-bottom-blur]").evaluate((element) => getComputedStyle(element).pointerEvents), "none");
+  await screenshot(page, "hero-blur-scrolled");
+  await page.evaluate(() => scrollTo(0, 0));
 
   for (const theme of ["light", "dark"]) {
     if (theme === "dark") {
@@ -159,6 +175,22 @@ try {
   await moving(page, resumed);
   await page.getByRole("link", { name: "Read the docs", exact: true }).click();
   await page.waitForURL("**/docs");
+  assert.equal(await page.locator("[data-website-bottom-blur]").count(), 1, "Blur persists across routes");
+  const docsBlur = await page.locator("[data-website-bottom-blur]").evaluate((element) => element.getBoundingClientRect().bottom);
+  assert.ok(Math.abs(docsBlur - await page.evaluate(() => innerHeight)) < 1);
+  await page.evaluate(() => {
+    const button = document.createElement("button");
+    button.textContent = "Blur interaction check";
+    button.dataset.blurProbe = "0";
+    button.style.cssText = "position:fixed;right:12px;bottom:12px;z-index:30";
+    button.addEventListener("click", () => { button.dataset.blurProbe = String(Number(button.dataset.blurProbe) + 1); });
+    document.body.appendChild(button);
+  });
+  const probe = page.getByRole("button", { name: "Blur interaction check", exact: true });
+  await probe.click();
+  await probe.press("Enter");
+  assert.equal(await probe.getAttribute("data-blur-probe"), "2", "Pointer and keyboard interaction work through the blur");
+  await probe.evaluate((button) => button.remove());
   await page.goBack();
   await page.locator("[data-hero-mosaic]").waitFor();
   await page.waitForTimeout(1600);
@@ -192,7 +224,7 @@ try {
   await screenshot(reduced, "hero-reduced-motion");
   await reduced.close();
   assert.deepEqual(errors, []);
-  console.log("Hero checks passed: alignment, continuous theme changes, logo-blue tiles, light/dark themes, CandyButton finishes, responsive resizing, live Liquid Media, animation, reduced motion, and navigation cleanup.");
+  console.log("Hero checks passed: alignment, progressive bottom blur, synchronized scrolling, continuous theme changes, logo-blue tiles, light/dark themes, CandyButton finishes, responsive resizing, live Liquid Media, animation, reduced motion, and navigation cleanup.");
 } finally {
   await browser.close();
 }
