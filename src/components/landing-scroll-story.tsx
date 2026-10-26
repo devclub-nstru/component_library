@@ -4,7 +4,7 @@ export function LandingScrollStory() {
   return (
     <section
       aria-labelledby="scroll-story-heading"
-      className="relative flex justify-center bg-[#f7f7f2] px-6 pb-[max(10rem,25svh)] pt-10 text-foreground dark:bg-black sm:px-10 sm:pt-14"
+      className="relative flex justify-center bg-[#f7f7f2] px-6 pb-20 pt-10 text-foreground dark:bg-black sm:px-10 sm:pb-28 sm:pt-14"
     >
       <h2 id="scroll-story-heading" className="sr-only">
         Interfaces with a pulse

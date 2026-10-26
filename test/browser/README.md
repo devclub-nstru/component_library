@@ -1,5 +1,11 @@
 # Browser checks
 
+Run `node test/browser/landing-components.mjs` for the landing page's live component
+grid: button feedback, slider and switch keyboard input, Gooey Nav selection,
+Curved Navbar opening and focus recovery, Orb state cycling, live clock updates,
+state across theme changes, aligned 320–1440px layouts, reduced motion, and route cleanup.
+It accepts the environment variables below and optionally saves `inside-*.png`.
+
 The Prompt Composer check exercises the public studio in Chrome: card hover and
 keyboard selection, the shared model highlight, switching from pointer hover to
 keyboard navigation, async submit and retry, voice preview cancellation and
