@@ -46,6 +46,7 @@ import otpInput from "./otp-input.json";
 import pixelCard from "./pixel-card.json";
 import profileMenu from "./profile-menu.json";
 import projectReveal from "./project-reveal.json";
+import meetTeam from "./meet-team.json";
 import scrollingCards from "./scrolling-cards.json";
 import scrollText from "./scroll-text.json";
 import parallaxStripTransition from "./parallax-strip-transition.json";
@@ -116,6 +117,7 @@ export {
   pixelCard,
   profileMenu,
   projectReveal,
+  meetTeam,
   scrollingCards,
   scrollText,
   parallaxStripTransition,
@@ -188,6 +190,7 @@ export const componentsList: ComponentRegistryItem[] = [
   pixelCard as ComponentRegistryItem,
   profileMenu as ComponentRegistryItem,
   projectReveal as ComponentRegistryItem,
+  meetTeam as ComponentRegistryItem,
   scrollingCards as ComponentRegistryItem,
   scrollText as ComponentRegistryItem,
   parallaxStripTransition as ComponentRegistryItem,

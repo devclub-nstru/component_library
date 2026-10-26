@@ -115,6 +115,7 @@ export function ScrollText({
           ...(softness > 0 ? { filter: `blur(${softness}px)` } : {}),
         });
         const timeline = gsap.timeline({
+          onUpdate: renderEffects,
           scrollTrigger: {
             trigger: root,
             scroller: scroller?.current ?? undefined,
@@ -140,7 +141,6 @@ export function ScrollText({
               duration: 1,
               stagger: spacing,
               ease: "none",
-              onUpdate: renderEffects,
             },
             0,
           );

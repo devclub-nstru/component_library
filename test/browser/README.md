@@ -35,3 +35,23 @@ The browser check is separate from `npm test`, which runs the repository's Node
 tests. It does not access a real microphone or an external transcription service.
 Real recording needs a consumer-provided `onTranscribe` callback and HTTPS or
 localhost. The studio explicitly enables a simulated voice preview.
+
+Run `node test/browser/meet-team.mjs` for Meet Team selection, portrait centering,
+mouse exploration, dragging at 50% and 150% canvas zoom, content editing, motion
+presets, reset, missing images, member addition/removal, empty and single-member
+states, dark theme, 390px touch dragging, and reduced motion. It accepts the same
+environment variables and optionally saves `meet-team-*.png` screenshots.
+
+Run `node test/browser/hero-section.mjs` for landing hero centering, rounded CandyButton
+actions, light/dark themes, continuous motion and palette blending across theme
+changes, logo-blue tiles, live Liquid Media canvas integration, resizing at
+1440px, 768px, 390px and 320px, dynamic reduced-motion preferences, and navigation
+cleanup. It accepts the environment variables above and saves `hero-*.png`
+screenshots when `SCREENSHOT_DIR` is set. Use `localhost` for the development
+server so Next.js can connect its development client using its allowed origin.
+
+Run `node test/browser/landing-scroll-story.mjs` for the section below the hero:
+medium typography across four or five desktop lines, no divider, hero-only
+mosaic artwork, progressive and reversible reveals, completion within the page's
+scroll range, light/dark themes, 320px and 390px layouts, and reduced motion.
+It accepts the same environment variables and optionally saves `scroll-story-*.png`.

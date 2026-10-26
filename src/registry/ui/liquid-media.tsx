@@ -17,6 +17,7 @@ import {
   AdditiveBlending,
   type BufferAttribute,
   type Camera,
+  CanvasTexture,
   type Group,
   type InterleavedBufferAttribute,
   LinearFilter,
@@ -829,7 +830,84 @@ type LiquidMediaVideoProps = LiquidEffectProps & {
   src: string;
 } & Omit<React.ComponentPropsWithoutRef<"video">, "src">;
 
-export type LiquidMediaProps = LiquidMediaImageProps | LiquidMediaVideoProps;
+type LiquidMediaCanvasProps = LiquidEffectProps & {
+  type: "canvas";
+  source: RefObject<HTMLCanvasElement | null>;
+};
+
+export type LiquidMediaProps =
+  | LiquidMediaImageProps
+  | LiquidMediaVideoProps
+  | LiquidMediaCanvasProps;
+
+function LiquidCanvas({
+  source,
+  material,
+  segments = 1,
+}: {
+  source: RefObject<HTMLCanvasElement | null>;
+  material: (map: Texture, pointer: PointerTarget) => ReactNode;
+  segments?: number;
+}) {
+  const mesh = useRef<Mesh>(null);
+  const textureRef = useRef<CanvasTexture | null>(null);
+  const pointer = usePointerUv(source, { enabled: true });
+  const { gl, size, viewport } = useThree();
+  const [texture, setTexture] = useState<CanvasTexture | null>(null);
+
+  useEffect(() => {
+    const canvas = source.current;
+    if (!canvas) return;
+    let active = true;
+    let width = 0;
+    let height = 0;
+    const refreshTexture = () => {
+      if (width === canvas.width && height === canvas.height) return;
+      width = canvas.width;
+      height = canvas.height;
+      const map = new CanvasTexture(canvas);
+      textureRef.current?.dispose();
+      textureRef.current = map;
+      queueMicrotask(() => {
+        if (active) setTexture(map);
+      });
+    };
+    refreshTexture();
+    const observer = new ResizeObserver(refreshTexture);
+    observer.observe(canvas);
+    return () => {
+      active = false;
+      observer.disconnect();
+      textureRef.current?.dispose();
+      textureRef.current = null;
+    };
+  }, [source]);
+
+  useFrame(() => {
+    const plane = mesh.current;
+    const canvas = source.current;
+    if (!plane || !canvas || size.height <= 0) return;
+    const bounds = canvas.getBoundingClientRect();
+    const canvasBounds = gl.domElement.getBoundingClientRect();
+    const scale = viewport.height / size.height;
+    plane.position.set(
+      (bounds.left - canvasBounds.left + bounds.width / 2 - size.width / 2) * scale,
+      -(bounds.top - canvasBounds.top + bounds.height / 2 - size.height / 2) * scale,
+      0,
+    );
+    plane.scale.set(bounds.width * scale, bounds.height * scale, 1);
+    if (textureRef.current) textureRef.current.needsUpdate = true;
+  });
+
+  if (!texture) return null;
+
+  return (
+    <mesh ref={mesh}>
+      <planeGeometry args={[1, 1, segments, segments]} />
+      {material(texture, pointer)}
+    </mesh>
+  );
+}
 
 function LiquidMediaMaterial({
   map,
@@ -1070,6 +1148,19 @@ function LiquidMediaInner(props: LiquidMediaProps) {
       decayRate={decayRate}
     />
   );
+
+  if (rest.type === "canvas") {
+    if (webglEnabled === false) return null;
+    return (
+      <webglTeleport.In>
+        <LiquidCanvas
+          source={rest.source}
+          material={material}
+          segments={segments}
+        />
+      </webglTeleport.In>
+    );
+  }
 
   if (rest.type === "video") {
     const { type: _type, ...videoProps } = rest;

@@ -1,113 +1,104 @@
 "use client";
 
-import Image from "next/image";
-import dynamic from "next/dynamic";
+import { useRef } from "react";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ArrowUpRight } from "lucide-react";
+import { HeroMosaic } from "@/components/hero-mosaic";
+import { CandyButton } from "@/registry/ui/candy-button";
+import { useIsDark } from "@/lib/use-is-dark";
 import { useMediaQuery } from "@/lib/use-media-query";
-import { cn } from "../lib/utils";
+import { cn } from "@/lib/utils";
 
-const LiquidMedia = dynamic(
-  () => import("@/registry/ui/liquid-media").then((module) => module.LiquidMedia),
-  { ssr: false },
-);
-
-const LANDMARK_POINTS = [
-  { id: 1, x: 33.0, y: 4.5 },
-  { id: 2, x: 65.2, y: 4.5 },
-  { id: 3, x: 67.7, y: 23.6 },
-  { id: 4, x: 68.5, y: 46.8 },
-  { id: 5, x: 63.4, y: 64.8 },
-  { id: 6, x: 51.0, y: 73.8 },
-  { id: 7, x: 41.2, y: 64.8 },
-  { id: 8, x: 36.0, y: 46.8 },
-  { id: 9, x: 33.2, y: 23.6 },
-];
+gsap.registerPlugin(useGSAP);
 
 export default function HeroSection() {
-  const liquidEnabled = useMediaQuery("(prefers-reduced-motion: no-preference)");
+  const rootRef = useRef<HTMLElement>(null);
+  const isDark = useIsDark();
+  const reducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
+
+  useGSAP(
+    () => {
+      const media = gsap.matchMedia();
+      media.add("(prefers-reduced-motion: no-preference)", () => {
+        gsap
+          .timeline({ defaults: { ease: "power3.out", duration: 1 } })
+          .from("[data-hero-copy]", { opacity: 0, y: 18, stagger: 0.11 }, 0.15);
+      });
+      return () => media.revert();
+    },
+    { scope: rootRef },
+  );
+
+  useGSAP(
+    () => {
+      const root = rootRef.current;
+      if (!root) return;
+      const colors = getComputedStyle(root);
+      gsap.to(root, {
+        "--hero-foreground": colors.getPropertyValue("--foreground").trim(),
+        "--hero-muted": colors.getPropertyValue("--muted-foreground").trim(),
+        duration: reducedMotion ? 0 : 0.5,
+        ease: "power2.inOut",
+        overwrite: "auto",
+      });
+    },
+    { scope: rootRef, dependencies: [isDark, reducedMotion] },
+  );
 
   return (
-    <section className="relative flex-1 min-h-[calc(100svh-4rem)] w-full bg-background text-foreground flex flex-col justify-between overflow-hidden select-none transition-colors duration-200">
-      <div className="absolute inset-0 w-full h-full select-none z-0">
-        <Image
-          src="/COMP-HE.png"
-          alt="Visual artwork"
-          fill
-          priority
-          draggable={false}
-          className="object-cover object-center pointer-events-none select-none contrast-105 dark:contrast-110 opacity-75 dark:opacity-100 transition-opacity"
-        />
-        {liquidEnabled && (
-          <div
-            aria-hidden="true"
-            className="absolute inset-0 contrast-105 dark:contrast-110 opacity-75 dark:opacity-100"
-          >
-            <LiquidMedia
-              src="/COMP-HE.png"
-              alt=""
-              draggable={false}
-              intensity={0.52}
-              radius={12}
-              expandRate={10}
-              decayRate={4}
-              className="absolute inset-0 h-full w-full object-cover object-center select-none"
-            />
-          </div>
-        )}
-        <div className="absolute inset-0 bg-white/45 dark:bg-black/30 pointer-events-none transition-colors duration-200" />
-      </div>
-
-      <div className="absolute inset-0 pointer-events-none z-10 grid grid-cols-6 sm:grid-cols-8 md:grid-cols-12 h-full w-full">
-        {Array.from({ length: 12 }).map((_, i) => (
-          <div
-            key={i}
-            className={cn(
-              "h-full border-r border-dashed border-border dark:border-white/8",
-              i >= 6 && "hidden sm:block",
-              i >= 8 && "hidden md:block",
-            )}
-          />
-        ))}
-      </div>
-
-      <div className="absolute inset-0 pointer-events-none z-20">
-        <svg
-          className="absolute inset-0 w-full h-full text-foreground/25 dark:text-white/20"
-          viewBox="0 0 100 100"
-          preserveAspectRatio="none"
+    <section
+      ref={rootRef}
+      aria-labelledby="hero-heading"
+      className="relative isolate flex min-h-[max(700px,calc(100svh-4rem))] flex-col items-center justify-center overflow-hidden bg-[#f7f7f2] px-6 py-28 text-[color:var(--hero-foreground,var(--foreground))] dark:bg-black sm:min-h-[max(720px,calc(100svh-4rem))] sm:px-10 sm:py-32"
+    >
+      <HeroMosaic isDark={isDark} />
+      <div className="relative z-10 mx-auto flex w-full max-w-170 flex-col items-center text-center">
+        <h1
+          id="hero-heading"
+          data-hero-copy
+          className="font-serif text-[clamp(40px,5.5vw,88px)] font-normal leading-[0.99] tracking-[-0.055em]"
         >
-          <polygon
-            points={LANDMARK_POINTS.map((p) => `${p.x},${p.y}`).join(" ")}
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="0.25"
-            strokeDasharray="1 1"
-          />
-        </svg>
-
-        {LANDMARK_POINTS.map((point) => (
-          <div
-            key={point.id}
-            className="absolute w-2 h-2 -ml-1 -mt-1 bg-foreground dark:bg-white rounded-full shadow-[0_0_6px_rgba(0,0,0,0.3)] dark:shadow-[0_0_6px_rgba(255,255,255,0.9)]"
-            style={{
-              left: `${point.x}%`,
-              top: `${point.y}%`,
-            }}
-          />
-        ))}
-      </div>
-
-      <RepeatingLineScale className="absolute top-0 left-0 right-0 z-30 pointer-events-none" />
-
-      <div className="flex-1" />
-
-      <div className="relative z-30 w-full max-w-4xl px-6 sm:px-10 md:px-14 pb-14 space-y-5">
-        <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl  font-normal leading-[1.14] text-foreground dark:text-white/95 tracking-tight transition-colors duration-200">
-          Tactile animated interface components crafted with physical
-          elasticity, shaders, and micro-interactions.
+          <span className="block">Build interfaces</span>
+          <span className="block">that feel as good</span>
+          <span className="block">as they look.</span>
         </h1>
-      </div>
 
-      <RepeatingLineScale className="absolute bottom-0 left-0 right-0 z-30 pointer-events-none" />
+        <p
+          data-hero-copy
+          className="mb-8 mt-7 max-w-100 text-[12px] leading-relaxed text-[color:var(--hero-muted,var(--muted-foreground))] sm:mb-9 sm:text-[14px]"
+        >
+          Tactile React components. Physical motion.
+          <br className="hidden sm:block" />
+          {" "}The details that make an interface unforgettable.
+        </p>
+
+        <div
+          data-hero-copy
+          className="flex flex-wrap items-center justify-center gap-3"
+        >
+          <CandyButton
+            as="a"
+            role="link"
+            href="/components"
+            color="#0074d4"
+            rightIcon={<ArrowUpRight aria-hidden="true" />}
+            className="h-11 rounded-full px-6 text-xs focus-visible:ring-[#0074d4]/60 focus-visible:ring-offset-background motion-reduce:transform-none motion-reduce:transition-none"
+          >
+            Explore components
+          </CandyButton>
+          <CandyButton
+            as="a"
+            role="link"
+            href="/docs"
+            variant={isDark ? "obsidian" : "pearl"}
+            rightIcon={<ArrowUpRight aria-hidden="true" />}
+            className="h-11 rounded-full border border-border px-6 text-xs focus-visible:ring-[#0074d4]/60 focus-visible:ring-offset-background motion-reduce:transform-none motion-reduce:transition-none"
+          >
+            Read the docs
+          </CandyButton>
+        </div>
+      </div>
     </section>
   );
 }

@@ -719,7 +719,7 @@
       "name": "liquid-media",
       "type": "registry:ui",
       "title": "Liquid Media",
-      "description": "Interactive WebGL fluid ripple distortion effect for images and videos with responsive cursor displacement.",
+      "description": "Interactive WebGL fluid ripple distortion for images, videos, and live canvases with responsive cursor displacement.",
       "dependencies": [
         "three",
         "@react-three/fiber",
@@ -849,6 +849,29 @@
           "path": "src/registry/ui/use-time-source.ts",
           "type": "registry:ui",
           "target": "@ui/use-time-source.ts"
+        }
+      ]
+    },
+    {
+      "name": "meet-team",
+      "type": "registry:ui",
+      "title": "Meet Team",
+      "description": "A perspective portrait fan with smooth GSAP spring motion, pointer exploration, touch dragging, and customizable team content.",
+      "dependencies": [
+        "gsap",
+        "@gsap/react",
+        "lucide-react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "files": [
+        {
+          "path": "src/registry/ui/meet-team.tsx",
+          "type": "registry:ui",
+          "target": "@ui/meet-team.tsx"
         }
       ]
     },
