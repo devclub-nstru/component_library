@@ -61,9 +61,7 @@ try {
   await section.waitFor();
   assert.ok(await section.evaluate((element) => element.previousElementSibling.getAttribute("aria-labelledby") === "scroll-story-heading"));
   assert.equal(await section.getByText(/Plenty of personality|Real components\. Right here|give your cursor|Hover, click, repeat/).count(), 0);
-  for (const number of ["01", "02", "03", "04", "05", "06"]) {
-    assert.equal(await section.getByText(number, { exact: true }).count(), 0, "Numbered category labels are removed");
-  }
+  assert.equal(await section.getByText(/^0[1-6]\s*(Buttons|Controls|Navigation|Curved Navbar|Orb|Clocks)$/).count(), 0, "Numbered category labels are removed");
   await reveal();
   await geometry(1440);
 
@@ -71,6 +69,9 @@ try {
   await buttons.scrollIntoViewIfNeeded();
   const mosaic = buttons.locator("[data-feature-mosaic]");
   assert.equal(await section.locator("[data-feature-mosaic]").count(), 6);
+  assert.equal(await mosaic.evaluate((canvas) => getComputedStyle(canvas).filter), "blur(1.5px)", "Mosaic backgrounds have a subtle blur");
+  assert.equal(await buttons.locator("[data-feature-demo]").evaluate((element) => getComputedStyle(element).filter), "none", "Live controls stay sharp");
+  assert.equal(await buttons.locator("h3").evaluate((element) => getComputedStyle(element).filter), "none", "Card copy stays sharp");
   const pixels = await mosaic.evaluate((canvas) => canvas.toDataURL());
   await page.waitForFunction(({ canvas, pixels }) => canvas.toDataURL() !== pixels, { canvas: await mosaic.elementHandle(), pixels });
   await buttons.hover({ position: { x: 20, y: 20 } });

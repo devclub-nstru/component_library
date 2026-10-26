@@ -151,7 +151,7 @@ export function FeatureMosaic({ seed, isDark }: { seed: number; isDark: boolean 
       ref={canvasRef}
       data-feature-mosaic
       aria-hidden="true"
-      className="pointer-events-none absolute inset-0 h-full w-full opacity-[var(--mosaic-opacity,0.42)]"
+      className="pointer-events-none absolute inset-0 h-full w-full opacity-[var(--mosaic-opacity,0.42)] blur-[1.5px]"
     />
   );
 }
