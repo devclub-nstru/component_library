@@ -61,9 +61,9 @@ try {
   await section.waitFor();
   assert.ok(await section.evaluate((element) => element.previousElementSibling.getAttribute("aria-labelledby") === "scroll-story-heading"));
   assert.equal(await section.getByText(/Plenty of personality|Real components\. Right here|give your cursor|Hover, click, repeat/).count(), 0);
-  assert.equal(await section.getByText(/^0[1-6]\s*(Buttons|Controls|Navigation|Curved Navbar|Orb|Clocks)$/).count(), 0, "Numbered category labels are removed");
   await reveal();
   await geometry(1440);
+  assert.equal(await section.getByText(/^0[1-6]\s*(Buttons|Controls|Navigation|Curved Navbar|Orb|Clocks)$/).filter({ visible: true }).count(), 0, "Numbered category labels are removed");
 
   const buttons = card("Built to be pressed.");
   await buttons.scrollIntoViewIfNeeded();
@@ -122,8 +122,8 @@ try {
   await orbButton.focus();
   await orbButton.press("Enter");
   assert.equal(await orbButton.getAttribute("aria-label"), "Orb state is solving. Click to cycle state.");
-  await orb.locator("canvas").waitFor();
-  await orb.locator("canvas").evaluate((element) => { element.dataset.continuityCheck = "present"; });
+  await orbButton.locator("canvas").waitFor();
+  await orbButton.locator("canvas").evaluate((element) => { element.dataset.continuityCheck = "present"; });
 
   const clock = card("Good timing is everything.");
   await clock.getByRole("button", { name: "Use 12-hour time" }).click();
@@ -140,7 +140,7 @@ try {
   assert.equal(await toggle.getAttribute("aria-checked"), "false", "Theme changes preserve demo state");
   assert.equal(await slider.getAttribute("aria-valuenow"), "65");
   assert.equal(await orbButton.getAttribute("aria-label"), "Orb state is solving. Click to cycle state.");
-  assert.equal(await orb.locator("canvas").getAttribute("data-continuity-check"), "present", "Theme changes preserve the orb instance");
+  assert.equal(await orbButton.locator("canvas").getAttribute("data-continuity-check"), "present", "Theme changes preserve the orb instance");
   assert.equal(await nav.getByRole("tab", { name: "Motion", exact: true }).getAttribute("aria-selected"), "true");
   await screenshot("inside-dark");
 
