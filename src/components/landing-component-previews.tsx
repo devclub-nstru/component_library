@@ -118,9 +118,7 @@ export function LandingCurvedNavbarPreview() {
   const isDark = useIsDark();
 
   return (
-    <div className="relative h-full w-full overflow-hidden rounded-xl bg-[radial-gradient(ellipse_at_50%_100%,#0080fc1a,transparent_70%)]">
-      <div aria-hidden="true" className="absolute inset-x-8 bottom-7 h-16 rounded-t-[50%] border-t border-[#0080fc]/20" />
-      <div aria-hidden="true" className="absolute inset-x-12 bottom-4 h-16 rounded-t-[50%] border-t border-[#0080fc]/10" />
+    <div className="relative h-full w-full overflow-hidden rounded-xl">
       <CurvedNavbar
         brand="devclub"
         brandHref="/components"

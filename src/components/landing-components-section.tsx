@@ -6,6 +6,8 @@ import { ArrowUpRight } from "lucide-react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { FeatureMosaic } from "@/components/feature-mosaic";
+import { useIsDark } from "@/lib/use-is-dark";
 import { BentoCard, BentoGrid } from "@/registry/ui/bento-grid";
 import {
   LandingButtonsPreview,
@@ -19,7 +21,7 @@ import {
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 function FeatureCard({
-  number,
+  seed,
   label,
   title,
   description,
@@ -27,7 +29,7 @@ function FeatureCard({
   className,
   children,
 }: {
-  number: string;
+  seed: number;
   label: string;
   title: string;
   description: string;
@@ -35,6 +37,61 @@ function FeatureCard({
   className: string;
   children: ReactNode;
 }) {
+  const previewRef = useRef<HTMLDivElement>(null);
+  const isDark = useIsDark();
+
+  useGSAP(
+    () => {
+      const card = previewRef.current?.closest<HTMLElement>("[data-landing-feature]");
+      const arrow = card?.querySelector<SVGElement>("[data-feature-arrow]");
+      if (!card || !arrow) return;
+      const media = gsap.matchMedia();
+      media.add("(prefers-reduced-motion: no-preference)", () => {
+        let hovering = false;
+        gsap.set(card, { "--mosaic-opacity": 0.42 });
+        const lift = gsap.quickTo(card, "y", { duration: 0.5, ease: "power3.out" });
+        const mosaic = gsap.quickTo(card, "--mosaic-opacity", { duration: 0.65, ease: "power2.out" });
+        const arrowX = gsap.quickTo(arrow, "x", { duration: 0.4, ease: "power3.out" });
+        const arrowY = gsap.quickTo(arrow, "y", { duration: 0.4, ease: "power3.out" });
+        const sync = () => {
+          const active = hovering || Boolean(card.querySelector(":focus-visible"));
+          lift(active ? -4 : 0);
+          mosaic(active ? 0.8 : 0.42);
+          arrowX(active ? 2 : 0);
+          arrowY(active ? -2 : 0);
+        };
+        const enter = (event: PointerEvent) => {
+          if (event.pointerType !== "mouse") return;
+          hovering = true;
+          sync();
+        };
+        const leave = () => {
+          hovering = false;
+          sync();
+        };
+        const blur = (event: FocusEvent) => {
+          if (event.relatedTarget instanceof Node && card.contains(event.relatedTarget)) return;
+          lift(hovering ? -4 : 0);
+          mosaic(hovering ? 0.8 : 0.42);
+          arrowX(hovering ? 2 : 0);
+          arrowY(hovering ? -2 : 0);
+        };
+        card.addEventListener("pointerenter", enter);
+        card.addEventListener("pointerleave", leave);
+        card.addEventListener("focusin", sync);
+        card.addEventListener("focusout", blur);
+        return () => {
+          card.removeEventListener("pointerenter", enter);
+          card.removeEventListener("pointerleave", leave);
+          card.removeEventListener("focusin", sync);
+          card.removeEventListener("focusout", blur);
+        };
+      });
+      return () => media.revert();
+    },
+    { scope: previewRef },
+  );
+
   return (
     <BentoCard
       data-landing-feature
@@ -42,22 +99,20 @@ function FeatureCard({
       aria-label={title}
       title={title}
       description={description}
-      className={`min-w-0 justify-start rounded-[22px] border-black/10 bg-white/65 p-1.5 shadow-none hover:border-[#0080fc]/30 hover:bg-white/80 hover:shadow-none dark:border-white/10 dark:bg-[#080808] dark:hover:border-[#0080fc]/35 dark:hover:bg-[#0a0a0a] motion-reduce:transition-none [&>div]:gap-0 [&_h3]:px-5 [&_h3]:pt-5 [&_h3]:text-[16px] [&_h3]:font-medium [&>div>p]:px-5 [&>div>p]:pb-6 [&>div>p]:pt-2 [&>div>p]:text-[12px] [&>div>p]:leading-relaxed ${className}`}
+      className={`min-w-0 justify-start rounded-[20px] border-black/12 bg-[#f7f7f2] p-0 shadow-none transition-[border-color] hover:border-[#0080fc]/45 hover:bg-[#f7f7f2] hover:shadow-none focus-within:border-[#0080fc]/45 dark:border-white/12 dark:bg-black dark:hover:border-[#0080fc]/45 dark:hover:bg-black motion-reduce:transition-none [&>div]:gap-0 [&>div>div:first-child]:rounded-none [&>div>div:nth-child(2)]:items-start [&>div>div:nth-child(2)]:gap-3 [&>div>div:nth-child(2)]:px-6 [&>div>div:nth-child(2)]:pt-4 [&>div>div:nth-child(2)>div]:order-2 [&>div>div:nth-child(2)>div]:shrink-0 [&_h3]:min-h-[2.2em] [&_h3]:min-w-0 [&_h3]:flex-1 [&_h3]:font-serif [&_h3]:text-[clamp(24px,2.1vw,28px)] [&_h3]:font-normal [&_h3]:leading-[1.1] [&_h3]:tracking-[-0.035em] [&>div>p]:px-6 [&>div>p]:pb-7 [&>div>p]:pt-2 [&>div>p]:text-[12px] [&>div>p]:leading-[1.7] ${className}`}
+      icon={
+        <Link
+          href={href}
+          aria-label={`Explore ${label.toLowerCase()}`}
+          className="flex size-8 items-center justify-center rounded-full border border-border text-muted-foreground hover:border-[#0080fc]/45 hover:text-[#0074d4] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0080fc]"
+        >
+          <ArrowUpRight data-feature-arrow size={15} aria-hidden="true" />
+        </Link>
+      }
       header={
-        <div data-feature-preview className="relative flex h-64 flex-col rounded-[16px] bg-[#f2f2ec] dark:bg-black">
-          <div className="flex shrink-0 items-center justify-between gap-3 px-4 pt-4">
-            <span className="text-[9px] font-medium uppercase tracking-[0.12em] text-muted-foreground">
-              <span className="mr-2 text-[#0074d4] dark:text-[#0080fc]">{number}</span>{label}
-            </span>
-            <Link
-              href={href}
-              aria-label={`Explore ${label.toLowerCase()}`}
-              className="rounded-full p-1 text-muted-foreground hover:text-[#0074d4] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0080fc]"
-            >
-              <ArrowUpRight size={14} aria-hidden="true" />
-            </Link>
-          </div>
-          <div className="flex min-h-0 flex-1 items-center justify-center px-4 pb-4">{children}</div>
+        <div ref={previewRef} data-feature-preview className="relative isolate h-72">
+          <FeatureMosaic seed={seed} isDark={isDark} />
+          <div data-feature-demo className="absolute inset-0 flex items-center justify-center px-6 pb-6 pt-8">{children}</div>
         </div>
       }
     />
@@ -70,15 +125,36 @@ export function LandingComponentsSection() {
   useGSAP(
     () => {
       const media = gsap.matchMedia();
-      media.add("(prefers-reduced-motion: no-preference)", () => {
-        gsap.utils.toArray<HTMLElement>("[data-landing-feature]", rootRef.current).forEach((card) => {
-          gsap.from(card, {
-            y: 24,
-            autoAlpha: 0,
-            duration: 0.75,
-            ease: "power3.out",
-            scrollTrigger: { trigger: card, start: "top 94%", once: true },
+      media.add("(prefers-reduced-motion: no-preference)", (context) => {
+        const cards = gsap.utils.toArray<HTMLElement>("[data-landing-feature]", rootRef.current);
+        const demos = cards.map((card) => card.querySelector("[data-feature-demo]"));
+        gsap.set(cards, { autoAlpha: 0 });
+        gsap.set(demos, { y: 18 });
+        const reveal = context.add("reveal", (batch: HTMLElement[]) => {
+          gsap.to(batch, {
+            autoAlpha: 1,
+            duration: 0.7,
+            stagger: 0.08,
+            ease: "power2.out",
           });
+          gsap.to(batch.map((card) => card.querySelector("[data-feature-demo]")), {
+            y: 0,
+            duration: 0.9,
+            stagger: 0.08,
+            ease: "power3.out",
+          });
+        });
+        ScrollTrigger.batch(cards, {
+          start: "top 94%",
+          once: true,
+          onEnter: (batch) => reveal(batch),
+        });
+        gsap.from("#inside-heading", {
+          autoAlpha: 0,
+          y: 14,
+          duration: 0.8,
+          ease: "power3.out",
+          scrollTrigger: { trigger: rootRef.current, start: "top 92%", once: true },
         });
       });
       return () => media.revert();
@@ -101,29 +177,29 @@ export function LandingComponentsSection() {
             What’s inside.
           </h2>
         </header>
-        <BentoGrid className="grid-cols-1 gap-4 md:grid-cols-6 xl:grid-cols-12">
+        <BentoGrid className="grid-cols-1 gap-5 md:grid-cols-6 xl:grid-cols-12">
           <FeatureCard
-            number="01"
+            seed={0}
             label="Buttons"
             title="Built to be pressed."
             description="A little depth. A little mischief. Buttons that do more than sit there looking clickable."
             href="/components/candy-button"
-            className="md:col-span-3 xl:col-span-5"
+            className="md:col-span-3 xl:col-span-4"
           >
             <LandingButtonsPreview />
           </FeatureCard>
           <FeatureCard
-            number="02"
+            seed={1}
             label="Controls"
             title="Your kind of precise."
             description="Slide it. Switch it. Find the sweet spot. The small interactions deserve good physics, too."
             href="/components/slider"
-            className="md:col-span-3 xl:col-span-4"
+            className="md:col-span-3 xl:col-span-5"
           >
             <LandingControlsPreview />
           </FeatureCard>
           <FeatureCard
-            number="03"
+            seed={2}
             label="Navigation"
             title="Find your flow."
             description="Fluid navigation that follows your lead. Getting around should feel this good."
@@ -133,27 +209,27 @@ export function LandingComponentsSection() {
             <LandingNavigationPreview />
           </FeatureCard>
           <FeatureCard
-            number="04"
+            seed={3}
             label="Curved Navbar"
             title="A better way around."
             description="A sculpted menu that opens with intention. Fluid curves, clear paths, and room to explore."
             href="/components/curved-navbar"
-            className="md:col-span-3 xl:col-span-4"
+            className="md:col-span-3 xl:col-span-5"
           >
             <LandingCurvedNavbarPreview />
           </FeatureCard>
           <FeatureCard
-            number="05"
+            seed={4}
             label="Orb"
             title="A thought with some presence."
             description="An expressive little signal. Breathing, searching, working—every state has its own rhythm."
             href="/components/orb"
-            className="md:col-span-3 xl:col-span-5"
+            className="md:col-span-3 xl:col-span-4"
           >
             <LandingOrbPreview />
           </FeatureCard>
           <FeatureCard
-            number="06"
+            seed={5}
             label="Clocks"
             title="Good timing is everything."
             description="Real time. Mechanical charm. Because even a Tuesday deserves a better clock."

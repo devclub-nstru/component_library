@@ -27,6 +27,11 @@ async function reveal() {
 }
 
 async function geometry(width) {
+  await page.mouse.move(0, 0);
+  await page.evaluate(() => {
+    if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+  });
+  await page.waitForTimeout(650);
   const bounds = await cards.evaluateAll((items) => items.map((item) => {
     const card = item.getBoundingClientRect();
     const preview = item.querySelector("[data-feature-preview]").getBoundingClientRect();
@@ -56,10 +61,25 @@ try {
   await section.waitFor();
   assert.ok(await section.evaluate((element) => element.previousElementSibling.getAttribute("aria-labelledby") === "scroll-story-heading"));
   assert.equal(await section.getByText(/Plenty of personality|Real components\. Right here|give your cursor|Hover, click, repeat/).count(), 0);
+  for (const number of ["01", "02", "03", "04", "05", "06"]) {
+    assert.equal(await section.getByText(number, { exact: true }).count(), 0, "Numbered category labels are removed");
+  }
   await reveal();
   await geometry(1440);
 
   const buttons = card("Built to be pressed.");
+  await buttons.scrollIntoViewIfNeeded();
+  const mosaic = buttons.locator("[data-feature-mosaic]");
+  assert.equal(await section.locator("[data-feature-mosaic]").count(), 6);
+  const pixels = await mosaic.evaluate((canvas) => canvas.toDataURL());
+  await page.waitForFunction(({ canvas, pixels }) => canvas.toDataURL() !== pixels, { canvas: await mosaic.elementHandle(), pixels });
+  await buttons.hover({ position: { x: 20, y: 20 } });
+  await page.waitForTimeout(650);
+  assert.ok(await buttons.evaluate((element) => new DOMMatrix(getComputedStyle(element).transform).m42 < -3), "Hover gently lifts the card");
+  assert.ok(await mosaic.evaluate((canvas) => Number(getComputedStyle(canvas).opacity) > 0.7), "Hover reveals more of the mosaic");
+  await page.mouse.move(0, 0);
+  await page.waitForTimeout(650);
+  assert.ok(await buttons.evaluate((element) => Math.abs(new DOMMatrix(getComputedStyle(element).transform).m42) < 0.1), "Card motion settles back to its aligned position");
   const candy = buttons.getByRole("button", { name: "Give it a click", exact: true });
   await candy.click();
   assert.equal(await buttons.getByRole("button", { name: "Feels good, right?", exact: true }).getAttribute("aria-pressed"), "true");
@@ -115,6 +135,7 @@ try {
   await page.getByRole("button", { name: "Switch to dark theme", exact: true }).click();
   await page.waitForTimeout(700);
   assert.equal(await section.evaluate((element) => getComputedStyle(element).backgroundColor), "rgb(0, 0, 0)");
+  assert.equal(await buttons.evaluate((element) => getComputedStyle(element).backgroundColor), "rgb(0, 0, 0)");
   assert.equal(await toggle.getAttribute("aria-checked"), "false", "Theme changes preserve demo state");
   assert.equal(await slider.getAttribute("aria-valuenow"), "65");
   assert.equal(await orbButton.getAttribute("aria-label"), "Orb state is solving. Click to cycle state.");
@@ -141,6 +162,12 @@ try {
   await reveal();
   await geometry(320);
   assert.equal(await section.evaluate((element) => getComputedStyle(element).backgroundColor), "rgb(247, 247, 242)");
+  await buttons.scrollIntoViewIfNeeded();
+  const reducedPixels = await mosaic.evaluate((canvas) => canvas.toDataURL());
+  await buttons.hover({ position: { x: 20, y: 20 } });
+  await page.waitForTimeout(350);
+  assert.equal(await mosaic.evaluate((canvas) => canvas.toDataURL()), reducedPixels, "Mosaic animation stops for reduced motion");
+  assert.ok(await buttons.evaluate((element) => Math.abs(new DOMMatrix(getComputedStyle(element).transform).m42) < 0.1), "Reduced motion disables card lifting");
   await screenshot("inside-light-320-reduced");
 
   await section.getByRole("link", { name: "Explore clocks", exact: true }).click();
@@ -150,7 +177,7 @@ try {
   await reveal();
   assert.equal(await cards.count(), 6);
   assert.deepEqual(errors, []);
-  console.log("Landing components passed: live button, slider, switch, navigation, curved menu, Orb and clock interactions; state continuity, aligned responsive layouts, themes, reduced motion and route cleanup.");
+  console.log("Landing components passed: mosaic motion, hover settling, reduced motion, live button, slider, switch, navigation, curved menu, Orb and clock interactions; state continuity, responsive alignment, themes and route cleanup.");
 } finally {
   await browser.close();
 }

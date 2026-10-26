@@ -1,7 +1,8 @@
 # Browser checks
 
 Run `node test/browser/landing-components.mjs` for the landing page's live component
-grid: button feedback, slider and switch keyboard input, Gooey Nav selection,
+grid: animated hero-style mosaics, hover settling, button feedback, slider and
+switch keyboard input, Gooey Nav selection,
 Curved Navbar opening and focus recovery, Orb state cycling, live clock updates,
 state across theme changes, aligned 320–1440px layouts, reduced motion, and route cleanup.
 It accepts the environment variables below and optionally saves `inside-*.png`.
